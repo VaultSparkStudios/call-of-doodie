@@ -85,7 +85,6 @@ import { acceptMutation as _acceptMutation } from "./systems/mutationResolution.
 import { spawnPickup as _spawnPickup } from "./systems/pickupSpawning.js";
 import { applyPlayerMovement, buildPointerAimSweepReport, computePointerAimAngle, resolveAimFrame, resolveMovementVector } from "./systems/gameStep.js";
 import { stampArenaDecal } from "./systems/backgroundLayer.js";
-import { stepEnemyFrame } from "./systems/enemyFrame.js";
 import { buildInputCalibrationRecord, loadInputCalibration, saveInputCalibration, summarizeInputCalibration } from "./utils/inputCalibration.js";
 import { markTutorialAction, normalizeTutorialEvidence, shouldShowTutorial, TUTORIAL_ACTIONS } from "./utils/tutorialProgress.js";
 import { isPlaytestMode, recordActivePlaytestMilestone, startActivePlaytestFlight } from "./utils/playtestFlightRecorder.js";
@@ -102,7 +101,9 @@ import { getInputActivityAge, releaseInputState } from "./systems/inputLifecycle
 import { resolveRunEndAttempt, RUN_PHASE } from "./systems/runTermination.js";
 import { normalizeVisualPack, VISUAL_PACKS } from "./utils/visualPack.js";
 import { createPressureArc, finalizePressureArc, recordFormationExposure, recordPressureSnapshot } from "./systems/pressureArc.js";
-import { createGhostRecorder, recordGhostSample } from "./systems/ghostRecorder.js";
+import { createGhostRecorder, exportGhostSamples, recordGhostSample } from "./systems/ghostRecorder.js";
+import { decodeGhostPath, encodeGhostPath } from "./utils/ghostPath.js";
+import { loadTopGhostPath } from "./storage.js";
 import { readPreference, writePreference } from "./utils/gamePreferences.js";
 import { loadGhostPlayback, persistGhostRecording } from "./utils/ghostStorage.js";
 import { applyObservedPlayerDamage, createDamageSequence, finalizeDamageSequence } from "./systems/damageSequence.js";
@@ -137,9 +138,16 @@ import { reconcileOwnership } from "./utils/cosmeticTrack.js";
 import { matchesExperiment } from "./utils/runBrain.js";
 import { getZombieOutbreakPlan, getZombieWaveEnemyCount, mutateEnemyForZombieMode } from "./systems/zombieMode.js";
 import { applyThreatRecommendationChoice, queueCompletedRunFact, recordPostRunFieldReport } from "./systems/runFactFlow.js";
-import { stepProjectileFrame } from "./systems/projectileFrame.js";
 import { applyModeRules, getModeRewardFlow, isBossWaveForMode, resolveModeId } from "./systems/modeRules.js";
-import { createModeState, getModeDefinition, getModeHudModel, getModeWaveEnemyCount, isModeBossWave, onModeWaveStart, stepMode } from "./systems/modeDefinition.js";
+import { getModeMeta, loadModeRuntime, needsModeRuntime } from "./systems/modeRegistry.js";
+
+// Combat systems chunk (enemy AI, projectiles). Preloaded at mount so a run start
+// never waits on the network; startGame still awaits it as a safety net.
+let combatRuntimePromise = null;
+function loadCombatRuntime() {
+  if (!combatRuntimePromise) combatRuntimePromise = import("./systems/combatRuntime.js");
+  return combatRuntimePromise;
+}
 
 const AchievementsPanel = lazy(() => import("./components/AchievementsPanel.jsx"));
 const DeathScreen = lazy(() => import("./components/DeathScreen.jsx"));
@@ -310,7 +318,15 @@ export default function CallOfDoodie() {
   // the seven legacy booleans above stay the ruleset contract for replay-eligible modes.
   const [gameModeId, setGameModeId] = useState("standard");
   const gameModeIdRef = useRef("standard");
-  const modeDefRef = useRef(getModeDefinition("standard"));
+  const modeDefRef = useRef(getModeMeta("standard"));
+  // Heavy mode runtime (definitions, allies, zones, verb handlers) is a dynamic chunk;
+  // null for plain legacy runs so the App bundle stays inside its byte budget.
+  const modeRuntimeRef = useRef(null);
+  // Per-frame combat systems (enemy AI, projectiles) load as one chunk at run start.
+  const combatRuntimeRef = useRef(null);
+  useEffect(() => { let alive = true; loadCombatRuntime().then((m) => { if (alive) combatRuntimeRef.current = m; }).catch(() => {}); return () => { alive = false; }; }, []);
+  const modeBossWave = (gs, legacy) => (modeDefRef.current?.isBossWave ? !!modeDefRef.current.isBossWave(gs) : !!legacy);
+  const modeWaveCount = (gs, computed) => (modeDefRef.current?.waveEnemyCount ? Math.max(0, Math.floor(modeDefRef.current.waveEnemyCount(gs, computed))) : computed);
   const perkOptionsRef        = useRef([]); // mirrors perkOptions state for analytics (no stale closure)
   const weaponSwitchTrackRef  = useRef(0);  // throttle weapon_switch analytics to once per 2s
   const [draftPending, setDraftPending]             = useState(false);
@@ -361,7 +377,7 @@ export default function CallOfDoodie() {
   const [synergyChargeReady, setSynergyChargeReady] = useState(false);
   const [liveAnnounce, setLiveAnnounce]         = useState(""); // aria-live region for screen readers
   const operationModeRefs = useMemo(() => [scoreAttackRef, dailyChallengeRef, cursedRunRef, bossRushRef, speedrunRef, gauntletRef, zombiesRef], []);
-  const operationRuntime = useOperationMode({ gsRef, sizeRef, frameMonitorRef, startTimeRef, difficultyRef, statsRef, activePerksRef, modeRefs: operationModeRefs, setScore, setHealth, setPaused, setPauseReason, setLiveAnnounce });
+  const operationRuntime = useOperationMode({ gsRef, modeRuntimeRef, sizeRef, frameMonitorRef, startTimeRef, difficultyRef, statsRef, activePerksRef, modeRefs: operationModeRefs, setScore, setHealth, setPaused, setPauseReason, setLiveAnnounce });
   const {
     stateRef: operationStateRef, completeRef: operationCompleteRef, state: operationState, arenaState: operationArenaState, objectiveState: operationObjectiveState, proximitySnapshot: operationProximitySnapshot,
     directive: operationDirective, completeReceipt: operationCompleteReceipt, start: startOperation, reset: resetOperation,
@@ -662,6 +678,13 @@ export default function CallOfDoodie() {
     const _gKey = `cod-ghost-${_ghostMode === "standard" ? "normal" : _ghostMode}-v1`;
     gsRef.current._ghostKey = _gKey;
     gsRef.current.ghost = loadGhostPlayback(_gKey);
+    // S163 live ghost race: in the Daily, race the board leader's path when one is published.
+    if (dailyChallengeRef.current) {
+      loadTopGhostPath("daily_challenge", difficultyRef.current).then((top) => {
+        const path = top ? decodeGhostPath(top.path) : [];
+        if (path.length > 10 && gsRef.current) { gsRef.current.ghost = path; gsRef.current._ghostRivalName = top.name; }
+      }).catch(() => {});
+    }
     // Persistent ghost leaderboard: load top-3 scores for this mode/difficulty as score targets
     loadTopGhosts(_ghostMode, difficultyRef.current || "normal")
       .then(ghosts => { if (gsRef.current) gsRef.current.topGhosts = ghosts; }).catch(() => {});
@@ -706,7 +729,7 @@ export default function CallOfDoodie() {
       gauntletMode: gauntletRef.current,
       zombiesMode: zombiesRef.current,
     })));
-    modeDefRef.current = getModeDefinition(gameModeIdRef.current);
+    modeDefRef.current = modeRuntimeRef.current ? modeRuntimeRef.current.getModeDefinition(gameModeIdRef.current) : getModeMeta(gameModeIdRef.current);
     // S163: a new mode carries its own ruleset (timer, boss cadence, shop/draft/route flow).
     if (modeDefRef.current.kind !== "legacy") {
       Object.assign(gsRef.current, applyModeRules(gsRef.current, modeDefRef.current.rulesetId));
@@ -895,7 +918,7 @@ export default function CallOfDoodie() {
     gsRef.current.floorZones = arena.floorZones;
     gsRef.current.props = arena.props;
     gsRef.current.hazards = arena.hazards;
-    createModeState(modeDefRef.current, gsRef.current, { W: w, H: h, addText, addParticles });
+    modeRuntimeRef.current?.createModeState(modeDefRef.current, gsRef.current, { W: w, H: h, addText, addParticles });
 
     // Show meta toast if upgrades active
     const metaSnap = loadMetaProgress();
@@ -1875,6 +1898,7 @@ export default function CallOfDoodie() {
     gs.killstreakCount++;
     addHeatOnKill(gs, { isBoss: !!e.isBossEnemy, killstreak: gs.killstreakCount });
     if (e.isBossEnemy) modeDefRef.current?.onBossDefeated?.(gs);
+    modeDefRef.current?.onEnemyKilled?.(gs, e);
 
     if (e.typeIndex != null) {
       const waveKills = gs._waveKillsByType || (gs._waveKillsByType = {});
@@ -2096,6 +2120,13 @@ export default function CallOfDoodie() {
   const startGame = useCallback(async (forceSeed, challengeOpts = {}) => {
     setPendingNextRunContract(null);
     const requestedOperation = challengeOpts.operationId ? getOperation(challengeOpts.operationId) : null;
+    // S163 bundle diet: only new modes and Operations pay for the mode runtime chunk.
+    if (needsModeRuntime(gameModeIdRef.current, { operation: !!requestedOperation })) {
+      modeRuntimeRef.current = await loadModeRuntime(gameModeIdRef.current, { operation: !!requestedOperation });
+    } else {
+      modeRuntimeRef.current = null;
+    }
+    if (!combatRuntimeRef.current) combatRuntimeRef.current = await loadCombatRuntime();
     const gauntletLaunch = gauntletRef.current ? buildWeeklyGauntletLaunch(getWeeklyGauntlet()) : null;
     if (gauntletLaunch) {
       forceSeed = gauntletLaunch.seed;
@@ -2366,6 +2397,7 @@ export default function CallOfDoodie() {
       summarySig: runSummarySigRef.current,
       eventDigest,
       commandTrace,
+      ghostPath: encodeGhostPath(exportGhostSamples(ghostRecordRef.current)),
       feedbackDifficulty,
       totalShots: statsRef.current.totalShots || 0,
       totalHits: statsRef.current.totalHits || 0,
@@ -2931,7 +2963,7 @@ export default function CallOfDoodie() {
       setBossWaveBanner(false);
       gs.currentWave++; gs.enemiesThisWave = 0;
       setLiveAnnounce("Wave " + gs.currentWave + " started");
-      onModeWaveStart(gs, modeDefRef.current, { W: GW(), H: GH(), addText, addParticles });
+      modeRuntimeRef.current?.onModeWaveStart(gs, modeDefRef.current, { W: GW(), H: GH(), addText, addParticles });
       // Dynamic Objective: at most one per non-boss wave, weighted by player weakness
       gs.activeObjective = null;
       gs.activeWaveContract = null;
@@ -2939,7 +2971,7 @@ export default function CallOfDoodie() {
       try {
         const _bossNext = gs.operationMode
           ? getCurrentEncounter(operationStateRef.current)?.verb === "BOSS"
-          : isModeBossWave(modeDefRef.current, gs, isBossWaveForMode(resolveModeId(gs), gs.currentWave, gs.routeForceBoss));
+          : modeBossWave(gs, isBossWaveForMode(resolveModeId(gs), gs.currentWave, gs.routeForceBoss));
         if (!_bossNext && !gs.operationMode && modeDefRef.current.usesDirectorObjectives !== false) {
           const career = loadCareerStats();
           const weakness = _identifyWeakness(career);
@@ -2979,12 +3011,12 @@ export default function CallOfDoodie() {
       const _bossInterval = gs.bossRushMode ? 1 : 5;
       const nextIsBoss = gs.operationMode
         ? getCurrentEncounter(operationStateRef.current)?.verb === "BOSS"
-        : isModeBossWave(modeDefRef.current, gs, gs.routeForceBoss || (gs.bossRushMode
+        : modeBossWave(gs, gs.routeForceBoss || (gs.bossRushMode
           ? gs.currentWave >= 4
           : gs.currentWave % _bossInterval === 0));
       gs.routeForceBoss = false; // consume the flag
       if (nextIsBoss) {
-        gs.maxEnemiesThisWave = getModeWaveEnemyCount(modeDefRef.current, gs, gs.currentWave >= 15 ? 2 : 1);
+        gs.maxEnemiesThisWave = modeWaveCount(gs, gs.currentWave >= 15 ? 2 : 1);
         gs.waveDirector = null;
         gs.waveDirectorStage = -1;
       } else {
@@ -2994,7 +3026,7 @@ export default function CallOfDoodie() {
           gs.zombieOutbreak = getZombieOutbreakPlan(gs.currentWave);
           gs.maxEnemiesThisWave = getZombieWaveEnemyCount(gs.maxEnemiesThisWave, gs.currentWave);
         }
-        gs.maxEnemiesThisWave = getModeWaveEnemyCount(modeDefRef.current, gs, gs.maxEnemiesThisWave);
+        gs.maxEnemiesThisWave = modeWaveCount(gs, gs.maxEnemiesThisWave);
         // Apply route modifiers to the upcoming wave
         if (gs.routeDoubleEnemies) { gs.maxEnemiesThisWave = Math.min(gs.maxEnemiesThisWave * 2, 80); gs.routeDoubleEnemies = false; }
         if (gs.routeEliteWave)    { gs.waveEliteOnly = true; gs.routeEliteWave = false; }
@@ -3204,7 +3236,9 @@ export default function CallOfDoodie() {
       }
     }
 
-    stepProjectileFrame({
+    const combat = combatRuntimeRef.current;
+    if (!combat) return;
+    combat.stepProjectileFrame({
       gs,
       player: p,
       world: { W, H },
@@ -3224,7 +3258,7 @@ export default function CallOfDoodie() {
       achievementCheckRef: achCheckRef,
     });
 
-    stepEnemyFrame({
+    combat.stepEnemyFrame({
       gs,
       player: p,
       world: { W, H },
@@ -3236,13 +3270,14 @@ export default function CallOfDoodie() {
     });
 
     // ── Mode mechanics: allies, zones, verb objectives, win/lose (S163) ──
-    const modeVerdict = stepMode(gs, modeDefRef.current, { W, H, frame: frameCountRef.current, addText, addParticles, spawnEnemy });
+    const modeVerdict = modeRuntimeRef.current ? modeRuntimeRef.current.stepMode(gs, modeDefRef.current, { W, H, frame: frameCountRef.current, addText, addParticles, spawnEnemy, setHealth, handlePlayerDeath }) : null;
     if (modeVerdict === "win") { handleModeVictory(gs); return; }
     if (modeVerdict === "lose") { handlePlayerDeath(gs, { cause: "mode_objective_failed", allowRecovery: false }); return; }
 
     // ── Pickup collection ──
     const pickupRange = perkModsRef.current.pickupRange || 30;
     gs.pickups = stepAndCompactInPlace(gs.pickups, pk => {
+      if (pk.type === "loot") { pk.life--; return pk.life > 0; }
       pk.life--;
       const d2 = Math.hypot(p.x - pk.x, p.y - pk.y);
       // ── Proximity mine: explode when player gets within 40px ──
@@ -3787,7 +3822,9 @@ export default function CallOfDoodie() {
   if (screen === "death") {
     const deathScreenProps = buildDeathScreenProps({
       victory: !!gsRef.current?._victory,
-      modeLabel: modeDefRef.current?.label || null,
+      modeLabel: modeDefRef.current?.label
+        ? (modeDefRef.current.placement && !gsRef.current?._victory ? `${modeDefRef.current.label} · FLUSHED #${modeDefRef.current.placement(gsRef.current)}` : modeDefRef.current.label)
+        : null,
       score,
       kills,
       deaths,
@@ -4187,7 +4224,7 @@ export default function CallOfDoodie() {
 
       {/* HUD overlay */}
       <HUD
-        modeHud={getModeHudModel(gsRef.current, modeDefRef.current)}
+        modeHud={modeRuntimeRef.current ? modeRuntimeRef.current.getModeHudModel(gsRef.current, modeDefRef.current) : null}
         wave={wave} timeSurvived={timeSurvived} score={score} kills={kills} deaths={deaths}
         health={health} ammo={ammo} isReloading={isReloading} currentWeapon={currentWeapon}
         combo={combo} comboTimer={comboTimer} killstreak={killstreak}

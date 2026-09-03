@@ -25,6 +25,9 @@ export function sanitizeObeliskIdentity(result, now = Date.now()) {
     subject,
     tier: bounded(identity?.tier, 24) || null,
     verifiedAt: new Date(now).toISOString(),
+    // S163: server-derived capability for /api/profile cloud backups. It is a
+    // project-scoped hash bound to the subject, never the upstream token.
+    profileKey: /^[a-f0-9]{64}$/i.test(String(result?.profileKey || "")) ? String(result.profileKey).toLowerCase() : null,
   };
 }
 

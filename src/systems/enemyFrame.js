@@ -163,7 +163,7 @@ export function stepEnemyFrame({
         const bCount = getBossRangedBurstCount(e);
         for (let bi = 0; bi < bCount; bi++) {
           const angle = pa + (bi - Math.floor(bCount / 2)) * 0.28;
-          gs.enemyBullets.push({ x: e.x, y: e.y, vx: Math.cos(angle) * e.projSpeed, vy: Math.sin(angle) * e.projSpeed, life: 90, size: 4, color: e.color, damage: 6 + e.typeIndex * 2, sourceType: e.typeIndex, sourceName: ENEMY_TYPES[e.typeIndex]?.name || e.name });
+          gs.enemyBullets.push({ x: e.x, y: e.y, vx: Math.cos(angle) * e.projSpeed, vy: Math.sin(angle) * e.projSpeed, life: 90, size: 4, color: e.color, damage: 6 + e.typeIndex * 2, sourceType: e.typeIndex, sourceName: ENEMY_TYPES[e.typeIndex]?.name || e.name, sourceId: e.id ?? null });
         }
       }
     }

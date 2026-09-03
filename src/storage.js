@@ -333,6 +333,7 @@ export function buildSubmitScorePayload(safeEntry, rawEntry = {}) {
   if (traceDigest) payload.traceDigest = traceDigest;
   if (traceLength > 0) payload.traceLength = traceLength;
   if (traceBody) payload.traceBody = traceBody;
+  if (typeof rawEntry?.ghostPath === "string" && rawEntry.ghostPath) payload.ghostPath = rawEntry.ghostPath.replace(/[^a-z0-9.;]/gi, "").slice(0, 8192);
   if (rawEntry?.traceEvidence && typeof rawEntry.traceEvidence === "object") {
     payload.traceEvidence = {
       level: typeof rawEntry.traceEvidence.level === "string" ? rawEntry.traceEvidence.level : "none",
@@ -1552,4 +1553,52 @@ export function unlockMetaNode(nodeId, cost) {
   unlocked.add(nodeId);
   _saveMetaTree(unlocked);
   return { success: true };
+}
+
+// ── S163 Sewer Extraction stash ─────────────────────────────────────────────
+const STASH_KEY = "cod-stash-v1";
+export function loadStash() {
+  try { const v = JSON.parse(localStorage.getItem(STASH_KEY) || "null"); if (v && typeof v === "object") return { total: Number(v.total) || 0, runs: Number(v.runs) || 0, best: Number(v.best) || 0, last: v.last || null }; } catch {}
+  return { total: 0, runs: 0, best: 0, last: null };
+}
+export function saveStash(stash) {
+  try { localStorage.setItem(STASH_KEY, JSON.stringify(stash)); } catch {}
+  return stash;
+}
+
+// ── S163 progress backup (guest-safe export/import + cloud blob) ────────────
+const BACKUP_SCHEMA = "cod-progress-backup-v1";
+export function exportProgressBackup(storage = globalThis.localStorage) {
+  const entries = {};
+  try {
+    for (let i = 0; i < storage.length; i += 1) {
+      const key = storage.key(i);
+      if (key && key.startsWith("cod-")) entries[key] = storage.getItem(key);
+    }
+  } catch {}
+  return { schema: BACKUP_SCHEMA, exportedAt: new Date().toISOString(), keys: Object.keys(entries).length, entries };
+}
+export function importProgressBackup(backup, storage = globalThis.localStorage) {
+  const parsed = typeof backup === "string" ? JSON.parse(backup) : backup;
+  if (!parsed || parsed.schema !== BACKUP_SCHEMA || typeof parsed.entries !== "object") throw new Error("Not a Call of Doodie progress backup");
+  let restored = 0;
+  for (const [key, value] of Object.entries(parsed.entries)) {
+    if (!key.startsWith("cod-") || typeof value !== "string" || value.length > 2_000_000) continue;
+    try { storage.setItem(key, value); restored += 1; } catch {}
+  }
+  return { restored, exportedAt: parsed.exportedAt || null };
+}
+
+// ── S163 live ghost race: the top scorer's downsampled path for a board ──────
+export async function loadTopGhostPath(mode = "standard", difficulty = "normal", { sinceMs = 7 * 86400000, now = Date.now() } = {}) {
+  const supabase = await getSupabaseClient();
+  if (!supabase) return null;
+  try {
+    const sinceIso = new Date(now - sinceMs).toISOString();
+    let q = supabase.from("leaderboard").select("name,score,wave,ghost_path,created_at").eq("difficulty", difficulty).not("ghost_path", "is", null).gte("created_at", sinceIso).order("score", { ascending: false }).limit(1);
+    q = mode === "standard" ? q.or("mode.is.null,mode.eq.standard") : q.eq("mode", mode);
+    const { data, error } = await q;
+    if (error || !data?.length || !data[0].ghost_path) return null;
+    return { name: data[0].name, score: data[0].score, wave: data[0].wave, path: data[0].ghost_path };
+  } catch { return null; }
 }

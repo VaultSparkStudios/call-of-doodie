@@ -41,8 +41,8 @@
 ║  ✓ agent memory (Claude/Codex project memory)                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 0 files  ·  M:0 A:0 D:0 ?:0                            ║
-║  Ahead: 3  ·  Behind: 0                                          ║
+║  Changes: 60 files  ·  M:44 A:0 D:0 ?:16                         ║
+║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ DEPLOYMENT ══════════════════════════════════════════════════╗
@@ -52,7 +52,7 @@
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
 ║  Doctor:        148/203                                          ║
 ║  Compliance:    —                                                ║
-║  Tests:         1286/1286                                        ║
+║  Tests:         1302/1302                                        ║
 ║  Validation:    full-fresh                                       ║
 ║  IGNIS:         12d ago                                          ║
 ║  Truth:         engineering-ready-sparked-no-go                  ║

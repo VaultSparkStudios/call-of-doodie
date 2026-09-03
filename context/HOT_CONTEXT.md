@@ -4,27 +4,15 @@
 
 ## Current Session
 
-- Session 163 (2026-09-03) ran the founder-directed evolution audit and shipped two tranches: gameplay foundations with the first two genuinely different modes, and single-brand site unification. The "evidence-gated, hold all content" posture from S154–S162 is retired by decision; content ships with honest evidence language.
-- Mode truth — a mode-definition layer (`src/systems/modeDefinition.js`) sits over the unchanged eight-id ruleset/replay contract and owns allies, arena theme pool, objective set, wave script, win condition, and per-frame mechanic. BOSS GAUNTLET (six bosses, no trash, par timer, real victory) and HOLD THE THRONE (three thrones, CPU squad, enemies attack the point) are selectable on the front door and score locally until the leaderboard enum accepts them.
-- Squad truth — CPU allies (The Intern, the Plunger Sergeant, The Roomba) follow, hold, attack, revive, and carry; Z/X/C issue orders; downed allies bleed out for eight seconds unless revived within 40 pixels. Ally kills score at half value through an owner field carried in the defeat metadata.
-- Simulation truth — enemy AI lives in `src/systems/enemyFrame.js` (App.jsx 4,760 → 4,270 lines); `useGameLoop` advances in whole 60Hz steps with a clamped four-step catch-up; `src/sim/stepSim.js` runs a deterministic headless step in plain Node with a presentation-stripped state hash; a guard test forbids direct `Math.random()` in simulation modules.
-- Objective truth — BREACH, HOLD, ESCORT, HUNT, SABOTAGE, ESCAPE, and BOSS are behavioral handlers with unit coverage; Operations still complete on their prior interact path and are not yet rewired to them.
-- Brand truth — one token source (`BRAND_TOKENS` in `src/utils/theme.js`) generates `src/styles/tokens.css` and `public/tokens.css`; the arcade/CRT language (Impact display, monospace body, one orange, one gold, one cyan) applies to the home, login, runtime shell, display-name screen, tutorial chip, weapon dock, and all seventeen static pages via a hex-free `doc.css`. HomeV3, MenuScreen, the `?home=` switch, and the dead `obelisk-passport/` copies are deleted; 231 brand hexes in component style props now reference tokens.
-- Site truth — `/play/` is retired with a 301 to the in-app deploy anchor; `/roadmap/` publishes shipped/next/later from `src/content/roadmap.js` and carries the honest "real-time co-op is not live" claim that left the changelog; the footer is three labelled groups shared by React and static pages from one `FOOTER_GROUPS` source; README feature claims regenerate from runtime constants and are checked at build; the cosmetic drop track is hidden until its art is complete and "early access" copy is gone.
-- Validation truth — full Vitest passes 221/221 files and 1,286/1,286 assertions; strict lint, deployable build, public contract and claims, security release gate, architecture budget, and token-drift checks pass. Playwright passes 19 with one intentional mobile skip. A real-browser smoke deploys both new modes and reads their HUD banners; fourteen theme captures across both schemes and mobile were directly reviewed.
-- Review truth — a code review found the ally-kill discount was unreachable (fixed by threading the owner through defeat metadata) and self-review found Boss Gauntlet never applied its ruleset so the boss rotation slot went negative on waves 1–4 (fixed by applying the mode definition's ruleset at run start).
-- Review truth (post-closeout) — game surfaces re-lock the dark tokens under `[data-cod-surface="game"]` (proven with a Porcelain Day in-run capture); color data that feeds `hexToRgb` or an off-DOM canvas stays literal hex; catch-up steps simulate without drawing.
-- Propagation truth — the synced `brief-format-check.yml` regressed to Node 20 a second time; the Node 22 floor was restored locally and the root-fix remains owned by studio-ops.
-- Lifecycle truth — cost-neutral, deployed, FORGE, public-unlaunched; SPARKED remains NO-GO. App chunk is 584 KB against the 493 KB S145 budget; the bundle diet is a scheduled follow-up.
+- Session 163 post-closeout pass (2026-09-03, founder-requested "all next steps") — Operations now complete through behavioral verb handlers with retry-under-pressure; the mode runtime and combat systems are dynamic chunks (App 584 → 551 KB, runtime gate green); SEWER EXTRACTION and BOT ROYALE are selectable and browser-smoked; the share sheet attaches the highlight clip; /#profile ships guest-safe backup with a cloud-backup client, Pages Function, and migration behind a project-scoped profile key; hash routes address profile/board/field-manual/changelog/modes; a live ghost race for the Daily is wired end to end but needs the migration and edge-function deploy. Validation: Vitest 1,302/1,302, strict lint, build, runtime gate, public contract, five-scenario browser smoke (four modes + Operation verb + profile route).
 
 ## Open Work
 
 # Task Board
 ## Session 163 - Real modes, CPU squad, fixed timestep, single brand
-- [ ] [SIL:2] Rewire Operation encounter completion to the verb handlers (`useOperationMode.resolveWave` gates on handler status).
-- [ ] [SIL:2] Bundle diet: App chunk 584 KB → under the 493 KB S145 budget (DeathScreen diet, panels.css, lazy mode modules).
-- [ ] [SIL:2] Sewer Extraction mode, async rivals (live ghost race, seed duel, squad board), offline Bot Royale (docs/AUDIT_2026-09-03.md tranche 3).
-- [ ] [SIL:1] Profile panel with Porcelain Passport cloud backup; information-architecture consolidation (field manual, bestiary, board) and hash routes (tranche 2 remainder).
+- [ ] [SIL:2] Deploy the S163 migration and edge-function change (profiles table, ghost_path column, submit-score ghostPath) and set OBELISK_VERIFY_SECRET / SUPABASE_SERVICE_ROLE_KEY on Pages so cloud backup and the remote ghost race light up.
+- [ ] [SIL:2] Seed duels with 24-hour result cards and squad boards (server tables); IA consolidation of field manual, bestiary, and board pages.
+- [ ] [SIL:1] App chunk 551 KB → 493 KB (DeathScreen diet, panels.css); scrolling camera for a sixteen-bot royale.
 ## Session 162 - Corrective-order evidence across runs
 ## Session 161 - Readable threat compass and prospective doctrine choice
 ## Session 160 - Propagation and release-evidence recovery
@@ -105,7 +93,7 @@
 
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 210,545 bytes · SHA-256 `5d58dce673ba…`
-- `context/TASK_BOARD.md` · 133,375 bytes · SHA-256 `3b72468cd287…`
-- `context/DECISIONS.md` · 133,822 bytes · SHA-256 `ad4a33a01c21…`
-- `docs/AUDIT_2026-09-03.json` · 3,485 bytes · SHA-256 `ca3a8e698c1c…`
+- `context/CURRENT_STATE.md` · 211,377 bytes · SHA-256 `4bbc007822c2…`
+- `context/TASK_BOARD.md` · 134,516 bytes · SHA-256 `f24c36b2213b…`
+- `context/DECISIONS.md` · 134,605 bytes · SHA-256 `8b6428c8d3b6…`
+- `docs/AUDIT_2026-09-03.json` · 4,225 bytes · SHA-256 `84f8db978e98…`

@@ -98,6 +98,7 @@ export function buildSessionSubmission({
   summarySig,
   eventDigest,
   commandTrace = null,
+  ghostPath = "",
   feedbackDifficulty = null,
   totalShots = 0,
   totalHits = 0,
@@ -141,6 +142,7 @@ export function buildSessionSubmission({
   if (traceDigest) entry.traceDigest = traceDigest;
   if (traceLength > 0) entry.traceLength = traceLength;
   if (traceBody) entry.traceBody = traceBody;
+  if (typeof ghostPath === "string" && ghostPath && ghostPath.length <= 8192) entry.ghostPath = ghostPath;
   if (traceAnalysis) {
     entry.traceEvidence = {
       level: traceAnalysis.evidenceLevel,

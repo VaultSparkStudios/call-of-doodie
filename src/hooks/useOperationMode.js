@@ -32,7 +32,7 @@ export function restoreOperationPlayerScore() {
 }
 
 export function useOperationMode({
-  gsRef, sizeRef, frameMonitorRef, startTimeRef, difficultyRef, statsRef, activePerksRef, modeRefs,
+  gsRef, modeRuntimeRef = { current: null }, sizeRef, frameMonitorRef, startTimeRef, difficultyRef, statsRef, activePerksRef, modeRefs,
   setScore, setHealth, setPaused, setPauseReason, setLiveAnnounce,
 }) {
   const stateRef = useRef(null);
@@ -110,6 +110,8 @@ export function useOperationMode({
     const proximityTarget = nextArena.interactables.find((item) => item.id === getOperationEncounterAction(encounter)?.targetId) || null;
     setProximitySnapshot(buildOperationProximitySnapshot({ player: gsRef.current?.player, target: proximityTarget }));
     if (encounter?.verb) applyOperationEncounterScore(encounter.verb);
+    // S163: the encounter verb is behavioral. Start its handler once the run state exists.
+    queueMicrotask(() => { const g = gsRef.current; const rt = modeRuntimeRef.current; if (g?.operationMode && encounter?.verb && rt) { rt.clearVerbObjective(g); rt.startVerbObjective(g, encounter.verb, rt.verbSpecFor(encounter.verb, encounter), { W: sizeRef.current.w, H: sizeRef.current.h }); } });
     return {
       operationMode: true, operationId: operation.id, operationRoute: route, operationRouteSource: routeSource,
       operationEncounterIndex: 0, operationEncounterVerb: encounter?.verb || null,
@@ -117,7 +119,7 @@ export function useOperationMode({
       _operationSplits: [], _operationBranches: [{ fork: "deployment-route", choice: route, elapsedMs: 0 }],
       _operationPressureMultiplier: Number(nextState.routeConsequence?.pressureMultiplier) || 1,
     };
-  }, [chooseLiveDirective, gsRef, sizeRef]);
+  }, [chooseLiveDirective, gsRef, modeRuntimeRef, sizeRef]);
 
   const interact = useCallback((action) => {
     const gs = gsRef.current;
@@ -186,10 +188,14 @@ export function useOperationMode({
     if (!gs?.operationMode || !encounter) return { handled: false, completed: false };
     const arenaReceipt = buildOperationArenaReceipt(arenaRef.current);
     const interactionBonus = Math.min(100, Math.max(0, Number(gs._operationInteractionBonuses?.[encounter.id]) || 0));
-    const objectiveResult = evaluateOperationObjectiveClear(objectiveRef.current, { arenaCleared: true });
+    // S163: a behavioral verb must be done (door breached, point held, cart delivered,
+    // target hunted, pump sabotaged, exit reached, boss down) before the room clears.
+    const verbState = gs.activeVerbObjective;
+    const verbDone = !verbState || verbState.status === "done";
+    const objectiveResult = evaluateOperationObjectiveClear(objectiveRef.current, { arenaCleared: verbDone });
     objectiveRef.current = objectiveResult.objectiveState;
     setObjectiveState(objectiveResult.objectiveState);
-    if (!objectiveResult.advance) {
+    if (!objectiveResult.advance || !verbDone) {
       gs._operationPressureMultiplier = 1 + Math.min(0.9, objectiveResult.objectiveState.reinforcementCount * 0.15);
       const blockedDirector = chooseLiveDirective(encounter, currentState, objectiveResult.objectiveState, gs, Date.now() - startTimeRef.current);
       setDirective(blockedDirector);
@@ -222,6 +228,7 @@ export function useOperationMode({
       const nextEncounter = getCurrentEncounter(nextState);
       const nextObjective = createOperationObjectiveState(nextEncounter);
       objectiveRef.current = nextObjective; setObjectiveState(nextObjective);
+      { const rt = modeRuntimeRef.current; if (rt) { rt.clearVerbObjective(gs); if (nextEncounter?.verb) rt.startVerbObjective(gs, nextEncounter.verb, rt.verbSpecFor(nextEncounter.verb, nextEncounter), { W: sizeRef.current.w, H: sizeRef.current.h }); } }
       const nextTarget = arenaRef.current.interactables.find((item) => item.id === getOperationEncounterAction(nextEncounter)?.targetId) || null;
       setProximitySnapshot(buildOperationProximitySnapshot({ player: gs.player, target: nextTarget }));
       gs._operationPressureMultiplier = Number(nextState.routeConsequence?.pressureMultiplier) || 1;
@@ -257,7 +264,7 @@ export function useOperationMode({
     track("operation_complete", { ...event, runScore: gs.score, durationSeconds: historyEntry.time, evidenceScope: "local-deterministic-not-causal-or-server-authoritative" });
     saveStudioGameEvent(buildStudioGameEvent("operation_complete", { surface: "operation_runtime", ...event }));
     return { handled: true, completed: true, nextState, receipt };
-  }, [chooseLiveDirective, difficultyRef, frameMonitorRef, gsRef, modeRefs, setLiveAnnounce, setPauseReason, setPaused, startTimeRef, statsRef]);
+  }, [chooseLiveDirective, difficultyRef, frameMonitorRef, gsRef, modeRefs, modeRuntimeRef, setLiveAnnounce, setPauseReason, setPaused, sizeRef, startTimeRef, statsRef]);
 
   return { stateRef, arenaRef, objectiveRef, completeRef, state, arenaState, objectiveState, proximitySnapshot, directive, completeReceipt, start, reset, interact, resolveWave, setCompleteReceipt };
 }

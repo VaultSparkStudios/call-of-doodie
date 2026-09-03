@@ -247,6 +247,8 @@ function normalizeEntry(entry: Record<string, unknown>) {
     kills: clampInt(entry.kills, 0, 1000000, 0),
     wave: clampInt(entry.wave, 1, 10000, 1),
     lastWords: cleanText(entry.lastWords, 60, "..."),
+    // S163: optional downsampled ghost path for live ghost races (base-36 "f.x.y" triples).
+    ghost_path: typeof entry.ghostPath === "string" && /^[a-z0-9.;]{1,8192}$/i.test(entry.ghostPath) ? entry.ghostPath : null,
     rank: cleanText(entry.rank, 40, "Noob Potato"),
     bestStreak: clampInt(entry.bestStreak, 0, 100000, 0),
     totalDamage: clampInt(entry.totalDamage, 0, 100000000, 0),

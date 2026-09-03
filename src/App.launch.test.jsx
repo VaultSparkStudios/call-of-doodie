@@ -10,6 +10,14 @@ vi.mock("./drawGame.js", () => ({
   drawGame: vi.fn(),
 }));
 
+// S163: the combat chunk is a dynamic import; stub it so the smoke never waits on
+// vite-node transforming the enemy/projectile systems.
+vi.mock("./systems/combatRuntime.js", () => ({
+  stepEnemyFrame: () => ({ ok: true }),
+  stepProjectileFrame: () => ({ ok: true }),
+  pickTarget: (_enemy, _gs, player) => player,
+}));
+
 vi.mock("./hooks/useGameLoop.js", () => ({
   useGameLoop: vi.fn(),
 }));

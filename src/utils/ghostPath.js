@@ -80,3 +80,34 @@ export function buildGhostDeathReadout(ghostData, enemies = []) {
     detail: "Final route drifted across pressure instead of cutting through it. Commit to one escape lane sooner.",
   };
 }
+
+
+// ── S163 remote ghost race ──────────────────────────────────────────────────
+// A leaderboard row may carry a downsampled path so the daily board leader can
+// be raced live. Encoded as base-36 triples "f.x.y" joined by ";" (≤ 8 KB).
+export const GHOST_PATH_MAX_SAMPLES = 400;
+export const GHOST_PATH_MAX_CHARS = 8192;
+
+export function encodeGhostPath(samples = [], maxSamples = GHOST_PATH_MAX_SAMPLES) {
+  const clean = (Array.isArray(samples) ? samples : []).filter((s) => s && Number.isFinite(s.f) && Number.isFinite(s.x) && Number.isFinite(s.y));
+  if (!clean.length) return "";
+  const step = Math.max(1, Math.ceil(clean.length / maxSamples));
+  const out = [];
+  for (let i = 0; i < clean.length; i += step) {
+    const s = clean[i];
+    out.push(`${Math.max(0, Math.floor(s.f)).toString(36)}.${Math.max(0, Math.round(s.x)).toString(36)}.${Math.max(0, Math.round(s.y)).toString(36)}`);
+  }
+  const text = out.join(";");
+  return text.length <= GHOST_PATH_MAX_CHARS ? text : text.slice(0, text.lastIndexOf(";", GHOST_PATH_MAX_CHARS));
+}
+
+export function decodeGhostPath(text) {
+  if (typeof text !== "string" || !text) return [];
+  const samples = [];
+  for (const part of text.split(";")) {
+    const [f, x, y] = part.split(".");
+    const sample = { f: parseInt(f, 36), x: parseInt(x, 36), y: parseInt(y, 36) };
+    if ([sample.f, sample.x, sample.y].every(Number.isFinite)) samples.push(sample);
+  }
+  return samples;
+}

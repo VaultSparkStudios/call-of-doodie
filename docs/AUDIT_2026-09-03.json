@@ -30,7 +30,7 @@
       "date": "2026-09-03",
       "tests": "221 files / 1286 assertions",
       "browser": "19 pass / 1 skip",
-      "note": "tranche 1 complete; tranche 2 tokens/brand/deletions/roadmap/claims complete; IA hash routes and profile cloud backup open"
+      "note": "tranche 1 complete; tranche 2 tokens/brand/deletions/roadmap/claims complete; IA hash routes and profile cloud backup open; post-closeout pass shipped Operation rewiring, bundle diet to 551 KB, Sewer Extraction, Bot Royale, profile + hash routes, cloud backup and remote ghost race pending deployment"
     }
   },
   "items": [
@@ -130,14 +130,42 @@
       "tier": "EMBER",
       "effort": "M",
       "tranche": 2,
-      "status": "open"
+      "status": "built-awaiting-deploy"
     },
     {
       "id": "async-multiplayer-bot-royale",
       "tier": "EMBER",
       "effort": "L",
       "tranche": 3,
-      "status": "planned"
+      "status": "partial"
+    },
+    {
+      "id": "sewer-extraction",
+      "tier": "FIRE",
+      "effort": "M",
+      "tranche": 3,
+      "status": "complete"
+    },
+    {
+      "id": "bot-royale-offline",
+      "tier": "FIRE",
+      "effort": "L",
+      "tranche": 3,
+      "status": "complete"
+    },
+    {
+      "id": "operation-verb-rewiring",
+      "tier": "EMBER",
+      "effort": "M",
+      "tranche": 1,
+      "status": "complete"
+    },
+    {
+      "id": "bundle-diet",
+      "tier": "EMBER",
+      "effort": "M",
+      "tranche": 5,
+      "status": "partial"
     }
   ]
 }

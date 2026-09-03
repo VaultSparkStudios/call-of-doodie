@@ -1,6 +1,6 @@
 {
-  "at": "2026-09-03T18:19:51.395Z",
-  "url": "http://localhost:4782/",
+  "at": "2026-09-03T19:50:40.062Z",
+  "url": "http://localhost:4784/",
   "ok": true,
   "results": [
     {
@@ -16,6 +16,24 @@
     {
       "label": "squad-strip",
       "present": true
+    },
+    {
+      "label": "SEWER EXTRACTION",
+      "banner": "LOOT 0 · ALARM 1 · EVAC AT 60",
+      "screenshot": "C:\\Users\\p4cka\\documents\\development\\call-of-doodie\\docs\\visual-qa\\new-modes\\sewer-extraction.png"
+    },
+    {
+      "label": "BOT ROYALE",
+      "banner": "12 BOTS LEFT · 0 FLUSHED · PHASE 0",
+      "screenshot": "C:\\Users\\p4cka\\documents\\development\\call-of-doodie\\docs\\visual-qa\\new-modes\\bot-royale.png"
+    },
+    {
+      "label": "profile-hash-route",
+      "present": true
+    },
+    {
+      "label": "operation-verb",
+      "banner": "BREACH"
     }
   ]
 }

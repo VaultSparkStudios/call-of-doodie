@@ -4,9 +4,15 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 163 shipped the founder-directed course correction: a mode-definition layer with BOSS GAUNTLET and HOLD THE THRONE, CPU squad teammates, a fixed 60Hz simulation with a headless deterministic kernel, and one design-token brand across the game, login, and every static page.",
-  "nextMilestone": "Tranche 3 of docs/AUDIT_2026-09-03.md: Sewer Extraction, clip sharing, async rivals (live ghost race, seed duel, squad board), and offline Bot Royale; rewire Operations to the verb handlers and bring the App chunk back under the 493 KB budget.",
+  "currentFocus": "Session 163 (incl. post-closeout pass) shipped four modes that play differently (BOSS GAUNTLET, HOLD THE THRONE, SEWER EXTRACTION, BOT ROYALE), CPU squad teammates, behavioral Operation objectives, a fixed-step simulation with a headless kernel, a single design-token brand, a profile page with backup, and a bundle diet that restored the runtime byte gate.",
+  "nextMilestone": "Deploy the S163 migration and submit-score change and set the Pages secrets so cloud backup and the Daily ghost race light up; then seed duels, squad boards, IA consolidation, and the 493 KB chunk target.",
   "testingSurfaces": [
+    {
+      "session": 163,
+      "status": "green",
+      "type": "post-closeout-gates",
+      "command": "Vitest 1302/1302 · strict lint · build · runtime gate 551 KB/560 KB · public contract 29 files · Playwright serial 19 pass / 1 skip · browser smoke: BOSS GAUNTLET, HOLD THE THRONE (+squad), SEWER EXTRACTION, BOT ROYALE, Operation BREACH verb, /#profile"
+    },
     {
       "session": 163,
       "status": "green",
@@ -650,8 +656,8 @@
   "currentSession": 163,
   "sessionMode": "founder",
   "lastAgent": "claude-code",
-  "testsPassing": 1286,
-  "testsTotal": 1286,
+  "testsPassing": 1302,
+  "testsTotal": 1302,
   "entropyScore": 0.197,
   "entropyLastComputed": "2026-08-23",
   "silRubricVersion": "3.0",

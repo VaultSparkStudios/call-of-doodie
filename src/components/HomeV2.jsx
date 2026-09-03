@@ -9,6 +9,7 @@ import {
   loadRunHistory, loadRivalryHistory, loadStudioGameEvents, getDailyChampion, getMissionStreak,
   countIncompleteMissions,
 } from "../storage.js";
+import { clearHash, watchHash } from "../utils/hashRoute.js";
 import { FULL_MODE_CATALOG as MODE_CATALOG, resolveSelectedModeId } from "../config/modeCatalog.js";
 import { QUICK_RULES } from "../config/quickRules.js";
 import { isOpsDebug } from "../utils/debugFlags.js";
@@ -49,6 +50,7 @@ import "./home-arcade.css";
 const DemoCanvas = lazy(() => import("./DemoCanvas.jsx"));
 const LeaderboardPanel = lazy(() => import("./LeaderboardPanel.jsx"));
 const AchievementsPanel = lazy(() => import("./AchievementsPanel.jsx"));
+const ProfilePanel = lazy(() => import("./ProfilePanel.jsx"));
 const SettingsPanel = lazy(() => import("./SettingsPanel.jsx"));
 const MetaTreePanel = lazy(() => import("./MetaTreePanel.jsx"));
 const SupporterModal = lazy(() => import("./SupporterModal.jsx"));
@@ -137,6 +139,7 @@ export default function HomeV2(props) {
   }, []);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [showAchievements, setShowAchievements] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [showMetaTree, setShowMetaTree] = useState(false);
   const [showSupporter, setShowSupporter] = useState(false);
@@ -494,6 +497,17 @@ export default function HomeV2(props) {
     });
     onStart(String(seed), challenge);
   }, [difficulty, modeId, onStart, recordFrontDoorAction, runIntel.focus, selectedLoadout.id]);
+
+  // S163 hash routes: /#profile, /#board, /#field-manual, /#changelog, /#modes, /#achievements, /#leaderboard.
+  useEffect(() => watchHash(({ id }) => {
+    if (id === "profile") setShowProfile(true);
+    else if (id === "board" || id === "leaderboard") { onRefreshLeaderboard?.(); setShowLeaderboard(true); }
+    else if (id === "field-manual") setShowRules(true);
+    else if (id === "changelog") setShowNewFeatures(true);
+    else if (id === "achievements") setShowAchievements(true);
+    else if (id === "modes") { setDeployPanelOpen(true); document.getElementById("deploy")?.scrollIntoView({ block: "start" }); }
+  }), [onRefreshLeaderboard, setDeployPanelOpen]);
+  const closeProfile = useCallback(() => { setShowProfile(false); clearHash(); }, []);
 
   const CMD_ACTIONS = useMemo(() => [
     () => { recordFrontDoorAction("open_career_stats", { source: "command_center" }); setCareer(loadCareerStats()); setMeta(loadMetaProgress()); setShowCareerStats(true); },
@@ -1011,7 +1025,7 @@ export default function HomeV2(props) {
           </div>
           {cmdCenterExpanded && <div className="home-tool-groups">
             {[
-              ["Progress", [["📊 CAREER STATS", CMD_ACTIONS[0], 0], ["📋 MISSIONS", CMD_ACTIONS[1], 1], ["🏅 ACHIEVEMENTS", () => setShowAchievements(true), null]]],
+              ["Progress", [["👤 YOUR RECORD", () => { recordFrontDoorAction("open_profile", { source: "command_center" }); setShowProfile(true); }, null], ["📊 CAREER STATS", CMD_ACTIONS[0], 0], ["📋 MISSIONS", CMD_ACTIONS[1], 1], ["🏅 ACHIEVEMENTS", () => setShowAchievements(true), null]]],
               ["Build", [["🎖️ UPGRADES", CMD_ACTIONS[2], 2], ["🌳 META TREE", CMD_ACTIONS[3], 3], ["⚙️ LOADOUTS", CMD_ACTIONS[5], 5]]],
               ["History", [["📜 RUN HISTORY", CMD_ACTIONS[4], 4], ["⚔️ LEADERBOARD", () => { onRefreshLeaderboard(); setShowLeaderboard(true); }, null], ["📊 COMMUNITY STATS", () => { location.href = `${import.meta.env.BASE_URL}stats/`; }, null]]],
               ["Learn", [["📜 RULES", CMD_ACTIONS[6], 6], ["⌨ CONTROLS", CMD_ACTIONS[7], 7], ["👾 MOST WANTED", CMD_ACTIONS[8], 8], ["✦ WHAT'S NEW", CMD_ACTIONS[9], 9]]],
@@ -1128,6 +1142,11 @@ export default function HomeV2(props) {
             <LeaderboardPanel leaderboard={leaderboard} lbLoading={lbLoading} lbHasMore={lbHasMore} onLoadMore={onLoadMore} username={username} onClose={() => setShowLeaderboard(false)} />
           </AsyncPanelBoundary>
         </div>
+      )}
+      {showProfile && (
+        <AsyncPanelBoundary>
+          <ProfilePanel username={username} onClose={closeProfile} />
+        </AsyncPanelBoundary>
       )}
       {showAchievements && (
         <div style={PANEL}>

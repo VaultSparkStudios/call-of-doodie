@@ -10,10 +10,14 @@ Public-safe launch roadmap summary.
 - [x] [SIL:2] **DONE S163** Behavioral objective verbs (BREACH/HOLD/ESCORT/HUNT/SABOTAGE/ESCAPE/BOSS) and zone controller with unit coverage.
 - [x] [SIL:3] **DONE S163** One design-token source generating SPA and static stylesheets; arcade brand across home, login, shell, static pages; HomeV3/MenuScreen/?home= retired; 231 brand hexes tokenized.
 - [x] [SIL:2] **DONE S163** `/play/` retired (301), `/roadmap/` added, grouped footer from one source, README claims generated and checked, changelog freshness warning, supporter copy corrected, cosmetic track hidden.
-- [ ] [SIL:2] Rewire Operation encounter completion to the verb handlers (`useOperationMode.resolveWave` gates on handler status).
-- [ ] [SIL:2] Bundle diet: App chunk 584 KB → under the 493 KB S145 budget (DeathScreen diet, panels.css, lazy mode modules).
-- [ ] [SIL:2] Sewer Extraction mode, async rivals (live ghost race, seed duel, squad board), offline Bot Royale (docs/AUDIT_2026-09-03.md tranche 3).
-- [ ] [SIL:1] Profile panel with Porcelain Passport cloud backup; information-architecture consolidation (field manual, bestiary, board) and hash routes (tranche 2 remainder).
+- [x] [SIL:2] **DONE S163 (post-closeout)** Operation encounters start their verb handler and only clear when it reports done; failed verbs retry under reinforcement pressure; the compact HUD shows the verb objective.
+- [x] [SIL:2] **DONE S163 (post-closeout)** Bundle diet: mode runtime and combat systems are dynamic chunks; App chunk 584 KB → 551 KB, under the 560 KB runtime gate (the 493 KB aspiration remains a later target).
+- [x] [SIL:3] **DONE S163 (post-closeout)** SEWER EXTRACTION and BOT ROYALE shipped and browser-smoked; clip-of-the-run attaches the highlight GIF to the share sheet; Daily races the board leader's ghost when a path is published (migration + edge-function change ready for deployment).
+- [x] [SIL:2] **DONE S163 (post-closeout)** /#profile "Your Sewer Record" with guest-safe backup download/restore; hash routes for profile/board/field-manual/changelog/modes/achievements; cloud backup client, Pages Function, and migration built behind a profile-key capability (503 until the deployment has its secrets).
+- [x] [SIL:1] **DONE S163 (post-closeout)** Review guards: token-in-data hazard test, runtime-boundary spec tolerant of host load, Dependabot high advisory fixed (browserslist).
+- [ ] [SIL:2] Deploy the S163 migration and edge-function change (profiles table, ghost_path column, submit-score ghostPath) and set OBELISK_VERIFY_SECRET / SUPABASE_SERVICE_ROLE_KEY on Pages so cloud backup and the remote ghost race light up.
+- [ ] [SIL:2] Seed duels with 24-hour result cards and squad boards (server tables); IA consolidation of field manual, bestiary, and board pages.
+- [ ] [SIL:1] App chunk 551 KB → 493 KB (DeathScreen diet, panels.css); scrolling camera for a sixteen-bot royale.
 
 **Runway exception:** participant fun/balance outcomes, physical-device proof, provider/mail/identity evidence, publication, real-time co-op, and SPARKED promotion remain independently gated. New modes score locally until the leaderboard mode enum accepts them.
 

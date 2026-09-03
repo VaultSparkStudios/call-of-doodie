@@ -11,9 +11,12 @@ import { getModeRules, LEGACY_MODE_IDS } from "./modeRules.js";
 import { spawnAlly, summarizeSquad } from "./allyUnit.js";
 import { stepAllies } from "./allyUnit.js";
 import { summarizeZones } from "./zones.js";
-import { getVerbObjectiveHud, tickVerbObjective } from "./objectiveHandlers.js";
+import { getVerbObjectiveHud, startVerbObjective, tickVerbObjective } from "./objectiveHandlers.js";
+export { clearVerbObjective, startVerbObjective, verbSpecFor } from "./objectiveHandlers.js";
 import { BOSS_GAUNTLET } from "../modes/bossGauntlet.js";
 import { HOLD_THE_THRONE } from "../modes/holdTheThrone.js";
+import { SEWER_EXTRACTION } from "../modes/sewerExtraction.js";
+import { BOT_ROYALE } from "../modes/botRoyale.js";
 
 function passthrough(id) {
   return Object.freeze({
@@ -32,6 +35,8 @@ function passthrough(id) {
 const DEFINITIONS = new Map([
   [BOSS_GAUNTLET.id, BOSS_GAUNTLET],
   [HOLD_THE_THRONE.id, HOLD_THE_THRONE],
+  [SEWER_EXTRACTION.id, SEWER_EXTRACTION],
+  [BOT_ROYALE.id, BOT_ROYALE],
 ]);
 
 export const PLAYABLE_MODE_IDS = Object.freeze([...LEGACY_MODE_IDS, ...DEFINITIONS.keys()]);
@@ -88,7 +93,17 @@ export function onModeWaveStart(gs, modeDef, ctx = {}) {
 export function stepMode(gs, modeDef, ctx = {}) {
   if (Number.isFinite(ctx.frame)) gs.frame = ctx.frame;
   if (gs.allies?.length) stepAllies(gs, ctx);
-  if (gs.activeVerbObjective) tickVerbObjective(gs, ctx);
+  if (gs.activeVerbObjective) {
+    const status = tickVerbObjective(gs, ctx);
+    if (status === "failed" && gs.operationMode) {
+      // Operations retry the verb with reinforcement pressure instead of ending the run.
+      const failed = gs.activeVerbObjective;
+      gs._operationVerbFailures = (gs._operationVerbFailures || 0) + 1;
+      gs.maxEnemiesThisWave = (gs.maxEnemiesThisWave || 5) + 3;
+      ctx.addText?.(gs, gs.player.x, gs.player.y - 64, `${failed.verb} FAILED · RETRY`, "#FF6B6B", true);
+      startVerbObjective(gs, failed.verb, failed.spec || {}, ctx);
+    }
+  }
   modeDef?.step?.(gs, ctx);
   if (gs._modeWon) return "win";
   if (gs._modeLost) return "lose";
@@ -110,7 +125,12 @@ export function getModeWaveEnemyCount(modeDef, gs, computed) {
 
 /** HUD model: squad strip, zones, verb objective, par timer, mode banner. */
 export function getModeHudModel(gs, modeDef) {
-  if (!gs || !modeDef || modeDef.kind === "legacy") return null;
+  if (!gs || !modeDef) return null;
+  if (modeDef.kind === "legacy") {
+    // Operations run under the legacy ruleset but carry a live verb objective.
+    if (!gs.activeVerbObjective && !(gs.allies?.length)) return null;
+    return { id: modeDef.id, label: gs.operationEncounterVerb || modeDef.id, squad: summarizeSquad(gs), zones: summarizeZones(gs), verbObjective: getVerbObjectiveHud(gs), banner: null, progress: null };
+  }
   return {
     id: modeDef.id,
     label: modeDef.label || modeDef.id,

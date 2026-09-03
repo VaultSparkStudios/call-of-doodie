@@ -495,6 +495,22 @@
       "scoring": "local-only"
     },
     {
+      "id": "sewer_extraction",
+      "label": "Sewer Extraction",
+      "kind": "mode",
+      "objective": "Loot crates while the alarm climbs. Extract to bank your stash; die and it goes down the drain.",
+      "seededReplayCode": false,
+      "scoring": "local-only"
+    },
+    {
+      "id": "bot_royale",
+      "label": "Bot Royale",
+      "kind": "mode",
+      "objective": "Free-for-all against twelve bots while the sewer floods inward. Last one standing wins.",
+      "seededReplayCode": false,
+      "scoring": "local-only"
+    },
+    {
       "id": "hold_the_throne",
       "label": "Hold the Throne",
       "kind": "mode",

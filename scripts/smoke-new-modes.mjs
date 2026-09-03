@@ -62,9 +62,29 @@ try {
   page.on("console", (m) => { if (m.type() === "error" && !/404/.test(m.text())) console.error("CONSOLE:", m.text().slice(0, 300)); });
   results.push(await deployMode(page, "BOSS GAUNTLET", /DOWN · NEXT/));
   results.push(await deployMode(page, "HOLD THE THRONE", /THRONES/));
-  const squad = await page.getByTestId("hud-squad").count();
-  if (!squad) throw new Error("HOLD THE THRONE: squad strip missing");
+  if (!(await page.getByTestId("hud-squad").count())) throw new Error("HOLD THE THRONE: squad strip missing");
   results.push({ label: "squad-strip", present: true });
+  results.push(await deployMode(page, "SEWER EXTRACTION", /LOOT/));
+  results.push(await deployMode(page, "BOT ROYALE", /BOTS LEFT/));
+  // Profile hash route opens the panel.
+  await page.goto(new globalThis.URL("?smoke=profile#profile", URL).href, { waitUntil: "domcontentloaded" });
+  await page.getByTestId("profile-panel").waitFor({ state: "visible", timeout: 20000 });
+  results.push({ label: "profile-hash-route", present: true });
+  // Operation: the first encounter verb (BREACH) must start its behavioral handler.
+  await page.goto(URL, { waitUntil: "domcontentloaded" });
+  const opBtn = page.getByRole("button", { name: /Start operation BLACKSITE FLUSH/i }).first();
+  await opBtn.waitFor({ state: "visible", timeout: 20000 });
+  await opBtn.click();
+  const opSkip = page.getByRole("button", { name: /GO IN CLEAN/i }).first();
+  try { await opSkip.waitFor({ state: "visible", timeout: 15000 }); await opSkip.click(); } catch { /* no draft */ }
+  await page.locator("[data-hud-surface]").first().waitFor({ state: "attached", timeout: 20000 });
+  await page.waitForTimeout(4000);
+  const verb = page.getByTestId("hud-verb-objective").first();
+  await verb.waitFor({ state: "attached", timeout: 15000 });
+  const verbText = (await verb.innerText()).trim();
+  if (!/BREACH/.test(verbText)) throw new Error(`operation verb HUD "${verbText}" did not show BREACH`);
+  await page.screenshot({ path: path.join(OUT, "operation-breach.png") });
+  results.push({ label: "operation-verb", banner: verbText });
 } catch (error) {
   failed = true;
   console.error("SMOKE FAIL:", error.message);

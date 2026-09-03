@@ -42,7 +42,7 @@ describe("public gameplay contract", () => {
     }));
     expect(contract.trust.replayCoverage.excluded).toHaveLength(3);
     expect(contract.cost).toEqual({ freeTierCostStatus: "cost-neutral", paidInferenceRequired: false });
-    expect(contract.modes).toHaveLength(10); // S163: 8 replay-eligible + 2 local-only new modes
+    expect(contract.modes).toHaveLength(12); // S163: 8 replay-eligible + 4 local-only new modes
     expect(contract.modes.filter((mode) => mode.seededReplayCode)).toHaveLength(8);
     expect(contract.formations.map((formation) => formation.id)).toEqual(["pincer", "escort", "flank", "surge"]);
     expect(contract.prestige.totalKillsRequired).toBe(11_520);

@@ -223,8 +223,31 @@ export function startVerbObjective(gs, verb, spec = {}, ctx = {}) {
   const state = handler.start(gs, spec, ctx);
   state.status = "active";
   state.startedFrame = gs.frame || 0;
+  state.spec = spec;
+  state.attempt = (gs.activeVerbObjective?.verb === verb ? (gs.activeVerbObjective.attempt || 0) : 0) + 1;
   gs.activeVerbObjective = state;
   return state;
+}
+
+/** Clear verb-owned world objects (zones, structures, carts) before a new encounter. */
+export function clearVerbObjective(gs) {
+  gs.activeVerbObjective = null;
+  gs.zones = [];
+  gs.structures = [];
+  gs.alarm = 0;
+  gs.allies = (gs.allies || []).filter((a) => a.order !== "carry");
+  gs._targetables = [];
+}
+
+/** Default authored spec for an Operation encounter verb. */
+export function verbSpecFor(verb, encounter = {}) {
+  switch (String(verb).toUpperCase()) {
+    case "HOLD": return { seconds: 30, label: encounter.title || "HOLD POINT" };
+    case "BREACH": return { hp: 500, targetId: `breach-${encounter.id || "door"}` };
+    case "SABOTAGE": return { seconds: 3 };
+    case "ESCAPE": return { alarmRate: 100 / (60 * 60) };
+    default: return {};
+  }
 }
 
 /** Advance the active verb objective. Returns "active" | "done" | "failed" | null. */

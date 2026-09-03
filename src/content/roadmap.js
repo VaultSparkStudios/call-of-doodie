@@ -6,6 +6,9 @@
 
 export const ROADMAP = Object.freeze({
   shipped: [
+    ["Sewer Extraction", "Loot crates, an alarm that climbs with every kill, an evac toilet at 60, lockdown at 100, and a persistent stash on your profile."],
+    ["Bot Royale", "Twelve bots with internet handles, a shrinking sewer flood, supply drops, and a placement on the debrief. Offline, no netcode."],
+    ["Your Sewer Record", "A profile page (/#profile) with career, stash, and guest-safe backup download and restore."],
     ["Two real game modes", "BOSS GAUNTLET (six bosses, no filler, par timer) and HOLD THE THRONE (capture three thrones with a CPU squad)."],
     ["CPU teammates", "The Intern, the Plunger Sergeant, and The Roomba: follow, hold, attack, revive, and carry orders on Z / X / C."],
     ["Fixed-step simulation", "The game advances in exact 60Hz steps on every display and has a headless deterministic sim kernel."],
@@ -13,10 +16,9 @@ export const ROADMAP = Object.freeze({
     ["Verified community stats and shared leaderboard", "Signed run tokens, plausibility envelopes, and reversible anomaly quarantine."],
   ],
   next: [
-    ["Sewer Extraction", "Loot, an alarm that climbs with every kill, an evac toilet, and a persistent stash."],
-    ["Async rivals", "Live ghost races in the Daily, seed duels with a 24-hour result card, and squad boards."],
-    ["Bot Royale", "Fifteen bots, a shrinking sewer flood, loot crates, and a placement screen. Offline first."],
-    ["One site theme everywhere", "The arcade cabinet look on every page, a profile page, and cloud backup of your record with the Porcelain Passport."],
+    ["Async rivals", "Seed duels with a 24-hour result card and squad boards. The Daily already races the board leader's ghost once a path is published."],
+    ["Cloud backup goes live", "The profile page and the backup service are built; the deployment needs its secrets before the Save-to-cloud button lights up."],
+    ["Bigger royale arena", "A scrolling camera and sixteen bots once the twelve-bot arena proves fun."],
   ],
   later: [
     ["Real-time co-op", "Two to four players in one arena. Planned after the async rivals ship and only with a cost-capped lobby service. Not live today."],

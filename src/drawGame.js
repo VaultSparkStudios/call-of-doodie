@@ -361,8 +361,8 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     const bob = Math.sin(Date.now() / 200 + pk.x) * 3;
     const ps = 1 + Math.sin(Date.now() / 300) * 0.15;
     ctx.save(); ctx.translate(pk.x, pk.y + bob); ctx.scale(ps, ps);
-    const _pkEmojis = { health:"💊", ammo:"📦", speed:"⚡", guardian_angel:"😇", upgrade:"🔧", nuke:"☢️", rage:"🔥", magnet:"🧲", freeze:"❄️" };
-    const _pkColors = { health:"#0F0", ammo:"#0BF", speed:"#FF0", guardian_angel:"#FFD700", upgrade:"#AA44FF", nuke:"#F00", rage:"#FF4400", magnet:"#FF88FF", freeze:"#88CCFF" };
+    const _pkEmojis = { health:"💊", ammo:"📦", speed:"⚡", guardian_angel:"😇", upgrade:"🔧", nuke:"☢️", rage:"🔥", magnet:"🧲", freeze:"❄️", loot:"💰" };
+    const _pkColors = { health:"#0F0", ammo:"#0BF", speed:"#FF0", guardian_angel:"#FFD700", upgrade:"#AA44FF", nuke:"#F00", rage:"#FF4400", magnet:"#FF88FF", freeze:"#88CCFF", loot:"#FFD34F" };
     const em = _pkEmojis[pk.type] || "✨";
     const isSpecial = pk.type === "guardian_angel" || pk.type === "upgrade";
     const isNew = pk.type === "rage" || pk.type === "magnet" || pk.type === "freeze";
@@ -1671,6 +1671,25 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
 // ── S163 mode layer: zones, structures, allies ───────────────────────────
 function drawModeLayer(ctx, gs, refs) {
   const frame = refs?.frameCountRef?.current || 0;
+  // Flood ring (Bot Royale): everything outside the circle is under water.
+  const flood = gs.flood;
+  if (flood && Number.isFinite(flood.r)) {
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(-4000, -4000, 8000, 8000);
+    ctx.arc(flood.cx, flood.cy, flood.r, 0, Math.PI * 2, true);
+    ctx.fillStyle = `rgba(20,110,160,${0.28 + 0.06 * Math.sin(frame * 0.05)})`;
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(flood.cx, flood.cy, flood.r, 0, Math.PI * 2);
+    ctx.strokeStyle = "#33E6FF"; ctx.lineWidth = 3; ctx.setLineDash([14, 10]); ctx.lineDashOffset = -frame * 0.8; ctx.stroke();
+    ctx.setLineDash([]);
+    if (flood.targetR < flood.r) {
+      ctx.beginPath(); ctx.arc(flood.cx, flood.cy, flood.targetR, 0, Math.PI * 2);
+      ctx.strokeStyle = "rgba(255,255,255,0.5)"; ctx.lineWidth = 1; ctx.setLineDash([4, 6]); ctx.stroke(); ctx.setLineDash([]);
+    }
+    ctx.restore();
+  }
   const zones = gs.zones || [];
   for (let i = 0; i < zones.length; i += 1) {
     const z = zones[i];

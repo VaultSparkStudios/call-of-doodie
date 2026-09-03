@@ -385,10 +385,17 @@ export default function DeathScreen({
     try {
       const { blob } = await generateScoreCard();
       const file = new File([blob], "call-of-doodie-score.png", { type: "image/png" });
+      // S163 Clip of the Run: attach the highlight GIF when the share sheet accepts it.
+      const files = [file];
+      if (highlightGifUrl) {
+        try { const gif = await (await fetch(highlightGifUrl)).blob(); files.push(new File([gif], "call-of-doodie-clip.gif", { type: "image/gif" })); } catch { /* card only */ }
+      }
       const _modeTag = bossRushMode ? " [BOSS RUSH]" : cursedRunMode ? " [CURSED]" : scoreAttackMode ? " [SCORE ATTACK]" : dailyChallengeMode ? " [DAILY]" : "";
       const shareText = `I scored ${score.toLocaleString()} pts and reached Wave ${wave}${_modeTag} in Call of Doodie! 💀 Can you beat me?`;
       const shareUrl = CANONICAL_SITE_URL;
-      if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+      if (navigator.share && navigator.canShare && navigator.canShare({ files })) {
+        await navigator.share({ files, title: "Call of Doodie Score", text: shareText, url: shareUrl });
+      } else if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
         await navigator.share({ files: [file], title: "Call of Doodie Score", text: shareText, url: shareUrl });
       } else {
         // Fallback: download the image

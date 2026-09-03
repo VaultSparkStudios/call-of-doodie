@@ -2,6 +2,12 @@
 
 Public-safe decisions only. Detailed internal decision history is maintained privately.
 
+## 2026-09-03 — Session 163 — Cloud backup uses a project-scoped profile key, never the Obelisk token
+
+**Decision:** `/api/obelisk-verify` mints `profileKey = sha256("profile:" + OBELISK_VERIFY_SECRET + ":" + subject)` after upstream verification; the passport stores that key; `/api/profile` recomputes it and compares in constant time before reading or writing one `profiles` row through the service role. The upstream Obelisk token is still never persisted.
+
+**Rationale:** The guest-first invariant and the "no bearer token in localStorage" hygiene stay intact while the Porcelain Passport finally unlocks something real: a backup that survives a cleared cache. The capability is bound to one subject and one deployment secret, so rotating the secret invalidates every key.
+
 ## 2026-09-03 — Session 163 — Public claims are generated, and unshipped features live on the roadmap
 
 **Decision:** README feature counts regenerate from runtime constants (`scripts/sync-readme-claims.mjs`) and drift fails `check-public-claims`; the changelog records only what shipped and warns past 30 days; negative claims about unshipped features (real-time co-op, networked royale) live on `/roadmap/`; `/play/` is retired in favor of the in-app deploy anchor.

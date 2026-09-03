@@ -13,6 +13,7 @@
 
 - Closeout push was rejected because origin carried six unpulled commits (dependabot dev bumps, protocol doc sync, a workflow sync). Rebased cleanly, reinstalled dependencies after killing two zombie preview processes that held the rollup binary, and re-ran every gate. The synced `brief-format-check.yml` had regressed to Node 20 again (the S160 regression); restored the Node 22 floor as a bounded repair.
 
+- Post-closeout "all next steps" pass: Operation verb rewiring with retry; dynamic mode/combat chunks (551 KB, gate green); Sewer Extraction; Bot Royale; clip attach on share; profile page with backup and hash routes; cloud backup capability (client, Pages Function, migration, tests); Daily ghost race path (client, storage, edge function, migration); token hazard guard test; runtime-boundary spec tolerance; browserslist advisory fixed. Smoke: four modes + Operation BREACH + /#profile.
 - Post-closeout review (founder-requested): scoped the dark palette to game surfaces (`data-cod-surface="game"`) so Porcelain Day cannot darken the HUD, pause, perks, or debrief on the dark arena; reverted tokens in data objects that feed `hexToRgb` (leaderboard tabs/tiers) and the off-DOM score-card canvas (death-screen pills); catch-up simulation steps no longer redraw the canvas — only the last step of a frame renders.
 
 Intent outcome: achieved — the founder's three complaints (identical modes, no teammates, theme jumps) each have shipped, verified fixes; the remaining plan is ordered in the audit.

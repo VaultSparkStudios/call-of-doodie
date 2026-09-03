@@ -70,7 +70,7 @@ export default function MobileHUD({
         </div>
       )}
 
-      {modeHud && (modeHud.banner || modeHud.squad?.length > 0) && (
+      {modeHud && (modeHud.banner || modeHud.squad?.length > 0 || modeHud.verbObjective) && (
         <div data-testid="hud-mode-panel" style={{ position: "absolute", left: 8, bottom: isMobile ? 92 : 104, maxWidth: isMobile ? 210 : 260, display: "flex", flexDirection: "column", gap: 3, pointerEvents: "none" }}>
           {modeHud.banner && (
             <div data-testid="hud-mode-banner" style={{ padding: "4px 8px", border: "1px solid rgba(255,211,79,.35)", borderRadius: 8, background: "rgba(4,7,10,.82)", color: "var(--cod-gold)", fontSize: 9, fontWeight: 900, letterSpacing: .6, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
@@ -80,6 +80,14 @@ export default function MobileHUD({
                   <span style={{ display: "block", height: "100%", width: `${Math.round(Math.max(0, Math.min(1, modeHud.progress.pct)) * 100)}%`, background: modeHud.progress.pressure > 0.5 ? "#FF4F46" : "#FFD34F" }} />
                 </span>
               )}
+            </div>
+          )}
+          {modeHud.verbObjective && (
+            <div data-testid="hud-verb-objective" style={{ padding: "4px 8px", border: `1px solid ${modeHud.verbObjective.color || "#FFD34F"}55`, borderRadius: 8, background: "rgba(4,7,10,.82)", color: modeHud.verbObjective.color || "#FFD34F", fontSize: 9, fontWeight: 900, letterSpacing: .6, whiteSpace: "nowrap" }}>
+              {modeHud.verbObjective.label}{modeHud.verbObjective.status === "done" ? " · DONE" : modeHud.verbObjective.status === "failed" ? " · RETRY" : ""}
+              <span style={{ display: "block", marginTop: 3, height: 4, background: "rgba(255,255,255,.12)", borderRadius: 2, overflow: "hidden" }}>
+                <span style={{ display: "block", height: "100%", width: `${Math.round(Math.max(0, Math.min(1, modeHud.verbObjective.pct || 0)) * 100)}%`, background: modeHud.verbObjective.color || "#FFD34F" }} />
+              </span>
             </div>
           )}
           {modeHud.squad?.length > 0 && (

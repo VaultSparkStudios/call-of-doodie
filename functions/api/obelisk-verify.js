@@ -151,6 +151,9 @@ export async function verifyObeliskRequest({ request, env = {}, fetchImpl = fetc
       tokenHash: await sha256(token),
       subjectHash: await sha256(identity.subject),
     },
+    // S163: project-scoped capability for /api/profile cloud backups. Derived
+    // from the deployment secret and the subject; never the upstream token.
+    profileKey: env.OBELISK_VERIFY_SECRET ? await sha256(`profile:${env.OBELISK_VERIFY_SECRET}:${identity.subject}`) : null,
   });
 }
 

@@ -14,7 +14,7 @@ Survive endless waves of absurd enemies using increasingly ridiculous weapons. E
 - 12 weapons — Banana Blaster, Rubber Chicken RPG, Nerf Minigun, Plunger Launcher, and more
 - 22 enemy types including bosses, elites, hazards, and a secret developer encounter
 - 27+ perks plus cursed perks, starter loadouts, synergy combos, and archetype capstones
-- 4 game modes (Standard Run, Sewer Zombies, Boss Gauntlet, Hold the Throne) and 6 challenge rulesets (Score Attack, Daily Challenge, Cursed Run, Boss Rush, Speed Run, Weekly Gauntlet); 10 selectable in total
+- 6 game modes (Standard Run, Sewer Zombies, Boss Gauntlet, Sewer Extraction, Bot Royale, Hold the Throne) and 6 challenge rulesets (Score Attack, Daily Challenge, Cursed Run, Boss Rush, Speed Run, Weekly Gauntlet); 12 selectable in total
 - 3 authored Operations with seven-encounter objectives, plus CPU squad teammates in squad modes
 - Global leaderboard (Supabase), signed run-claim trust hardening, career stats, meta progression, and 66 achievements
 <!-- claims:end -->

@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { createModeState, getModeDefinition, getModeHudModel, getModeWaveEnemyCount, isModeBossWave, isNewModeId, PLAYABLE_MODE_IDS, stepMode } from "./modeDefinition.js";
 import { LEGACY_MODE_IDS } from "./modeRules.js";
 import { createSimInput, createSimState, runSim } from "../sim/stepSim.js";
+import { hashSimState } from "../sim/presentationKeys.js";
 import { startVerbObjective, tickVerbObjective, OBJECTIVE_VERBS } from "./objectiveHandlers.js";
 import { FULL_MODE_CATALOG, MODE_CATALOG, NEW_MODE_CATALOG, listModesByKind } from "../config/modeCatalog.js";
 import { ZONE_STATE } from "./zones.js";
@@ -32,7 +33,7 @@ describe("mode definition layer (S163)", () => {
     }
     expect(FULL_MODE_CATALOG.length).toBe(MODE_CATALOG.length + NEW_MODE_CATALOG.length);
     expect(listModesByKind("ruleset").map((m) => m.id)).toEqual(["score_attack", "daily_challenge", "cursed", "boss_rush", "speedrun", "gauntlet"]);
-    expect(listModesByKind("mode").map((m) => m.id)).toEqual(["standard", "zombies", "boss_gauntlet", "hold_the_throne"]);
+    expect(listModesByKind("mode").map((m) => m.id)).toEqual(["standard", "zombies", "boss_gauntlet", "sewer_extraction", "bot_royale", "hold_the_throne"]);
   });
 
   it("BOSS GAUNTLET: every wave is a boss, six defeats win, local-only", () => {
@@ -89,6 +90,71 @@ describe("mode definition layer (S163)", () => {
     const a = runSim(build(), 300, () => createSimInput({ move: { dx: -1, dy: 0 } }), { hooks });
     const b = runSim(build(), 300, () => createSimInput({ move: { dx: -1, dy: 0 } }), { hooks });
     expect(JSON.stringify(a.gs.zones.map((z) => [z.progress, z.pressure, z.state]))).toBe(JSON.stringify(b.gs.zones.map((z) => [z.progress, z.pressure, z.state])));
+  });
+});
+
+describe("SEWER EXTRACTION and BOT ROYALE (S163 tranche 3)", () => {
+  it("extraction: crates raise loot and alarm, evac opens at 60, extracting wins and banks the stash", () => {
+    const def = getModeDefinition("sewer_extraction");
+    const gs = createSimState({ seed: 7 });
+    createModeState(def, gs, noText);
+    expect(gs.pickups.filter((p) => p.type === "loot").length).toBe(3);
+    const crate = gs.pickups.find((p) => p.type === "loot");
+    gs.player.x = crate.x; gs.player.y = crate.y;
+    stepMode(gs, def, { ...noText, frame: 1 });
+    expect(gs._extractLoot).toBeGreaterThan(0);
+    expect(gs.alarm).toBeGreaterThan(0);
+    gs.alarm = 60;
+    stepMode(gs, def, { ...noText, frame: 2 });
+    const exit = gs.structures.find((s) => s.id === "evac-toilet");
+    expect(exit).toBeTruthy();
+    gs.player.x = exit.x; gs.player.y = exit.y;
+    expect(stepMode(gs, def, { ...noText, frame: 3 })).toBe("win");
+    expect(gs._extractBanked.loot).toBe(gs._extractLoot);
+    expect(getModeHudModel(gs, def).banner).toMatch(/LOOT/);
+  });
+
+  it("extraction: alarm 100 locks the exit", () => {
+    const def = getModeDefinition("sewer_extraction");
+    const gs = createSimState({ seed: 8 });
+    createModeState(def, gs, noText);
+    gs.alarm = 100;
+    stepMode(gs, def, { ...noText, frame: 1 });
+    expect(gs._extractLocked).toBe(true);
+    expect(gs.structures.find((s) => s.id === "evac-toilet")).toBeUndefined();
+  });
+
+  it("royale: twelve bots spawn, bot bullets hurt other bots, flood shrinks, last one wins", () => {
+    const def = getModeDefinition("bot_royale");
+    const gs = createSimState({ seed: 3 });
+    createModeState(def, gs, noText);
+    const bots = gs.enemies.filter((e) => e.isBot);
+    expect(bots.length).toBe(12);
+    expect(getModeWaveEnemyCount(def, gs, 40)).toBe(0);
+    // A bullet from bot-0 hits bot-1.
+    const target = bots[1];
+    gs.enemyBullets.push({ x: target.x, y: target.y, vx: 0, vy: 0, life: 10, size: 4, damage: 999, sourceId: "bot-0" });
+    stepMode(gs, def, { ...noText, frame: 1 });
+    expect(target._defeatResolved).toBe(true);
+    stepMode(gs, def, { ...noText, frame: 2 });
+    expect(gs._targetables.length).toBe(11);
+    // Flood shrinks after a phase.
+    const r0 = gs.flood.r;
+    stepMode(gs, def, { ...noText, frame: 20 * 60 + 1 });
+    expect(gs.flood.targetR).toBeLessThan(r0);
+    // Everyone else gone → win.
+    for (const b of gs.enemies) if (b.isBot) b._defeatResolved = true;
+    expect(stepMode(gs, def, { ...noText, frame: 20 * 60 + 2 })).toBe("win");
+    expect(def.placement({ _royaleAlive: 3 })).toBe(4);
+  });
+
+  it("royale runs deterministically inside the headless kernel", () => {
+    const def = getModeDefinition("bot_royale");
+    const build = () => { const gs = createSimState({ seed: 55 }); createModeState(def, gs, noText); return gs; };
+    const hooks = { afterEnemies: (gs) => { def.step(gs, noText); } };
+    const a = runSim(build(), 240, () => createSimInput({ move: { dx: 1, dy: 0 }, fire: true, aim: 0 }), { hooks });
+    const b = runSim(build(), 240, () => createSimInput({ move: { dx: 1, dy: 0 }, fire: true, aim: 0 }), { hooks });
+    expect(hashSimState(a.gs)).toBe(hashSimState(b.gs));
   });
 });
 
