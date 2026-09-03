@@ -132,18 +132,6 @@ vi.mock("./storage.js", () => ({
   loadRunHistory: vi.fn(() => []),
 }));
 
-vi.mock("./components/MenuScreen.jsx", () => ({
-  default: function MenuScreenMock({ onStart }) {
-    return <button onClick={() => onStart()}>start</button>;
-  },
-}));
-
-vi.mock("./components/HomeV3.jsx", () => ({
-  default: function HomeV3Mock({ onStart }) {
-    return <button onClick={() => onStart()}>start</button>;
-  },
-}));
-
 vi.mock("./components/HomeV2.jsx", () => ({
   default: function HomeV2Mock({ onStart, onSetGauntletMode }) {
     return <>

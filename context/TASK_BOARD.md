@@ -2,6 +2,21 @@
 
 Public-safe launch roadmap summary.
 
+## Session 163 - Real modes, CPU squad, fixed timestep, single brand
+
+- [x] [SIL:3] **DONE S163** Enemy AI extracted to `enemyFrame.js`; fixed 60Hz simulation step; headless deterministic `stepSim` kernel with state hash; `Math.random()` guard for simulation modules.
+- [x] [SIL:3] **DONE S163** Mode-definition layer over the unchanged eight-id ruleset/replay contract; BOSS GAUNTLET and HOLD THE THRONE selectable, local-only scoring, real victory screen.
+- [x] [SIL:3] **DONE S163** CPU squad (Intern, Sergeant, Roomba) with follow/hold/attack/revive/carry, Z/X/C orders, bleed-out and revive, half-value ally kills.
+- [x] [SIL:2] **DONE S163** Behavioral objective verbs (BREACH/HOLD/ESCORT/HUNT/SABOTAGE/ESCAPE/BOSS) and zone controller with unit coverage.
+- [x] [SIL:3] **DONE S163** One design-token source generating SPA and static stylesheets; arcade brand across home, login, shell, static pages; HomeV3/MenuScreen/?home= retired; 231 brand hexes tokenized.
+- [x] [SIL:2] **DONE S163** `/play/` retired (301), `/roadmap/` added, grouped footer from one source, README claims generated and checked, changelog freshness warning, supporter copy corrected, cosmetic track hidden.
+- [ ] [SIL:2] Rewire Operation encounter completion to the verb handlers (`useOperationMode.resolveWave` gates on handler status).
+- [ ] [SIL:2] Bundle diet: App chunk 584 KB → under the 493 KB S145 budget (DeathScreen diet, panels.css, lazy mode modules).
+- [ ] [SIL:2] Sewer Extraction mode, async rivals (live ghost race, seed duel, squad board), offline Bot Royale (docs/AUDIT_2026-09-03.md tranche 3).
+- [ ] [SIL:1] Profile panel with Porcelain Passport cloud backup; information-architecture consolidation (field manual, bestiary, board) and hash routes (tranche 2 remainder).
+
+**Runway exception:** participant fun/balance outcomes, physical-device proof, provider/mail/identity evidence, publication, real-time co-op, and SPARKED promotion remain independently gated. New modes score locally until the leaderboard mode enum accepts them.
+
 ## Session 162 - Corrective-order evidence across runs
 
 - [x] [SIL:3] **DONE S162** Drill-specific persisted outcomes initialize the desktop/mobile live HUD through one normalized evidence authority; malformed, duplicate, and cross-drill receipts fail closed.

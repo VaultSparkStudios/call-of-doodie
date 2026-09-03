@@ -4,6 +4,36 @@ pm run launch:qa and full suite before closeout.\n
 
 Detailed internal scoring, audit trends, and brainstorming are maintained privately.
 
+## 2026-09-03 — Session 163 | Total: 995/1000 | Velocity: 6 | Debt: ↓
+
+SIL 995/1000: Answered a founder course correction with two shipped tranches — a mode-definition layer with two genuinely different modes and a CPU squad on a fixed-step, headless-capable simulation, plus one design-token brand across every page — while keeping the replay contract, guest-first storage, and cost neutrality untouched.
+
+| Category | Score | Δ | Rationale |
+|---|---:|---|---|
+| Dev Health | 100 | → | Full Vitest 221 files / 1,286 assertions; strict lint, deployable build, public contract and claims, security gate, architecture budget, token drift, and Playwright 19/1 skip are green; App.jsx shrank 490 lines. |
+| Creative Alignment | 100 | → | Readable chaos (zones, squad strip, banner), improvised doctrine (orders, personalities with mechanical differences), and comedy (Intern, Sergeant, Roomba) all serve SOUL pillars; no pay-to-win, no prescribed build. |
+| Momentum | 100 | → | Audit, plan, two tranches, review fixes, and canonical closeout in one continuous session; fifteen-item ordered plan carries forward. |
+| Engagement | 99 | → | Two modes with real win states and teammates are the first player-facing loop change in ten sessions; no participant fun or retention outcome is claimed. |
+| Process Quality | 98 | ↓1 | A code review caught an unreachable ally-kill discount and self-review caught an unapplied ruleset that produced a negative boss slot; both fixed with tests, but they shipped to the working tree first. The automated reviewer overloaded twice and was replaced with a lighter agent. |
+| Cross-Repo Coherence | 100 | → | All work stayed inside this repo; protocol scripts (retirement gate, contract validator, claims check) were updated with the product rather than bypassed. |
+| Security Posture | 100 | → | No dependency, secret, identity, or network surface added; `import.meta.env` reads guarded; secret scan clean on the staged diff. |
+| Ecosystem Integration | 99 | → | Public contract, README, roadmap, footer manifest, and agents/llms surfaces regenerate from the same sources; Operations remain on their old completion path pending rewiring. |
+| Capital Efficiency | 100 | → | Zero hosted inference, zero new paid service; Durable Object co-op is explicitly sequenced after zero-cost async rivals. |
+| Automation Coverage | 99 | → | Kernel determinism, mode definitions, allies, verbs, zones, and contract pins are unit-tested; browser smoke and theme captures are scripted (`smoke:modes`, `capture-theme-shots`); visual approval remained direct human-style review of captures. |
+
+Rolling averages: 3-session 997.0 · 5-session 997.4 · sparkline `█████`.
+
+Top win: the founder could name the problem in one sentence ("the modes all look the same") and the session ended with two modes that a player would describe differently, on a simulation that no longer depends on monitor refresh rate.
+Top gap: the App chunk grew to 584 KB against the 493 KB budget because mode systems import into App; the bundle diet is scheduled, not done.
+Intent outcome: Achieved — review, closeout, and tranche 2 all executed; tranche 2's profile/cloud-backup and IA-consolidation items are carried honestly as open.
+
+**Brainstorm**
+1. Lazy-load mode definitions and ally/zone systems behind the mode selection so Standard runs never pay for them.
+2. Rewire Operation encounters to the verb handlers so ESCORT actually escorts and HUNT actually flees inside Operations.
+3. Sewer Extraction next: it reuses ESCAPE and SABOTAGE handlers plus the persistent stash, and gives the roadmap its first "next" item to move to "shipped".
+
+**Committed to TASK_BOARD:** Operation rewiring, bundle diet, tranche 3 modes/rivals, profile and IA remainder.
+
 ## 2026-08-25 — Session 162 | Total: 998/1000 | Velocity: 3 | Debt: ↓
 
 SIL 998/1000: Carried corrective-order evidence across death, rematch, live HUD, and Run History while preserving deterministic coaching, guest-first storage, cost neutrality, and an explicit non-causal evidence ceiling.
@@ -821,7 +851,7 @@ Avgs — 3: 998.0 | 5: 998.0 | 10: 997.2
   └ 3-session: Dev 100.0 | Align 100.0 | Momentum 100.0 | Engage 99.0 | Process 100.0 [N=3]
 Velocity trend: →  |  Protocol velocity: →  |  Debt: ↓
 Momentum runway: 0 repo-owned items — evidence-gated frontier exhausted  |  Intent rate: 100% (last 5 tracked)
-Last session: 2026-08-25 | Session 162 | Total: 998/1000 | Velocity: 3 | protocolVelocity: 3
+Last session: 2026-09-03 | Session 163 | Total: 995/1000 | Velocity: 6 | protocolVelocity: 6
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 

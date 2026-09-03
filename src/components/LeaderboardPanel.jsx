@@ -4,10 +4,10 @@ import CommunityStatsPanel from "./CommunityStatsPanel.jsx";
 
 const MODE_TABS = [
   { key: null,              label: "ALL",          color: "#AAA" },
-  { key: "normal",          label: "🎯 NORMAL",     color: "#FFD700" },
-  { key: "score_attack",    label: "⏱ SCORE ATK",  color: "#FF6600" },
-  { key: "daily_challenge", label: "📅 DAILY",      color: "#00E5FF" },
-  { key: "boss_rush",       label: "☠ BOSS RUSH",  color: "#FF3333" },
+  { key: "normal",          label: "🎯 NORMAL",     color: "var(--cod-gold)" },
+  { key: "score_attack",    label: "⏱ SCORE ATK",  color: "var(--cod-orange)" },
+  { key: "daily_challenge", label: "📅 DAILY",      color: "var(--cod-cyan)" },
+  { key: "boss_rush",       label: "☠ BOSS RUSH",  color: "var(--cod-danger)" },
   { key: "cursed",          label: "☠ CURSED",      color: "#CC00FF" },
   { key: "speedrun",        label: "🏃 SPEEDRUN",   color: "#00FF88" },
   { key: "gauntlet",        label: "🏋️ GAUNTLET",   color: "#AA44FF" },
@@ -39,7 +39,7 @@ function InputDeviceBadge({ device }) {
 // ── Account level badge ───────────────────────────────────────────────────────
 const LEVEL_TIERS = [
   { min: 100, color: "#CC44FF", bg: "rgba(160,0,255,0.18)", border: "#AA22FF", label: "👑" },
-  { min: 50,  color: "#FFD700", bg: "rgba(255,215,0,0.18)",  border: "#CC9900", label: "★" },
+  { min: 50,  color: "var(--cod-gold)", bg: "rgba(255,215,0,0.18)",  border: "#CC9900", label: "★" },
   { min: 25,  color: "#C0C0C0", bg: "rgba(200,200,200,0.15)", border: "#A0A0A0", label: "◈" },
   { min: 10,  color: "#CD7F32", bg: "rgba(160,90,40,0.2)",   border: "#A05820", label: "◆" },
   { min: 1,   color: "#888888", bg: "rgba(120,120,120,0.12)", border: "#555",   label: "·" },
@@ -54,7 +54,7 @@ function SupporterBadge({ supporter }) {
         fontSize: 10, padding: "1px 4px", borderRadius: 3,
         background: "rgba(255,215,0,0.15)",
         border: "1px solid rgba(255,215,0,0.5)",
-        color: "#FFD700", fontWeight: 900, flexShrink: 0,
+        color: "var(--cod-gold)", fontWeight: 900, flexShrink: 0,
         fontFamily: "'Courier New', monospace",
       }}
     >⭐</span>
@@ -82,8 +82,8 @@ function AccountLevelBadge({ level }) {
 const DIFF_TABS = [
   { key: null,     label: "ALL",    emoji: "🌐", color: "#AAA" },
   { key: "easy",   label: "EASY",   emoji: "🟢", color: "#44CC44" },
-  { key: "normal", label: "NORMAL", emoji: "🟡", color: "#FFD700" },
-  { key: "hard",   label: "HARD",   emoji: "🔴", color: "#FF4444" },
+  { key: "normal", label: "NORMAL", emoji: "🟡", color: "var(--cod-gold)" },
+  { key: "hard",   label: "HARD",   emoji: "🔴", color: "var(--cod-danger)" },
   { key: "insane", label: "INSANE", emoji: "💀", color: "#FF00FF" },
 ];
 
@@ -162,7 +162,7 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
       <div style={{ ...card, maxWidth: 820, width: "100%", minHeight: 0, overflow: "visible", position: "relative", border: "1px solid rgba(255,215,0,0.2)", padding: "18px 16px", color: "#fff", margin: "auto 0" }}>
         <button onClick={onClose} style={{ position: "absolute", top: 10, right: 14, background: "none", border: "none", color: "#CCC", fontSize: 20, cursor: "pointer", fontFamily: "monospace" }}>X</button>
 
-        <h3 style={{ color: "#FFD700", margin: "0 0 2px", fontSize: 18, letterSpacing: 2 }}>GLOBAL LEADERBOARD</h3>
+        <h3 style={{ color: "var(--cod-gold)", margin: "0 0 2px", fontSize: 18, letterSpacing: 2 }}>GLOBAL LEADERBOARD</h3>
         <p style={{ color: "#BBB", fontSize: 11, margin: "0 0 8px" }}>Global leaderboard · showing {leaderboard.length}</p>
 
         <div style={{ marginBottom: 12 }}><CommunityStatsPanel compact /></div>
@@ -218,7 +218,7 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
         {/* Boss Rush difficulty sub-tabs */}
         {activeMode === "boss_rush" && (
           <div style={{ display: "flex", gap: 3, marginBottom: 6, flexWrap: "wrap", paddingLeft: 4 }}>
-            <span style={{ fontSize: 10, color: "#FF3333", fontWeight: 700, letterSpacing: 1, alignSelf: "center", marginRight: 2 }}>BR DIFF:</span>
+            <span style={{ fontSize: 10, color: "var(--cod-danger)", fontWeight: 700, letterSpacing: 1, alignSelf: "center", marginRight: 2 }}>BR DIFF:</span>
             {[{ key: null, label: "ALL" }, { key: "easy", label: "EASY" }, { key: "normal", label: "NRM" }, { key: "hard", label: "HARD" }, { key: "insane", label: "INS" }].map(st => {
               const isActive = bossRushDiff === st.key;
               return (
@@ -242,7 +242,7 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
         {/* Gauntlet difficulty sub-tabs */}
         {activeMode === "gauntlet" && (
           <div style={{ display: "flex", gap: 3, marginBottom: 6, flexWrap: "wrap", paddingLeft: 4 }}>
-            <span style={{ fontSize: 10, color: "#FFC800", fontWeight: 700, letterSpacing: 1, alignSelf: "center", marginRight: 2 }}>GT DIFF:</span>
+            <span style={{ fontSize: 10, color: "var(--cod-gold)", fontWeight: 700, letterSpacing: 1, alignSelf: "center", marginRight: 2 }}>GT DIFF:</span>
             {[{ key: null, label: "ALL" }, { key: "easy", label: "EASY" }, { key: "normal", label: "NRM" }, { key: "hard", label: "HARD" }, { key: "insane", label: "INS" }].map(st => {
               const isActive = gauntletDiff === st.key;
               return (
@@ -362,7 +362,7 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
                       {e.level && <span style={{ color: "#bbb", fontSize: 10, flexShrink: 0 }} title="In-run XP level">⬆{e.level}</span>}
                       {loadoutEmoji && <span style={{ fontSize: 10, flexShrink: 0 }} title={e.starterLoadout}>{loadoutEmoji}</span>}
                       {e.customSettings && <span style={{ fontSize: 10, flexShrink: 0 }} title="Custom settings used">⚙️</span>}
-                      {e.mode === "boss_rush" && <span style={{ fontSize: 10, padding: "0px 4px", borderRadius: 3, background: "rgba(255,51,51,0.18)", border: "1px solid rgba(255,51,51,0.5)", color: "#FF3333", fontWeight: 900, flexShrink: 0 }}>☠BR</span>}
+                      {e.mode === "boss_rush" && <span style={{ fontSize: 10, padding: "0px 4px", borderRadius: 3, background: "rgba(255,51,51,0.18)", border: "1px solid rgba(255,51,51,0.5)", color: "var(--cod-danger)", fontWeight: 900, flexShrink: 0 }}>☠BR</span>}
                       {e.mode === "cursed"    && <span style={{ fontSize: 10, padding: "0px 4px", borderRadius: 3, background: "rgba(204,0,255,0.18)", border: "1px solid rgba(204,0,255,0.5)", color: "#CC00FF", fontWeight: 900, flexShrink: 0 }}>☠CU</span>}
                       {e.mode === "speedrun"  && <span style={{ fontSize: 10, padding: "0px 4px", borderRadius: 3, background: "rgba(0,255,136,0.15)", border: "1px solid rgba(0,255,136,0.5)", color: "#00FF88", fontWeight: 900, flexShrink: 0 }}>🏃SR</span>}
                       {e.mode === "gauntlet"  && <span style={{ fontSize: 10, padding: "0px 4px", borderRadius: 3, background: "rgba(170,68,255,0.18)", border: "1px solid rgba(170,68,255,0.5)", color: "#AA44FF", fontWeight: 900, flexShrink: 0 }}>🏋GT</span>}
@@ -375,7 +375,7 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
                         <span style={{ fontSize: 10, color: "#666", fontFamily: "'Courier New', monospace", letterSpacing: 0.5 }}>seed #{e.seed}</span>
                       )}
                       {activeMode === "daily_challenge" && e.seed === todaySeed && (
-                        <span style={{ fontSize: 10, padding: "0px 4px", borderRadius: 3, background: "rgba(0,229,255,0.18)", border: "1px solid rgba(0,229,255,0.5)", color: "#00E5FF", fontWeight: 900, letterSpacing: 0.5 }}>TODAY</span>
+                        <span style={{ fontSize: 10, padding: "0px 4px", borderRadius: 3, background: "rgba(0,229,255,0.18)", border: "1px solid rgba(0,229,255,0.5)", color: "var(--cod-cyan)", fontWeight: 900, letterSpacing: 0.5 }}>TODAY</span>
                       )}
                       {e.prestige > 0 && (
                         <span style={{ fontSize: 10, color: e.prestige >= 5 ? "#FF44FF" : e.prestige >= 3 ? "#FFD700" : "#888", fontWeight: 700, letterSpacing: 0.5 }}>Prestige {e.prestige}</span>
@@ -407,7 +407,7 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
           <div style={{ textAlign: "center", marginTop: 12 }}>
             <button
               onClick={onLoadMore}
-              style={{ padding: "7px 24px", fontSize: 12, fontFamily: "'Courier New', monospace", fontWeight: 700, letterSpacing: 1, cursor: "pointer", borderRadius: 4, background: "rgba(255,215,0,0.08)", border: "1px solid rgba(255,215,0,0.3)", color: "#FFD700" }}
+              style={{ padding: "7px 24px", fontSize: 12, fontFamily: "'Courier New', monospace", fontWeight: 700, letterSpacing: 1, cursor: "pointer", borderRadius: 4, background: "rgba(255,215,0,0.08)", border: "1px solid rgba(255,215,0,0.3)", color: "var(--cod-gold)" }}
             >
               LOAD MORE ↓
             </button>

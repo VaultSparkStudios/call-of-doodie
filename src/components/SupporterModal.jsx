@@ -6,7 +6,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useFocusTrap } from "../hooks/useFocusTrap.js";
 import { isSupporter, supporterVerificationStatus, verifySupporterCallsign } from "../utils/supporter.js";
-import { COSMETICS, currentTrackWeek, reconcileOwnership } from "../utils/cosmeticTrack.js";
+import { COSMETICS, COSMETIC_TRACK_ENABLED, currentTrackWeek, reconcileOwnership } from "../utils/cosmeticTrack.js";
 import { loadCareerStats } from "../storage.js";
 
 const KOFI_URL = "https://ko-fi.com/vaultsparkstudios";
@@ -80,7 +80,7 @@ export default function SupporterModal({ callsign, onClose }) {
           style={{ position: "absolute", top: 12, right: 14, background: "none", border: "none", color: "#aaa", fontSize: 20, cursor: "pointer", padding: "4px 8px", lineHeight: 1 }}
         >✕</button>
 
-        <h2 id="supporter-title" style={{ color: "#FFD700", margin: "0 0 4px", fontSize: 22 }}>
+        <h2 id="supporter-title" style={{ color: "var(--cod-gold)", margin: "0 0 4px", fontSize: 22 }}>
           ⭐ Supporter Pack
         </h2>
         <p style={{ color: "#aaa", fontSize: 12, margin: "0 0 20px" }}>
@@ -99,7 +99,7 @@ export default function SupporterModal({ callsign, onClose }) {
         {claimed ? (
           <div style={{ textAlign: "center", padding: "14px 0" }}>
             <div style={{ fontSize: 36, marginBottom: 8 }}>⭐</div>
-            <p style={{ color: "#FFD700", fontWeight: 900, fontSize: 16, margin: "0 0 6px" }}>
+            <p style={{ color: "var(--cod-gold)", fontWeight: 900, fontSize: 16, margin: "0 0 6px" }}>
               Supporter verified for {verification.callsign}
             </p>
             <p style={{ color: "#aaa", fontSize: 12, margin: 0 }}>
@@ -137,8 +137,8 @@ export default function SupporterModal({ callsign, onClose }) {
           Verification source: callsign_claims · local storage is cache only.
         </p>
 
-        {/* Doodie Pass Lite — cosmetic track */}
-        <CosmeticTrackBlock callsign={callsign} />
+        {/* Doodie Pass Lite — cosmetic track (hidden until every drop is finished; S163) */}
+        {COSMETIC_TRACK_ENABLED && <CosmeticTrackBlock callsign={callsign} />}
       </div>
     </div>
   );
@@ -153,7 +153,7 @@ function CosmeticTrackBlock({ callsign }) {
   return (
     <div style={{ marginTop: 18, paddingTop: 14, borderTop: "1px solid rgba(255,215,0,0.18)" }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
-        <div style={{ color: "#FFD700", fontWeight: 900, fontSize: 13, letterSpacing: 1 }}>🎟 DOODIE PASS LITE</div>
+        <div style={{ color: "var(--cod-gold)", fontWeight: 900, fontSize: 13, letterSpacing: 1 }}>🎟 DOODIE PASS LITE</div>
         <div style={{ fontSize: 10, color: "#888" }}>Week {week + 1} of 4 · {supporter ? "Supporter" : "Free"}</div>
       </div>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 6 }}>
@@ -174,7 +174,7 @@ function CosmeticTrackBlock({ callsign }) {
         })}
       </div>
       <div style={{ fontSize: 10, color: "#666", marginTop: 8, textAlign: "center" }}>
-        Free unlocks via career milestones. Supporters unlock everything + early access.
+        Free unlocks via career milestones. Supporters unlock every cosmetic on the track.
       </div>
     </div>
   );

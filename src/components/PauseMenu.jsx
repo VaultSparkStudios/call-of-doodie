@@ -46,11 +46,11 @@ export default function PauseMenu({ wave, timeSurvived, score, isMobile, achieve
     const idx = mainItems.findIndex(i => i.key === key);
     return navFocusIdx === idx;
   };
-  const focusRing = { outline: "2px solid #FF6B35", outlineOffset: 2, boxShadow: "0 0 12px rgba(255,107,53,0.45)" };
+  const focusRing = { outline: "2px solid var(--cod-orange)", outlineOffset: 2, boxShadow: "0 0 12px rgba(255,107,53,0.45)" };
 
   const card = { background: "rgba(255,255,255,0.05)", borderRadius: 10, border: "1px solid rgba(255,255,255,0.1)", padding: 16 };
   const pBtn = { padding: "12px 24px", fontSize: 15, fontWeight: 900, fontFamily: "'Courier New',monospace", background: "rgba(255,255,255,0.08)", color: "#FFF", border: "1px solid rgba(255,255,255,0.2)", borderRadius: 8, cursor: "pointer", width: "100%", maxWidth: 300 };
-  const backBtn = { ...pBtn, marginTop: 16, background: "linear-gradient(180deg,#FF6B35,#CC4400)", border: "none" };
+  const backBtn = { ...pBtn, marginTop: 16, background: "linear-gradient(180deg,var(--cod-orange),#CC4400)", border: "none" };
 
   const overlay = { position: "fixed", inset: 0, background: "rgba(0,0,0,0.85)", zIndex: 90, display: "flex", alignItems: "flex-start", justifyContent: "center", padding: "max(16px, env(safe-area-inset-top)) 16px max(20px, env(safe-area-inset-bottom))", overflowY: "auto", WebkitOverflowScrolling: "touch", backdropFilter: "blur(6px)" };
   const panel = { ...card, maxWidth: 460, width: "100%", padding: "24px 20px", color: "#fff", border: "1px solid rgba(255,215,0,0.25)", overflowY: "visible", margin: "auto 0" };
@@ -94,22 +94,22 @@ export default function PauseMenu({ wave, timeSurvived, score, isMobile, achieve
   if (view === "rules") return (
     <div style={overlay}>
       <div style={panel}>
-        <h3 style={{ color: "#FFD700", margin: "0 0 12px", fontSize: 18 }}>📜 RULES OF ENGAGEMENT</h3>
+        <h3 style={{ color: "var(--cod-gold)", margin: "0 0 12px", fontSize: 18 }}>📜 RULES OF ENGAGEMENT</h3>
         <div style={{ fontSize: 13, color: "#EEE", lineHeight: 2 }}>
-          <div>🎯 <strong style={{ color: "#FF6B35" }}>Objective:</strong> Survive as many waves as possible</div>
-          <div>👾 <strong style={{ color: "#FF6B35" }}>Enemies:</strong> Spawn in waves, each harder than the last</div>
-          <div>⚠️ <strong style={{ color: "#FF6B35" }}>Boss Waves:</strong> Every 5th wave spawns a powerful boss!</div>
-          <div>⚡ <strong style={{ color: "#FF6B35" }}>Combos:</strong> Kill quickly for score multipliers (2s window)</div>
-          <div>🔥 <strong style={{ color: "#FF6B35" }}>Killstreaks:</strong> Every 5 kills triggers a bonus attack</div>
-          <div>💥 <strong style={{ color: "#FF6B35" }}>Critical Hits:</strong> 15% chance for 2x damage (gold text)</div>
-          <div>💊 <strong style={{ color: "#FF6B35" }}>Pickups:</strong> Enemies drop health, ammo, speed, nukes & upgrades</div>
-          <div>🔧 <strong style={{ color: "#FF6B35" }}>Weapon Upgrades:</strong> Rare drops — boost damage, fire rate & ammo!</div>
-          <div>😇 <strong style={{ color: "#FF6B35" }}>Guardian Angel:</strong> Super rare boss drop — grants 1 extra life!</div>
-          <div>✨ <strong style={{ color: "#FF6B35" }}>Perks:</strong> Pick one on every level-up. They stack!</div>
-          <div>⚠️ <strong style={{ color: "#FF6B35" }}>Ranged Foes:</strong> Glowing ring enemies shoot at you!</div>
-          <div>💨 <strong style={{ color: "#FF6B35" }}>Dash:</strong> Brief invincibility to dodge through danger</div>
-          <div>⬆ <strong style={{ color: "#FF6B35" }}>XP & Levels:</strong> Level up from kills — choose a perk each time</div>
-          <div>🏆 <strong style={{ color: "#FF6B35" }}>Leaderboard:</strong> Submit your score with famous last words</div>
+          <div>🎯 <strong style={{ color: "var(--cod-orange)" }}>Objective:</strong> Survive as many waves as possible</div>
+          <div>👾 <strong style={{ color: "var(--cod-orange)" }}>Enemies:</strong> Spawn in waves, each harder than the last</div>
+          <div>⚠️ <strong style={{ color: "var(--cod-orange)" }}>Boss Waves:</strong> Every 5th wave spawns a powerful boss!</div>
+          <div>⚡ <strong style={{ color: "var(--cod-orange)" }}>Combos:</strong> Kill quickly for score multipliers (2s window)</div>
+          <div>🔥 <strong style={{ color: "var(--cod-orange)" }}>Killstreaks:</strong> Every 5 kills triggers a bonus attack</div>
+          <div>💥 <strong style={{ color: "var(--cod-orange)" }}>Critical Hits:</strong> 15% chance for 2x damage (gold text)</div>
+          <div>💊 <strong style={{ color: "var(--cod-orange)" }}>Pickups:</strong> Enemies drop health, ammo, speed, nukes & upgrades</div>
+          <div>🔧 <strong style={{ color: "var(--cod-orange)" }}>Weapon Upgrades:</strong> Rare drops — boost damage, fire rate & ammo!</div>
+          <div>😇 <strong style={{ color: "var(--cod-orange)" }}>Guardian Angel:</strong> Super rare boss drop — grants 1 extra life!</div>
+          <div>✨ <strong style={{ color: "var(--cod-orange)" }}>Perks:</strong> Pick one on every level-up. They stack!</div>
+          <div>⚠️ <strong style={{ color: "var(--cod-orange)" }}>Ranged Foes:</strong> Glowing ring enemies shoot at you!</div>
+          <div>💨 <strong style={{ color: "var(--cod-orange)" }}>Dash:</strong> Brief invincibility to dodge through danger</div>
+          <div>⬆ <strong style={{ color: "var(--cod-orange)" }}>XP & Levels:</strong> Level up from kills — choose a perk each time</div>
+          <div>🏆 <strong style={{ color: "var(--cod-orange)" }}>Leaderboard:</strong> Submit your score with famous last words</div>
         </div>
         <button onClick={() => setView("main")} style={backBtn}>← BACK</button>
       </div>
@@ -119,53 +119,53 @@ export default function PauseMenu({ wave, timeSurvived, score, isMobile, achieve
   if (view === "controls") return (
     <div style={overlay}>
       <div style={panel}>
-        <h3 style={{ color: "#FFD700", margin: "0 0 12px", fontSize: 18 }}>⌨ CONTROLS</h3>
+        <h3 style={{ color: "var(--cod-gold)", margin: "0 0 12px", fontSize: 18 }}>⌨ CONTROLS</h3>
         {isMobile ? (
           <div style={{ fontSize: 13, color: "#EEE", lineHeight: 2.2 }}>
-            <div>👆 <span style={{ color: "#FF6B35", fontWeight: 800 }}>Left thumb</span> — Move soldier</div>
-            <div>👆 <span style={{ color: "#FF6B35", fontWeight: 800 }}>Right thumb</span> — Aim & auto-fire</div>
+            <div>👆 <span style={{ color: "var(--cod-orange)", fontWeight: 800 }}>Left thumb</span> — Move soldier</div>
+            <div>👆 <span style={{ color: "var(--cod-orange)", fontWeight: 800 }}>Right thumb</span> — Aim & auto-fire</div>
             <div>🎯 <span style={{ color: "#EEE" }}>Move only → auto-aims nearest enemy</span></div>
-            <div>💨 <span style={{ color: "#00E5FF", fontWeight: 800 }}>DASH button</span> — Invincible dodge</div>
+            <div>💨 <span style={{ color: "var(--cod-cyan)", fontWeight: 800 }}>DASH button</span> — Invincible dodge</div>
             <div>💣 <span style={{ color: "#FF4500", fontWeight: 800 }}>GRENADE button</span> — AOE explosion</div>
-            <div>🔢 <span style={{ color: "#FFD700", fontWeight: 800 }}>Weapon buttons</span> — Tap to swap</div>
-            <div>⟳ <span style={{ color: "#FFD700", fontWeight: 800 }}>R button</span> — Manual reload</div>
-            <div>⏸ <span style={{ color: "#FFD700", fontWeight: 800 }}>Pause button</span> — This menu</div>
+            <div>🔢 <span style={{ color: "var(--cod-gold)", fontWeight: 800 }}>Weapon buttons</span> — Tap to swap</div>
+            <div>⟳ <span style={{ color: "var(--cod-gold)", fontWeight: 800 }}>R button</span> — Manual reload</div>
+            <div>⏸ <span style={{ color: "var(--cod-gold)", fontWeight: 800 }}>Pause button</span> — This menu</div>
           </div>
         ) : (
           <div style={{ fontSize: 13, color: "#EEE", lineHeight: 2.2 }}>
-            <div>🏃 <span style={{ color: "#FF6B35", fontWeight: 800 }}>W/A/S/D</span> — Move</div>
-            <div>🖱 <span style={{ color: "#FF6B35", fontWeight: 800 }}>Mouse</span> — Aim</div>
-            <div>🔫 <span style={{ color: "#FF6B35", fontWeight: 800 }}>Left Click</span> — Shoot</div>
-            <div>🔄 <span style={{ color: "#FFD700", fontWeight: 800 }}>R</span> — Reload</div>
-            <div>🔢 <span style={{ color: "#FFD700", fontWeight: 800 }}>1 / 2 / 3 / 4</span> — Switch weapons</div>
+            <div>🏃 <span style={{ color: "var(--cod-orange)", fontWeight: 800 }}>W/A/S/D</span> — Move</div>
+            <div>🖱 <span style={{ color: "var(--cod-orange)", fontWeight: 800 }}>Mouse</span> — Aim</div>
+            <div>🔫 <span style={{ color: "var(--cod-orange)", fontWeight: 800 }}>Left Click</span> — Shoot</div>
+            <div>🔄 <span style={{ color: "var(--cod-gold)", fontWeight: 800 }}>R</span> — Reload</div>
+            <div>🔢 <span style={{ color: "var(--cod-gold)", fontWeight: 800 }}>1 / 2 / 3 / 4</span> — Switch weapons</div>
             <div>💣 <span style={{ color: "#FF4500", fontWeight: 800 }}>Q / G</span> — Throw grenade</div>
-            <div>💨 <span style={{ color: "#00E5FF", fontWeight: 800 }}>Space / Shift</span> — Dash</div>
-            <div>⏸ <span style={{ color: "#FFD700", fontWeight: 800 }}>Escape</span> — Pause / Resume</div>
+            <div>💨 <span style={{ color: "var(--cod-cyan)", fontWeight: 800 }}>Space / Shift</span> — Dash</div>
+            <div>⏸ <span style={{ color: "var(--cod-gold)", fontWeight: 800 }}>Escape</span> — Pause / Resume</div>
           </div>
         )}
         {/* Controller bindings */}
         <div style={{ marginTop: 14, paddingTop: 12, borderTop: "1px solid rgba(255,255,255,0.1)" }}>
-          <div style={{ fontSize: 12, color: "#FFD700", fontWeight: 700, marginBottom: 8, display: "flex", alignItems: "center", gap: 6 }}>
+          <div style={{ fontSize: 12, color: "var(--cod-gold)", fontWeight: 700, marginBottom: 8, display: "flex", alignItems: "center", gap: 6 }}>
             🎮 CONTROLLER
             {controllerType === "xbox" && <span style={{ fontSize: 9, padding: "1px 5px", borderRadius: 3, background: "rgba(16,124,16,0.2)", border: "1px solid #107C10", color: "#4DBD61", fontWeight: 900 }}>Xbox</span>}
             {controllerType === "ps" && <span style={{ fontSize: 9, padding: "1px 5px", borderRadius: 3, background: "rgba(0,55,145,0.22)", border: "1px solid #2255BB", color: "#6699FF", fontWeight: 900 }}>PS</span>}
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "4px 12px", fontSize: 12, color: "#EEE", lineHeight: 2 }}>
-            <div>🕹️ <span style={{ color: "#FF6B35", fontWeight: 800 }}>{labels.move}</span> — Move</div>
-            <div>🎯 <span style={{ color: "#FF6B35", fontWeight: 800 }}>{labels.aim}</span> — Aim</div>
-            <div>🔫 <span style={{ color: "#FF6B35", fontWeight: 800 }}>{labels.shoot}</span> — Shoot</div>
-            <div>🔭 <span style={{ color: "#00E5FF", fontWeight: 800 }}>{labels.ads}</span> — ADS Zoom</div>
-            <div>💨 <span style={{ color: "#00E5FF", fontWeight: 800 }}>{labels.dash}</span> — Dash</div>
+            <div>🕹️ <span style={{ color: "var(--cod-orange)", fontWeight: 800 }}>{labels.move}</span> — Move</div>
+            <div>🎯 <span style={{ color: "var(--cod-orange)", fontWeight: 800 }}>{labels.aim}</span> — Aim</div>
+            <div>🔫 <span style={{ color: "var(--cod-orange)", fontWeight: 800 }}>{labels.shoot}</span> — Shoot</div>
+            <div>🔭 <span style={{ color: "var(--cod-cyan)", fontWeight: 800 }}>{labels.ads}</span> — ADS Zoom</div>
+            <div>💨 <span style={{ color: "var(--cod-cyan)", fontWeight: 800 }}>{labels.dash}</span> — Dash</div>
             <div>💣 <span style={{ color: "#FF4500", fontWeight: 800 }}>{labels.grenade}</span> — Grenade</div>
-            <div>🔄 <span style={{ color: "#FFD700", fontWeight: 800 }}>{labels.reload}</span> — Reload</div>
-            <div>◀ <span style={{ color: "#FFD700", fontWeight: 800 }}>{labels.previousWeapon}</span> — Prev weapon</div>
-            <div>▶ <span style={{ color: "#FFD700", fontWeight: 800 }}>{labels.nextWeapon}</span> — Next weapon</div>
-            <div>⏸ <span style={{ color: "#FFD700", fontWeight: 800 }}>{labels.pause}</span> — Pause</div>
+            <div>🔄 <span style={{ color: "var(--cod-gold)", fontWeight: 800 }}>{labels.reload}</span> — Reload</div>
+            <div>◀ <span style={{ color: "var(--cod-gold)", fontWeight: 800 }}>{labels.previousWeapon}</span> — Prev weapon</div>
+            <div>▶ <span style={{ color: "var(--cod-gold)", fontWeight: 800 }}>{labels.nextWeapon}</span> — Next weapon</div>
+            <div>⏸ <span style={{ color: "var(--cod-gold)", fontWeight: 800 }}>{labels.pause}</span> — Pause</div>
             <div>⬆⬇ <span style={{ color: "#AAA", fontWeight: 800 }}>D-pad U/D</span> — Navigate menus</div>
           </div>
         </div>
         <div style={{ marginTop: 14 }}>
-          <div style={{ fontSize: 12, color: "#FFD700", fontWeight: 700, marginBottom: 6 }}>WEAPONS</div>
+          <div style={{ fontSize: 12, color: "var(--cod-gold)", fontWeight: 700, marginBottom: 6 }}>WEAPONS</div>
           {WEAPONS.map((w, i) => (
             <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, padding: "4px 0", fontSize: 12, color: "#EEE" }}>
               <span style={{ fontSize: 16 }}>{w.emoji}</span>
@@ -182,7 +182,7 @@ export default function PauseMenu({ wave, timeSurvived, score, isMobile, achieve
   if (view === "bestiary") return (
     <div style={overlay}>
       <div style={panel}>
-        <h3 style={{ color: "#FFD700", margin: "0 0 12px", fontSize: 18 }}>👾 MOST WANTED LIST</h3>
+        <h3 style={{ color: "var(--cod-gold)", margin: "0 0 12px", fontSize: 18 }}>👾 MOST WANTED LIST</h3>
         {ENEMY_TYPES.map((e, i) => (
           <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 6px", borderRadius: 6, marginBottom: 4, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.05)" }}>
             <span style={{ fontSize: 24 }}>{e.emoji}</span>
@@ -204,14 +204,14 @@ export default function PauseMenu({ wave, timeSurvived, score, isMobile, achieve
     const synergies = activeSynergiesData || [];
     // Compute a human-readable stat summary from perkMods
     const stats = [];
-    if ((pm.damageMult || 1) > 1)         stats.push({ label: "Damage",      val: `×${pm.damageMult.toFixed(2)}`,       color: "#FF4444" });
+    if ((pm.damageMult || 1) > 1)         stats.push({ label: "Damage",      val: `×${pm.damageMult.toFixed(2)}`,       color: "var(--cod-danger)" });
     if ((pm.fireRateMult || 1) < 1)       stats.push({ label: "Fire Rate",   val: `×${(1/pm.fireRateMult).toFixed(1)} faster`, color: "#FF8800" });
-    if ((pm.speedMult || 1) > 1)          stats.push({ label: "Speed",       val: `×${pm.speedMult.toFixed(2)}`,        color: "#00E5FF" });
+    if ((pm.speedMult || 1) > 1)          stats.push({ label: "Speed",       val: `×${pm.speedMult.toFixed(2)}`,        color: "var(--cod-cyan)" });
     if ((pm.lifesteal || 0) > 0)          stats.push({ label: "Lifesteal",   val: `${Math.round(pm.lifesteal*100)}% per hit`, color: "#FF0066" });
     if ((pm.pierce || 0) > 0)             stats.push({ label: "Pierce",      val: `+${pm.pierce} targets`,             color: "#FFAA00" });
     if ((pm.maxAmmoMult || pm.ammoMult || 1) > 1) stats.push({ label: "Max Ammo", val: `×${(pm.maxAmmoMult || pm.ammoMult || 1).toFixed(1)}`, color: "#00FF88" });
     if ((pm.reloadMult || 1) < 1)         stats.push({ label: "Reload",      val: `×${pm.reloadMult.toFixed(2)} faster`, color: "#AAAAFF" });
-    if ((pm.xpMult || 1) > 1)             stats.push({ label: "XP Gain",     val: `×${pm.xpMult.toFixed(1)}`,          color: "#FFD700" });
+    if ((pm.xpMult || 1) > 1)             stats.push({ label: "XP Gain",     val: `×${pm.xpMult.toFixed(1)}`,          color: "var(--cod-gold)" });
     if ((pm.pickupRange || 0) > 30)       stats.push({ label: "Pickup Range",val: `${pm.pickupRange}px`,               color: "#00FFCC" });
     if (pm.bounces > 0)                   stats.push({ label: "Bounces",     val: `+${pm.bounces} extra`,              color: "#7FFF00" });
     if (pm.extraPellets > 0)              stats.push({ label: "Pellets",     val: `+${pm.extraPellets} per shot`,      color: "#FF69B4" });
@@ -282,7 +282,7 @@ export default function PauseMenu({ wave, timeSurvived, score, isMobile, achieve
             </div>
           )}
 
-          <button onClick={() => setView("main")} style={{ padding: "12px 24px", fontSize: 15, fontWeight: 900, fontFamily: "'Courier New',monospace", background: "linear-gradient(180deg,#FF6B35,#CC4400)", color: "#FFF", border: "none", borderRadius: 8, cursor: "pointer", width: "100%", maxWidth: 300, marginTop: 20 }}>← BACK</button>
+          <button onClick={() => setView("main")} style={{ padding: "12px 24px", fontSize: 15, fontWeight: 900, fontFamily: "'Courier New',monospace", background: "linear-gradient(180deg,var(--cod-orange),#CC4400)", color: "#FFF", border: "none", borderRadius: 8, cursor: "pointer", width: "100%", maxWidth: 300, marginTop: 20 }}>← BACK</button>
         </div>
       </div>
     );
@@ -293,10 +293,10 @@ export default function PauseMenu({ wave, timeSurvived, score, isMobile, achieve
     <div style={overlay}>
       <div style={{ textAlign: "center", maxWidth: 320, width: "100%" }}>
         <div style={{ fontSize: 36, marginBottom: 4 }}>⏸</div>
-        <h2 style={{ color: "#FFD700", fontSize: 28, margin: "0 0 4px", letterSpacing: 3, fontFamily: "'Courier New',monospace" }}>PAUSED</h2>
+        <h2 style={{ color: "var(--cod-gold)", fontSize: 28, margin: "0 0 4px", letterSpacing: 3, fontFamily: "'Courier New',monospace" }}>PAUSED</h2>
         {pauseReason?.label && (
           <div role="status" aria-live="polite" style={{ margin: "8px 0 12px", padding: "8px 10px", border: "1px solid rgba(0,229,255,0.45)", borderRadius: 8, background: "rgba(0,229,255,0.08)", fontFamily: "'Courier New',monospace" }}>
-            <div style={{ color: "#7FE6FF", fontSize: 11, fontWeight: 900 }}>{pauseReason.label}</div>
+            <div style={{ color: "var(--cod-cyan)", fontSize: 11, fontWeight: 900 }}>{pauseReason.label}</div>
             <div style={{ color: "#CCC", fontSize: 9, marginTop: 3 }}>{pauseReason.detail}</div>
           </div>
         )}
@@ -304,13 +304,13 @@ export default function PauseMenu({ wave, timeSurvived, score, isMobile, achieve
           Wave {wave} · {fmtTime(timeSurvived)} · Score: {score.toLocaleString()}
         </p>
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
-          <button onClick={onResume} style={{ ...pBtn, background: "linear-gradient(180deg,#FF6B35,#CC4400)", border: "none", fontSize: 18, ...(gfocus("resume") ? focusRing : {}) }}>▶ RESUME</button>
+          <button onClick={onResume} style={{ ...pBtn, background: "linear-gradient(180deg,var(--cod-orange),#CC4400)", border: "none", fontSize: 18, ...(gfocus("resume") ? focusRing : {}) }}>▶ RESUME</button>
           <button onClick={() => setView("build")} style={{ ...pBtn, color: "#FF88FF", borderColor: "rgba(255,136,255,0.25)", ...(gfocus("build") ? focusRing : {}) }}>🔧 BUILD SUMMARY {(activePerks?.length || 0) > 0 ? `(${activePerks.length} perks)` : ""}</button>
           <button onClick={() => setView("rules")} style={{ ...pBtn, ...(gfocus("rules") ? focusRing : {}) }}>📜 RULES</button>
           <button onClick={() => setView("controls")} style={{ ...pBtn, ...(gfocus("controls") ? focusRing : {}) }}>⌨ CONTROLS</button>
           <button onClick={() => setView("bestiary")} style={{ ...pBtn, ...(gfocus("bestiary") ? focusRing : {}) }}>👾 MOST WANTED LIST</button>
           <button onClick={() => setShowAch(true)} style={{ ...pBtn, ...(gfocus("achievements") ? focusRing : {}) }}>🏅 ACHIEVEMENTS ({achievementsUnlocked.length}/{ACHIEVEMENTS.length})</button>
-          <button onClick={() => { onRefreshLeaderboard?.(); setShowLb(true); }} style={{ ...pBtn, color: "#00E5FF", borderColor: "rgba(0,229,255,0.25)", ...(gfocus("leaderboard") ? focusRing : {}) }}>⚔️ LEADERBOARD</button>
+          <button onClick={() => { onRefreshLeaderboard?.(); setShowLb(true); }} style={{ ...pBtn, color: "var(--cod-cyan)", borderColor: "rgba(0,229,255,0.25)", ...(gfocus("leaderboard") ? focusRing : {}) }}>⚔️ LEADERBOARD</button>
           <button onClick={() => { soundUIOpen(); setShowSettings(true); }} style={{ ...pBtn, ...(gfocus("settings") ? focusRing : {}) }}>⚙ SETTINGS</button>
           <button onClick={onToggleMute} style={{ ...pBtn, color: musicMuted ? "#888" : "#0EF", ...(gfocus("music") ? focusRing : {}) }}>
             {musicMuted ? "🔇 MUSIC: OFF" : "🔊 MUSIC: ON"}

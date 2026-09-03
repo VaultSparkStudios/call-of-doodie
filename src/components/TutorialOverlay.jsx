@@ -6,8 +6,8 @@ import "./tutorial-overlay.css";
 const STEPS = [
   { icon: "↔", title: "Move", requirement: "move", desc: "Reposition to keep enemies at a safe distance.", pc: "WASD", mobile: "Drag the left side", controller: "Left stick", color: "#00FF88" },
   { icon: "✦", title: "Fire and defeat one enemy", requirement: ["shoot", "kill"], desc: "Aim into a crowd and keep moving.", pc: "Aim + left click", mobile: "Drag the right side", controller: "RT / R2", color: "#FFB14A" },
-  { icon: "»", title: "Dash", requirement: "dash", desc: "Dodge through danger while briefly invulnerable.", pc: "Space or Shift", mobile: "Tap Dash", controller: "A / Cross", color: "#00E5FF" },
-  { icon: "●", title: "Throw a grenade", requirement: "grenade", desc: "Use grenades when enemies group together.", pc: "Q or G", mobile: "Tap Grenade", controller: "B / Circle", color: "#FF6B35" },
+  { icon: "»", title: "Dash", requirement: "dash", desc: "Dodge through danger while briefly invulnerable.", pc: "Space or Shift", mobile: "Tap Dash", controller: "A / Cross", color: "var(--cod-cyan)" },
+  { icon: "●", title: "Throw a grenade", requirement: "grenade", desc: "Use grenades when enemies group together.", pc: "Q or G", mobile: "Tap Grenade", controller: "B / Circle", color: "var(--cod-orange)" },
   { icon: "◆", title: "Choose an upgrade", requirement: "perk", desc: "Collect experience, level up, and shape your build.", pc: null, mobile: null, controller: null, color: "#C790FF" },
 ];
 

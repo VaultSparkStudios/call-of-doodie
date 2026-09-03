@@ -130,7 +130,7 @@ export default function HUD({
       </div>
 
       {modeHud && (modeHud.banner || modeHud.progress) && (
-        <div data-testid="hud-mode-banner" style={{ position: "absolute", top: 30, left: "50%", transform: "translateX(-50%)", fontSize: 10, color: "#FFD34F", background: "rgba(0,0,0,0.55)", padding: "2px 10px", borderRadius: 8, fontWeight: 800, letterSpacing: 1, whiteSpace: "nowrap", border: "1px solid rgba(255,211,79,0.35)", fontFamily: "'Courier New',monospace" }}>
+        <div data-testid="hud-mode-banner" style={{ position: "absolute", top: 30, left: "50%", transform: "translateX(-50%)", fontSize: 10, color: "var(--cod-gold)", background: "rgba(0,0,0,0.55)", padding: "2px 10px", borderRadius: 8, fontWeight: 800, letterSpacing: 1, whiteSpace: "nowrap", border: "1px solid rgba(255,211,79,0.35)", fontFamily: "'Courier New',monospace" }}>
           {modeHud.banner}
           {modeHud.progress && (
             <span style={{ display: "inline-block", marginLeft: 8, width: 90, height: 6, verticalAlign: "middle", background: "rgba(255,255,255,0.12)", borderRadius: 3, overflow: "hidden" }}>
@@ -229,7 +229,7 @@ export default function HUD({
           padding: "3px 8px", fontSize: 9, fontFamily: "'Courier New',monospace", color: "#BEEFFF",
           whiteSpace: "nowrap", overflow: "hidden",
         }} title="Top leaderboard ghosts loaded for this mode and difficulty">
-          <span style={{ color: "#00E5FF", fontWeight: 900 }}>GHOST PACK</span>
+          <span style={{ color: "var(--cod-cyan)", fontWeight: 900 }}>GHOST PACK</span>
           {topGhosts.slice(0, 3).map((ghost, index) => (
             <span key={`${ghost.name || "ghost"}-${index}`} style={{ color: index === 0 ? "#FFD700" : "#D8F6FF", overflow: "hidden", textOverflow: "ellipsis", maxWidth: 138 }}>
               {index + 1}. {(ghost.name || "Ghost").slice(0, 12)} {Math.max(0, Number(ghost.score || 0)).toLocaleString()}
@@ -290,7 +290,7 @@ export default function HUD({
 
       {/* Run modifier badge */}
       {runModifier && (
-        <div style={{ position: "absolute", top: centerStack.slots.runModifier, left: "50%", transform: "translateX(-50%)", fontSize: 9, color: "#FFD700", background: "rgba(0,0,0,0.55)", padding: "2px 9px", borderRadius: 8, fontWeight: 700, letterSpacing: 1, border: "1px solid rgba(255,215,0,0.28)", whiteSpace: "nowrap" }} title={runModifier.desc}>
+        <div style={{ position: "absolute", top: centerStack.slots.runModifier, left: "50%", transform: "translateX(-50%)", fontSize: 9, color: "var(--cod-gold)", background: "rgba(0,0,0,0.55)", padding: "2px 9px", borderRadius: 8, fontWeight: 700, letterSpacing: 1, border: "1px solid rgba(255,215,0,0.28)", whiteSpace: "nowrap" }} title={runModifier.desc}>
           {runModifier.emoji} {runModifier.name.toUpperCase()}
         </div>
       )}
@@ -358,7 +358,7 @@ export default function HUD({
       <div style={{ position: "absolute", top: 42, left: 12, maxWidth: 200 }}>
         {killFeed.slice(0, 4).map((kf, i) => (
           <div key={kf.id} style={{ fontSize: 10, color: "rgba(255,255,255," + (1 - i * 0.15) + ")", marginBottom: 2, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-            <span style={{ color: "#FFD700" }}>{username}</span> [{WEAPONS.find(w => w.name === kf.weapon)?.emoji}] <span style={{ color: "#FF69B4" }}>{kf.enemy}</span>
+            <span style={{ color: "var(--cod-gold)" }}>{username}</span> [{WEAPONS.find(w => w.name === kf.weapon)?.emoji}] <span style={{ color: "#FF69B4" }}>{kf.enemy}</span>
           </div>
         ))}
       </div>
@@ -402,7 +402,7 @@ export default function HUD({
         <div style={{ background: "rgba(255,255,255,0.15)", borderRadius: 3, height: 6, overflow: "hidden" }}>
           <div style={{ width: Math.min(100, (health / diff.playerHP) * 100) + "%", height: "100%", borderRadius: 3, background: health > 60 ? "#0F0" : health > 30 ? "#FA0" : "#F00", transition: "width 0.2s" }} />
         </div>
-        {extraLives > 0 && <div style={{ fontSize: 9, color: "#FFD700", marginTop: 2 }}>Guardian Angel Active</div>}
+        {extraLives > 0 && <div style={{ fontSize: 9, color: "var(--cod-gold)", marginTop: 2 }}>Guardian Angel Active</div>}
       </div>
 
       {/* Overclocked heat gauge */}
@@ -452,9 +452,9 @@ export default function HUD({
       <div style={{ position: "absolute", bottom: 8, right: isMobile ? 8 : 56, textAlign: "right" }}>
         <div style={{ fontSize: 11, color: weaponUpgrades?.[currentWeapon] >= 3 && weapon.upgradedName ? "#FFD700" : weapon.color, marginBottom: 1, fontWeight: 600 }}>
           {weapon.emoji} {weaponEvolutions?.[currentWeapon]?.evolved
-            ? <span style={{ color: "#FF6B35", textShadow: "0 0 8px rgba(255,107,53,0.7)" }}>🔥 {weaponEvolutions[currentWeapon].name}</span>
+            ? <span style={{ color: "var(--cod-orange)", textShadow: "0 0 8px rgba(255,107,53,0.7)" }}>🔥 {weaponEvolutions[currentWeapon].name}</span>
             : weaponUpgrades?.[currentWeapon] >= 3 && weapon.upgradedName
-              ? <span style={{ color: "#FFD700", textShadow: "0 0 8px rgba(255,215,0,0.6)" }}>⭐⭐⭐ {weapon.upgradedName}</span>
+              ? <span style={{ color: "var(--cod-gold)", textShadow: "0 0 8px rgba(255,215,0,0.6)" }}>⭐⭐⭐ {weapon.upgradedName}</span>
               : <>{weapon.name}{weaponUpgrades?.[currentWeapon] > 0 && <span style={{ color: "#AA44FF", marginLeft: 4, fontSize: 10 }}>{upgStars(currentWeapon)}</span>}</>
           }
         </div>
@@ -462,7 +462,7 @@ export default function HUD({
           <span style={{ color: ammo > 0 ? "#FFF" : "#F44" }}>{ammo}</span>
           <span style={{ color: "#BBB", fontSize: 13 }}>/{weapon.maxAmmo}</span>
         </div>
-        {isReloading && <div style={{ fontSize: 11, color: "#FFD700", animation: "blink 0.5s infinite" }}>RELOADING...</div>}
+        {isReloading && <div style={{ fontSize: 11, color: "var(--cod-gold)", animation: "blink 0.5s infinite" }}>RELOADING...</div>}
       </div>
 
       {/* Low HP vignette */}
@@ -488,7 +488,7 @@ export default function HUD({
                 </div>
                 {!done && (
                   <div style={{ width: 120, height: 2, background: "rgba(255,255,255,0.1)", borderRadius: 1, marginTop: 2, overflow: "hidden" }}>
-                    <div style={{ width: Math.min(100, ((m._progress || 0) / m.goal) * 100) + "%", height: "100%", background: "#FFD700", borderRadius: 1, transition: "width 0.3s" }} />
+                    <div style={{ width: Math.min(100, ((m._progress || 0) / m.goal) * 100) + "%", height: "100%", background: "var(--cod-gold)", borderRadius: 1, transition: "width 0.3s" }} />
                   </div>
                 )}
               </div>
@@ -515,7 +515,7 @@ export default function HUD({
                 maxWidth: "calc(100vw - 16px)",
                 border: "1px dashed rgba(0,229,255,0.55)",
                 background: "rgba(0,229,255,0.045)",
-                color: "#7FE6FF",
+                color: "var(--cod-cyan)",
                 fontSize: 9,
                 fontWeight: 900,
                 letterSpacing: 1,

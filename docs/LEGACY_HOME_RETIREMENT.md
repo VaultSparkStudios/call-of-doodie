@@ -26,3 +26,7 @@ Keep legacy home fallback-only until the evidence below is collected. Do not add
 - Keep it lazy-loaded.
 - Mark it fallback-only in future audit/launch notes.
 - Do not duplicate new HomeV2 player-journey work into the legacy surface unless a real fallback defect requires it.
+
+## 2026-09-03 — Retired (Session 163)
+
+The founder chose the HomeV2 arcade/CRT language as the single brand. `MenuScreen.jsx` (v1), `HomeV3.jsx` (v3), `home-v3.css`, and the `?home=` switch (`src/utils/homeVersion.js`) were deleted. `scripts/legacy-home-retirement-gate.mjs` now asserts the retirement instead of guarding the fallback.

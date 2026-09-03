@@ -2,6 +2,12 @@
 
 Public-safe decisions only. Detailed internal decision history is maintained privately.
 
+## 2026-09-03 — Session 163 — Public claims are generated, and unshipped features live on the roadmap
+
+**Decision:** README feature counts regenerate from runtime constants (`scripts/sync-readme-claims.mjs`) and drift fails `check-public-claims`; the changelog records only what shipped and warns past 30 days; negative claims about unshipped features (real-time co-op, networked royale) live on `/roadmap/`; `/play/` is retired in favor of the in-app deploy anchor.
+
+**Rationale:** Hand-typed numbers had already drifted (7 modes vs 8, 57+ vs 66 achievements). A changelog that disclaims futures reads as marketing hedging; a roadmap that says "not live" reads as honesty.
+
 ## 2026-09-03 — Session 163 — Modes must change what the player does; evidence gating no longer blocks content
 
 **Decision:** The founder-directed audit confirmed six of eight modes were the same survival loop with a flag flipped and Operation verbs were labels. The "hold all content until consented participant evidence" posture (S154–S162) is retired. Modes ship through a mode-definition layer (`src/systems/modeDefinition.js`) on top of the unchanged eight-id ruleset/replay contract: allies, zones, structures, behavioral objective verbs, win conditions. New modes are local-only for scoring until the leaderboard mode enum accepts them.

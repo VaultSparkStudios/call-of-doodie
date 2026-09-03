@@ -1,7 +1,7 @@
 .arcade-home {
-  --arcade-orange:#ff6b22;
-  --arcade-gold:#ffd34f;
-  --arcade-cyan:#33e6ff;
+  --arcade-orange:var(--cod-orange);
+  --arcade-gold:var(--cod-gold);
+  --arcade-cyan:var(--cod-cyan);
   --text-body:16px;
   --text-support:14px;
   --text-label:12px;
@@ -9,13 +9,13 @@
   background:
     radial-gradient(circle at 50% -15%,rgba(255,110,25,.2),transparent 38%),
     radial-gradient(circle at 12% 45%,rgba(0,229,255,.08),transparent 27%),
-    linear-gradient(180deg,#070b10 0%,#020305 72%,#070402 100%) !important;
+    var(--cod-page) !important;
 }
 .arcade-home[data-theme="porcelain-day"] {
   background:
     radial-gradient(circle at 50% -15%,rgba(184,60,0,.13),transparent 38%),
     radial-gradient(circle at 12% 45%,rgba(0,100,122,.08),transparent 27%),
-    linear-gradient(180deg,#fff4dd 0%,#f6f0e7 48%,#e8e0d4 100%) !important;
+    var(--cod-page) !important;
 }
 .arcade-home[data-theme="porcelain-day"]::before { opacity:.07; mix-blend-mode:multiply; }
 .arcade-home[data-theme="porcelain-day"]::after { box-shadow:inset 0 0 90px rgba(79,49,27,.18),inset 0 0 24px rgba(184,60,0,.08); }
@@ -93,7 +93,7 @@
 .arcade-home__portrait span { position:absolute; right:0; bottom:12px; left:0; padding:4px; color:#ffcf88; background:rgba(2,4,8,.82); border:1px solid rgba(255,160,60,.25); font-size:12px; font-weight:900; letter-spacing:.4px; }
 .arcade-home__portrait--operative{left:14px}.arcade-home__portrait--nemesis{right:14px;filter:drop-shadow(0 0 17px rgba(255,60,145,.25))}.arcade-home__portrait--nemesis span{color:#ff8ec6}
 .arcade-home__insert-coin { position:relative; z-index:1; margin-bottom:5px; color:#67efff; font-size:12px; font-weight:900; letter-spacing:1.6px; animation:arcadeBlink 1.8s steps(2,end) infinite; }
-.arcade-home__title { position:relative; z-index:1; font-family:Impact,"Arial Black",sans-serif !important; font-style:italic; letter-spacing:-1px !important; -webkit-text-stroke:1px rgba(72,20,0,.8); transform:skewX(-4deg); }
+.arcade-home__title { position:relative; z-index:1; font-family:var(--font-display) !important; font-style:italic; letter-spacing:-1px !important; -webkit-text-stroke:1px rgba(72,20,0,.8); transform:skewX(-4deg); }
 .arcade-home__deploy { max-width:620px !important; filter:drop-shadow(0 10px 18px rgba(0,0,0,.5)); }
 .arcade-home__deploy-button { min-height:72px; position:relative; overflow:hidden; text-shadow:0 2px rgba(90,20,0,.7); border:1px solid #ffad62 !important; box-shadow:0 0 32px rgba(255,92,18,.36),inset 0 2px rgba(255,255,255,.24),inset 0 -8px rgba(92,22,0,.18) !important; }
 .arcade-home__deploy-button::after { content:""; position:absolute; inset:-60% -20%; background:linear-gradient(100deg,transparent 38%,rgba(255,255,255,.28) 48%,transparent 58%); transform:translateX(-70%); animation:deploySweep 4.5s ease-in-out infinite; }

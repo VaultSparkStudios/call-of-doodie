@@ -1,5 +1,18 @@
 # Work Log
 
+## 2026-09-03 (Session 163 — real modes, CPU squad, fixed timestep, single brand)
+
+- Ran the founder-directed audit with three read-only explorations and two architecture passes; confirmed six of eight modes differed only by ruleset flags, Operation verbs were labels, no ally or netcode existed, five visual languages shipped, and App.jsx had seven lines of loop headroom. Wrote `docs/AUDIT_2026-09-03.md` (five tranches, fifteen ordered items) and recorded three founder decisions.
+- Extracted the 543-line enemy AI block into `src/systems/enemyFrame.js` with a target picker; added a fixed 60Hz accumulator to `useGameLoop`; added `src/sim/stepSim.js` and `presentationKeys.js`; added `allies`, `director`, and `royale` RNG streams and a test that forbids direct `Math.random()` in simulation modules.
+- Built CPU allies, the zone controller, seven behavioral objective verbs, and the mode-definition layer; shipped BOSS GAUNTLET and HOLD THE THRONE with a batched App.jsx pass, HUD banner and squad strip in the compact HUD, a victory path through the death flow, and local-only scoring.
+- A code review found the ally-kill discount unreachable; self-review found Boss Gauntlet never applied its ruleset. Both fixed with tests.
+- Created the token system (`BRAND_TOKENS` → generated `tokens.css` for SPA and static), `base.css`, hex-free `doc.css`; migrated auth, runtime shell, display-name, tutorial, and weapon-dock CSS; aliased the arcade home; swept 231 brand hexes in component style props to tokens.
+- Deleted HomeV3, MenuScreen, the home-version switch, and the dead `obelisk-passport/` copies; rewrote the retirement gate to assert the retirement.
+- Retired `/play/` with a 301, added `/roadmap/` from `src/content/roadmap.js`, moved the co-op negative claim there, grouped the footer from one `FOOTER_GROUPS` source, generated README claims from constants with a build check, added a changelog-age warning, corrected supporter copy, hid the cosmetic track.
+- Full Vitest 221/221 files and 1,286/1,286 assertions; strict lint; build; public contract 29 files; claims; security release gate; architecture budget; token drift; Playwright 19 pass / 1 skip; browser mode smoke; 14 theme captures directly reviewed (`docs/visual-qa/s163-theme/`).
+
+Intent outcome: achieved — the founder's three complaints (identical modes, no teammates, theme jumps) each have shipped, verified fixes; the remaining plan is ordered in the audit.
+
 ## 2026-08-25/26 (Session 162 — corrective-order evidence across runs)
 
 - Ran the fresh game-loop review and nine-axis audit from synchronized exact production; promoted three repository-owned evidence-propagation gaps and rejected the false premise that drill outcomes were not already persisted.

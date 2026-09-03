@@ -1,0 +1,3 @@
+# Cloudflare Pages redirects (S163)
+/play/  /#deploy  301
+/play   /#deploy  301

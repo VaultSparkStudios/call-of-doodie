@@ -17,13 +17,13 @@ export default function AchievementsPanel({ achievementsUnlocked, onClose, runSt
     <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.9)", zIndex: 110, display: "flex", alignItems: "flex-start", justifyContent: "center", padding: "max(12px, env(safe-area-inset-top)) 12px max(18px, env(safe-area-inset-bottom))", overflowY: "auto", WebkitOverflowScrolling: "touch", backdropFilter: "blur(4px)" }}>
       <div style={{ ...card, maxWidth: 520, width: "100%", overflow: "visible", position: "relative", border: "1px solid rgba(255,215,0,0.25)", padding: "18px 14px", color: "#fff", margin: "auto 0" }}>
         <button onClick={onClose} style={{ position: "absolute", top: 10, right: 14, background: "none", border: "none", color: "#CCC", fontSize: 20, cursor: "pointer", fontFamily: "monospace" }}>X</button>
-        <h3 style={{ color: "#FFD700", margin: "0 0 2px", fontSize: 18, letterSpacing: 2 }}>🏅 CAREER ACHIEVEMENTS</h3>
+        <h3 style={{ color: "var(--cod-gold)", margin: "0 0 2px", fontSize: 18, letterSpacing: 2 }}>🏅 CAREER ACHIEVEMENTS</h3>
         <div style={{ marginBottom: 14 }}>
           <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, color: "#CCC", marginBottom: 3 }}>
             <span>{unlocked}/{total} UNLOCKED</span><span>{pct}%</span>
           </div>
           <div style={{ height: 6, background: "rgba(255,255,255,0.1)", borderRadius: 3, overflow: "hidden" }}>
-            <div style={{ width: pct + "%", height: "100%", background: "linear-gradient(90deg,#FF6B35,#FFD700)", borderRadius: 3, transition: "width 0.3s" }} />
+            <div style={{ width: pct + "%", height: "100%", background: "linear-gradient(90deg,var(--cod-orange),var(--cod-gold))", borderRadius: 3, transition: "width 0.3s" }} />
           </div>
         </div>
         {["legendary", "gold", "silver", "bronze"].map(tier => {

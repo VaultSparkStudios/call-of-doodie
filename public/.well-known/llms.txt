@@ -14,7 +14,6 @@ Players move, shoot, dash, grenade, switch weapon, interact, choose perk, choose
 
 - Home: https://callofdoodie.wtf/
 - About: https://callofdoodie.wtf/about/
-- Play: https://callofdoodie.wtf/play/
 - How to Play: https://callofdoodie.wtf/how-to-play/
 - Enemies: https://callofdoodie.wtf/enemies/
 - Arsenal: https://callofdoodie.wtf/arsenal/
@@ -26,6 +25,7 @@ Players move, shoot, dash, grenade, switch weapon, interact, choose perk, choose
 - Press Kit: https://callofdoodie.wtf/press-kit/
 - Status: https://callofdoodie.wtf/status/
 - Changelog: https://callofdoodie.wtf/changelog/
+- Roadmap: https://callofdoodie.wtf/roadmap/
 - Privacy: https://callofdoodie.wtf/privacy/
 - Terms: https://callofdoodie.wtf/terms/
 - Contact: https://callofdoodie.wtf/contact/

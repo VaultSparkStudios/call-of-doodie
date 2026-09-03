@@ -39,7 +39,7 @@ export default function OperationPlaytestCommandPost({ receipt }) {
     const link = document.createElement("a"); link.href = href; link.download = "operation-playtest-aggregate.json"; link.click(); URL.revokeObjectURL(href);
   };
   return <details style={{ margin: "16px 0", border: "1px solid #465463", borderRadius: 8, padding: 12 }}>
-    <summary style={{ cursor: "pointer", color: "#7FE6FF", fontWeight: 900 }}>OPT-IN PAIRED PLAYTEST COMMAND POST</summary>
+    <summary style={{ cursor: "pointer", color: "var(--cod-cyan)", fontWeight: 900 }}>OPT-IN PAIRED PLAYTEST COMMAND POST</summary>
     <p style={{ color: "#AAB7C4", fontSize: 11 }}>Compare one eligible Standard history run with this Operation. Stored locally; export contains aggregate counts only, with no run references, identity, or free text.</p>
     {standardRuns.length ? <label style={{ display: "grid", gap: 4, fontSize: 11 }}>Verified Standard run
       <select aria-label="Verified Standard run" value={standardEvidenceRef} onChange={(event) => setStandardEvidenceRef(event.target.value)} style={{ minHeight: 44 }}>

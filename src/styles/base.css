@@ -1,0 +1,7 @@
+/* Base — S163. Global type and focus rules on top of tokens.css. */
+html { background: var(--cod-bg); }
+body { color: var(--cod-ink); font-family: var(--font-mono); font-size: var(--fs-body); line-height: 1.5; }
+h1, h2, h3, .display { font-family: var(--font-display); font-weight: 400; letter-spacing: .01em; }
+:focus-visible { outline: 3px solid var(--cod-focus); outline-offset: 3px; }
+a { color: var(--cod-cyan); }
+::selection { background: color-mix(in srgb, var(--cod-orange) 45%, transparent); }

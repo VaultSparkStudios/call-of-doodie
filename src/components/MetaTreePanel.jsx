@@ -44,18 +44,18 @@ export default function MetaTreePanel({ onClose }) {
         {/* Header */}
         <div style={header}>
           <div>
-            <div style={{ fontSize: 18, fontWeight: 700, color: "#FFD700", letterSpacing: 2 }}>🌳 META PROGRESSION TREE</div>
+            <div style={{ fontSize: 18, fontWeight: 700, color: "var(--cod-gold)", letterSpacing: 2 }}>🌳 META PROGRESSION TREE</div>
             <div style={{ fontSize: 11, color: "#888", marginTop: 3 }}>Spend career points to permanently upgrade your runs</div>
           </div>
           <div style={{ textAlign: "right" }}>
-            <div style={{ fontSize: 13, color: "#FFD700", fontWeight: 700 }}>⭐ {points.toLocaleString()} pts</div>
+            <div style={{ fontSize: 13, color: "var(--cod-gold)", fontWeight: 700 }}>⭐ {points.toLocaleString()} pts</div>
             <button onClick={onClose} style={{ marginTop: 6, background: "transparent", border: "1px solid #444", color: "#888", borderRadius: 4, padding: "4px 10px", fontSize: 11, cursor: "pointer", letterSpacing: 1 }}>✕ CLOSE</button>
           </div>
         </div>
 
         {/* Toast */}
         {toast && (
-          <div style={{ textAlign: "center", fontSize: 12, color: "#FFD700", background: "rgba(255,215,0,0.08)", border: "1px solid rgba(255,215,0,0.3)", borderRadius: 6, padding: "8px 16px" }}>
+          <div style={{ textAlign: "center", fontSize: 12, color: "var(--cod-gold)", background: "rgba(255,215,0,0.08)", border: "1px solid rgba(255,215,0,0.3)", borderRadius: 6, padding: "8px 16px" }}>
             {toast}
           </div>
         )}

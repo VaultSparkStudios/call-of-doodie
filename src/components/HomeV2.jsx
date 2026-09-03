@@ -534,8 +534,8 @@ export default function HomeV2(props) {
   const chip = { padding: "4px 10px", borderRadius: 20, fontSize: 11, fontWeight: 700, background: themePalette.panel, border: `1px solid ${themePalette.line}`, color: themePalette.muted, cursor: "pointer", fontFamily: "inherit" };
   const iconBtn = { ...chip, width: 44, minWidth: 44, minHeight: 44, padding: 0, display: "inline-grid", placeItems: "center", fontSize: 16 };
   const hero = { textAlign: "center", marginBottom: 14 };
-  const title = { fontSize: "clamp(40px,10vw,72px)", fontWeight: 900, margin: 0, lineHeight: 1, letterSpacing: -2, background: "linear-gradient(180deg,#FFD700,#FF6B00)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", filter: "drop-shadow(0 0 24px rgba(255,107,0,0.45))" };
-  const tag = { marginTop: 4, fontSize: "clamp(11px,2.4vw,15px)", color: "#FF6B35", letterSpacing: 4, fontWeight: 700 };
+  const title = { fontSize: "clamp(40px,10vw,72px)", fontWeight: 900, margin: 0, lineHeight: 1, letterSpacing: -2, background: "linear-gradient(180deg,var(--cod-gold),#FF6B00)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", filter: "drop-shadow(0 0 24px rgba(255,107,0,0.45))" };
+  const tag = { marginTop: 4, fontSize: "clamp(11px,2.4vw,15px)", color: "var(--cod-orange)", letterSpacing: 4, fontWeight: 700 };
   const deployRow = { display: "flex", justifyContent: "center", alignItems: "stretch", gap: 0, margin: "18px auto 8px", maxWidth: 540 };
   const deployBtn = {
     flex: 1, padding: "18px 22px", fontSize: 22, fontWeight: 900, fontFamily: "'Courier New',monospace",
@@ -648,7 +648,7 @@ export default function HomeV2(props) {
               style={{
                 marginTop: 8, padding: "4px 10px", display: "inline-block",
                 fontSize: 11, letterSpacing: 1.5, fontWeight: 800,
-                color: "#FFD700", background: "rgba(255,215,0,0.08)",
+                color: "var(--cod-gold)", background: "rgba(255,215,0,0.08)",
                 border: "1px solid rgba(255,215,0,0.45)", borderRadius: 999,
               }}
             >
@@ -785,7 +785,7 @@ export default function HomeV2(props) {
             </div>
             {/* Replay code share + paste */}
             <details style={{ marginTop: 9, paddingTop: 8, borderTop: "1px solid rgba(255,255,255,0.06)" }}>
-              <summary style={{ cursor: "pointer", color: "#7FE6FF", fontSize: 10, fontWeight: 900, letterSpacing: 1.2 }}>ADVANCED RUN CODES &amp; RELAYS</summary>
+              <summary style={{ cursor: "pointer", color: "var(--cod-cyan)", fontSize: 10, fontWeight: 900, letterSpacing: 1.2 }}>ADVANCED RUN CODES &amp; RELAYS</summary>
             <div style={{ marginTop: 10, display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap", paddingTop: 8, borderTop: "1px solid rgba(255,255,255,0.06)" }}>
               <label style={{ fontSize: 10, color: "#888", letterSpacing: 1 }}>REPLAY</label>
               <input
@@ -826,7 +826,7 @@ export default function HomeV2(props) {
             </div>
             <div data-testid="scenario-cartridge" style={{ marginTop: 10, display: "grid", gap: 7, paddingTop: 9, borderTop: "1px solid rgba(127,230,255,0.18)" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 7, flexWrap: "wrap" }}>
-                <strong style={{ color: "#7FE6FF", fontSize: 10, letterSpacing: 1.4 }}>SCENARIO CARTRIDGE</strong>
+                <strong style={{ color: "var(--cod-cyan)", fontSize: 10, letterSpacing: 1.4 }}>SCENARIO CARTRIDGE</strong>
                 <span style={{ color: "#888", fontSize: 9 }}>seed + mode + difficulty + loadout + optional rival</span>
               </div>
               <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
@@ -838,7 +838,7 @@ export default function HomeV2(props) {
                   setChallengeMode(cartridge.targetScore ? { seed: String(cartridge.seed), diff: cartridge.difficulty, vs: cartridge.targetScore, vsName: cartridge.rival } : null);
                   setScenarioNotice("Scenario Cartridge verified and loaded.");
                 }}>LOAD</button>
-                <button type="button" style={{ ...quickBtn, color: "#7FE6FF", borderColor: "rgba(127,230,255,0.4)" }} onClick={async () => {
+                <button type="button" style={{ ...quickBtn, color: "var(--cod-cyan)", borderColor: "rgba(127,230,255,0.4)" }} onClick={async () => {
                   const cartridge = buildScenarioCartridge({ seed: Number(customSeed || todaySeedStr), mode: modeId, difficulty, loadout: selectedLoadout.id, targetScore: challengeMode?.vs, rival: challengeMode?.vsName });
                   const url = buildSewerRelayUrl(cartridge);
                   try { await navigator.clipboard?.writeText?.(url); setScenarioNotice("Sewer Relay copied — asynchronous, deterministic, and account-free."); }
@@ -862,7 +862,7 @@ export default function HomeV2(props) {
         {/* Quick actions are grouped by player intent instead of mixing play,
             navigation, installation, and diagnostic receipts in one strip. */}
         <div style={quickRow}>
-          <button style={{ ...quickBtn, borderColor: "rgba(0,229,255,0.4)", color: "#00E5FF" }} onClick={() => {
+          <button style={{ ...quickBtn, borderColor: "rgba(0,229,255,0.4)", color: "var(--cod-cyan)" }} onClick={() => {
             const studioEvent = recordFrontDoorAction("daily_challenge", { source: "quick_chip", seed: todaySeedStr });
             track("front_door_action", { actionId: "daily_challenge", surface: "home_v2", mode: "daily_challenge", difficulty, loadout: selectedLoadout.id, intelligenceFocus: runIntel.focus, studioEvent });
             onSetDailyChallengeMode?.(true);
@@ -870,7 +870,7 @@ export default function HomeV2(props) {
           }}>
             📅 {dailyAlreadyPlayed ? "DAILY (REPLAY)" : `DAILY #${todaySeedStr}`}
           </button>
-          <button aria-label="Launch weekly Gauntlet" title={weeklyGauntletLaunch.doctrineTagName ? `This week's contract: ${weeklyGauntletLaunch.doctrineTagName}` : undefined} style={{ ...quickBtn, borderColor: "rgba(255,200,0,0.4)", color: "#FFC800" }} onClick={() => {
+          <button aria-label="Launch weekly Gauntlet" title={weeklyGauntletLaunch.doctrineTagName ? `This week's contract: ${weeklyGauntletLaunch.doctrineTagName}` : undefined} style={{ ...quickBtn, borderColor: "rgba(255,200,0,0.4)", color: "var(--cod-gold)" }} onClick={() => {
             const studioEvent = recordFrontDoorAction("gauntlet_focus", { source: "quick_chip" });
             track("front_door_action", { actionId: "gauntlet_focus", surface: "home_v2", mode: "gauntlet", difficulty, loadout: selectedLoadout.id, intelligenceFocus: runIntel.focus, studioEvent });
             onSetGauntletMode?.(true);
@@ -911,7 +911,7 @@ export default function HomeV2(props) {
           </button>
           {onInstallApp && (
             <button
-              style={{ ...quickBtn, borderColor: "rgba(0,229,255,0.45)", color: "#7FE6FF" }}
+              style={{ ...quickBtn, borderColor: "rgba(0,229,255,0.45)", color: "var(--cod-cyan)" }}
               onClick={() => {
                 track("front_door_action", { actionId: "install_app", surface: "home_v2", mode: modeId, difficulty, loadout: selectedLoadout.id });
                 onInstallApp();
@@ -928,7 +928,7 @@ export default function HomeV2(props) {
             <summary style={{ cursor: "pointer", color: themePalette.ink, fontSize: 10, fontWeight: 900, letterSpacing: 1.5 }}>DEVICE &amp; SAVE STATUS</summary>
             <div style={{ display: "grid", gap: 8, marginTop: 10, fontSize: 11, lineHeight: 1.45 }}>
               <div>
-                <strong style={{ color: "#7FE6FF" }}>{pwaInstallReceipt.playerLabel}</strong>
+                <strong style={{ color: "var(--cod-cyan)" }}>{pwaInstallReceipt.playerLabel}</strong>
                 <div style={{ color: themePalette.muted }}>{pwaInstallReceipt.detail}</div>
               </div>
               <div>
@@ -948,7 +948,7 @@ export default function HomeV2(props) {
           {trainingNotice && <div role="status" style={{ flexBasis: "100%", color: "#9BFFBD", fontSize: 10, textAlign: "center" }}>{trainingNotice}</div>}
           {inputDebugEnabled && (
             <button
-              style={{ ...quickBtn, borderColor: "rgba(0,229,255,0.45)", color: "#7FE6FF" }}
+              style={{ ...quickBtn, borderColor: "rgba(0,229,255,0.45)", color: "var(--cod-cyan)" }}
               onClick={() => {
                 writePreference("cod-debug-input", "1", "local", "home");
                 recordFrontDoorAction("open_input_diagnostics", { source: "quick_chip" });
@@ -1041,7 +1041,7 @@ export default function HomeV2(props) {
           <div style={{ ...tickerCard, marginTop: 8, background: "rgba(255,107,53,0.08)", borderColor: "rgba(255,107,53,0.45)", color: "#FFD7B8" }}>
             <span style={{ fontSize: 14 }}>⚔️</span>
             <span style={{ flex: 1 }}>
-              <strong style={{ color: "#FF6B35" }}>CHALLENGE:</strong> Seed #{challengeMode.seed}
+              <strong style={{ color: "var(--cod-orange)" }}>CHALLENGE:</strong> Seed #{challengeMode.seed}
               {challengeMode.vs && (<> · Beat {challengeMode.vsName ? `@${challengeMode.vsName}` : "rival"}: <strong>{challengeMode.vs.toLocaleString()}</strong></>)}
             </span>
             <button onClick={() => { setCustomSeed(""); setChallengeMode(null); }} style={{ background: "none", border: "none", color: "#888", cursor: "pointer", fontSize: 14 }}>✕</button>
@@ -1072,7 +1072,7 @@ export default function HomeV2(props) {
           <div style={{ ...tickerCard, marginTop: 8, background: "rgba(127,230,255,0.05)", borderColor: "rgba(127,230,255,0.22)", color: "#D9F8FF" }}>
             <span style={{ fontSize: 14 }}>📈</span>
             <span style={{ flex: 1 }}>
-              <strong style={{ color: "#7FE6FF" }}>MEASUREMENT STATUS:</strong>{" "}
+              <strong style={{ color: "var(--cod-cyan)" }}>MEASUREMENT STATUS:</strong>{" "}
               {analyticsStatus.enabled ? "PostHog armed" : "PostHog key missing"}
               {" · "}
               {telemetrySummary.failedSyncCount > 0
@@ -1089,7 +1089,7 @@ export default function HomeV2(props) {
           <div style={{ ...tickerCard, marginTop: 8, background: "rgba(255,215,0,0.05)", borderColor: "rgba(255,215,0,0.22)", color: "#FFF2C2" }}>
             <span style={{ fontSize: 14 }}>LAB</span>
             <span style={{ flex: 1 }}>
-              <strong style={{ color: "#FFD700" }}>BALANCE LAB:</strong>{" "}
+              <strong style={{ color: "var(--cod-gold)" }}>BALANCE LAB:</strong>{" "}
               {balanceLab.topInsight.title} — <span style={{ color: "#CCC" }}>{balanceLab.topInsight.detail}</span>
               <span style={{ color: "#888" }}> · {balanceLab.inspected.runs} runs / {balanceLab.inspected.events} events inspected</span>
             </span>
@@ -1292,7 +1292,7 @@ function AimCheckPanel({ controllerType, onVerify, onDiagnostics, onClose }) {
   return (
     <div style={PANEL} role="dialog" aria-modal="true" aria-labelledby="aim-check-title">
       <div style={{ width: "min(460px, 100%)", margin: "auto 0", padding: 18, borderRadius: 10, background: "rgba(8,12,18,0.98)", border: "1px solid rgba(0,229,255,0.32)", color: "#EEE", textAlign: "center", boxShadow: "0 14px 40px rgba(0,0,0,0.65)" }}>
-        <div style={{ color: "#7FE6FF", fontSize: 10, fontWeight: 900, letterSpacing: 2 }}>EVIDENCE-BACKED AIM CHECK</div>
+        <div style={{ color: "var(--cod-cyan)", fontSize: 10, fontWeight: 900, letterSpacing: 2 }}>EVIDENCE-BACKED AIM CHECK</div>
         <h2 id="aim-check-title" style={{ margin: "8px 0 6px", fontSize: 22, color: "#FFF", letterSpacing: 1 }}>Verify Full-Circle Control</h2>
         <p style={{ margin: "0 auto 14px", maxWidth: 380, color: "#BFC9D8", fontSize: 12, lineHeight: 1.55 }}>
           Aim through all four directions inside the target, press W/A/S/D or arrow keys, or sweep a controller stick. A receipt is saved only from observed input for {device}.
@@ -1350,7 +1350,7 @@ function CareerTab({ career, meta, missions, missionProgress, onOpenMetaTree, ne
         <StatChip label="MISSIONS" value={`${(missions?.length || 0) - incomplete}/${missions?.length || 0}`} />
       </div>
       <div style={{ marginTop: 12, display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
-        <button onClick={onOpenMetaTree} style={{ padding: "8px 14px", fontSize: 12, fontWeight: 800, fontFamily: "inherit", cursor: "pointer", background: "rgba(255,215,0,0.1)", border: "1px solid rgba(255,215,0,0.35)", color: "#FFD700", borderRadius: 8 }}>🌳 META TREE</button>
+        <button onClick={onOpenMetaTree} style={{ padding: "8px 14px", fontSize: 12, fontWeight: 800, fontFamily: "inherit", cursor: "pointer", background: "rgba(255,215,0,0.1)", border: "1px solid rgba(255,215,0,0.35)", color: "var(--cod-gold)", borderRadius: 8 }}>🌳 META TREE</button>
       </div>
       <div style={{ marginTop: 12, fontSize: 10, color: "#888", textAlign: "center" }}>
         Daily missions: <strong style={{ color: incomplete > 0 ? "#FFD700" : "#00FF88" }}>{incomplete}</strong> incomplete
@@ -1391,7 +1391,7 @@ function CodexTab({ truthGraph }) {
         <div data-testid="field-manual-truth" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(210px,1fr))", gap: 8 }}>
           {truthGraph.claims.map((claim) => (
             <a key={claim.id} href={claim.source} style={{ display: "block", padding: "10px 11px", borderRadius: 8, border: "1px solid rgba(127,230,255,0.16)", background: "rgba(127,230,255,0.04)", color: "inherit", textDecoration: "none" }}>
-              <div style={{ color: "#7FE6FF", fontSize: 9, letterSpacing: 1.4, fontWeight: 900 }}>{claim.label.toUpperCase()} · {claim.effectiveDate}</div>
+              <div style={{ color: "var(--cod-cyan)", fontSize: 9, letterSpacing: 1.4, fontWeight: 900 }}>{claim.label.toUpperCase()} · {claim.effectiveDate}</div>
               <div style={{ color: "#FFF", fontSize: 13, fontWeight: 900, marginTop: 4 }}>{claim.value}</div>
               <div style={{ color: "#AAA", fontSize: 10, lineHeight: 1.45, marginTop: 4 }}>{claim.evidence}</div>
             </a>
@@ -1453,7 +1453,7 @@ function SupportTab({ onOpen }) {
       <div style={{ fontSize: 32 }}>❤️</div>
       <p>Call of Doodie is free. Always will be.</p>
       <p style={{ fontSize: 11, color: "#AAA" }}>If you want to see more — a cosmetic ⭐ badge on the leaderboard helps keep the servers running.</p>
-      <button onClick={onOpen} style={{ marginTop: 8, padding: "10px 22px", fontSize: 12, fontWeight: 900, fontFamily: "inherit", cursor: "pointer", background: "linear-gradient(180deg,#FF6B35,#CC4400)", color: "#FFF", border: "none", borderRadius: 8, letterSpacing: 1 }}>
+      <button onClick={onOpen} style={{ marginTop: 8, padding: "10px 22px", fontSize: 12, fontWeight: 900, fontFamily: "inherit", cursor: "pointer", background: "linear-gradient(180deg,var(--cod-orange),#CC4400)", color: "#FFF", border: "none", borderRadius: 8, letterSpacing: 1 }}>
         ☕ KO-FI · SUPPORT
       </button>
     </div>

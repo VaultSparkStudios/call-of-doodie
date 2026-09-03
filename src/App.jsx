@@ -52,7 +52,6 @@ import { scheduleIdleWork } from "./utils/deferredWork.js";
 import { applyCanvasScale, watchCanvasScale } from "./utils/canvasScale.js";
 import { captureGifFrame } from "./utils/gifCapture.js";
 import { getRouteOptions } from "./utils/routeOptions.js";
-import { resolveHomeVersion } from "./utils/homeVersion.js";
 import { useGameLoop } from "./hooks/useGameLoop.js";
 import { useShellLifecycle } from "./hooks/useShellLifecycle.js";
 import HUD from "./components/HUD.jsx";
@@ -67,9 +66,7 @@ const HomeV2 = lazy(() => import("./components/HomeV2.jsx"));
 const OperationRuntimeLayer = lazy(() => import("./components/OperationRuntimeLayer.jsx"));
 import { DesktopWeaponDock, MobileWeaponDock } from "./components/WeaponDock.jsx";
 const DisplayNameScreen = lazy(() => import("./components/DisplayNameScreen.jsx"));
-const HomeV3          = lazy(() => import("./components/HomeV3.jsx"));
 const InputDebugOverlay = lazy(() => import("./components/InputDebugOverlay.jsx"));
-const MenuScreen     = lazy(() => import("./components/MenuScreen.jsx"));
 const PauseMenu       = lazy(() => import("./components/PauseMenu.jsx"));
 const PerkModal       = lazy(() => import("./components/PerkModal.jsx"));
 const WaveShopModal   = lazy(() => import("./components/WaveShopModal.jsx"));
@@ -3729,8 +3726,9 @@ export default function CallOfDoodie() {
     if (draftPending) {
       return <AsyncPanelBoundary><DraftScreen options={draftOptions} onSelect={applyDraftPerk} /></AsyncPanelBoundary>;
     }
-    const homeVersion = resolveHomeVersion(window.location.search);
-    const Home = homeVersion === "v1" ? MenuScreen : homeVersion === "v3" ? HomeV3 : HomeV2;
+    // S163: HomeV2 (arcade CRT) is the only front door. The legacy home query switch and
+    // the MenuScreen/HomeV3 alternates were retired with the single-brand decision.
+    const Home = HomeV2;
     return (
       <AsyncPanelBoundary>
         <Home

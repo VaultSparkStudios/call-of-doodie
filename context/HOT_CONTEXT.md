@@ -4,18 +4,25 @@
 
 ## Current Session
 
-- Session 162 (2026-08-25/26) completed the repository-owned `/arc` through fresh game-loop review, a three-item premise-verified audit, full implementation, isolated staging, rendered-pixel review, an independent engineering release gate, direct-main publication, and exact production verification.
-- Corrective-order truth — normalized drill outcomes are grouped by exact drill, malformed and duplicate receipts fail closed, the live HUD carries prior evidence instead of resetting a mastery badge, and Run History exposes at most four newest-first local order ledgers.
-- Evidence boundary — repeatability means at least two observed improvements within the latest three receipts for that order. The archive is device-local, advisory, and explicitly not proof that the order caused an outcome or that the player mastered it.
-- Loop-source truth — protocol and public Game Loop sources share the accepted-order → live-progress → outcome → bounded-archive lifecycle and the same unavailable causal/mastery claims.
-- Validation truth — full Vitest passes 220/220 files and 1,270/1,270 assertions; strict lint, deployable build, schema, public contract, dependency/runtime/assets/media/security, npm audit zero, supply-chain, and protocol courts pass. Serial browser interaction passes 17 with one intentional mobile Scenario Cartridge skip; the eight-worker run is retained only as a host-contention diagnostic.
-- Visual truth — staging `https://session-162-staging.call-of-doodie.pages.dev/` (immutable `https://1b86fbd2.call-of-doodie.pages.dev/`) passes 7/7 live checks, the hosted route/theme/viewport matrix 1,020/1,020, and the focused before/after matrix 128/128. Fourteen hash-bound captures received direct review with zero blocking defects.
-- Release truth — branding, proprietary/public contract, footer 18/18, Cloudflare credential readiness, cost-neutral ALLOW, mobile-parity attestation, rollback, npm audit, supply-chain, and founder authorization pass. Engineering FORGE is GO; SPARKED remains NO-GO.
-- Production truth — exact source `5d54f90bde9ba1768925a9e024d9fcd48b8d52ae` passed GitHub Actions workflow `32924884085` with Linux lint, all 1,270 assertions, build, and Cloudflare deployment. Immutable `https://d9e689b6.call-of-doodie.pages.dev/` and canonical `https://callofdoodie.wtf/` report deploy `5d54f90bde9b` and pass 7/7 live checks each; cutover 5/5, replay trust 3/3, leaderboard isolation, and Studio launch surfaces pass.
+- Session 163 (2026-09-03) ran the founder-directed evolution audit and shipped two tranches: gameplay foundations with the first two genuinely different modes, and single-brand site unification. The "evidence-gated, hold all content" posture from S154–S162 is retired by decision; content ships with honest evidence language.
+- Mode truth — a mode-definition layer (`src/systems/modeDefinition.js`) sits over the unchanged eight-id ruleset/replay contract and owns allies, arena theme pool, objective set, wave script, win condition, and per-frame mechanic. BOSS GAUNTLET (six bosses, no trash, par timer, real victory) and HOLD THE THRONE (three thrones, CPU squad, enemies attack the point) are selectable on the front door and score locally until the leaderboard enum accepts them.
+- Squad truth — CPU allies (The Intern, the Plunger Sergeant, The Roomba) follow, hold, attack, revive, and carry; Z/X/C issue orders; downed allies bleed out for eight seconds unless revived within 40 pixels. Ally kills score at half value through an owner field carried in the defeat metadata.
+- Simulation truth — enemy AI lives in `src/systems/enemyFrame.js` (App.jsx 4,760 → 4,270 lines); `useGameLoop` advances in whole 60Hz steps with a clamped four-step catch-up; `src/sim/stepSim.js` runs a deterministic headless step in plain Node with a presentation-stripped state hash; a guard test forbids direct `Math.random()` in simulation modules.
+- Objective truth — BREACH, HOLD, ESCORT, HUNT, SABOTAGE, ESCAPE, and BOSS are behavioral handlers with unit coverage; Operations still complete on their prior interact path and are not yet rewired to them.
+- Brand truth — one token source (`BRAND_TOKENS` in `src/utils/theme.js`) generates `src/styles/tokens.css` and `public/tokens.css`; the arcade/CRT language (Impact display, monospace body, one orange, one gold, one cyan) applies to the home, login, runtime shell, display-name screen, tutorial chip, weapon dock, and all seventeen static pages via a hex-free `doc.css`. HomeV3, MenuScreen, the `?home=` switch, and the dead `obelisk-passport/` copies are deleted; 231 brand hexes in component style props now reference tokens.
+- Site truth — `/play/` is retired with a 301 to the in-app deploy anchor; `/roadmap/` publishes shipped/next/later from `src/content/roadmap.js` and carries the honest "real-time co-op is not live" claim that left the changelog; the footer is three labelled groups shared by React and static pages from one `FOOTER_GROUPS` source; README feature claims regenerate from runtime constants and are checked at build; the cosmetic drop track is hidden until its art is complete and "early access" copy is gone.
+- Validation truth — full Vitest passes 221/221 files and 1,286/1,286 assertions; strict lint, deployable build, public contract and claims, security release gate, architecture budget, and token-drift checks pass. Playwright passes 19 with one intentional mobile skip. A real-browser smoke deploys both new modes and reads their HUD banners; fourteen theme captures across both schemes and mobile were directly reviewed.
+- Review truth — a code review found the ally-kill discount was unreachable (fixed by threading the owner through defeat metadata) and self-review found Boss Gauntlet never applied its ruleset so the boss rotation slot went negative on waves 1–4 (fixed by applying the mode definition's ruleset at run start).
+- Lifecycle truth — cost-neutral, deployed, FORGE, public-unlaunched; SPARKED remains NO-GO. App chunk is 584 KB against the 493 KB S145 budget; the bundle diet is a scheduled follow-up.
 
 ## Open Work
 
 # Task Board
+## Session 163 - Real modes, CPU squad, fixed timestep, single brand
+- [ ] [SIL:2] Rewire Operation encounter completion to the verb handlers (`useOperationMode.resolveWave` gates on handler status).
+- [ ] [SIL:2] Bundle diet: App chunk 584 KB → under the 493 KB S145 budget (DeathScreen diet, panels.css, lazy mode modules).
+- [ ] [SIL:2] Sewer Extraction mode, async rivals (live ghost race, seed duel, squad board), offline Bot Royale (docs/AUDIT_2026-09-03.md tranche 3).
+- [ ] [SIL:1] Profile panel with Porcelain Passport cloud backup; information-architecture consolidation (field manual, bestiary, board) and hash routes (tranche 2 remainder).
 ## Session 162 - Corrective-order evidence across runs
 ## Session 161 - Readable threat compass and prospective doctrine choice
 ## Session 160 - Propagation and release-evidence recovery
@@ -96,7 +103,7 @@
 
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 206,476 bytes · SHA-256 `165d1078d835…`
-- `context/TASK_BOARD.md` · 131,340 bytes · SHA-256 `c0874f9f65d4…`
-- `context/DECISIONS.md` · 130,875 bytes · SHA-256 `923a5b99fc42…`
-- `docs/AUDIT_2026-09-03.json` · 2,616 bytes · SHA-256 `4381391dfbc3…`
+- `context/CURRENT_STATE.md` · 210,097 bytes · SHA-256 `6a7d6e6e0d71…`
+- `context/TASK_BOARD.md` · 133,375 bytes · SHA-256 `3b72468cd287…`
+- `context/DECISIONS.md` · 133,822 bytes · SHA-256 `ad4a33a01c21…`
+- `docs/AUDIT_2026-09-03.json` · 3,485 bytes · SHA-256 `ca3a8e698c1c…`

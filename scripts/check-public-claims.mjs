@@ -55,6 +55,23 @@ if (registrySrc.includes("opens directly on the main menu")) {
   errors.push('/play/ copy claims the game "opens directly on the main menu", contradicting the RuntimeBoundary launcher shell.');
 }
 
+// S163: README claims block must match runtime constants (scripts/sync-readme-claims.mjs).
+{
+  const { spawnSync } = await import("node:child_process");
+  const r = spawnSync(process.execPath, ["scripts/sync-readme-claims.mjs", "--check"], { encoding: "utf8" });
+  if (r.status !== 0) errors.push((r.stderr || r.stdout || "README claims drifted").trim());
+}
+// S163: the public changelog must not go stale — warn past 30 days, fail on CI tag builds.
+{
+  const { CHANGELOG_ENTRIES } = await import("../src/config/changelog.js");
+  const latest = String(CHANGELOG_ENTRIES[0]?.[0] || "").split(" · ")[0];
+  const ageDays = (Date.now() - new Date(latest).getTime()) / 86400000;
+  if (Number.isFinite(ageDays) && ageDays > 30) {
+    const message = `latest public changelog entry is ${Math.floor(ageDays)} days old (${latest})`;
+    if (process.env.CI && process.env.GITHUB_REF_TYPE === "tag") errors.push(message); else console.warn(`Public claims: WARN — ${message}`);
+  }
+}
+
 if (errors.length) {
   console.error(`Public claims: FAIL (${errors.length})`);
   for (const error of errors) console.error(`- ${error}`);

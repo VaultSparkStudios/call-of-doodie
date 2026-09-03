@@ -35,7 +35,7 @@ export default function RouteSelectModal({ options, wave, onSelect, buildArchety
           </div>
           <div style={{
             fontSize: 26, fontWeight: 900, letterSpacing: 3,
-            color: "#FFD700", textShadow: "0 0 20px rgba(255,215,0,0.4)",
+            color: "var(--cod-gold)", textShadow: "0 0 20px rgba(255,215,0,0.4)",
             marginBottom: 4,
           }}>
             CHOOSE YOUR PATH

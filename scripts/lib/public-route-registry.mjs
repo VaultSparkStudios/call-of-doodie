@@ -1,6 +1,7 @@
 import crypto from "node:crypto";
 import { buildPublicGameplayContract } from "./public-gameplay-contract.mjs";
-import { PRIMARY_PUBLIC_NAV } from "../../src/config/publicNavigation.js";
+import { FOOTER_GROUPS, groupFooterLinks, PRIMARY_PUBLIC_NAV } from "../../src/config/publicNavigation.js";
+import { roadmapSections } from "../../src/content/roadmap.js";
 import { CHANGELOG_ENTRIES } from "../../src/config/changelog.js";
 import { deriveContentVersionDate } from "./build-date.mjs";
 import { ENEMY_ATLAS_CONTRACT } from "../../src/utils/enemyAtlasContract.js";
@@ -100,18 +101,6 @@ const ROUTE_DEFINITIONS = [
     ],
   },
   {
-    id: "play", path: "/play/", label: "Play", rel: "play", priority: 0.8, generated: true,
-    eyebrow: "Play in your browser", title: "No install. No account wall. Start the run.",
-    description: "Play Call of Doodie free in a modern desktop or mobile browser.",
-    lede: "The game loads a lightweight launcher, then the full command-center menu — no install and no sign-up gate. A display name is optional and only matters for shared challenges and leaderboard identity.",
-    cta: ["Start Call of Doodie", "../"],
-    sections: [
-      ["Desktop", "Use a keyboard and mouse or a supported gamepad. A current version of Chrome, Edge, Firefox, or Safari is recommended."],
-      ["Mobile", "Use the left side of the arena to move and the right side to aim. Large bottom controls handle weapon switching, reload, dash, and grenade actions."],
-      ["Progress storage", "Progress is stored in this browser. Clearing site data, switching browsers, or changing devices can remove local progress unless a feature explicitly says otherwise."],
-    ],
-  },
-  {
     id: "how-to-play", path: "/how-to-play/", label: "How to Play", rel: "guide", priority: 0.8, generated: true,
     eyebrow: "Player guide", title: "Move first. Build smart. Keep the arena readable.",
     description: "A concise guide to movement, combat, upgrades, bosses, and controls in Call of Doodie.",
@@ -142,7 +131,7 @@ const ROUTE_DEFINITIONS = [
     id: "modes", path: "/modes/", label: "Modes", rel: "modes", priority: 0.6, generated: true,
     eyebrow: "Ways to play", title: "One arena. Several reasons to come back.",
     description: "Compare authored Operations, live seeded arcade modes, and difficulty profiles in Call of Doodie.",
-    lede: (gameplay) => `Deploy into ${gameplay.operations.length} authored Operations, or pick from ${gameplay.modes.length} seeded Arcade & Rivals modes across ${gameplay.difficulties.length} difficulty profiles.`,
+    lede: (gameplay) => `Deploy into ${gameplay.operations.length} authored Operations, or pick from ${gameplay.modes.length} Arcade & Rivals modes across ${gameplay.difficulties.length} difficulty profiles.`,
     sections: buildModeSections,
   },
   {
@@ -199,7 +188,7 @@ const ROUTE_DEFINITIONS = [
     lede: "Call of Doodie is a free comedy-first browser roguelite shooter created by VaultSpark Studios LLC.",
     sections: (gameplay) => [
       ["One-line description", "A fast browser arena shooter where improvised weapons, absurd enemies, and escalating buildcraft turn every short run into a story."],
-      ["Live feature facts", `Instant browser play · desktop, touch, and gamepad input · ${gameplay.operations.length} authored Operations · ${gameplay.enemies.length}-character roster · ${gameplay.modes.length} seeded Arcade & Rivals modes · permanent progression · advisory replay receipts`],
+      ["Live feature facts", `Instant browser play · desktop, touch, and gamepad input · ${gameplay.operations.length} authored Operations · ${gameplay.enemies.length}-character roster · ${gameplay.modes.length} Arcade & Rivals modes · permanent progression · advisory replay receipts`],
       ["Rights and attribution", "All original code, content, characters, assets, and designs are proprietary and all rights are reserved by VaultSpark Studios LLC. Review the Rights & IP page before reuse."],
     ],
     cta: ["Request press materials", "../contact/"],
@@ -222,6 +211,13 @@ const ROUTE_DEFINITIONS = [
     lede: "This log highlights meaningful player-facing releases rather than every internal code change.",
     // Entries live in src/config/changelog.js (S155 single changelog source).
     sections: CHANGELOG_ENTRIES,
+  },
+  {
+    id: "roadmap", path: "/roadmap/", label: "Roadmap", rel: "roadmap", priority: 0.5, generated: true,
+    eyebrow: "Roadmap", title: "What shipped, what is next, and what is not live yet.",
+    description: "The honest public roadmap for Call of Doodie: shipped modes, upcoming rivals and royale work, and gated real-time plans.",
+    lede: "Shipped means playable in your browser today. Next is in active work. Later is planned and explicitly not live.",
+    sections: roadmapSections(),
   },
   { id: "privacy", path: "/privacy/", label: "Privacy", rel: "privacy", priority: 0.6, generated: false },
   { id: "terms", path: "/terms/", label: "Terms", rel: "terms", priority: 0.6, generated: false },
@@ -257,14 +253,22 @@ export function relativeHref(routePath, prefix = "../") {
 
 export function renderHeaderNav(prefix = "../") {
   const links = getPublicRouteRegistry().filter((route) => route.header);
-  return links.map((route) => `  <a href="${relativeHref(route.path, prefix)}">${escapeHtml(route.label)}</a>`).join("\n")
+  // S163: /play/ was retired; the Play link jumps straight to the in-app deploy panel.
+  const play = `  <a href="${prefix}#deploy">Play</a>`;
+  return [play, ...links.map((route) => `  <a href="${relativeHref(route.path, prefix)}">${escapeHtml(route.label)}</a>`)].join("\n")
     + '\n  <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch color theme">Theme</button>';
 }
 
+// S163: grouped footer (Play / Learn / Studio) shared with SiteFooter.jsx via
+// FOOTER_GROUPS. Only <nav>/<strong>/<a> inside so the hand-written pages'
+// footer regex replacement stays safe.
 export function renderFooterLinks(prefix = "../") {
-  return getPublicRouteRegistry()
-    .filter((route) => route.footer)
-    .map((route) => `<a href="${relativeHref(route.path, prefix)}">${escapeHtml(route.label)}</a>`)
+  const routes = getPublicRouteRegistry().filter((route) => route.footer);
+  const items = routes.map((route) => ({ id: route.id, href: route.path, label: route.label }));
+  const groups = groupFooterLinks(items, { groups: FOOTER_GROUPS });
+  return groups
+    .filter((group) => group.links.length)
+    .map((group) => `<nav aria-label="${escapeHtml(group.label)} links"><strong>${escapeHtml(group.label.toUpperCase())}</strong>${group.links.map((item) => `<a href="${relativeHref(item.href, prefix)}">${escapeHtml(item.label)}</a>`).join("")}</nav>`)
     .join("");
 }
 

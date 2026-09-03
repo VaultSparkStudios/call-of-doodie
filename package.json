@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "prebuild": "node scripts/generate-public-pages.mjs && node scripts/generate-public-gameplay-contract.mjs && node scripts/generate-icons.mjs",
+    "prebuild": "node scripts/generate-tokens-css.mjs && node scripts/sync-readme-claims.mjs && node scripts/generate-public-gameplay-contract.mjs && node scripts/generate-public-pages.mjs && node scripts/generate-icons.mjs",
     "build": "vite build",
     "build:deployable": "node scripts/build-deployable.mjs",
     "preview": "vite preview",
@@ -81,7 +81,8 @@
     "context:hot:check": "node scripts/render-hot-context.mjs --check",
     "stats:snapshot": "node scripts/refresh-community-stats-snapshot.mjs",
     "claims:check": "node scripts/check-public-claims.mjs",
-    "smoke:modes": "node scripts/smoke-new-modes.mjs"
+    "smoke:modes": "node scripts/smoke-new-modes.mjs",
+    "tokens:generate": "node scripts/generate-tokens-css.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.112.3",

@@ -293,7 +293,7 @@ export default function DeathScreen({
     // ── Match HUD: left side stat pills ───────────────────────────────────────
     const _pillY = 120, _pillH = 36, _pillGap = 8;
     const _pills = [
-      { label: "WAVE", val: String(wave), color: "#FF3333" },
+      { label: "WAVE", val: String(wave), color: "var(--cod-danger)" },
       { label: "KILLS", val: String(kills), color: "#00FF88" },
       { label: "STREAK", val: String(bestStreak), color: "#FF8800" },
     ];
@@ -330,10 +330,10 @@ export default function DeathScreen({
 
     // ── Stats row ─────────────────────────────────────────────────────────────
     const _stats = [
-      { val: "LV " + level, label: "LEVEL", color: "#00E5FF" },
+      { val: "LV " + level, label: "LEVEL", color: "var(--cod-cyan)" },
       { val: kills, label: "ELIMINATED", color: "#00FF88" },
-      { val: "WAVE " + wave, label: "REACHED", color: "#FF4444" },
-      { val: fmtTime(timeSurvived), label: "SURVIVED", color: "#00BFFF" },
+      { val: "WAVE " + wave, label: "REACHED", color: "var(--cod-danger)" },
+      { val: fmtTime(timeSurvived), label: "SURVIVED", color: "var(--cod-cyan)" },
     ];
     const _sw = W / _stats.length;
     _stats.forEach((s, i) => {
@@ -403,7 +403,7 @@ export default function DeathScreen({
     setSharing(false);
   };
 
-  const btnP = { padding: "14px 40px", fontSize: 18, fontWeight: 900, fontFamily: "'Courier New',monospace", background: "linear-gradient(180deg,#FF6B35,#CC4400)", color: "#FFF", border: "none", borderRadius: 6, cursor: "pointer", letterSpacing: 2 };
+  const btnP = { padding: "14px 40px", fontSize: 18, fontWeight: 900, fontFamily: "'Courier New',monospace", background: "linear-gradient(180deg,var(--cod-orange),#CC4400)", color: "#FFF", border: "none", borderRadius: 6, cursor: "pointer", letterSpacing: 2 };
   const btnS = { ...btnP, background: "rgba(255,255,255,0.08)", color: "#CCC", border: "1px solid #444" };
   const card = { background: "rgba(255,255,255,0.05)", borderRadius: 10, border: "1px solid rgba(255,255,255,0.1)", padding: 16 };
   const base = { width: "100%", height: "100dvh", margin: 0, overflow: "hidden", background: "#0a0a0a", fontFamily: "'Courier New', monospace", display: "flex", flexDirection: "column", position: "relative", touchAction: "none", userSelect: "none", WebkitUserSelect: "none" };
@@ -716,7 +716,7 @@ export default function DeathScreen({
       </div>
       <div style={{ marginTop: 8, padding: "9px 10px", borderRadius: 7, background: "rgba(0,0,0,0.28)", border: "1px solid rgba(255,255,255,0.1)" }}>
         <div style={{ fontSize: 11, color: "#FFF", lineHeight: 1.45 }}>{runTheFix.target}</div>
-        <div style={{ marginTop: 4, fontSize: 10, color: "#8FEFFF", lineHeight: 1.45 }}>Proof target: {runTheFix.proof}</div>
+        <div style={{ marginTop: 4, fontSize: 10, color: "var(--cod-cyan)", lineHeight: 1.45 }}>Proof target: {runTheFix.proof}</div>
       </div>
       <details style={{ marginTop: 8 }}>
         <summary style={{ color: "#B9C4D8", fontSize: 9, fontWeight: 900, cursor: "pointer" }}>INSPECT RANKED REASONING · {insightGraph.contradictions.length ? `${insightGraph.contradictions.length} CONFLICT` : "NO CONFLICTS"}</summary>
@@ -750,16 +750,16 @@ export default function DeathScreen({
       <div style={{ textAlign: "center", maxWidth: 460, width: "100%", margin: "auto" }}>
         <div style={{ fontSize: 52, lineHeight: 1, paddingTop: 4 }}>{victory ? "🏆" : "💀"}</div>
         <h2 data-testid="death-title" style={{ fontSize: "clamp(24px,7vw,38px)", color: victory ? "#FFD34F" : "#FF2222", margin: "4px 0", letterSpacing: 3 }}>{victory ? "VICTORY" : "YOU DIED"}</h2>
-        {modeLabel && <div style={{ display: "inline-block", padding: "2px 10px", marginBottom: 4, borderRadius: 10, border: "1px solid rgba(255,211,79,0.45)", color: "#FFD34F", fontSize: 11, fontWeight: 800, letterSpacing: 1 }}>{modeLabel}</div>}
+        {modeLabel && <div style={{ display: "inline-block", padding: "2px 10px", marginBottom: 4, borderRadius: 10, border: "1px solid rgba(255,211,79,0.45)", color: "var(--cod-gold)", fontSize: 11, fontWeight: 800, letterSpacing: 1 }}>{modeLabel}</div>}
         <p style={{ color: "#FF6666", fontSize: 14, fontStyle: "italic", margin: "4px 0 8px" }}>"{deathMessage}"</p>
         {practiceRun && (
-          <div style={{ display: "inline-block", padding: "2px 10px", marginBottom: 6, borderRadius: 10, border: "1px solid rgba(0,229,255,0.45)", color: "#00E5FF", fontSize: 11, fontWeight: 700, letterSpacing: 1 }}>🔁 DRILL RUN</div>
+          <div style={{ display: "inline-block", padding: "2px 10px", marginBottom: 6, borderRadius: 10, border: "1px solid rgba(0,229,255,0.45)", color: "var(--cod-cyan)", fontSize: 11, fontWeight: 700, letterSpacing: 1 }}>🔁 DRILL RUN</div>
         )}
         <div style={{ fontSize: 11, color: diff.color, marginBottom: 6, fontWeight: 700 }}>
           {diff.emoji} {diff.label.toUpperCase()} MODE
-          {scoreAttackMode  && <span style={{ marginLeft: 8, color: "#FF6600" }}>⏱ SCORE ATTACK</span>}
-          {dailyChallengeMode && <span style={{ marginLeft: 8, color: "#00E5FF" }}>📅 DAILY CHALLENGE</span>}
-          {bossRushMode     && <span style={{ marginLeft: 8, color: "#FF3333", fontWeight: 900 }}>☠ BOSS RUSH</span>}
+          {scoreAttackMode  && <span style={{ marginLeft: 8, color: "var(--cod-orange)" }}>⏱ SCORE ATTACK</span>}
+          {dailyChallengeMode && <span style={{ marginLeft: 8, color: "var(--cod-cyan)" }}>📅 DAILY CHALLENGE</span>}
+          {bossRushMode     && <span style={{ marginLeft: 8, color: "var(--cod-danger)", fontWeight: 900 }}>☠ BOSS RUSH</span>}
           {cursedRunMode    && <span style={{ marginLeft: 8, color: "#CC00FF", fontWeight: 900 }}>☠ CURSED</span>}
           {zombiesMode      && <span style={{ marginLeft: 8, color: "#8DFF67", fontWeight: 900 }}>🧟 SEWER ZOMBIES</span>}
         </div>
@@ -782,17 +782,17 @@ export default function DeathScreen({
                 <div style={{ fontSize: 28, marginBottom: 4 }}>🏆</div>
                 <div style={{ fontSize: 16, fontWeight: 900, color: "#00FF88", letterSpacing: 2 }}>CHALLENGE BEATEN!</div>
                 <div style={{ fontSize: 11, color: "#CCC", marginTop: 4 }}>
-                  You beat {vsName ? <span style={{ color: "#FFD700" }}>@{vsName}</span> : "their score"} by{" "}
+                  You beat {vsName ? <span style={{ color: "var(--cod-gold)" }}>@{vsName}</span> : "their score"} by{" "}
                   <span style={{ color: "#00FF88", fontWeight: 900 }}>+{(score - vsScore).toLocaleString()} pts</span>
                 </div>
               </>
             ) : (
               <>
                 <div style={{ fontSize: 28, marginBottom: 4 }}>💀</div>
-                <div style={{ fontSize: 16, fontWeight: 900, color: "#FF4444", letterSpacing: 2 }}>CHALLENGE FAILED</div>
+                <div style={{ fontSize: 16, fontWeight: 900, color: "var(--cod-danger)", letterSpacing: 2 }}>CHALLENGE FAILED</div>
                 <div style={{ fontSize: 11, color: "#CCC", marginTop: 4 }}>
-                  {vsName ? <span style={{ color: "#FFD700" }}>@{vsName}</span> : "They"} beat you by{" "}
-                  <span style={{ color: "#FF4444", fontWeight: 900 }}>{(vsScore - score).toLocaleString()} pts</span>
+                  {vsName ? <span style={{ color: "var(--cod-gold)" }}>@{vsName}</span> : "They"} beat you by{" "}
+                  <span style={{ color: "var(--cod-danger)", fontWeight: 900 }}>{(vsScore - score).toLocaleString()} pts</span>
                 </div>
                 <div style={{ fontSize: 10, color: "#888", marginTop: 3 }}>Target: {vsScore.toLocaleString()} pts</div>
               </>
@@ -810,7 +810,7 @@ export default function DeathScreen({
 
         {runModifier && (
           <div style={{ marginBottom: 10, padding: "5px 14px", borderRadius: 8, border: "1px solid rgba(255,215,0,0.3)", background: "rgba(255,215,0,0.06)", display: "inline-block" }}>
-            <span style={{ color: "#FFD700", fontSize: 11, fontWeight: 700 }}>{runModifier.emoji} {runModifier.name.toUpperCase()}</span>
+            <span style={{ color: "var(--cod-gold)", fontSize: 11, fontWeight: 700 }}>{runModifier.emoji} {runModifier.name.toUpperCase()}</span>
             <span style={{ color: "#bbb", fontSize: 10, marginLeft: 8 }}>{runModifier.desc}</span>
           </div>
         )}
@@ -921,7 +921,7 @@ export default function DeathScreen({
             <span style={{ color: "#FF6B6B", fontWeight: 700 }}>Killed by:</span> {runCoach.killedBy}
           </div>
           <div style={{ fontSize: 11, color: "#FFE5B3", lineHeight: 1.45, marginBottom: 4 }}>
-            <span style={{ color: "#FFC800", fontWeight: 700 }}>Try next:</span> {runCoach.tryNext}
+            <span style={{ color: "var(--cod-gold)", fontWeight: 700 }}>Try next:</span> {runCoach.tryNext}
           </div>
           <div style={{ fontSize: 11, color: "#B3FFB3", lineHeight: 1.45, marginBottom: runCoach.weaponTip ? 4 : 0 }}>
             <span style={{ color: "#00FF88", fontWeight: 700 }}>Working:</span> {runCoach.working}
@@ -989,7 +989,7 @@ export default function DeathScreen({
 
         {fairnessReceipt?.seed > 0 && (
           <div data-testid="fairness-receipt" style={{ ...card, marginTop: 8, marginBottom: 12, textAlign: "left", border: "1px solid rgba(143,239,255,0.28)", background: "linear-gradient(180deg,rgba(0,229,255,0.07),rgba(255,255,255,0.035))" }}>
-            <div style={{ fontSize: 10, color: "#8FEFFF", letterSpacing: 2, fontWeight: 900 }}>FAIRNESS RECEIPT · {fairnessReceipt.fingerprint}</div>
+            <div style={{ fontSize: 10, color: "var(--cod-cyan)", letterSpacing: 2, fontWeight: 900 }}>FAIRNESS RECEIPT · {fairnessReceipt.fingerprint}</div>
             <div style={{ marginTop: 7, display: "flex", gap: 12, flexWrap: "wrap", color: "#E8F7FF", fontSize: 10 }}>
               <span>SEED #{fairnessReceipt.seed}</span>
               <span>{fairnessReceipt.streamCount} STREAMS</span>
@@ -1096,7 +1096,7 @@ export default function DeathScreen({
         </div>
 
         <div style={{ ...card, marginBottom: 12, textAlign: "left", border: "1px solid rgba(0,229,255,0.18)", background: "linear-gradient(180deg,rgba(0,229,255,0.07),rgba(255,255,255,0.035))" }}>
-          <div style={{ fontSize: 10, color: "#00E5FF", letterSpacing: 2, fontWeight: 900, marginBottom: 6 }}>RUN INTELLIGENCE</div>
+          <div style={{ fontSize: 10, color: "var(--cod-cyan)", letterSpacing: 2, fontWeight: 900, marginBottom: 6 }}>RUN INTELLIGENCE</div>
           <div style={{ fontSize: 12, color: "#EAFBFF", lineHeight: 1.5 }}>
             {collapseCoaching.contributingFactor.label}: <span style={{ color: "#FFF", fontWeight: 700 }}>{collapseCoaching.contributingFactor.statement}</span>
           </div>
@@ -1122,7 +1122,7 @@ export default function DeathScreen({
             "{postRunIntel.callout}"
           </div>
           {postRunIntel.rivalry && (
-            <div style={{ fontSize: 11, color: "#8FEFFF", lineHeight: 1.5, marginTop: 6 }}>
+            <div style={{ fontSize: 11, color: "var(--cod-cyan)", lineHeight: 1.5, marginTop: 6 }}>
               {postRunIntel.rivalry.prompt}
             </div>
           )}
@@ -1133,7 +1133,7 @@ export default function DeathScreen({
             <div style={{ marginTop: 8, padding: "7px 8px", borderRadius: 6, background: "rgba(0,0,0,0.24)", border: "1px solid rgba(255,255,255,0.08)" }}>
               <div style={{ fontSize: 9, color: "#FFD7B8", letterSpacing: 1.5, fontWeight: 900 }}>CONTRACT: {debrief.nextRunContract.focus}</div>
               <div style={{ fontSize: 10, color: "#EEE", lineHeight: 1.4, marginTop: 3 }}>{debrief.nextRunContract.target}</div>
-              <div style={{ fontSize: 9, color: "#8FEFFF", lineHeight: 1.4, marginTop: 3 }}>{debrief.nextRunContract.proof}</div>
+              <div style={{ fontSize: 9, color: "var(--cod-cyan)", lineHeight: 1.4, marginTop: 3 }}>{debrief.nextRunContract.proof}</div>
             </div>
             <button
               onClick={() => {
@@ -1242,7 +1242,7 @@ export default function DeathScreen({
         {/* Doodie Pass cosmetic unlocks */}
         {cosmeticUnlocks && cosmeticUnlocks.length > 0 && (
           <div style={{ ...card, marginBottom: 10, padding: "10px 12px", border: "1px solid rgba(255,180,0,0.35)", background: "rgba(255,180,0,0.07)" }}>
-            <div style={{ fontSize: 10, color: "#FFD700", letterSpacing: 2, fontWeight: 900, marginBottom: 6 }}>🎖 DOODIE PASS UNLOCKED</div>
+            <div style={{ fontSize: 10, color: "var(--cod-gold)", letterSpacing: 2, fontWeight: 900, marginBottom: 6 }}>🎖 DOODIE PASS UNLOCKED</div>
             {cosmeticUnlocks.map((c) => (
               <div key={c.id} style={{ fontSize: 12, color: "#FFE082", marginBottom: 3 }}>
                 {c.emoji} <strong>{c.name}</strong> — {c.desc}
@@ -1278,7 +1278,7 @@ export default function DeathScreen({
             <div style={{ fontSize: 9, color: "#555", letterSpacing: 3, marginBottom: 10, fontFamily: "'Courier New',monospace", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
               <span>── GHOST RACE — YOUR PATH ──</span>
               {traceEvidence?.evidenceLevel === "rich" && (
-                <span style={{ fontSize: 8, color: "#FFD700", background: "rgba(255,215,0,0.12)", border: "1px solid rgba(255,215,0,0.35)", borderRadius: 4, padding: "1px 6px", letterSpacing: 1.5, fontWeight: 700 }}>⭐ VERIFIED RUN</span>
+                <span style={{ fontSize: 8, color: "var(--cod-gold)", background: "rgba(255,215,0,0.12)", border: "1px solid rgba(255,215,0,0.35)", borderRadius: 4, padding: "1px 6px", letterSpacing: 1.5, fontWeight: 700 }}>⭐ VERIFIED RUN</span>
               )}
             </div>
             <canvas ref={ghostCanvasRef} width={280} height={140} style={{ borderRadius: 6, border: "1px solid #1A1A1A", display: "block", margin: "0 auto" }} />
@@ -1332,7 +1332,7 @@ export default function DeathScreen({
           <div style={{ fontSize: 11, color: "#888", lineHeight: 1.5, marginBottom: runNarrative.moments.length > 0 ? 10 : 0 }}>{runNarrative.actDesc}</div>
           {runNarrative.moments.map((m, i) => (
             <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 8, padding: "4px 0", borderTop: "1px solid #1A1A1A" }}>
-              <div style={{ fontSize: 8, color: "#FFD700", letterSpacing: 2, fontFamily: "'Courier New',monospace", whiteSpace: "nowrap", marginTop: 2 }}>{m.label}</div>
+              <div style={{ fontSize: 8, color: "var(--cod-gold)", letterSpacing: 2, fontFamily: "'Courier New',monospace", whiteSpace: "nowrap", marginTop: 2 }}>{m.label}</div>
               <div style={{ fontSize: 10, color: "#AAA", lineHeight: 1.5 }}>{m.desc}</div>
             </div>
           ))}
@@ -1428,7 +1428,7 @@ export default function DeathScreen({
         )}
 
         <div style={{ marginBottom: 10, color: "#EEE", fontSize: 13 }}>
-          Rank: <span style={{ color: "#FFD700", fontWeight: 700 }}>{RANK_NAMES[rankIndex]}</span>
+          Rank: <span style={{ color: "var(--cod-gold)", fontWeight: 700 }}>{RANK_NAMES[rankIndex]}</span>
         </div>
 
         <div style={{ marginBottom: 12 }}>
@@ -1437,7 +1437,7 @@ export default function DeathScreen({
 
         {!practiceRun && (
           <div data-testid="field-report" style={{ ...card, marginBottom: 12, border: "1px solid rgba(127,230,255,0.22)", background: "rgba(4,24,28,0.58)" }}>
-            <div style={{ color: "#7FE6FF", fontSize: 10, fontWeight: 900, letterSpacing: 2 }}>FIELD REPORT · HOW WAS THE THREAT?</div>
+            <div style={{ color: "var(--cod-cyan)", fontSize: 10, fontWeight: 900, letterSpacing: 2 }}>FIELD REPORT · HOW WAS THE THREAT?</div>
             <div style={{ color: "#8B989F", fontSize: 9, marginTop: 4 }}>One tap helps tune future modes. Your answer never changes difficulty without your approval.</div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3,minmax(0,1fr))", gap: 6, marginTop: 9 }}>
               {Object.values(FIELD_REPORTS).map(report => {
@@ -1471,7 +1471,7 @@ export default function DeathScreen({
 
         {practiceRun ? (
           <div style={{ ...card, marginBottom: 12, border: "1px solid rgba(0,229,255,0.25)" }}>
-            <div style={{ fontSize: 12, color: "#00E5FF", letterSpacing: 1, fontWeight: 700 }}>🔁 DRILL RUN</div>
+            <div style={{ fontSize: 12, color: "var(--cod-cyan)", letterSpacing: 1, fontWeight: 700 }}>🔁 DRILL RUN</div>
             <div style={{ fontSize: 11, color: "#AAD", marginTop: 4 }}>Practice rematches don't submit to the leaderboard or set career records.</div>
           </div>
         ) : !runIntegrityReceipt.onlineEligible ? (
@@ -1484,7 +1484,7 @@ export default function DeathScreen({
           </div>
         ) : !submitStatus || submitStatus === 'pending' ? (
           <div style={{ ...card, marginBottom: 12, border: "1px solid rgba(255,215,0,0.15)" }}>
-            <div style={{ fontSize: 12, color: "#FFD700", marginBottom: 8, letterSpacing: 1, fontWeight: 700 }}>SUBMIT TO HALL OF SHAME</div>
+            <div style={{ fontSize: 12, color: "var(--cod-gold)", marginBottom: 8, letterSpacing: 1, fontWeight: 700 }}>SUBMIT TO HALL OF SHAME</div>
             <input
               type="text"
               value={lastWords}
@@ -1497,7 +1497,7 @@ export default function DeathScreen({
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
               <div style={{ fontSize: 10, color: "#CCC" }}>{lastWords.trim().split(/\s+/).filter(Boolean).length}/5 words</div>
               {gamepadConnected && (
-                <button onClick={() => setShowLastWordsKeyboard(true)} style={{ fontSize: 10, padding: "3px 8px", background: "rgba(255,107,53,0.12)", border: "1px solid rgba(255,107,53,0.3)", borderRadius: 4, color: "#FF6B35", cursor: "pointer", fontFamily: "'Courier New',monospace", fontWeight: 700 }}>
+                <button onClick={() => setShowLastWordsKeyboard(true)} style={{ fontSize: 10, padding: "3px 8px", background: "rgba(255,107,53,0.12)", border: "1px solid rgba(255,107,53,0.3)", borderRadius: 4, color: "var(--cod-orange)", cursor: "pointer", fontFamily: "'Courier New',monospace", fontWeight: 700 }}>
                   🎮 Keyboard
                 </button>
               )}
@@ -1510,7 +1510,7 @@ export default function DeathScreen({
           <div style={{ ...card, marginBottom: 12, border: "1px solid rgba(0,255,0,0.2)", background: "rgba(0,255,0,0.03)" }}>
             <div style={{ color: "#0F0", fontSize: 14, fontWeight: 700 }}>✅ Score submitted!</div>
             {globalRank && (
-              <div style={{ color: "#FFD700", fontSize: 13, fontWeight: 900, marginTop: 6, letterSpacing: 1 }}>
+              <div style={{ color: "var(--cod-gold)", fontSize: 13, fontWeight: 900, marginTop: 6, letterSpacing: 1 }}>
                 🌍 Global Rank: <span style={{ color: "#FFF" }}>#{globalRank.toLocaleString()}</span>
               </div>
             )}
@@ -1573,7 +1573,7 @@ export default function DeathScreen({
         {/* Highlight GIF */}
         {(gifEncoding || highlightGifUrl) && (
           <div style={{ marginBottom: 12, textAlign: "center" }}>
-            <div style={{ fontSize: 10, color: "#FF6B35", fontWeight: 700, letterSpacing: 2, marginBottom: 6 }}>🎬 BEST MOMENT</div>
+            <div style={{ fontSize: 10, color: "var(--cod-orange)", fontWeight: 700, letterSpacing: 2, marginBottom: 6 }}>🎬 BEST MOMENT</div>
             {gifEncoding ? (
               <div style={{ width: "100%", maxWidth: 320, height: 90, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,107,53,0.25)", borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, color: "#aaa", margin: "0 auto", fontFamily: "'Courier New',monospace" }}>
                 ⏳ encoding highlight...
@@ -1594,7 +1594,7 @@ export default function DeathScreen({
                       }
                     } catch {}
                   }}
-                  style={{ marginTop: 7, padding: "7px 18px", background: "rgba(255,107,53,0.15)", border: "1px solid rgba(255,107,53,0.45)", color: "#FF6B35", borderRadius: 6, cursor: "pointer", fontSize: 12, fontWeight: 700, fontFamily: "'Courier New',monospace" }}
+                  style={{ marginTop: 7, padding: "7px 18px", background: "rgba(255,107,53,0.15)", border: "1px solid rgba(255,107,53,0.45)", color: "var(--cod-orange)", borderRadius: 6, cursor: "pointer", fontSize: 12, fontWeight: 700, fontFamily: "'Courier New',monospace" }}
                 >📤 SHARE BEST MOMENT</button>
               </>
             )}
@@ -1640,7 +1640,7 @@ export default function DeathScreen({
           <div style={{ marginBottom: 10 }}>
             <button
               onClick={onInstallApp}
-              style={{ ...btnS, width: "100%", fontSize: 14, background: "rgba(0,229,255,0.08)", border: "1px solid rgba(0,229,255,0.35)", color: "#00E5FF" }}
+              style={{ ...btnS, width: "100%", fontSize: 14, background: "rgba(0,229,255,0.08)", border: "1px solid rgba(0,229,255,0.35)", color: "var(--cod-cyan)" }}
             >📲 INSTALL APP</button>
           </div>
         )}
@@ -1658,7 +1658,7 @@ export default function DeathScreen({
                 track("debrief_rematch_wave", { seed: runSeed, deathWave: wave, startWave: rematchWave, score, intelligenceCause: postRunIntel.cause, drillId: nextRunDrill.id });
                 onStartGame(runSeed, { startWave: rematchWave, drill: { ...makeDrillLaunch("rematch"), deathWave: wave } });
               }}
-              style={{ ...btnS, minWidth: 130, fontSize: 13, border: "1px solid rgba(0,229,255,0.45)", color: "#00E5FF" }}
+              style={{ ...btnS, minWidth: 130, fontSize: 13, border: "1px solid rgba(0,229,255,0.45)", color: "var(--cod-cyan)" }}
             >🔁 REMATCH W{rematchWave}</button>
           )}
           {runSeed > 0 && (
@@ -1687,7 +1687,7 @@ export default function DeathScreen({
             <div style={{ fontSize: 11, color: "#888", letterSpacing: 2, marginBottom: 12, fontFamily: "'Courier New',monospace" }}>SCAN TO CHALLENGE</div>
             {qrError ? (
               <div style={{ padding: "12px 0" }}>
-                <div style={{ fontSize: 11, color: "#FF4444", marginBottom: 8 }}>QR generation failed</div>
+                <div style={{ fontSize: 11, color: "var(--cod-danger)", marginBottom: 8 }}>QR generation failed</div>
                 <div style={{ fontSize: 9, color: "#888", wordBreak: "break-all", fontFamily: "'Courier New',monospace", userSelect: "all" }}>{challengeUrl}</div>
               </div>
             ) : (

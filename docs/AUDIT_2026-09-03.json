@@ -12,7 +12,11 @@
     "type": "game",
     "candidateCount": 40,
     "promotedCount": 15,
-    "top3": ["sim-foundations", "mode-definition-layer", "allies-and-objective-verbs"],
+    "top3": [
+      "sim-foundations",
+      "mode-definition-layer",
+      "allies-and-objective-verbs"
+    ],
     "livePremiseVerification": true,
     "premiseEvidence": "Three read-only explorations and two architecture passes verified: modes differ only by modeRules.js flags, Operation verbs are labels, no ally or netcode exists, five visual languages ship, App.jsx has 7 lines of loop headroom.",
     "founderDecisions": {
@@ -20,23 +24,120 @@
       "multiplayer": "async-first, durable-object co-op second, networked royale after telemetry",
       "firstTranche": "gameplay foundations + Boss Gauntlet + Hold the Throne"
     },
-    "supersedes": "evidence-gated content hold (S154-S162)"
+    "supersedes": "evidence-gated content hold (S154-S162)",
+    "closeout": {
+      "session": 163,
+      "date": "2026-09-03",
+      "tests": "221 files / 1286 assertions",
+      "browser": "19 pass / 1 skip",
+      "note": "tranche 1 complete; tranche 2 tokens/brand/deletions/roadmap/claims complete; IA hash routes and profile cloud backup open"
+    }
   },
   "items": [
-    {"id": "enemy-frame-extraction", "tier": "FIRE", "effort": "L", "tranche": 1, "status": "planned"},
-    {"id": "fixed-timestep", "tier": "FIRE", "effort": "S", "tranche": 1, "status": "planned"},
-    {"id": "sim-rng-eradication", "tier": "FIRE", "effort": "S", "tranche": 1, "status": "planned"},
-    {"id": "headless-step-sim", "tier": "FIRE", "effort": "M", "tranche": 1, "status": "planned"},
-    {"id": "mode-definition-layer", "tier": "FIRE", "effort": "M", "tranche": 1, "status": "planned"},
-    {"id": "app-surgery-pass", "tier": "FIRE", "effort": "M", "tranche": 1, "status": "planned"},
-    {"id": "ally-unit", "tier": "FIRE", "effort": "M", "tranche": 1, "status": "planned"},
-    {"id": "objective-handlers", "tier": "FIRE", "effort": "M", "tranche": 1, "status": "planned"},
-    {"id": "mode-boss-gauntlet", "tier": "FIRE", "effort": "S", "tranche": 1, "status": "planned"},
-    {"id": "mode-hold-the-throne", "tier": "FIRE", "effort": "M", "tranche": 1, "status": "planned"},
-    {"id": "design-tokens", "tier": "FIRE", "effort": "M", "tranche": 2, "status": "planned"},
-    {"id": "site-ia-consolidation", "tier": "FIRE", "effort": "L", "tranche": 2, "status": "planned"},
-    {"id": "freshness-automation", "tier": "EMBER", "effort": "M", "tranche": 2, "status": "planned"},
-    {"id": "profile-cloud-backup", "tier": "EMBER", "effort": "M", "tranche": 2, "status": "planned"},
-    {"id": "async-multiplayer-bot-royale", "tier": "EMBER", "effort": "L", "tranche": 3, "status": "planned"}
+    {
+      "id": "enemy-frame-extraction",
+      "tier": "FIRE",
+      "effort": "L",
+      "tranche": 1,
+      "status": "complete"
+    },
+    {
+      "id": "fixed-timestep",
+      "tier": "FIRE",
+      "effort": "S",
+      "tranche": 1,
+      "status": "complete"
+    },
+    {
+      "id": "sim-rng-eradication",
+      "tier": "FIRE",
+      "effort": "S",
+      "tranche": 1,
+      "status": "complete"
+    },
+    {
+      "id": "headless-step-sim",
+      "tier": "FIRE",
+      "effort": "M",
+      "tranche": 1,
+      "status": "complete"
+    },
+    {
+      "id": "mode-definition-layer",
+      "tier": "FIRE",
+      "effort": "M",
+      "tranche": 1,
+      "status": "complete"
+    },
+    {
+      "id": "app-surgery-pass",
+      "tier": "FIRE",
+      "effort": "M",
+      "tranche": 1,
+      "status": "complete"
+    },
+    {
+      "id": "ally-unit",
+      "tier": "FIRE",
+      "effort": "M",
+      "tranche": 1,
+      "status": "complete"
+    },
+    {
+      "id": "objective-handlers",
+      "tier": "FIRE",
+      "effort": "M",
+      "tranche": 1,
+      "status": "complete"
+    },
+    {
+      "id": "mode-boss-gauntlet",
+      "tier": "FIRE",
+      "effort": "S",
+      "tranche": 1,
+      "status": "complete"
+    },
+    {
+      "id": "mode-hold-the-throne",
+      "tier": "FIRE",
+      "effort": "M",
+      "tranche": 1,
+      "status": "complete"
+    },
+    {
+      "id": "design-tokens",
+      "tier": "FIRE",
+      "effort": "M",
+      "tranche": 2,
+      "status": "complete"
+    },
+    {
+      "id": "site-ia-consolidation",
+      "tier": "FIRE",
+      "effort": "L",
+      "tranche": 2,
+      "status": "partial"
+    },
+    {
+      "id": "freshness-automation",
+      "tier": "EMBER",
+      "effort": "M",
+      "tranche": 2,
+      "status": "partial"
+    },
+    {
+      "id": "profile-cloud-backup",
+      "tier": "EMBER",
+      "effort": "M",
+      "tranche": 2,
+      "status": "open"
+    },
+    {
+      "id": "async-multiplayer-bot-royale",
+      "tier": "EMBER",
+      "effort": "L",
+      "tranche": 3,
+      "status": "planned"
+    }
   ]
 }

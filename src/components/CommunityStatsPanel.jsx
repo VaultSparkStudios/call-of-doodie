@@ -67,7 +67,7 @@ function CompareRow({ label, you, community, format = formatStat }) {
           <div style={{ width: `${youPct}%`, height: "100%", borderRadius: 2, background: "#5EE68A" }} />
         </div>
         <div style={{ height: 4, borderRadius: 2, background: "rgba(255,255,255,0.06)" }}>
-          <div style={{ width: `${comPct}%`, height: "100%", borderRadius: 2, background: "#7FE6FF" }} />
+          <div style={{ width: `${comPct}%`, height: "100%", borderRadius: 2, background: "var(--cod-cyan)" }} />
         </div>
       </div>
       <span style={{ color: "#9AA7AE", fontVariantNumeric: "tabular-nums", textAlign: "right" }}>{format(you)} · {format(community)}</span>
@@ -136,7 +136,7 @@ export default function CommunityStatsPanel({ career: suppliedCareer = null, run
       <div style={{ display: "flex", gap: 8, alignItems: "center", justifyContent: "space-between", flexWrap: "wrap" }}>
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-            <div className="community-stats__header" style={{ color: "#7FE6FF", fontSize: 10, letterSpacing: 2.2, fontWeight: 900 }}>● LIVE SEWER NETWORK</div>
+            <div className="community-stats__header" style={{ color: "var(--cod-cyan)", fontSize: 10, letterSpacing: 2.2, fontWeight: 900 }}>● LIVE SEWER NETWORK</div>
             <a className="community-stats__full-link" href={`${import.meta.env.BASE_URL}stats/`} style={{ color: "#9CEBFF", fontSize: 8, letterSpacing: 1, textDecoration: "underline", textUnderlineOffset: 2 }}>VIEW ALL STATS →</a>
             {!showcase && <button type="button" onClick={refreshCommunityStatsNow} aria-label="Refresh Community Stats now" style={{ padding: 0, border: 0, background: "transparent", color: "#9CEBFF", fontSize: 8, letterSpacing: 1, textDecoration: "underline", textUnderlineOffset: 2, cursor: "pointer" }}>REFRESH</button>}
           </div>

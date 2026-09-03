@@ -6,6 +6,8 @@ import { ObeliskLogin } from "./ObeliskLogin.jsx";
 import { getObeliskRoute } from "./obeliskRoutes.js";
 import { applyTheme, readTheme } from "./utils/theme.js";
 import { initializeSentry } from "./utils/sentryClient.js";
+import "./styles/tokens.css";
+import "./styles/base.css";
 import "./auth.css";
 import "./runtime-shell.css";
 import { RuntimeBoundary } from "./RuntimeBoundary.jsx";

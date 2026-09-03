@@ -1,3 +1,17 @@
+## 2026-09-03 — Session 163 — Mode, simulation, squad, and brand truth
+
+- Mode truth — BOSS GAUNTLET and HOLD THE THRONE change what the player does (fixed length with victory; zone control with a squad). The eight legacy ids keep their ruleset/replay contract byte-for-byte; new modes are `replayEligible:false` and never reach global submission.
+- Simulation truth — the loop advances in exact 60Hz steps; `stepSim` reproduces the same state hash for the same seed and inputs in plain Node. Weapon firing in the kernel is a single-projectile model and App's spread/burst/hitscan flow is not replicated; wave rewards remain host concerns.
+- Squad truth — allies are deterministic through the `allies` stream; ids derive from run state, not module counters. Revived allies survive the bleed-out check (a self-review fix).
+- Objective truth — verb handlers are unit-proven but Operations still complete on their prior path; this is recorded as open, not claimed.
+- Brand truth — one token source, hex-free `doc.css`, direct review of 14 captures across both schemes and mobile. Inline hex sweep covered style properties in component files only; canvas drawing code intentionally keeps literal colors.
+- Claims truth — README counts are generated; the public contract lists 10 modes with 8 seeded-replay and 2 local-only; `/roadmap/` carries the co-op "not live" statement.
+- Validation truth — 221/221 files, 1,286/1,286 assertions; Playwright 19/1 skip; contract 29 files; security gate; architecture budget; browser mode smoke.
+- Boundary truth — no participant, physical-device, provider, identity, or publication evidence was gathered; App chunk exceeds the S145 budget and is scheduled.
+
+Overall status: green engineering implementation across two tranches; SPARKED remains NO-GO.
+Last reviewed: 2026-09-03
+
 <!-- truth-audit-version: 1.1 -->
 ## 2026-08-25 — Session 162 — Corrective-order, evidence-boundary, and staging truth
 

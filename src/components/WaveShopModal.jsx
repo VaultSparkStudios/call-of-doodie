@@ -65,7 +65,7 @@ export default function WaveShopModal({ options, wave, onSelect, boughtHistory =
     }}>
       <div style={{ maxWidth: 480, width: "100%", textAlign: "center", margin: "auto 0" }}>
         <div style={{ fontSize: 32, marginBottom: 4 }}>📦</div>
-        <h2 style={{ fontSize: "clamp(16px,4vw,24px)", fontWeight: 900, margin: "0 0 4px", color: "#FFD700", letterSpacing: 2 }}>
+        <h2 style={{ fontSize: "clamp(16px,4vw,24px)", fontWeight: 900, margin: "0 0 4px", color: "var(--cod-gold)", letterSpacing: 2 }}>
           WAVE {wave - 1} CLEAR!
         </h2>
         <p style={{ color: "#AAA", fontSize: 12, margin: "0 0 18px" }}>
@@ -124,7 +124,7 @@ export default function WaveShopModal({ options, wave, onSelect, boughtHistory =
               >
                 <span style={{ fontSize: 32, lineHeight: 1 }}>{opt.emoji}</span>
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: 15, fontWeight: 900, color: "#FFD700", marginBottom: 2 }}>{opt.name}</div>
+                  <div style={{ fontSize: 15, fontWeight: 900, color: "var(--cod-gold)", marginBottom: 2 }}>{opt.name}</div>
                   <div style={{ fontSize: 12, color: "#CCC" }}>{opt.desc}</div>
                   {(isFocused || hoveredId === opt.id) && (() => {
                     const { advisory, urgency } = getShopAdvisory(opt, gs, currentWeapon);
@@ -158,7 +158,7 @@ export default function WaveShopModal({ options, wave, onSelect, boughtHistory =
 
             {/* Coin balance */}
             <div style={{ marginBottom: 10, fontSize: 12, color: "#C8A000", fontWeight: 700, letterSpacing: 1 }}>
-              BALANCE: <span style={{ color: "#FFD700" }}>💩 {coins}</span>
+              BALANCE: <span style={{ color: "var(--cod-gold)" }}>💩 {coins}</span>
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>

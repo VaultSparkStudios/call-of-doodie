@@ -2,7 +2,10 @@
 //
 // 10 cosmetics released over 4 weeks since the campaign anchor date.
 // FREE track unlocks 4 of them via play (career milestones).
-// SUPPORTER track unlocks all 10 + grants early access (week-of-release).
+// SUPPORTER track unlocks all 10.
+// S163: the weekly drop track is hidden from players until every week has
+// finished art; flip this once the four weeks are complete.
+export const COSMETIC_TRACK_ENABLED = false;
 //
 // IMPORTANT (locked-in by founder feedback):
 //   - No gameplay impact. Only skins, taunts, kill-text fonts, badge tints.

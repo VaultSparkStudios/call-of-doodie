@@ -67,7 +67,8 @@ const requiredFiles = [
   relative("public", "sitemap.xml"),
   relative("public", "robots.txt"),
   relative("public", "footer-manifest.json"),
-  relative("public", "legal.css"),
+  relative("public", "doc.css"),
+  relative("public", "tokens.css"),
   relative("public", "theme.js"),
   relative("docs", "DEPLOY_ROLLBACK.md"),
   relative("docs", "RELEASE_PARITY.md"),
@@ -205,8 +206,6 @@ requireIncludes(siteFooterFile, read(siteFooterFile), [
 }
 for (const file of [
   relative("src", "components", "HomeV2.jsx"),
-  relative("src", "components", "MenuScreen.jsx"),
-  relative("src", "components", "HomeV3.jsx"),
 ]) {
   requireIncludes(file, read(file), ["./SiteFooter.jsx", "<SiteFooter"]);
 }
@@ -225,12 +224,20 @@ for (const page of ["privacy", "terms", "contact", "ip"]) {
   ]);
 }
 
-requireIncludes("legal.css", contentByFile[relative("public", "legal.css")], [
-  "sewer-night",
+// S163: static pages consume the generated design tokens plus a hex-free doc layer.
+requireIncludes("tokens.css", contentByFile[relative("public", "tokens.css")], [
   "porcelain-day",
+  "--cod-orange",
+  "--cod-focus",
+  "--font-display",
+]);
+requireIncludes("doc.css", contentByFile[relative("public", "doc.css")], [
+  "var(--cod-",
   "--button-ink",
   ".theme-toggle",
+  ".footer-links nav",
 ]);
+if (/#[0-9a-fA-F]{6}/.test(contentByFile[relative("public", "doc.css")] || "")) errors.push("doc.css contains a raw hex color; use a token from src/utils/theme.js");
 requireIncludes("theme.js", contentByFile[relative("public", "theme.js")], [
   "cod-theme",
   "porcelain-day",

@@ -27,7 +27,7 @@ export default function DraftScreen({ options, onSelect }) {
     }}>
       <div style={{ maxWidth: 640, width: "94%", textAlign: "center" }}>
         <div style={{ fontSize: 9, color: "#555", letterSpacing: 5, marginBottom: 12 }}>── PRE-DEPLOYMENT ──</div>
-        <div style={{ fontSize: "clamp(20px,5vw,32px)", fontWeight: 900, color: "#FFD700", letterSpacing: 3, marginBottom: 6 }}>
+        <div style={{ fontSize: "clamp(20px,5vw,32px)", fontWeight: 900, color: "var(--cod-gold)", letterSpacing: 3, marginBottom: 6 }}>
           CHOOSE YOUR EDGE
         </div>
         <div style={{ fontSize: 12, color: "#666", marginBottom: 28 }}>

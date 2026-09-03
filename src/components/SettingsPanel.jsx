@@ -186,7 +186,7 @@ export default function SettingsPanel({ settings, onSave, onClose }) {
 
   const base = { fontFamily: "'Courier New',monospace", cursor: "pointer", borderRadius: 6, fontWeight: 700 };
 
-  const focusStyle = { outline: "2px solid #FF6B35", outlineOffset: 2, boxShadow: "0 0 10px rgba(255,107,53,0.35)" };
+  const focusStyle = { outline: "2px solid var(--cod-orange)", outlineOffset: 2, boxShadow: "0 0 10px rgba(255,107,53,0.35)" };
 
   return (
     <div
@@ -197,7 +197,7 @@ export default function SettingsPanel({ settings, onSave, onClose }) {
 
         {/* Header */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 16px 10px", borderBottom: "1px solid rgba(255,107,53,0.2)", flexShrink: 0 }}>
-          <h3 style={{ color: "#FF6B35", margin: 0, fontSize: 16, letterSpacing: 2, fontFamily: "'Courier New',monospace" }}>⚙ SETTINGS</h3>
+          <h3 style={{ color: "var(--cod-orange)", margin: 0, fontSize: 16, letterSpacing: 2, fontFamily: "'Courier New',monospace" }}>⚙ SETTINGS</h3>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <span style={{ fontSize: 9, color: "#555", letterSpacing: 1 }}>🎮 LB/RB = tabs · D-pad navigates</span>
             <button onClick={apply} style={{ ...base, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.14)", color: "#AAA", fontSize: 15, width: 34, height: 34, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</button>
@@ -222,13 +222,13 @@ export default function SettingsPanel({ settings, onSave, onClose }) {
                 <div key={key} style={{ ...(isFocused ? { borderRadius: 6, background: "rgba(255,107,53,0.06)", padding: "6px 8px", margin: "-6px -8px" } : {}) }}>
                   <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4, fontSize: 12, color: isFocused ? "#FF6B35" : "#CCC" }}>
                     <span>{meta.label}</span>
-                    {meta.type === "slider" && <span style={{ color: "#FF6B35", fontWeight: 700, minWidth: 60, textAlign: "right", fontFamily: "monospace", fontSize: 11 }}>{meta.fmt(val(key))}</span>}
+                    {meta.type === "slider" && <span style={{ color: "var(--cod-orange)", fontWeight: 700, minWidth: 60, textAlign: "right", fontFamily: "monospace", fontSize: 11 }}>{meta.fmt(val(key))}</span>}
                   </div>
                   {meta.desc && <div style={{ fontSize: 10, color: "#aaa", marginBottom: 7, lineHeight: 1.3 }}>{meta.desc}</div>}
                   {meta.type === "slider" && (
                     <input type="range" min={meta.min} max={meta.max} step={meta.step} value={val(key)}
                       onChange={e => set(key, parseFloat(e.target.value))}
-                      style={{ width: "100%", accentColor: "#FF6B35", cursor: "pointer", height: 4 }} />
+                      style={{ width: "100%", accentColor: "var(--cod-orange)", cursor: "pointer", height: 4 }} />
                   )}
                   {meta.type === "options" && (
                     <div>
@@ -303,7 +303,7 @@ export default function SettingsPanel({ settings, onSave, onClose }) {
             <button onClick={() => setW({ ...SETTINGS_DEFAULTS })} style={{ ...base, fontSize: 11, padding: "5px 10px", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)", color: "#ccc" }}>↩ Default</button>
             {presets.map(p => (
               <div key={p.name} style={{ display: "flex", alignItems: "center", gap: 2 }}>
-                <button onClick={() => setW({ ...SETTINGS_DEFAULTS, ...p.settings })} style={{ ...base, fontSize: 11, padding: "5px 10px", background: "rgba(255,215,0,0.08)", border: "1px solid rgba(255,215,0,0.3)", color: "#FFD700" }}>{p.name}</button>
+                <button onClick={() => setW({ ...SETTINGS_DEFAULTS, ...p.settings })} style={{ ...base, fontSize: 11, padding: "5px 10px", background: "rgba(255,215,0,0.08)", border: "1px solid rgba(255,215,0,0.3)", color: "var(--cod-gold)" }}>{p.name}</button>
                 <button onClick={() => { const u = presets.filter(x => x.name !== p.name); setPresets(u); savePresets(u); }} style={{ padding: "3px 5px", cursor: "pointer", background: "transparent", border: "none", color: "#aaa", fontSize: 11 }}>✕</button>
               </div>
             ))}
@@ -327,7 +327,7 @@ export default function SettingsPanel({ settings, onSave, onClose }) {
             <button
               onClick={apply}
               style={{
-                flex: 1, padding: 11, background: "linear-gradient(180deg,#FF6B35,#CC4400)",
+                flex: 1, padding: 11, background: "linear-gradient(180deg,var(--cod-orange),#CC4400)",
                 border: "none", borderRadius: 7, color: "#FFF", fontSize: 14,
                 fontWeight: 900, fontFamily: "'Courier New',monospace", cursor: "pointer", letterSpacing: 1,
                 ...(focusIdx === tabEntries.length ? focusStyle : {}),

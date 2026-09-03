@@ -1,11 +1,11 @@
 {
   "schemaVersion": "1.0",
   "source": "scripts/lib/public-route-registry.mjs",
-  "contentVersion": "2026-08-23",
-  "fingerprint": "e659c36d7741f8840d5a25f39854b016614d898589df3a1e7c57f30fb8070b43",
+  "contentVersion": "2026-09-03",
+  "fingerprint": "6128adbfca137dfe6145be14c7d56fd2018ff71ebcb63c522b52c399f90d20b1",
   "coverage": {
     "routes": 18,
-    "headerRoutes": 6,
+    "headerRoutes": 5,
     "footerRoutes": 18,
     "visualAuditRoutes": 20,
     "generatedPages": 13
@@ -19,7 +19,6 @@
   "routeIds": [
     "home",
     "about",
-    "play",
     "how-to-play",
     "enemies",
     "arsenal",
@@ -31,6 +30,7 @@
     "press-kit",
     "status",
     "changelog",
+    "roadmap",
     "privacy",
     "terms",
     "contact",

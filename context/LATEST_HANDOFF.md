@@ -1,3 +1,24 @@
+# Latest Handoff — Session 163
+
+Session Intent: Founder-directed course correction — audit why the modes felt identical and the site theme jumped, then ship real modes with CPU teammates, a deterministic fixed-step simulation, and one brand across every page.
+
+## Where We Left Off (Session 163)
+
+- Shipped: enemy AI extraction, fixed 60Hz timestep, headless `stepSim` kernel, RNG guard, CPU squad, zones, behavioral objective verbs, mode-definition layer, BOSS GAUNTLET and HOLD THE THRONE.
+- Shipped: single design-token source, hex-free static `doc.css`, arcade brand on home/login/shell/display-name/tutorial/weapon-dock/static pages, HomeV3 and MenuScreen deleted, 231 brand hexes tokenized, three-group footer, `/roadmap/`, `/play/` retired, README claims generated and checked, supporter copy fixed.
+- Decisions: evidence gating no longer blocks content; arcade CRT is the sole brand; multiplayer order is async → Durable Object co-op → networked royale.
+- Validation: Vitest 221/221 files, 1,286/1,286 assertions; strict lint; build; public contract 29 files and claims; security release gate; architecture budget; token drift; Playwright 19 pass / 1 intentional skip; `npm run smoke:modes` deploys both new modes in a real browser; 14 theme captures reviewed.
+- Known gaps: Operations not yet rewired to the verb handlers; App chunk 584 KB over the 493 KB budget; profile/cloud backup, IA consolidation, and hash routes remain from tranche 2.
+- Next: tranche 3 from `docs/AUDIT_2026-09-03.md` — Sewer Extraction, clip sharing, async rivals, Bot Royale — then the bundle diet and Operation rewiring.
+
+## Impact Summary
+
+**Headline.** The game finally has modes that play differently and teammates that fight beside you, on a simulation that runs the same speed on every screen, under one brand from the front door to the privacy policy.
+
+**Evidence.** Two tranches, fifteen audit-plan items advanced; 1,286 assertions; 19 browser cases; two new modes browser-smoked; 14 theme captures; zero new dependencies, hosted calls, identity surfaces, or variable-cost services.
+
+---
+
 # Latest Handoff — Session 162
 
 Session Intent: Run one complete `/arc` from synchronized production through fresh game-loop review, premise-verified audit, complete implementation, isolated staging, rendered-pixel proof, independent release gating, canonical closeout, direct-main publication, and exact production verification.

@@ -150,15 +150,16 @@ function renderPage(page) {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#090a0d">
+  <meta name="theme-color" content="#070b10">
   <meta name="description" content="${escapeHtml(page.description)}">
   <link rel="canonical" href="${page.canonicalUrl}">
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="../legal.css">
+  <link rel="stylesheet" href="../tokens.css">
+  <link rel="stylesheet" href="../doc.css">
   <script src="../theme.js" defer></script>
 ${liveStatsScript ? `  ${liveStatsScript}\n` : ""}  <title>${escapeHtml(page.title)} | Call of Doodie</title>
 </head>
-<body>
+<body class="fx-vignette">
   <div class="shell">
     <header class="site-header"><a class="brand" href="../">CALL OF <span>DOODIE</span></a><nav aria-label="Primary navigation">
 ${renderHeaderNav("../")}

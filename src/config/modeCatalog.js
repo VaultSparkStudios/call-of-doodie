@@ -1,6 +1,6 @@
 // modeCatalog.js — single source of truth for game-mode identity (S155).
 //
-// HomeV2, HomeV3, and the legacy MenuScreen each hardcoded their own 8-mode
+// HomeV2 and the (since-retired, S163) HomeV3/MenuScreen each hardcoded their own 8-mode
 // table with divergent labels (v1 omitted zombies entirely and mislabeled it
 // "Standard"). This catalog merges the richest fields from all three and is
 // keyed by REPLAY_MODES ids so the replay-code contract and the UI can never

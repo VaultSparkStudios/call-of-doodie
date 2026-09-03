@@ -98,7 +98,7 @@ export default function OperationCompleteModal({
         role="dialog"
         style={panelStyle}
       >
-        <p style={{ color: "#00E5FF", fontSize: 11, letterSpacing: 3, margin: "0 0 6px" }}>
+        <p style={{ color: "var(--cod-cyan)", fontSize: 11, letterSpacing: 3, margin: "0 0 6px" }}>
           OPERATION COMPLETE
         </p>
         <h2 id="operation-complete-title" style={{ color: "#FFD166", fontSize: 28, margin: 0 }}>
@@ -120,7 +120,7 @@ export default function OperationCompleteModal({
           <dt style={{ color: "#8CA0B3" }}>CHECKPOINT</dt>
           <dd style={{ margin: 0 }}>{safeText(receipt?.checkpoint, "LOCAL RESULT ONLY")}</dd>
           <dt style={{ color: "#8CA0B3" }}>FINGERPRINT</dt>
-          <dd style={{ color: "#7FE6FF", margin: 0, overflowWrap: "anywhere" }}>
+          <dd style={{ color: "var(--cod-cyan)", margin: 0, overflowWrap: "anywhere" }}>
             {safeText(fingerprint, "UNAVAILABLE")}
           </dd>
         </dl>
@@ -130,7 +130,7 @@ export default function OperationCompleteModal({
             aria-labelledby="operation-score-breakdown-title"
             style={{ margin: "18px 0 0", padding: 12, border: "1px solid rgba(0, 229, 255, 0.35)", borderRadius: 8 }}
           >
-            <h3 id="operation-score-breakdown-title" style={{ margin: "0 0 9px", color: "#7FE6FF", fontSize: 12, letterSpacing: 1.5 }}>
+            <h3 id="operation-score-breakdown-title" style={{ margin: "0 0 9px", color: "var(--cod-cyan)", fontSize: 12, letterSpacing: 1.5 }}>
               OPERATION SCORE BREAKDOWN
             </h3>
             <dl style={{ display: "grid", gridTemplateColumns: "1fr max-content", gap: "5px 12px", margin: 0, fontSize: 11 }}>

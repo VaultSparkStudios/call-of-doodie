@@ -52,7 +52,7 @@ export default function MobileHUD({
 
       {(primary || bankedPerkChoices > 0) && (
         <div style={{ position: "absolute", top: "calc(max(6px, env(safe-area-inset-top)) + 60px)", left: isMobile ? 8 : "50%", right: isMobile ? 8 : "auto", width: isMobile ? "auto" : "min(560px, calc(100vw - 32px))", transform: isMobile ? "none" : "translateX(-50%)", display: "flex", justifyContent: "center" }}>
-          <button data-testid="hud-priority-chip" onClick={() => setDetailsOpen((open) => !open)} aria-expanded={detailsOpen} style={{ minHeight: 48, maxWidth: "100%", padding: "8px 14px", pointerEvents: "all", border: `1px solid ${TONE_COLOR[primary?.tone] || "#61DDFF"}55`, borderRadius: 999, color: TONE_COLOR[primary?.tone] || "#C6F6FF", background: "rgba(4,16,22,.86)", fontSize: 11, fontWeight: 850, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+          <button data-testid="hud-priority-chip" onClick={() => setDetailsOpen((open) => !open)} aria-expanded={detailsOpen} style={{ minHeight: 48, maxWidth: "100%", padding: "8px 14px", pointerEvents: "all", border: `1px solid ${TONE_COLOR[primary?.tone] || "var(--cod-cyan)"}55`, borderRadius: 999, color: TONE_COLOR[primary?.tone] || "#C6F6FF", background: "rgba(4,16,22,.86)", fontSize: 11, fontWeight: 850, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
             {bankedPerkChoices > 0 ? `Perk ready ×${bankedPerkChoices}` : primary?.label}
             <span style={{ marginLeft: 8, color: "#7D98A4" }}>{detailsOpen ? "▲" : "▼"}</span>
           </button>
@@ -73,7 +73,7 @@ export default function MobileHUD({
       {modeHud && (modeHud.banner || modeHud.squad?.length > 0) && (
         <div data-testid="hud-mode-panel" style={{ position: "absolute", left: 8, bottom: isMobile ? 92 : 104, maxWidth: isMobile ? 210 : 260, display: "flex", flexDirection: "column", gap: 3, pointerEvents: "none" }}>
           {modeHud.banner && (
-            <div data-testid="hud-mode-banner" style={{ padding: "4px 8px", border: "1px solid rgba(255,211,79,.35)", borderRadius: 8, background: "rgba(4,7,10,.82)", color: "#FFD34F", fontSize: 9, fontWeight: 900, letterSpacing: .6, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+            <div data-testid="hud-mode-banner" style={{ padding: "4px 8px", border: "1px solid rgba(255,211,79,.35)", borderRadius: 8, background: "rgba(4,7,10,.82)", color: "var(--cod-gold)", fontSize: 9, fontWeight: 900, letterSpacing: .6, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
               {modeHud.banner}
               {modeHud.progress && (
                 <span style={{ display: "block", marginTop: 3, height: 4, background: "rgba(255,255,255,.12)", borderRadius: 2, overflow: "hidden" }}>

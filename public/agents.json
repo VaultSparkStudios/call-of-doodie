@@ -27,10 +27,6 @@
       "href": "https://callofdoodie.wtf/about/"
     },
     {
-      "rel": "play",
-      "href": "https://callofdoodie.wtf/play/"
-    },
-    {
       "rel": "guide",
       "href": "https://callofdoodie.wtf/how-to-play/"
     },
@@ -73,6 +69,10 @@
     {
       "rel": "changelog",
       "href": "https://callofdoodie.wtf/changelog/"
+    },
+    {
+      "rel": "roadmap",
+      "href": "https://callofdoodie.wtf/roadmap/"
     },
     {
       "rel": "privacy",
