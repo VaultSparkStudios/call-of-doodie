@@ -4,15 +4,15 @@
 
 ## Current Session
 
-- Session 163 post-closeout pass (2026-09-03, founder-requested "all next steps") — Operations now complete through behavioral verb handlers with retry-under-pressure; the mode runtime and combat systems are dynamic chunks (App 584 → 551 KB, runtime gate green); SEWER EXTRACTION and BOT ROYALE are selectable and browser-smoked; the share sheet attaches the highlight clip; /#profile ships guest-safe backup with a cloud-backup client, Pages Function, and migration behind a project-scoped profile key; hash routes address profile/board/field-manual/changelog/modes; a live ghost race for the Daily is wired end to end but needs the migration and edge-function deploy. Validation: Vitest 1,302/1,302, strict lint, build, runtime gate, public contract, five-scenario browser smoke (four modes + Operation verb + profile route).
+- Session 163 open-items pass (2026-09-03) — seed duels (server rows with a 24-hour window, one immutable response, result card on the debrief) and squad codes (validated on signed submissions; SQUAD tab on the board; managed on Your Record); site consolidated to /board/, /field-manual/, /bestiary/ with 301s, one field-manual content source, and regenerated nav/footer/manifests; bundle diet pass two moved sounds, the HUD, the weapon docks, and twenty loop-only systems into lazy chunks: App 551 KB → 460 KB. Migrations and the edge-function change are ready but not deployed. Validation: strict lint, build, runtime gate, public contract 28 files, full Vitest, serial Playwright, browser smoke (four modes, squad, Operation verb, profile), theme captures.
 
 ## Open Work
 
 # Task Board
 ## Session 163 - Real modes, CPU squad, fixed timestep, single brand
 - [ ] [SIL:2] Deploy the S163 migration and edge-function change (profiles table, ghost_path column, submit-score ghostPath) and set OBELISK_VERIFY_SECRET / SUPABASE_SERVICE_ROLE_KEY on Pages so cloud backup and the remote ghost race light up.
-- [ ] [SIL:2] Seed duels with 24-hour result cards and squad boards (server tables); IA consolidation of field manual, bestiary, and board pages.
-- [ ] [SIL:1] App chunk 551 KB → 493 KB (DeathScreen diet, panels.css); scrolling camera for a sixteen-bot royale.
+- [ ] [SIL:2] Deploy migrations 2026-09-03_profiles_and_ghost_paths and 2026-09-03_duels_and_squads plus the submit-score edge function; set Pages secrets so cloud backup, ghost race, duels, and squads light up.
+- [ ] [SIL:1] Scrolling camera for a sixteen-bot royale; DeathScreen diet.
 ## Session 162 - Corrective-order evidence across runs
 ## Session 161 - Readable threat compass and prospective doctrine choice
 ## Session 160 - Propagation and release-evidence recovery
@@ -93,7 +93,7 @@
 
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 211,377 bytes · SHA-256 `4bbc007822c2…`
-- `context/TASK_BOARD.md` · 134,516 bytes · SHA-256 `f24c36b2213b…`
-- `context/DECISIONS.md` · 134,605 bytes · SHA-256 `8b6428c8d3b6…`
+- `context/CURRENT_STATE.md` · 212,141 bytes · SHA-256 `31d6e46e35f5…`
+- `context/TASK_BOARD.md` · 135,042 bytes · SHA-256 `84ea72966793…`
+- `context/DECISIONS.md` · 135,357 bytes · SHA-256 `dbdd6f389b08…`
 - `docs/AUDIT_2026-09-03.json` · 4,225 bytes · SHA-256 `84f8db978e98…`

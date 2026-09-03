@@ -10,7 +10,8 @@ Session Intent: Founder-directed course correction — audit why the modes felt 
 - Validation: Vitest 221/221 files, 1,286/1,286 assertions; strict lint; build; public contract 29 files and claims; security release gate; architecture budget; token drift; Playwright 19 pass / 1 intentional skip; `npm run smoke:modes` deploys both new modes in a real browser; 14 theme captures reviewed.
 - Known gaps: Operations not yet rewired to the verb handlers; App chunk 584 KB over the 493 KB budget; profile/cloud backup, IA consolidation, and hash routes remain from tranche 2.
 - Post-closeout pass: Operation verbs rewired with retry; dynamic chunks bring App to 551 KB (gate green); SEWER EXTRACTION and BOT ROYALE shipped; clip attaches to share; /#profile with backup; cloud backup + Daily ghost race built behind a deployment step.
-- Next: deploy the S163 migration/edge function and set the Pages secrets (cloud backup + remote ghost race light up); seed duels and squad boards; IA consolidation; App chunk toward 493 KB.
+- Open-items pass: seed duels and squad boards built; /board/, /field-manual/, /bestiary/ consolidation; App chunk 460 KB.
+- Next: deploy both S163 migrations and the submit-score change, set the Pages secrets (cloud backup, ghost race, duels, squads light up); scrolling-camera royale; DeathScreen diet.
 
 ## Impact Summary
 

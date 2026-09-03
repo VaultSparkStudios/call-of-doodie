@@ -3,7 +3,7 @@ import AsyncPanelBoundary from "./AsyncPanelBoundary.jsx";
 import { useGamepadNav } from "../hooks/useGamepadNav.js";
 import { WEAPONS, ENEMY_TYPES, ACHIEVEMENTS } from "../constants.js";
 import { getControllerLabels } from "../utils/gamepad.js";
-import { MUSIC_VIBES, soundUIOpen, soundUISelect } from "../sounds.js";
+import { MUSIC_VIBES, soundUIOpen, soundUISelect } from "../audio/soundFacade.js";
 
 const AchievementsPanel = lazy(() => import("./AchievementsPanel.jsx"));
 const SettingsPanel = lazy(() => import("./SettingsPanel.jsx"));

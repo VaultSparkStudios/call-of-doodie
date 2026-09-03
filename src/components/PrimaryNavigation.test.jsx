@@ -22,8 +22,7 @@ describe("PrimaryNavigation", () => {
       root.render(<PrimaryNavigation onOpenProgress={onOpenProgress} />);
     });
 
-    expect(container.querySelector('a[href="/stats/"]')).toBeTruthy();
-    expect(container.querySelector('a[href="/leaderboard/"]')).toBeTruthy();
+    expect(container.querySelector('a[href="/board/"]')).toBeTruthy();
     const more = [...container.querySelectorAll("button")].find((button) => button.textContent === "More");
     more.focus();
     await act(async () => { more.click(); });

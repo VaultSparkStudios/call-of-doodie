@@ -1,3 +1,11 @@
 # Cloudflare Pages redirects (S163)
 /play/  /#deploy  301
 /play   /#deploy  301
+/how-to-play/  /field-manual/  301
+/how-to-play   /field-manual/  301
+/enemies/  /bestiary/  301
+/enemies   /bestiary/  301
+/leaderboard/  /board/  301
+/leaderboard   /board/  301
+/stats/  /board/  301
+/stats   /board/  301

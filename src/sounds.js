@@ -770,13 +770,8 @@ export function setMusicTier(tier) {
   _pendingTier = t;
 }
 
-export const MUSIC_VIBES = [
-  { id: "chill",   name: "Chill",   emoji: "😌" },
-  { id: "action",  name: "Action",  emoji: "⚡" },
-  { id: "intense", name: "Intense", emoji: "🔥" },
-  { id: "retro",   name: "Retro",   emoji: "👾" },
-  { id: "spooky",  name: "Spooky",  emoji: "👻" },
-];
+import { MUSIC_VIBES } from "./audio/musicVibes.js";
+export { MUSIC_VIBES };
 
 // ===== MUSIC DEPTH (S155) =====
 // Each vibe now plays a 4-bar cycle (A · A · B · A-with-fill) over a chord

@@ -16,6 +16,7 @@ const HANDLES = ["xX_PlungerLord_Xx", "KarenSlayer99", "rentfree", "definitely_n
 const FLOOD_PHASE_FRAMES = 20 * 60;
 const FLOOD_MIN_R = 120;
 const FLOOD_DOT = 0.35;
+const DROP_FRAMES = 4 * 60; // everyone holds position while the sewer floods in
 
 function spawnBot(gs, index, ctx) {
   const rng = getRunRng(gs, "royale");
@@ -33,9 +34,11 @@ function spawnBot(gs, index, ctx) {
     deathQuotes: ["gg ez", "lag", "my controller died", "reported", "this is rigged", "brb mom"],
     emoji: type.emoji, typeIndex,
     wobble: rng() * Math.PI * 2, hitFlash: 0,
-    ranged: true, projSpeed: 5.2, projRate: 70 + Math.floor(rng() * 40), shootTimer: Math.floor(rng() * 60),
+    ranged: true, projSpeed: 5.2, projRate: 95 + Math.floor(rng() * 50), shootTimer: -DROP_FRAMES,
+    _spawnX: 0, _spawnY: 0,
     isBossEnemy: false, freezeTimer: 0,
   };
+  bot._spawnX = bot.x; bot._spawnY = bot.y;
   gs.enemies.push(bot);
   return bot;
 }
@@ -65,6 +68,10 @@ export const BOT_ROYALE = Object.freeze({
     gs._royalePlacement = null;
     gs.maxEnemiesThisWave = 0;
     gs.enemiesThisWave = 0;
+    // The flood is the only hazard; static acid pools at spawn made the drop unfair.
+    gs.hazards = [];
+    gs.player.invincible = DROP_FRAMES + 30;
+    ctx.addText?.(gs, W / 2, H / 2 - 120, "🌊 DROP IN · 4s", "#33E6FF", true);
   },
 
   isBossWave() { return false; },
@@ -76,6 +83,11 @@ export const BOT_ROYALE = Object.freeze({
     const frame = gs.frame || 0;
     const bots = aliveBots(gs);
     gs._royaleAlive = bots.length;
+    // Drop phase: bots hold their landing spots; nobody fires yet.
+    if (frame < DROP_FRAMES) {
+      for (const b of bots) { b.x = b._spawnX; b.y = b._spawnY; }
+      if (frame % 60 === 0 && frame > 0) ctx.addText?.(gs, W / 2, H / 2 - 120, `🌊 DROP IN · ${Math.ceil((DROP_FRAMES - frame) / 60)}s`, "#33E6FF", true);
+    }
 
     // Free-for-all: every bot sees every other bot as a target candidate.
     gs._targetables = bots.map((b) => ({ x: b.x, y: b.y, alive: true, kind: "bot", id: b.id }));

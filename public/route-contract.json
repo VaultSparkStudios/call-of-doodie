@@ -2,13 +2,13 @@
   "schemaVersion": "1.0",
   "source": "scripts/lib/public-route-registry.mjs",
   "contentVersion": "2026-09-03",
-  "fingerprint": "020dd350b4908799c4dcaf2024282f326908e89ad700b4a6b38a7729658dc570",
+  "fingerprint": "a641ddd66c73ca883542dfb5dde9767175b86435c265d02aa13752c3537752e7",
   "coverage": {
-    "routes": 18,
-    "headerRoutes": 5,
-    "footerRoutes": 18,
-    "visualAuditRoutes": 20,
-    "generatedPages": 13
+    "routes": 17,
+    "headerRoutes": 4,
+    "footerRoutes": 17,
+    "visualAuditRoutes": 19,
+    "generatedPages": 12
   },
   "gameplay": {
     "enemies": 22,
@@ -19,12 +19,11 @@
   "routeIds": [
     "home",
     "about",
-    "how-to-play",
-    "enemies",
+    "field-manual",
+    "bestiary",
     "arsenal",
     "modes",
-    "leaderboard",
-    "stats",
+    "board",
     "accessibility",
     "support",
     "press-kit",

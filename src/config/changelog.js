@@ -9,6 +9,7 @@
 //    and the share card (constants.js re-exports it for back-compat)
 
 export const CHANGELOG_ENTRIES = [
+  ["September 3, 2026 · Duels, squads, and one board", "Seed duels: the challenge link from your debrief now opens a 24-hour duel and the rival's result comes back as a card (friendly, unverified). Squad codes: create or join one on Your Record and the board's new SQUAD tab shows your crew's best verified runs. The site consolidated: /board/ merges the leaderboard and live stats, /field-manual/ replaces How to Play, /bestiary/ replaces Enemies; old links redirect. Under the hood the game bundle shrank by a quarter, so the arena starts faster."],
   ["September 3, 2026 · Extraction, royale, and your record", "Two more modes that play differently: SEWER EXTRACTION (loot crates, a climbing alarm, an evac toilet, lockdown at 100, and a persistent stash) and BOT ROYALE (twelve bots, a shrinking sewer flood, supply drops, and a placement on the debrief). Operations now use behavioral objectives: breach the door, hold the point, escort the cart, hunt the runner, sabotage the pump, escape before the alarm. A profile page at /#profile with career, stash, and guest-safe backup download and restore. The share sheet attaches your highlight clip. The Daily can race the board leader's ghost once a path is published. Under the hood: the game bundle dropped below its byte budget again."],
   ["September 3, 2026 · Real modes, real teammates", "Two new game modes that play differently: BOSS GAUNTLET (six bosses back to back, no filler, a par timer, and a real victory screen) and HOLD THE THRONE (king-of-the-hill with a CPU squad: The Intern, the Plunger Sergeant, and The Roomba; enemies attack the throne, revive downed teammates, issue Z/X/C squad orders). Under the hood: a fixed 60Hz simulation step so 120Hz screens no longer run the game at double speed, a headless deterministic sim kernel, and behavioral objective verbs (breach, hold, escort, hunt, sabotage, escape). New modes score locally until the global leaderboard accepts them."],
   ["August 16, 2026 · Operations deploy", "Added three authored 12–18 minute Operations with seven distinct encounter verbs, deterministic route and scoring receipts, interactive arena systems, mission-director guidance, an Operation-first command deck, a preference-safe chapter score, and distinct objective/reinforcement audio cues. Arcade & Rivals modes remain available."],
@@ -24,6 +25,8 @@ export const CHANGELOG_ENTRIES = [
 ];
 
 export const NEW_FEATURES = [
+  "⚔️ SEED DUELS — 24-hour duel links with a result card on the debrief",
+  "🤝 SQUAD CODES — create or join on Your Record; SQUAD tab on the board",
   "📦 SEWER EXTRACTION — loot, climbing alarm, evac toilet, lockdown, persistent stash",
   "🌊 BOT ROYALE — twelve bots, shrinking flood, supply drops, placement on the debrief",
   "👤 YOUR RECORD — /#profile with career, stash, backup download and restore",

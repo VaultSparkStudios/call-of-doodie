@@ -13,13 +13,13 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://callofdoodie.wtf/how-to-play/</loc>
+    <loc>https://callofdoodie.wtf/field-manual/</loc>
     <lastmod>2026-09-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://callofdoodie.wtf/enemies/</loc>
+    <loc>https://callofdoodie.wtf/bestiary/</loc>
     <lastmod>2026-09-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -37,13 +37,7 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://callofdoodie.wtf/leaderboard/</loc>
-    <lastmod>2026-09-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://callofdoodie.wtf/stats/</loc>
+    <loc>https://callofdoodie.wtf/board/</loc>
     <lastmod>2026-09-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>

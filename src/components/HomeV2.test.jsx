@@ -206,7 +206,7 @@ describe("HomeV2", () => {
     localStorage.removeItem("cod-career-v1");
   });
 
-  it("exposes primary public navigation and live Stats in the first homepage flow", async () => {
+  it("exposes primary public navigation and the live board in the first homepage flow", async () => {
     container = document.createElement("div");
     document.body.appendChild(container);
     await act(async () => {
@@ -216,9 +216,9 @@ describe("HomeV2", () => {
 
     const navigation = container.querySelector('[data-testid="primary-navigation"]');
     expect(navigation).toBeTruthy();
-    expect(navigation.querySelector('a[href="/stats/"]')?.textContent).toBe("Stats");
+    expect(navigation.querySelector('a[href="/board/"]')?.textContent).toBe("Board");
     expect(container.querySelector('#live-stats [data-testid="community-stats"]')).toBeTruthy();
-    expect(container.querySelector('#live-stats a[href$="stats/"]')?.textContent).toContain("VIEW ALL STATS");
+    expect(container.querySelector('#live-stats a[href$="board/"]')?.textContent).toContain("VIEW ALL STATS");
     expect(container.querySelector('#live-stats').textContent).toContain("VERIFIED RUNS");
     expect(container.querySelector('#live-stats').textContent).toContain("DISTINCT RUNNERS");
     expect(container.querySelector('#live-stats').textContent).toContain("ENEMIES TERMINATED");

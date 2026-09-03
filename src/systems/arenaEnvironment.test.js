@@ -125,7 +125,11 @@ describe("buildArenaEnvironment", () => {
   it("keeps App.jsx as orchestration over the extracted environment boundary", () => {
     const appSource = readFileSync(resolve(process.cwd(), "src/App.jsx"), "utf8");
 
-    expect(appSource).toContain('import { buildArenaEnvironment } from "./systems/arenaEnvironment.js";');
+    // S163: the environment builder is reached through the lazy combat chunk.
+    const combat = readFileSync(resolve(process.cwd(), "src/systems/combatRuntime.js"), "utf8");
+    expect(combat).toContain('from "./arenaEnvironment.js"');
+    expect(appSource).toContain("combatRuntimeRef.current.buildArenaEnvironment(");
+    expect(appSource).not.toContain('from "./systems/arenaEnvironment.js"');
     expect(appSource).toContain("buildArenaEnvironment({ seed, width: w, height: h })");
     expect(appSource).not.toContain("Math.imul(_ws, 1664525)");
   });

@@ -1,6 +1,6 @@
 import { act } from "react";
 import { createRoot } from "react-dom/client";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 
@@ -12,17 +12,18 @@ vi.mock("./drawGame.js", () => ({
 
 // S163: the combat chunk is a dynamic import; stub it so the smoke never waits on
 // vite-node transforming the enemy/projectile systems.
-vi.mock("./systems/combatRuntime.js", () => ({
-  stepEnemyFrame: () => ({ ok: true }),
-  stepProjectileFrame: () => ({ ok: true }),
-  pickTarget: (_enemy, _gs, player) => player,
-}));
+vi.mock("./systems/combatRuntime.js", async () => {
+  const actual = await vi.importActual("./systems/combatRuntime.js");
+  return { ...actual, stepEnemyFrame: () => ({ ok: true }), stepProjectileFrame: () => ({ ok: true }), pickTarget: (_enemy, _gs, player) => player };
+});
 
 vi.mock("./hooks/useGameLoop.js", () => ({
   useGameLoop: vi.fn(),
 }));
 
-vi.mock("./sounds.js", () => ({
+vi.mock("./audio/soundFacade.js", () => ({
+  loadSounds: () => Promise.resolve({}),
+  soundsReady: () => true,
   soundShoot: vi.fn(),
   soundHitAt: vi.fn(),
   soundDeath: vi.fn(),
@@ -216,10 +217,19 @@ let container;
 let root;
 
 async function flush() {
+  // S163: run start awaits dynamic chunks (combat systems, sounds); give the
+  // module runner a few macrotasks instead of a single microtask.
   await act(async () => {
-    await Promise.resolve();
+    for (let i = 0; i < 4; i += 1) await new Promise((resolve) => setTimeout(resolve, 15));
   });
 }
+
+// S163: warm the dynamic chunks once so run start resolves inside a flush.
+beforeAll(async () => {
+  await import("./systems/combatRuntime.js");
+  const facade = await import("./audio/soundFacade.js");
+  await facade.loadSounds?.()?.catch?.(() => {});
+});
 
 afterEach(async () => {
   issueRunTokenMock.mockClear();

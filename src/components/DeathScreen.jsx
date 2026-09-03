@@ -10,6 +10,7 @@ import { buildPostRunIntelligence, buildRunEventDigest, buildStudioGameEvent } f
 import { buildInsightGraph } from "../utils/insightGraph.js";
 import { track } from "../utils/analytics.js";
 import { buildChallengeUrl, copyChallengeUrl } from "../utils/challengeLinks.js";
+import { createDuel } from "../utils/duels.js";
 import { encodeReplayCode } from "../utils/replayCode.js";
 import { buildReplayProofPresenter } from "../utils/replayProofPresenter.js";
 import { resolveRematchStartWave } from "../systems/rematchDrill.js";
@@ -36,7 +37,7 @@ const LeaderboardPanel = lazy(() => import("./LeaderboardPanel.jsx"));
 const TIER_COLORS = { bronze: "#CD7F32", silver: "#C0C0C0", gold: "#FFD700", legendary: "#FF6B35" };
 
 export default function DeathScreen({
-  victory = false, modeLabel = null,
+  victory = false, modeLabel = null, duelResult = null,
   score, kills, deaths: _deaths, wave, level, bestStreak, timeSurvived, totalDamage,
   crits, grenades, deathMessage, difficulty, runSeed, runModifier, achievementsUnlocked,
   activePerks, missionsSummary,
@@ -758,6 +759,11 @@ export default function DeathScreen({
         <div style={{ fontSize: 52, lineHeight: 1, paddingTop: 4 }}>{victory ? "🏆" : "💀"}</div>
         <h2 data-testid="death-title" style={{ fontSize: "clamp(24px,7vw,38px)", color: victory ? "#FFD34F" : "#FF2222", margin: "4px 0", letterSpacing: 3 }}>{victory ? "VICTORY" : "YOU DIED"}</h2>
         {modeLabel && <div style={{ display: "inline-block", padding: "2px 10px", marginBottom: 4, borderRadius: 10, border: "1px solid rgba(255,211,79,0.45)", color: "var(--cod-gold)", fontSize: 11, fontWeight: 800, letterSpacing: 1 }}>{modeLabel}</div>}
+        {duelResult && (
+          <div data-testid="duel-result" style={{ display: "inline-block", padding: "2px 10px", marginBottom: 4, marginLeft: 6, borderRadius: 10, border: "1px solid rgba(51,230,255,0.45)", color: "var(--cod-cyan)", fontSize: 11, fontWeight: 800, letterSpacing: 1 }}>
+            {duelResult.ok ? (duelResult.status === "responder_won" ? "⚔️ DUEL WON · recorded" : "⚔️ DUEL LOST · recorded") : "⚔️ DUEL " + (duelResult.reason === "already_answered_or_expired" ? "EXPIRED OR ANSWERED" : "NOT RECORDED")} · friendly, unverified
+          </div>
+        )}
         <p style={{ color: "#FF6666", fontSize: 14, fontStyle: "italic", margin: "4px 0 8px" }}>"{deathMessage}"</p>
         {practiceRun && (
           <div style={{ display: "inline-block", padding: "2px 10px", marginBottom: 6, borderRadius: 10, border: "1px solid rgba(0,229,255,0.45)", color: "var(--cod-cyan)", fontSize: 11, fontWeight: 700, letterSpacing: 1 }}>🔁 DRILL RUN</div>
@@ -1627,7 +1633,8 @@ export default function DeathScreen({
             <button
               onClick={() => {
                 track("debrief_copy_challenge", { seed: runSeed, score, wave, difficulty });
-                copyChallengeUrl({ seed: runSeed, difficulty, vsScore: score, vsName: username }).then((url) => {
+                // S163 seed duel: open a 24-hour duel row so the rival's result comes back as a card.
+                createDuel({ seed: runSeed, difficulty, name: username, score, wave }).then((duel) => copyChallengeUrl({ seed: runSeed, difficulty, vsScore: score, vsName: username, duelId: duel?.id || null })).then((url) => {
                   if (!url) return;
                   setCopiedChallenge(true);
                   setTimeout(() => setCopiedChallenge(false), 1500);

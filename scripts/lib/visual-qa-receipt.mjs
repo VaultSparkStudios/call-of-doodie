@@ -4,7 +4,7 @@ const PREFERRED_CAPTURES = [
   { route: "login", theme: "sewer-night", width: 1440, file: "login-dark-desktop.png", page: "Porcelain Passport login receipt surface" },
   { route: "auth-callback", theme: "porcelain-day", width: 390, file: "auth-callback-light-mobile.png", page: "Porcelain Passport callback receipt surface" },
   { route: "modes", theme: "sewer-night", width: 1440, file: "modes-dark-desktop.png", page: "Mode selection surface" },
-  { route: "leaderboard", theme: "porcelain-day", width: 390, file: "leaderboard-light-mobile.png", page: "Leaderboard surface" },
+  { route: "board", theme: "porcelain-day", width: 390, file: "board-light-mobile.png", page: "Board surface" },
 ];
 
 export function selectRepresentativeCaptures(audit) {

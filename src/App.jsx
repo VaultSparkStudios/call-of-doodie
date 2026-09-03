@@ -13,14 +13,9 @@ import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats,
 import { spawnEnemy as _spawnEnemy, spawnBoss as _spawnBoss, BOSS_ROTATION, applyEliteType, getRandomEliteType, getWaveSpawnRng } from "./gameHelpers.js";
 import { preloadBossAtlas, preloadEnemyAtlasesForTypes, preloadObjectAtlases, preloadZombieAtlas } from "./utils/visualAssetLibrary.js";
 import { cosmeticRandom, createNamedRunRng, getRunRng, shuffleWithRng } from "./systems/runRng.js";
-import { buildArenaEnvironment } from "./systems/arenaEnvironment.js";
 import { applyRunSettings, loadSettings, saveSettings, SETTINGS_DEFAULTS, hudFlags } from "./settings.js";
-import { addHeatOnKill, decayHeat, heatTier, resetHeat } from "./systems/heatMeter.js";
-import { planEnemyCoinDrop, planEnemyDefeatScore } from "./systems/defeatEconomy.js";
-import { applyEnemyDamage, collectQueuedEnemyDefeats, collectUnqueuedLethalEnemies, queueEnemyDefeat, retireEnemyWithoutDefeat, takeQueuedEnemyDefeat } from "./systems/enemyDefeatLifecycle.js";
-import { pickObjective, pickWaveChallengeContract, resolveWaveChallengeContract, startWaveChallengeContract } from "./systems/objectiveDirector.js";
-import { resolveObjectiveFrame } from "./systems/objectiveFrame.js";
 import { identifyWeakness as _identifyWeakness } from "./utils/metaClarity.js";
+import { loadSounds } from "./audio/soundFacade.js";
 import {
   soundShoot, soundDeath, soundLevelUp, soundPickupAt, soundEnemyDeathAt,
   soundLastStand, soundHeartbeatPulse, soundBossFinale,
@@ -36,10 +31,9 @@ import {
   setBusVolume, setMusicLowpass,
   soundPlayerHurt, soundEmptyMag, soundWeaponSwap, soundWaveAnnounce,
   soundCoinAt, soundShopPurchase, soundShopDeny,
-} from "./sounds.js";
+} from "./audio/soundFacade.js";
 import { analyticsInit, track, identify, gameCtx, resolveMode } from "./utils/analytics.js";
 import { getDominantArchetype, getNewlyUnlockedArchetypes, getArchetypeProgress } from "./utils/buildArchetypes.js";
-import { createWhisperLedger, tickTacticalWhisper } from "./systems/tacticalWhisper.js";
 import { rumbleGamepad, vibrate, setHapticsEnabled } from "./utils/haptics.js";
 import { resolveTouchStick } from "./utils/touchHandedness.js";
 import { getLevelXpNeeded, getNextPerkLevel, shouldAwardPerkChoice, getWaveSurvivalBonus } from "./utils/levelFlow.js";
@@ -54,7 +48,7 @@ import { captureGifFrame } from "./utils/gifCapture.js";
 import { getRouteOptions } from "./utils/routeOptions.js";
 import { useGameLoop } from "./hooks/useGameLoop.js";
 import { useShellLifecycle } from "./hooks/useShellLifecycle.js";
-import HUD from "./components/HUD.jsx";
+const HUD = lazy(() => import("./components/HUD.jsx"));
 import { getOperation } from "./systems/operationCampaign.js";
 import { buildOperationReceipt, getCurrentEncounter } from "./systems/operationDirector.js";
 import { useOperationMode } from "./hooks/useOperationMode.js";
@@ -64,7 +58,8 @@ const WEAPON_RECOIL = [3, 12, 2, 4, 18, 2, 6, 4, 7, 14, 4, 8];
 
 const HomeV2 = lazy(() => import("./components/HomeV2.jsx"));
 const OperationRuntimeLayer = lazy(() => import("./components/OperationRuntimeLayer.jsx"));
-import { DesktopWeaponDock, MobileWeaponDock } from "./components/WeaponDock.jsx";
+const DesktopWeaponDock = lazy(() => import("./components/WeaponDock.jsx").then((m) => ({ default: m.DesktopWeaponDock })));
+const MobileWeaponDock = lazy(() => import("./components/WeaponDock.jsx").then((m) => ({ default: m.MobileWeaponDock })));
 const DisplayNameScreen = lazy(() => import("./components/DisplayNameScreen.jsx"));
 const InputDebugOverlay = lazy(() => import("./components/InputDebugOverlay.jsx"));
 const PauseMenu       = lazy(() => import("./components/PauseMenu.jsx"));
@@ -73,18 +68,11 @@ const WaveShopModal   = lazy(() => import("./components/WaveShopModal.jsx"));
 const RouteSelectModal = lazy(() => import("./components/RouteSelectModal.jsx"));
 const TutorialOverlay = lazy(() => import("./components/TutorialOverlay.jsx"));
 const DraftScreen     = lazy(() => import("./components/DraftScreen.jsx"));
-import { getCoinShopOptions, getShopOptions } from "./systems/shopOptions.js";
 import {
   consumeBankedPerkChoice,
   createWaveRewardPlan,
   resolveQueuedReward,
 } from "./systems/progressionFlow.js";
-import { applyArchetypeCapstone, applyPerkSynergies } from "./systems/perkResolution.js";
-import { applyCoinShopEffect, applyShopOptionEffect } from "./systems/shopResolution.js";
-import { acceptMutation as _acceptMutation } from "./systems/mutationResolution.js";
-import { spawnPickup as _spawnPickup } from "./systems/pickupSpawning.js";
-import { applyPlayerMovement, buildPointerAimSweepReport, computePointerAimAngle, resolveAimFrame, resolveMovementVector } from "./systems/gameStep.js";
-import { stampArenaDecal } from "./systems/backgroundLayer.js";
 import { buildInputCalibrationRecord, loadInputCalibration, saveInputCalibration, summarizeInputCalibration } from "./utils/inputCalibration.js";
 import { markTutorialAction, normalizeTutorialEvidence, shouldShowTutorial, TUTORIAL_ACTIONS } from "./utils/tutorialProgress.js";
 import { isPlaytestMode, recordActivePlaytestMilestone, startActivePlaytestFlight } from "./utils/playtestFlightRecorder.js";
@@ -92,8 +80,6 @@ import { getRoastCallout } from "./utils/roastDirector.js";
 import { interpolateBossQuote, getBossTone } from "./utils/bossDialogue.js";
 import { getRunAct } from "./utils/runNarrative.js";
 import { buildStudioGameEvent } from "./utils/runIntelligence.js";
-import { compactTruthyInPlace } from "./systems/frameIndex.js";
-import { stepAndCompactInPlace, stepTransientEffectsInPlace } from "./systems/transientLifecycle.js";
 import { addParticles, addText } from "./systems/transientPresentation.js";
 import { buildIntegrityLocalSubmissionResult, getRunIntegrityReceipt, recordRunIntegrityFault } from "./systems/runIntegrity.js";
 import { planPauseTransition } from "./systems/pauseTransition.js";
@@ -104,9 +90,10 @@ import { createPressureArc, finalizePressureArc, recordFormationExposure, record
 import { createGhostRecorder, exportGhostSamples, recordGhostSample } from "./systems/ghostRecorder.js";
 import { decodeGhostPath, encodeGhostPath } from "./utils/ghostPath.js";
 import { loadTopGhostPath } from "./storage.js";
+import { getSquadCode } from "./utils/squads.js";
+import { respondDuel } from "./utils/duels.js";
 import { readPreference, writePreference } from "./utils/gamePreferences.js";
 import { loadGhostPlayback, persistGhostRecording } from "./utils/ghostStorage.js";
-import { applyObservedPlayerDamage, createDamageSequence, finalizeDamageSequence } from "./systems/damageSequence.js";
 import {
   buildWaveTelemetrySnapshot,
   computeWaveThreatRating,
@@ -120,8 +107,6 @@ import {
   getWaveSpawnRate,
   heatBiasedFormation,
 } from "./systems/waveDirector.js";
-import { buildWavePlanReceipt, recordWavePlanSnapshot } from "./systems/wavePlanReceipt.js";
-import { createBossWavePlan } from "./systems/bossWaveFlow.js";
 import { buildRematchKit, buildRematchDrillBrief, getMaxEnemiesForWave, estimateNonBossWaveCount } from "./systems/rematchDrill.js";
 import { buildActiveRunDrill, buildDrillEvidenceLedger, sanitizeCarriedRunDrill } from "./systems/runDrill.js";
 import {
@@ -136,7 +121,6 @@ import {
 import { buildDeathScreenProps } from "./systems/deathFlow.js";
 import { reconcileOwnership } from "./utils/cosmeticTrack.js";
 import { matchesExperiment } from "./utils/runBrain.js";
-import { getZombieOutbreakPlan, getZombieWaveEnemyCount, mutateEnemyForZombieMode } from "./systems/zombieMode.js";
 import { applyThreatRecommendationChoice, queueCompletedRunFact, recordPostRunFieldReport } from "./systems/runFactFlow.js";
 import { applyModeRules, getModeRewardFlow, isBossWaveForMode, resolveModeId } from "./systems/modeRules.js";
 import { getModeMeta, loadModeRuntime, needsModeRuntime } from "./systems/modeRegistry.js";
@@ -324,6 +308,7 @@ export default function CallOfDoodie() {
   const modeRuntimeRef = useRef(null);
   // Per-frame combat systems (enemy AI, projectiles) load as one chunk at run start.
   const combatRuntimeRef = useRef(null);
+  useEffect(() => { loadSounds().catch(() => {}); }, []);
   useEffect(() => { let alive = true; loadCombatRuntime().then((m) => { if (alive) combatRuntimeRef.current = m; }).catch(() => {}); return () => { alive = false; }; }, []);
   const modeBossWave = (gs, legacy) => (modeDefRef.current?.isBossWave ? !!modeDefRef.current.isBossWave(gs) : !!legacy);
   const modeWaveCount = (gs, computed) => (modeDefRef.current?.waveEnemyCount ? Math.max(0, Math.floor(modeDefRef.current.waveEnemyCount(gs, computed))) : computed);
@@ -335,6 +320,7 @@ export default function CallOfDoodie() {
   const draftChosenRef = useRef(null);
   const [challengeVsScore, setChallengeVsScore]     = useState(null);
   const [challengeVsName, setChallengeVsName]       = useState(null);
+  const [duelResult, setDuelResult]                 = useState(null);
   const [weaponKillsSnapshot, setWeaponKillsSnapshot] = useState([]);
   const [metaToast, setMetaToast]         = useState(null);
   const [missionsSummary, setMissionsSummary] = useState([]); // captured at death
@@ -620,7 +606,7 @@ export default function CallOfDoodie() {
       careerBest: { score: career.bestScore || 0, wave: career.bestWave || 0 },
       newBestScore: false, newBestWave: false,
       coinStreakKills: 0, coinStreakTimer: 0, coinMultActive: false, coinMultTimer: 0,
-      waveDirector: null, waveDirectorStage: -1, waveTelemetryBand: null, wavePlanLedger: [], pressureArc: createPressureArc(), damageSequence: createDamageSequence(),
+      waveDirector: null, waveDirectorStage: -1, waveTelemetryBand: null, wavePlanLedger: [], pressureArc: createPressureArc(), damageSequence: combatRuntimeRef.current.createDamageSequence(),
       precisionStreak: 0,
       _adaptiveSpawnMods: getAdaptiveSpawnMods(career),
     };
@@ -663,7 +649,7 @@ export default function CallOfDoodie() {
         dailyChallengeMode: false,
         random: getWaveSpawnRng(gs0),
       });
-      gs0.wavePlanLedger = recordWavePlanSnapshot(gs0.wavePlanLedger, gs0.waveDirector);
+      gs0.wavePlanLedger = combatRuntimeRef.current.recordWavePlanSnapshot(gs0.wavePlanLedger, gs0.waveDirector);
     }
     setRunSeed(seed);
     comboRef.current = { count: 0, timer: 0, max: 0 };
@@ -833,8 +819,8 @@ export default function CallOfDoodie() {
     gsRef.current.gauntletMode = gauntletRef.current;
     gsRef.current.speedrunMode = speedrunRef.current;
     gsRef.current.zombiesMode = zombiesRef.current;
-    gsRef.current.zombieOutbreak = zombiesRef.current ? getZombieOutbreakPlan(gsRef.current.currentWave) : null;
-    if (zombiesRef.current) gsRef.current.maxEnemiesThisWave = getZombieWaveEnemyCount(gsRef.current.maxEnemiesThisWave, gsRef.current.currentWave);
+    gsRef.current.zombieOutbreak = zombiesRef.current ? combatRuntimeRef.current.getZombieOutbreakPlan(gsRef.current.currentWave) : null;
+    if (zombiesRef.current) gsRef.current.maxEnemiesThisWave = combatRuntimeRef.current.getZombieWaveEnemyCount(gsRef.current.maxEnemiesThisWave, gsRef.current.currentWave);
     if (gauntletRef.current) {
       try {
         const _gt = getWeeklyGauntlet();
@@ -906,11 +892,11 @@ export default function CallOfDoodie() {
     // Apply user settings to this run
     const sett = settingsRef.current;
     applyRunSettings(gsRef.current, sett);
-    gsRef.current._whisperLedger = createWhisperLedger();
+    gsRef.current._whisperLedger = combatRuntimeRef.current.createWhisperLedger();
     perkModsRef.current.xpMult        = (perkModsRef.current.xpMult || 1) * sett.xpGainMult;
     if (sett.pickupMagnet > 1) perkModsRef.current.pickupRange = Math.max(perkModsRef.current.pickupRange || 30, 30 * sett.pickupMagnet);
 
-    const arena = buildArenaEnvironment({ seed, width: w, height: h });
+    const arena = combatRuntimeRef.current.buildArenaEnvironment({ seed, width: w, height: h });
     gsRef.current._layoutName = arena.layoutName;
     gsRef.current.obstacles = arena.obstacles;
     gsRef.current.terrain = arena.terrain;
@@ -1056,9 +1042,9 @@ export default function CallOfDoodie() {
       const gs = gsRef.current;
       if (!gs) return;
       const choiceRng = getRunRng(gs, "choices");
-      const opts = getShopOptions(gs, currentWeaponRef.current, choiceRng);
+      const opts = combatRuntimeRef.current.getShopOptions(gs, currentWeaponRef.current, choiceRng);
       setShopOptions(opts);
-      setCoinShopOptions(getCoinShopOptions(gs, choiceRng));
+      setCoinShopOptions(combatRuntimeRef.current.getCoinShopOptions(gs, choiceRng));
       setShopPending(true);
       shopPendingRef.current = true;
     }
@@ -1098,7 +1084,7 @@ export default function CallOfDoodie() {
       const d = difficultyRef.current;
       gsRef.current.glassjawMult = d === "insane" ? 1.4 : d === "hard" ? 1.65 : 2.0;
     }
-    const unlockedSynergies = applyPerkSynergies(perkModsRef.current);
+    const unlockedSynergies = combatRuntimeRef.current.applyPerkSynergies(perkModsRef.current);
     if (unlockedSynergies.length > 0 && gsRef.current) {
       unlockedSynergies.forEach((synergy, index) => {
         const yOffset = index === 0 ? -85 : -50 - ((index - 1) * 30);
@@ -1142,7 +1128,7 @@ export default function CallOfDoodie() {
           difficulty: difficultyRef.current,
           perksSelected: nextActivePerks.length,
         });
-        applyArchetypeCapstone(archetype.id, perkModsRef.current, gsRef.current);
+        combatRuntimeRef.current.applyArchetypeCapstone(archetype.id, perkModsRef.current, gsRef.current);
         if (gsRef.current) {
           addText(gsRef.current, GW() / 2, GH() / 2 - 112, `${archetype.emoji} CAPSTONE: ${archetype.capstoneName}!`, archetype.color, true);
           addText(gsRef.current, GW() / 2, GH() / 2 - 84, archetype.capstoneDesc, "#DDD");
@@ -1204,7 +1190,7 @@ export default function CallOfDoodie() {
   const applyShopOption = useCallback((optionId) => {
     const gs = gsRef.current;
     if (!gs?.player) return;
-    const resolution = applyShopOptionEffect({
+    const resolution = combatRuntimeRef.current.applyShopOptionEffect({
       optionId,
       gameState: gs,
       weaponIndex: currentWeaponRef.current,
@@ -1239,7 +1225,7 @@ export default function CallOfDoodie() {
     const gs = gsRef.current;
     if (!gs?.player) return;
     if ((gs.coins || 0) < cost) { soundShopDeny(); return; }
-    const resolution = applyCoinShopEffect({
+    const resolution = combatRuntimeRef.current.applyCoinShopEffect({
       optionId,
       cost,
       gameState: gs,
@@ -1276,9 +1262,9 @@ export default function CallOfDoodie() {
       const gs = gsRef.current;
       if (!gs) return;
       const choiceRng = getRunRng(gs, "choices");
-      const opts = getShopOptions(gs, currentWeaponRef.current, choiceRng);
+      const opts = combatRuntimeRef.current.getShopOptions(gs, currentWeaponRef.current, choiceRng);
       setShopOptions(opts);
-      setCoinShopOptions(getCoinShopOptions(gs, choiceRng));
+      setCoinShopOptions(combatRuntimeRef.current.getCoinShopOptions(gs, choiceRng));
       setShopPending(true);
       shopPendingRef.current = true;
     }
@@ -1287,7 +1273,7 @@ export default function CallOfDoodie() {
   const applyMutation = useCallback((mutation) => {
     const gs = gsRef.current;
     if (!gs) return;
-    const delta = _acceptMutation(gs, mutation);
+    const delta = combatRuntimeRef.current.acceptMutation(gs, mutation);
     if (!delta) return;
     gs.coins = delta.coins;
     setCoins(delta.coins);
@@ -1341,7 +1327,7 @@ export default function CallOfDoodie() {
   const spawnEnemy = useCallback((gs) => {
     _spawnEnemy(gs, GW(), GH(), difficultyRef.current);
     const ne = gs.enemies[gs.enemies.length - 1];
-    if (ne && gs.zombiesMode) mutateEnemyForZombieMode(ne, { wave: gs.currentWave, ordinal: gs.enemiesThisWave });
+    if (ne && gs.zombiesMode) combatRuntimeRef.current.mutateEnemyForZombieMode(ne, { wave: gs.currentWave, ordinal: gs.enemiesThisWave });
     if (ne && gs.visualPack !== VISUAL_PACKS.RETRO) {
       const activeRoster = [ne.typeIndex, ...gs.enemies.slice(-12).map((enemy) => enemy.typeIndex)];
       preloadEnemyAtlasesForTypes(activeRoster);
@@ -1366,7 +1352,7 @@ export default function CallOfDoodie() {
 
   // ── Pickup spawning helper ────────────────────────────────────────────────
   const spawnPickup = useCallback((gs, ex, ey, isBoss) => {
-    _spawnPickup(gs, ex, ey, isBoss, {
+    combatRuntimeRef.current.spawnPickup(gs, ex, ey, isBoss, {
       ammoDropMult: perkModsRef.current.ammoDropMult || 1,
       rng: getRunRng(gs, "loot"),
     });
@@ -1576,7 +1562,7 @@ export default function CallOfDoodie() {
       (gs.enemies || []).forEach(e => {
         const d = Math.hypot(e.x - gs.player.x, e.y - gs.player.y);
         if (d < dmhRadius) {
-          const result = applyEnemyDamage(e, Math.floor(200 * (1 - d / dmhRadius)), { source: "dead-mans-hand", weaponName: "DEAD MAN'S HAND" });
+          const result = combatRuntimeRef.current.applyEnemyDamage(e, Math.floor(200 * (1 - d / dmhRadius)), { source: "dead-mans-hand", weaponName: "DEAD MAN'S HAND" });
           if (result.applied > 0) { e.hitFlash = 15; gs.totalDamage += result.applied; }
         }
       });
@@ -1612,7 +1598,7 @@ export default function CallOfDoodie() {
       gs.player.health = diff.playerHP; gs.player.invincible = endAttempt.invincibleFrames;
       setHealth(diff.playerHP);
       gs.enemies.forEach(e => {
-        const result = applyEnemyDamage(e, 30, { source: "guardian-angel", weaponName: "GUARDIAN ANGEL" });
+        const result = combatRuntimeRef.current.applyEnemyDamage(e, 30, { source: "guardian-angel", weaponName: "GUARDIAN ANGEL" });
         if (result.applied > 0) { e.hitFlash = 10; gs.totalDamage += result.applied; }
       });
       gs.enemyBullets = []; gs.screenShake = 20;
@@ -1689,6 +1675,11 @@ export default function CallOfDoodie() {
     setWeaponKillsSnapshot([...(statsRef.current.weaponKills || [])]);
     setBestStreak(statsRef.current.bestStreak);
     setTimeSurvived(Math.floor((Date.now() - startTimeRef.current) / 1000));
+    // S163 seed duel: record the response once; the debrief shows the outcome.
+    if (gs?._duelId && !gs.practiceRun) {
+      const duelId = gs._duelId; gs._duelId = null;
+      respondDuel(duelId, { name: username, score: gs.score, wave: gs.currentWave }).then((r) => setDuelResult(r)).catch(() => setDuelResult({ ok: false, reason: "network" }));
+    }
     // Save career stats + mission progress
     const _prevCareerKills = loadCareerStats().totalKills || 0;
     const _prevAcctLevel = getAccountLevel(_prevCareerKills);
@@ -1810,8 +1801,8 @@ export default function CallOfDoodie() {
       performanceReceipt: frameMonitorRef.current?.snapshot?.() || null,
       ghostRecorderReceipt: gs.ghostRecorderReceipt,
       pressureReceipt: finalizePressureArc(gs.pressureArc, { deathWave: gs.currentWave }),
-      damageReceipt: finalizeDamageSequence(gs.damageSequence, { maxHealth: gs.player?.maxHealth, finalFrame: frameCountRef.current }),
-      wavePlanReceipt: buildWavePlanReceipt(gs.wavePlanLedger),
+      damageReceipt: combatRuntimeRef.current.finalizeDamageSequence(gs.damageSequence, { maxHealth: gs.player?.maxHealth, finalFrame: frameCountRef.current }),
+      wavePlanReceipt: combatRuntimeRef.current.buildWavePlanReceipt(gs.wavePlanLedger),
       totalDamage: gs.totalDamage,
       totalShots: statsRef.current.totalShots || 0,
       totalHits: statsRef.current.totalHits || 0,
@@ -1861,7 +1852,7 @@ export default function CallOfDoodie() {
 
   // enemy-defeat-pipeline:single-executor
   const finalizeEnemyDefeat = (gs, e) => {
-    const defeatMeta = takeQueuedEnemyDefeat(e);
+    const defeatMeta = combatRuntimeRef.current.takeQueuedEnemyDefeat(e);
     if (!defeatMeta) return false;
 
     const p = gs.player;
@@ -1884,7 +1875,7 @@ export default function CallOfDoodie() {
     else if (comboRef.current.count === 15) { gs._comboCardTimer = 60; gs._comboCardTier = "unstoppable"; }
 
     const comboMult = 1 + Math.max(0, comboRef.current.count - 1) * 0.1;
-    const defeat = planEnemyDefeatScore({
+    const defeat = combatRuntimeRef.current.planEnemyDefeatScore({
       enemy: e,
       comboMult,
       killScoreMult: gs.killScoreMult || 1,
@@ -1896,7 +1887,7 @@ export default function CallOfDoodie() {
     gs.score += pts;
     gs.kills++;
     gs.killstreakCount++;
-    addHeatOnKill(gs, { isBoss: !!e.isBossEnemy, killstreak: gs.killstreakCount });
+    combatRuntimeRef.current.addHeatOnKill(gs, { isBoss: !!e.isBossEnemy, killstreak: gs.killstreakCount });
     if (e.isBossEnemy) modeDefRef.current?.onBossDefeated?.(gs);
     modeDefRef.current?.onEnemyKilled?.(gs, e);
 
@@ -1968,7 +1959,7 @@ export default function CallOfDoodie() {
     }
 
     const lootRng = getRunRng(gs, "loot");
-    const coinDrop = planEnemyCoinDrop({ enemy: e, rng: lootRng, coinMultActive: gs.coinMultActive, treeCoinBonus: gs._treeCoinBonus || 1 }).amount;
+    const coinDrop = combatRuntimeRef.current.planEnemyCoinDrop({ enemy: e, rng: lootRng, coinMultActive: gs.coinMultActive, treeCoinBonus: gs._treeCoinBonus || 1 }).amount;
     if (coinDrop > 0) {
       gs.coins = (gs.coins || 0) + coinDrop;
       setCoins(gs.coins);
@@ -2016,7 +2007,7 @@ export default function CallOfDoodie() {
       }
       // S155: big enemies leave a persistent splat on the arena floor.
       if (e.size >= 34) {
-        stampArenaDecal(gs, { kind: "splat", x: e.x, y: e.y, size: e.size * 0.35, alpha: 0.22, color: "rgba(80,52,26,0.55)", seed: (e.x + e.y) % 6, rot: (e.x * 7 + e.y) % 3 });
+        combatRuntimeRef.current.stampArenaDecal(gs, { kind: "splat", x: e.x, y: e.y, size: e.size * 0.35, alpha: 0.22, color: "rgba(80,52,26,0.55)", seed: (e.x + e.y) % 6, rot: (e.x * 7 + e.y) % 3 });
       }
     }
 
@@ -2044,7 +2035,7 @@ export default function CallOfDoodie() {
         if (nearbyEnemy === e || nearbyEnemy.health <= 0) return;
         const deltaX = nearbyEnemy.x - e.x, deltaY = nearbyEnemy.y - e.y;
         if (deltaX * deltaX + deltaY * deltaY < explosionRadius * explosionRadius) {
-          const result = applyEnemyDamage(nearbyEnemy, 35, { source: "elite-chain", weaponName: "CHAIN REACTION" });
+          const result = combatRuntimeRef.current.applyEnemyDamage(nearbyEnemy, 35, { source: "elite-chain", weaponName: "CHAIN REACTION" });
           if (result.applied > 0) nearbyEnemy.hitFlash = 10;
         }
       });
@@ -2065,7 +2056,7 @@ export default function CallOfDoodie() {
       const streakRoast = getRoastCallout("kill_streak", roastCooldowns.current, gs.currentWave);
       if (streakRoast) addText(gs, W / 2, 108, streakRoast, "#FF8855");
       gs.enemies.forEach((nearbyEnemy) => {
-        const result = applyEnemyDamage(nearbyEnemy, 40, { source: "killstreak", weaponName: "KILLSTREAK" });
+        const result = combatRuntimeRef.current.applyEnemyDamage(nearbyEnemy, 40, { source: "killstreak", weaponName: "KILLSTREAK" });
         if (result.applied > 0) nearbyEnemy.hitFlash = 15;
       });
       gs.screenShake = 12;
@@ -2092,9 +2083,9 @@ export default function CallOfDoodie() {
   };
 
   const drainEnemyDefeats = (gs) => {
-    const unattributed = collectUnqueuedLethalEnemies(gs.enemies);
+    const unattributed = combatRuntimeRef.current.collectUnqueuedLethalEnemies(gs.enemies);
     if (unattributed.length > 0) {
-      for (const enemy of unattributed) queueEnemyDefeat(enemy, { source: "unattributed", weaponName: "UNATTRIBUTED" });
+      for (const enemy of unattributed) combatRuntimeRef.current.queueEnemyDefeat(enemy, { source: "unattributed", weaponName: "UNATTRIBUTED" });
       recordRunIntegrityFault(gs, {
         stage: "enemy_defeat_unattributed",
         error: new Error(`${unattributed.length} lethal enemies bypassed defeat attribution`),
@@ -2103,7 +2094,7 @@ export default function CallOfDoodie() {
     }
     let processed = 0;
     while (true) {
-      const pending = collectQueuedEnemyDefeats(gs.enemies);
+      const pending = combatRuntimeRef.current.collectQueuedEnemyDefeats(gs.enemies);
       if (pending.length === 0) break;
       for (const enemy of pending) if (finalizeEnemyDefeat(gs, enemy)) processed++;
       if (processed > 2048) {
@@ -2111,7 +2102,7 @@ export default function CallOfDoodie() {
         break;
       }
     }
-    gs.enemies = stepAndCompactInPlace(gs.enemies, (enemy) => !enemy._defeatResolved);
+    gs.enemies = combatRuntimeRef.current.stepAndCompactInPlace(gs.enemies, (enemy) => !enemy._defeatResolved);
     return processed;
   };
   drainEnemyDefeatsRef.current = drainEnemyDefeats;
@@ -2170,9 +2161,12 @@ export default function CallOfDoodie() {
     }
     setChallengeVsScore(vsScore);
     setChallengeVsName(vsName);
+    setDuelResult(null);
+    const _pendingDuelId = challengeOpts.duelId || null;
     stopMusic(); stopAmbient();
     settingsRef.current = loadSettings(); // refresh settings at game start
     const seed = initGame(forceSeed, challengeOpts.startWave, challengeOpts.drill || null);
+    if (gsRef.current) gsRef.current._duelId = _pendingDuelId;
     if (requestedOperation) {
       Object.assign(gsRef.current, startOperation({ operation: requestedOperation, challenge: challengeOpts, seed }));
       gsRef.current._ghostKey = `cod-ghost-operation-${requestedOperation.id}-v1`;
@@ -2193,7 +2187,7 @@ export default function CallOfDoodie() {
       }
       gsRef.current._telegraphMult = tmap;
     } catch { gsRef.current._telegraphMult = {}; }
-    resetHeat(gsRef.current);
+    combatRuntimeRef.current.resetHeat(gsRef.current);
     gsRef.current._lastHeatTier = 0;
     setScreen("game"); setScore(0); setKills(0); setDeaths(0); setWave(gsRef.current.currentWave || 1);
     const starterWeapon = Math.max(0, Math.min(WEAPONS.length - 1, currentWeaponRef.current));
@@ -2398,6 +2392,7 @@ export default function CallOfDoodie() {
       eventDigest,
       commandTrace,
       ghostPath: encodeGhostPath(exportGhostSamples(ghostRecordRef.current)),
+      squadCode: getSquadCode(),
       feedbackDifficulty,
       totalShots: statsRef.current.totalShots || 0,
       totalHits: statsRef.current.totalHits || 0,
@@ -2457,11 +2452,11 @@ export default function CallOfDoodie() {
     if (!ctxRef.current) ctxRef.current = canvas.getContext("2d");
     const ctx = ctxRef.current;
     if (!gs.player) return;
-    gs.enemies = compactTruthyInPlace(gs.enemies);
-    gs.enemyBullets = compactTruthyInPlace(gs.enemyBullets);
-    gs.bullets = compactTruthyInPlace(gs.bullets);
-    gs.grenades = compactTruthyInPlace(gs.grenades);
-    gs.pickups = compactTruthyInPlace(gs.pickups);
+    gs.enemies = combatRuntimeRef.current.compactTruthyInPlace(gs.enemies);
+    gs.enemyBullets = combatRuntimeRef.current.compactTruthyInPlace(gs.enemyBullets);
+    gs.bullets = combatRuntimeRef.current.compactTruthyInPlace(gs.bullets);
+    gs.grenades = combatRuntimeRef.current.compactTruthyInPlace(gs.grenades);
+    gs.pickups = combatRuntimeRef.current.compactTruthyInPlace(gs.pickups);
     const W = GW(), H = GH(), p = gs.player, wpnIdx = currentWeaponRef.current;
 
     if (pausedRef.current || perkPendingRef.current || shopPendingRef.current || routePendingRef.current || bossCutsceneRef.current || waveAnnouncePendingRef.current || mutationPendingRef.current) {
@@ -2480,10 +2475,10 @@ export default function CallOfDoodie() {
     const keys = keysRef.current;
     const js = joystickRef.current;
     const gpMove = gamepadMoveRef.current;
-    const movement = resolveMovementVector({ keys, joystick: js, gamepad: gpMove });
+    const movement = combatRuntimeRef.current.resolveMovementVector({ keys, joystick: js, gamepad: gpMove });
     const { dx, dy } = movement;
     gs._movementReceipt = movement;
-    applyPlayerMovement(p, movement, {
+    combatRuntimeRef.current.applyPlayerMovement(p, movement, {
       dashActive: dashRef.current.active > 0,
       adrenalineRushTimer: gs.adrenalineRushTimer || 0,
       rubbleSlowed: !!gs._rubbleSlowed,
@@ -2493,7 +2488,7 @@ export default function CallOfDoodie() {
     });
     sampleCommandTrace("move", Math.abs(dx) > 0.1 || Math.abs(dy) > 0.1 ? directionBucket(dx, dy) : "neutral");
     if (Math.abs(dx) > 0.1 || Math.abs(dy) > 0.1) { if (cosmeticRandom() < 0.3) gs.trail.push({ x: p.x, y: p.y, life: 10 }); }
-    gs.trail = stepAndCompactInPlace(gs.trail, t => { t.life--; return t.life > 0; });
+    gs.trail = combatRuntimeRef.current.stepAndCompactInPlace(gs.trail, t => { t.life--; return t.life > 0; });
 
     // ── Aim ──
     const ss = shootStickRef.current;
@@ -2502,10 +2497,10 @@ export default function CallOfDoodie() {
     let pointerAngle = null;
     if (pointerActive) {
       const rect = canvas.getBoundingClientRect();
-      pointerAngle = computePointerAimAngle(mouse, rect, { w: W, h: H }, p);
+      pointerAngle = combatRuntimeRef.current.computePointerAimAngle(mouse, rect, { w: W, h: H }, p);
       inputDeviceRef.current = "mouse";
     }
-    const aimFrame = resolveAimFrame({
+    const aimFrame = combatRuntimeRef.current.resolveAimFrame({
       player: p,
       enemies: gs.enemies,
       shootStick: ss,
@@ -2539,7 +2534,7 @@ export default function CallOfDoodie() {
       let pointerSweep = null;
       const rect = canvasRef.current?.getBoundingClientRect?.();
       if (rect && gs?.player) {
-        const sweep = buildPointerAimSweepReport(rect, { w: W, h: H }, gs.player);
+        const sweep = combatRuntimeRef.current.buildPointerAimSweepReport(rect, { w: W, h: H }, gs.player);
         pointerSweep = `${sweep.buckets.length}/4`;
         if (sweep.complete) {
           calibration = saveInputCalibration(buildInputCalibrationRecord({
@@ -2625,7 +2620,7 @@ export default function CallOfDoodie() {
     }
 
     // ── Dynamic Objective tick + reward resolution ──
-    const objectiveFrame = resolveObjectiveFrame(gs, statsRef.current.objectiveChains);
+    const objectiveFrame = combatRuntimeRef.current.resolveObjectiveFrame(gs, statsRef.current.objectiveChains);
     if (objectiveFrame) {
       statsRef.current.objectiveChains = objectiveFrame.objectiveChains;
       if (objectiveFrame.coinsTotal != null) setCoins(objectiveFrame.coinsTotal);
@@ -2639,14 +2634,14 @@ export default function CallOfDoodie() {
     // ── Tactical whisper (S145): one quiet, rate-limited mid-run coaching line ──
     if (frameCountRef.current % 90 === 0) {
       try {
-        const _whisper = tickTacticalWhisper(gs, { frame: frameCountRef.current, activePerks: activePerksRef.current, unlockedArchetypeIds: archetypeUnlocksRef.current });
+        const _whisper = combatRuntimeRef.current.tickTacticalWhisper(gs, { frame: frameCountRef.current, activePerks: activePerksRef.current, unlockedArchetypeIds: archetypeUnlocksRef.current });
         if (_whisper) addText(gs, GW() / 2, 96, `▸ ${_whisper.text}`, _whisper.color, false);
       } catch { /* whisper must never break the loop */ }
     }
     // ── Frame capture for highlight GIF (~10fps) ──
     // Heat decay + adaptive music tier
-    decayHeat(gs);
-    const _ht = heatTier(gs.heat || 0);
+    combatRuntimeRef.current.decayHeat(gs);
+    const _ht = combatRuntimeRef.current.heatTier(gs.heat || 0);
     if (gs._lastHeatTier !== _ht) {
       gs._lastHeatTier = _ht;
       try { setMusicTier(_ht); } catch {}
@@ -2794,13 +2789,13 @@ export default function CallOfDoodie() {
       }
       const _arcMult = gs._runAct === 'THE LEGEND' ? 0.88 : gs._runAct === 'THE OPENER' ? 1.12 : 1;
       const baseSpawnRate = Math.max(6, Math.floor((100 - gs.currentWave * 7) * diffS.spawnMult / (gs.settSpawnMult || 1) / (gs.blitzSpawnMult || 1) * _arcMult));
-      const zombiePlan = gs.zombiesMode ? getZombieOutbreakPlan(gs.currentWave) : null;
+      const zombiePlan = gs.zombiesMode ? combatRuntimeRef.current.getZombieOutbreakPlan(gs.currentWave) : null;
       const spawnRate = Math.max(4, Math.floor(getWaveSpawnRate(baseSpawnRate, directorState) * (zombiePlan?.spawnRateMult || 1)));
       if (gs.spawnTimer >= spawnRate && gs.enemiesThisWave < gs.maxEnemiesThisWave && !gs._respiteLock) {
         gs.spawnTimer = 0; gs.enemiesThisWave++; spawnEnemy(gs);
         const ne = gs.enemies[gs.enemies.length - 1];
         const _baseFormation = getSpawnFormationPlan(gs.waveDirector, directorState, gs.enemiesThisWave - 1);
-        const formation = heatBiasedFormation(heatTier(gs.heat || 0), _baseFormation, gs.enemiesThisWave - 1);
+        const formation = heatBiasedFormation(combatRuntimeRef.current.heatTier(gs.heat || 0), _baseFormation, gs.enemiesThisWave - 1);
         if (formation) {
           applySpawnFormation(ne, formation, W, H);
           recordFormationExposure(gs.pressureArc, formation, { wave: gs.currentWave, stageId: directorState?.stageId });
@@ -2865,7 +2860,7 @@ export default function CallOfDoodie() {
         const operationResult = resolveOperationWave({ player: p });
         if (operationResult.completed) return;
       }
-      const contractResult = resolveWaveChallengeContract(gs);
+      const contractResult = combatRuntimeRef.current.resolveWaveChallengeContract(gs);
       if (contractResult) {
         if (contractResult.completed) {
           gs.coins = (gs.coins || 0) + contractResult.rewardCoins;
@@ -2975,7 +2970,7 @@ export default function CallOfDoodie() {
         if (!_bossNext && !gs.operationMode && modeDefRef.current.usesDirectorObjectives !== false) {
           const career = loadCareerStats();
           const weakness = _identifyWeakness(career);
-          const obj = pickObjective({
+          const obj = combatRuntimeRef.current.pickObjective({
             wave: gs.currentWave,
             weakness,
             bossWave: false,
@@ -2987,13 +2982,13 @@ export default function CallOfDoodie() {
             addText(gs, GW() / 2, GH() / 2 - 90, obj.label + " ACTIVE", obj.color, true);
             addText(gs, GW() / 2, GH() / 2 - 70, obj.description, "#DDDDDD");
           } else {
-            const contract = pickWaveChallengeContract({
+            const contract = combatRuntimeRef.current.pickWaveChallengeContract({
               wave: gs.currentWave,
               bossWave: false,
               rng: getRunRng(gs, "choices"),
             });
             if (contract) {
-              gs.activeWaveContract = startWaveChallengeContract(contract, gs);
+              gs.activeWaveContract = combatRuntimeRef.current.startWaveChallengeContract(contract, gs);
               setActiveWaveContract(gs.activeWaveContract);
               addText(gs, GW() / 2, GH() / 2 - 90, contract.label + " ACTIVE", contract.color, true);
               addText(gs, GW() / 2, GH() / 2 - 70, contract.description, "#DDDDDD");
@@ -3023,8 +3018,8 @@ export default function CallOfDoodie() {
         const _waveMax = gs.currentWave >= 50 ? 100 : gs.currentWave >= 40 ? 80 : 60;
         gs.maxEnemiesThisWave = Math.min(Math.floor((5 + gs.currentWave * 3) * (gs.waveEnemyMult || 1) * (gs.operationMode ? (gs._operationPressureMultiplier || 1) : 1)), _waveMax);
         if (gs.zombiesMode) {
-          gs.zombieOutbreak = getZombieOutbreakPlan(gs.currentWave);
-          gs.maxEnemiesThisWave = getZombieWaveEnemyCount(gs.maxEnemiesThisWave, gs.currentWave);
+          gs.zombieOutbreak = combatRuntimeRef.current.getZombieOutbreakPlan(gs.currentWave);
+          gs.maxEnemiesThisWave = combatRuntimeRef.current.getZombieWaveEnemyCount(gs.maxEnemiesThisWave, gs.currentWave);
         }
         gs.maxEnemiesThisWave = modeWaveCount(gs, gs.maxEnemiesThisWave);
         // Apply route modifiers to the upcoming wave
@@ -3041,7 +3036,7 @@ export default function CallOfDoodie() {
           dailyChallengeMode: gs.dailyChallengeMode,
           random: getWaveSpawnRng(gs),
         });
-        gs.wavePlanLedger = recordWavePlanSnapshot(gs.wavePlanLedger, gs.waveDirector);
+        gs.wavePlanLedger = combatRuntimeRef.current.recordWavePlanSnapshot(gs.wavePlanLedger, gs.waveDirector);
         gs.waveDirectorStage = -1;
         gs._formationToastedThisWave = new Set();
       }
@@ -3071,7 +3066,7 @@ export default function CallOfDoodie() {
         setMusicIntensity(true);
         gs.screenShake = 20;
         // ── Boss rotation: Karen→Splitter→Juggernaut→Summoner→Landlord, cycling ──
-        const bossPlan = createBossWavePlan({
+        const bossPlan = combatRuntimeRef.current.createBossWavePlan({
           currentWave: gs.currentWave,
           bossRushMode: gs.bossRushMode,
           developerBossSpawned: gs.developerBossSpawned,
@@ -3226,9 +3221,9 @@ export default function CallOfDoodie() {
             // Shop (if applicable) triggers from applyMutation / skipMutation callbacks
           } else if (rewardPlan.action === "shop") {
             const choiceRng = getRunRng(gsRef.current, "choices");
-            const opts = getShopOptions(gsRef.current, currentWeaponRef.current, choiceRng);
+            const opts = combatRuntimeRef.current.getShopOptions(gsRef.current, currentWeaponRef.current, choiceRng);
             setShopOptions(opts);
-            setCoinShopOptions(getCoinShopOptions(gsRef.current, choiceRng));
+            setCoinShopOptions(combatRuntimeRef.current.getCoinShopOptions(gsRef.current, choiceRng));
             setShopPending(true);
             shopPendingRef.current = true;
           }
@@ -3276,7 +3271,7 @@ export default function CallOfDoodie() {
 
     // ── Pickup collection ──
     const pickupRange = perkModsRef.current.pickupRange || 30;
-    gs.pickups = stepAndCompactInPlace(gs.pickups, pk => {
+    gs.pickups = combatRuntimeRef.current.stepAndCompactInPlace(gs.pickups, pk => {
       if (pk.type === "loot") { pk.life--; return pk.life > 0; }
       pk.life--;
       const d2 = Math.hypot(p.x - pk.x, p.y - pk.y);
@@ -3284,7 +3279,7 @@ export default function CallOfDoodie() {
       if (pk.type === "mine") {
         if (d2 < 40 && p.invincible <= 0) {
           const _mineDmg = 25 * (gsRef.current?.glassjawMult || 1);
-          applyObservedPlayerDamage(gs, { damage: _mineDmg, frame: frameCountRef.current, kind: "mine", sourceName: "Proximity mine" }); setHealth(Math.floor(p.health));
+          combatRuntimeRef.current.applyObservedPlayerDamage(gs, { damage: _mineDmg, frame: frameCountRef.current, kind: "mine", sourceName: "Proximity mine" }); setHealth(Math.floor(p.health));
           p.invincible = 30; gs.damageFlash = 12;
           gs.damageThisWave = (gs.damageThisWave || 0) + 1;
           addText(gs, pk.x, pk.y - 20, "💥 MINE! -" + Math.round(_mineDmg), "#FF4400", true);
@@ -3324,7 +3319,7 @@ export default function CallOfDoodie() {
           statsRef.current.nukes++;
           addText(gs, W / 2, H / 2, "TACTICAL NUKE!", "#FF0000", true);
           gs.enemies.forEach((en, _ni) => {
-            retireEnemyWithoutDefeat(en, "tactical-nuke");
+            combatRuntimeRef.current.retireEnemyWithoutDefeat(en, "tactical-nuke");
             gs.score += en.points;
             if (_ni < 12) addParticles(gs, en.x, en.y, en.color, 8);
           });
@@ -3384,7 +3379,7 @@ export default function CallOfDoodie() {
     });
 
     // ── Particles / floats ──
-    stepTransientEffectsInPlace(gs);
+    combatRuntimeRef.current.stepTransientEffectsInPlace(gs);
 
 
     if (gs.screenShake > 0) gs.screenShake *= 0.85;
@@ -3822,6 +3817,7 @@ export default function CallOfDoodie() {
   if (screen === "death") {
     const deathScreenProps = buildDeathScreenProps({
       victory: !!gsRef.current?._victory,
+      duelResult,
       modeLabel: modeDefRef.current?.label
         ? (modeDefRef.current.placement && !gsRef.current?._victory ? `${modeDefRef.current.label} · FLUSHED #${modeDefRef.current.placement(gsRef.current)}` : modeDefRef.current.label)
         : null,
@@ -4223,6 +4219,7 @@ export default function CallOfDoodie() {
       )}
 
       {/* HUD overlay */}
+      <AsyncPanelBoundary>
       <HUD
         modeHud={modeRuntimeRef.current ? modeRuntimeRef.current.getModeHudModel(gsRef.current, modeDefRef.current) : null}
         wave={wave} timeSurvived={timeSurvived} score={score} kills={kills} deaths={deaths}
@@ -4286,10 +4283,13 @@ export default function CallOfDoodie() {
         runIntegrity={getRunIntegrityReceipt(gsRef.current)}
         practiceEvidence={gsRef.current?.practiceEvidence || null}
       />
+      </AsyncPanelBoundary>
 
       {/* Mobile action bar */}
+      <AsyncPanelBoundary>
       {isMobile && <MobileWeaponDock currentWeapon={currentWeapon} weaponUpgrades={weaponUpgrades} weaponAmmos={gsRef.current?.weaponAmmos || []} ammo={ammo} weaponMods={gsRef.current?.weaponMods || {}} grenadeReady={grenadeReady} dashReady={dashReady} isReloading={isReloading} onSwitchWeapon={switchWeapon} onReload={() => doReload(currentWeaponRef.current)} onDash={doDash} onGrenade={throwGrenade} />}
       {!isMobile && <DesktopWeaponDock currentWeapon={currentWeapon} weaponUpgrades={weaponUpgrades} weaponAmmos={gsRef.current?.weaponAmmos || []} ammo={ammo} weaponMods={gsRef.current?.weaponMods || {}} grenadeReady={grenadeReady} dashReady={dashReady} isReloading={isReloading} showAmmoBars onSwitchWeapon={switchWeapon} onReload={() => doReload(currentWeaponRef.current)} onDash={doDash} onGrenade={throwGrenade} />}
+      </AsyncPanelBoundary>
 
       <style>{`
         @keyframes blink { 0%,100% { opacity:1 } 50% { opacity:.3 } }

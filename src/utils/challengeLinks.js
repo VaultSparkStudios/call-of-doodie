@@ -23,6 +23,7 @@ export function buildChallengeUrl({
   difficulty = "normal",
   vsScore = null,
   vsName = "",
+  duelId = null,
   baseUrl = null,
 } = {}) {
   const safeSeed = cleanSeed(seed);
@@ -36,6 +37,7 @@ export function buildChallengeUrl({
   const safeVsName = cleanVsName(vsName);
   if (safeVsScore != null) params.set("vs", String(safeVsScore));
   if (safeVsName) params.set("vsName", safeVsName);
+  if (typeof duelId === "string" && /^[0-9a-f-]{36}$/i.test(duelId)) params.set("duel", duelId);
 
   const resolvedBase = baseUrl
     || CANONICAL_SITE_URL

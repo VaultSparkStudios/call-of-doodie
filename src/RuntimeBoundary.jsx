@@ -21,10 +21,10 @@ function RuntimeShell({ onEnter }) {
           Play now <span aria-hidden="true">→</span>
         </button>
         <nav className="runtime-shell__nav" aria-label="Explore Call of Doodie">
-          <a href="/stats/">Live Stats</a>
+          <a href="/board/">Board</a>
           <a href="/modes/">Modes</a>
-          <a href="/how-to-play/">How to Play</a>
-          <a href="/leaderboard/">Leaderboard</a>
+          <a href="/field-manual/">Field Manual</a>
+          <a href="/bestiary/">Bestiary</a>
         </nav>
         <div className="runtime-shell__meta" aria-label="Game characteristics">
           <span>Free to play</span><span>Guest-first</span><span>Local progress</span><span>Keyboard · mouse · controller</span>

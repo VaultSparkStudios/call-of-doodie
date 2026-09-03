@@ -1,5 +1,5 @@
 import { WEAPONS } from "./constants.js";
-import { getMusicBPM } from "./sounds.js";
+import { getMusicBPM } from "./audio/soundFacade.js";
 import { buildWeaponAccent, drawShadedOrb, drawWeaponBarrel } from "./utils/visualPrimitives.js";
 import { getRuntimeCharacterSprite, getRuntimeEnemySprite, getRuntimeZombieSprite, getWeaponSprite, getWorldObjectSprite } from "./utils/visualAssetLibrary.js";
 import { motionPhaseSeed, resolveSpriteDeath, resolveSpriteMotion } from "./systems/spriteMotion.js";

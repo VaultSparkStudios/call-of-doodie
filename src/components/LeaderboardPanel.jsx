@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { compareLeaderboardEntries, getDailyChallengeSeed, loadLeaderboardToday, searchLeaderboard } from "../storage.js";
 import CommunityStatsPanel from "./CommunityStatsPanel.jsx";
+import { getSquadCode, loadSquadBoard } from "../utils/squads.js";
 
 const MODE_TABS = [
   { key: null,              label: "ALL",          color: "#AAA" },
@@ -13,6 +14,7 @@ const MODE_TABS = [
   { key: "gauntlet",        label: "🏋️ GAUNTLET",   color: "#AA44FF" },
   { key: "zombies",         label: "🧟 ZOMBIES",    color: "#8DFF67" },
   { key: "__today__",       label: "🌅 TODAY",      color: "#00FF88" },
+  { key: "__squad__",       label: "🤝 SQUAD",      color: "#7CFFB8" },
 ];
 
 // ── Input device badge ────────────────────────────────────────────────────────
@@ -100,6 +102,9 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
   const [searchLoading, setSearchLoading] = useState(false);
   const [todayData, setTodayData] = useState(null);
   const [todayLoading, setTodayLoading] = useState(false);
+  const [squadData, setSquadData] = useState(null);
+  const [squadLoading, setSquadLoading] = useState(false);
+  const squadCode = getSquadCode();
   const searchTimeout = useRef(null);
   const todaySeed = getDailyChallengeSeed();
 
@@ -110,6 +115,14 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
       loadLeaderboardToday().then(data => { setTodayData(data); setTodayLoading(false); });
     }
   }, [activeMode, todayData, todayLoading]);
+
+  // S163 squad board: best verified score per member for the local squad code.
+  useEffect(() => {
+    if (activeMode === "__squad__" && squadData === null && !squadLoading) {
+      setSquadLoading(true);
+      loadSquadBoard(squadCode).then((data) => { setSquadData(data); setSquadLoading(false); });
+    }
+  }, [activeMode, squadData, squadLoading, squadCode]);
 
   // Debounced search — local filter first, remote search on demand
   const handleSearchChange = (val) => {
@@ -128,13 +141,16 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
 
   // Source data: search results > today data > normal filtered
   const isToday = activeMode === "__today__";
+  const isSquad = activeMode === "__squad__";
   const sourceData = searchResults !== null
     ? searchResults
     : isToday
       ? (todayData || [])
-      : leaderboard;
+      : isSquad
+        ? (squadData?.members || [])
+        : leaderboard;
 
-  const modeFiltered = (isToday || searchResults !== null) ? sourceData : (
+  const modeFiltered = (isToday || isSquad || searchResults !== null) ? sourceData : (
     activeMode === "score_attack"    ? leaderboard.filter(e => e.mode === "score_attack")
     : activeMode === "daily_challenge" ? leaderboard.filter(e => e.mode === "daily_challenge")
     : activeMode === "boss_rush"       ? leaderboard.filter(e => e.mode === "boss_rush")
@@ -292,7 +308,15 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
           })}
         </div>
 
-        {(lbLoading && !isToday && searchResults === null) || (isToday && todayLoading) || (searchResults === null && searchLoading) ? (
+        {isSquad && !squadCode && (
+          <div data-testid="squad-hint" style={{ padding: 10, marginBottom: 8, borderRadius: 8, border: "1px solid rgba(124,255,184,0.35)", color: "var(--cod-muted)", fontSize: 11 }}>
+            No squad yet. Open <a href="/#profile" style={{ color: "var(--cod-cyan)" }}>Your Record</a> to create or join a squad code; every verified run you submit will carry it.
+          </div>
+        )}
+        {isSquad && squadCode && squadData && (
+          <div style={{ fontSize: 10, color: "var(--cod-quiet)", marginBottom: 6, letterSpacing: 1 }}>SQUAD {squadCode} · {squadData.members.length} members · combined best {Number(squadData.total || 0).toLocaleString()}</div>
+        )}
+        {(lbLoading && !isToday && !isSquad && searchResults === null) || (isToday && todayLoading) || (isSquad && squadLoading) || (searchResults === null && searchLoading) ? (
           <p style={{ color: "#DDD", fontSize: 14 }}>Loading...</p>
         ) : sorted.length === 0 ? (
           <p style={{ color: "#CCC", fontStyle: "italic", fontSize: 14 }}>

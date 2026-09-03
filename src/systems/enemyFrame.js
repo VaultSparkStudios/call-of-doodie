@@ -3,7 +3,7 @@ import { cosmeticRandom, getRunRng } from "./runRng.js";
 import { addParticles, addText, MAX_PARTICLES } from "./transientPresentation.js";
 import { applyObservedPlayerDamage } from "./damageSequence.js";
 import { rumbleGamepad, vibrate } from "../utils/haptics.js";
-import { soundBossPhase2 } from "../sounds.js";
+import { soundBossPhase2 } from "../audio/soundFacade.js";
 import { getBossRangedBurstCount, triggerBossPhaseTwoTransition } from "./bossPhases.js";
 import { retireEnemyWithoutDefeat } from "./enemyDefeatLifecycle.js";
 import { applySergeantAura, buildEnemyFrameIndex, countSummonsFor, createEnemyFrameIndex } from "./frameIndex.js";

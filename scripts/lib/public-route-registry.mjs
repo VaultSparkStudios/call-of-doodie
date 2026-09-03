@@ -2,6 +2,7 @@ import crypto from "node:crypto";
 import { buildPublicGameplayContract } from "./public-gameplay-contract.mjs";
 import { FOOTER_GROUPS, groupFooterLinks, PRIMARY_PUBLIC_NAV } from "../../src/config/publicNavigation.js";
 import { roadmapSections } from "../../src/content/roadmap.js";
+import { FIELD_MANUAL_SECTIONS } from "../../src/content/fieldManual.js";
 import { CHANGELOG_ENTRIES } from "../../src/config/changelog.js";
 import { deriveContentVersionDate } from "./build-date.mjs";
 import { ENEMY_ATLAS_CONTRACT } from "../../src/utils/enemyAtlasContract.js";
@@ -101,20 +102,15 @@ const ROUTE_DEFINITIONS = [
     ],
   },
   {
-    id: "how-to-play", path: "/how-to-play/", label: "How to Play", rel: "guide", priority: 0.8, generated: true,
-    eyebrow: "Player guide", title: "Move first. Build smart. Keep the arena readable.",
-    description: "A concise guide to movement, combat, upgrades, bosses, and controls in Call of Doodie.",
+    id: "field-manual", path: "/field-manual/", label: "Field Manual", rel: "guide", priority: 0.8, generated: true,
+    eyebrow: "Field manual", title: "Move first. Build smart. Keep the arena readable.",
+    description: "The Call of Doodie field manual: movement, combat, builds, warnings, every mode, squad orders, and controls.",
     lede: "Survival is more about positioning than standing still and firing. The compact in-game training guide advances only when it observes each action.",
-    sections: [
-      ["1. Keep moving", "Circle threats, preserve escape lanes, and dash through danger when the arena closes in. Dash grants a brief window of invulnerability."],
-      ["2. Aim into groups", "Weapons reward different ranges and crowd shapes. Switch when your current weapon no longer fits the pressure in front of you."],
-      ["3. Build a run", "Collect experience, choose upgrades, and combine effects that support one plan. Focused synergies usually outperform a pile of unrelated bonuses."],
-      ["4. Read the warnings", "Ranged aim lines, shield arcs, boss rings, hazard colors, and shape markers communicate danger without relying on color alone."],
-    ],
+    sections: FIELD_MANUAL_SECTIONS,
   },
   {
-    id: "enemies", path: "/enemies/", label: "Enemies", rel: "enemies", priority: 0.8, generated: true,
-    eyebrow: "Enemy codex", title: "Every problem has a silhouette.",
+    id: "bestiary", path: "/bestiary/", label: "Bestiary", rel: "enemies", priority: 0.8, generated: true,
+    eyebrow: "Bestiary", title: "Every problem has a silhouette.",
     description: "Meet every enemy and boss in the live Call of Doodie roster.",
     lede: (gameplay) => `The live roster contains ${gameplay.enemies.length} threats. Art cohorts describe atlas delivery; the boss rotation below comes from gameplay rules.`,
     sections: buildEnemySections,
@@ -135,27 +131,17 @@ const ROUTE_DEFINITIONS = [
     sections: buildModeSections,
   },
   {
-    id: "leaderboard", path: "/leaderboard/", label: "Leaderboard", rel: "leaderboard", priority: 0.6, generated: true,
-    eyebrow: "Scores and trust", title: "A score means more when its rules are visible.",
-    description: "Understand Call of Doodie leaderboards, shared seeds, replay receipts, and run integrity.",
-    lede: "Public score comparison is optional. You can play as Guest; a display name is only requested when identity adds value.",
+    id: "board", path: "/board/", label: "Board", rel: "leaderboard", priority: 0.7, generated: true,
+    eyebrow: "The Sewer Board", title: "Scores, stats, and the trust behind them.",
+    description: "The live Call of Doodie board: verified top scores, community statistics, shared seeds, replay receipts, and run integrity on one page.",
+    lede: "One page for every number that matters: the verified top 10, live community totals that refresh every 15 seconds, and the rules that make a score mean something. Guest play is fine; a callsign is only asked for when identity adds value.",
     sections: [
-      ["Shared conditions", "Daily and Gauntlet modes use shared seeds so players can compare results under common starting conditions."],
+      ["Shared conditions", "Daily and Gauntlet modes use shared seeds so players can compare results under common starting conditions. Squad codes group friends on the in-game board."],
       ["Run receipts", "Replay proof is advisory deterministic evidence, not a promise of full physics resimulation. Integrity indicators explain when a run is local-only or has unusual conditions."],
+      ["How to read the stats", "Every community number is a live total across verified completed runs, never a per-player claim. Automated health-check rows are excluded. A small corpus means trends are directional, not statistical."],
       ["Respectful identity", "Use a display name that is safe to publish. Do not include an email address, phone number, real-world address, or other private information."],
     ],
-  },
-  {
-    id: "stats", path: "/stats/", label: "Stats", rel: "stats", priority: 0.7, generated: true,
-    eyebrow: "Live player analytics", title: "Community Stats",
-    description: "Verified Call of Doodie player and run statistics with scope, freshness, and plain-language analysis.",
-    lede: "Community Stats refresh every 15 seconds and include every recoverable server record, from legacy public scores through full-detail completed-run facts. The verified snapshot remains visible whenever the live service is temporarily unreachable.",
-    sections: [
-      ["How to read this page", "Every number above is a live total across verified completed runs — never a per-player claim. The small corpus means trends are directional, not statistical. Community records show the single best verified wave, score, and kill count anyone has posted."],
-      ["What is excluded", "Automated health-check rows are excluded from every public total. Runs never submitted before telemetry existed cannot be recovered, and unavailable legacy detail stays unknown rather than being estimated."],
-      ["Live view", "This page, the Home screen, leaderboard, and post-game debrief all refresh Community Stats every 15 seconds while visible and recover immediately after reconnect, focus, or visibility changes. Sparklines chart the totals this browser has observed changing."],
-    ],
-    cta: ["Play with Community Stats", "../"],
+    cta: ["Play and post a score", "../"],
   },
   {
     id: "accessibility", path: "/accessibility/", label: "Accessibility", rel: "accessibility", priority: 0.6, generated: true,

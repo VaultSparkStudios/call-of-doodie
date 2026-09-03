@@ -77,7 +77,7 @@ const statsSnapshot = JSON.parse(fs.readFileSync(path.resolve("data", "community
 const fmtInt = (value) => Number(value || 0).toLocaleString("en-US");
 
 function renderLiveCommunityStats(page) {
-  if (page.id !== "stats") return "";
+  if (page.id !== "board") return "";
   const snap = statsSnapshot.stats;
   const metrics = [
     ["runs", "Runs", fmtInt(snap.runs)],
@@ -117,7 +117,7 @@ function renderLiveCommunityStats(page) {
 // showing a single score (a dead end for the visitor's intent). It now
 // renders a live top-10 from /api/top-scores with a graceful offline state.
 function renderLiveLeaderboard(page) {
-  if (page.id !== "leaderboard") return "";
+  if (page.id !== "board") return "";
   return `
       <section class="live-stats" aria-labelledby="live-board-heading">
         <div class="live-stats-head">
@@ -137,11 +137,9 @@ function renderLiveLeaderboard(page) {
 function renderPage(page) {
   const art = page.art ? renderArt() : "";
   const liveStats = renderLiveCommunityStats(page) + renderLiveLeaderboard(page);
-  const liveStatsScript = page.id === "stats"
-    ? '<script src="../community-stats-live.js" defer></script>'
-    : page.id === "leaderboard"
-      ? '<script src="../leaderboard-live.js" defer></script>'
-      : "";
+  const liveStatsScript = page.id === "board"
+    ? '<script src="../leaderboard-live.js" defer></script>\n  <script src="../community-stats-live.js" defer></script>'
+    : "";
   const cta = page.cta
     ? `<a class="primary-cta" href="${escapeHtml(page.cta[1])}">${escapeHtml(page.cta[0])} <span aria-hidden="true">→</span></a>`
     : "";

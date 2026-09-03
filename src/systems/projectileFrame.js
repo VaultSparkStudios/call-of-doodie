@@ -17,7 +17,7 @@ import { stepAndCompactInPlace } from "./transientLifecycle.js";
 import { addParticles, addText } from "./transientPresentation.js";
 import { stampArenaDecal } from "./backgroundLayer.js";
 import { cosmeticRandom, getRunRng } from "./runRng.js";
-import { getMusicBPM, soundHitAt, soundPrecisionClick, soundPrecisionLock } from "../sounds.js";
+import { getMusicBPM, soundHitAt, soundPrecisionClick, soundPrecisionLock } from "../audio/soundFacade.js";
 import { rumbleGamepad, vibrate } from "../utils/haptics.js";
 import { trackRhythmMasteryHit } from "../storage.js";
 

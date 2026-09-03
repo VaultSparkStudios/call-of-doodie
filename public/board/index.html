@@ -4,14 +4,15 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#070b10">
-  <meta name="description" content="Verified Call of Doodie player and run statistics with scope, freshness, and plain-language analysis.">
-  <link rel="canonical" href="https://callofdoodie.wtf/stats/">
+  <meta name="description" content="The live Call of Doodie board: verified top scores, community statistics, shared seeds, replay receipts, and run integrity on one page.">
+  <link rel="canonical" href="https://callofdoodie.wtf/board/">
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../tokens.css">
   <link rel="stylesheet" href="../doc.css">
   <script src="../theme.js" defer></script>
+  <script src="../leaderboard-live.js" defer></script>
   <script src="../community-stats-live.js" defer></script>
-  <title>Community Stats | Call of Doodie</title>
+  <title>Scores, stats, and the trust behind them. | Call of Doodie</title>
 </head>
 <body class="fx-vignette">
   <div class="shell">
@@ -20,15 +21,14 @@
   <a href="../">Home</a>
   <a href="../arsenal/">Arsenal</a>
   <a href="../modes/">Modes</a>
-  <a href="../leaderboard/">Leaderboard</a>
-  <a href="../stats/">Stats</a>
+  <a href="../board/">Board</a>
   <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch color theme">Theme</button>
     </nav></header>
     <main>
-      <p class="eyebrow">Live player analytics</p>
-      <h1>Community Stats</h1>
-      <p class="lede">Community Stats refresh every 15 seconds and include every recoverable server record, from legacy public scores through full-detail completed-run facts. The verified snapshot remains visible whenever the live service is temporarily unreachable.</p>
-      <a class="primary-cta" href="../">Play with Community Stats <span aria-hidden="true">→</span></a>
+      <p class="eyebrow">The Sewer Board</p>
+      <h1>Scores, stats, and the trust behind them.</h1>
+      <p class="lede">One page for every number that matters: the verified top 10, live community totals that refresh every 15 seconds, and the rules that make a score mean something. Guest play is fine; a callsign is only asked for when identity adds value.</p>
+      <a class="primary-cta" href="../">Play and post a score <span aria-hidden="true">→</span></a>
       <section class="live-stats" aria-labelledby="live-community-heading">
         <div class="live-stats-head">
           <div><p class="eyebrow">Always-current aggregate</p><h2 id="live-community-heading">All supported history</h2></div>
@@ -50,10 +50,23 @@
         <p class="live-coverage" data-community-coverage>As of 2026-08-08: all 12 supported runs · 0 full-detail · 12 legacy · oldest supported record March 12, 2026. Live totals replace this snapshot when connected.</p>
         <p class="live-caveat">This includes every recoverable server record. Runs never submitted before telemetry existed cannot be reconstructed; unavailable legacy fields remain unknown instead of being estimated.</p>
       </section>
-      <div class="card-grid"><section class="card"><h2>How to read this page</h2><p>Every number above is a live total across verified completed runs — never a per-player claim. The small corpus means trends are directional, not statistical. Community records show the single best verified wave, score, and kill count anyone has posted.</p></section><section class="card"><h2>What is excluded</h2><p>Automated health-check rows are excluded from every public total. Runs never submitted before telemetry existed cannot be recovered, and unavailable legacy detail stays unknown rather than being estimated.</p></section><section class="card"><h2>Live view</h2><p>This page, the Home screen, leaderboard, and post-game debrief all refresh Community Stats every 15 seconds while visible and recover immediately after reconnect, focus, or visibility changes. Sparklines chart the totals this browser has observed changing.</p></section></div>
+      <section class="live-stats" aria-labelledby="live-board-heading">
+        <div class="live-stats-head">
+          <div><p class="eyebrow">Verified global board</p><h2 id="live-board-heading">Top 10 right now</h2></div>
+          <span class="status" data-top-scores-status data-state="connecting" aria-live="polite">Connecting to the live board…</span>
+        </div>
+        <div style="overflow-x:auto">
+          <table data-top-scores hidden style="width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums">
+            <thead><tr style="text-align:left"><th>#</th><th>Callsign</th><th>Score</th><th>Wave</th><th>Kills</th><th>Mode</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <p class="live-caveat">Scores carry trust checks; runs with modified gameplay settings are badged in game. Play as a guest and submit with any callsign.</p>
+      </section>
+      <div class="card-grid"><section class="card"><h2>Shared conditions</h2><p>Daily and Gauntlet modes use shared seeds so players can compare results under common starting conditions. Squad codes group friends on the in-game board.</p></section><section class="card"><h2>Run receipts</h2><p>Replay proof is advisory deterministic evidence, not a promise of full physics resimulation. Integrity indicators explain when a run is local-only or has unusual conditions.</p></section><section class="card"><h2>How to read the stats</h2><p>Every community number is a live total across verified completed runs, never a per-player claim. Automated health-check rows are excluded. A small corpus means trends are directional, not statistical.</p></section><section class="card"><h2>Respectful identity</h2><p>Use a display name that is safe to publish. Do not include an email address, phone number, real-world address, or other private information.</p></section></div>
       <aside class="next-links card" aria-label="Explore more"><strong>Keep exploring</strong><a href="../modes/">Modes</a><a href="../arsenal/">Arsenal</a><a href="../accessibility/">Accessibility</a><a href="../support/">Support</a></aside>
     </main>
-    <footer><div class="footer-links"><nav aria-label="Play links"><strong>PLAY</strong><a href="../modes/">Modes</a><a href="../leaderboard/">Leaderboard</a><a href="../stats/">Stats</a></nav><nav aria-label="Learn links"><strong>LEARN</strong><a href="../how-to-play/">How to Play</a><a href="../enemies/">Enemies</a><a href="../arsenal/">Arsenal</a><a href="../changelog/">Changelog</a><a href="../roadmap/">Roadmap</a><a href="../accessibility/">Accessibility</a></nav><nav aria-label="Studio links"><strong>STUDIO</strong><a href="../about/">About</a><a href="../press-kit/">Press Kit</a><a href="../support/">Support</a><a href="../contact/">Contact</a><a href="../status/">Status</a><a href="../privacy/">Privacy</a><a href="../terms/">Terms</a><a href="../ip/">Rights &amp; IP</a><a href="../">Home</a></nav></div><p class="parody-note">Call of Doodie is a parody game and is not affiliated with, endorsed by, or associated with Activision, the Call of Duty franchise, or any related entity.</p><div>© 2026 <a href="https://vaultsparkstudios.com/">VaultSpark Studios LLC</a>. All rights reserved.</div></footer>
+    <footer><div class="footer-links"><nav aria-label="Play links"><strong>PLAY</strong><a href="../modes/">Modes</a><a href="../board/">Board</a></nav><nav aria-label="Learn links"><strong>LEARN</strong><a href="../field-manual/">Field Manual</a><a href="../bestiary/">Bestiary</a><a href="../arsenal/">Arsenal</a><a href="../changelog/">Changelog</a><a href="../roadmap/">Roadmap</a><a href="../accessibility/">Accessibility</a></nav><nav aria-label="Studio links"><strong>STUDIO</strong><a href="../about/">About</a><a href="../press-kit/">Press Kit</a><a href="../support/">Support</a><a href="../contact/">Contact</a><a href="../status/">Status</a><a href="../privacy/">Privacy</a><a href="../terms/">Terms</a><a href="../ip/">Rights &amp; IP</a><a href="../">Home</a></nav></div><p class="parody-note">Call of Doodie is a parody game and is not affiliated with, endorsed by, or associated with Activision, the Call of Duty franchise, or any related entity.</p><div>© 2026 <a href="https://vaultsparkstudios.com/">VaultSpark Studios LLC</a>. All rights reserved.</div></footer>
   </div>
 </body>
 </html>

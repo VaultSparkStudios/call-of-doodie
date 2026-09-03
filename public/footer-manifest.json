@@ -14,12 +14,8 @@
       "label": "Modes"
     },
     {
-      "href": "/leaderboard/",
-      "label": "Leaderboard"
-    },
-    {
-      "href": "/stats/",
-      "label": "Stats"
+      "href": "/board/",
+      "label": "Board"
     }
   ],
   "footerLinks": [
@@ -32,12 +28,12 @@
       "label": "About"
     },
     {
-      "href": "/how-to-play/",
-      "label": "How to Play"
+      "href": "/field-manual/",
+      "label": "Field Manual"
     },
     {
-      "href": "/enemies/",
-      "label": "Enemies"
+      "href": "/bestiary/",
+      "label": "Bestiary"
     },
     {
       "href": "/arsenal/",
@@ -48,12 +44,8 @@
       "label": "Modes"
     },
     {
-      "href": "/leaderboard/",
-      "label": "Leaderboard"
-    },
-    {
-      "href": "/stats/",
-      "label": "Stats"
+      "href": "/board/",
+      "label": "Board"
     },
     {
       "href": "/accessibility/",
@@ -98,8 +90,8 @@
   ],
   "footerOnly": [
     "/about/",
-    "/how-to-play/",
-    "/enemies/",
+    "/field-manual/",
+    "/bestiary/",
     "/accessibility/",
     "/support/",
     "/press-kit/",

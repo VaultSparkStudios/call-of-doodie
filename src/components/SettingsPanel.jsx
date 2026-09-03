@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { SETTINGS_DEFAULTS, saveSettings, loadPresets, savePresets } from "../settings.js";
-import { soundUIClose } from "../sounds.js";
+import { soundUIClose } from "../audio/soundFacade.js";
 import { isPlaytestMode, setPlaytestPulseEnabled } from "../utils/playtestFlightRecorder.js";
 
 const TABS = ["Quick", "Advanced"];

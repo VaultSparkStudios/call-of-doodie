@@ -334,6 +334,7 @@ export function buildSubmitScorePayload(safeEntry, rawEntry = {}) {
   if (traceLength > 0) payload.traceLength = traceLength;
   if (traceBody) payload.traceBody = traceBody;
   if (typeof rawEntry?.ghostPath === "string" && rawEntry.ghostPath) payload.ghostPath = rawEntry.ghostPath.replace(/[^a-z0-9.;]/gi, "").slice(0, 8192);
+  if (typeof rawEntry?.squadCode === "string" && /^[A-Z0-9]{4,12}$/.test(rawEntry.squadCode)) payload.squadCode = rawEntry.squadCode;
   if (rawEntry?.traceEvidence && typeof rawEntry.traceEvidence === "object") {
     payload.traceEvidence = {
       level: typeof rawEntry.traceEvidence.level === "string" ? rawEntry.traceEvidence.level : "none",

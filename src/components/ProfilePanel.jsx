@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { exportProgressBackup, importProgressBackup, loadCareerStats, loadDoctrineArchive, loadStash } from "../storage.js";
 import { readPassport } from "../utils/obeliskPassport.js";
 import { fetchCloudBackup, pushCloudBackup } from "../utils/cloudBackup.js";
+import { getSquadCode, makeSquadCode, setSquadCode } from "../utils/squads.js";
 
 // ProfilePanel — "Your Sewer Record" (S163). Guest-safe: everything works from
 // browser storage; the Porcelain Passport adds cloud backup + sync when the
@@ -20,6 +21,8 @@ export default function ProfilePanel({ onClose, username = null }) {
   const [passport] = useState(() => readPassport());
   const [notice, setNotice] = useState("");
   const [cloud, setCloud] = useState({ state: "idle", updatedAt: null });
+  const [squad, setSquad] = useState(() => getSquadCode());
+  const [squadInput, setSquadInput] = useState("");
 
   useEffect(() => {
     if (!passport?.subject) return;
@@ -90,6 +93,24 @@ export default function ProfilePanel({ onClose, username = null }) {
         <section style={box} aria-label="Stash">
           <div style={h}>SEWER EXTRACTION STASH</div>
           <div style={{ fontSize: 13 }}>Banked loot <b style={{ color: "var(--cod-gold)" }}>{fmt(stash.total)}</b> · best haul <b>{fmt(stash.best)}</b> · extractions <b>{fmt(stash.runs)}</b></div>
+        </section>
+
+        <section style={box} aria-label="Squad">
+          <div style={h}>SQUAD CODE</div>
+          <p style={{ margin: "0 0 8px", fontSize: 12, color: "var(--cod-muted)" }}>Share one code with friends. Every verified run you submit carries it, and the board's SQUAD tab shows your crew's best.</p>
+          {squad ? (
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
+              <span data-testid="squad-code" style={{ fontFamily: "var(--font-display)", fontSize: 24, letterSpacing: 4, color: "var(--cod-gold)" }}>{squad}</span>
+              <button type="button" style={btn} onClick={() => { navigator.clipboard?.writeText?.(squad); setNotice("Squad code copied."); }}>Copy</button>
+              <button type="button" style={btn} onClick={() => { setSquadCode(""); setSquad(""); setNotice("Left the squad."); }}>Leave</button>
+            </div>
+          ) : (
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+              <input aria-label="Squad code" value={squadInput} onChange={(e) => setSquadInput(e.target.value.toUpperCase())} placeholder="JOIN A CODE" maxLength={12} style={{ ...btn, minWidth: 140, background: "var(--cod-bg-deep)" }} />
+              <button type="button" style={btn} onClick={() => { const code = setSquadCode(squadInput); setSquad(code); setNotice(code ? "Joined the squad." : "Codes are 4 to 12 letters or digits."); }}>Join</button>
+              <button type="button" style={btn} onClick={() => { const code = setSquadCode(makeSquadCode()); setSquad(code); setNotice("New squad created. Share the code."); }}>Create new</button>
+            </div>
+          )}
         </section>
 
         <section style={box} aria-label="Backup">

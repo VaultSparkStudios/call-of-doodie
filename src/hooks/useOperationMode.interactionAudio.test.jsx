@@ -15,7 +15,7 @@ const mocks = vi.hoisted(() => ({
   readPreference: vi.fn(() => "action"),
 }));
 
-vi.mock("../sounds.js", () => ({
+vi.mock("../audio/soundFacade.js", () => ({
   setMusicVibe: mocks.setMusicVibe,
   soundOperationObjective: mocks.soundOperationObjective,
   soundOperationReinforcement: mocks.soundOperationReinforcement,

@@ -44,7 +44,7 @@ try {
   await panel.getByText("LIVE", { exact: false }).last().waitFor({ state: "visible" });
   const inGameText = await panel.innerText();
 
-  await page.goto(`${origin}/stats/`, { waitUntil: "networkidle" });
+  await page.goto(`${origin}/board/`, { waitUntil: "networkidle" });
   await page.locator('[data-community-status][data-state="live"]').waitFor({ state: "visible" });
   const publicRuns = await page.locator('[data-community-stat="runs"]').innerText();
   const publicCoverage = await page.locator("[data-community-coverage]").innerText();

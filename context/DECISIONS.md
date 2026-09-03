@@ -2,6 +2,12 @@
 
 Public-safe decisions only. Detailed internal decision history is maintained privately.
 
+## 2026-09-03 — Session 163 — Duels are friendly and unverified; squads ride on signed submissions
+
+**Decision:** A seed duel is a public row anyone can open and exactly one responder can answer inside 24 hours; the challenger's fields are immutable by trigger. Duel scores are self-reported and every surface labels them friendly and unverified. Squad codes are validated and stored only through the signed `submit-score` path, so the SQUAD tab is a filter over verified rows and inherits the board's trust.
+
+**Rationale:** Async rivals should ship at zero variable cost without weakening the global board. Keeping the trust boundary visible ("friendly, unverified" versus "verified") is the proof-over-posture pillar applied to social features.
+
 ## 2026-09-03 — Session 163 — Cloud backup uses a project-scoped profile key, never the Obelisk token
 
 **Decision:** `/api/obelisk-verify` mints `profileKey = sha256("profile:" + OBELISK_VERIFY_SECRET + ":" + subject)` after upstream verification; the passport stores that key; `/api/profile` recomputes it and compares in constant time before reading or writing one `profiles` row through the service role. The upstream Obelisk token is still never persisted.

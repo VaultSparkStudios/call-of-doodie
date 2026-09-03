@@ -249,6 +249,8 @@ function normalizeEntry(entry: Record<string, unknown>) {
     lastWords: cleanText(entry.lastWords, 60, "..."),
     // S163: optional downsampled ghost path for live ghost races (base-36 "f.x.y" triples).
     ghost_path: typeof entry.ghostPath === "string" && /^[a-z0-9.;]{1,8192}$/i.test(entry.ghostPath) ? entry.ghostPath : null,
+    // S163: optional squad code groups friends on the board.
+    squad_code: typeof entry.squadCode === "string" && /^[A-Z0-9]{4,12}$/.test(entry.squadCode) ? entry.squadCode : null,
     rank: cleanText(entry.rank, 40, "Noob Potato"),
     bestStreak: clampInt(entry.bestStreak, 0, 100000, 0),
     totalDamage: clampInt(entry.totalDamage, 0, 100000000, 0),

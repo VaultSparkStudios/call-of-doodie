@@ -137,7 +137,7 @@ export default function CommunityStatsPanel({ career: suppliedCareer = null, run
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
             <div className="community-stats__header" style={{ color: "var(--cod-cyan)", fontSize: 10, letterSpacing: 2.2, fontWeight: 900 }}>● LIVE SEWER NETWORK</div>
-            <a className="community-stats__full-link" href={`${import.meta.env.BASE_URL}stats/`} style={{ color: "#9CEBFF", fontSize: 8, letterSpacing: 1, textDecoration: "underline", textUnderlineOffset: 2 }}>VIEW ALL STATS →</a>
+            <a className="community-stats__full-link" href={`${import.meta.env.BASE_URL}board/`} style={{ color: "#9CEBFF", fontSize: 8, letterSpacing: 1, textDecoration: "underline", textUnderlineOffset: 2 }}>VIEW ALL STATS →</a>
             {!showcase && <button type="button" onClick={refreshCommunityStatsNow} aria-label="Refresh Community Stats now" style={{ padding: 0, border: 0, background: "transparent", color: "#9CEBFF", fontSize: 8, letterSpacing: 1, textDecoration: "underline", textUnderlineOffset: 2, cursor: "pointer" }}>REFRESH</button>}
           </div>
           <div style={{ color: "#748089", fontSize: 8, marginTop: 2, letterSpacing: 0.8 }}>VERIFIED PLAYER + RUN TOTALS · HEALTH CHECKS EXCLUDED</div>

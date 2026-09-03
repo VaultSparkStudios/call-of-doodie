@@ -16,8 +16,10 @@ Public-safe launch roadmap summary.
 - [x] [SIL:2] **DONE S163 (post-closeout)** /#profile "Your Sewer Record" with guest-safe backup download/restore; hash routes for profile/board/field-manual/changelog/modes/achievements; cloud backup client, Pages Function, and migration built behind a profile-key capability (503 until the deployment has its secrets).
 - [x] [SIL:1] **DONE S163 (post-closeout)** Review guards: token-in-data hazard test, runtime-boundary spec tolerant of host load, Dependabot high advisory fixed (browserslist).
 - [ ] [SIL:2] Deploy the S163 migration and edge-function change (profiles table, ghost_path column, submit-score ghostPath) and set OBELISK_VERIFY_SECRET / SUPABASE_SERVICE_ROLE_KEY on Pages so cloud backup and the remote ghost race light up.
-- [ ] [SIL:2] Seed duels with 24-hour result cards and squad boards (server tables); IA consolidation of field manual, bestiary, and board pages.
-- [ ] [SIL:1] App chunk 551 KB → 493 KB (DeathScreen diet, panels.css); scrolling camera for a sixteen-bot royale.
+- [x] [SIL:2] **DONE S163 (open-items pass)** Seed duels (24-hour rows, RLS, immutable challenger, one response) with a debrief result card; squad codes on signed submissions with a SQUAD board tab; /board/, /field-manual/, /bestiary/ consolidation with 301s and one field-manual content source.
+- [x] [SIL:2] **DONE S163 (open-items pass)** Bundle diet pass 2: lazy sound facade, lazy HUD and weapon docks, twenty loop-only systems moved into the combat chunk; App 551 KB → 460 KB (target was 493).
+- [ ] [SIL:2] Deploy migrations 2026-09-03_profiles_and_ghost_paths and 2026-09-03_duels_and_squads plus the submit-score edge function; set Pages secrets so cloud backup, ghost race, duels, and squads light up.
+- [ ] [SIL:1] Scrolling camera for a sixteen-bot royale; DeathScreen diet.
 
 **Runway exception:** participant fun/balance outcomes, physical-device proof, provider/mail/identity evidence, publication, real-time co-op, and SPARKED promotion remain independently gated. New modes score locally until the leaderboard mode enum accepts them.
 

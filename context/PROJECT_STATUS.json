@@ -4,9 +4,15 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 163 (incl. post-closeout pass) shipped four modes that play differently (BOSS GAUNTLET, HOLD THE THRONE, SEWER EXTRACTION, BOT ROYALE), CPU squad teammates, behavioral Operation objectives, a fixed-step simulation with a headless kernel, a single design-token brand, a profile page with backup, and a bundle diet that restored the runtime byte gate.",
-  "nextMilestone": "Deploy the S163 migration and submit-score change and set the Pages secrets so cloud backup and the Daily ghost race light up; then seed duels, squad boards, IA consolidation, and the 493 KB chunk target.",
+  "currentFocus": "Session 163 (three passes) shipped four modes that play differently, CPU squad teammates, behavioral Operation objectives, a fixed-step simulation with a headless kernel, one design-token brand, a profile page with backup, seed duels and squad boards, a consolidated site (/board/, /field-manual/, /bestiary/), and a bundle diet from 584 KB to 460 KB.",
+  "nextMilestone": "Deploy both S163 migrations and the submit-score change and set the Pages secrets so cloud backup, the Daily ghost race, duels, and squads light up; then a scrolling-camera royale and the DeathScreen diet.",
   "testingSurfaces": [
+    {
+      "session": 163,
+      "status": "green",
+      "type": "open-items-gates",
+      "command": "strict lint · build · runtime gate 460 KB/560 KB · public contract 28 files · claims · full Vitest · Playwright serial 19 pass / 1 skip · browser smoke: four modes, squad strip, Operation BREACH, /#profile"
+    },
     {
       "session": 163,
       "status": "green",

@@ -23,7 +23,7 @@ describe("runtime boundary source contract", () => {
       root.render(<RuntimeBoundary />);
     });
     expect(container.querySelector('[data-testid="runtime-enter"]')?.textContent).toContain("Play now");
-    expect(container.querySelector('a[href="/stats/"]')?.textContent).toBe("Live Stats");
+    expect(container.querySelector('a[href="/board/"]')?.textContent).toBe("Board");
     expect(container.querySelector('a[href="/modes/"]')).toBeTruthy();
     act(() => root.unmount());
     container.remove();

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { track } from "../utils/analytics.js";
 import { saveRunToHistory, saveStudioGameEvent } from "../storage.js";
 import { buildStudioGameEvent } from "../utils/runIntelligence.js";
-import { setMusicVibe, soundOperationObjective, soundOperationReinforcement, soundWaveClear } from "../sounds.js";
+import { setMusicVibe, soundOperationObjective, soundOperationReinforcement, soundWaveClear } from "../audio/soundFacade.js";
 import { readPreference } from "../utils/gamePreferences.js";
 import { addText } from "../systems/transientPresentation.js";
 import { getRunIntegrityReceipt, recordRunIntegrityFault } from "../systems/runIntegrity.js";

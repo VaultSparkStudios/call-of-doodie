@@ -99,6 +99,7 @@ export function buildSessionSubmission({
   eventDigest,
   commandTrace = null,
   ghostPath = "",
+  squadCode = "",
   feedbackDifficulty = null,
   totalShots = 0,
   totalHits = 0,
@@ -143,6 +144,7 @@ export function buildSessionSubmission({
   if (traceLength > 0) entry.traceLength = traceLength;
   if (traceBody) entry.traceBody = traceBody;
   if (typeof ghostPath === "string" && ghostPath && ghostPath.length <= 8192) entry.ghostPath = ghostPath;
+  if (typeof squadCode === "string" && /^[A-Z0-9]{4,12}$/.test(squadCode)) entry.squadCode = squadCode;
   if (traceAnalysis) {
     entry.traceEvidence = {
       level: traceAnalysis.evidenceLevel,

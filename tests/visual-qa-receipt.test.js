@@ -9,7 +9,7 @@ describe("visual QA receipt selection", () => {
       ["login", "sewer-night", 1440],
       ["auth-callback", "porcelain-day", 390],
       ["modes", "sewer-night", 1440],
-      ["leaderboard", "porcelain-day", 390],
+      ["board", "porcelain-day", 390],
     ];
     const captures = specs.map(([route, theme, width]) => ({
       route, theme, width, screenshot: `${route}--${theme}--${width}.png`, summary: { pass: true },

@@ -10,6 +10,7 @@ import {
   countIncompleteMissions,
 } from "../storage.js";
 import { clearHash, watchHash } from "../utils/hashRoute.js";
+import { duelHoursLeft, duelStatus, isDuelId, loadDuel } from "../utils/duels.js";
 import { FULL_MODE_CATALOG as MODE_CATALOG, resolveSelectedModeId } from "../config/modeCatalog.js";
 import { QUICK_RULES } from "../config/quickRules.js";
 import { isOpsDebug } from "../utils/debugFlags.js";
@@ -236,11 +237,21 @@ export default function HomeV2(props) {
         setCustomSeed(urlSeed);
         const urlDiff = params.get("diff");
         if (urlDiff && Object.keys(DIFFICULTIES).includes(urlDiff)) setDifficulty(urlDiff);
+        const duelParam = params.get("duel");
         setChallengeMode({
           seed: urlSeed, diff: urlDiff || null,
           vs: params.get("vs") ? parseInt(params.get("vs")) : null,
           vsName: params.get("vsName") || null,
+          duelId: isDuelId(duelParam) ? duelParam : null,
         });
+        // S163 seed duel: hydrate the card from the server row (24-hour window).
+        if (isDuelId(duelParam)) {
+          loadDuel(duelParam).then((duel) => {
+            if (!duel) return;
+            const status = duelStatus(duel);
+            setChallengeMode((current) => current ? { ...current, vs: duel.challenger_score, vsName: duel.challenger_name, duelStatus: status, duelHoursLeft: duelHoursLeft(duel), duelResponder: duel.responder_name || null, duelResponderScore: duel.responder_score ?? null } : current);
+          }).catch(() => {});
+        }
       }
     }
     requestStudioEventSync({ limit: 25 }).catch(() => {});
@@ -391,6 +402,7 @@ export default function HomeV2(props) {
     const seed = carriedDrill?.seed || (dailyChallengeMode ? todaySeedStr : (customSeed || undefined));
     const challenge = {
       ...(challengeMode?.vs ? { vs: challengeMode.vs, vsName: challengeMode.vsName } : {}),
+      ...(challengeMode?.duelId && challengeMode?.duelStatus === "open" ? { duelId: challengeMode.duelId } : {}),
       ...(carriedDrill ? { drill: carriedDrill } : {}),
     };
     const studioEvent = recordFrontDoorAction("deploy", { source: "deploy_button", seed: seed || null });
@@ -1027,7 +1039,7 @@ export default function HomeV2(props) {
             {[
               ["Progress", [["👤 YOUR RECORD", () => { recordFrontDoorAction("open_profile", { source: "command_center" }); setShowProfile(true); }, null], ["📊 CAREER STATS", CMD_ACTIONS[0], 0], ["📋 MISSIONS", CMD_ACTIONS[1], 1], ["🏅 ACHIEVEMENTS", () => setShowAchievements(true), null]]],
               ["Build", [["🎖️ UPGRADES", CMD_ACTIONS[2], 2], ["🌳 META TREE", CMD_ACTIONS[3], 3], ["⚙️ LOADOUTS", CMD_ACTIONS[5], 5]]],
-              ["History", [["📜 RUN HISTORY", CMD_ACTIONS[4], 4], ["⚔️ LEADERBOARD", () => { onRefreshLeaderboard(); setShowLeaderboard(true); }, null], ["📊 COMMUNITY STATS", () => { location.href = `${import.meta.env.BASE_URL}stats/`; }, null]]],
+              ["History", [["📜 RUN HISTORY", CMD_ACTIONS[4], 4], ["⚔️ LEADERBOARD", () => { onRefreshLeaderboard(); setShowLeaderboard(true); }, null], ["📊 COMMUNITY STATS", () => { location.href = `${import.meta.env.BASE_URL}board/`; }, null]]],
               ["Learn", [["📜 RULES", CMD_ACTIONS[6], 6], ["⌨ CONTROLS", CMD_ACTIONS[7], 7], ["👾 MOST WANTED", CMD_ACTIONS[8], 8], ["✦ WHAT'S NEW", CMD_ACTIONS[9], 9]]],
             ].map(([group, items]) => (
               <section key={group} className="home-tool-group">
@@ -1055,7 +1067,10 @@ export default function HomeV2(props) {
           <div style={{ ...tickerCard, marginTop: 8, background: "rgba(255,107,53,0.08)", borderColor: "rgba(255,107,53,0.45)", color: "#FFD7B8" }}>
             <span style={{ fontSize: 14 }}>⚔️</span>
             <span style={{ flex: 1 }}>
-              <strong style={{ color: "var(--cod-orange)" }}>CHALLENGE:</strong> Seed #{challengeMode.seed}
+              <strong style={{ color: "var(--cod-orange)" }}>{challengeMode.duelId ? "DUEL:" : "CHALLENGE:"}</strong> Seed #{challengeMode.seed}
+              {challengeMode.duelId && challengeMode.duelStatus === "open" && <> · <span style={{ color: "var(--cod-cyan)" }}>{challengeMode.duelHoursLeft}h left · friendly, unverified</span></>}
+              {challengeMode.duelId && challengeMode.duelStatus === "expired" && <> · <span style={{ color: "var(--cod-danger)" }}>duel expired · play it anyway</span></>}
+              {challengeMode.duelId && (challengeMode.duelStatus === "responder_won" || challengeMode.duelStatus === "challenger_won") && <> · <span style={{ color: "var(--cod-gold)" }}>answered by @{challengeMode.duelResponder} with {Number(challengeMode.duelResponderScore || 0).toLocaleString()}</span></>}
               {challengeMode.vs && (<> · Beat {challengeMode.vsName ? `@${challengeMode.vsName}` : "rival"}: <strong>{challengeMode.vs.toLocaleString()}</strong></>)}
             </span>
             <button onClick={() => { setCustomSeed(""); setChallengeMode(null); }} style={{ background: "none", border: "none", color: "#888", cursor: "pointer", fontSize: 14 }}>✕</button>

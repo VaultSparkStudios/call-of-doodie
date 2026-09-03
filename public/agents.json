@@ -28,11 +28,11 @@
     },
     {
       "rel": "guide",
-      "href": "https://callofdoodie.wtf/how-to-play/"
+      "href": "https://callofdoodie.wtf/field-manual/"
     },
     {
       "rel": "enemies",
-      "href": "https://callofdoodie.wtf/enemies/"
+      "href": "https://callofdoodie.wtf/bestiary/"
     },
     {
       "rel": "arsenal",
@@ -44,11 +44,7 @@
     },
     {
       "rel": "leaderboard",
-      "href": "https://callofdoodie.wtf/leaderboard/"
-    },
-    {
-      "rel": "stats",
-      "href": "https://callofdoodie.wtf/stats/"
+      "href": "https://callofdoodie.wtf/board/"
     },
     {
       "rel": "accessibility",
