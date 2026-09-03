@@ -2,6 +2,7 @@ import { StrictMode, useEffect, useRef } from "react";
 import { createRoot } from "react-dom/client";
 import OperationCompleteModal from "../src/components/OperationCompleteModal.jsx";
 import PerkModal from "../src/components/PerkModal.jsx";
+import DraftScreen from "../src/components/DraftScreen.jsx";
 import HUD from "../src/components/HUD.jsx";
 import { RunHistoryPanel } from "../src/components/MenuPanels.jsx";
 import { drawOffscreenThreatArrows, getOffscreenThreatArrows } from "../src/utils/offscreenIndicators.js";
@@ -135,8 +136,26 @@ function ThreatStage({ baseline = false }) {
   );
 }
 
+// Perks that belong to known archetypes — used for the draft-after surface
+const draftOptionsWithSeeds = Object.freeze([
+  { id: "eagle_eye", name: "Eagle Eye", emoji: "🎯", tier: "common", desc: "Raise critical-hit chance." },
+  { id: "iron_gut", name: "Iron Gut", emoji: "🛡️", tier: "uncommon", desc: "Gain a chunk of bonus max health." },
+  { id: "deep_pockets", name: "Deep Pockets", emoji: "💰", tier: "common", desc: "Carry more coins." },
+]);
+
+// Perks with no archetype membership — used for the draft-before surface to verify clean state
+const draftOptionsPlain = Object.freeze([
+  { id: "hollow_points", name: "Hollow Points", emoji: "🔸", tier: "common", desc: "Bullets deal more damage." },
+  { id: "fast_learner", name: "Fast Learner", emoji: "📚", tier: "common", desc: "Gain XP faster." },
+  { id: "deep_pockets", name: "Deep Pockets", emoji: "💰", tier: "common", desc: "Carry more coins." },
+]);
+
 const surface = new URLSearchParams(location.search).get("surface") || "operation";
-const visualSurface = surface === "perk-before"
+const visualSurface = surface === "draft-before"
+  ? <DraftScreen options={draftOptionsPlain} onSelect={() => {}} />
+  : surface === "draft-after"
+    ? <DraftScreen options={draftOptionsWithSeeds} onSelect={() => {}} />
+    : surface === "perk-before"
   ? <PerkModal options={perkOptions} level={7} activePerks={activePerks} previewDoctrineDeltas={false} onSelect={() => {}} />
   : surface === "perk-after"
     ? <PerkModal options={perkOptions} level={7} activePerks={activePerks} onSelect={() => {}} />

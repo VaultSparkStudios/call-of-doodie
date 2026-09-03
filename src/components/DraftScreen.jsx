@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import { useGamepadNav } from "../hooks/useGamepadNav.js";
+import { getPerkArchetypeMatches } from "../utils/buildArchetypes.js";
 
 const TIER_COLORS = { common: "#AAAAAA", uncommon: "#00CC88", rare: "#6688FF", legendary: "#FFD700", cursed: "#CC00FF" };
 
@@ -37,6 +38,7 @@ export default function DraftScreen({ options, onSelect }) {
           {options.map((perk, pIdx) => {
             const col = TIER_COLORS[perk.tier] || "#AAA";
             const isHov = hovered === perk.id || focusIdx === pIdx;
+            const archetypeSeeds = getPerkArchetypeMatches(perk);
             return (
               <button key={perk.id} onClick={() => onSelect(perk)}
                 onMouseEnter={() => setHovered(perk.id)} onMouseLeave={() => setHovered(null)}
@@ -57,6 +59,25 @@ export default function DraftScreen({ options, onSelect }) {
                 </div>
                 <div style={{ fontSize: 9, color: "#666", letterSpacing: 1, marginBottom: 10, textTransform: "uppercase" }}>{perk.tier}</div>
                 <div style={{ fontSize: 11, color: isHov ? "#DDD" : "#777", lineHeight: 1.5 }}>{perk.desc}</div>
+                {archetypeSeeds.length > 0 && (
+                  <div data-testid="draft-archetype-seeds" style={{ display: "flex", flexWrap: "wrap", gap: 4, marginTop: 10, justifyContent: "center" }}>
+                    {archetypeSeeds.map(arch => (
+                      <span
+                        key={arch.id}
+                        title={`Seeds the ${arch.name} doctrine`}
+                        style={{
+                          fontSize: 9, letterSpacing: 0.5,
+                          color: arch.color,
+                          background: `${arch.color}20`,
+                          border: `1px solid ${arch.color}55`,
+                          borderRadius: 4, padding: "2px 5px",
+                        }}
+                      >
+                        {arch.emoji} {arch.name.toUpperCase()}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </button>
             );
           })}
