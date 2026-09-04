@@ -37,7 +37,13 @@ if (!accessToken || !supabaseUrl) {
   process.exit(1);
 }
 
-const projectRef = new URL(supabaseUrl).hostname.split(".")[0];
+// S163: the gateway SUPABASE_URL is the studio project; the game's production
+// project is passed explicitly so a migration can never land on the wrong one.
+const refIndex = args.indexOf("--project-ref");
+const overrideRef = refIndex >= 0 ? String(args[refIndex + 1] || "") : "";
+if (overrideRef && !/^[a-z]{20}$/.test(overrideRef)) { console.error("--project-ref must be a 20-letter Supabase project ref."); process.exit(2); }
+const projectRef = overrideRef || new URL(supabaseUrl).hostname.split(".")[0];
+console.error(`Target project ref: ${projectRef}`);
 const response = await fetch(`https://api.supabase.com/v1/projects/${projectRef}/database/query`, {
   method: "POST",
   headers: { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json" },

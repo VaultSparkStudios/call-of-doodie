@@ -37,7 +37,7 @@ describe("/api/profile (S163 cloud backup)", () => {
       const put = await onRequest({ request: new Request("https://callofdoodie.wtf/api/profile", { method: "PUT", headers: { origin, "x-profile-key": key, "content-type": "application/json" }, body: JSON.stringify({ subject: "s1", backup: { schema: "cod-progress-backup-v1", entries: { "cod-career-v1": "{}" } } }) }), env });
       expect(put.status).toBe(200);
       expect(calls.every((c) => c.auth === "Bearer svc")).toBe(true);
-      expect(calls.some((c) => c.url.includes("profiles?on_conflict=subject"))).toBe(true);
+      expect(calls.some((c) => c.url.includes("cod_profiles?on_conflict=subject"))).toBe(true);
       // A key for another subject cannot touch this row.
       const other = await onRequest({ request: new Request("https://callofdoodie.wtf/api/profile?subject=s1", { headers: { origin, "x-profile-key": await keyFor("s2") } }), env });
       expect(other.status).toBe(401);

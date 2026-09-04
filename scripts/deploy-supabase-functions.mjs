@@ -5,7 +5,11 @@ import { spawnSync } from "./lib/safe-spawn.mjs";
 import { envForSpawn, getSecret, redact, resolveCapability } from "./lib/secrets.mjs";
 
 const allowed = new Set(["issue-run-token", "submit-score", "validate-replay", "kofi-webhook", "sync-studio-events", "sync-game-run"]);
-const requested = process.argv.slice(2).filter((arg) => !arg.startsWith("--"));
+const argv = process.argv.slice(2);
+const refIndex = argv.indexOf("--project-ref");
+const overrideRef = refIndex >= 0 ? String(argv[refIndex + 1] || "") : "";
+if (overrideRef && !/^[a-z]{20}$/.test(overrideRef)) { console.error("--project-ref must be a 20-letter Supabase project ref."); process.exit(2); }
+const requested = argv.filter((arg, i) => !arg.startsWith("--") && !(i > 0 && argv[i - 1] === "--project-ref"));
 const functions = requested.length ? requested : ["issue-run-token", "submit-score"];
 if (functions.some((name) => !allowed.has(name))) {
   console.error(`Allowed functions: ${[...allowed].join(", ")}`);
@@ -20,7 +24,9 @@ if (!management.ok || !admin.ok) {
 }
 
 const supabaseUrl = getSecret("SUPABASE_URL", "supabase.admin");
-const projectRef = new URL(supabaseUrl).hostname.split(".")[0];
+// S163: production is a different project than the gateway default; pass --project-ref.
+const projectRef = overrideRef || new URL(supabaseUrl).hostname.split(".")[0];
+console.log(`Target project ref: ${projectRef}`);
 const env = envForSpawn("supabase.management", ["SUPABASE_ACCESS_TOKEN"]);
 for (const functionName of functions) {
   const result = spawnSync("supabase", ["functions", "deploy", functionName, "--project-ref", projectRef, "--no-verify-jwt"], {

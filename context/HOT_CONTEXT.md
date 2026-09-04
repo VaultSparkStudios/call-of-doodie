@@ -4,14 +4,14 @@
 
 ## Current Session
 
-- Session 163 open-items pass (2026-09-03) — seed duels (server rows with a 24-hour window, one immutable response, result card on the debrief) and squad codes (validated on signed submissions; SQUAD tab on the board; managed on Your Record); site consolidated to /board/, /field-manual/, /bestiary/ with 301s, one field-manual content source, and regenerated nav/footer/manifests; bundle diet pass two moved sounds, the HUD, the weapon docks, and twenty loop-only systems into lazy chunks: App 551 KB → 460 KB. Migrations and the edge-function change are ready but not deployed. Validation: strict lint, build, runtime gate, public contract 28 files, full Vitest, serial Playwright, browser smoke (four modes, squad, Operation verb, profile), theme captures.
+- Session 163 deploy pass (2026-09-03) — the secrets gateway's Supabase project is "VaultSpark Studios-2" (ckwt…), not the game's production project "VaultSpark Studios" (fjnp…); both deploy scripts now take `--project-ref`. Migrations for ghost paths, duels/squads, and cod_profiles are applied on production; submit-score is deployed there (a copy mistakenly sent to Studios-2 was deleted). The first draft named the backup table `profiles`, which already exists on the shared project for another product; the backup table is `cod_profiles` and the shared table was left as it was (RLS and policies already present). SUPABASE_SERVICE_ROLE_KEY is set on Pages. OBELISK_VERIFY_URL/SECRET exist nowhere in the gateway or on Pages, so Passport verification and cloud backup stay 503 until the founder sets them.
 
 ## Open Work
 
 # Task Board
 ## Session 163 - Real modes, CPU squad, fixed timestep, single brand
 - [ ] [SIL:2] Deploy the S163 migration and edge-function change (profiles table, ghost_path column, submit-score ghostPath) and set OBELISK_VERIFY_SECRET / SUPABASE_SERVICE_ROLE_KEY on Pages so cloud backup and the remote ghost race light up.
-- [ ] [SIL:2] Deploy migrations 2026-09-03_profiles_and_ghost_paths and 2026-09-03_duels_and_squads plus the submit-score edge function; set Pages secrets so cloud backup, ghost race, duels, and squads light up.
+- [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET on the Pages project: neither is in the secrets gateway, so Porcelain Passport verification (and therefore cloud backup) answers 503 in production until they exist.
 - [ ] [SIL:1] Scrolling camera for a sixteen-bot royale; DeathScreen diet.
 ## Session 162 - Corrective-order evidence across runs
 ## Session 161 - Readable threat compass and prospective doctrine choice
@@ -93,7 +93,7 @@
 
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 212,141 bytes · SHA-256 `31d6e46e35f5…`
-- `context/TASK_BOARD.md` · 135,042 bytes · SHA-256 `84ea72966793…`
+- `context/CURRENT_STATE.md` · 212,957 bytes · SHA-256 `1a96dba7083f…`
+- `context/TASK_BOARD.md` · 135,415 bytes · SHA-256 `01734960859f…`
 - `context/DECISIONS.md` · 135,357 bytes · SHA-256 `dbdd6f389b08…`
 - `docs/AUDIT_2026-09-03.json` · 4,225 bytes · SHA-256 `84f8db978e98…`

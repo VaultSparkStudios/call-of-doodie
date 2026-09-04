@@ -6,7 +6,7 @@
 // Trust model: /api/obelisk-verify mints a project-scoped profile key after a
 // successful upstream verification (sha256 of the deployment secret and the
 // subject). Presenting that key unlocks only that subject's blob. Storage is
-// one row per subject in the Supabase `profiles` table through the service-role
+// one row per subject in the Supabase `cod_profiles` table through the service-role
 // key. When any secret is missing the endpoint answers 503 and the client
 // stays guest-safe.
 
@@ -90,7 +90,7 @@ export async function onRequest({ request, env }) {
     const subject = new URL(request.url).searchParams.get("subject") || "";
     if (!subject || subject.length > 200) return json({ error: "bad_subject" }, 400);
     if (!(await verifySubject(env, request, subject))) return json({ error: "unverified" }, 401);
-    const res = await supabaseRest(env, `profiles?subject=eq.${encodeURIComponent(subject)}&select=backup,updated_at&limit=1`);
+    const res = await supabaseRest(env, `cod_profiles?subject=eq.${encodeURIComponent(subject)}&select=backup,updated_at&limit=1`);
     if (!res.ok) return json({ error: "storage_unavailable" }, 502);
     const rows = await res.json();
     if (!rows.length) return json({ error: "not_found" }, 404);
@@ -106,7 +106,7 @@ export async function onRequest({ request, env }) {
     if (JSON.stringify(body.backup).length > MAX_BLOB_BYTES) return json({ error: "too_large" }, 413);
     if (!(await verifySubject(env, request, subject))) return json({ error: "unverified" }, 401);
     const updatedAt = new Date().toISOString();
-    const res = await supabaseRest(env, "profiles?on_conflict=subject", {
+    const res = await supabaseRest(env, "cod_profiles?on_conflict=subject", {
       method: "POST",
       headers: { prefer: "resolution=merge-duplicates,return=minimal" },
       body: JSON.stringify([{ subject, backup: body.backup, updated_at: updatedAt }]),

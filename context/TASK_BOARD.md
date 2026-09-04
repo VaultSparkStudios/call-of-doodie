@@ -18,7 +18,8 @@ Public-safe launch roadmap summary.
 - [ ] [SIL:2] Deploy the S163 migration and edge-function change (profiles table, ghost_path column, submit-score ghostPath) and set OBELISK_VERIFY_SECRET / SUPABASE_SERVICE_ROLE_KEY on Pages so cloud backup and the remote ghost race light up.
 - [x] [SIL:2] **DONE S163 (open-items pass)** Seed duels (24-hour rows, RLS, immutable challenger, one response) with a debrief result card; squad codes on signed submissions with a SQUAD board tab; /board/, /field-manual/, /bestiary/ consolidation with 301s and one field-manual content source.
 - [x] [SIL:2] **DONE S163 (open-items pass)** Bundle diet pass 2: lazy sound facade, lazy HUD and weapon docks, twenty loop-only systems moved into the combat chunk; App 551 KB → 460 KB (target was 493).
-- [ ] [SIL:2] Deploy migrations 2026-09-03_profiles_and_ghost_paths and 2026-09-03_duels_and_squads plus the submit-score edge function; set Pages secrets so cloud backup, ghost race, duels, and squads light up.
+- [x] [SIL:2] **DONE S163 (deploy pass)** Migrations 2026-09-03_profiles_and_ghost_paths, _duels_and_squads, and _cod_profiles applied to the production project (fjnp…); submit-score deployed there; SUPABASE_SERVICE_ROLE_KEY set on the Pages project (production + preview). Duels, squads, and the Daily ghost race are live on the next deploy.
+- [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET on the Pages project: neither is in the secrets gateway, so Porcelain Passport verification (and therefore cloud backup) answers 503 in production until they exist.
 - [ ] [SIL:1] Scrolling camera for a sixteen-bot royale; DeathScreen diet.
 
 **Runway exception:** participant fun/balance outcomes, physical-device proof, provider/mail/identity evidence, publication, real-time co-op, and SPARKED promotion remain independently gated. New modes score locally until the leaderboard mode enum accepts them.

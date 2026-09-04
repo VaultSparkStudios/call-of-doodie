@@ -1,6 +1,7 @@
+SET search_path TO public;
 -- S163: friendly seed duels (unverified, 24h) and squad codes on the leaderboard.
 
-CREATE TABLE IF NOT EXISTS duels (
+CREATE TABLE IF NOT EXISTS public.duels (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   seed integer NOT NULL CHECK (seed >= 0 AND seed <= 999999999),
   mode text NOT NULL DEFAULT 'standard',
@@ -15,21 +16,21 @@ CREATE TABLE IF NOT EXISTS duels (
   expires_at timestamptz NOT NULL DEFAULT (now() + interval '24 hours'),
   responded_at timestamptz
 );
-CREATE INDEX IF NOT EXISTS duels_expires_idx ON duels (expires_at);
-ALTER TABLE duels ENABLE ROW LEVEL SECURITY;
+CREATE INDEX IF NOT EXISTS duels_expires_idx ON public.duels (expires_at);
+ALTER TABLE public.duels ENABLE ROW LEVEL SECURITY;
 
-DROP POLICY IF EXISTS "duels_public_read" ON duels;
-CREATE POLICY "duels_public_read" ON duels FOR SELECT USING (true);
+DROP POLICY IF EXISTS "duels_public_read" ON public.duels;
+CREATE POLICY "duels_public_read" ON public.duels FOR SELECT USING (true);
 
 -- Anyone may open a duel; scores are self-reported and labelled friendly/unverified in the client.
-DROP POLICY IF EXISTS "duels_anon_create" ON duels;
-CREATE POLICY "duels_anon_create" ON duels FOR INSERT WITH CHECK (
+DROP POLICY IF EXISTS "duels_anon_create" ON public.duels;
+CREATE POLICY "duels_anon_create" ON public.duels FOR INSERT WITH CHECK (
   responder_name IS NULL AND responder_score IS NULL AND responder_wave IS NULL AND responded_at IS NULL
 );
 
 -- One response per duel, only while unanswered and unexpired; challenger fields are immutable.
-DROP POLICY IF EXISTS "duels_anon_respond" ON duels;
-CREATE POLICY "duels_anon_respond" ON duels FOR UPDATE
+DROP POLICY IF EXISTS "duels_anon_respond" ON public.duels;
+CREATE POLICY "duels_anon_respond" ON public.duels FOR UPDATE
   USING (responder_score IS NULL AND expires_at > now())
   WITH CHECK (responder_score IS NOT NULL AND responder_name IS NOT NULL AND responder_wave IS NOT NULL);
 
@@ -41,13 +42,13 @@ BEGIN
   NEW.responded_at := now();
   RETURN NEW;
 END; $$ LANGUAGE plpgsql;
-DROP TRIGGER IF EXISTS duels_protect_challenger_trg ON duels;
-CREATE TRIGGER duels_protect_challenger_trg BEFORE UPDATE ON duels FOR EACH ROW EXECUTE FUNCTION duels_protect_challenger();
+DROP TRIGGER IF EXISTS duels_protect_challenger_trg ON public.duels;
+CREATE TRIGGER duels_protect_challenger_trg BEFORE UPDATE ON public.duels FOR EACH ROW EXECUTE FUNCTION duels_protect_challenger();
 
 -- Squad boards: a short shared code groups friends on the public board.
-ALTER TABLE leaderboard ADD COLUMN IF NOT EXISTS squad_code text;
+ALTER TABLE public.leaderboard ADD COLUMN IF NOT EXISTS squad_code text;
 DO $$ BEGIN
-  ALTER TABLE leaderboard ADD CONSTRAINT leaderboard_squad_code_check CHECK (squad_code IS NULL OR squad_code ~ '^[A-Z0-9]{4,12}$');
+  ALTER TABLE public.leaderboard ADD CONSTRAINT leaderboard_squad_code_check CHECK (squad_code IS NULL OR squad_code ~ '^[A-Z0-9]{4,12}$');
 EXCEPTION WHEN duplicate_object THEN NULL;
 END $$;
-CREATE INDEX IF NOT EXISTS leaderboard_squad_code_idx ON leaderboard (squad_code, score DESC) WHERE squad_code IS NOT NULL;
+CREATE INDEX IF NOT EXISTS leaderboard_squad_code_idx ON public.leaderboard (squad_code, score DESC) WHERE squad_code IS NOT NULL;
