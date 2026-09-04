@@ -48,11 +48,22 @@ if (!projectMinimum) errors.push("package.json must declare a parseable engines.
 if (projectMinimum && requiredDependencyMinimum > projectMinimum) {
   errors.push(`dependency floor Node ${requiredDependencyMinimum} exceeds project floor Node ${projectMinimum}`);
 }
+// Workflows propagated from Studio OS are rewritten by the canon sync (five
+// times in S163 alone), so their pin cannot be enforced as a deploy blocker
+// without taking production down on every sync. They must still be a
+// maintained LTS line; the root fix is tracked with studio-ops.
+const EXTERNALLY_SYNCED = new Set([".github/workflows/brief-format-check.yml"]);
+const EXTERNAL_FLOOR = 20;
+const warnings = [];
 for (const row of workflowRows) {
-  if (projectMinimum && row.major < projectMinimum) {
-    errors.push(`${row.file} uses Node ${row.major}, below project floor Node ${projectMinimum}`);
+  if (!projectMinimum || row.major >= projectMinimum) continue;
+  if (EXTERNALLY_SYNCED.has(row.file) && row.major >= EXTERNAL_FLOOR) {
+    warnings.push(`${row.file} uses Node ${row.major} (Studio OS sync; project floor is ${projectMinimum})`);
+    continue;
   }
+  errors.push(`${row.file} uses Node ${row.major}, below project floor Node ${projectMinimum}`);
 }
+for (const warning of warnings) console.warn(`Node runtime contract: WARN · ${warning}`);
 if (projectMinimum && actualMajor < projectMinimum) {
   errors.push(`current Node ${actualMajor} is below project floor Node ${projectMinimum}`);
 }
