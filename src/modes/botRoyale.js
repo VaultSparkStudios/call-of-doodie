@@ -1,6 +1,6 @@
-// BOT ROYALE — offline battle royale (S163 tranche 3).
+// BOT ROYALE — offline battle royale (S163 tranche 3; expanded to 16 bots S164).
 //
-// Twelve bots with internet-archetype sprites fight you and each other while
+// Sixteen bots with internet-archetype sprites fight you and each other while
 // the sewer floods inward. Bots are enemies (so the existing AI, projectile,
 // and defeat paths apply) with a bot id; bot-versus-bot hits are resolved
 // here from the enemy bullet stream. Outside the flood ring everyone takes
@@ -10,9 +10,9 @@ import { ENEMY_TYPES } from "../constants.js";
 import { getRunRng } from "../systems/runRng.js";
 import { retireEnemyWithoutDefeat } from "../systems/enemyDefeatLifecycle.js";
 
-const BOT_COUNT = 12;
+const BOT_COUNT = 16;
 const BOT_TYPES = [0, 1, 2, 3, 5, 6, 7, 8]; // non-boss archetypes with sprites
-const HANDLES = ["xX_PlungerLord_Xx", "KarenSlayer99", "rentfree", "definitely_not_a_bot", "sewer_sommelier", "mom_said_no", "ratioed", "flushgod", "porcelain_prince", "wifi_password", "LowBatteryLarry", "clogmaster"];
+const HANDLES = ["xX_PlungerLord_Xx", "KarenSlayer99", "rentfree", "definitely_not_a_bot", "sewer_sommelier", "mom_said_no", "ratioed", "flushgod", "porcelain_prince", "wifi_password", "LowBatteryLarry", "clogmaster", "no_ragrets", "TacticalPlunger", "GrumpyClogger", "sewer_cryptid"];
 const FLOOD_PHASE_FRAMES = 20 * 60;
 const FLOOD_MIN_R = 120;
 const FLOOD_DOT = 0.35;
