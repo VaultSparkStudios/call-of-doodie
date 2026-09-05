@@ -209,13 +209,31 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ctx.translate(-p.x, -p.y);
   }
 
+  // Scrolling camera for Bot Royale: gs._royaleWorld carries the world size and
+  // gs._camX / gs._camY track the camera offset (world-top-left shown at screen 0,0).
+  // All values default to 0 for non-royale modes so zero-cost for every other mode.
+  const _rwld = gs._royaleWorld;
+  const _camX = _rwld ? Math.round(gs._camX || 0) : 0;
+  const _camY = _rwld ? Math.round(gs._camY || 0) : 0;
+
   // Background — prerendered static arena layers (S155). Gradient, floor
   // zones, terrain, props, grid, and vignette are painted once per run into an
   // offscreen canvas (systems/backgroundLayer.js) and blitted here; combat
   // decals persist by stamping straight into that canvas.
   const _theme = ARENA_THEMES[gs.mapTheme] || ARENA_THEMES[0];
   const _arenaLayers = getArenaLayers(gs, W, H, _dpr, { theme: _theme, perfStep: _perfStep, retroCharacters });
-  ctx.drawImage(_arenaLayers.underlay.canvas, 0, 0, W, H);
+  if (_rwld && (_camX > 0 || _camY > 0)) {
+    // Tile the W×H background canvas to fill the scrolling viewport.
+    // Two tiles in each axis cover any partial-scroll offset within a 1.8× world.
+    const _bgX = -(_camX % W), _bgY = -(_camY % H);
+    for (let _ty = 0; _ty <= 1; _ty++) {
+      for (let _tx = 0; _tx <= 1; _tx++) {
+        ctx.drawImage(_arenaLayers.underlay.canvas, Math.round(_bgX + _tx * W), Math.round(_bgY + _ty * H), W, H);
+      }
+    }
+  } else {
+    ctx.drawImage(_arenaLayers.underlay.canvas, 0, 0, W, H);
+  }
 
   // ── Active dynamic objective (Hot Zone / Lockdown / Escort / Sniper / Bounty) ──
   const _obj = gs.activeObjective;
@@ -418,7 +436,16 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   });
 
   // Obstacles — prerendered layer (systems/backgroundLayer.js), single blit
-  ctx.drawImage(_arenaLayers.obstacles.canvas, 0, 0, W, H);
+  if (_rwld && (_camX > 0 || _camY > 0)) {
+    const _obX = -(_camX % W), _obY = -(_camY % H);
+    for (let _ty = 0; _ty <= 1; _ty++) {
+      for (let _tx = 0; _tx <= 1; _tx++) {
+        ctx.drawImage(_arenaLayers.obstacles.canvas, Math.round(_obX + _tx * W), Math.round(_obY + _ty * H), W, H);
+      }
+    }
+  } else {
+    ctx.drawImage(_arenaLayers.obstacles.canvas, 0, 0, W, H);
+  }
 
   // Fog of War overlay (wave event): draw dark fog, punch holes around player and near enemies
   if (gs.fogOfWar) {
@@ -427,6 +454,13 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     _fog.addColorStop(1, "rgba(0,0,12,0.88)");
     ctx.fillStyle = _fog; ctx.fillRect(0, 0, W, H);
   }
+
+  // Camera translate: applied after the prerendered background layers (which are
+  // tiled in screen space above) so all world-space entities render at the correct
+  // viewport position. Restored after floating texts; screen-space overlays
+  // (radar, flash, vignette) follow that restore and are unaffected.
+  const _hasCam = _camX !== 0 || _camY !== 0;
+  if (_hasCam) { ctx.save(); ctx.translate(-_camX, -_camY); }
 
   // Beat-precision vulnerability: compute once per frame for the enemy loop
   // Window widens with precision streak: base 8 frames + 1 per 5 streak (max +4 at ≥20)
@@ -1350,8 +1384,13 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   });
   ctx.globalAlpha = 1;
 
-  // Mini-radar
+  // Restore camera translate before screen-space overlays (radar, flash, vignette).
+  if (_hasCam) ctx.restore();
+
+  // Mini-radar — always screen-space; enemy positions are relative to player.
+  // Scale the radar to show the full royale world (bots can be >W*0.6 away).
   const rs = 45, rx = W - rs - 8, ry = isMobile ? 52 : 48;
+  const _radarScale = _rwld ? Math.max(W * 0.6, _rwld.W * 0.65) : W * 0.6;
   ctx.globalAlpha = 0.35; ctx.fillStyle = "#000"; ctx.beginPath(); ctx.arc(rx, ry, rs, 0, Math.PI * 2); ctx.fill();
   ctx.strokeStyle = gs.bossWave ? "#F00" : "#0F0"; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(rx, ry, rs, 0, Math.PI * 2); ctx.stroke();
   ctx.globalAlpha = 0.7;
@@ -1359,7 +1398,7 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   for (let _ri = 0; _ri < (gs.enemies || []).length; _ri++) {
     const e = gs.enemies[_ri];
     if (!e) continue;
-    const edx = (e.x - p.x) / (W * 0.6) * rs, edy = (e.y - p.y) / (H * 0.6) * rs;
+    const edx = (e.x - p.x) / _radarScale * rs, edy = (e.y - p.y) / _radarScale * rs;
     if (Math.hypot(edx, edy) < rs - 2) {
       ctx.fillStyle = e.isBossEnemy ? "#FF00FF" : e.typeIndex >= 4 ? "#F00" : e.ranged ? "#F80" : "#FF0";
       ctx.beginPath(); ctx.arc(rx + edx, ry + edy, e.isBossEnemy ? 4 : 2, 0, Math.PI * 2); ctx.fill();
