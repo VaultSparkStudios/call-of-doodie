@@ -3256,7 +3256,7 @@ export default function CallOfDoodie() {
     combat.stepEnemyFrame({
       gs,
       player: p,
-      world: { W, H },
+      world: { W: gs.royaleMap?.W || W, H: gs.royaleMap?.H || H },
       frame: frameCountRef.current,
       dashActiveFrames: dashRef.current.active,
       spawnEnemy,
