@@ -190,6 +190,9 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     delete ctx.shadowBlur;
     ctx.__codShadowKill = false;
   }
+  // Scrolling camera for map-larger-than-canvas modes (e.g. Bot Royale).
+  const _hasCam = !!(gs.royaleMap && gs.camera);
+  if (_hasCam) { ctx.save(); ctx.translate(-(gs.camera.x || 0), -(gs.camera.y || 0)); }
   ctx.save();
   if (!_rm && gs.screenShake > 0.5) {
     // Trauma-style shake: a directional bias (recoil kick / impact push)
@@ -215,7 +218,14 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   // decals persist by stamping straight into that canvas.
   const _theme = ARENA_THEMES[gs.mapTheme] || ARENA_THEMES[0];
   const _arenaLayers = getArenaLayers(gs, W, H, _dpr, { theme: _theme, perfStep: _perfStep, retroCharacters });
-  ctx.drawImage(_arenaLayers.underlay.canvas, 0, 0, W, H);
+  if (gs.royaleMap) {
+    const _mW = gs.royaleMap.W, _mH = gs.royaleMap.H;
+    for (let _tx = 0; _tx < _mW; _tx += W)
+      for (let _ty = 0; _ty < _mH; _ty += H)
+        ctx.drawImage(_arenaLayers.underlay.canvas, _tx, _ty, Math.min(W, _mW - _tx), Math.min(H, _mH - _ty));
+  } else {
+    ctx.drawImage(_arenaLayers.underlay.canvas, 0, 0, W, H);
+  }
 
   // ── Active dynamic objective (Hot Zone / Lockdown / Escort / Sniper / Bounty) ──
   const _obj = gs.activeObjective;
@@ -1349,6 +1359,8 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ctx.strokeText(ft.text, ft.x, ft.y); ctx.fillText(ft.text, ft.x, ft.y);
   });
   ctx.globalAlpha = 1;
+  // Pop camera transform — HUD draws in screen (DPR) space from here.
+  if (_hasCam) ctx.restore();
 
   // Mini-radar
   const rs = 45, rx = W - rs - 8, ry = isMobile ? 52 : 48;

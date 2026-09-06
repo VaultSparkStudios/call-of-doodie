@@ -10,9 +10,10 @@ import { ENEMY_TYPES } from "../constants.js";
 import { getRunRng } from "../systems/runRng.js";
 import { retireEnemyWithoutDefeat } from "../systems/enemyDefeatLifecycle.js";
 
-const BOT_COUNT = 12;
+const BOT_COUNT = 16;
+const MAP_SCALE = 1.8; // world is 1.8× the canvas — ~2304×1296 on a 1280×720 viewport
 const BOT_TYPES = [0, 1, 2, 3, 5, 6, 7, 8]; // non-boss archetypes with sprites
-const HANDLES = ["xX_PlungerLord_Xx", "KarenSlayer99", "rentfree", "definitely_not_a_bot", "sewer_sommelier", "mom_said_no", "ratioed", "flushgod", "porcelain_prince", "wifi_password", "LowBatteryLarry", "clogmaster"];
+const HANDLES = ["xX_PlungerLord_Xx", "KarenSlayer99", "rentfree", "definitely_not_a_bot", "sewer_sommelier", "mom_said_no", "ratioed", "flushgod", "porcelain_prince", "wifi_password", "LowBatteryLarry", "clogmaster", "buffering_irl", "404_found", "delete_system32", "touch_grass_never"];
 const FLOOD_PHASE_FRAMES = 20 * 60;
 const FLOOD_MIN_R = 120;
 const FLOOD_DOT = 0.35;
@@ -21,14 +22,15 @@ const DROP_FRAMES = 4 * 60; // everyone holds position while the sewer floods in
 function spawnBot(gs, index, ctx) {
   const rng = getRunRng(gs, "royale");
   const W = ctx.W || gs._W || 1280, H = ctx.H || gs._H || 720;
+  const mapW = gs.royaleMap?.W || W, mapH = gs.royaleMap?.H || H;
   const typeIndex = BOT_TYPES[Math.floor(rng() * BOT_TYPES.length)];
   const type = ENEMY_TYPES[typeIndex];
   const angle = (index / BOT_COUNT) * Math.PI * 2 + rng() * 0.3;
-  const radius = Math.min(W, H) * 0.42;
+  const radius = Math.min(mapW, mapH) * 0.42;
   const bot = {
     id: `bot-${index}`,
     isBot: true,
-    x: W / 2 + Math.cos(angle) * radius, y: H / 2 + Math.sin(angle) * radius,
+    x: mapW / 2 + Math.cos(angle) * radius, y: mapH / 2 + Math.sin(angle) * radius,
     health: 140, maxHealth: 140,
     speed: 1.9 + rng() * 0.6, size: 36, color: type.color, name: HANDLES[index % HANDLES.length], points: 250,
     deathQuotes: ["gg ez", "lag", "my controller died", "reported", "this is rigged", "brb mom"],
@@ -61,8 +63,11 @@ export const BOT_ROYALE = Object.freeze({
 
   init(gs, ctx) {
     const W = ctx.W || gs._W || 1280, H = ctx.H || gs._H || 720;
+    const mapW = Math.round(W * MAP_SCALE), mapH = Math.round(H * MAP_SCALE);
+    gs.royaleMap = { W: mapW, H: mapH };
+    gs.camera = { x: 0, y: 0 };
     for (let i = 0; i < BOT_COUNT; i += 1) spawnBot(gs, i, ctx);
-    gs.flood = { cx: W / 2, cy: H / 2, r: Math.hypot(W, H) / 2, targetR: Math.hypot(W, H) / 2, phase: 0, nextShrinkFrame: FLOOD_PHASE_FRAMES };
+    gs.flood = { cx: mapW / 2, cy: mapH / 2, r: Math.hypot(mapW, mapH) / 2, targetR: Math.hypot(mapW, mapH) / 2, phase: 0, nextShrinkFrame: FLOOD_PHASE_FRAMES };
     gs._royaleAlive = BOT_COUNT;
     gs._royaleKills = 0;
     gs._royalePlacement = null;
@@ -70,8 +75,10 @@ export const BOT_ROYALE = Object.freeze({
     gs.enemiesThisWave = 0;
     // The flood is the only hazard; static acid pools at spawn made the drop unfair.
     gs.hazards = [];
-    gs.player.invincible = DROP_FRAMES + 30;
-    ctx.addText?.(gs, W / 2, H / 2 - 120, "🌊 DROP IN · 4s", "#33E6FF", true);
+    const p = gs.player;
+    p.x = mapW / 2; p.y = mapH / 2;
+    p.invincible = DROP_FRAMES + 30;
+    ctx.addText?.(gs, p.x, p.y - 120, "🌊 DROP IN · 4s", "#33E6FF", true);
   },
 
   isBossWave() { return false; },
@@ -80,13 +87,19 @@ export const BOT_ROYALE = Object.freeze({
   step(gs, ctx) {
     const p = gs.player;
     const W = ctx.W || gs._W || 1280, H = ctx.H || gs._H || 720;
+    const mapW = gs.royaleMap?.W || W, mapH = gs.royaleMap?.H || H;
+    // Camera: clamp so the viewport never shows beyond the map edges.
+    gs.camera = {
+      x: Math.max(0, Math.min(mapW - W, p.x - W / 2)),
+      y: Math.max(0, Math.min(mapH - H, p.y - H / 2)),
+    };
     const frame = gs.frame || 0;
     const bots = aliveBots(gs);
     gs._royaleAlive = bots.length;
     // Drop phase: bots hold their landing spots; nobody fires yet.
     if (frame < DROP_FRAMES) {
       for (const b of bots) { b.x = b._spawnX; b.y = b._spawnY; }
-      if (frame % 60 === 0 && frame > 0) ctx.addText?.(gs, W / 2, H / 2 - 120, `🌊 DROP IN · ${Math.ceil((DROP_FRAMES - frame) / 60)}s`, "#33E6FF", true);
+      if (frame % 60 === 0 && frame > 0) ctx.addText?.(gs, p.x, p.y - 120, `🌊 DROP IN · ${Math.ceil((DROP_FRAMES - frame) / 60)}s`, "#33E6FF", true);
     }
 
     // Free-for-all: every bot sees every other bot as a target candidate.
@@ -121,9 +134,9 @@ export const BOT_ROYALE = Object.freeze({
         flood.targetR = Math.max(FLOOD_MIN_R, flood.targetR * 0.62);
         flood.nextShrinkFrame = frame + FLOOD_PHASE_FRAMES;
         const rng = getRunRng(gs, "royale");
-        flood.cx = Math.max(flood.targetR, Math.min(W - flood.targetR, flood.cx + (rng() - 0.5) * 220));
-        flood.cy = Math.max(flood.targetR, Math.min(H - flood.targetR, flood.cy + (rng() - 0.5) * 140));
-        ctx.addText?.(gs, W / 2, H / 2 - 120, `🌊 THE SEWER FLOODS · PHASE ${flood.phase}`, "#33E6FF", true);
+        flood.cx = Math.max(flood.targetR, Math.min(mapW - flood.targetR, flood.cx + (rng() - 0.5) * 220));
+        flood.cy = Math.max(flood.targetR, Math.min(mapH - flood.targetR, flood.cy + (rng() - 0.5) * 140));
+        ctx.addText?.(gs, p.x, p.y - 120, `🌊 THE SEWER FLOODS · PHASE ${flood.phase}`, "#33E6FF", true);
       }
       if (flood.r > flood.targetR) flood.r = Math.max(flood.targetR, flood.r - 1.2);
       // Damage outside the ring.
@@ -168,6 +181,6 @@ export const BOT_ROYALE = Object.freeze({
   progress(gs) {
     const f = gs.flood;
     const untilShrink = f ? Math.max(0, f.nextShrinkFrame - (gs.frame || 0)) / 60 : 0;
-    return { label: "FLOOD", value: untilShrink, pct: f ? 1 - untilShrink / (FLOOD_PHASE_FRAMES / 60) : 0, unit: "s", pressure: f ? Math.max(0, 1 - f.r / 400) : 0 };
+    return { label: "FLOOD", value: untilShrink, pct: f ? 1 - untilShrink / (FLOOD_PHASE_FRAMES / 60) : 0, unit: "s", pressure: f ? Math.max(0, 1 - f.r / 720) : 0 };
   },
 });
