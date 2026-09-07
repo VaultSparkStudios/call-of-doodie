@@ -124,12 +124,12 @@ describe("SEWER EXTRACTION and BOT ROYALE (S163 tranche 3)", () => {
     expect(gs.structures.find((s) => s.id === "evac-toilet")).toBeUndefined();
   });
 
-  it("royale: twelve bots spawn, bot bullets hurt other bots, flood shrinks, last one wins", () => {
+  it("royale: sixteen bots spawn, bot bullets hurt other bots, flood shrinks, last one wins", () => {
     const def = getModeDefinition("bot_royale");
     const gs = createSimState({ seed: 3 });
     createModeState(def, gs, noText);
     const bots = gs.enemies.filter((e) => e.isBot);
-    expect(bots.length).toBe(12);
+    expect(bots.length).toBe(16);
     expect(getModeWaveEnemyCount(def, gs, 40)).toBe(0);
     // A bullet from bot-0 hits bot-1.
     const target = bots[1];
