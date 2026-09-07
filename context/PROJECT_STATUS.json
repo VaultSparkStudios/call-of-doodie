@@ -24,6 +24,18 @@
       "status": "flaky",
       "type": "browser-parallel",
       "command": "Playwright with default workers produced 6 cold-start timeouts on home-shell locators; re-run serially at 19 pass / 1 skip. Classified as worker contention on this machine, not a regression — the project's own recorded baseline is a serial run."
+    },
+    {
+      "session": 165,
+      "status": "green",
+      "type": "production-verification",
+      "command": "Staging 7ec01b37 shell 7/7 + launch surfaces before main; Cloudflare run 34148240262 green for source 0e66c18; production deployment 26c98eb2 immutable shell 7/7, callofdoodie.wtf 7/7, post-cutover 5/5, launch surfaces, replay trust 3/3, shared-leaderboard isolation; production smoke:modes five scenarios with BOT ROYALE reading '16 BOTS LEFT'"
+    },
+    {
+      "session": 165,
+      "status": "resolved",
+      "type": "ci-incident",
+      "command": "Cloudflare run 34147838525 failed on route-contract/sitemap drift. Root cause: PUBLIC_CONTENT_VERSION_DATE derives from the newest commit touching scripts/lib, which this session edited, so the generated public artifacts are only regenerable after that commit lands. Fixed in 0e66c18; diff is the date alone; the two failing test files pass 30/30."
     }
   ],
   "blockers": [
@@ -82,7 +94,7 @@
   "freeTierCostStatus": "cost-neutral",
   "runtimeUrl": "https://callofdoodie.wtf/",
   "stagingType": "cloudflare-pages",
-  "stagingUrl": "https://session-162-staging.call-of-doodie.pages.dev/",
+  "stagingUrl": "https://session-165-staging.call-of-doodie.pages.dev/",
   "testsLastRun": "2026-09-07",
   "sanitizationLastCleared": "2026-08-23",
   "sessionShellHygiene": {
@@ -90,8 +102,8 @@
     "started": 8,
     "closed": 8,
     "running": 0,
-    "enumeratedAt": "2026-09-07T17:04:11.294Z",
-    "scope": "Five harness background shells (baseline gate, camera gate, remaining gates, isolated vite preview on port 4183, Playwright runs) plus three foreground gate batches. The isolated preview was started on 4183 because port 4173 was held by a foreign node process from outside this repo and was never assumed to serve this build; it was stopped at closeout. Non-yielded foreground commands are not counted as background shells."
+    "enumeratedAt": "2026-09-07T17:40:51.242Z",
+    "scope": "Five harness background shells (baseline gate, camera gate, remaining gates, final seal gate, isolated vite preview on 4183) plus three foreground gate batches. The preview ran on 4183 because port 4173 is held by a node process from outside this repo, which was never assumed to serve this build; it was stopped at closeout and 4183 and 53173 were re-checked with zero listeners. Non-yielded foreground commands are not counted as background shells."
   },
   "doctorScore": {
     "date": "2026-08-23",

@@ -18,6 +18,17 @@
 
 Intent outcome: achieved — recovery, audit, full implementation, closeout, direct-main publication, and production deployment completed in one arc. SPARKED remains explicitly unpromoted.
 
+### Production follow-through
+
+- Staging first: isolated preview `session-165-staging` at immutable `https://7ec01b37.call-of-doodie.pages.dev` passed live shell 7/7 and launch surfaces before anything reached `main`.
+- Closeout commit `d9cfb3e` pushed directly to `main`; the Cloudflare workflow `34147838525` **failed** on `route-contract.json fingerprint drifted from source` and `sitemap.xml drifted from the public route graph`.
+- Root-caused rather than refreshed. `scripts/lib/build-date.mjs` derives `PUBLIC_CONTENT_VERSION_DATE` from the newest git commit touching content paths, and `scripts/lib` is one of them. This session edited `scripts/lib/app-architecture.mjs` and `scripts/lib/build-date.mjs`, so the content date could only roll from 2026-09-03 to 2026-09-07 **after** those edits were committed — which means the generated public artifacts are regenerable only after the commit that changes `scripts/lib`, never before it. Every local gate was green pre-commit for exactly that reason, and this is a structural ordering constraint in the build-date design, not a missed step. Regenerated in `0e66c18`; the entire diff is that one date, and both files CI failed on pass 30/30.
+- Cloudflare workflow `34148240262` succeeded. Production deployment `26c98eb2-a834-4784-a892-7190daf60809` for source `0e66c18`; immutable origin `https://26c98eb2.call-of-doodie.pages.dev`.
+- Production verification: immutable shell 7/7, custom domain `https://callofdoodie.wtf/` 7/7, post-cutover surfaces 5/5, launch surfaces, replay trust 3/3, and shared-leaderboard isolation all pass.
+- Production browser proof: `smoke:modes` run against `https://callofdoodie.wtf/` passed all five scenarios, with BOT ROYALE reading `16 BOTS LEFT · 0 FLUSHED · PHASE 0` — the scaled arena and the sixteen-bot count are live, not just built.
+- Shell hygiene: 8 started · 8 closed · 0 running. The isolated preview on port 4183 was stopped and both 4183 and 53173 re-checked with zero listeners. Port 4173 remains held by a node process from outside this repo and was deliberately never used.
+- Noted for the founder, not acted on: `gh run list` shows several stale branches from other agents attempting this same audit item (`feature/royale-scrollcam-16bots`, `feat/bot-royale-camera-death-screen-diet`, `feat/royale-scrolling-camera-16bot`, `feat/deathscreen-diet-16bot-royale`, dated 2026-09-04 → 09-07). This session shipped to `main` directly and did not touch, merge, or delete any of them.
+
 ## 2026-09-03 (Session 164 — the passes that shipped after S163 sealed; record recovered 2026-09-07 in S165)
 
 - Session 163 sealed its closeout at `94fd15d3`. Fifteen further substantive commits then shipped and deployed — the post-closeout feature pass, the open-items pass, the production deploy pass, and the founder-requested review pass — and every one of them labelled itself "S163 post-closeout" or "S163 open items", continuing under a sealed number.

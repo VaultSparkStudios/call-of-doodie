@@ -1,30 +1,30 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.1 -->
-<!-- generated-at: 2026-09-03 (Session 163 closeout) -->
+<!-- generated-at: 2026-09-07 (Session 165 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S163 ════════════════════╗
-║  Date: 2026-09-03  ·  SIL: 995/1000  ·  Velocity: 6 down         ║
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S165 ════════════════════╗
+║  Date: 2026-09-07  ·  SIL: 997/1000  ·  Velocity: 5 down         ║
 ║  Mode: FOUNDER  ·  Agent: claude-code                            ║
 ║  Live:  preview  →  https://callofdoodie.wtf/                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ Shipped: enemy AI extraction, fixed 60Hz timestep, headless   ║
-║  ✓ Shipped: single design-token source, hex-free static `doc.cs  ║
-║  ✓ Decisions: evidence gating no longer blocks content; arcade   ║
-║  ✓ Validation: Vitest 221/221 files, 1,286/1,286 assertions; st  ║
-║  ✓ Known gaps: Operations not yet rewired to the verb handlers;  ║
+║  ✓ Recovery: triage found no dirty tree and no stale lock, but   ║
+║  ✓ Shipped: `pickTarget` identity skip — BOT ROYALE's bots had   ║
+║  ✓ Shipped: `src/systems/camera.js` — dead-zone follow, arena c  ║
+║  ✓ Shipped: BOT ROYALE on a 2× arena with sixteen bots and a 24  ║
+║  ✓ Shipped: death-beat diet — share-card painter extracted to `  ║
 ╚════════════════════════════════════════════════════════════════╝
-╔══ SCORES · SIL 995/1000 ═══════════════════════════════════════╗
+╔══ SCORES · SIL 997/1000 ═══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
 ║    Alignment          100  ██████████                            ║
 ║    Momentum           100  ██████████                            ║
-║    Engagement         99   ██████████                            ║
-║    Process Qual       98   ██████████                            ║
+║    Engagement         98   ██████████                            ║
+║    Process Qual       100  ██████████                            ║
 ║    Coherence          100  ██████████                            ║
 ║    Security           100  ██████████                            ║
-║    Ecosystem          99   ██████████                            ║
+║    Ecosystem          100  ██████████                            ║
 ║    Capital            100  ██████████                            ║
 ║    Automation         99   ██████████                            ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -38,26 +38,26 @@
 ║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
 ║  ✓ context/TRUTH_AUDIT.md                                        ║
 ║  ✓ context/PROJECT_STATUS.json                                   ║
-║  ✓ agent memory (Claude/Codex project memory)                    ║
+║  · agent memory (Claude/Codex project memory)                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 94 files  ·  M:80 A:0 D:4 ?:10                         ║
+║  Changes: 9 files  ·  M:8 A:0 D:0 ?:1                            ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ DEPLOYMENT ══════════════════════════════════════════════════╗
-║  Staging:  https://session-162-staging.call-of-doodie.pages.dev  ║
+║  Staging:  https://session-165-staging.call-of-doodie.pages.dev  ║
 ║  Live:     https://callofdoodie.wtf/  ·  preview/FORGE (not yet  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
 ║  Doctor:        148/203                                          ║
 ║  Compliance:    —                                                ║
-║  Tests:         1302/1302                                        ║
+║  Tests:         1330/1330                                        ║
 ║  Validation:    full-fresh                                       ║
-║  IGNIS:         12d ago                                          ║
+║  IGNIS:         16d ago                                          ║
 ║  Truth:         engineering-ready-sparked-no-go                  ║
-║  Sanitization:  12d ago                                          ║
-║  shells:        unknown · missing/stale enumeration              ║
+║  Sanitization:  16d ago                                          ║
+║  shells:        8 started · 8 closed · 0 running                 ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ NEXT SESSION ════════════════════════════════════════════════╗
 ║  (no genius cache — run `node scripts/cache-genius-list.mjs`)    ║
