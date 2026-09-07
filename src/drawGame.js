@@ -202,6 +202,13 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
       (_sdy * 0.6 + (Math.random() - 0.5) * (1 - Math.abs(_sdy) * 0.5)) * _mag,
     );
   }
+  // Camera transform — must precede ADS so zoom centres on the player's screen position.
+  const _camX = gs.cameraX || 0, _camY = gs.cameraY || 0;
+  const _hasCamera = _camX !== 0 || _camY !== 0;
+  if (_hasCamera) {
+    ctx.save();
+    ctx.translate(-_camX, -_camY);
+  }
   // ADS zoom: scale 1.28× centered on player for aim-down-sights effect
   if (gs.adsZoom && p) {
     ctx.translate(p.x, p.y);
@@ -215,11 +222,7 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   // decals persist by stamping straight into that canvas.
   const _theme = ARENA_THEMES[gs.mapTheme] || ARENA_THEMES[0];
   const _arenaLayers = getArenaLayers(gs, W, H, _dpr, { theme: _theme, perfStep: _perfStep, retroCharacters });
-  const _camX = gs.cameraX || 0, _camY = gs.cameraY || 0;
-  const _hasCamera = _camX !== 0 || _camY !== 0;
   if (_hasCamera) {
-    ctx.save();
-    ctx.translate(-_camX, -_camY);
     const _WW = gs._royaleWorldW || W * 2, _WH = gs._royaleWorldH || H * 2;
     ctx.fillStyle = _theme.bg[1] || "#111";
     ctx.fillRect(0, 0, _WW, _WH);
@@ -1672,13 +1675,15 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ctx.restore();
   }
 
-  // Player-relative threat compass — screen-space by contract. Enemy world
-  // positions are transformed around the same ADS focus as the arena, then
-  // bounded/aggregated after the world transform has been restored.
-  const _offscreenArrows = getOffscreenThreatArrows(_enemiesDraw, W, H, {
+  // Player-relative threat compass — screen-space by contract. With a scrolling
+  // camera, enemy world positions are shifted to screen space before the check.
+  const _threatEnemies = _hasCamera
+    ? _enemiesDraw.map(e => ({ x: e.x - _camX, y: e.y - _camY, isBossEnemy: e.isBossEnemy, eliteType: e.eliteType }))
+    : _enemiesDraw;
+  const _offscreenArrows = getOffscreenThreatArrows(_threatEnemies, W, H, {
     fogOfWar: Boolean(gs.fogOfWar),
-    focusX: p?.x ?? W / 2,
-    focusY: p?.y ?? H / 2,
+    focusX: (p?.x ?? W / 2) - (_hasCamera ? _camX : 0),
+    focusY: (p?.y ?? H / 2) - (_hasCamera ? _camY : 0),
     zoom: gs.adsZoom ? 1.28 : 1,
   });
   drawOffscreenThreatArrows(ctx, _offscreenArrows);

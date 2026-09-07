@@ -2482,8 +2482,8 @@ export default function CallOfDoodie() {
       dashActive: dashRef.current.active > 0,
       adrenalineRushTimer: gs.adrenalineRushTimer || 0,
       rubbleSlowed: !!gs._rubbleSlowed,
-      W,
-      H,
+      W: gs._royaleWorldW || W,
+      H: gs._royaleWorldH || H,
       obstacles: gs.obstacles || [],
     });
     sampleCommandTrace("move", Math.abs(dx) > 0.1 || Math.abs(dy) > 0.1 ? directionBucket(dx, dy) : "neutral");
@@ -3238,7 +3238,7 @@ export default function CallOfDoodie() {
     combat.stepProjectileFrame({
       gs,
       player: p,
-      world: { W, H },
+      world: { W: gs._royaleWorldW || W, H: gs._royaleWorldH || H },
       weaponIndex: wpnIdx,
       frame: frameCountRef.current,
       dashActive: dashRef.current.active > 0,
