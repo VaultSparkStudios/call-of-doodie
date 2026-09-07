@@ -215,7 +215,21 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   // decals persist by stamping straight into that canvas.
   const _theme = ARENA_THEMES[gs.mapTheme] || ARENA_THEMES[0];
   const _arenaLayers = getArenaLayers(gs, W, H, _dpr, { theme: _theme, perfStep: _perfStep, retroCharacters });
-  ctx.drawImage(_arenaLayers.underlay.canvas, 0, 0, W, H);
+  const _camX = gs.cameraX || 0, _camY = gs.cameraY || 0;
+  const _hasCamera = _camX !== 0 || _camY !== 0;
+  if (_hasCamera) {
+    ctx.save();
+    ctx.translate(-_camX, -_camY);
+    const _WW = gs._royaleWorldW || W * 2, _WH = gs._royaleWorldH || H * 2;
+    ctx.fillStyle = _theme.bg[1] || "#111";
+    ctx.fillRect(0, 0, _WW, _WH);
+    ctx.drawImage(_arenaLayers.underlay.canvas, 0, 0, W, H);
+    ctx.drawImage(_arenaLayers.underlay.canvas, W, 0, W, H);
+    ctx.drawImage(_arenaLayers.underlay.canvas, 0, H, W, H);
+    ctx.drawImage(_arenaLayers.underlay.canvas, W, H, W, H);
+  } else {
+    ctx.drawImage(_arenaLayers.underlay.canvas, 0, 0, W, H);
+  }
 
   // ── Active dynamic objective (Hot Zone / Lockdown / Escort / Sniper / Bounty) ──
   const _obj = gs.activeObjective;
@@ -1349,6 +1363,9 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ctx.strokeText(ft.text, ft.x, ft.y); ctx.fillText(ft.text, ft.x, ft.y);
   });
   ctx.globalAlpha = 1;
+
+  // Restore camera transform before screen-space HUD elements
+  if (_hasCamera) ctx.restore();
 
   // Mini-radar
   const rs = 45, rx = W - rs - 8, ry = isMobile ? 52 : 48;

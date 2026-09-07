@@ -2497,7 +2497,9 @@ export default function CallOfDoodie() {
     let pointerAngle = null;
     if (pointerActive) {
       const rect = canvas.getBoundingClientRect();
-      pointerAngle = combatRuntimeRef.current.computePointerAimAngle(mouse, rect, { w: W, h: H }, p);
+      const _camOffX = gs.cameraX || 0, _camOffY = gs.cameraY || 0;
+      const _aimPlayer = (_camOffX || _camOffY) ? { x: p.x - _camOffX, y: p.y - _camOffY } : p;
+      pointerAngle = combatRuntimeRef.current.computePointerAimAngle(mouse, rect, { w: W, h: H }, _aimPlayer);
       inputDeviceRef.current = "mouse";
     }
     const aimFrame = combatRuntimeRef.current.resolveAimFrame({
@@ -3256,7 +3258,9 @@ export default function CallOfDoodie() {
     combat.stepEnemyFrame({
       gs,
       player: p,
-      world: { W, H },
+      // For modes with a larger world (Bot Royale), pass world dimensions so
+      // enemy boundary clamping uses the correct bounds, not the viewport.
+      world: { W: gs._royaleWorldW || W, H: gs._royaleWorldH || H },
       frame: frameCountRef.current,
       dashActiveFrames: dashRef.current.active,
       spawnEnemy,
