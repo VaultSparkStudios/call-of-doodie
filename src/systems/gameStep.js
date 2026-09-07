@@ -78,7 +78,9 @@ export function computeMovementVector(keys = {}, joystick = {}, gamepad = {}) {
   return { dx, dy };
 }
 
-export function computePointerAimAngle(pointer, rect, canvasSize, player) {
+// `camera` (S165) shifts the canvas point into arena coordinates before the
+// angle is taken. Omitted or pinned at the origin, the maths is unchanged.
+export function computePointerAimAngle(pointer, rect, canvasSize, player, camera = null) {
   const safeRect = rect || { left: 0, top: 0, width: canvasSize?.w || 1, height: canvasSize?.h || 1 };
   const canvasW = canvasSize?.w || safeRect.width || 1;
   const canvasH = canvasSize?.h || safeRect.height || 1;
@@ -86,7 +88,9 @@ export function computePointerAimAngle(pointer, rect, canvasSize, player) {
   const rectH = safeRect.height || 1;
   const x = ((pointer?.x || 0) - (safeRect.left || 0)) * (canvasW / rectW);
   const y = ((pointer?.y || 0) - (safeRect.top || 0)) * (canvasH / rectH);
-  return Math.atan2(y - (player?.y || 0), x - (player?.x || 0));
+  const worldX = x + (camera?.x || 0);
+  const worldY = y + (camera?.y || 0);
+  return Math.atan2(worldY - (player?.y || 0), worldX - (player?.x || 0));
 }
 
 export function angleToUnitVector(angle) {

@@ -1,17 +1,17 @@
 {
-  "at": "2026-09-03T21:31:07.897Z",
-  "url": "http://localhost:4786/",
+  "at": "2026-09-07T17:13:35.161Z",
+  "url": "http://localhost:4183/",
   "ok": true,
   "results": [
     {
       "label": "BOSS GAUNTLET",
       "banner": "0/6 DOWN · NEXT: Mega Karen",
-      "screenshot": "C:\\Users\\p4cka\\documents\\development\\call-of-doodie\\docs\\visual-qa\\new-modes\\boss-gauntlet.png"
+      "screenshot": "docs/visual-qa/new-modes/boss-gauntlet.png"
     },
     {
       "label": "HOLD THE THRONE",
       "banner": "0/3 THRONES · WEST THRONE 0s/30s",
-      "screenshot": "C:\\Users\\p4cka\\documents\\development\\call-of-doodie\\docs\\visual-qa\\new-modes\\hold-the-throne.png"
+      "screenshot": "docs/visual-qa/new-modes/hold-the-throne.png"
     },
     {
       "label": "squad-strip",
@@ -20,12 +20,12 @@
     {
       "label": "SEWER EXTRACTION",
       "banner": "LOOT 0 · ALARM 1 · EVAC AT 60",
-      "screenshot": "C:\\Users\\p4cka\\documents\\development\\call-of-doodie\\docs\\visual-qa\\new-modes\\sewer-extraction.png"
+      "screenshot": "docs/visual-qa/new-modes/sewer-extraction.png"
     },
     {
       "label": "BOT ROYALE",
-      "banner": "12 BOTS LEFT · 0 FLUSHED · PHASE 0",
-      "screenshot": "C:\\Users\\p4cka\\documents\\development\\call-of-doodie\\docs\\visual-qa\\new-modes\\bot-royale.png"
+      "banner": "16 BOTS LEFT · 0 FLUSHED · PHASE 0",
+      "screenshot": "docs/visual-qa/new-modes/bot-royale.png"
     },
     {
       "label": "profile-hash-route",

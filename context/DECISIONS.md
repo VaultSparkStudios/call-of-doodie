@@ -2,6 +2,24 @@
 
 Public-safe decisions only. Detailed internal decision history is maintained privately.
 
+## 2026-09-07 — Session 165 — The arena is a mode's choice; the viewport is never the world
+
+**Decision:** Simulation state is expressed in arena coordinates, and a mode declares how big that arena is with an optional `arena.scale` on its mode definition (`resolveArenaSize`, capped at 4× and never smaller than the viewport). A mode that declares nothing gets an arena exactly the size of the screen and a camera clamped to (0, 0), which makes every conversion the identity. `drawGame` applies a single camera translate at the existing shake/ADS seam so world-space draw calls need no changes; canvas, HUD, and screen-space overlays stay viewport-sized.
+
+**Rationale:** A battle royale that fits on one screen has no map to cross and no approach to read. Making the camera opt-in per mode rather than global means the change is provably free for the ten modes that do not want it — the identity path is asserted in `camera.test.js` — instead of asking every existing mode to re-prove itself.
+
+## 2026-09-07 — Session 165 — Work that continues past a sealed closeout gets the next session number, not the last one
+
+**Decision:** The fifteen commits that shipped after Session 163's closeout anchor are recorded as **Session 164**, not as "S163 post-closeout" as they labelled themselves. Session numbers move forward, are never reused, and are never reversed. Session 165 is the session that recovered that record, and the S164 SIL entry is explicitly marked as written by a later session from commits rather than contemporaneously.
+
+**Rationale:** Every write-back surface is keyed by session number, so a reused number mis-files a whole block of work permanently. Skipped numbers are cheap; reused ones corrupt the ledger. Recording the reuse honestly in `TRUTH_AUDIT.md` costs one paragraph and preserves the ability to audit what actually happened.
+
+## 2026-09-07 — Session 165 — When a gate goes red, fix the measurement before touching the budget
+
+**Decision:** `check-app-architecture` was red on `main` for two reasons — a marker string that stopped matching when the game loop took a parameter, and a boundary count that only saw `App.jsx`'s own imports. Both were fixed in the checker: prefix-match the loop marker, and count system boundaries reached through declared facade modules (`combatRuntime.js`, `modeDefinition.js`). `minSystemBoundaries: 27` was left exactly as it was.
+
+**Rationale:** Lowering the minimum to 19 would have produced a green board while destroying the ratchet, and would have punished S163's deliberate move of twenty loop systems behind the lazy combat chunk — the exact refactor the budget exists to encourage. The budget was right and the ruler was broken; the receipt now reports 45 boundaries and a real 985-line loop span instead of `null`. Both drifts are covered by regression tests so neither can go quiet again.
+
 ## 2026-09-03 — Session 163 — Duels are friendly and unverified; squads ride on signed submissions
 
 **Decision:** A seed duel is a public row anyone can open and exactly one responder can answer inside 24 hours; the challenger's fields are immutable by trigger. Duel scores are self-reported and every surface labels them friendly and unverified. Squad codes are validated and stored only through the signed `submit-score` path, so the SQUAD tab is a filter over verified rows and inherits the board's trust.

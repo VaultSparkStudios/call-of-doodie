@@ -19,9 +19,29 @@ function importedBoundaries(source, family) {
   return [...String(source).matchAll(regex)].map((match) => match[1]).filter((value, index, all) => all.indexOf(value) === index).sort();
 }
 
-export function analyzeAppArchitecture(source, budget = {}) {
+// A facade module already lives inside `systems/`, so the boundaries it owns
+// are sibling imports (`from "./enemyFrame.js"`), not `./systems/…` paths.
+function siblingBoundaries(source) {
+  return [...String(source || "").matchAll(/from\s+["']\.\/([^"'/]+\.js)["']/g)].map((match) => match[1]);
+}
+
+/**
+ * @param {string} source            App.jsx
+ * @param {object} budget            scripts/contracts/app-architecture-budget.json
+ * @param {object} [options]
+ * @param {string[]} [options.facadeSources]
+ *   Sources of modules App reaches its systems *through* (S163 moved twenty
+ *   loop-only systems behind the lazy combat-runtime chunk, so counting only
+ *   App's own imports scores that extraction as boundary LOSS — the opposite
+ *   of what this budget exists to protect). Their sibling system imports count
+ *   toward the same boundary total, de-duplicated.
+ */
+export function analyzeAppArchitecture(source, budget = {}, { facadeSources = [] } = {}) {
   const lines = physicalLines(source);
-  const starts = occurrences(lines, "const gameLoop = useCallback(() => {");
+  // Prefix match: the loop took a `{ render = true }` parameter in S163 and the
+  // exact-signature marker silently stopped matching, which zeroed the span
+  // check without failing loudly enough to be noticed for two sessions.
+  const starts = occurrences(lines, "const gameLoop = useCallback(");
   const ends = occurrences(lines, "useGameLoop(gameLoop");
   const errors = [];
   if (starts.length !== 1) errors.push(`expected one gameLoop start marker, found ${starts.length}`);
@@ -33,7 +53,9 @@ export function analyzeAppArchitecture(source, budget = {}) {
     : null;
   if (gameLoopStart && gameLoopEnd && gameLoopEnd <= gameLoopStart) errors.push("useGameLoop boundary precedes gameLoop start");
 
-  const systems = importedBoundaries(source, "systems");
+  const direct = importedBoundaries(source, "systems");
+  const viaFacade = facadeSources.flatMap(siblingBoundaries);
+  const systems = [...new Set([...direct, ...viaFacade])].sort();
   const hooks = importedBoundaries(source, "hooks");
   const budgetKeys = ["maxTotalLines", "maxGameLoopSpan", "minSystemBoundaries", "minHookBoundaries"];
   for (const key of budgetKeys) {
@@ -58,6 +80,8 @@ export function analyzeAppArchitecture(source, budget = {}) {
     gameLoopEnd,
     gameLoopSpan,
     systemBoundaryCount: systems.length,
+    directSystemBoundaryCount: direct.length,
+    facadeSystemBoundaryCount: systems.length - direct.length,
     hookBoundaryCount: hooks.length,
     systems,
     hooks,

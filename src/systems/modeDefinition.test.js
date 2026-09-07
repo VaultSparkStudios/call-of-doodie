@@ -124,12 +124,12 @@ describe("SEWER EXTRACTION and BOT ROYALE (S163 tranche 3)", () => {
     expect(gs.structures.find((s) => s.id === "evac-toilet")).toBeUndefined();
   });
 
-  it("royale: twelve bots spawn, bot bullets hurt other bots, flood shrinks, last one wins", () => {
+  it("royale: sixteen bots spawn, bot bullets hurt other bots, flood shrinks, last one wins", () => {
     const def = getModeDefinition("bot_royale");
     const gs = createSimState({ seed: 3 });
     createModeState(def, gs, noText);
     const bots = gs.enemies.filter((e) => e.isBot);
-    expect(bots.length).toBe(12);
+    expect(bots.length).toBe(16);
     expect(getModeWaveEnemyCount(def, gs, 40)).toBe(0);
     // A bullet from bot-0 hits bot-1.
     const target = bots[1];
@@ -137,14 +137,14 @@ describe("SEWER EXTRACTION and BOT ROYALE (S163 tranche 3)", () => {
     stepMode(gs, def, { ...noText, frame: 1 });
     expect(target._defeatResolved).toBe(true);
     stepMode(gs, def, { ...noText, frame: 2 });
-    expect(gs._targetables.length).toBe(11);
+    expect(gs._targetables.length).toBe(15);
     // Flood shrinks after a phase.
     const r0 = gs.flood.r;
-    stepMode(gs, def, { ...noText, frame: 20 * 60 + 1 });
+    stepMode(gs, def, { ...noText, frame: 24 * 60 + 1 });
     expect(gs.flood.targetR).toBeLessThan(r0);
     // Everyone else gone → win.
     for (const b of gs.enemies) if (b.isBot) b._defeatResolved = true;
-    expect(stepMode(gs, def, { ...noText, frame: 20 * 60 + 2 })).toBe("win");
+    expect(stepMode(gs, def, { ...noText, frame: 24 * 60 + 2 })).toBe("win");
     expect(def.placement({ _royaleAlive: 3 })).toBe(4);
   });
 

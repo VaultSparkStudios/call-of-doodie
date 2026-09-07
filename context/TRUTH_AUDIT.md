@@ -1,3 +1,30 @@
+## 2026-09-07 — Session 165 — Camera, readability, gate, and evidence truth
+
+- Camera truth — simulation state is in arena coordinates and `drawGame` applies one camera translate at the pre-existing shake/ADS seam. A mode that declares no `arena.scale` gets an arena exactly the size of the viewport and a camera clamped to (0, 0); the identity of every conversion in that case is asserted directly in `camera.test.js`, so "existing modes are unchanged" is a tested claim, not an assurance.
+- Readability truth — the off-screen threat compass was genuinely camera-blind (its module header asserted "no scrolling camera" by contract) and now takes an arena→screen offset. Floating combat text was a fourth case found by reading rather than by the audit list. The flood ring was already inside the world block and needed no change; the "missing minimap" already existed under the name "Mini-radar". Both wrong premises are recorded in `docs/AUDIT_2026-09-07.md` rather than deleted.
+- Radar truth — the whole-arena radar is clipped to its disc, so the opening flood ring (radius ~51 radar-pixels against a 45-pixel disc) is not drawn at all until the water closes below the arena's short axis. The flood indicator is therefore informative from the first shrink phase onward, not from the drop.
+- Gate truth — `check-app-architecture` and `check-windows-hide` were **red on `main`** before this session and had been reported as passing. Both were root-fixed: the architecture marker now prefix-matches and boundaries reached through declared facades are counted, with `minSystemBoundaries: 27` untouched and the receipt reporting 45 boundaries and a real 985-line loop span; the two direct `child_process` imports now route through `lib/safe-spawn.mjs`. No budget was lowered to obtain either green.
+- Test truth — a default-worker Playwright run produced six cold-start timeouts on home-shell locators. Re-running serially passed 19 with one intentional skip, matching the project's own recorded baseline, so the six are classified as worker contention on this machine and recorded as flaky rather than as a regression or as a pass.
+- Browser-proof truth — the five-scenario mode smoke ran against an isolated preview on port 4183 because port 4173 was held by a foreign node process from outside this repo; that foreign server was never assumed to serve this build. The BOT ROYALE capture was reviewed directly and a canvas pixel probe confirmed the radar disc renders; the banner read `16 BOTS LEFT`.
+- Evidence-boundary truth — no participant, physical-device, provider, identity, balance, or publication evidence was gathered. That the larger royale is *better to play* is unmeasured and is not claimed anywhere. Cloud backup still answers 503 in production because `OBELISK_VERIFY_URL`/`OBELISK_VERIFY_SECRET` exist neither in the secrets gateway nor on Pages; that remains founder-gated and is not worked around.
+
+Overall status: green engineering implementation with two previously-hidden gate defects repaired; SPARKED remains NO-GO.
+Last reviewed: 2026-09-07
+
+<!-- truth-audit-version: 1.1 -->
+## 2026-09-03 — Session 164 (recovered in S165) — Numbering, write-back, and royale truth
+
+- Numbering truth — fifteen substantive commits landed after Session 163's sealed closeout anchor `94fd15d3` and labelled themselves "S163 post-closeout" and "S163 open items", reusing a closed session number. They are recorded as **Session 164**. Session numbers move forward and are never reused or reversed; no number was skipped and none was voided.
+- Write-back truth — the code shipped, pushed and deployed; only the record was missing. `CURRENT_STATE`, `TASK_BOARD`, `LATEST_HANDOFF` and `WORK_LOG` were carried forward in passing by feature commits, so every surface-vs-surface freshness check stayed green while `SELF_IMPROVEMENT_LOOP.md` and this file sat four days stale. Surfaces agreeing with each other is not evidence that any of them is current.
+- Detection truth — only `scripts/check-writeback-currency.mjs` saw it (exit 1, oldest un-written-back commit 96.8h). The clean tree and the `0 0` remote comparison were both true and both irrelevant.
+- Royale truth — BOT ROYALE's header claimed twelve bots "fight you and each other". They did not. Every bot published its own position into `gs._targetables` and `pickTarget` had no self-exclusion, so each bot's nearest candidate was itself at distance zero: bots stood still and aimed at their own position, and the only bot-versus-bot damage was the incidental bullet sweep. Fixed in S165 with an identity skip and a five-case regression court. The pre-existing royale test passed throughout, because it asserted the target list's *length* and never one of its effects.
+- Scoring truth — the S164 SIL entry is written by a later session reading commits, not by the session that did the work. It is the weakest form of self-assessment in the system and is labelled as such rather than presented as contemporaneous.
+- Surface-defect truth — `context/SELF_IMPROVEMENT_LOOP.md` carries a corrupted pre-title fragment (a Session 121 line with a literal `\n` and a mangled `npm run`) that predates this session. It is cosmetic, it is recorded rather than silently rewritten, and the file is append-only below it.
+
+Overall status: the shipped code and the live deployment were sound; the record was not. Both are now current. SPARKED remains NO-GO.
+Last reviewed: 2026-09-07
+
+<!-- truth-audit-version: 1.1 -->
 ## 2026-09-03 — Session 163 — Mode, simulation, squad, and brand truth
 
 - Mode truth — BOSS GAUNTLET and HOLD THE THRONE change what the player does (fixed length with victory; zone control with a squad). The eight legacy ids keep their ruleset/replay contract byte-for-byte; new modes are `replayEligible:false` and never reach global submission.

@@ -2,6 +2,21 @@
 
 Public-safe launch roadmap summary.
 
+## Session 165 - Scrolling camera, live royale bots, death-beat diet, record recovery
+
+- [x] [SIL:3] **DONE S165** BOT ROYALE bots no longer target themselves: `pickTarget` skips the candidate carrying the enemy's own id, so the free-for-all the mode always claimed actually happens. Five-case regression court covers rival selection, the far-player fallback, dead candidates, and the untouched zone/structure path.
+- [x] [SIL:3] **DONE S165** Scrolling world camera (`src/systems/camera.js`): dead-zone follow, arena clamp, world/screen conversion, and a per-mode `arena.scale` opt-in. Modes that declare no scale get an arena exactly the size of the viewport and a camera pinned at (0, 0), so their behaviour is unchanged.
+- [x] [SIL:2] **DONE S165** BOT ROYALE runs on a 2× arena with sixteen bots and a 24-second flood phase; the arena, obstacles, props, spawns, movement clamp, flow field, and mode step all resolve against arena bounds instead of the viewport.
+- [x] [SIL:2] **DONE S165** Camera-correct readability: the off-screen threat compass takes an arena→screen offset, floating combat text shifts with the camera, and the Mini-radar switches to a whole-arena plot with arena extent, the flood ring, and its next close when the arena exceeds the viewport.
+- [x] [SIL:2] **DONE S165** Death-beat diet: the 1200×630 share-card painter moved to `utils/scoreCardRenderer.js` behind a dynamic import, the QR encoder loads on demand, and the on-screen keyboard is lazy. DeathScreen 101.8 KB → 91.6 KB.
+- [x] [SIL:2] **DONE S165** Recovered the Session 164 write-back debt: SIL, TRUTH_AUDIT, and WORK_LOG entries for the fifteen un-closed post-S163 commits, with the reused session number recorded rather than papered over.
+- [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET on the Pages project: neither is in the secrets gateway, so Porcelain Passport verification (and therefore cloud backup) answers 503 in production until they exist.
+- [ ] [SIL:2] Never continue work under a sealed session number — open the next number instead. Carried from the S164 SIL brainstorm.
+- [ ] [SIL:1] Pair every collection-shape assertion in a mode test with one behavioural effect assertion; the royale target-list length check passed green over an inert mode.
+- [ ] [SIL:1] DeathScreen remains the largest non-vendor lazy chunk at ~92 KB; the debrief/archive panels are the next split.
+
+**Runway exception:** participant fun/balance outcomes, physical-device proof, provider/mail/identity evidence, publication, real-time co-op, and SPARKED promotion remain independently gated. The camera is proven by unit courts, the full suite, and a real-browser mode smoke; no device-farm or participant evidence is claimed.
+
 ## Session 163 - Real modes, CPU squad, fixed timestep, single brand
 
 - [x] [SIL:3] **DONE S163** Enemy AI extracted to `enemyFrame.js`; fixed 60Hz simulation step; headless deterministic `stepSim` kernel with state hash; `Math.random()` guard for simulation modules.

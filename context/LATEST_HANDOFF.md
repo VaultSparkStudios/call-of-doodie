@@ -1,3 +1,27 @@
+# Latest Handoff — Session 165
+
+Session Intent: Run one complete `/arc` — recover whatever the previous session left unfinished, audit against live code, implement everything found, close out, then push directly to `main` and deploy to production under explicit founder authorization.
+
+## Where We Left Off (Session 165)
+
+- Recovery: triage found no dirty tree and no stale lock, but `check-writeback-currency.mjs` exited 1 — fifteen substantive commits had shipped and deployed after Session 163's sealed closeout with no session ever closing out, leaving SIL and TRUTH_AUDIT 96.8 h stale. That block is recorded as **Session 164**; this session is 165. A clean tree proved nothing was in flight, not that the last session finished.
+- Shipped: `pickTarget` identity skip — BOT ROYALE's bots had been targeting themselves at distance zero since the mode shipped, so they stood still and fired at their own position. The mode's free-for-all now actually happens.
+- Shipped: `src/systems/camera.js` — dead-zone follow, arena clamp, world/screen conversion, `resolveArenaSize` with a per-mode `arena.scale`. Arena-sized simulation bounds, viewport-sized canvas and HUD, one camera translate at the existing shake/ADS seam in `drawGame`. Modes without a scale are byte-identical to S164.
+- Shipped: BOT ROYALE on a 2× arena with sixteen bots and a 24-second flood phase; camera-correct off-screen threat compass, floating text, and a whole-arena Mini-radar carrying the flood ring and its next close.
+- Shipped: death-beat diet — share-card painter extracted to `utils/scoreCardRenderer.js` behind a dynamic import, QR encoder on demand, lazy on-screen keyboard.
+- Audit honesty: two of the three premises originally written for the readability item were wrong (the flood ring was already inside the world block; the "missing minimap" exists under the name "Mini-radar"). Both corrections are recorded in `docs/AUDIT_2026-09-07.md` rather than quietly deleted.
+- Validation: strict lint 0, Vitest 228 files / 1,330 assertions, deployable build, runtime boundary gate, schema/coherence/architecture, public contract and claims, security release gate.
+- Known gaps: DeathScreen is still the largest non-vendor lazy chunk (~92 KB); the debrief/archive panels are the next split. OBELISK_VERIFY_URL / OBELISK_VERIFY_SECRET remain founder-only, so `/api/profile` answers 503 in production. No participant, device-farm, or balance evidence is claimed for the larger royale.
+- Next: split the DeathScreen debrief/archive panels; consider a second scaled-arena mode now that the camera exists; watch royale pacing on a 2× arena with real play.
+
+## Impact Summary
+
+**Headline.** The sewer got bigger than the screen, and the bots in it started fighting back.
+
+**Evidence.** One production correctness defect found and fixed (inert royale bots, live since the mode shipped), a scrolling camera behind a per-mode opt-in that leaves every existing mode byte-identical, three camera-blind readability surfaces repaired, ~10 KB moved off the death beat, and four days of missing session record recovered and honestly labelled. 228 test files, 1,330 assertions, zero new dependencies, zero hosted calls, zero variable per-user cost.
+
+---
+
 # Latest Handoff — Session 163
 
 Session Intent: Founder-directed course correction — audit why the modes felt identical and the site theme jumped, then ship real modes with CPU teammates, a deterministic fixed-step simulation, and one brand across every page.

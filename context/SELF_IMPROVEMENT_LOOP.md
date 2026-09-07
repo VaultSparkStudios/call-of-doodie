@@ -4,6 +4,68 @@ pm run launch:qa and full suite before closeout.\n
 
 Detailed internal scoring, audit trends, and brainstorming are maintained privately.
 
+## 2026-09-07 — Session 165 | Total: 997/1000 | Velocity: 5 | Debt: ↓
+
+SIL 997/1000: Recovered four days of missing session record, then found and fixed a production correctness defect that had made the flagship royale's bots inert since the mode shipped, gave the game its first scrolling camera behind a per-mode opt-in that leaves every existing mode byte-identical, repaired three camera-blind readability surfaces, moved ~11 KB off the death beat, and root-fixed two studio gates that were silently red on `main` — without lowering a single budget to get there.
+
+| Category | Score | Δ | Rationale |
+|---|---:|---|---|
+| Dev Health | 100 | → | Strict lint 0; Vitest 228 files / 1,330 assertions; deployable build; runtime boundary 462,810 B against the 560,000 B gate; schema/coherence/architecture/storage/task/node; public contract and claims; security release gate; dependency and asset gates; hot-context currency; Playwright 19 pass / 1 intentional skip. Two gates that were red on `main` before this session (`check-app-architecture`, `check-windows-hide`) are green by root fix, not by re-baselining. |
+| Creative Alignment | 100 | → | A royale you can cross serves "readable chaos" only if you can still read it, so the camera shipped with the compass, the floating text, and the radar fixed in the same pass. The bot fix restores a promise the mode's own header already made. Nothing prescribes a build; no pay-to-win. |
+| Momentum | 100 | → | Recovery triage, premise-verified audit, five items, browser proof, and closeout ran as one continuous single-terminal mission with no founder pause. |
+| Engagement | 98 | ↓ | Sixteen live opponents on a map four times the old area is real replay value, and the browser smoke proves it deploys and reads correctly. But no participant, device-farm, or balance evidence exists for a 2× arena — whether the larger royale is *better* to play is unmeasured and is not claimed. |
+| Process Quality | 100 | ↑ | Every audit premise was grepped against live code before implementation, and when two of them turned out to be wrong — the flood ring was already world-space, and the "missing minimap" exists under the name "Mini-radar" — the corrections were written into the audit rather than deleted. The architecture gate's `minSystemBoundaries: 27` was left untouched and the *measurement* was fixed instead. Six parallel Playwright reds were classified as cold-start contention by re-running serially, not waved through. |
+| Cross-Repo Coherence | 100 | → | No sibling repository tree was touched. The `safe-spawn` routing follows the studio-wide CANON-016 wrapper this repo already carries. |
+| Security Posture | 100 | → | No dependency added, no secret read or written, no credential surface changed. The two `child_process` imports outside the hardened wrapper were closed, removing a Windows console-window/`SuspExec.SE` exposure. |
+| Ecosystem Integration | 100 | → | The camera opts in through the existing mode-definition layer rather than adding a parallel config; `resolveArenaSize` returns the viewport for every mode that says nothing, so integration cost for existing modes is exactly zero. |
+| Capital Efficiency | 100 | → | Local and deterministic throughout: no hosted inference, no new paid service, no variable per-user cost. The arena background caps its backing store at 1× DPR when scaled rather than allocating a 16-megapixel surface. |
+| Automation Coverage | 99 | → | 20 new assertions across five files cover the camera resolver/follow/clamp/conversion, the targeting identity skip, the share-card layout, and both architecture-checker regressions. The App-level camera wiring (arena bounds, viewport-anchored announcements) is proven by the full suite plus a real-browser four-mode smoke rather than by a dedicated integration court — honest, but a court would be better. |
+
+Rolling averages: 3-session 987.0 · 5-session 991.4.
+
+Top win: the audit's own premises were the most valuable thing it produced — chasing "the flood ring is screen-space" into the code disproved it, and the same read found the genuinely camera-blind surface (the threat compass, whose module header still asserted "no scrolling camera") plus a fourth case nobody had listed (floating combat text). Verifying a claim you expect to confirm is how you find the one you did not.
+Top gap: the S164 record had to be reconstructed from commits by a later session. That entry's score is the least trustworthy number in this file and is labelled as such.
+
+Intent outcome: Achieved — recovery, audit, full implementation, closeout, direct-main publication, and production deployment completed in one arc under explicit founder authorization.
+
+Brainstorm:
+1. A second scaled-arena mode now that the camera exists — Sewer Extraction wants distance between the loot and the evac far more than the royale does.
+2. Camera-aware spawn budgeting: on a 2× arena the same enemy count is a quarter of the density, so wave pressure should scale with arena area rather than with wave number alone.
+3. Split the DeathScreen debrief and archive panels; at ~90 KB it is still the largest non-vendor lazy chunk and it still arrives at the worst moment in the run.
+
+**Committed to TASK_BOARD:** [SIL:2] scale wave pressure with arena area, not wave number alone, before a second mode takes a large arena; [SIL:1] split the DeathScreen debrief/archive panels out of the death-beat chunk.
+
+## 2026-09-03 — Session 164 (recovered in S165) | Total: 969/1000 | Velocity: 6 | Debt: ↑
+
+SIL 969/1000: **Written back on 2026-09-07 by Session 165, four days late.** Session 163 sealed its closeout at `94fd15d3`; fifteen further substantive commits then shipped, deployed to production, and were pushed — extraction and royale modes, Operation verb rewiring, a profile page with local and cloud backup, the Daily ghost race, seed duels, squad boards, the /board/ + /field-manual/ + /bestiary/ consolidation, a 584 → 460 KB bundle diet, a dark-token review pass, and the production data-layer deploy — **without any session ever closing out.** Those commits labelled themselves "S163 post-closeout", reusing a sealed number. They are recorded here as **Session 164**: numbers move forward and are never reused, so S164 is this block's permanent identity and Session 165 is the session that recovered it.
+
+The code was never in doubt — the tree was clean, `origin/main...HEAD` was `0 0`, and production was live. Only the record was missing, and only the two surfaces that no other commit touches: this file and `TRUTH_AUDIT.md`. `CURRENT_STATE`, `TASK_BOARD`, `LATEST_HANDOFF` and `WORK_LOG` had all been carried forward in passing, which is exactly why every surface-vs-surface freshness probe stayed green while the ledger was four days stale. `check-writeback-currency.mjs` was the only probe that saw it.
+
+| Category | Score | Δ | Rationale |
+|---|---:|---|---|
+| Dev Health | 96 | ↓ | Every gate was green at the time and the deploy is live, but a correctness defect reached production undetected: in BOT ROYALE each bot published itself into the shared target list and `pickTarget` had no self-exclusion, so bots steered and fired at their own position. Found and fixed in S165. |
+| Creative Alignment | 99 | → | Extraction and royale are genuinely different verbs, duels and squads serve "humiliation becomes revenge", and the profile page keeps guest-first play intact. Nothing prescribes one build. |
+| Momentum | 100 | → | Four working passes in one day — post-closeout features, open items, deploy, and a founder-requested review pass — all shipped and live. |
+| Engagement | 97 | → | Two new modes, duels, squad boards and a profile surface are real replay value, but the flagship royale's bots were inert, so the engagement claimed for that mode was not the engagement delivered. |
+| Process Quality | 88 | ↓↓ | The session's real failure. Work continued past a sealed session boundary under a reused number, and ended without a closeout, leaving the canonical record four days behind live production. Honest deferral was available and was not taken. |
+| Cross-Repo Coherence | 99 | → | All work stayed in this repo. The propagated `brief-format-check.yml` regressed to Node 20 a fifth time and was repaired locally with the root fix left owned by studio-ops — bounded and correctly attributed. |
+| Security Posture | 99 | → | `SUPABASE_SERVICE_ROLE_KEY` was set through the Management API and never printed; the staged secret scan was kept clean at source rather than bypassed. The Obelisk verify secrets remain founder-only and unfabricated. |
+| Ecosystem Integration | 99 | → | New surfaces reuse existing storage, RNG-stream, and mode-definition exports; the migration was namespaced to `cod_profiles` after discovering a shared `profiles` table rather than colliding with another product. |
+| Capital Efficiency | 100 | → | No new dependency, no hosted inference, no variable per-user cost. |
+| Automation Coverage | 92 | ↓ | Tests were added with each feature, but the royale test asserted `_targetables.length` and flood/win behaviour without ever asserting that a bot targets a *rival* — so it passed green over an inert mode. A covered surface is not the same as a proven one. |
+
+Top win: the whole block shipped, deployed, and verified live on production in a single day, including a real cross-project Supabase discovery (the gateway's project is not the game's) that was root-fixed with `--project-ref` rather than worked around.
+Top gap: the closeout never ran, so this score is written by a later session reading commits instead of by the session that did the work — the least reliable form of self-assessment available, and the reason the number is capped where it is.
+
+Intent outcome: **Partially achieved.** The shipping intent succeeded completely; the protocol intent failed completely.
+
+Brainstorm:
+1. Treat "founder asks for one more pass after closeout" as the start of the next session, not an extension of the sealed one — the number is the cheapest thing in the system to spend.
+2. Any test that asserts a collection's *length* over a behavioural mode should also assert one *effect* of that collection, or it is a shape test wearing a behaviour test's name.
+3. Run `check-writeback-currency.mjs` at session **start** as well as at closeout; it was the only probe that could see this, and nothing was asking it.
+
+**Committed to TASK_BOARD:** [SIL:2] never continue work under a sealed session number — open the next number instead; [SIL:1] pair every collection-shape assertion in a mode test with one behavioural effect assertion.
+
 ## 2026-09-03 — Session 163 | Total: 995/1000 | Velocity: 6 | Debt: ↓
 
 SIL 995/1000: Answered a founder course correction with two shipped tranches — a mode-definition layer with two genuinely different modes and a CPU squad on a fixed-step, headless-capable simulation, plus one design-token brand across every page — while keeping the replay contract, guest-first storage, and cost neutrality untouched.

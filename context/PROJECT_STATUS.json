@@ -4,637 +4,26 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 163 (three passes) shipped four modes that play differently, CPU squad teammates, behavioral Operation objectives, a fixed-step simulation with a headless kernel, one design-token brand, a profile page with backup, seed duels and squad boards, a consolidated site (/board/, /field-manual/, /bestiary/), and a bundle diet from 584 KB to 460 KB.",
-  "nextMilestone": "Deploy both S163 migrations and the submit-score change and set the Pages secrets so cloud backup, the Daily ghost race, duels, and squads light up; then a scrolling-camera royale and the DeathScreen diet.",
+  "currentFocus": "Session 165 gave the game its first scrolling world camera behind a per-mode arena.scale opt-in (every existing mode is byte-identical), put BOT ROYALE on a 2x arena with sixteen live bots, fixed a production defect that had every royale bot targeting itself at distance zero, made the threat compass / floating text / radar camera-correct, moved the share-card painter, QR encoder and on-screen keyboard off the death beat, and recovered the four-day Session 164 write-back debt.",
+  "nextMilestone": "Scale wave pressure with arena area before a second mode takes a large arena; split the DeathScreen debrief/archive panels out of the death-beat chunk; the founder still needs to set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET on Pages so cloud backup stops answering 503.",
   "testingSurfaces": [
     {
-      "session": 163,
+      "session": 165,
       "status": "green",
-      "type": "open-items-gates",
-      "command": "strict lint · build · runtime gate 460 KB/560 KB · public contract 28 files · claims · full Vitest · Playwright serial 19 pass / 1 skip · browser smoke: four modes, squad strip, Operation BREACH, /#profile"
+      "type": "full-gates",
+      "command": "strict lint 0 · Vitest 228 files / 1,330 assertions · deployable build · runtime boundary 462,810 B / 560,000 B · schema+coherence+architecture+storage+task+node · public contract + claims · security release gate · dependency + asset gates · hot-context currency · windows-hide guard"
     },
     {
-      "session": 163,
+      "session": 165,
       "status": "green",
-      "type": "post-closeout-gates",
-      "command": "Vitest 1302/1302 · strict lint · build · runtime gate 551 KB/560 KB · public contract 29 files · Playwright serial 19 pass / 1 skip · browser smoke: BOSS GAUNTLET, HOLD THE THRONE (+squad), SEWER EXTRACTION, BOT ROYALE, Operation BREACH verb, /#profile"
+      "type": "browser-proof",
+      "command": "Playwright serial 19 pass / 1 intentional skip; smoke:modes real-browser five-scenario pass — BOSS GAUNTLET, HOLD THE THRONE, SEWER EXTRACTION, BOT ROYALE (banner '16 BOTS LEFT'), squad strip, Operation BREACH, /#profile; bot-royale capture directly reviewed and a canvas pixel probe confirmed the radar disc renders"
     },
     {
-      "session": 163,
-      "status": "green",
-      "type": "tests",
-      "command": "full Vitest 221 files / 1286 assertions · strict lint · deployable build · public contract 29 files · public claims · security release gate · architecture budget · token drift · Playwright 19 pass / 1 intentional mobile skip"
-    },
-    {
-      "session": 163,
-      "status": "green",
-      "type": "browser-smoke",
-      "command": "npm run smoke:modes — BOSS GAUNTLET and HOLD THE THRONE deploy from the front door and render HUD banners; screenshots docs/visual-qa/new-modes/"
-    },
-    {
-      "session": 163,
-      "status": "green",
-      "type": "visual-review",
-      "command": "scripts/capture-theme-shots.mjs — 14 captures (home, modes, roadmap, login, privacy, changelog × sewer-night/porcelain-day + mobile) directly reviewed; docs/visual-qa/s163-theme/"
-    },
-    {
-      "session": 162,
-      "status": "green",
-      "url": "https://d9e689b6.call-of-doodie.pages.dev/",
-      "type": "production-verifier",
-      "command": "source 5d54f90bde9b · workflow 32924884085 · Linux lint and 1270 assertions · build/deploy green · immutable/custom exact health and shell 7/7 each · cutover 5/5 · replay 3/3 · leaderboard isolation and Studio launch surfaces pass"
-    },
-    {
-      "session": 162,
-      "status": "green",
-      "url": "https://1b86fbd2.call-of-doodie.pages.dev/",
-      "type": "staging-preview",
-      "command": "alias https://session-162-staging.call-of-doodie.pages.dev/ · shell/edge 7/7 · broad matrix 1020/1020 · focused before-after 128/128 · CANON-053 14 hash-bound captures directly reviewed"
-    },
-    {
-      "session": 162,
-      "status": "green",
-      "type": "tests",
-      "command": "full Vitest 220 files / 1270 assertions · focused 27/27 · browser interaction serial 17 pass / 1 intentional mobile skip · strict lint · deployable build · schema/public/security/dependency/assets/media/runtime/protocol · npm audit 0"
-    },
-    {
-      "session": 162,
-      "status": "green",
-      "type": "release-gate",
-      "command": "engineering FORGE GO · branding and public contract pass · footer 18/18 · mobile parity attested · cost-neutral ALLOW · Cloudflare deploy READY · npm audit and supply-chain scans clean · SPARKED NO-GO"
-    },
-    {
-      "session": 161,
-      "status": "green",
-      "url": "https://39696138.call-of-doodie.pages.dev/",
-      "type": "production-verifier",
-      "command": "source 6cc76130d23f · workflow 32894266704 · Linux lint and 1267 assertions · build/deploy green · immutable/custom exact health and shell 7/7 each · cutover 5/5 · backend 5/5 · replay 3/3 · leaderboard isolation and Studio launch surfaces pass"
-    },
-    {
-      "session": 161,
-      "status": "green",
-      "url": "https://36b0643f.call-of-doodie.pages.dev/",
-      "type": "staging-preview",
-      "command": "alias https://session-161-staging.call-of-doodie.pages.dev/ · shell/edge 7/7 on both origins · broad matrix 1020/1020 · focused before-after 96/96 · CANON-053 14 hash-bound captures directly reviewed"
-    },
-    {
-      "session": 161,
-      "status": "green",
-      "type": "tests",
-      "command": "full Vitest 220 files / 1267 assertions · focused 34/34 · browser E2E serial 19 pass / 1 intentional mobile skip · strict lint · deployable build · schema/public/security/dependency/assets/media/runtime/protocol · npm audit 0"
-    },
-    {
-      "session": 161,
-      "status": "green",
-      "type": "release-gate",
-      "command": "engineering FORGE GO · branding and public contract pass · footer 18/18 · mobile parity attested · cost-neutral ALLOW · Cloudflare deploy 3/3 READY · secret and supply-chain scans clean · SPARKED NO-GO"
-    },
-    {
-      "session": 160,
-      "status": "green",
-      "url": "https://950cc1ed.call-of-doodie.pages.dev/",
-      "type": "production-recovery",
-      "command": "source f76850a · workflow 32883766091 · 219 files / 1255 assertions · build/deploy green · immutable/custom shell 7/7 each · cutover 5/5 · no product/lifecycle delta"
-    },
-    {
-      "session": 159,
-      "status": "green",
-      "url": "https://017af042.call-of-doodie.pages.dev/",
-      "type": "production-verifier",
-      "command": "source 0864686b6b4f · quality/build/deploy 32626881275 · Dependabot 32626942358 · immutable/custom health exact · shell 7/7 both · cutover 5/5 · backend 5/5 · replay 3/3 · leaderboard, launch surfaces, and Operation pixels 48/48 pass"
-    },
-    {
-      "session": 159,
-      "status": "green",
-      "url": "https://9499adda.call-of-doodie.pages.dev/",
-      "type": "staging-preview",
-      "command": "alias https://session-159-staging.call-of-doodie.pages.dev/ · exact closeout source 0864686b6b4f · broad 1020/1020 · focused Operation 48/48 · modal 36/36 · 30 hash-bound captures directly reviewed"
-    },
-    {
-      "session": 159,
-      "status": "green",
-      "type": "tests",
-      "command": "full Vitest 219 files / 1254 assertions · focused 48/48 · browser E2E 19 pass / 1 intentional mobile skip · strict lint · deployable build · schema/public/security/dependency/assets/media/runtime · npm audit 0"
-    },
-    {
-      "session": 159,
-      "status": "green",
-      "type": "release-gate",
-      "command": "engineering FORGE GO · strict public sanitization and secret scans 0 findings · cost-neutral · SPARKED NO-GO"
-    },
-    {
-      "session": 158,
-      "status": "green",
-      "url": "https://ee00b749.call-of-doodie.pages.dev/",
-      "type": "production-verifier",
-      "command": "source bdbf396c0148 · brief 31986725453 · quality/build/deploy 31986725436 · immutable/custom health exact · shell 7/7 both · cutover 5/5 · backend 5/5 · replay 3/3 · leaderboard, launch surfaces, and Operation pixels 36/36 pass"
-    },
-    {
-      "session": 158,
-      "status": "green",
-      "url": "https://09d33af3.call-of-doodie.pages.dev/",
-      "type": "staging-preview",
-      "command": "alias https://session-158-staging.call-of-doodie.pages.dev/ · hosted shell 7/7 · broad matrix 1020/1020 · focused Operation 36/36 · 18 hash-bound captures directly reviewed"
-    },
-    {
-      "session": 158,
-      "status": "green",
-      "type": "tests",
-      "command": "full Vitest 215 files / 1229 assertions · focused 20/20 · browser E2E 19 pass / 1 intentional mobile skip · strict lint · deployable build · schema/public/security/dependency/assets/media/runtime · npm audit 0"
-    },
-    {
-      "session": 158,
-      "status": "green",
-      "type": "release-gate",
-      "command": "engineering FORGE GO · strict public sanitization 0 findings · cost-neutral ALLOW · footer 18/18 · synthetic staging INP 48ms at 390px and 1440px · SPARKED NO-GO"
-    },
-    {
-      "status": "green",
-      "url": "https://228f133b.call-of-doodie.pages.dev/",
-      "type": "production-verifier",
-      "command": "source 5ce42226349b · brief 31970693660 · quality/build/deploy 31970693652 · immutable/custom health exact · shell 7/7 both · cutover 5/5 · backend 5/5 · replay 3/3 · leaderboard, launch surfaces, and Operation pixels 36/36 pass"
-    },
-    {
-      "status": "green",
-      "url": "https://906bded2.call-of-doodie.pages.dev/",
-      "type": "staging-preview",
-      "command": "Session 157 alias https://session-157-staging.call-of-doodie.pages.dev/ · hosted broad 1020/1020 · focused Operation 36/36 · 26 hash-bound captures directly reviewed"
-    },
-    {
-      "status": "green",
-      "type": "tests",
-      "command": "Session 157 — full Vitest 212 files / 1214 tests; browser E2E 19 pass / 1 intentional mobile skip; strict lint; deployable build; schema/public/security/dependency/assets/media/runtime; npm audit 0"
-    },
-    {
-      "status": "green",
-      "type": "recovery-verification",
-      "command": "Session 156 — synchronized tree passes full serialized Vitest 209 files / 1205 tests in 268.27s; no product-code delta"
-    },
-    {
-      "status": "green",
-      "url": "https://068d27b2.call-of-doodie.pages.dev/",
-      "type": "production-evidence-seal",
-      "command": "source b37da9c · brief 31932656756 · quality/build/deploy 31932656740 · final documentation seal a4549a4"
-    },
-    {
-      "status": "green",
-      "url": "https://e1017435.call-of-doodie.pages.dev/",
-      "type": "production-verifier",
-      "command": "application source 7e613d4e6854 · workflow 31931957413 quality/build/deploy green · immutable/custom health exact · live shell 7/7 · cutover 5/5"
-    },
-    {
-      "status": "green",
-      "url": "https://session-155-staging.call-of-doodie.pages.dev/",
-      "type": "staging-preview",
-      "command": "immutable https://213212ad.call-of-doodie.pages.dev/ · exact source 7e613d4e6854 · hosted matrix 1020/1020 · Operation state/modal matrices 72/72 · 26 hash-bound captures directly reviewed"
-    },
-    {
-      "status": "green",
-      "type": "tests",
-      "command": "Session 155 — full Vitest 209 files / 1205 tests; strict lint; architecture 4753/5000 and loop 1498/1775; schema; deployable build; public/assets/dependency/runtime/security; npm audit 0"
-    },
-    {
-      "status": "green",
-      "url": "https://session-154-staging.call-of-doodie.pages.dev/",
-      "type": "staging-preview",
-      "command": "immutable https://5da63921.call-of-doodie.pages.dev/ · hosted shell/edge/manifest/service-worker/social-card 7/7 · HTTP 200 · HSTS/CSP/noindex verified"
-    },
-    {
-      "status": "green",
-      "type": "tests",
-      "command": "Session 154 — protocol 42/42; focused 53/53; full Vitest 196 files / 1158 tests; strict lint; schema; deployable build; public/assets/dependency/runtime/security; npm audit 0"
-    },
-    {
-      "status": "green",
-      "type": "ci-verifier",
-      "command": "b61d883 brief 31769146459 green; deploy 31769146435 blocked pre-deploy on ambient-CI fixture drift; hermetic fix proves CI=true full Vitest 196/196 files / 1158/1158 tests locally"
-    },
-    {
-      "status": "green",
-      "url": "https://11c3148b.call-of-doodie.pages.dev/",
-      "type": "production-verifier-seal",
-      "command": "source 5b8b704; brief 31769440471; quality/build/deploy 31769440455; immutable/custom shell 7/7; cutover 5/5; backend 5/5; replay 3/3; leaderboard and launch surfaces pass"
-    },
-    {
-      "status": "green",
-      "url": "https://callofdoodie.wtf/",
-      "type": "production"
-    },
-    {
-      "status": "green",
-      "url": "https://playcallofdoodie.com/",
-      "type": "production"
-    },
-    {
-      "status": "green",
-      "url": "https://call-of-doodie.pages.dev/",
-      "type": "cloudflare"
-    },
-    {
-      "status": "green",
-      "url": "https://session-125-staging.call-of-doodie.pages.dev/",
-      "type": "staging-preview",
-      "command": "live shell 5/5; hosted default/theme/viewport matrix 255/255"
-    },
-    {
-      "status": "green",
-      "type": "tests",
-      "command": "npm test — 685/685 across 89 files"
-    },
-    {
-      "status": "green",
-      "type": "deploy",
-      "command": "staging deploy 29796935326 + brief 29796935367; production security-ratchet deploy 29804998578 + brief 29804998598; Dependabot open alerts 0"
-    },
-    {
-      "status": "green",
-      "type": "production-smoke",
-      "command": "npm run live:site-check"
-    },
-    {
-      "status": "green",
-      "type": "production-smoke",
-      "command": "npm run post-cutover:smoke"
-    },
-    {
-      "status": "green",
-      "type": "production-smoke",
-      "command": "npm run replay:trust-smoke"
-    },
-    {
-      "status": "green",
-      "type": "tests",
-      "command": "npm test — 704/704 across 93 files; strict lint; production build"
-    },
-    {
-      "status": "green",
-      "url": "https://session-126-staging.call-of-doodie.pages.dev/",
-      "type": "staging-preview",
-      "command": "SHA 193fdd6 · deploy 29889321484 · brief 29889321470 · hosted visual 255/255 · eight public routes HTTP 200"
-    },
-    {
-      "status": "green",
-      "url": "https://session-127-staging.call-of-doodie.pages.dev/",
-      "type": "staging-preview",
-      "command": "SHA 57dd40b · deploy 29973290482 · hosted health/HSTS 7/7 · hosted visual 255/255"
-    },
-    {
-      "status": "green",
-      "type": "tests",
-      "command": "npm test — 721/721 across 98 files; strict lint; production build"
-    },
-    {
-      "status": "green",
-      "type": "tests",
-      "command": "Session 128 — 737/737 across 102 files; strict lint; production build; public/protocol/dependency/security/media/assets gates; npm audit 0; browser E2E 2/2"
-    },
-    {
-      "status": "green",
-      "type": "local-browser-capture",
-      "command": "Five real Chromium desktop/mobile captures refreshed; no render failure. Direct host pixel viewer unavailable (CryptUnprotectData), so pixel-perfect review is unclaimed."
-    },
-    {
-      "status": "green",
-      "url": "https://session-129-staging.call-of-doodie.pages.dev/",
-      "type": "staging-preview",
-      "command": "Session 129 direct-upload preview · typed runtime 7/7 · hosted visual route/theme/viewport matrix 255/255"
-    },
-    {
-      "status": "green",
-      "type": "tests",
-      "command": "Session 129 — 780/780 across 106 files; strict lint; production build; dependency/public/protocol/security/replay/media/assets gates; npm audit 0"
-    },
-    {
-      "status": "green",
-      "type": "production-smoke",
-      "command": "Session 129 — live 7/7; post-cutover 5/5; launch surfaces and shared leaderboard collision checks pass"
-    },
-    {
-      "status": "green",
-      "url": "https://session-130-staging.call-of-doodie.pages.dev/",
-      "type": "staging-preview",
-      "command": "Session 130 direct-upload preview via secrets gateway · typed runtime 7/7 · hosted visual route/theme/viewport matrix 255/255"
-    },
-    {
-      "status": "green",
-      "type": "tests",
-      "command": "Session 130 — 809/809 across 111 files; core coverage 82/82 with freshness ratchet; strict lint; production build; browser E2E 2/2"
-    },
-    {
-      "status": "green",
-      "url": "https://session-131-staging.call-of-doodie.pages.dev/",
-      "type": "staging-preview",
-      "command": "Session 131 direct-upload preview via secrets gateway · hosted visual route/theme/viewport matrix 867/867"
-    },
-    {
-      "status": "green",
-      "type": "tests",
-      "command": "Session 131 — 824/824 across 116 files; strict lint; production build; public/assets/dependency/security/replay/schema/protocol/media gates; browser E2E 2/2"
-    },
-    {
-      "status": "green",
-      "url": "https://session-132-staging.call-of-doodie.pages.dev/",
-      "type": "staging-preview",
-      "command": "Session 132 direct-upload preview via secrets gateway · hosted visual route/theme/viewport matrix 867/867"
-    },
-    {
-      "status": "green",
-      "type": "tests",
-      "command": "Session 132 — 836/836 across 120 files; strict lint; production build; public/dependency/security/replay/schema/protocol/media gates; browser E2E 2/2"
-    },
-    {
-      "status": "green",
-      "type": "tests",
-      "command": "Session 132 continuation — 840/840 across 121 files; strict lint; build; public/dependency/security/schema/protocol/replay gates; browser E2E 2/2; schedule policy 5/5 workflows green"
-    },
-    {
-      "status": "green",
-      "url": "https://callofdoodie.wtf/",
-      "type": "production-deploy",
-      "command": "implementation commit 9b3f2615b744 · brief-format-check 30320143912 · Cloudflare deploy 30320143925 · live 7/7 · cutover 5/5 · replay 3/3 · function health 5/5; later closeout-only commits are separately CI/deploy gated"
-    },
-    {
-      "status": "green",
-      "url": "https://session-133-staging.call-of-doodie.pages.dev/",
-      "type": "staging-preview",
-      "command": "Session 133 direct-upload preview via secrets gateway · 8/8 critical routes · hosted visual route/theme/viewport matrix 867/867"
-    },
-    {
-      "status": "green",
-      "type": "tests",
-      "command": "Session 133 — 857/857 across 125 files; core coverage 88/88; strict lint; production build; public/dependency/security/replay/schema/protocol/media/storage gates; browser E2E 2/2"
-    },
-    {
-      "status": "green",
-      "type": "tests",
-      "command": "Session 134 — 866/866 across 127 files; strict lint; architecture 4975/5000; asset validation; production build; browser E2E 4/4 across Desktop Chrome and Pixel 7"
-    },
-    {
-      "status": "green",
-      "type": "tests",
-      "command": "Session 135 — 881/881 across 130 files; strict lint; asset validation; production build; diff check; focused input/Retro/browser completion E2E 8/8 across Desktop Chrome and Pixel 7"
-    },
-    {
-      "status": "green",
-      "url": "https://session-136-staging.call-of-doodie.pages.dev/",
-      "type": "staging-preview",
-      "command": "Session 136 broker-native direct-upload preview · seven HTTP/edge surfaces with one-year HSTS · hosted 21-route × 2-theme × 3-width matrix 867/867"
-    },
-    {
-      "status": "green",
-      "type": "tests",
-      "command": "Session 136 — 918/918 across 137 files; strict lint; production build; dependency/security/public/schema/protocol/replay/assets/home gates; desktop/mobile browser E2E 8/8"
-    },
-    {
-      "status": "green",
-      "url": "https://callofdoodie.wtf/",
-      "type": "production-deploy",
-      "command": "Session 136 SHA b821837382ea · brief 30725877849 · Cloudflare quality/build/deploy 30725877848 · live 7/7 · cutover 5/5 · replay 3/3 · function health 5/5"
-    },
-    {
-      "status": "green",
-      "type": "tests",
-      "command": "Session 136 final — 919/919 across 137 files; isolated public-CI capability-boundary proof added; exact-main workflows green"
-    },
-    {
-      "status": "green",
-      "url": "https://session-137-staging.call-of-doodie.pages.dev/",
-      "type": "staging-preview",
-      "command": "Session 137 secrets-gateway direct upload; immutable preview https://dd1b8c97.call-of-doodie.pages.dev; hosted 17-route × 2-theme × 3-width matrix 867/867; four hash-bound inspected captures"
-    },
-    {
-      "status": "green",
-      "type": "tests",
-      "command": "Session 137 — 935/935 across 143 files; strict lint; production build; architecture 4,999/5,000; desktop/mobile browser E2E 8/8"
-    },
-    {
-      "status": "measured-no-go",
-      "type": "production-performance",
-      "command": "Three Lighthouse runs per surface at production revision f1d4d825742c: HomeV2 median LCP 3226ms vs v1 2651ms; fallback retirement remains false and funnel evidence remains separate"
-    },
-    {
-      "status": "green",
-      "url": "https://session-138-staging.call-of-doodie.pages.dev/",
-      "type": "staging-preview",
-      "command": "Session 138 dependency-clean direct upload; immutable https://daa4b291.call-of-doodie.pages.dev; HTTP/edge smoke 7/7; hosted 19-route × 2-theme × 3-width matrix 969/969"
-    },
-    {
-      "status": "green",
-      "type": "tests",
-      "command": "Session 138 — 954/954 across 152 files; strict lint; production build; browser 12/12; public 27/27; security/npm audit 0; dependency/schema/architecture/runtime/asset/startup/protocol/Hot Context gates green"
-    },
-    {
-      "status": "green",
-      "type": "staging-performance",
-      "command": "Three clean origin-scoped Lighthouse runs per surface: default median performance 1.00, LCP 1301ms, CLS 0, TBT 8ms; production/funnel authority remains separate"
-    },
-    {
-      "status": "green",
-      "type": "tests",
-      "command": "Session 139 — 979/979 across 161 files in four direct Vitest shards; strict lint; schema/public/security/dependency/runtime/architecture/replay/health gates green; npm audit 0"
-    },
-    {
-      "status": "green",
-      "type": "local-rendered-pixel-qa",
-      "command": "Session 139 — 19 routes × 2 themes × 3 widths: 969/969; six hash-bound captures; focused Prestige desktop/mobile state probe; direct host pixel viewer unavailable (CryptUnprotectData), so manual pixel-perfect review is unclaimed"
-    },
-    {
-      "status": "green",
-      "url": "https://session-139-staging.call-of-doodie.pages.dev/",
-      "type": "staging-preview",
-      "command": "Session 139 recovery — brokered direct upload; immutable https://e4f2498c.call-of-doodie.pages.dev/; hosted 19-route × 2-theme × 3-width visual court 969/969"
-    },
-    {
-      "status": "green",
-      "url": "https://session-141-staging.call-of-doodie.pages.dev/",
-      "type": "staging-preview",
-      "command": "Session 141 brokered direct upload; immutable https://542f6c31.call-of-doodie.pages.dev/; hosted 19-route × 2-theme × 3-width visual court 969/969; six hash-bound captures"
-    },
-    {
-      "status": "green",
-      "type": "tests",
-      "command": "Session 141 — 1000/1000 across 169 files in 255.92s; focused 40/40 plus browser input/Retro/focus 6/6; strict lint/build/public/protocol/startup/security/replay/media and CANON-053 gates green"
-    },
-    {
-      "status": "green",
-      "url": "https://callofdoodie.wtf/",
-      "type": "production-deploy",
-      "command": "Session 141 implementation tip 80a0891e922b · brief 31076182617 · Cloudflare quality/deploy 31076182684 · immutable https://33f65ed2.call-of-doodie.pages.dev/ · typed edge health matches revision"
-    },
-    {
-      "status": "green",
-      "type": "production-smoke",
-      "command": "Session 141 — live 7/7 · cutover 5/5 · replay trust 3/3 · score backend 5/5 · Studio launch surfaces pass"
-    },
-    {
-      "status": "green",
-      "url": "https://session-142-staging.call-of-doodie.pages.dev/",
-      "type": "staging-preview",
-      "command": "Session 142 immutable b8732629 · 19 routes × 2 themes × 3 widths 969/969 · focused gameplay states 44/44 · 12 hash-bound captures"
-    },
-    {
-      "status": "green",
-      "url": "https://callofdoodie.wtf/",
-      "type": "production-deploy",
-      "command": "Session 142 production 8ff1b286 · live 7/7 · cutover 5/5 · replay trust 3/3 · production gameplay states 44/44"
-    },
-    {
-      "status": "green",
-      "type": "community-data",
-      "command": "12 real public rows · 5 runners · 259 kills · 119223 score · 21628 damage · 0 visible synthetic · 28 service-visible synthetic checks"
-    },
-    {
-      "status": "yellow",
-      "type": "mobile-interaction",
-      "command": "Synthetic 390px native mode-select interaction 832ms; retained as a red SPARKED gate, not a FORGE functional/visual failure"
-    },
-    {
-      "status": "green",
-      "url": "https://session-143-staging.call-of-doodie.pages.dev/",
-      "type": "staging-preview",
-      "command": "Session 143 immutable 7b9b6cb0; Community Stats browser/API all-history proof; 16 hash-bound theme/width captures"
-    },
-    {
-      "status": "green",
-      "url": "https://callofdoodie.wtf/",
-      "type": "production-deploy",
-      "command": "Session 143 production e0b481c3; live 7/7; cutover 5/5; replay trust 3/3; Community Stats browser/API reconciliation"
-    },
-    {
-      "status": "green",
-      "type": "tests",
-      "command": "Session 143 — 1022/1022 across 176 files; strict lint/schema/build; npm audit 0; supply-chain incidents 0"
-    },
-    {
-      "status": "green",
-      "type": "community-data",
-      "command": "All recoverable history — 12 real runs (0 rich, 12 legacy) · 5 runners · 259 kills · 119223 score · 21628 damage · 28 synthetic excluded"
-    },
-    {
-      "status": "green",
-      "type": "tests",
-      "command": "Session 147 — 1108/1108 across 184 files in isolation (vitest run --no-file-parallelism); strict lint; production build; runtime boundary 494,760B (gate 560,000B); public contract 28/28; schema lint clean; visual asset manifest 24 assets ok"
-    },
-    {
-      "status": "measured-not-device-confirmed",
-      "type": "mobile-performance-trace",
-      "command": "Session 147 real CDP Tracing capture of the production mobile mode-selector click: longest task 13.5ms, ruling out a JS compute cause for the 1408ms Event Timing API regression; leading hypothesis (native <select> picker overhead) not yet real-device confirmed"
-    },
-    {
-      "status": "green",
-      "type": "focused-tests",
-      "command": "Session 148 recovery — 71/71 changed-surface tests plus 9/9 shared-haptics tests; strict lint; 25-asset manifest; schema/architecture/storage/task/runtime gates; production build"
-    },
-    {
-      "status": "inconclusive",
-      "type": "tests",
-      "command": "Session 148 recovery — full serialized Vitest corpus timed out after 15 minutes under severe shared-host contention; no full-suite green claimed"
-    },
-    {
-      "session": 148,
-      "status": "green",
-      "url": "https://session-148-staging.call-of-doodie.pages.dev/",
-      "type": "staging-preview",
-      "command": "Session 148 recovery — immutable 9d4caec8.call-of-doodie.pages.dev; hosted 20-route × 2-theme × 3-width court 1020/1020; six hash-bound captures in docs/visual-qa/LATEST.json; subjective browser-bridge approval unclaimed"
-    },
-    {
-      "session": 150,
-      "status": "green",
-      "url": "https://session-150-staging.call-of-doodie.pages.dev/",
-      "type": "staging-preview",
-      "command": "immutable 684db11d.call-of-doodie.pages.dev; hosted broad visual court 1020/1020; focused desktop/mobile dark/light navigation court green; six hash-bound captures"
-    },
-    {
-      "session": 150,
-      "status": "green",
-      "type": "focused-tests",
-      "command": "35/35 changed-surface tests; strict lint; schema/architecture; public contract 28/28; deployable build; security/npm audit; dependency/assets/media/cost/release gates; two broad-suite attempts timed out after 15 minutes under shared-host contention without a captured assertion failure"
-    },
-    {
-      "session": 150,
-      "status": "green",
-      "url": "https://callofdoodie.wtf/",
-      "type": "production-deploy",
-      "command": "commit c260d77; workflow 31566376617; immutable 76855535.call-of-doodie.pages.dev; shell 7/7; redirects 5/5; replay 3/3; launch surfaces and focused desktop/mobile theme navigation court pass"
-    },
-    {
-      "session": 151,
-      "status": "green",
-      "url": "https://session-151-staging.call-of-doodie.pages.dev/",
-      "type": "staging-preview",
-      "command": "immutable 1fc32adb; hosted public visual matrix 1020/1020; eight hash-bound captures; direct death-screen mobile/desktop review complete"
-    },
-    {
-      "session": 151,
-      "status": "green",
-      "type": "tests",
-      "command": "1138/1138 assertions across 191 files via four bounded shards plus one recovered exact-tree serialized run; strict lint; schema/architecture; public 28/28; deployable build; security/npm audit; dependency/assets/media/cost/stats/visual gates"
-    },
-    {
-      "session": 151,
-      "status": "green",
-      "url": "https://5be7b044.call-of-doodie.pages.dev/",
-      "type": "production-deploy",
-      "command": "source 1952f510; workflow 31631272045; shell 7/7; cutover 5/5; replay 3/3; backend 5/5; leaderboard isolation and Studio launch surfaces pass"
-    },
-    {
-      "session": 152,
-      "status": "green",
-      "url": "https://session-152-staging.call-of-doodie.pages.dev/",
-      "type": "staging-preview",
-      "command": "immutable 25837962; hosted public visual matrix 1020/1020; 14 hash-bound captures; direct mastery and drill-outcome desktop/mobile review complete"
-    },
-    {
-      "session": 152,
-      "status": "green",
-      "type": "release-candidate",
-      "command": "focused 57/57; strict lint; schema/architecture; public 28/28; deployable build; security/npm audit zero; dependency/assets/media/cost/CANON-053 gates; independent engineering GO and SPARKED NO-GO"
-    },
-    {
-      "session": 152,
-      "status": "green",
-      "type": "tests",
-      "command": "final root-fixed closeout tree: 1143/1143 assertions across 191 files in 126.86s; focused implementation 57/57; closeout order/freshness 9/9"
-    },
-    {
-      "session": 152,
-      "status": "green",
-      "url": "https://a1fe44a3.call-of-doodie.pages.dev/",
-      "type": "production-deploy",
-      "command": "source 471cd6762b828f61d6bd55e47d614cec47d3abeb; brief 31657471854; quality/build/deploy 31657471851; shell 7/7; cutover 5/5; replay 3/3; backend 5/5; leaderboard isolation and Studio launch surfaces pass"
-    },
-    {
-      "session": 153,
-      "status": "green",
-      "url": "https://d7ec86f1.call-of-doodie.pages.dev/",
-      "type": "staging-preview",
-      "command": "broad hosted visual matrix 1020/1020; Replay Passport 32/32; real playtest signal 44/44; 18 hash-bound direct-reviewed captures across two themes and 390/1440px"
-    },
-    {
-      "session": 153,
-      "status": "green",
-      "type": "release-candidate",
-      "command": "195/195 files; 1153/1153 assertions; lint/build/architecture/runtime/public/security/dependency/supply-chain/cost/canon/visual/backend/replay/leaderboard gates green; FORGE GO, SPARKED NO-GO"
-    },
-    {
-      "session": 153,
-      "status": "green",
-      "url": "https://c9ee3b5e.call-of-doodie.pages.dev/",
-      "type": "production-deploy",
-      "command": "source 4b78142e; brief 31743411548; Supabase 31743411535; Cloudflare 31743411559; shell 7/7; cutover 5/5; playtest 11/11; backend 5/5; replay 3/3; leaderboard and launch surfaces pass"
-    },
-    {
-      "session": 153,
-      "status": "green",
-      "type": "verifier-seal",
-      "command": "project-ref-validating public Supabase resolver; full 196 files / 1155 assertions; lint, deployable build, runtime, security, backend, replay, and leaderboard gates pass"
-    },
-    {
-      "session": 153,
-      "status": "green",
-      "url": "https://ce9e4ae3.call-of-doodie.pages.dev/",
-      "type": "production-verifier-seal",
-      "command": "source 10c05add; brief 31745229611; Cloudflare 31745229701; immutable and custom health exact-ID; shell 7/7; cutover 5/5; backend 5/5; replay 3/3; leaderboard and launch surfaces pass"
+      "session": 165,
+      "status": "flaky",
+      "type": "browser-parallel",
+      "command": "Playwright with default workers produced 6 cold-start timeouts on home-shell locators; re-run serially at 19 pass / 1 skip. Classified as worker contention on this machine, not a regression — the project's own recorded baseline is a serial run."
     }
   ],
   "blockers": [
@@ -645,7 +34,7 @@
     "Broad Cloudflare studio-access token should be rotated or narrowed after domain stabilization.",
     "CANON-045 and CANON-055 remain STRONG external/checker findings; no ABSOLUTE canon gap is present."
   ],
-  "lastUpdated": "2026-09-03",
+  "lastUpdated": "2026-09-07",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
   "truthAuditStatus": "engineering-ready-sparked-no-go",
@@ -653,17 +42,17 @@
   "ignisScore": 43723,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-08-23",
-  "silSession": 163,
-  "silScore": 995,
-  "silAvg3": 997,
-  "silVelocity": 6,
+  "silSession": 165,
+  "silScore": 997,
+  "silAvg3": 987,
+  "silVelocity": 5,
   "silDebt": "down",
-  "silLastSession": 163,
-  "currentSession": 163,
+  "silLastSession": 165,
+  "currentSession": 165,
   "sessionMode": "founder",
   "lastAgent": "claude-code",
-  "testsPassing": 1302,
-  "testsTotal": 1302,
+  "testsPassing": 1330,
+  "testsTotal": 1330,
   "entropyScore": 0.197,
   "entropyLastComputed": "2026-08-23",
   "silRubricVersion": "3.0",
@@ -673,11 +62,11 @@
     "devHealth": 100,
     "creativeAlignment": 100,
     "momentum": 100,
-    "engagement": 99,
-    "processQuality": 98,
+    "engagement": 98,
+    "processQuality": 100,
     "crossRepoCoherence": 100,
     "securityPosture": 100,
-    "ecosystemIntegration": 99,
+    "ecosystemIntegration": 100,
     "capitalEfficiency": 100,
     "automationCoverage": 99
   },
@@ -694,15 +83,15 @@
   "runtimeUrl": "https://callofdoodie.wtf/",
   "stagingType": "cloudflare-pages",
   "stagingUrl": "https://session-162-staging.call-of-doodie.pages.dev/",
-  "testsLastRun": "2026-08-25",
+  "testsLastRun": "2026-09-07",
   "sanitizationLastCleared": "2026-08-23",
   "sessionShellHygiene": {
-    "session": 162,
-    "started": 25,
-    "closed": 25,
+    "session": 165,
+    "started": 8,
+    "closed": 8,
     "running": 0,
-    "enumeratedAt": "2026-08-26T03:11:58.961Z",
-    "scope": "Every identifiable S162 yielded command session retained across the active, compacted, and production-follow-through turn was reconciled. Staging, visual-audit, security, dependency, supply-chain, browser, Vite, Doctor, closeout, Git transport, CI-watch, production-smoke, and patch-helper sessions exited; repo-scoped node/cmd/pwsh/git/ssh processes and ports 4174, 4179, and 53173 were rechecked with zero listeners. Non-yielded foreground commands are not counted as background shells."
+    "enumeratedAt": "2026-09-07T17:04:11.294Z",
+    "scope": "Five harness background shells (baseline gate, camera gate, remaining gates, isolated vite preview on port 4183, Playwright runs) plus three foreground gate batches. The isolated preview was started on 4183 because port 4173 was held by a foreign node process from outside this repo and was never assumed to serve this build; it was stopped at closeout. Non-yielded foreground commands are not counted as background shells."
   },
   "doctorScore": {
     "date": "2026-08-23",
@@ -720,16 +109,14 @@
     "total": 203,
     "score": 74
   },
-  "lastSessionSummary": "Session 163 shipped the founder-directed course correction: a mode-definition layer with BOSS GAUNTLET and HOLD THE THRONE, CPU squad teammates, a fixed 60Hz simulation with a headless deterministic kernel, and one design-token brand across the game, login, and every static page.",
-  "testsAssertionsPassing": 1270,
-  "testsAssertionsTotal": 1270,
-  "testsAssertionsFiles": 220,
-  "testsFlaky": [
-    "Eight-worker Playwright diagnostic saturated the shared dev host; the 17 runnable interaction cases passed under authoritative serial desktop/mobile execution."
-  ],
+  "lastSessionSummary": "Session 165 ran a full recovery-checked arc: triaged and recovered the Session 164 write-back debt (fifteen commits shipped and deployed after S163 sealed, with no closeout for 96.8h), then shipped a scrolling world camera, a sixteen-bot 2x-arena BOT ROYALE, a fix for royale bots that had been targeting themselves since the mode shipped, camera-correct threat compass / floating text / whole-arena radar, and a death-beat diet moving the share-card painter, QR encoder and on-screen keyboard off the DeathScreen chunk (101.8 KB to 90.5 KB). Root-fixed two studio gates that were silently red on main without lowering either budget.",
+  "testsAssertionsPassing": 1330,
+  "testsAssertionsTotal": 1330,
+  "testsAssertionsFiles": 228,
+  "testsFlaky": 6,
   "testsInconclusive": 0,
   "testsEnvBlocked": [],
   "testsDeferred": [],
   "testsBudgetExhausted": false,
-  "silAvg5": 998
+  "silAvg5": 991
 }

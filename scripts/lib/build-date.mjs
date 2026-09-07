@@ -7,7 +7,8 @@
 // generate-public-pages --check gate stays meaningful; wall-clock would dirty
 // every build), and honest by construction.
 
-import { execFileSync } from "node:child_process";
+// Routed through safe-spawn so windowsHide:true is forced (S165; CANON-016).
+import { execFileSync } from "./safe-spawn.mjs";
 
 // Paths whose commits count as "content changed" for the public site.
 const CONTENT_PATHS = [

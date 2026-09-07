@@ -1,12 +1,16 @@
 /**
  * offscreenIndicators.js — pure geometry for edge-of-viewport threat arrows.
  *
- * The arena is a fixed W×H field (no scrolling camera), so "off-screen"
- * only happens briefly — enemies spawn just past the edges (see
- * gameHelpers.js spawnEnemy) and during Siege/formation bursts several can
- * be off-canvas at once. Boss/elite spawns and those bursts are exactly the
- * moments "Readable chaos" (SOUL.md) matters most, so this surfaces a small
- * directional compass marker at the canvas edge for each occupied direction.
+ * For most modes the arena is a fixed W×H field, so "off-screen" only happens
+ * briefly — enemies spawn just past the edges (see gameHelpers.js spawnEnemy)
+ * and during Siege/formation bursts several can be off-canvas at once. Since
+ * S165 a mode may declare an arena larger than the viewport and scroll a camera
+ * over it, in which case most of the field is off-screen at any moment and this
+ * compass carries the whole readability load. Callers pass `camX`/`camY` (arena
+ * → screen offset); at (0, 0) the geometry is exactly what it was before.
+ * Boss/elite spawns and burst waves are the moments "Readable chaos" (SOUL.md)
+ * matters most, so this surfaces a small directional compass marker at the
+ * canvas edge for each occupied direction.
  *
  * Suppressed entirely during the Fog of War perk (gs.fogOfWar) — reduced
  * information there is that perk's intentional tradeoff, not a bug to patch.
@@ -79,17 +83,25 @@ export function getOffscreenThreatArrows(enemies, W, H, {
   zoom = 1,
   sectorCount = 8,
   maxArrows = 8,
+  camX = 0,
+  camY = 0,
 } = {}) {
   if (fogOfWar || !Array.isArray(enemies) || !enemies.length) return [];
   const safeSectorCount = clamp(Math.floor(sectorCount) || 8, 1, 16);
   const safeMaxArrows = clamp(Math.floor(maxArrows) || 8, 1, safeSectorCount);
+  // Arena → screen. Focus and every enemy shift together, so the ADS zoom
+  // still pivots on the player and the edge projection stays in canvas space.
+  const screenFocusX = focusX - camX;
+  const screenFocusY = focusY - camY;
   const groups = new Map();
   for (const e of enemies) {
-    const point = worldToThreatScreenPoint(e.x, e.y, { focusX, focusY, zoom });
+    const point = worldToThreatScreenPoint(e.x - camX, e.y - camY, {
+      focusX: screenFocusX, focusY: screenFocusY, zoom,
+    });
     if (!isOffscreen(point.x, point.y, W, H)) continue;
     const edge = projectToEdge(point.x, point.y, W, H, margin, {
-      originX: focusX,
-      originY: focusY,
+      originX: screenFocusX,
+      originY: screenFocusY,
     });
     const priority = e.isBossEnemy ? 3 : e.eliteType ? 2 : 1;
     const normalizedAngle = (edge.angle + Math.PI * 2) % (Math.PI * 2);

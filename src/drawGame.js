@@ -202,6 +202,16 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
       (_sdy * 0.6 + (Math.random() - 0.5) * (1 - Math.abs(_sdy) * 0.5)) * _mag,
     );
   }
+  // S165 camera: one translate turns the whole world block below into a view
+  // onto an arena that may be larger than the canvas. Every draw call keeps its
+  // arena coordinates; screen-space overlays are painted after the restore().
+  // For every mode that does not scale its arena the camera sits at (0, 0) and
+  // this is a no-op.
+  const _cam = gs.camera || null;
+  const _camX = _cam?.x || 0, _camY = _cam?.y || 0;
+  const _AW = gs.arenaW || W, _AH = gs.arenaH || H;
+  if (_camX !== 0 || _camY !== 0) ctx.translate(-_camX, -_camY);
+
   // ADS zoom: scale 1.28× centered on player for aim-down-sights effect
   if (gs.adsZoom && p) {
     ctx.translate(p.x, p.y);
@@ -214,8 +224,13 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   // offscreen canvas (systems/backgroundLayer.js) and blitted here; combat
   // decals persist by stamping straight into that canvas.
   const _theme = ARENA_THEMES[gs.mapTheme] || ARENA_THEMES[0];
-  const _arenaLayers = getArenaLayers(gs, W, H, _dpr, { theme: _theme, perfStep: _perfStep, retroCharacters });
-  ctx.drawImage(_arenaLayers.underlay.canvas, 0, 0, W, H);
+  // The layer canvases cover the whole ARENA so decals stay put under a moving
+  // camera. A scrolled arena caps the backing-store scale at 1× DPR: a 2× arena
+  // at 2× DPR would be a 16-megapixel offscreen surface for a background that
+  // is blitted, never resampled.
+  const _bgDpr = (_AW > W || _AH > H) ? Math.min(1, _dpr) : _dpr;
+  const _arenaLayers = getArenaLayers(gs, _AW, _AH, _bgDpr, { theme: _theme, perfStep: _perfStep, retroCharacters });
+  ctx.drawImage(_arenaLayers.underlay.canvas, 0, 0, _AW, _AH);
 
   // ── Active dynamic objective (Hot Zone / Lockdown / Escort / Sniper / Bounty) ──
   const _obj = gs.activeObjective;
@@ -418,7 +433,7 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   });
 
   // Obstacles — prerendered layer (systems/backgroundLayer.js), single blit
-  ctx.drawImage(_arenaLayers.obstacles.canvas, 0, 0, W, H);
+  ctx.drawImage(_arenaLayers.obstacles.canvas, 0, 0, _AW, _AH);
 
   // Fog of War overlay (wave event): draw dark fog, punch holes around player and near enemies
   if (gs.fogOfWar) {
@@ -1330,7 +1345,11 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   }
   ctx.restore();
 
-  // Floating texts
+  // Floating texts carry ARENA coordinates, so under a scrolled camera they
+  // need the camera offset — but not the shake or the ADS zoom, which is why
+  // they sit outside the world block rather than inside it.
+  const _ftCam = (_camX !== 0 || _camY !== 0);
+  if (_ftCam) { ctx.save(); ctx.translate(-_camX, -_camY); }
   gs.floatingTexts.forEach(ft => {
     const _ftBig = ft.big === true || (typeof ft.text === "string" && ft.text.includes("💥"));
     const maxLife = _ftBig ? 90 : ft.quote ? 110 : 60;
@@ -1348,6 +1367,7 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     }
     ctx.strokeText(ft.text, ft.x, ft.y); ctx.fillText(ft.text, ft.x, ft.y);
   });
+  if (_ftCam) ctx.restore();
   ctx.globalAlpha = 1;
 
   // Mini-radar
@@ -1355,16 +1375,64 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   ctx.globalAlpha = 0.35; ctx.fillStyle = "#000"; ctx.beginPath(); ctx.arc(rx, ry, rs, 0, Math.PI * 2); ctx.fill();
   ctx.strokeStyle = gs.bossWave ? "#F00" : "#0F0"; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(rx, ry, rs, 0, Math.PI * 2); ctx.stroke();
   ctx.globalAlpha = 0.7;
-  ctx.fillStyle = "#0F0"; ctx.beginPath(); ctx.arc(rx, ry, 2, 0, Math.PI * 2); ctx.fill();
+  // Scrolled arenas (S165) switch the radar from a player-relative window to a
+  // whole-arena plot: on a map larger than the screen, "which way is the fight"
+  // is worth less than "where am I in the sewer and where is the water".
+  const _radarWholeArena = _AW > W || _AH > H;
+  // Scale by the arena DIAGONAL, not its long axis: the radar is round, so
+  // fitting the long axis to the diameter pushes the arena's four corners
+  // outside the disc and silently hides anyone standing in them.
+  const _radarSpan = _radarWholeArena ? Math.hypot(_AW, _AH) : 0;
+  // Arena point → radar point. Whole-arena mode is absolute; the legacy mode is
+  // player-relative over a 0.6-viewport window, unchanged.
+  const _toRadar = (wx, wy) => (_radarWholeArena
+    ? { dx: (wx - _AW / 2) / _radarSpan * (rs * 2), dy: (wy - _AH / 2) / _radarSpan * (rs * 2) }
+    : { dx: (wx - p.x) / (W * 0.6) * rs, dy: (wy - p.y) / (H * 0.6) * rs });
+
+  // Everything plotted on the radar is clipped to the radar disc. The flood
+  // ring opens wider than the arena's short axis, so without this it paints a
+  // large cyan arc across the corner of the screen at run start.
+  ctx.save();
+  ctx.beginPath(); ctx.arc(rx, ry, rs, 0, Math.PI * 2); ctx.clip();
+
+  if (_radarWholeArena) {
+    // Arena extent, so the player can read how much sewer is left.
+    ctx.save();
+    ctx.globalAlpha = 0.28;
+    ctx.strokeStyle = "#0F0"; ctx.lineWidth = 1;
+    ctx.strokeRect(rx - (_AW / _radarSpan) * rs, ry - (_AH / _radarSpan) * rs,
+      (_AW / _radarSpan) * rs * 2, (_AH / _radarSpan) * rs * 2);
+    ctx.restore();
+    const _fl = gs.flood;
+    if (_fl && Number.isFinite(_fl.r)) {
+      const c = _toRadar(_fl.cx, _fl.cy);
+      ctx.save();
+      ctx.globalAlpha = 0.75;
+      ctx.strokeStyle = "#33E6FF"; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.arc(rx + c.dx, ry + c.dy, Math.max(1, (_fl.r / _radarSpan) * rs * 2), 0, Math.PI * 2); ctx.stroke();
+      if (_fl.targetR < _fl.r) {
+        ctx.globalAlpha = 0.45; ctx.setLineDash([2, 3]);
+        ctx.beginPath(); ctx.arc(rx + c.dx, ry + c.dy, Math.max(1, (_fl.targetR / _radarSpan) * rs * 2), 0, Math.PI * 2); ctx.stroke();
+        ctx.setLineDash([]);
+      }
+      ctx.restore();
+    }
+  }
+  ctx.globalAlpha = 0.7;
+  const _pr = _toRadar(p.x, p.y);
+  ctx.fillStyle = "#0F0"; ctx.beginPath(); ctx.arc(rx + _pr.dx, ry + _pr.dy, 2, 0, Math.PI * 2); ctx.fill();
   for (let _ri = 0; _ri < (gs.enemies || []).length; _ri++) {
     const e = gs.enemies[_ri];
     if (!e) continue;
-    const edx = (e.x - p.x) / (W * 0.6) * rs, edy = (e.y - p.y) / (H * 0.6) * rs;
-    if (Math.hypot(edx, edy) < rs - 2) {
+    const { dx: edx, dy: edy } = _toRadar(e.x, e.y);
+    // Whole-arena mode already fits inside the disc and is clipped to it, so
+    // the player-relative range cull would only re-hide the arena's corners.
+    if (_radarWholeArena || Math.hypot(edx, edy) < rs - 2) {
       ctx.fillStyle = e.isBossEnemy ? "#FF00FF" : e.typeIndex >= 4 ? "#F00" : e.ranged ? "#F80" : "#FF0";
       ctx.beginPath(); ctx.arc(rx + edx, ry + edy, e.isBossEnemy ? 4 : 2, 0, Math.PI * 2); ctx.fill();
     }
   }
+  ctx.restore();
   ctx.globalAlpha = 1;
 
   // Rage active: red pulse overlay
@@ -1663,6 +1731,8 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     focusX: p?.x ?? W / 2,
     focusY: p?.y ?? H / 2,
     zoom: gs.adsZoom ? 1.28 : 1,
+    camX: _camX,
+    camY: _camY,
   });
   drawOffscreenThreatArrows(ctx, _offscreenArrows);
 }

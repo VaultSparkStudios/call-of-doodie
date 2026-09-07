@@ -1,8 +1,7 @@
 import { useState, useRef, useEffect, useMemo, lazy } from "react";
 import AsyncPanelBoundary from "./AsyncPanelBoundary.jsx";
 import { ACHIEVEMENTS, ENEMY_TYPES, RANK_NAMES, WEAPONS } from "../constants.js";
-import VirtualKeyboard from "./VirtualKeyboard.jsx";
-import { qrEncode } from "../utils/qrEncode.js";
+
 import { buildRunDebrief } from "../utils/runDebrief.js";
 import { buildRunNarrative } from "../utils/runNarrative.js";
 import { buildRunCoach } from "../utils/runCoach.js";
@@ -33,6 +32,8 @@ import { FIELD_REPORTS } from "../utils/fieldReport.js";
 import CommunityStatsPanel from "./CommunityStatsPanel.jsx";
 
 const LeaderboardPanel = lazy(() => import("./LeaderboardPanel.jsx"));
+// S165 diet: the on-screen keyboard is only mounted for touch name entry.
+const VirtualKeyboard = lazy(() => import("./VirtualKeyboard.jsx"));
 
 const TIER_COLORS = { bronze: "#CD7F32", silver: "#C0C0C0", gold: "#FFD700", legendary: "#FF6B35" };
 
@@ -227,159 +228,51 @@ export default function DeathScreen({
     vsName: username,
   });
 
+  // S165 diet: the QR encoder is ~6.5 KB of source that only runs when the
+  // player opens the challenge QR, so it loads on demand rather than with the
+  // death beat. `cancelled` guards a close that races the import.
   useEffect(() => {
-    if (!showQR || !challengeUrl) return;
+    if (!showQR || !challengeUrl) return undefined;
     setQrError(false);
-    if (!qrCanvasRef.current) return;
-    try {
-      const { matrix, size } = qrEncode(challengeUrl);
-      const scale = 6;
-      const canvas = qrCanvasRef.current;
-      canvas.width = (size + 8) * scale;
-      canvas.height = (size + 8) * scale;
-      const ctx = canvas.getContext("2d");
-      ctx.fillStyle = "#FFFFFF"; ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = "#000000";
-      for (let r = 0; r < size; r++) for (let c = 0; c < size; c++) {
-        if (matrix[r][c]) ctx.fillRect((c + 4) * scale, (r + 4) * scale, scale, scale);
+    if (!qrCanvasRef.current) return undefined;
+    let cancelled = false;
+    (async () => {
+      try {
+        const { qrEncode } = await import("../utils/qrEncode.js");
+        if (cancelled) return;
+        const { matrix, size } = qrEncode(challengeUrl);
+        const canvas = qrCanvasRef.current;
+        if (!canvas) return;
+        const scale = 6;
+        canvas.width = (size + 8) * scale;
+        canvas.height = (size + 8) * scale;
+        const ctx = canvas.getContext("2d");
+        ctx.fillStyle = "#FFFFFF"; ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#000000";
+        for (let r = 0; r < size; r++) for (let c = 0; c < size; c++) {
+          if (matrix[r][c]) ctx.fillRect((c + 4) * scale, (r + 4) * scale, scale, scale);
+        }
+      } catch (e) {
+        if (cancelled) return;
+        console.warn("QR encode failed:", e);
+        setQrError(true);
       }
-    } catch (e) { console.warn("QR encode failed:", e); setQrError(true); }
+    })();
+    return () => { cancelled = true; };
   }, [showQR, challengeUrl]);
 
-  const generateScoreCard = () => new Promise((resolve) => {
-    const W = 1200, H = 630;
-    const cvs = document.createElement("canvas");
-    cvs.width = W; cvs.height = H;
-    const c = cvs.getContext("2d");
-    const diff = DIFFICULTIES[difficulty] || DIFFICULTIES.normal;
-    const rank = RANK_NAMES[Math.min(Math.floor(kills / 10), RANK_NAMES.length - 1)];
-
-    // ── Background: dark with scanlines + vignette ────────────────────────────
-    const bg = c.createLinearGradient(0, 0, W, H);
-    bg.addColorStop(0, "#0d0005"); bg.addColorStop(0.45, "#140a1a"); bg.addColorStop(1, "#0a0200");
-    c.fillStyle = bg; c.fillRect(0, 0, W, H);
-    // Scanlines
-    c.fillStyle = "rgba(0,0,0,0.18)";
-    for (let y = 0; y < H; y += 4) { c.fillRect(0, y, W, 2); }
-    // Vignette
-    const vig = c.createRadialGradient(W / 2, H / 2, H * 0.2, W / 2, H / 2, H * 0.82);
-    vig.addColorStop(0, "rgba(0,0,0,0)"); vig.addColorStop(1, "rgba(0,0,0,0.75)");
-    c.fillStyle = vig; c.fillRect(0, 0, W, H);
-
-    // ── Stream chrome: top bar ────────────────────────────────────────────────
-    c.fillStyle = "rgba(0,0,0,0.72)"; c.fillRect(0, 0, W, 52);
-    // LIVE badge
-    c.fillStyle = "#E00000"; c.beginPath(); c.roundRect(16, 12, 68, 28, 5); c.fill();
-    c.font = "bold 16px 'Courier New', monospace"; c.textAlign = "left";
-    c.fillStyle = "#FFF"; c.fillText("● LIVE", 24, 31);
-    // Channel name (centre)
-    c.textAlign = "center";
-    c.font = "bold 20px 'Courier New', monospace"; c.fillStyle = "#FFF";
-    c.fillText("📺  CALL OF DOODIE  ·  MODERN WARFARE ON MOM'S WIFI", W / 2, 32);
-    // Viewer count (right)
-    const _viewers = ((score / 100 + kills * 3 + wave * 50) | 0).toLocaleString();
-    c.textAlign = "right"; c.font = "14px 'Courier New', monospace"; c.fillStyle = "#CCC";
-    c.fillText("👥 " + _viewers + " watching", W - 18, 20);
-    c.fillStyle = "#888"; c.fillText(CANONICAL_SITE_HOST, W - 18, 38);
-
-    // ── KILLCAM banner ────────────────────────────────────────────────────────
-    c.textAlign = "center";
-    c.fillStyle = "rgba(180,0,0,0.82)"; c.fillRect(0, 52, W, 50);
-    c.font = "bold 30px 'Courier New', monospace";
-    c.fillStyle = "#FFF"; c.shadowColor = "#F00"; c.shadowBlur = 20;
-    const _modeLabel = bossRushMode ? "  ·  ☠ BOSS RUSH" : cursedRunMode ? "  ·  ☠ CURSED" : scoreAttackMode ? "  ·  ⏱ SCORE ATTACK" : dailyChallengeMode ? "  ·  📅 DAILY" : "";
-    c.fillText("💀  KILLCAM  ·  " + (playerSkin || "🪖") + " " + username.toUpperCase() + "  HAS FALLEN" + _modeLabel, W / 2, 86);
-    c.shadowBlur = 0;
-
-    // ── Match HUD: left side stat pills ───────────────────────────────────────
-    const _pillY = 120, _pillH = 36, _pillGap = 8;
-    const _pills = [
-      { label: "WAVE", val: String(wave), color: "#ff3b3b" },
-      { label: "KILLS", val: String(kills), color: "#00FF88" },
-      { label: "STREAK", val: String(bestStreak), color: "#FF8800" },
-    ];
-    let _px = 18;
-    _pills.forEach(p => {
-      const tw = Math.max(90, p.val.length * 18 + 60);
-      c.fillStyle = "rgba(0,0,0,0.7)"; c.beginPath(); c.roundRect(_px, _pillY, tw, _pillH, 6); c.fill();
-      c.strokeStyle = p.color + "88"; c.lineWidth = 1.5; c.beginPath(); c.roundRect(_px, _pillY, tw, _pillH, 6); c.stroke();
-      c.textAlign = "left"; c.font = "10px 'Courier New', monospace"; c.fillStyle = p.color;
-      c.fillText(p.label, _px + 8, _pillY + 14);
-      c.font = "bold 18px 'Courier New', monospace"; c.fillStyle = "#FFF";
-      c.fillText(p.val, _px + 8, _pillY + _pillH - 8);
-      _px += tw + _pillGap;
+  // S165 diet: the 1200x630 share card only exists when the player presses
+  // SHARE, so its canvas painter lives in its own chunk and is fetched then.
+  const generateScoreCard = async () => {
+    const { generateScoreCard: renderCard } = await import("../utils/scoreCardRenderer.js");
+    return renderCard({
+      score, kills, wave, level, bestStreak, timeSurvived, username, playerSkin,
+      deathMessage, difficulty, DIFFICULTIES, RANK_NAMES, fmtTime,
+      siteHost: CANONICAL_SITE_HOST,
+      bossRushMode, cursedRunMode, scoreAttackMode, dailyChallengeMode,
+      replayProofReceipt, replayProofPresenter,
     });
-
-    // ── Rank + difficulty pill (right side) ───────────────────────────────────
-    c.textAlign = "right";
-    c.font = "bold 16px 'Courier New', monospace"; c.fillStyle = diff.color || "#CCC";
-    c.fillText(diff.emoji + " " + diff.label.toUpperCase() + "  ·  " + rank.toUpperCase(), W - 18, _pillY + _pillH - 6);
-    c.font = "13px 'Courier New', monospace"; c.fillStyle = "#888";
-    c.fillText("⏱ " + fmtTime(timeSurvived) + "  survived", W - 18, _pillY + 14);
-
-    // ── Big score in the middle ───────────────────────────────────────────────
-    c.textAlign = "center";
-    const scoreGrad = c.createLinearGradient(0, 190, 0, 300);
-    scoreGrad.addColorStop(0, "#FFD700"); scoreGrad.addColorStop(1, "#FF6B00");
-    c.font = "bold 140px 'Courier New', monospace";
-    c.fillStyle = scoreGrad;
-    c.shadowColor = "rgba(255,150,0,0.55)"; c.shadowBlur = 40;
-    c.fillText(score.toLocaleString(), W / 2, 295);
-    c.shadowBlur = 0;
-    c.font = "bold 20px 'Courier New', monospace"; c.fillStyle = "#CCC";
-    c.fillText("FINAL SCORE", W / 2, 325);
-
-    // ── Stats row ─────────────────────────────────────────────────────────────
-    const _stats = [
-      { val: "LV " + level, label: "LEVEL", color: "#33e6ff" },
-      { val: kills, label: "ELIMINATED", color: "#00FF88" },
-      { val: "WAVE " + wave, label: "REACHED", color: "#ff3b3b" },
-      { val: fmtTime(timeSurvived), label: "SURVIVED", color: "#33e6ff" },
-    ];
-    const _sw = W / _stats.length;
-    _stats.forEach((s, i) => {
-      const sx = _sw * i + _sw / 2;
-      c.fillStyle = "rgba(255,255,255,0.05)";
-      c.beginPath(); c.roundRect(_sw * i + 10, 348, _sw - 20, 80, 6); c.fill();
-      c.strokeStyle = s.color + "44"; c.lineWidth = 1;
-      c.beginPath(); c.roundRect(_sw * i + 10, 348, _sw - 20, 80, 6); c.stroke();
-      c.textAlign = "center";
-      c.font = "bold 30px 'Courier New', monospace"; c.fillStyle = s.color;
-      c.shadowColor = s.color; c.shadowBlur = 8;
-      c.fillText(s.val, sx, 390);
-      c.shadowBlur = 0;
-      c.font = "11px 'Courier New', monospace"; c.fillStyle = "#888";
-      c.fillText(s.label, sx, 416);
-    });
-
-    // ── Death quote ───────────────────────────────────────────────────────────
-    c.textAlign = "center";
-    c.font = "italic 17px 'Courier New', monospace";
-    c.fillStyle = "#FF8888"; c.fillText('"' + deathMessage + '"', W / 2, 462);
-
-    if (replayProofReceipt) {
-      c.fillStyle = "rgba(0,0,0,0.72)";
-      c.beginPath(); c.roundRect(314, 478, 572, 38, 6); c.fill();
-      c.strokeStyle = replayProofReceipt.color + "AA"; c.lineWidth = 1.5;
-      c.beginPath(); c.roundRect(314, 478, 572, 38, 6); c.stroke();
-      c.textAlign = "center";
-      c.font = "bold 13px 'Courier New', monospace";
-      c.fillStyle = replayProofReceipt.color;
-      c.fillText(replayProofPresenter.shareStamp, W / 2, 502);
-    }
-
-    // ── Bottom bar: CTA ───────────────────────────────────────────────────────
-    c.fillStyle = "rgba(0,0,0,0.8)"; c.fillRect(0, H - 72, W, 72);
-    const ctaGrad = c.createLinearGradient(0, 0, W, 0);
-    ctaGrad.addColorStop(0, "#FF6B35"); ctaGrad.addColorStop(0.5, "#FFD700"); ctaGrad.addColorStop(1, "#FF6B35");
-    c.fillStyle = ctaGrad; c.fillRect(0, H - 72, W, 4);
-    c.font = "bold 24px 'Courier New', monospace"; c.fillStyle = "#FFF";
-    c.fillText("💀  CAN YOU BEAT " + username.toUpperCase() + "?  ·  " + CANONICAL_SITE_HOST + "  💀", W / 2, H - 32);
-    c.font = "13px 'Courier New', monospace"; c.fillStyle = "#888";
-    c.fillText("FREE TO PLAY IN YOUR BROWSER  ·  SHARE YOUR SCORE  ·  #CallOfDoodie", W / 2, H - 12);
-
-    cvs.toBlob(blob => resolve({ blob, cvs }), "image/png");
-  });
+  };
 
   const handleShare = async () => {
     setSharing(true);
@@ -1473,13 +1366,15 @@ export default function DeathScreen({
         )}
 
         {showLastWordsKeyboard && (
-          <VirtualKeyboard
-            value={lastWords}
-            onChange={v => { const w = v.split(/\s+/).filter(Boolean); if (w.length <= 5) setLastWords(v); }}
-            onConfirm={() => setShowLastWordsKeyboard(false)}
-            maxLength={60}
-            title="FAMOUS LAST WORDS (5 WORDS MAX)"
-          />
+          <AsyncPanelBoundary>
+            <VirtualKeyboard
+              value={lastWords}
+              onChange={v => { const w = v.split(/\s+/).filter(Boolean); if (w.length <= 5) setLastWords(v); }}
+              onConfirm={() => setShowLastWordsKeyboard(false)}
+              maxLength={60}
+              title="FAMOUS LAST WORDS (5 WORDS MAX)"
+            />
+          </AsyncPanelBoundary>
         )}
 
         {practiceRun ? (

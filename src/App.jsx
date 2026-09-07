@@ -83,6 +83,7 @@ import { buildStudioGameEvent } from "./utils/runIntelligence.js";
 import { addParticles, addText } from "./systems/transientPresentation.js";
 import { buildIntegrityLocalSubmissionResult, getRunIntegrityReceipt, recordRunIntegrityFault } from "./systems/runIntegrity.js";
 import { planPauseTransition } from "./systems/pauseTransition.js";
+import { createCamera, resolveArenaSize, updateCamera, viewCenter } from "./systems/camera.js";
 import { getInputActivityAge, releaseInputState } from "./systems/inputLifecycle.js";
 import { resolveRunEndAttempt, RUN_PHASE } from "./systems/runTermination.js";
 import { normalizeVisualPack, VISUAL_PACKS } from "./utils/visualPack.js";
@@ -896,7 +897,20 @@ export default function CallOfDoodie() {
     perkModsRef.current.xpMult        = (perkModsRef.current.xpMult || 1) * sett.xpGainMult;
     if (sett.pickupMagnet > 1) perkModsRef.current.pickupRange = Math.max(perkModsRef.current.pickupRange || 30, 30 * sett.pickupMagnet);
 
-    const arena = combatRuntimeRef.current.buildArenaEnvironment({ seed, width: w, height: h });
+    // S165 — the arena may be larger than the viewport; the camera scrolls over
+    // it. Modes that declare no `arena.scale` get an arena exactly the size of
+    // the screen, a camera pinned at (0, 0), and identical behaviour to S164.
+    const { arenaW: aw, arenaH: ah } = resolveArenaSize(modeDefRef.current, w, h);
+    gsRef.current.arenaW = aw;
+    gsRef.current.arenaH = ah;
+    gsRef.current.camera = createCamera({ arenaW: aw, arenaH: ah, viewW: w, viewH: h });
+    if (aw !== w || ah !== h) {
+      gsRef.current.player.x = aw / 2;
+      gsRef.current.player.y = ah / 2;
+    }
+    updateCamera(gsRef.current.camera, gsRef.current.player, { viewW: w, viewH: h, snap: true });
+
+    const arena = combatRuntimeRef.current.buildArenaEnvironment({ seed, width: aw, height: ah });
     gsRef.current._layoutName = arena.layoutName;
     gsRef.current.obstacles = arena.obstacles;
     gsRef.current.terrain = arena.terrain;
@@ -904,7 +918,7 @@ export default function CallOfDoodie() {
     gsRef.current.floorZones = arena.floorZones;
     gsRef.current.props = arena.props;
     gsRef.current.hazards = arena.hazards;
-    modeRuntimeRef.current?.createModeState(modeDefRef.current, gsRef.current, { W: w, H: h, addText, addParticles });
+    modeRuntimeRef.current?.createModeState(modeDefRef.current, gsRef.current, { W: aw, H: ah, addText, addParticles });
 
     // Show meta toast if upgrades active
     const metaSnap = loadMetaProgress();
@@ -1858,6 +1872,10 @@ export default function CallOfDoodie() {
     const p = gs.player;
     const W = GW();
     const H = GH();
+    // Announcement banners are placed in arena coordinates but must read as
+    // screen-centred, so they anchor on the visible viewport (S165 camera).
+    const _vc = viewCenter(gs.camera, W, H);
+    const VX = _vc.x, VY = _vc.y, VTOP = (gs.camera?.y || 0);
     e.lastDmgSource = defeatMeta.source;
     (gs._wkbt = gs._wkbt || {})[e.typeIndex] = (gs._wkbt[e.typeIndex] || 0) + 1;
 
@@ -1939,11 +1957,11 @@ export default function CallOfDoodie() {
       addParticles(gs, e.x, e.y, "#FFD700", 30);
       addParticles(gs, e.x, e.y, "#FFFFFF", 20);
       retainLastMatchingInPlace(gs.floatingTexts, (text) => text.big, 4);
-      addText(gs, W / 2, H / 3, "☠ BOSS ELIMINATED ☠", "#FF0000", true);
+      addText(gs, VX, VY - H / 6, "☠ BOSS ELIMINATED ☠", "#FF0000", true);
       if (100 > bestMomentRef.current.score) bestMomentRef.current = { ts: Date.now(), score: 100 };
       if (e.typeIndex === 20) gs.algorithmSurge = false;
       const bossRoast = getRoastCallout("boss_kill", roastCooldowns.current, gs.currentWave, 3);
-      if (bossRoast) addText(gs, W / 2, H / 3 + 36, bossRoast, "#FFD700");
+      if (bossRoast) addText(gs, VX, VY - H / 6 + 36, bossRoast, "#FFD700");
       try {
         const wasNemesis = isNemesis(e.typeIndex);
         const previous = getBossKillRecord(e.typeIndex);
@@ -1951,7 +1969,7 @@ export default function CallOfDoodie() {
         if (wasNemesis) {
           gs.nemesisBossType = null;
           statsRef.current.nemesisSlain = (statsRef.current.nemesisSlain || 0) + 1;
-          addText(gs, W / 2, H / 3 + 56, "🎯 NEMESIS SLAIN! +30💩", "#FF4400", true);
+          addText(gs, VX, VY - H / 6 + 56, "🎯 NEMESIS SLAIN! +30💩", "#FF4400", true);
           gs.coins = (gs.coins || 0) + 30;
           setCoins(gs.coins);
         }
@@ -1982,7 +2000,7 @@ export default function CallOfDoodie() {
     setBestStreak(statsRef.current.bestStreak); setTotalDamage(Math.floor(gs.totalDamage));
     if (!gs.newBestScore && gs.score > (gs.careerBest?.score || 0)) {
       gs.newBestScore = true;
-      addText(gs, W / 2, H / 2 - 120, "🏆 NEW BEST SCORE!", "#FFD700", true);
+      addText(gs, VX, VY - 120, "🏆 NEW BEST SCORE!", "#FFD700", true);
       addParticles(gs, p.x, p.y - 60, "#FFD700", 25);
       addParticles(gs, p.x, p.y - 60, "#FF4400", 15);
       addParticles(gs, p.x, p.y - 60, "#FFFFFF", 10);
@@ -2002,7 +2020,7 @@ export default function CallOfDoodie() {
         addText(gs, e.x, e.y - 38, "✨ SUMMON DISMISSED", "#CC88FF");
       } else if ((gs._deathSoundsThisFrame || 0) < 2) {
         gs._deathSoundsThisFrame = (gs._deathSoundsThisFrame || 0) + 1;
-        soundEnemyDeathAt(e.typeIndex, e.x, W, comboRef.current.count);
+        soundEnemyDeathAt(e.typeIndex, e.x - (gs.camera?.x || 0), W, comboRef.current.count);
         vibrate("kill");
       }
       // S155: big enemies leave a persistent splat on the arena floor.
@@ -2042,19 +2060,19 @@ export default function CallOfDoodie() {
     }
 
     if (!e.isBossEnemy && KILL_MILESTONES[gs.kills]) {
-      addText(gs, W / 2, H / 2 - 90, KILL_MILESTONES[gs.kills], "#FF44FF", true);
-      addText(gs, W / 2, H / 2 - 65, `${gs.kills} KILLS!`, "#FFF", true);
-      gs.screenShake = 10; addParticles(gs, W / 2, H / 2 - 80, "#FF44FF", 20);
+      addText(gs, VX, VY - 90, KILL_MILESTONES[gs.kills], "#FF44FF", true);
+      addText(gs, VX, VY - 65, `${gs.kills} KILLS!`, "#FFF", true);
+      gs.screenShake = 10; addParticles(gs, VX, VY - 80, "#FF44FF", 20);
     }
     if (gs.kills === 1) {
       const firstBloodRoast = getRoastCallout("first_blood", roastCooldowns.current, gs.currentWave, 1);
-      if (firstBloodRoast) addText(gs, W / 2, 56, firstBloodRoast, "#FFB5C5", true);
+      if (firstBloodRoast) addText(gs, VX, VTOP + 56, firstBloodRoast, "#FFB5C5", true);
     }
     if (!e.isBossEnemy && gs.killstreakCount % 5 === 0 && gs.killstreakCount > 0) {
       const streakIndex = Math.min(Math.floor(gs.killstreakCount / 5) - 1, KILLSTREAKS.length - 1);
-      addText(gs, W / 2, 80, `${KILLSTREAKS[streakIndex]}!`, "#FF4500", true);
+      addText(gs, VX, VTOP + 80, `${KILLSTREAKS[streakIndex]}!`, "#FF4500", true);
       const streakRoast = getRoastCallout("kill_streak", roastCooldowns.current, gs.currentWave);
-      if (streakRoast) addText(gs, W / 2, 108, streakRoast, "#FF8855");
+      if (streakRoast) addText(gs, VX, VTOP + 108, streakRoast, "#FF8855");
       gs.enemies.forEach((nearbyEnemy) => {
         const result = combatRuntimeRef.current.applyEnemyDamage(nearbyEnemy, 40, { source: "killstreak", weaponName: "KILLSTREAK" });
         if (result.applied > 0) nearbyEnemy.hitFlash = 15;
@@ -2458,6 +2476,10 @@ export default function CallOfDoodie() {
     gs.grenades = combatRuntimeRef.current.compactTruthyInPlace(gs.grenades);
     gs.pickups = combatRuntimeRef.current.compactTruthyInPlace(gs.pickups);
     const W = GW(), H = GH(), p = gs.player, wpnIdx = currentWeaponRef.current;
+    // Arena extent (simulation bounds) vs viewport extent (canvas + HUD). They
+    // are equal for every mode that does not declare an `arena.scale`.
+    const AW = gs.arenaW || W, AH = gs.arenaH || H;
+    const cam = gs.camera || (gs.camera = createCamera({ arenaW: AW, arenaH: AH, viewW: W, viewH: H }));
 
     if (pausedRef.current || perkPendingRef.current || shopPendingRef.current || routePendingRef.current || bossCutsceneRef.current || waveAnnouncePendingRef.current || mutationPendingRef.current) {
       return;
@@ -2482,10 +2504,14 @@ export default function CallOfDoodie() {
       dashActive: dashRef.current.active > 0,
       adrenalineRushTimer: gs.adrenalineRushTimer || 0,
       rubbleSlowed: !!gs._rubbleSlowed,
-      W,
-      H,
+      W: AW,
+      H: AH,
       obstacles: gs.obstacles || [],
     });
+    // Frame the player before anything reads the camera this frame.
+    updateCamera(cam, p, { viewW: W, viewH: H });
+    const _vc = viewCenter(cam, W, H);
+    const VX = _vc.x, VY = _vc.y;
     sampleCommandTrace("move", Math.abs(dx) > 0.1 || Math.abs(dy) > 0.1 ? directionBucket(dx, dy) : "neutral");
     if (Math.abs(dx) > 0.1 || Math.abs(dy) > 0.1) { if (cosmeticRandom() < 0.3) gs.trail.push({ x: p.x, y: p.y, life: 10 }); }
     gs.trail = combatRuntimeRef.current.stepAndCompactInPlace(gs.trail, t => { t.life--; return t.life > 0; });
@@ -2497,7 +2523,7 @@ export default function CallOfDoodie() {
     let pointerAngle = null;
     if (pointerActive) {
       const rect = canvas.getBoundingClientRect();
-      pointerAngle = combatRuntimeRef.current.computePointerAimAngle(mouse, rect, { w: W, h: H }, p);
+      pointerAngle = combatRuntimeRef.current.computePointerAimAngle(mouse, rect, { w: W, h: H }, p, cam);
       inputDeviceRef.current = "mouse";
     }
     const aimFrame = combatRuntimeRef.current.resolveAimFrame({
@@ -2603,10 +2629,10 @@ export default function CallOfDoodie() {
         gs._chainEnrageLevel = _newEnrage;
         if (_newEnrage > _prev) {
           if (_newEnrage === 1) {
-            addText(gs, W / 2, H / 2 - 110, "🔴 ENEMIES ENRAGED", "#FF6644", true);
+            addText(gs, VX, VY - 110, "🔴 ENEMIES ENRAGED", "#FF6644", true);
             try { soundChainEscalate(1); } catch {}
           } else if (_newEnrage === 2) {
-            addText(gs, W / 2, H / 2 - 110, "🔥 ENEMIES FURIOUS", "#FF2200", true);
+            addText(gs, VX, VY - 110, "🔥 ENEMIES FURIOUS", "#FF2200", true);
             try { soundChainEscalate(2); } catch {}
           }
         }
@@ -2757,7 +2783,7 @@ export default function CallOfDoodie() {
       if (directorState && directorState.stageIndex !== gs.waveDirectorStage) {
         gs.waveDirectorStage = directorState.stageIndex;
         if (directorState.telegraph) {
-          addText(gs, W / 2, H / 2 - 92, directorState.telegraph, "#FFD700", true);
+          addText(gs, VX, VY - 92, directorState.telegraph, "#FFD700", true);
           setLiveAnnounce(`${gs.waveDirector.label}. ${directorState.telegraph.replace(/[^\w\s]/g, " ").trim()}`);
         }
         track("wave_director_stage", {
@@ -2797,7 +2823,7 @@ export default function CallOfDoodie() {
         const _baseFormation = getSpawnFormationPlan(gs.waveDirector, directorState, gs.enemiesThisWave - 1);
         const formation = heatBiasedFormation(combatRuntimeRef.current.heatTier(gs.heat || 0), _baseFormation, gs.enemiesThisWave - 1);
         if (formation) {
-          applySpawnFormation(ne, formation, W, H);
+          applySpawnFormation(ne, formation, AW, AH);
           recordFormationExposure(gs.pressureArc, formation, { wave: gs.currentWave, stageId: directorState?.stageId });
           gs._lastFormationLabel = formation.label;
           // Formation lore toast: show once per formation type per wave
@@ -2805,7 +2831,7 @@ export default function CallOfDoodie() {
           if (!gs._formationToastedThisWave.has(formation.id)) {
             gs._formationToastedThisWave.add(formation.id);
             const _lore = { FLANK: "⚠ FLANKING — enemies splitting to cut off escape", PINCER: "⚠ PINCER — encirclement inbound", SURGE: "⚠ SURGE — overwhelming assault" };
-            if (_lore[formation.label]) addText(gs, W / 2, H / 2 - 60, _lore[formation.label], "#FFF8DC");
+            if (_lore[formation.label]) addText(gs, VX, VY - 60, _lore[formation.label], "#FFF8DC");
           }
         }
         const directorEliteType = getGuaranteedEliteType(gs.waveDirector, directorState, gs.enemiesThisWave - 1);
@@ -2974,7 +3000,7 @@ export default function CallOfDoodie() {
             wave: gs.currentWave,
             weakness,
             bossWave: false,
-            world: { W: GW(), H: GH() },
+            world: { W: gsRef.current?.arenaW || GW(), H: gsRef.current?.arenaH || GH() },
             rng: getRunRng(gs, "choices"),
           });
           if (obj) {
@@ -3044,7 +3070,7 @@ export default function CallOfDoodie() {
       setMapTheme(gs.mapTheme ?? 0);
       if (!gs.newBestWave && gs.currentWave > (gs.careerBest?.wave || 0)) {
         gs.newBestWave = true;
-        addText(gs, W / 2, H / 2 - 150, "🌊 NEW BEST WAVE!", "#00FFAA", true);
+        addText(gs, VX, VY - 150, "🌊 NEW BEST WAVE!", "#00FFAA", true);
       }
       // No-hit wave tracking (reset after check)
       if (!gs.damageThisWave) statsRef.current.noHitWaves = (statsRef.current.noHitWaves || 0) + 1;
@@ -3118,10 +3144,10 @@ export default function CallOfDoodie() {
         setTimeout(() => { bossCutsceneRef.current = false; setBossCutscene(null); }, 3000);
         setTimeout(() => { setBossWaveBanner(false); }, 4800);
         bossPlan.announceLines.forEach((line, index) => {
-          addText(gs, W / 2, H / 2 - 70 + (index * 20), line.text, line.color, line.emphasize);
+          addText(gs, VX, VY - 70 + (index * 20), line.text, line.color, line.emphasize);
         });
         bossPlan.warningLines.forEach((line, index) => {
-          addText(gs, W / 2, H / 2 + 45 + (index * 20), line.text, line.color);
+          addText(gs, VX, VY + 45 + (index * 20), line.text, line.color);
         });
         bossPlan.spawnBosses.forEach((bossType) => spawnBoss(gs, bossType));
         if (bossPlan.escortCount > 0) {
@@ -3131,7 +3157,7 @@ export default function CallOfDoodie() {
         }
         // Mark all boss enemies as "spawned" so the wave-clear condition can trigger
         gs.enemiesThisWave = gs.maxEnemiesThisWave;
-        addParticles(gs, W / 2, H / 2, "#FF0000", 40);
+        addParticles(gs, VX, VY, "#FF0000", 40);
       } else {
         setMusicIntensity(false);
         // ── Wave director event layer ──
@@ -3140,35 +3166,35 @@ export default function CallOfDoodie() {
           switch (gs.waveEvent) {
             case "fast_round":
               gs.waveEventSpeedMult = 2.0;
-              addText(gs, W / 2, H / 2 + 70, "⚡ FAST ROUND — Enemies 2× speed!", "#FF8800");
+              addText(gs, VX, VY + 70, "⚡ FAST ROUND — Enemies 2× speed!", "#FF8800");
               break;
             case "siege":
               gs.maxEnemiesThisWave = Math.min(gs.maxEnemiesThisWave * 2, 80);
               gs.siegeMode = true;
-              addText(gs, W / 2, H / 2 + 70, "🪖 SIEGE — 2× enemies, no pickups!", "#FF4444");
+              addText(gs, VX, VY + 70, "🪖 SIEGE — 2× enemies, no pickups!", "#FF4444");
               break;
             case "elite_only":
               gs.waveEliteOnly = true;
-              addText(gs, W / 2, H / 2 + 70, "👑 ELITE ONLY — Every enemy is elite!", "#FFD700");
+              addText(gs, VX, VY + 70, "👑 ELITE ONLY — Every enemy is elite!", "#FFD700");
               break;
             case "fog_of_war":
               gs.fogOfWar = true;
-              addText(gs, W / 2, H / 2 + 70, "🌫️ FOG OF WAR — Enemies hidden until close!", "#88CCFF");
+              addText(gs, VX, VY + 70, "🌫️ FOG OF WAR — Enemies hidden until close!", "#88CCFF");
               break;
           }
         }
         // ── Cursed Run: escalating chaos events ──
         if (gs.cursedRunMode) {
           const cw = gs.currentWave;
-          if (cw === 5)  { addText(gs, W / 2, H / 2 - 60, "☠ CURSED: ENEMIES ENRAGED", "#CC00FF", true); gs.mutAlwaysEnraged = true; }
-          if (cw === 10) { addText(gs, W / 2, H / 2 - 60, "☠ CURSED: SCORE HIDDEN", "#CC00FF", true); gs.cursedHideScore = true; }
-          if (cw === 15) { addText(gs, W / 2, H / 2 - 60, "☠ CURSED: ACID TRAILS", "#CC00FF", true); gs.cursedAcidTrails = true; }
-          if (cw === 20) { addText(gs, W / 2, H / 2 - 60, "☠ CURSED: ALL EXPLOSIVE", "#CC00FF", true); gs.mutAllExplosive = true; }
-          if (cw === 25) { addText(gs, W / 2, H / 2 - 60, "☠ CURSED: SPAWNS DOUBLED", "#CC00FF", true); gs.waveEnemyMult = (gs.waveEnemyMult || 1) * 2; }
+          if (cw === 5)  { addText(gs, VX, VY - 60, "☠ CURSED: ENEMIES ENRAGED", "#CC00FF", true); gs.mutAlwaysEnraged = true; }
+          if (cw === 10) { addText(gs, VX, VY - 60, "☠ CURSED: SCORE HIDDEN", "#CC00FF", true); gs.cursedHideScore = true; }
+          if (cw === 15) { addText(gs, VX, VY - 60, "☠ CURSED: ACID TRAILS", "#CC00FF", true); gs.cursedAcidTrails = true; }
+          if (cw === 20) { addText(gs, VX, VY - 60, "☠ CURSED: ALL EXPLOSIVE", "#CC00FF", true); gs.mutAllExplosive = true; }
+          if (cw === 25) { addText(gs, VX, VY - 60, "☠ CURSED: SPAWNS DOUBLED", "#CC00FF", true); gs.waveEnemyMult = (gs.waveEnemyMult || 1) * 2; }
         }
-        addText(gs, W / 2, H / 2, "WAVE " + gs.currentWave + "!", "#FFD700", true);
-        addText(gs, W / 2, H / 2 + 30, "+" + (gs.currentWave * 100) + " WAVE BONUS" + (streakBonus > 0 ? " +" + streakBonus + " STREAK" : ""), "#00FF88");
-        if (gs.waveStreak >= 3) addText(gs, W / 2, H / 2 + 55, "🔥 " + gs.waveStreak + "-WAVE STREAK!", "#FF8800", true);
+        addText(gs, VX, VY, "WAVE " + gs.currentWave + "!", "#FFD700", true);
+        addText(gs, VX, VY + 30, "+" + (gs.currentWave * 100) + " WAVE BONUS" + (streakBonus > 0 ? " +" + streakBonus + " STREAK" : ""), "#00FF88");
+        if (gs.waveStreak >= 3) addText(gs, VX, VY + 55, "🔥 " + gs.waveStreak + "-WAVE STREAK!", "#FF8800", true);
         soundWaveClear();
 
         // ── Wave incoming preview card then chain mutation/shop. Boss waves use
@@ -3236,7 +3262,7 @@ export default function CallOfDoodie() {
     combat.stepProjectileFrame({
       gs,
       player: p,
-      world: { W, H },
+      world: { W: AW, H: AH },
       weaponIndex: wpnIdx,
       frame: frameCountRef.current,
       dashActive: dashRef.current.active > 0,
@@ -3256,7 +3282,7 @@ export default function CallOfDoodie() {
     combat.stepEnemyFrame({
       gs,
       player: p,
-      world: { W, H },
+      world: { W: AW, H: AH },
       frame: frameCountRef.current,
       dashActiveFrames: dashRef.current.active,
       spawnEnemy,
@@ -3265,7 +3291,7 @@ export default function CallOfDoodie() {
     });
 
     // ── Mode mechanics: allies, zones, verb objectives, win/lose (S163) ──
-    const modeVerdict = modeRuntimeRef.current ? modeRuntimeRef.current.stepMode(gs, modeDefRef.current, { W, H, frame: frameCountRef.current, addText, addParticles, spawnEnemy, setHealth, handlePlayerDeath }) : null;
+    const modeVerdict = modeRuntimeRef.current ? modeRuntimeRef.current.stepMode(gs, modeDefRef.current, { W: AW, H: AH, frame: frameCountRef.current, addText, addParticles, spawnEnemy, setHealth, handlePlayerDeath }) : null;
     if (modeVerdict === "win") { handleModeVictory(gs); return; }
     if (modeVerdict === "lose") { handlePlayerDeath(gs, { cause: "mode_objective_failed", allowRecovery: false }); return; }
 
@@ -3292,7 +3318,7 @@ export default function CallOfDoodie() {
         return pk.life > 0;
       }
       if (d2 < pickupRange) {
-        soundPickupAt(pk.type, pk.x, W);
+        soundPickupAt(pk.type, pk.x - (gs.camera?.x || 0), W);
         if (pk.type === "health") {
           const maxHP = p.maxHealth || 100; p.health = Math.min(maxHP, p.health + 30);
           setHealth(p.health); addText(gs, pk.x, pk.y, "+30 HP", "#00FF00");
@@ -3317,7 +3343,7 @@ export default function CallOfDoodie() {
           setTimeout(() => { if (gsRef.current) gsRef.current.player.speed = Math.max(4, gsRef.current.player.speed - 0.5); }, 5000);
         } else if (pk.type === "nuke") {
           statsRef.current.nukes++;
-          addText(gs, W / 2, H / 2, "TACTICAL NUKE!", "#FF0000", true);
+          addText(gs, VX, VY, "TACTICAL NUKE!", "#FF0000", true);
           gs.enemies.forEach((en, _ni) => {
             combatRuntimeRef.current.retireEnemyWithoutDefeat(en, "tactical-nuke");
             gs.score += en.points;

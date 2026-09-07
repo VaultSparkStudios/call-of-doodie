@@ -34,6 +34,10 @@ export function pickTarget(e, gs, player) {
   for (let i = 0; i < extra.length; i += 1) {
     const s = extra[i];
     if (!s || s.alive === false) continue;
+    // A free-for-all mode (BOT ROYALE) publishes every combatant as a
+    // candidate, so an enemy would otherwise find its own entry at distance
+    // zero and steer/fire at the spot it already occupies. Identity skip.
+    if (s.id != null && e.id != null && s.id === e.id) continue;
     const d = Math.hypot(s.x - e.x, s.y - e.y);
     if (d < bestD) { best = s; bestD = d; }
   }

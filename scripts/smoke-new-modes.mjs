@@ -6,7 +6,9 @@
 // screenshots to docs/visual-qa/new-modes/ and exits non-zero on any failure.
 
 import { chromium } from "playwright";
-import { spawn } from "node:child_process";
+// Routed through safe-spawn so the preview child cannot pop a console window
+// on Windows (S165; arc SKILL.md §0, CANON-016).
+import { spawn } from "./lib/safe-spawn.mjs";
 import fs from "node:fs";
 import path from "node:path";
 
@@ -48,7 +50,9 @@ async function deployMode(page, label, expectBanner) {
   if (!expectBanner.test(text)) throw new Error(`${label}: banner "${text}" did not match ${expectBanner}`);
   const shot = path.join(OUT, `${label.toLowerCase().replace(/[^a-z0-9]+/g, "-")}.png`);
   await page.screenshot({ path: shot });
-  return { label, banner: text, screenshot: shot };
+  // Repo-relative, forward-slashed: this receipt is committed to a public repo,
+  // and an absolute path leaks the operator's home directory (S165).
+  return { label, banner: text, screenshot: path.relative(process.cwd(), shot).split(path.sep).join("/") };
 }
 
 const preview = urlArg ? null : await startPreview();
