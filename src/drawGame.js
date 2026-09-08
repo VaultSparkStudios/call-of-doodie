@@ -1421,29 +1421,6 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
       ctx.restore();
     }
   }
-  const _objectiveMarkers = buildRadarObjectiveMarkers(gs, { wholeArena: _radarWholeArena });
-  for (const marker of _objectiveMarkers) {
-    const point = _toRadar(marker.x, marker.y);
-    if (marker.kind === "loot") {
-      // radar-loot-marker: gold square remains distinct from round combat dots.
-      ctx.fillStyle = "#FFD34F";
-      ctx.fillRect(rx + point.dx - 2, ry + point.dy - 2, 4, 4);
-    } else if (marker.kind === "evac") {
-      // radar-evac-marker: cyan diamond + restrained pulse makes the open exit readable.
-      const pulse = gs.reducedMotion ? 5 : 5 + Math.sin((gs.frame || 0) / 12) * 1.5;
-      ctx.strokeStyle = "#33E6FF";
-      ctx.lineWidth = 1.5;
-      ctx.beginPath();
-      ctx.moveTo(rx + point.dx, ry + point.dy - pulse);
-      ctx.lineTo(rx + point.dx + pulse, ry + point.dy);
-      ctx.lineTo(rx + point.dx, ry + point.dy + pulse);
-      ctx.lineTo(rx + point.dx - pulse, ry + point.dy);
-      ctx.closePath();
-      ctx.stroke();
-    }
-  }
-  ctx.globalAlpha = 0.7;
-
   // Scaled-mode objectives stay readable without painting more noise into the
   // main viewport. The model is bounded (evac first, then at most seven loot
   // crates) and the radar's existing disc clip owns corner safety.

@@ -97,21 +97,26 @@ describe("buildDeathScreenProps", () => {
 
   it("renders the revenge brief before one collapsed secondary analysis block", () => {
     const source = fs.readFileSync(path.resolve(import.meta.dirname, "..", "components", "DeathScreen.jsx"), "utf8");
+    const secondarySource = fs.readFileSync(path.resolve(import.meta.dirname, "..", "components", "DeathScreenSecondaryAnalysis.jsx"), "utf8");
     const challenge = source.indexOf("{/* Challenge result card */}");
     const outcome = source.indexOf("{drillOutcomeBrief}", challenge);
     const brief = source.indexOf("{revengeBrief}", challenge);
     const analysis = source.indexOf('data-testid="secondary-run-analysis"', brief);
-    const buildGrade = source.indexOf("BUILD GRADE", analysis);
-    const runDna = source.indexOf("RUN DNA", analysis);
+    const buildGrade = secondarySource.indexOf("BUILD GRADE");
+    const runDna = secondarySource.indexOf("RUN DNA");
 
     expect(challenge).toBeGreaterThan(-1);
     expect(outcome).toBeGreaterThan(challenge);
     expect(brief).toBeGreaterThan(outcome);
     expect(brief).toBeGreaterThan(challenge);
     expect(analysis).toBeGreaterThan(brief);
-    expect(buildGrade).toBeGreaterThan(analysis);
-    expect(runDna).toBeGreaterThan(analysis);
+    expect(buildGrade).toBeGreaterThan(-1);
+    expect(runDna).toBeGreaterThan(buildGrade);
+    expect(source).toContain('const SecondaryRunAnalysis = lazy(() => import("./DeathScreenSecondaryAnalysis.jsx"))');
+    expect(source).toContain("if (event.currentTarget.open) setSecondaryAnalysisRequested(true)");
+    expect(source).toContain('<AsyncPanelBoundary label="run analysis">');
     expect(source).not.toContain("autoFocus");
+    expect(secondarySource).not.toContain("autoFocus");
     expect(source.match(/data-testid="run-drill-outcome"/g)).toHaveLength(1);
   });
 
