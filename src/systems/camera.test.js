@@ -3,6 +3,7 @@ import {
   clampCamera,
   createCamera,
   isCameraActive,
+  resolveArenaBounds,
   resolveArenaSize,
   screenToWorld,
   updateCamera,
@@ -27,6 +28,18 @@ describe("resolveArenaSize", () => {
   it("scales up and caps at 4×", () => {
     expect(resolveArenaSize({ arena: { scale: 2 } }, 1280, 720)).toEqual({ arenaW: 2560, arenaH: 1440 });
     expect(resolveArenaSize({ arena: { scale: 99 } }, 100, 100)).toEqual({ arenaW: 400, arenaH: 400 });
+  });
+});
+
+describe("resolveArenaBounds", () => {
+  it("preserves viewport identity for missing, partial, or undersized runtime state", () => {
+    expect(resolveArenaBounds(null, 1280, 720)).toEqual({ W: 1280, H: 720 });
+    expect(resolveArenaBounds({ arenaW: 900, arenaH: 500 }, 1280, 720)).toEqual({ W: 1280, H: 720 });
+    expect(resolveArenaBounds({ arenaW: 2560 }, 1280, 720)).toEqual({ W: 2560, H: 720 });
+  });
+
+  it("returns the live scaled world for spawn and cluster systems", () => {
+    expect(resolveArenaBounds({ arenaW: 1920, arenaH: 1080 }, 1280, 720)).toEqual({ W: 1920, H: 1080 });
   });
 });
 

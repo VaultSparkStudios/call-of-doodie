@@ -128,6 +128,13 @@ describe("spawnEnemy — seeded determinism", () => {
     expect(gs.enemies).toHaveLength(1);
     expect(gs.enemies[0].health).toBeGreaterThan(0);
   });
+
+  it("uses the supplied scaled arena perimeter instead of an implicit viewport", () => {
+    const gs = makeGs(4, { runSeed: 4242 });
+    for (let i = 0; i < 48; i += 1) spawnEnemy(gs, W * 2, H * 2, "normal");
+    expect(gs.enemies.some((enemy) => enemy.x === W * 2 + 30 || enemy.y === H * 2 + 30)).toBe(true);
+    expect(gs.enemies.every((enemy) => enemy.x >= -30 && enemy.x <= W * 2 + 30 && enemy.y >= -30 && enemy.y <= H * 2 + 30)).toBe(true);
+  });
 });
 
 describe("Daily Challenge / Gauntlet fairness — same seed across a full multi-wave run", () => {
@@ -184,5 +191,16 @@ describe("spawnBoss — seeded determinism", () => {
     const snap = bossSnapshot(31337);
     expect(snap.bonusAbilities).toHaveLength(2);
     expect(new Set(snap.bonusAbilities).size).toBe(2);
+  });
+
+  it("uses the supplied scaled arena edge and midpoint", () => {
+    const bosses = [];
+    for (let seed = 1; seed <= 16; seed += 1) {
+      const gs = makeGs(20, { runSeed: seed });
+      spawnBoss(gs, W * 2, H * 2, "normal", 4);
+      bosses.push(gs.enemies[0]);
+    }
+    expect(bosses.some((boss) => boss.x === W * 2 + 50 || boss.y === H * 2 + 50)).toBe(true);
+    expect(bosses.every((boss) => boss.x >= -50 && boss.x <= W * 2 + 50 && boss.y >= -50 && boss.y <= H * 2 + 50)).toBe(true);
   });
 });

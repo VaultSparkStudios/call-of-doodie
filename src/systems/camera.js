@@ -97,3 +97,17 @@ export function resolveArenaSize(modeDef, viewW, viewH) {
   const factor = Number.isFinite(scale) && scale > 1 ? Math.min(4, scale) : 1;
   return { arenaW: Math.round(viewW * factor), arenaH: Math.round(viewH * factor) };
 }
+
+/**
+ * One runtime authority for systems that need world bounds after a run starts.
+ * Falling back to the viewport preserves the exact pre-scrolling contract and
+ * keeps partially initialized/test states safe.
+ */
+export function resolveArenaBounds(state, viewW, viewH) {
+  const arenaW = Number(state?.arenaW);
+  const arenaH = Number(state?.arenaH);
+  return {
+    W: Number.isFinite(arenaW) && arenaW >= viewW ? arenaW : viewW,
+    H: Number.isFinite(arenaH) && arenaH >= viewH ? arenaH : viewH,
+  };
+}

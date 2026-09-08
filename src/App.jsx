@@ -83,7 +83,7 @@ import { buildStudioGameEvent } from "./utils/runIntelligence.js";
 import { addParticles, addText } from "./systems/transientPresentation.js";
 import { buildIntegrityLocalSubmissionResult, getRunIntegrityReceipt, recordRunIntegrityFault } from "./systems/runIntegrity.js";
 import { planPauseTransition } from "./systems/pauseTransition.js";
-import { createCamera, resolveArenaSize, updateCamera, viewCenter } from "./systems/camera.js";
+import { createCamera, resolveArenaBounds, resolveArenaSize, updateCamera, viewCenter } from "./systems/camera.js";
 import { getInputActivityAge, releaseInputState } from "./systems/inputLifecycle.js";
 import { resolveRunEndAttempt, RUN_PHASE } from "./systems/runTermination.js";
 import { normalizeVisualPack, VISUAL_PACKS } from "./utils/visualPack.js";
@@ -1337,9 +1337,13 @@ export default function CallOfDoodie() {
   }, [recordCommandTrace]);
 
   // ── Boss / enemy spawning (logic lives in gameHelpers.js) ────────────────
-  const spawnBoss  = useCallback((gs, typeIndex) => _spawnBoss(gs, GW(), GH(), difficultyRef.current, typeIndex), []);
+  const spawnBoss  = useCallback((gs, typeIndex) => {
+    const world = resolveArenaBounds(gs, GW(), GH());
+    _spawnBoss(gs, world.W, world.H, difficultyRef.current, typeIndex);
+  }, []);
   const spawnEnemy = useCallback((gs) => {
-    _spawnEnemy(gs, GW(), GH(), difficultyRef.current);
+    const world = resolveArenaBounds(gs, GW(), GH());
+    _spawnEnemy(gs, world.W, world.H, difficultyRef.current);
     const ne = gs.enemies[gs.enemies.length - 1];
     if (ne && gs.zombiesMode) combatRuntimeRef.current.mutateEnemyForZombieMode(ne, { wave: gs.currentWave, ordinal: gs.enemiesThisWave });
     if (ne && gs.visualPack !== VISUAL_PACKS.RETRO) {
@@ -1355,8 +1359,8 @@ export default function CallOfDoodie() {
         const _last = gs._lastSpawnByType?.[ne.typeIndex];
         if (_last && (_frame - _last.frame) < 3) {
           const _crng = getWaveSpawnRng(gs);
-          ne.x = Math.max(20, Math.min(GW() - 20, _last.x + (_crng() < 0.5 ? 1 : -1) * (40 + _crng() * 40)));
-          ne.y = Math.max(20, Math.min(GH() - 20, _last.y + (_crng() < 0.5 ? 1 : -1) * (40 + _crng() * 40)));
+          ne.x = Math.max(20, Math.min(world.W - 20, _last.x + (_crng() < 0.5 ? 1 : -1) * (40 + _crng() * 40)));
+          ne.y = Math.max(20, Math.min(world.H - 20, _last.y + (_crng() < 0.5 ? 1 : -1) * (40 + _crng() * 40)));
         }
         gs._lastSpawnByType = gs._lastSpawnByType || {};
         gs._lastSpawnByType[ne.typeIndex] = { x: ne.x, y: ne.y, frame: _frame };
