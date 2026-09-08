@@ -3,7 +3,6 @@ import AsyncPanelBoundary from "./AsyncPanelBoundary.jsx";
 import { ACHIEVEMENTS, ENEMY_TYPES, RANK_NAMES, WEAPONS } from "../constants.js";
 
 import { buildRunDebrief } from "../utils/runDebrief.js";
-import { buildRunNarrative } from "../utils/runNarrative.js";
 import { buildRunCoach } from "../utils/runCoach.js";
 import { buildPostRunIntelligence, buildRunEventDigest, buildStudioGameEvent } from "../utils/runIntelligence.js";
 import { buildInsightGraph } from "../utils/insightGraph.js";
@@ -29,11 +28,13 @@ import { recordActivePlaytestContinuation } from "../utils/playtestFlightRecorde
 import PlaytestFlightReceipt from "./PlaytestFlightReceipt.jsx";
 import { recordRivalryResult, requestStudioEventSync, saveStudioGameEvent, loadCareerStats, loadMetaProgress, loadRunHistory, loadRivalryHistory, loadStudioGameEvents, saveExperimentIntent, loadDoctrineArchive } from "../storage.js";
 import { FIELD_REPORTS } from "../utils/fieldReport.js";
-import CommunityStatsPanel from "./CommunityStatsPanel.jsx";
 
 const LeaderboardPanel = lazy(() => import("./LeaderboardPanel.jsx"));
 // S165 diet: the on-screen keyboard is only mounted for touch name entry.
 const VirtualKeyboard = lazy(() => import("./VirtualKeyboard.jsx"));
+// S166 diet: community stats panel and run arc panel are below-fold, load after initial paint.
+const CommunityStatsPanel = lazy(() => import("./CommunityStatsPanel.jsx"));
+const DeathScreenRunArcPanel = lazy(() => import("./DeathScreenRunArcPanel.jsx"));
 
 const TIER_COLORS = { bronze: "#CD7F32", silver: "#C0C0C0", gold: "#FFD700", legendary: "#FF6B35" };
 
@@ -340,7 +341,6 @@ export default function DeathScreen({
     vsScore,
     runSeed,
   });
-  const runNarrative = buildRunNarrative({ wave, score, kills, bestStreak, nearDeathEvents, precisionPeakStreak, bossKillCount, flowStateFired, timeSurvived });
   const _topWpn = (() => {
     const wk = weaponKills || [];
     const total = wk.reduce((s, v) => s + (v || 0), 0);
@@ -748,10 +748,12 @@ export default function DeathScreen({
         {weaponKills && weaponKills.some(k => k > 0) && (() => {
           const _total = weaponKills.reduce((s, k) => s + (k || 0), 0);
           const _used = weaponKills.map((k, i) => ({ k: k || 0, i })).filter(w => w.k > 0).sort((a, b) => b.k - a.k);
-          const _doShareCard = () => {
+          const _doShareCard = async () => {
             if (shareCardBusy) return;
             setShareCardBusy(true);
             try {
+              const { buildRunNarrative } = await import("../utils/runNarrative.js");
+              const runNarrative = buildRunNarrative({ wave, score, kills, bestStreak, nearDeathEvents, precisionPeakStreak, bossKillCount, flowStateFired, timeSurvived });
               const worker = new Worker(new URL("../workers/shareCard.worker.js", import.meta.url), { type: "module" });
               worker.onmessage = (ev) => {
                 worker.terminate();
@@ -1210,45 +1212,16 @@ export default function DeathScreen({
           </div>
         )}
 
-        {/* Run narrative arc card */}
-        <div style={{ ...card, marginBottom: 12 }}>
-          <div style={{ fontSize: 9, color: "#555", letterSpacing: 3, marginBottom: 8, fontFamily: "'Courier New',monospace", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <span>── RUN ARC ──</span>
-            {waveScoreLog.length >= 2 && (() => {
-              const maxS = Math.max(...waveScoreLog, 1);
-              const W2 = 120, H2 = 20;
-              const pts = waveScoreLog.map((s, i) => {
-                const x = (i / (waveScoreLog.length - 1)) * W2;
-                const y = H2 - (s / maxS) * H2;
-                return `${x.toFixed(1)},${y.toFixed(1)}`;
-              }).join(" ");
-              const peak = Math.max(...waveScoreLog);
-              const peakIdx = waveScoreLog.lastIndexOf(peak);
-              const px = (peakIdx / (waveScoreLog.length - 1)) * W2;
-              const py = H2 - (peak / maxS) * H2;
-              return (
-                <svg width={W2} height={H2} style={{ overflow: "visible" }}>
-                  <polyline points={pts} fill="none" stroke="#88FF99" strokeWidth="1.5" opacity="0.7" />
-                  <circle cx={px} cy={py} r="2.5" fill="#FFD700" />
-                </svg>
-              );
-            })()}
-          </div>
-          <div style={{ fontSize: 14, fontWeight: 900, color: "#EEE", letterSpacing: 2, marginBottom: 4 }}>{runNarrative.act}</div>
-          <div style={{ fontSize: 11, color: "#888", lineHeight: 1.5, marginBottom: runNarrative.moments.length > 0 ? 10 : 0 }}>{runNarrative.actDesc}</div>
-          {runNarrative.moments.map((m, i) => (
-            <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 8, padding: "4px 0", borderTop: "1px solid #1A1A1A" }}>
-              <div style={{ fontSize: 8, color: "var(--cod-gold)", letterSpacing: 2, fontFamily: "'Courier New',monospace", whiteSpace: "nowrap", marginTop: 2 }}>{m.label}</div>
-              <div style={{ fontSize: 10, color: "#AAA", lineHeight: 1.5 }}>{m.desc}</div>
-            </div>
-          ))}
-          {peakMoment && (
-            <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "4px 0", borderTop: "1px solid #1A1A1A" }}>
-              <div style={{ fontSize: 8, color: "#FF8800", letterSpacing: 2, fontFamily: "'Courier New',monospace", whiteSpace: "nowrap" }}>PEAK MOMENT</div>
-              <div style={{ fontSize: 10, color: "#AAA", lineHeight: 1.5 }}>{peakMoment.label} ×{peakMoment.count} on wave {peakMoment.wave}{peakMoment.enemiesAlive > 0 ? ` (${peakMoment.enemiesAlive} left standing)` : ""}.</div>
-            </div>
-          )}
-        </div>
+        {/* Run narrative arc card — lazy; buildRunNarrative loads in the panel chunk */}
+        <AsyncPanelBoundary>
+          <DeathScreenRunArcPanel
+            wave={wave} score={score} kills={kills} bestStreak={bestStreak}
+            nearDeathEvents={nearDeathEvents} precisionPeakStreak={precisionPeakStreak}
+            bossKillCount={bossKillCount} flowStateFired={flowStateFired}
+            timeSurvived={timeSurvived} waveScoreLog={waveScoreLog}
+            peakMoment={peakMoment} card={card}
+          />
+        </AsyncPanelBoundary>
 
         {/* Weapon legend milestones crossed this run */}
         {weaponMilestones.length > 0 && (
@@ -1337,9 +1310,11 @@ export default function DeathScreen({
           Rank: <span style={{ color: "var(--cod-gold)", fontWeight: 700 }}>{RANK_NAMES[rankIndex]}</span>
         </div>
 
-        <div style={{ marginBottom: 12 }}>
-          <CommunityStatsPanel compact />
-        </div>
+        <AsyncPanelBoundary>
+          <div style={{ marginBottom: 12 }}>
+            <CommunityStatsPanel compact />
+          </div>
+        </AsyncPanelBoundary>
 
         {!practiceRun && (
           <div data-testid="field-report" style={{ ...card, marginBottom: 12, border: "1px solid rgba(127,230,255,0.22)", background: "rgba(4,24,28,0.58)" }}>
