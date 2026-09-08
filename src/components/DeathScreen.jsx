@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useMemo, lazy } from "react";
+import { useState, useRef, useEffect, useMemo, lazy, Suspense } from "react";
 import AsyncPanelBoundary from "./AsyncPanelBoundary.jsx";
 import { ACHIEVEMENTS, ENEMY_TYPES, RANK_NAMES, WEAPONS } from "../constants.js";
 
@@ -1212,8 +1212,9 @@ export default function DeathScreen({
           </div>
         )}
 
-        {/* Run narrative arc card — lazy; buildRunNarrative loads in the panel chunk */}
-        <AsyncPanelBoundary>
+        {/* Run narrative arc card — lazy; buildRunNarrative loads in the panel chunk.
+            Suspense fallback=null: below-fold, no blocking overlay needed. */}
+        <Suspense fallback={null}>
           <DeathScreenRunArcPanel
             wave={wave} score={score} kills={kills} bestStreak={bestStreak}
             nearDeathEvents={nearDeathEvents} precisionPeakStreak={precisionPeakStreak}
@@ -1221,7 +1222,7 @@ export default function DeathScreen({
             timeSurvived={timeSurvived} waveScoreLog={waveScoreLog}
             peakMoment={peakMoment} card={card}
           />
-        </AsyncPanelBoundary>
+        </Suspense>
 
         {/* Weapon legend milestones crossed this run */}
         {weaponMilestones.length > 0 && (
@@ -1310,11 +1311,11 @@ export default function DeathScreen({
           Rank: <span style={{ color: "var(--cod-gold)", fontWeight: 700 }}>{RANK_NAMES[rankIndex]}</span>
         </div>
 
-        <AsyncPanelBoundary>
+        <Suspense fallback={null}>
           <div style={{ marginBottom: 12 }}>
             <CommunityStatsPanel compact />
           </div>
-        </AsyncPanelBoundary>
+        </Suspense>
 
         {!practiceRun && (
           <div data-testid="field-report" style={{ ...card, marginBottom: 12, border: "1px solid rgba(127,230,255,0.22)", background: "rgba(4,24,28,0.58)" }}>
