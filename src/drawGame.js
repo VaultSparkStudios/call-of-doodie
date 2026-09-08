@@ -7,6 +7,7 @@ import { getPlayerRenderPose } from "./utils/playerRenderPose.js";
 import { drawRetroEnemyCharacter, drawRetroPlayerCharacter, VISUAL_PACKS } from "./utils/visualPack.js";
 import { drawOffscreenThreatArrows, getOffscreenThreatArrows } from "./utils/offscreenIndicators.js";
 import { getArenaLayers } from "./systems/backgroundLayer.js";
+import { buildRadarObjectiveMarkers, projectRadarPoint } from "./systems/radarModel.js";
 
 // Per-enemy body-shape coordinate tables (hoisted out of the draw loop —
 // these were re-allocated as fresh array literals for every enemy, every
@@ -1385,9 +1386,11 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   const _radarSpan = _radarWholeArena ? Math.hypot(_AW, _AH) : 0;
   // Arena point → radar point. Whole-arena mode is absolute; the legacy mode is
   // player-relative over a 0.6-viewport window, unchanged.
-  const _toRadar = (wx, wy) => (_radarWholeArena
-    ? { dx: (wx - _AW / 2) / _radarSpan * (rs * 2), dy: (wy - _AH / 2) / _radarSpan * (rs * 2) }
-    : { dx: (wx - p.x) / (W * 0.6) * rs, dy: (wy - p.y) / (H * 0.6) * rs });
+  const _toRadar = (wx, wy) => projectRadarPoint({
+    x: wx, y: wy, wholeArena: _radarWholeArena,
+    arenaW: _AW, arenaH: _AH, playerX: p.x, playerY: p.y,
+    viewW: W, viewH: H, radius: rs,
+  });
 
   // Everything plotted on the radar is clipped to the radar disc. The flood
   // ring opens wider than the arena's short axis, so without this it paints a
@@ -1418,7 +1421,57 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
       ctx.restore();
     }
   }
+  const _objectiveMarkers = buildRadarObjectiveMarkers(gs, { wholeArena: _radarWholeArena });
+  for (const marker of _objectiveMarkers) {
+    const point = _toRadar(marker.x, marker.y);
+    if (marker.kind === "loot") {
+      // radar-loot-marker: gold square remains distinct from round combat dots.
+      ctx.fillStyle = "#FFD34F";
+      ctx.fillRect(rx + point.dx - 2, ry + point.dy - 2, 4, 4);
+    } else if (marker.kind === "evac") {
+      // radar-evac-marker: cyan diamond + restrained pulse makes the open exit readable.
+      const pulse = gs.reducedMotion ? 5 : 5 + Math.sin((gs.frame || 0) / 12) * 1.5;
+      ctx.strokeStyle = "#33E6FF";
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(rx + point.dx, ry + point.dy - pulse);
+      ctx.lineTo(rx + point.dx + pulse, ry + point.dy);
+      ctx.lineTo(rx + point.dx, ry + point.dy + pulse);
+      ctx.lineTo(rx + point.dx - pulse, ry + point.dy);
+      ctx.closePath();
+      ctx.stroke();
+    }
+  }
   ctx.globalAlpha = 0.7;
+
+  // Scaled-mode objectives stay readable without painting more noise into the
+  // main viewport. The model is bounded (evac first, then at most seven loot
+  // crates) and the radar's existing disc clip owns corner safety.
+  const _objectiveMarkers = buildRadarObjectiveMarkers(gs, { wholeArena: _radarWholeArena });
+  for (const marker of _objectiveMarkers) {
+    const point = _toRadar(marker.x, marker.y);
+    if (marker.kind === "loot") {
+      // radar-loot-marker — gold square, distinct from circular combat dots.
+      ctx.fillStyle = "#FFD34F";
+      ctx.fillRect(rx + point.dx - 2, ry + point.dy - 2, 4, 4);
+      ctx.strokeStyle = "rgba(0,0,0,0.85)";
+      ctx.lineWidth = 1;
+      ctx.strokeRect(rx + point.dx - 2.5, ry + point.dy - 2.5, 5, 5);
+    } else if (marker.kind === "evac") {
+      // radar-evac-marker — cyan diamond with reduced-motion-safe pulse.
+      const pulse = gs.reducedMotion ? 4 : 4 + Math.sin((gs.frame || 0) / 10);
+      ctx.save();
+      ctx.translate(rx + point.dx, ry + point.dy);
+      ctx.rotate(Math.PI / 4);
+      ctx.fillStyle = "#33E6FF";
+      ctx.fillRect(-pulse / 2, -pulse / 2, pulse, pulse);
+      ctx.strokeStyle = "#E9FDFF";
+      ctx.lineWidth = 1;
+      ctx.strokeRect(-pulse / 2 - 1, -pulse / 2 - 1, pulse + 2, pulse + 2);
+      ctx.restore();
+    }
+  }
+
   const _pr = _toRadar(p.x, p.y);
   ctx.fillStyle = "#0F0"; ctx.beginPath(); ctx.arc(rx + _pr.dx, ry + _pr.dy, 2, 0, Math.PI * 2); ctx.fill();
   for (let _ri = 0; _ri < (gs.enemies || []).length; _ri++) {
