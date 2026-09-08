@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { createModeState, getModeDefinition, getModeHudModel, getModeWaveEnemyCount, isModeBossWave, isNewModeId, PLAYABLE_MODE_IDS, stepMode } from "./modeDefinition.js";
+import { createModeState, getArenaPressureScale, getModeDefinition, getModeHudModel, getModeWaveEnemyCount, isModeBossWave, isNewModeId, PLAYABLE_MODE_IDS, stepMode } from "./modeDefinition.js";
 import { LEGACY_MODE_IDS } from "./modeRules.js";
 import { createSimInput, createSimState, runSim } from "../sim/stepSim.js";
 import { hashSimState } from "../sim/presentationKeys.js";
@@ -93,7 +93,38 @@ describe("mode definition layer (S163)", () => {
   });
 });
 
+describe("large-arena pressure contract (S166)", () => {
+  it("preserves unscaled modes and grows pressure slower than arena area", () => {
+    expect(getArenaPressureScale({ arena: {} })).toBe(1);
+    expect(getArenaPressureScale({ arena: { scale: 1.5 } })).toBe(1.25);
+    expect(getArenaPressureScale({ arena: { scale: 4 } })).toBe(1.75);
+    expect(getModeWaveEnemyCount({ arena: {} }, {}, 17)).toBe(17);
+    expect(getModeWaveEnemyCount({ arena: { scale: 1.5 } }, {}, 40)).toBe(50);
+  });
+
+  it("layers the arena pressure scale after a mode-specific wave rule", () => {
+    const def = { arena: { scale: 1.5 }, waveEnemyCount: (_gs, computed) => computed * 1.5 };
+    expect(getModeWaveEnemyCount(def, {}, 40)).toBe(75);
+  });
+});
+
 describe("SEWER EXTRACTION and BOT ROYALE (S163 tranche 3)", () => {
+  it("extraction: the 1.5× arena distributes loot across the scrolling world and scales pressure linearly", () => {
+    const def = getModeDefinition("sewer_extraction");
+    expect(def.arena.scale).toBe(1.5);
+    expect(getModeWaveEnemyCount(def, { alarm: 0 }, 40)).toBe(50);
+    expect(getModeWaveEnemyCount(def, { alarm: 100 }, 40)).toBe(87);
+
+    const crates = [];
+    for (let seed = 1; seed <= 12; seed += 1) {
+      const gs = createSimState({ seed });
+      createModeState(def, gs, { ...noText, W: 1920, H: 1080 });
+      crates.push(...gs.pickups.filter((pickup) => pickup.type === "loot"));
+    }
+    expect(crates.every((crate) => crate.x >= 60 && crate.x <= 1860 && crate.y >= 60 && crate.y <= 1020)).toBe(true);
+    expect(crates.some((crate) => crate.x > 1280 || crate.y > 720)).toBe(true);
+  });
+
   it("extraction: crates raise loot and alarm, evac opens at 60, extracting wins and banks the stash", () => {
     const def = getModeDefinition("sewer_extraction");
     const gs = createSimState({ seed: 7 });

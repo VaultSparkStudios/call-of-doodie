@@ -31,7 +31,11 @@ export const SEWER_EXTRACTION = Object.freeze({
   replayEligible: false,
   rulesetId: "standard",
   allies: null,
-  arena: { themePool: [2, 3, 5] },
+  // The loot/alarm/evac loop is the second mode to earn a scrolling world.
+  // Mode runtime applies a bounded linear pressure scale (1.25× here), not the
+  // quadratic 2.25× area, so traversal gains space without emptying the sewer
+  // or overwhelming low-power browsers.
+  arena: { themePool: [2, 3, 5], scale: 1.5 },
   hud: { squad: false, zones: false, parTimer: false, verbObjective: false },
   usesDirectorObjectives: false,
   alarmEvac: ALARM_EVAC,

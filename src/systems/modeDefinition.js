@@ -118,9 +118,21 @@ export function isModeBossWave(modeDef, gs, legacyIsBoss) {
   return !!legacyIsBoss;
 }
 
+/**
+ * Larger maps need more simultaneous pressure, but enemy count should grow
+ * slower than raw area so mobile and low-power browsers do not pay a quadratic
+ * cost. Every extra 1× of linear arena scale adds 50% pressure, capped at 1.75×.
+ * Unscaled modes resolve to exactly 1 and remain byte-for-byte identical.
+ */
+export function getArenaPressureScale(modeDef) {
+  const scale = Number(modeDef?.arena?.scale);
+  if (!Number.isFinite(scale) || scale <= 1) return 1;
+  return Math.min(1.75, 1 + (Math.min(4, scale) - 1) * 0.5);
+}
+
 export function getModeWaveEnemyCount(modeDef, gs, computed) {
-  if (modeDef?.waveEnemyCount) return Math.max(0, Math.floor(modeDef.waveEnemyCount(gs, computed)));
-  return computed;
+  const modeCount = modeDef?.waveEnemyCount ? modeDef.waveEnemyCount(gs, computed) : computed;
+  return Math.max(0, Math.floor(modeCount * getArenaPressureScale(modeDef)));
 }
 
 /** HUD model: squad strip, zones, verb objective, par timer, mode banner. */
