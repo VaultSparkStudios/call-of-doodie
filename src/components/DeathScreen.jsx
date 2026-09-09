@@ -36,7 +36,7 @@ const SecondaryRunAnalysis = lazy(() => import("./DeathScreenSecondaryAnalysis.j
 const TIER_COLORS = { bronze: "#CD7F32", silver: "#C0C0C0", gold: "#FFD700", legendary: "#FF6B35" };
 
 export default function DeathScreen({
-  victory = false, modeLabel = null, duelResult = null,
+  victory = false, modeLabel = null, modeOutcome = null, duelResult = null,
   score, kills, deaths: _deaths, wave, level, bestStreak, timeSurvived, totalDamage,
   crits, grenades, deathMessage, difficulty, runSeed, runModifier, achievementsUnlocked,
   activePerks, missionsSummary,
@@ -650,6 +650,12 @@ export default function DeathScreen({
         {duelResult && (
           <div data-testid="duel-result" style={{ display: "inline-block", padding: "2px 10px", marginBottom: 4, marginLeft: 6, borderRadius: 10, border: "1px solid rgba(51,230,255,0.45)", color: "var(--cod-cyan)", fontSize: 11, fontWeight: 800, letterSpacing: 1 }}>
             {duelResult.ok ? (duelResult.status === "responder_won" ? "⚔️ DUEL WON · recorded" : "⚔️ DUEL LOST · recorded") : "⚔️ DUEL " + (duelResult.reason === "already_answered_or_expired" ? "EXPIRED OR ANSWERED" : "NOT RECORDED")} · friendly, unverified
+          </div>
+        )}
+        {modeOutcome?.headline && (
+          <div data-testid="mode-outcome" style={{ margin: "6px auto 4px", padding: "8px 12px", maxWidth: 420, borderRadius: 8, border: `1px solid ${victory ? "rgba(255,211,79,0.45)" : "rgba(255,255,255,0.16)"}`, background: "rgba(255,255,255,0.045)" }}>
+            <div style={{ color: victory ? "var(--cod-gold)" : "#EEE", fontSize: 14, fontWeight: 900, letterSpacing: 1.5 }}>{modeOutcome.headline}</div>
+            {modeOutcome.detail && <div style={{ color: "#B8C0D0", fontSize: 10, letterSpacing: 0.5, marginTop: 3 }}>{modeOutcome.detail}</div>}
           </div>
         )}
         <p style={{ color: "#FF6666", fontSize: 14, fontStyle: "italic", margin: "4px 0 8px" }}>"{deathMessage}"</p>

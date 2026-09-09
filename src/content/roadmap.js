@@ -9,7 +9,7 @@ export const ROADMAP = Object.freeze({
     ["Seed duels and squad boards", "Copy a challenge link from the debrief to open a 24-hour duel; the rival's result comes back as a card. Share a squad code and the board's SQUAD tab shows your crew's best verified runs."],
     ["One board, one field manual, one bestiary", "/board/ merges the leaderboard and live stats, /field-manual/ replaces How to Play, /bestiary/ replaces Enemies. Old links redirect."],
     ["Sewer Extraction", "Loot crates, an alarm that climbs with every kill, an evac toilet at 60, lockdown at 100, and a persistent stash on your profile."],
-    ["Bot Royale", "Twelve bots with internet handles, a shrinking sewer flood, supply drops, and a placement on the debrief. Offline, no netcode."],
+    ["Bot Royale", "Sixteen bots with internet handles on a two-screen scrolling arena, a shrinking sewer flood, supply drops, and a placement on the debrief. Offline, no netcode."],
     ["Your Sewer Record", "A profile page (/#profile) with career, stash, and guest-safe backup download and restore."],
     ["Two real game modes", "BOSS GAUNTLET (six bosses, no filler, par timer) and HOLD THE THRONE (capture three thrones with a CPU squad)."],
     ["CPU teammates", "The Intern, the Plunger Sergeant, and The Roomba: follow, hold, attack, revive, and carry orders on Z / X / C."],
@@ -19,7 +19,7 @@ export const ROADMAP = Object.freeze({
   ],
   next: [
     ["Rivals go live", "Seed duels, squad boards, cloud backup, and the Daily ghost race are built; the deployment needs its migration and secrets before they light up."],
-    ["Bigger royale arena", "A scrolling camera and sixteen bots once the twelve-bot arena proves fun."],
+    ["Royale pacing from real play", "The two-screen, sixteen-bot arena is live; flood timing and bot count change only after real runs say how it feels."],
   ],
   later: [
     ["Real-time co-op", "Two to four players in one arena. Planned after the async rivals ship and only with a cost-capped lobby service. Not live today."],

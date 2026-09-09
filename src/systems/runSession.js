@@ -76,6 +76,7 @@ export function createRunHistoryEntry({
   ghostRecorderReceipt = null,
   pressureReceipt = null,
   damageReceipt = null,
+  deathAttribution = null,
   totalDamage = 0,
   totalShots = 0,
   totalHits = 0,
@@ -100,6 +101,19 @@ export function createRunHistoryEntry({
     bossKills: Math.max(0, Math.floor(Number(bossKills) || 0)),
     ts: Date.now(),
   };
+  if (deathAttribution && typeof deathAttribution === "object") {
+    // S167: bounded copy of the killer attribution so history and coaching
+    // can say whether "what killed you" was observed or only nearest-threat.
+    entry.deathAttribution = {
+      typeIndex: Number.isFinite(Number(deathAttribution.typeIndex)) && deathAttribution.typeIndex !== null ? Math.floor(Number(deathAttribution.typeIndex)) : null,
+      sourceName: String(deathAttribution.sourceName || "").slice(0, 40) || null,
+      kind: String(deathAttribution.kind || "unknown").slice(0, 16),
+      evidenceLevel: deathAttribution.evidenceLevel === "observed" ? "observed" : "hypothesis",
+      basis: deathAttribution.basis === "damage-sequence" ? "damage-sequence" : "nearest-enemy",
+      hazard: !!deathAttribution.hazard,
+      boss: !!deathAttribution.boss,
+    };
+  }
   if (traceEvidence) {
     entry.traceEvidence = {
       level: traceEvidence.level || traceEvidence.evidenceLevel || "none",

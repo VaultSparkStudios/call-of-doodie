@@ -154,6 +154,35 @@ export function getModeHudModel(gs, modeDef) {
   };
 }
 
+const OUTCOME_TEXT_MAX = 80;
+
+function boundedText(value) {
+  return String(value ?? "").replace(/[\u0000-\u001f\u007f]/g, "").replace(/\s+/g, " ").trim().slice(0, OUTCOME_TEXT_MAX);
+}
+
+/**
+ * Mode outcome receipt for the death/victory screen (S167): what the run was
+ * worth in the mode that was being played. Pure and bounded; null for legacy
+ * modes and for definitions without an outcome. Never a skill or balance claim.
+ */
+export function getModeOutcomeReceipt(gs, modeDef) {
+  if (!gs || !modeDef || modeDef.kind === "legacy" || typeof modeDef.outcome !== "function") return null;
+  let raw = null;
+  try { raw = modeDef.outcome(gs); } catch { raw = null; }
+  const headline = boundedText(raw?.headline);
+  if (!headline) return null;
+  const stat = Number(raw?.stat);
+  return {
+    schemaVersion: "mode-outcome-v1",
+    modeId: modeDef.id,
+    label: boundedText(modeDef.label || modeDef.id),
+    victory: !!gs._modeWon,
+    headline,
+    detail: boundedText(raw?.detail) || null,
+    stat: Number.isFinite(stat) ? stat : null,
+  };
+}
+
 export function listNewModes() {
   return [...DEFINITIONS.values()];
 }

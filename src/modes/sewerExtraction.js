@@ -60,7 +60,9 @@ export const SEWER_EXTRACTION = Object.freeze({
 
   onWaveStart(gs, ctx) {
     for (let i = 0; i < CRATES_PER_WAVE; i += 1) spawnCrate(gs, ctx);
-    ctx.addText?.(gs, ctx.W / 2, ctx.H / 2 - 120, "📦 CRATES DROPPED", "#FFD34F", true);
+    // Screen-anchored (S167): the arena is 1.5× the screen, so a world-centre
+    // callout would be off-screen for most of the run.
+    ctx.announce?.(gs, "📦 CRATES DROPPED", "#FFD34F");
   },
 
   onEnemyKilled(gs) {
@@ -127,5 +129,18 @@ export const SEWER_EXTRACTION = Object.freeze({
 
   progress(gs) {
     return { label: "ALARM", value: gs.alarm || 0, pct: Math.min(1, (gs.alarm || 0) / ALARM_LOCK), unit: "", pressure: (gs.alarm || 0) / ALARM_LOCK };
+  },
+
+  // What the run was worth, for the death/victory screen (S167). Pure, bounded,
+  // derived only from mode state; never a balance or skill claim.
+  outcome(gs) {
+    const loot = Math.max(0, Math.floor(gs._extractLoot || 0));
+    const crates = Math.max(0, Math.floor(gs._extractCrates || 0));
+    const alarm = Math.max(0, Math.min(ALARM_LOCK, Math.floor(gs.alarm || 0)));
+    if (gs._extractBanked) {
+      return { headline: `🚽 ${loot} LOOT BANKED`, detail: `${crates} crate${crates === 1 ? "" : "s"} carried out · alarm ${alarm}/${ALARM_LOCK}`, stat: loot };
+    }
+    const state = gs._extractLocked ? "exit was sealed by lockdown" : gs._extractOpen ? "evac was open" : `evac opens at alarm ${ALARM_EVAC}`;
+    return { headline: `📦 ${loot} LOOT DOWN THE DRAIN`, detail: `${crates} crate${crates === 1 ? "" : "s"} grabbed · alarm ${alarm}/${ALARM_LOCK} · ${state}`, stat: loot };
   },
 });

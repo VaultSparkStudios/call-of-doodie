@@ -9,6 +9,7 @@
 import { ENEMY_TYPES } from "../constants.js";
 import { getRunRng } from "../systems/runRng.js";
 import { retireEnemyWithoutDefeat } from "../systems/enemyDefeatLifecycle.js";
+import { applyObservedPlayerDamage } from "../systems/damageSequence.js";
 
 const BOT_COUNT = 16;
 const BOT_TYPES = [0, 1, 2, 3, 5, 6, 7, 8]; // non-boss archetypes with sprites
@@ -73,7 +74,9 @@ export const BOT_ROYALE = Object.freeze({
     // The flood is the only hazard; static acid pools at spawn made the drop unfair.
     gs.hazards = [];
     gs.player.invincible = DROP_FRAMES + 30;
-    ctx.addText?.(gs, W / 2, H / 2 - 120, "🌊 DROP IN · 4s", "#33E6FF", true);
+    // Phase callouts are screen-anchored (S167): on a 2× arena the world centre
+    // is off-screen for anyone who is not standing on it.
+    ctx.announce?.(gs, "🌊 DROP IN · 4s", "#33E6FF");
   },
 
   isBossWave() { return false; },
@@ -88,7 +91,7 @@ export const BOT_ROYALE = Object.freeze({
     // Drop phase: bots hold their landing spots; nobody fires yet.
     if (frame < DROP_FRAMES) {
       for (const b of bots) { b.x = b._spawnX; b.y = b._spawnY; }
-      if (frame % 60 === 0 && frame > 0) ctx.addText?.(gs, W / 2, H / 2 - 120, `🌊 DROP IN · ${Math.ceil((DROP_FRAMES - frame) / 60)}s`, "#33E6FF", true);
+      if (frame % 60 === 0 && frame > 0) ctx.announce?.(gs, `🌊 DROP IN · ${Math.ceil((DROP_FRAMES - frame) / 60)}s`, "#33E6FF");
     }
 
     // Free-for-all: every bot sees every other bot as a target candidate.
@@ -125,12 +128,14 @@ export const BOT_ROYALE = Object.freeze({
         const rng = getRunRng(gs, "royale");
         flood.cx = Math.max(flood.targetR, Math.min(W - flood.targetR, flood.cx + (rng() - 0.5) * 220));
         flood.cy = Math.max(flood.targetR, Math.min(H - flood.targetR, flood.cy + (rng() - 0.5) * 140));
-        ctx.addText?.(gs, W / 2, H / 2 - 120, `🌊 THE SEWER FLOODS · PHASE ${flood.phase}`, "#33E6FF", true);
+        ctx.announce?.(gs, `🌊 THE SEWER FLOODS · PHASE ${flood.phase}`, "#33E6FF");
       }
       if (flood.r > flood.targetR) flood.r = Math.max(flood.targetR, flood.r - 1.2);
       // Damage outside the ring.
       if (Math.hypot(p.x - flood.cx, p.y - flood.cy) > flood.r && p.invincible <= 0) {
-        p.health -= FLOOD_DOT;
+        // Observed, not silent (S167): a drowning must reach the damage receipt
+        // and the death attribution, or the nearest bot gets the blame.
+        applyObservedPlayerDamage(gs, { damage: FLOOD_DOT, frame, kind: "hazard", sourceName: "Sewer flood" });
         if (frame % 45 === 0) ctx.addText?.(gs, p.x, p.y - 30, "🌊 FLOODING", "#33E6FF");
         ctx.setHealth?.(Math.max(0, Math.floor(p.health)));
         if (p.health <= 0) ctx.handlePlayerDeath?.(gs);
@@ -165,6 +170,18 @@ export const BOT_ROYALE = Object.freeze({
 
   banner(gs) {
     return `${gs._royaleAlive ?? BOT_COUNT} BOTS LEFT · ${gs._royaleKills || 0} FLUSHED · PHASE ${gs.flood?.phase || 0}`;
+  },
+
+  outcome(gs) {
+    const alive = Math.max(0, Math.floor(gs._royaleAlive ?? BOT_COUNT));
+    const flushed = Math.max(0, Math.floor(gs._royaleKills || 0));
+    const phase = Math.max(0, Math.floor(gs.flood?.phase || 0));
+    const won = alive === 0;
+    return {
+      headline: won ? "🏆 LAST ONE FLUSHING" : `🌊 FLUSHED #${alive + 1} OF ${BOT_COUNT + 1}`,
+      detail: `${flushed} bot${flushed === 1 ? "" : "s"} flushed · flood phase ${phase}${won ? "" : ` · ${alive} still in the pipe`}`,
+      stat: won ? 1 : alive + 1,
+    };
   },
 
   progress(gs) {

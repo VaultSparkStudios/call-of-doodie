@@ -268,7 +268,7 @@ export function stepEnemyFrame({
         const _brCap = Math.floor(360 * _waveScale);
         // Warning flash: 1 second (60 frames) before the ring fires
         // Adaptive widen if player has been dying to this enemy type recently
-        const _brWarn = Math.floor(60 * (gs._telegraphMult?.[e.type] || 1));
+        const _brWarn = Math.floor(60 * (gs._telegraphMult?.[e.typeIndex] || 1));
         e.bulletRingWarning = _abilityReady && e.bulletRingTimer >= _brCap - _brWarn && e.bulletRingTimer < _brCap;
         if (_abilityReady && e.bulletRingTimer >= _brCap) {
           e.bulletRingTimer = 0;
@@ -290,7 +290,7 @@ export function stepEnemyFrame({
           e.groundSlamTimer++;
           const _gsCap = Math.floor(420 * _waveScale);
           // Warning flash: 1.5 seconds (90 frames) before the slam triggers
-          const _gsWarn = Math.floor(90 * (gs._telegraphMult?.[e.type] || 1));
+          const _gsWarn = Math.floor(90 * (gs._telegraphMult?.[e.typeIndex] || 1));
           e.groundSlamWarning = _abilityReady && e.groundSlamTimer >= _gsCap - _gsWarn && e.groundSlamTimer < _gsCap;
           if (_abilityReady && e.groundSlamTimer >= _gsCap) {
             e.groundSlamTimer = 0; e.groundSlamWarning = false; e.groundSlamActive = true; e.groundSlamRadius = 0;

@@ -83,4 +83,17 @@ export const HOLD_THE_THRONE = Object.freeze({
     const zone = getActiveZone(gs);
     return zone ? { label: zone.label, value: zone.progress / 60, pct: zone.progress / zone.captureFrames, unit: "s", pressure: zone.pressure / 100 } : null;
   },
+
+  outcome(gs) {
+    const captured = Math.max(0, Math.min(3, Math.floor(gs._thronesCaptured || 0)));
+    const lost = Math.max(0, Math.floor(gs._thronesLost || 0));
+    const zone = getActiveZone(gs);
+    const held = zone ? Math.floor((zone.progress || 0) / 60) : 0;
+    const won = captured >= 3;
+    return {
+      headline: won ? "👑 ALL THREE THRONES HELD" : `👑 ${captured}/3 THRONES HELD`,
+      detail: won ? `${lost} lost along the way` : `${lost} lost${zone ? ` · ${zone.label} at ${held}s/${CAPTURE_SECONDS}s when it ended` : ""}`,
+      stat: captured,
+    };
+  },
 });

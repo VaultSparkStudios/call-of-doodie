@@ -1349,9 +1349,11 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   // Floating texts carry ARENA coordinates, so under a scrolled camera they
   // need the camera offset — but not the shake or the ADS zoom, which is why
   // they sit outside the world block rather than inside it.
+  // Screen-anchored texts (S167 `addScreenText`) carry VIEWPORT coordinates and
+  // are painted in a second pass with no camera offset at all, so announcements
+  // stay on screen wherever the camera has scrolled.
   const _ftCam = (_camX !== 0 || _camY !== 0);
-  if (_ftCam) { ctx.save(); ctx.translate(-_camX, -_camY); }
-  gs.floatingTexts.forEach(ft => {
+  const _paintFloatingText = (ft) => {
     const _ftBig = ft.big === true || (typeof ft.text === "string" && ft.text.includes("💥"));
     const maxLife = _ftBig ? 90 : ft.quote ? 110 : 60;
     ctx.globalAlpha = Math.min(1, ft.life / maxLife);
@@ -1367,8 +1369,11 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
       ctx.strokeStyle = "#000"; ctx.lineWidth = 3;
     }
     ctx.strokeText(ft.text, ft.x, ft.y); ctx.fillText(ft.text, ft.x, ft.y);
-  });
+  };
+  if (_ftCam) { ctx.save(); ctx.translate(-_camX, -_camY); }
+  gs.floatingTexts.forEach(ft => { if (ft.screen !== true) _paintFloatingText(ft); });
   if (_ftCam) ctx.restore();
+  gs.floatingTexts.forEach(ft => { if (ft.screen === true) _paintFloatingText(ft); });
   ctx.globalAlpha = 1;
 
   // Mini-radar

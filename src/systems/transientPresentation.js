@@ -51,7 +51,7 @@ export function addParticles(gs, x, y, color, count = 8, rng = cosmeticRandom, k
   return amount;
 }
 
-export function addText(gs, x, y, text, color = "#FFF", big = false) {
+function pushFloatingText(gs, x, y, text, color, big, screen) {
   if (!Array.isArray(gs?.floatingTexts)) return false;
   if (gs.floatingTexts.length >= MAX_FLOAT_TEXTS) {
     if (!big) return false;
@@ -64,6 +64,32 @@ export function addText(gs, x, y, text, color = "#FFF", big = false) {
     vy: isQuote ? -0.65 : big ? -1 : -2,
     big: big === true,
     quote: isQuote,
+    screen,
   });
   return true;
+}
+
+/** World-anchored floating text: `x, y` are ARENA coordinates and scroll with the camera. */
+export function addText(gs, x, y, text, color = "#FFF", big = false) {
+  return pushFloatingText(gs, x, y, text, color, big, false);
+}
+
+/**
+ * Screen-anchored floating text (S167): `x, y` are VIEWPORT coordinates.
+ * Announcements (level-ups, objective calls, mode phases) must stay readable
+ * wherever the camera is, so the renderer paints these outside the camera
+ * translate. On an unscaled arena the two kinds coincide exactly.
+ */
+export function addScreenText(gs, x, y, text, color = "#FFF", big = false) {
+  return pushFloatingText(gs, x, y, text, color, big, true);
+}
+
+/**
+ * Centre-screen announcement for mode definitions, which only know arena
+ * coordinates. `yOffset` is relative to the viewport centre.
+ */
+export function announce(gs, viewW, viewH, text, color = "#FFF", big = true, yOffset = -120) {
+  const w = Number.isFinite(viewW) ? viewW : Number(gs?._viewW) || 0;
+  const h = Number.isFinite(viewH) ? viewH : Number(gs?._viewH) || 0;
+  return addScreenText(gs, w / 2, h / 2 + yOffset, text, color, big);
 }

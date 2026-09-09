@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { createModeState, getArenaPressureScale, getModeDefinition, getModeHudModel, getModeWaveEnemyCount, isModeBossWave, isNewModeId, PLAYABLE_MODE_IDS, stepMode } from "./modeDefinition.js";
+import { createModeState, getArenaPressureScale, getModeDefinition, getModeHudModel, getModeOutcomeReceipt, getModeWaveEnemyCount, isModeBossWave, isNewModeId, onModeWaveStart, PLAYABLE_MODE_IDS, stepMode } from "./modeDefinition.js";
 import { LEGACY_MODE_IDS } from "./modeRules.js";
 import { createSimInput, createSimState, runSim } from "../sim/stepSim.js";
 import { hashSimState } from "../sim/presentationKeys.js";
@@ -125,6 +125,38 @@ describe("SEWER EXTRACTION and BOT ROYALE (S163 tranche 3)", () => {
     expect(crates.some((crate) => crate.x > 1280 || crate.y > 720)).toBe(true);
   });
 
+  it("extraction: wave-start crates use the arena the context hands them, not a viewport (S167)", () => {
+    const def = getModeDefinition("sewer_extraction");
+    const announced = [];
+    const arenaCtx = { ...noText, W: 1920, H: 1080, viewW: 1280, viewH: 720, announce: (_gs, text) => announced.push(text) };
+    const crates = [];
+    for (let seed = 1; seed <= 12; seed += 1) {
+      const gs = createSimState({ seed });
+      createModeState(def, gs, arenaCtx);
+      gs.pickups.length = 0;
+      gs.currentWave = 2;
+      onModeWaveStart(gs, def, arenaCtx);
+      crates.push(...gs.pickups.filter((pickup) => pickup.type === "loot"));
+    }
+    expect(crates.length).toBe(36);
+    expect(crates.every((crate) => crate.x >= 60 && crate.x <= 1860 && crate.y >= 60 && crate.y <= 1020)).toBe(true);
+    expect(crates.some((crate) => crate.x > 1280 || crate.y > 720)).toBe(true);
+    expect(announced.filter((text) => text.includes("CRATES DROPPED")).length).toBe(12);
+  });
+
+  it("royale: phase callouts go through the screen-anchored announce channel (S167)", () => {
+    const def = getModeDefinition("bot_royale");
+    const gs = createSimState({ seed: 9 });
+    const announced = [];
+    const ctx = { ...noText, W: 2560, H: 1440, announce: (_gs, text) => announced.push(text) };
+    createModeState(def, gs, ctx);
+    expect(announced.at(-1)).toMatch(/DROP IN/);
+    stepMode(gs, def, { ...ctx, frame: 24 * 60 + 1 });
+    expect(announced.at(-1)).toMatch(/THE SEWER FLOODS · PHASE 1/);
+    // No world-anchored copy of the announcement was written at the arena centre.
+    expect(gs.floatingTexts.some((text) => text.x === 1280 && text.y === 600)).toBe(false);
+  });
+
   it("extraction: crates raise loot and alarm, evac opens at 60, extracting wins and banks the stash", () => {
     const def = getModeDefinition("sewer_extraction");
     const gs = createSimState({ seed: 7 });
@@ -186,6 +218,58 @@ describe("SEWER EXTRACTION and BOT ROYALE (S163 tranche 3)", () => {
     const a = runSim(build(), 240, () => createSimInput({ move: { dx: 1, dy: 0 }, fire: true, aim: 0 }), { hooks });
     const b = runSim(build(), 240, () => createSimInput({ move: { dx: 1, dy: 0 }, fire: true, aim: 0 }), { hooks });
     expect(hashSimState(a.gs)).toBe(hashSimState(b.gs));
+  });
+});
+
+describe("mode outcome receipts (S167)", () => {
+  it("legacy modes and definitions without an outcome return null", () => {
+    expect(getModeOutcomeReceipt({ _modeWon: false }, getModeDefinition("standard"))).toBeNull();
+    expect(getModeOutcomeReceipt({}, { id: "x", kind: "mode", label: "X" })).toBeNull();
+    expect(getModeOutcomeReceipt(null, getModeDefinition("bot_royale"))).toBeNull();
+    expect(getModeOutcomeReceipt({}, { id: "boom", kind: "mode", label: "BOOM", outcome() { throw new Error("no"); } })).toBeNull();
+  });
+
+  it("extraction says what went down the drain or what was banked", () => {
+    const def = getModeDefinition("sewer_extraction");
+    const lost = getModeOutcomeReceipt({ _extractLoot: 140, _extractCrates: 3, alarm: 72.6, _extractOpen: true }, def);
+    expect(lost).toMatchObject({ schemaVersion: "mode-outcome-v1", modeId: "sewer_extraction", label: "SEWER EXTRACTION", victory: false, headline: "📦 140 LOOT DOWN THE DRAIN", detail: "3 crates grabbed · alarm 72/100 · evac was open", stat: 140 });
+    const sealed = getModeOutcomeReceipt({ _extractLoot: 20, _extractCrates: 1, alarm: 100, _extractLocked: true }, def);
+    expect(sealed.detail).toBe("1 crate grabbed · alarm 100/100 · exit was sealed by lockdown");
+    const banked = getModeOutcomeReceipt({ _extractLoot: 300, _extractCrates: 6, alarm: 64, _extractBanked: { loot: 300 }, _modeWon: true }, def);
+    expect(banked).toMatchObject({ victory: true, headline: "🚽 300 LOOT BANKED", detail: "6 crates carried out · alarm 64/100", stat: 300 });
+  });
+
+  it("royale reports placement, throne reports thrones, gauntlet reports bosses and par", () => {
+    expect(getModeOutcomeReceipt({ _royaleAlive: 5, _royaleKills: 3, flood: { phase: 2 } }, getModeDefinition("bot_royale")))
+      .toMatchObject({ headline: "🌊 FLUSHED #6 OF 17", detail: "3 bots flushed · flood phase 2 · 5 still in the pipe", stat: 6 });
+    expect(getModeOutcomeReceipt({ _royaleAlive: 0, _royaleKills: 9, flood: { phase: 4 }, _modeWon: true }, getModeDefinition("bot_royale")))
+      .toMatchObject({ victory: true, headline: "🏆 LAST ONE FLUSHING", detail: "9 bots flushed · flood phase 4", stat: 1 });
+
+    const throneDef = getModeDefinition("hold_the_throne");
+    const throneState = createSimState({ seed: 4 });
+    createModeState(throneDef, throneState, noText);
+    throneState._thronesCaptured = 1;
+    throneState._thronesLost = 1;
+    throneState.zones.find((z) => z.active).progress = 12 * 60;
+    const throne = getModeOutcomeReceipt(throneState, throneDef);
+    expect(throne.headline).toBe("👑 1/3 THRONES HELD");
+    expect(throne.detail).toMatch(/^1 lost · .+ at 12s\/30s when it ended$/);
+    expect(getModeOutcomeReceipt({ _thronesCaptured: 3, _thronesLost: 0, _modeWon: true }, throneDef)).toMatchObject({ headline: "👑 ALL THREE THRONES HELD", detail: "0 lost along the way" });
+
+    const gauntletDef = getModeDefinition("boss_gauntlet");
+    const stopped = getModeOutcomeReceipt({ _gauntletBossesDown: 2, _gauntletBossIndex: 2, frame: 150 * 60, _gauntletStartFrame: 0 }, gauntletDef);
+    expect(stopped.headline).toBe("☠ 2/6 BOSSES DOWN");
+    expect(stopped.detail).toMatch(/^stopped by .+ · 150s of 360s par used$/);
+    expect(getModeOutcomeReceipt({ _gauntletBossesDown: 6, frame: 300 * 60, _gauntletStartFrame: 0, _modeWon: true }, gauntletDef)).toMatchObject({ headline: "☠ ALL 6 BOSSES DOWN", detail: "par beaten by 60s" });
+    expect(getModeOutcomeReceipt({ _gauntletBossesDown: 6, frame: 400 * 60, _gauntletStartFrame: 0, _modeWon: true }, gauntletDef).detail).toBe("40s over par");
+  });
+
+  it("bounds every receipt string and strips control characters", () => {
+    const def = { id: "long", kind: "mode", label: "LONG", outcome: () => ({ headline: `${"H".repeat(200)}`, detail: "a b   c", stat: "nope" }) };
+    const receipt = getModeOutcomeReceipt({}, def);
+    expect(receipt.headline).toBe("H".repeat(80));
+    expect(receipt.detail).toBe("ab c");
+    expect(receipt.stat).toBeNull();
   });
 });
 

@@ -1,0 +1,438 @@
+{
+  "schemaVersion": "2.1",
+  "generatedBy": "/audit skill (S167)",
+  "generatedAt": "2026-09-09T08:05:00.000Z",
+  "session": 167,
+  "project": {
+    "slug": "call-of-doodie",
+    "type": "game",
+    "name": "Call-Of-Doodie"
+  },
+  "axes": {
+    "features-depth": 1.5,
+    "ui-ux-feedback": 2,
+    "gamification-immersion": 3,
+    "ai-intelligence": 1.5,
+    "security": 1,
+    "speed-organization-efficiency": 1,
+    "token-cost": 1,
+    "observability-honesty": 1,
+    "sil-debt": 1
+  },
+  "meta": {
+    "candidateCount": 27,
+    "promotedCount": 4,
+    "combinedPriority": 197.4,
+    "livePremiseVerification": true,
+    "gameLoopReview": {
+      "source": "docs/GAME_LOOP_REVIEW_2026-09-09.md",
+      "loopTightness": 9.4,
+      "progressionCurve": 9.3,
+      "sessionEngagement": 9.5,
+      "retentionHooks": 9,
+      "soulFidelity": 9.5,
+      "overall": 9.3,
+      "evidenceBoundary": "Structural review only; no participant fun, balance, retention, or physical-device claim."
+    },
+    "baseline": {
+      "head": "7d099ca2",
+      "tests": "226 files / 1,307 assertions passed with 4 worker-timeout errors on the host at S167 start (230 files / 1,343 expected; timeouts classified as host contention, re-run in isolation)",
+      "doctor": "blockingFailing 0 · 155/220 probes pass"
+    }
+  },
+  "axisCoverage": {
+    "features-depth": {
+      "surviving": [
+        "mode-wave-context-arena-authority"
+      ],
+      "rejectedOnVerify": [
+        {
+          "slug": "third-scrolling-mode",
+          "premise": "A third mode should adopt the scrolling camera.",
+          "evidence": "Two scrolled modes shipped in S165/S166 and the wave-start seam that feeds them is still viewport-bound; a third scaled mode would inherit the same defect before it is fixed."
+        }
+      ]
+    },
+    "ui-ux-feedback": {
+      "surviving": [
+        "screen-anchored-announcements"
+      ],
+      "rejectedOnVerify": [
+        {
+          "slug": "hud-restyle",
+          "premise": "The HUD lacks a coherent visual language.",
+          "evidence": "One generated token source drives the HUD; the live readability gap is that 28 App.jsx announcements and the mode flood/crate callouts are written at viewport-centre coordinates into a world that scrolls."
+        }
+      ]
+    },
+    "gamification-immersion": {
+      "surviving": [
+        "death-attribution-observed-damage",
+        "mode-outcome-receipt"
+      ],
+      "rejectedOnVerify": [
+        {
+          "slug": "new-progression-track",
+          "premise": "Retention needs another ladder.",
+          "evidence": "Career, mastery, doctrines, achievements, missions, contracts, ghosts, duels, squads, and order evidence already exist; the live gap is that the 'what killed you' loop those systems feed has silently never recorded a killer."
+        }
+      ]
+    },
+    "ai-intelligence": {
+      "surviving": [],
+      "rejectedOnVerify": [
+        {
+          "slug": "insight-graph-observed-damage-node",
+          "premise": "The one-verdict insight graph ignores the observed final-damage receipt.",
+          "evidence": "buildCollapseCoaching already consumes damageReceipt through observedFinish() and its primary node feeds buildInsightGraph as the 'collapse-primary' diagnosis; the receipt is already the top-ranked evidence when it exists. Rejected as a false premise (a WIN)."
+        },
+        {
+          "slug": "hosted-run-coach",
+          "premise": "Post-run coaching needs hosted inference.",
+          "evidence": "The deterministic insight graph ranks local evidence; hosted inference adds variable cost without a proven player gap."
+        }
+      ]
+    },
+    "security": {
+      "surviving": [],
+      "rejectedOnVerify": [
+        {
+          "slug": "local-auth-replacement",
+          "premise": "Local auth should unblock cloud backup.",
+          "evidence": "CANON-045 requires Obelisk delegation; the missing OBELISK_VERIFY_URL/SECRET credentials are founder-only and independently tracked."
+        }
+      ]
+    },
+    "speed-organization-efficiency": {
+      "surviving": [],
+      "rejectedOnVerify": [
+        {
+          "slug": "death-screen-second-split",
+          "premise": "The DeathScreen chunk is still the late-load bottleneck.",
+          "evidence": "S166 moved secondary analysis to an 18.5 KB deferred chunk and the immediate chunk is 73.3 KB; no measured gap justifies another split this session."
+        }
+      ]
+    },
+    "token-cost": {
+      "surviving": [],
+      "rejectedOnVerify": [
+        {
+          "slug": "api-response-cache",
+          "premise": "A variable-cost API dominates the player loop.",
+          "evidence": "All promoted work is local deterministic browser logic; there is no hosted model or per-user paid call to optimise."
+        }
+      ]
+    },
+    "observability-honesty": {
+      "surviving": [],
+      "rejectedOnVerify": [
+        {
+          "slug": "claim-royale-balance",
+          "premise": "Synthetic coverage can prove the 2x royale is balanced.",
+          "evidence": "SOUL and GAME_LOOP reserve balance and fun claims for participant evidence; this audit limits itself to structural correctness, readability, and honest attribution."
+        }
+      ]
+    },
+    "sil-debt": {
+      "surviving": [],
+      "rejectedOnVerify": [
+        {
+          "slug": "refresh-only-reports",
+          "premise": "The stale IGNIS or doctor score is itself product work.",
+          "evidence": "Refreshing a derived report changes no gameplay or release outcome; closeout owns live rescoring."
+        }
+      ]
+    }
+  },
+  "items": [
+    {
+      "id": 1,
+      "slug": "death-attribution-observed-damage",
+      "tier": "🔥",
+      "axis": "gamification-immersion",
+      "effortHours": 4,
+      "impact": 10,
+      "innovation": 6,
+      "priority": 69.6,
+      "title": "Make the death screen name the thing that actually killed you",
+      "why": "handlePlayerDeath reads gs._lastDamageBy, which no module has written since the S163 enemy-frame extraction, then falls back to the nearest enemy's `.type` — a field enemies never carry (they carry `typeIndex`). killerType is therefore always undefined: recordDeathByEnemy never fires, MOST WANTED killed-by counts stay at zero, adaptive telegraphing keys on gs._telegraphMult[e.type] (undefined), the Run Coach 'what killed you' pattern never forms, ghost/run-history killedByType is always null, and the boss-nemesis branch would throw on an out-of-scope `best` if it were ever reached. BOT ROYALE flood damage bypasses applyObservedPlayerDamage entirely, so a drowning is invisible to the observed final-damage receipt.",
+      "recipe": "Add a pure resolveDeathAttribution(gs) in src/systems/deathAttribution.js that prefers the last damage-sequence event (sourceType/sourceName/kind), falls back to the nearest live enemy by typeIndex, and reports the evidence level. Route handlePlayerDeath, ghost persistence, and run-history killedBy through it; key adaptive telegraphing by typeIndex; record royale flood damage as an observed hazard named 'Sewer flood'; cover every path with unit tests.",
+      "status": "shipped",
+      "executionLog": [
+        "L2 shipped: src/systems/deathAttribution.js resolves the observed damage-sequence event first and the nearest live enemy (typeIndex) as a labelled hypothesis; handlePlayerDeath, ghost persistence, run history (bounded deathAttribution receipt), adaptive telegraphing (typeIndex), and nemesis tracking route through it; royale flood damage is an observed hazard 'Sewer flood'. Courts: deathAttribution 4/4, runSession, modeDefinition, deathFlow green; strict lint 0."
+      ],
+      "premises": [
+        {
+          "claim": "handlePlayerDeath still reads the never-written _lastDamageBy field.",
+          "claims": "content",
+          "adapter": "grep-count",
+          "target": "src/App.jsx",
+          "pattern": "_lastDamageBy",
+          "operator": "gte",
+          "expected": 1
+        },
+        {
+          "claim": "The nearest-enemy fallback reads a `.type` field enemies do not carry.",
+          "claims": "content",
+          "adapter": "file-content",
+          "target": "src/App.jsx",
+          "pattern": "if (best) killerType = best.type;",
+          "operator": "eq",
+          "expected": true
+        },
+        {
+          "claim": "Spawned enemies carry typeIndex, not type.",
+          "claims": "content",
+          "adapter": "file-content",
+          "target": "src/gameHelpers.js",
+          "pattern": "deathQuotes: type.deathQuotes, emoji: type.emoji, typeIndex: ti,",
+          "operator": "eq",
+          "expected": true
+        },
+        {
+          "claim": "Royale flood damage bypasses the observed damage sequence.",
+          "claims": "content",
+          "adapter": "file-content",
+          "target": "src/modes/botRoyale.js",
+          "pattern": "p.health -= FLOOD_DOT;",
+          "operator": "eq",
+          "expected": true
+        }
+      ],
+      "ladder": {
+        "L1": {
+          "effortHours": 1,
+          "recipe": "Change best.type to best.typeIndex and e.type to e.typeIndex."
+        },
+        "L2": {
+          "effortHours": 4,
+          "recipe": "Add the pure attribution resolver over the damage sequence with the nearest-enemy fallback, route all death consumers through it, observe flood damage, and add unit tests."
+        },
+        "L3": {
+          "effortHours": 7,
+          "recipe": "L2 plus a per-mode hazard vocabulary (flood, lockdown, throne loss) surfaced in MOST WANTED as non-enemy causes."
+        }
+      }
+    },
+    {
+      "id": 2,
+      "slug": "mode-outcome-receipt",
+      "tier": "🔥",
+      "axis": "gamification-immersion",
+      "effortHours": 3,
+      "impact": 8,
+      "innovation": 6,
+      "priority": 62.1,
+      "title": "Show what the run was worth in the mode you were playing",
+      "why": "The death and victory screens carry only a mode label (plus a royale placement). A SEWER EXTRACTION death never says how much loot went down the drain or how close the evac was; a HOLD THE THRONE death never says how many thrones were held; a BOSS GAUNTLET death never says which boss stopped the run or whether par was beaten. The mode-specific stake — the thing Soul pillar 2 says a defeat must convert into a lesson — is dropped at the exact moment it matters.",
+      "recipe": "Give each mode definition a pure outcome(gs) that returns a bounded {headline, detail, stat} receipt (extraction: loot lost or banked, crates, alarm state; royale: placement, flushed, phase; throne: captured/lost; gauntlet: bosses down and par delta). Build it in deathFlow.buildModeOutcomeReceipt, pass it through buildDeathScreenProps, and render it under the title with data-testid so tests and pixels can bind to it.",
+      "status": "shipped",
+      "executionLog": [
+        "L2 shipped: every mode definition exposes a pure outcome(gs); getModeOutcomeReceipt bounds it to mode-outcome-v1; buildDeathScreenProps carries it and DeathScreen renders data-testid=\"mode-outcome\" under the title. Courts: modeDefinition outcome 4/4, deathFlow passthrough + source contract green; strict lint 0."
+      ],
+      "premises": [
+        {
+          "claim": "The death screen receives only a mode label from the mode definition.",
+          "claims": "content",
+          "adapter": "grep-count",
+          "target": "src/App.jsx",
+          "pattern": "modeLabel: modeDefRef.current",
+          "operator": "gte",
+          "expected": 1
+        },
+        {
+          "claim": "No mode definition exposes an outcome receipt.",
+          "claims": "content",
+          "adapter": "grep-count",
+          "target": "src/systems/modeDefinition.js",
+          "pattern": "outcome",
+          "operator": "eq",
+          "expected": 0
+        }
+      ],
+      "ladder": {
+        "L1": {
+          "effortHours": 1,
+          "recipe": "Append extraction loot to the existing modeLabel string."
+        },
+        "L2": {
+          "effortHours": 3,
+          "recipe": "Per-mode pure outcome receipts, one builder, one rendered line with a test id, unit tests per mode."
+        },
+        "L3": {
+          "effortHours": 6,
+          "recipe": "L2 plus persisting the receipt into run history and the profile stash panel."
+        }
+      }
+    },
+    {
+      "id": 3,
+      "slug": "screen-anchored-announcements",
+      "tier": "⚡",
+      "axis": "ui-ux-feedback",
+      "effortHours": 4,
+      "impact": 9,
+      "innovation": 6,
+      "priority": 41.8,
+      "title": "Keep announcements on the screen when the world scrolls",
+      "why": "Floating texts are drawn in arena coordinates under the camera translate (S165). Twenty-eight App.jsx call sites write level-ups, DOCTRINE READY, objective ACTIVE, MISSION COMPLETE, synergy, and perk roasts at GW()/2, GH()/2 — the centre of the top-left viewport-sized window of the arena — and BOT ROYALE writes its DROP IN and THE SEWER FLOODS phase calls at the arena centre. In the two scrolled modes those announcements are off-screen whenever the camera has moved, which is most of the time.",
+      "recipe": "Add addScreenText to transientPresentation (a floating text flagged screen:true), render screen-flagged texts outside the camera translate in drawGame, migrate every viewport-centre App.jsx call site, and hand modes an announce(gs, text, color) helper through the mode context so mode callouts never need arena coordinates. Guard with a unit test and a source contract that forbids world-anchored centre announcements.",
+      "status": "shipped",
+      "executionLog": [
+        "L2 shipped: addScreenText/announce in transientPresentation, drawGame paints screen-flagged texts outside the camera translate, 57 App.jsx call sites migrated (GW()/2 and VX/VY announcement sites), mode ctx carries announce/viewW/viewH and the four mode definitions use it. Courts: transientPresentation, modeDefinition, arena-spawn-wiring source contract green; strict lint 0."
+      ],
+      "premises": [
+        {
+          "claim": "Floating texts are camera-translated world objects.",
+          "claims": "content",
+          "adapter": "file-content",
+          "target": "src/drawGame.js",
+          "pattern": "if (_ftCam) { ctx.save(); ctx.translate(-_camX, -_camY); }",
+          "operator": "eq",
+          "expected": true
+        },
+        {
+          "claim": "App.jsx writes announcements at viewport-centre arena coordinates.",
+          "claims": "content",
+          "adapter": "grep-count",
+          "target": "src/App.jsx",
+          "pattern": "addText\\(gs(?:Ref\\.current)?, GW\\(\\) / 2",
+          "operator": "gte",
+          "expected": 20
+        },
+        {
+          "claim": "Royale flood-phase callouts are written at the arena centre.",
+          "claims": "content",
+          "adapter": "file-content",
+          "target": "src/modes/botRoyale.js",
+          "pattern": "ctx.addText?.(gs, W / 2, H / 2 - 120, `🌊 THE SEWER FLOODS",
+          "operator": "eq",
+          "expected": true
+        }
+      ],
+      "ladder": {
+        "L1": {
+          "effortHours": 1,
+          "recipe": "Offset the centre call sites by the live camera position at push time."
+        },
+        "L2": {
+          "effortHours": 4,
+          "recipe": "Screen-anchored floating-text kind rendered outside the camera, all call sites migrated, mode announce helper, tests and source contract."
+        },
+        "L3": {
+          "effortHours": 7,
+          "recipe": "L2 plus an announcement queue that staggers simultaneous big callouts."
+        }
+      }
+    },
+    {
+      "id": 4,
+      "slug": "mode-wave-context-arena-authority",
+      "tier": "⚡",
+      "axis": "features-depth",
+      "effortHours": 2,
+      "impact": 8,
+      "innovation": 4,
+      "priority": 24,
+      "title": "Give wave-start mode hooks the arena, not the viewport",
+      "why": "createModeState and stepMode receive arena dimensions, but onModeWaveStart is called with { W: GW(), H: GH() } — the viewport. SEWER EXTRACTION spawns three crates per wave from that context, so every crate after the first wave lands inside the top-left viewport-sized window of the 1.5x arena; the S166 'distributes loot across the scrolling world' claim holds only for wave 1.",
+      "recipe": "Resolve arena bounds once at the wave-start seam and pass them (plus viewW/viewH for screen-space needs) to onModeWaveStart; add a unit test that drives onWaveStart with arena dimensions and asserts crates land beyond the viewport; extend the arena-spawn wiring source contract.",
+      "status": "shipped",
+      "executionLog": [
+        "L2 shipped: onModeWaveStart receives resolveArenaBounds(gs, GW(), GH()) plus viewW/viewH; extraction wave crates land across the 1.5x arena. Courts: modeDefinition wave-start distribution 36/36 crates, arena-spawn-wiring contract green."
+      ],
+      "premises": [
+        {
+          "claim": "The wave-start mode hook receives viewport dimensions.",
+          "claims": "content",
+          "adapter": "file-content",
+          "target": "src/App.jsx",
+          "pattern": "onModeWaveStart(gs, modeDefRef.current, { W: GW(), H: GH(), addText, addParticles })",
+          "operator": "eq",
+          "expected": true
+        },
+        {
+          "claim": "Extraction spawns wave crates from that context.",
+          "claims": "content",
+          "adapter": "file-content",
+          "target": "src/modes/sewerExtraction.js",
+          "pattern": "for (let i = 0; i < CRATES_PER_WAVE; i += 1) spawnCrate(gs, ctx);",
+          "operator": "eq",
+          "expected": true
+        }
+      ],
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Swap GW()/GH() for the resolved arena bounds at the call site."
+        },
+        "L2": {
+          "effortHours": 2,
+          "recipe": "L1 plus viewW/viewH in the context, a wave-start crate distribution test, and the wiring source contract."
+        },
+        "L3": {
+          "effortHours": 4,
+          "recipe": "L2 plus crate placement biased away from the player so wave drops always require traversal."
+        }
+      }
+    }
+  ],
+  "totals": {
+    "count": 4,
+    "priority": 197.4,
+    "top3": [
+      "death-attribution-observed-damage",
+      "mode-outcome-receipt",
+      "screen-anchored-announcements"
+    ]
+  },
+  "innovationReserve": [
+    "non-enemy-causes-in-most-wanted",
+    "announcement-queue-stagger",
+    "traversal-biased-crate-drops"
+  ],
+  "skipped": [
+    {
+      "slug": "lazy-panel-browser-contract",
+      "reason": "DEFERRED — the S166 follow-up needs a Playwright path that reaches the death screen; no existing fixture or test hook reaches it, and adding a production test hook is a design decision the founder should make. The jsdom source contract from S166 remains in force."
+    },
+    {
+      "slug": "extraction-lockdown-ends-run",
+      "reason": "DEFERRED — the source comment says lockdown ends the run while the code turns it into a last stand; the public roadmap only promises 'lockdown at 100'. Changing the ending is a design call without participant evidence."
+    },
+    {
+      "slug": "balance-retune",
+      "reason": "DATA-BLOCKED — no representative participant corpus supports numeric balance changes."
+    },
+    {
+      "slug": "new-account-flow",
+      "reason": "GATED — Obelisk identity and reply-capable mail evidence are external release dependencies, not permission to invent local auth."
+    }
+  ],
+  "executionLog": [
+    {
+      "slug": "death-attribution-observed-damage",
+      "status": "shipped",
+      "outcome": "Make the death screen name the thing that actually killed you",
+      "verification": "L2 shipped: src/systems/deathAttribution.js resolves the observed damage-sequence event first and the nearest live enemy (typeIndex) as a labelled hypothesis; handlePlayerDeath, ghost persistence, run history (bounded deathAttribution receipt), adaptive telegraphing (typeIndex), and nemesis tracking route through it; royale flood damage is an observed hazard 'Sewer flood'. Courts: deathAttribution 4/4, runSession, modeDefinition, deathFlow green; strict lint 0."
+    },
+    {
+      "slug": "mode-outcome-receipt",
+      "status": "shipped",
+      "outcome": "Show what the run was worth in the mode you were playing",
+      "verification": "L2 shipped: every mode definition exposes a pure outcome(gs); getModeOutcomeReceipt bounds it to mode-outcome-v1; buildDeathScreenProps carries it and DeathScreen renders data-testid=\"mode-outcome\" under the title. Courts: modeDefinition outcome 4/4, deathFlow passthrough + source contract green; strict lint 0."
+    },
+    {
+      "slug": "screen-anchored-announcements",
+      "status": "shipped",
+      "outcome": "Keep announcements on the screen when the world scrolls",
+      "verification": "L2 shipped: addScreenText/announce in transientPresentation, drawGame paints screen-flagged texts outside the camera translate, 57 App.jsx call sites migrated (GW()/2 and VX/VY announcement sites), mode ctx carries announce/viewW/viewH and the four mode definitions use it. Courts: transientPresentation, modeDefinition, arena-spawn-wiring source contract green; strict lint 0."
+    },
+    {
+      "slug": "mode-wave-context-arena-authority",
+      "status": "shipped",
+      "outcome": "Give wave-start mode hooks the arena, not the viewport",
+      "verification": "L2 shipped: onModeWaveStart receives resolveArenaBounds(gs, GW(), GH()) plus viewW/viewH; extraction wave crates land across the 1.5x arena. Courts: modeDefinition wave-start distribution 36/36 crates, arena-spawn-wiring contract green."
+    }
+  ]
+}

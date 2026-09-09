@@ -109,6 +109,13 @@ describe("runSession", () => {
       },
     });
     expect(createRunHistoryEntry({ integrityReceipt: { onlineEligible: true } })).not.toHaveProperty("integrityReceipt");
+    expect(createRunHistoryEntry({})).not.toHaveProperty("deathAttribution");
+    expect(createRunHistoryEntry({ deathAttribution: { typeIndex: 4, sourceName: "Karen ground slam", kind: "boss", evidenceLevel: "observed", basis: "damage-sequence", boss: true, distance: 12 } }).deathAttribution)
+      .toEqual({ typeIndex: 4, sourceName: "Karen ground slam", kind: "boss", evidenceLevel: "observed", basis: "damage-sequence", hazard: false, boss: true });
+    expect(createRunHistoryEntry({ deathAttribution: { typeIndex: null, sourceName: "Sewer flood", kind: "hazard", evidenceLevel: "observed", basis: "damage-sequence", hazard: true } }).deathAttribution)
+      .toMatchObject({ typeIndex: null, hazard: true, evidenceLevel: "observed" });
+    expect(createRunHistoryEntry({ deathAttribution: { typeIndex: 2, evidenceLevel: "guess", basis: "vibes" } }).deathAttribution)
+      .toMatchObject({ typeIndex: 2, evidenceLevel: "hypothesis", basis: "nearest-enemy" });
 
     const events = createDeathStudioEvents({
       score: 9999,

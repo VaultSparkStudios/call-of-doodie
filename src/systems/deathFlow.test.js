@@ -121,6 +121,20 @@ describe("buildDeathScreenProps", () => {
     expect(source.match(/data-testid="run-drill-outcome"/g)).toHaveLength(1);
   });
 
+  it("carries a mode outcome receipt to the screen and renders it under the title (S167)", () => {
+    const source = fs.readFileSync(path.resolve(import.meta.dirname, "..", "components", "DeathScreen.jsx"), "utf8");
+    const outcome = { schemaVersion: "mode-outcome-v1", modeId: "sewer_extraction", label: "SEWER EXTRACTION", victory: false, headline: "📦 140 LOOT DOWN THE DRAIN", detail: "3 crates grabbed", stat: 140 };
+    expect(buildDeathScreenProps({ modeOutcome: outcome }).modeOutcome).toEqual(outcome);
+    expect(buildDeathScreenProps({ modeOutcome: { detail: "no headline" } }).modeOutcome).toBeNull();
+    expect(buildDeathScreenProps({}).modeOutcome).toBeNull();
+    const title = source.indexOf('data-testid="death-title"');
+    const receipt = source.indexOf('data-testid="mode-outcome"', title);
+    const message = source.indexOf('"{deathMessage}"', receipt);
+    expect(receipt).toBeGreaterThan(title);
+    expect(message).toBeGreaterThan(receipt);
+    expect(source).toContain("modeOutcome?.headline && (");
+  });
+
   it("maps death screen state without reaching into React", () => {
     const onStartGame = vi.fn();
     const props = buildDeathScreenProps({

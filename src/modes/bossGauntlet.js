@@ -37,7 +37,7 @@ export const BOSS_GAUNTLET = Object.freeze({
   onWaveStart(gs, ctx) {
     const idx = Math.min(BOSS_COUNT - 1, Math.max(0, (gs.currentWave || 1) - 1));
     gs._gauntletBossIndex = idx;
-    ctx.addText?.(gs, ctx.W / 2, ctx.H / 2 - 120, `BOSS ${idx + 1} / ${BOSS_COUNT}`, "#FF3333", true);
+    ctx.announce?.(gs, `BOSS ${idx + 1} / ${BOSS_COUNT}`, "#FF3333");
   },
 
   onBossDefeated(gs) {
@@ -58,5 +58,20 @@ export const BOSS_GAUNTLET = Object.freeze({
   progress(gs) {
     const elapsed = ((gs.frame || 0) - (gs._gauntletStartFrame || 0)) / 60;
     return { label: "PAR", value: Math.max(0, PAR_SECONDS - elapsed), pct: Math.min(1, elapsed / PAR_SECONDS), unit: "s" };
+  },
+
+  outcome(gs) {
+    const down = Math.max(0, Math.min(BOSS_COUNT, Math.floor(gs._gauntletBossesDown || 0)));
+    const elapsed = Math.max(0, Math.floor(((gs.frame || 0) - (gs._gauntletStartFrame || 0)) / 60));
+    const won = down >= BOSS_COUNT;
+    const idx = Math.max(0, Math.min(BOSS_COUNT - 1, Math.floor(gs._gauntletBossIndex || 0)));
+    const stopper = ENEMY_TYPES[BOSS_ROTATION[idx % BOSS_ROTATION.length]]?.name || `BOSS ${idx + 1}`;
+    const parDelta = PAR_SECONDS - elapsed;
+    const parText = won ? (parDelta >= 0 ? `par beaten by ${parDelta}s` : `${-parDelta}s over par`) : `${elapsed}s of ${PAR_SECONDS}s par used`;
+    return {
+      headline: won ? `☠ ALL ${BOSS_COUNT} BOSSES DOWN` : `☠ ${down}/${BOSS_COUNT} BOSSES DOWN`,
+      detail: won ? parText : `stopped by ${stopper} · ${parText}`,
+      stat: down,
+    };
   },
 });

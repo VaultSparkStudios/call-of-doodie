@@ -53,6 +53,7 @@ export function buildRunTheFixContract({
 export function buildDeathScreenProps({
   victory = false,
   modeLabel = null,
+  modeOutcome = null,
   duelResult = null,
   score,
   kills,
@@ -115,6 +116,7 @@ export function buildDeathScreenProps({
   return {
     victory: !!victory,
     modeLabel: modeLabel || null,
+    modeOutcome: modeOutcome?.headline ? modeOutcome : null,
     duelResult: duelResult || null,
     score,
     kills,
