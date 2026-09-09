@@ -26,7 +26,7 @@ Rolling averages: 3-session 988.0 · 5-session 991.4.
 Top win: the hosted first-open interaction turned an apparently successful code split into an actionable, contained failure before release, then proved the repaired path across both themes and both target widths.
 Top gap: extraction scale and pressure have synthetic correctness evidence only; their fun and pacing remain unmeasured without consented participant runs.
 
-Intent outcome: implementation, staging, rendered-pixel proof, and engineering release readiness achieved; exact-main publication and production proof remain the authorized closeout follow-through.
+Intent outcome: achieved — implementation, staging, rendered-pixel proof, direct-main publication, and exact production verification completed in one arc under explicit founder authorization.
 
 Brainstorm:
 1. Add a minimal-model browser court that opens every lazy death-analysis subsection before staging.

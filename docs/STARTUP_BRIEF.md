@@ -44,7 +44,7 @@
 ║                                                                  ║
 ║    998/1000   ███████████████████████░   100%                    ║
 ║    SIL v3.0  ·  Avg3: 998  ·  Velocity 4→                        ║
-║    Last active: 1d  ·  Last closeout: 1d  ·  (active = newest…   ║
+║    Last active: 0d  ·  Last closeout: 1d  ·  (active = newest…   ║
 ║    Trend  ▄▆▆▄▄  →  (last 5 sessions)                            ║
 ║                                                                  ║
 ║    Category         Score  Bar        Spark   Δ                  ║
@@ -68,14 +68,14 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ✓  █████░░░░░░░░░░░░░░░░░░░   23% used                          ║
-║     61,775 / 272,000 tok  ·  codex/codex-272k  · …               ║
-║     ~30,888 tok/turn  ·  cache 50%  ·  6 turns to compact        ║
+║  ✓  █████░░░░░░░░░░░░░░░░░░░   22% used                          ║
+║     61,000 / 272,000 tok  ·  codex/codex-272k  · …               ║
+║     ~30,500 tok/turn  ·  cache 50%  ·  6 turns to compact        ║
 ║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         1343/1343 passing (2026-09-08)                 ║
+║  ✓  Tests         1343/1343 passing (2026-09-09)                 ║
 ║  ✓  Velocity      4 →  ·  Debt: ↓                                ║
 ║  ✓  Runway        0 repo-owned items — evidence-gated…           ║
 ║  ⛔  Context age   ?d                                             ║
@@ -117,7 +117,7 @@
 ╔══ MOMENTUM METER ══════════════════════════════════════════════╗
 ║  Velocity:   ▄▆▆▄▄  4→  (last 5 sessions)                        ║
 ║  Intent:     100% achieved last 5                                ║
-║  Streak:     — (last intent not achieved)                        ║
+║  Streak:     ✓ 2 consecutive achieved-intent sessions            ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIL FORECAST (next session) ═════════════════════════════════╗

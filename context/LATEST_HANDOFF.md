@@ -12,14 +12,14 @@ Session Intent: Run one complete `/arc` from the verified S165 closeout through 
 - Validation: 230 files / 1,343 assertions, strict lint, deployable build, schema/public/security/dependency/runtime/assets, browser E2E 19 pass / one intentional mobile skip, staging shell 7/7, route matrix 969/969, touched states 40/40, and 18 hash-bound captures across both themes and 390/1440px.
 - Pixel truth: all 18 captures received direct inspection. Mobile extraction, desktop Porcelain Day extraction, the radar crop, and first-open secondary analysis remain readable without overflow or crash; the evacuation radar contains measured cyan, gold, and green pixels.
 - Release: cost-neutral engineering FORGE is GO and staging is verified. SPARKED remains NO-GO behind current physical-device, participant, provider/mail, Obelisk identity, performance, publication, and explicit lifecycle evidence.
-- Deploy: direct-main publication and exact production verification are the remaining authorized follow-through. Do not claim completion until the final GitHub workflow and canonical/immutable production origins prove the exact revision.
+- Deploy: source `0647bb0d678795ed6b18a8552bfe0f5f8470801c` passed workflow `34312878779` with Linux lint, all 1,343 assertions, build, and Cloudflare deployment to immutable `https://99ad3bbc.call-of-doodie.pages.dev/`. Immutable and canonical origins report `deploy: 0647bb0d6787` and pass shell 7/7; cutover 5/5, mode smoke, replay trust 3/3, leaderboard isolation, launch surfaces, and final backend health 5/5 pass.
 - Next: add a focused lazy-panel browser contract; collect consented extraction telemetry before tuning scale or pressure; keep the Obelisk credential gap founder-visible.
 
 ## Impact Summary
 
 **Headline.** Sewer Extraction now asks the player to cross a real world, shows exactly what remains and where to escape, and keeps the post-death revenge action light enough to arrive on time.
 
-**Evidence.** Four audit items shipped; 230 files / 1,343 assertions; DeathScreen 73.33 KB plus an 18.50 KB deferred analysis chunk; staged pixels 969/969 broad + 40/40 touched; 18 directly reviewed captures; zero new dependencies, hosted inference, or variable per-user cost.
+**Evidence.** Four audit items shipped; 230 files / 1,343 assertions; DeathScreen 73.33 KB plus an 18.50 KB deferred analysis chunk; staged pixels 969/969 broad + 40/40 touched; 18 directly reviewed captures; workflow `34312878779`; immutable `99ad3bbc`; exact health `0647bb0d6787`; zero new dependencies, hosted inference, or variable per-user cost.
 
 ---
 

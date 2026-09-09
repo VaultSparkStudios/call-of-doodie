@@ -4,9 +4,21 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 166 makes SEWER EXTRACTION a 1.5x world with arena-authoritative spawns, bounded 1.25x pressure, and gold-loot/cyan-evac whole-arena radar objectives; secondary death analysis is first-open lazy, reducing immediate DeathScreen to 73.33 KB. All four audit items, staging, rendered pixels, and engineering release gates are green; direct-main production verification is in progress.",
-  "nextMilestone": "Publish and exact-SHA verify the S166 engineering release; then add a focused lazy death-analysis browser contract and collect consented extraction pacing evidence before changing the arena scale or pressure slope. OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET remain founder-gated.",
+  "currentFocus": "Session 166 is exact-main published and production-verified: SEWER EXTRACTION is a 1.5x world with arena-authoritative spawns, bounded 1.25x pressure, gold-loot/cyan-evac radar objectives, and first-open lazy secondary death analysis. Workflow 34312878779 and immutable 99ad3bbc serve exact source 0647bb0d6787.",
+  "nextMilestone": "Add a focused lazy death-analysis browser contract and collect consented extraction pacing evidence before changing the arena scale or pressure slope. OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET remain founder-gated; all SPARKED external evidence remains separate.",
   "testingSurfaces": [
+    {
+      "session": 166,
+      "status": "green",
+      "type": "production-verification",
+      "command": "source 0647bb0d6787 · workflow 34312878779 · immutable 99ad3bbc · immutable/custom shell 7/7 with exact deploy id · cutover 5/5 · mode smoke · replay 3/3 · leaderboard isolation · launch surfaces · final backend health 5/5"
+    },
+    {
+      "session": 166,
+      "status": "resolved",
+      "type": "ci-incident",
+      "command": "workflow 34312512478 blocked stale HOT_CONTEXT after final closeout edits; deterministic rerender fixed it and corrected workflow 34312878779 passed. Local focused retry never started a worker under host contention and is not counted green."
+    },
     {
       "session": 166,
       "status": "green",
@@ -64,11 +76,11 @@
     "Broad Cloudflare studio-access token should be rotated or narrowed after domain stabilization.",
     "CANON-045 and CANON-055 remain STRONG external/checker findings; no ABSOLUTE canon gap is present."
   ],
-  "lastUpdated": "2026-09-08",
+  "lastUpdated": "2026-09-09",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
   "truthAuditStatus": "engineering-ready-sparked-no-go",
-  "truthAuditLastRun": "2026-09-08",
+  "truthAuditLastRun": "2026-09-09",
   "ignisScore": 43565,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-08-31",
@@ -113,7 +125,7 @@
   "runtimeUrl": "https://callofdoodie.wtf/",
   "stagingType": "cloudflare-pages",
   "stagingUrl": "https://session-166-staging.call-of-doodie.pages.dev/",
-  "testsLastRun": "2026-09-08",
+  "testsLastRun": "2026-09-09",
   "sanitizationLastCleared": "2026-09-09",
   "sessionShellHygiene": {
     "session": 166,
@@ -137,7 +149,7 @@
     "total": 219,
     "score": 73
   },
-  "lastSessionSummary": "Session 166 shipped arena-authoritative spawns, a 1.5x SEWER EXTRACTION world with bounded 1.25x pressure, whole-arena loot and evacuation radar objectives, and first-open lazy secondary death analysis that reduced immediate DeathScreen to 73.33 KB. Hosted first-open pixels caught and closed a missing-model regression; all 1,343 assertions, release gates, staging shell, 969 broad pixel checks, 40 touched-state checks, and 18 directly reviewed captures are green.",
+  "lastSessionSummary": "Session 166 shipped arena-authoritative spawns, a 1.5x SEWER EXTRACTION world with bounded 1.25x pressure, whole-arena loot and evacuation radar objectives, and first-open lazy secondary death analysis that reduced immediate DeathScreen to 73.33 KB. Hosted first-open pixels caught and closed a missing-model regression; exact source 0647bb0d6787 passed workflow 34312878779 and production shell/cutover/modes/replay/leaderboard/launch/backend courts.",
   "testsAssertionsPassing": 1343,
   "testsAssertionsTotal": 1343,
   "testsAssertionsFiles": 230,

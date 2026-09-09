@@ -18,6 +18,8 @@ Headline: Extraction became a readable journey, and the death beat shed its seco
 - serial Playwright 19 pass / one intentional mobile skip
 - staging shell 7/7; hosted pixels 969/969 broad + 40/40 touched
 - 18 hash-bound captures directly reviewed across both themes and target widths
+- workflow 34312878779 passed exact source 0647bb0d6787 and deployed immutable 99ad3bbc
+- immutable/canonical shell 7/7, cutover 5/5, modes, replay 3/3, leaderboard, launch, and final backend 5/5
 
 ## Remaining
 

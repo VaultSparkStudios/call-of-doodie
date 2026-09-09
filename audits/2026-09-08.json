@@ -4,7 +4,7 @@
   "session": 166,
   "project": "Call-Of-Doodie",
   "intent": "complete one continuous arc through fresh game-loop review, premise-verified audit, all repository-owned implementation, isolated staging, rendered-pixel review, closeout, direct-main publication, and exact production verification",
-  "outcome": "implementation-staging-and-release-gates-achieved-production-follow-through-in-progress",
+  "outcome": "achieved-and-exact-production-verified",
   "shipped": [
     "arena-authoritative enemy boss and cluster spawning",
     "1.5x Sewer Extraction world with bounded 1.25x arena pressure",
@@ -20,7 +20,10 @@
     "hosted route/theme/viewport matrix 969/969 and touched-state matrix 40/40",
     "18 hash-bound captures directly reviewed across both themes and mobile/desktop widths with zero blocking defects",
     "branding, footer 17/17, mobile parity, Cloudflare deploy readiness, rollback, and cost-neutral release ALLOW",
-    "engineering FORGE release gate GO; SPARKED independently NO-GO"
+    "engineering FORGE release gate GO; SPARKED independently NO-GO",
+    "exact source 0647bb0d678795ed6b18a8552bfe0f5f8470801c passed workflow 34312878779 and deployed to immutable 99ad3bbc",
+    "immutable and canonical health report 0647bb0d6787; both pass live shell 7/7",
+    "post-cutover 5/5, production mode smoke, replay trust 3/3, shared-leaderboard isolation, launch surfaces, and final backend health 5/5 pass"
   ],
   "deferred": [
     "participant fun, pacing, balance, causal, and retention conclusions",

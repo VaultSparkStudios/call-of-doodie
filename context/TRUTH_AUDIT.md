@@ -7,11 +7,13 @@
 - Validation truth — 230/230 Vitest files and 1,343/1,343 assertions, strict lint, deployable build, App 464.35 KB / 560 KB, schema/public/security/dependency/asset/runtime gates, and serial Playwright 19 pass / one intentional mobile skip are green.
 - Visual truth — `session-166-staging` passes shell 7/7, broad hosted pixels 969/969, touched states 40/40, and CANON-053 with 18 hash-bound captures across Sewer Night/Porcelain Day and 390/1440px. Representative extraction, radar, and opened-analysis frames were directly inspected.
 - Evidence-boundary truth — the capture harness's alarm-threshold assignment is labelled visual-state injection and proves only rendering of the open-evacuation state. No participant, physical-device, provider, identity, mail, performance, publication, or lifecycle evidence is claimed.
-- Release truth — cost-neutral engineering FORGE is GO on staging. SPARKED remains NO-GO. Direct-main publication and exact production verification remain pending until their receipts are appended.
-- Push-gate truth — settings sanitization and two canonical staged secret scans passed. The Bash pre-push wrapper orphaned on two ordinary attempts; the same outgoing credential, local-path, and Anthropic-router patterns were rerun directly with zero matches before a documented one-push `--no-verify` exception. No force push or content-gate bypass is authorized.
+- Release truth — source `0647bb0d678795ed6b18a8552bfe0f5f8470801c` passed workflow `34312878779` and published immutable `99ad3bbc`. Immutable and canonical health report `0647bb0d6787`; shell 7/7 both, cutover 5/5, mode smoke, replay trust 3/3, leaderboard isolation, launch surfaces, and final backend health 5/5 pass.
+- CI-correction truth — run `34312512478` correctly stopped before deploy because the final closeout edits made `HOT_CONTEXT` stale. The artifact was deterministically rerendered; direct freshness check and the corrected Linux workflow pass. The failed run is not hidden or relabelled flaky.
+- Backend truth — three initial health attempts saw two rate-service 500s and one transport failure. Official Supabase logs showed contemporaneous shared-database statement timeouts; the rate function and 72 KB table were present with zero waiting locks, and a direct token call returned 200. The final five-step health court passed; no persistent outage or invented always-green history is claimed.
+- Push-gate truth — settings sanitization and canonical staged secret scans passed. The Bash pre-push wrapper orphaned on two ordinary attempts; the same outgoing credential, local-path, and Anthropic-router patterns are rerun directly before every bounded S166 `--no-verify` follow-up. No force push or content-gate bypass is authorized.
 
-Overall status: all four S166 repository-owned audit items are implemented and staging-verified; production follow-through is in progress. SPARKED remains NO-GO.
-Last reviewed: 2026-09-08
+Overall status: all four S166 repository-owned audit items are implemented, exact-main published, and production-verified. SPARKED remains NO-GO.
+Last reviewed: 2026-09-09
 
 <!-- truth-audit-version: 1.1 -->
 

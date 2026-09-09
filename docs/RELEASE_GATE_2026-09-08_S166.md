@@ -19,7 +19,7 @@ Staging: `https://session-166-staging.call-of-doodie.pages.dev/`
 - Hosted rendered pixels: route/theme/viewport matrix 969/969; touched transient states 40/40; 18 hash-bound captures directly reviewed; CANON-053 check passes.
 - Branding/legal/footer: public contract green; footer completeness 17/17; proprietary notice retained.
 - Cost: cost-neutral ALLOW; no new dependency, hosted inference, identity surface, or variable per-user cost.
-- Pre-push security: settings sanitization zero findings, canonical staged secret scan clean twice, gateway audit complete, and direct outgoing credential/path/router pattern scan clean. The Git-Bash hook wrapper orphaned on two attempts; a documented bounded `--no-verify` exception is used for this non-force push.
+- Pre-push security: settings sanitization zero findings, canonical staged secret scans clean, gateway audit complete, and direct outgoing credential/path/router pattern scans clean. The Git-Bash hook wrapper orphaned on two attempts; a documented bounded S166 `--no-verify` exception is used only for non-force finalization pushes.
 - CI history: the two latest pre-S166 `main` workflows are green; the older route/sitemap drift incident is fixed and superseded.
 - Rollback: follow `docs/DEPLOY_ROLLBACK.md`; Cloudflare retains immutable deployment revisions and `main` remains the source authority.
 
@@ -35,4 +35,9 @@ These are not blockers to the authorized cost-neutral engineering deployment. Th
 
 ## Exact-revision seal
 
-Pending direct-main publication, final GitHub Actions success, immutable Pages revision, and canonical-domain health. Append those receipts after deployment; do not mark the session complete before they agree on the exact final source.
+- Source: `0647bb0d678795ed6b18a8552bfe0f5f8470801c`.
+- GitHub Actions: workflow `34312878779` passed Linux lint, 230 files / 1,343 assertions, build, and deploy.
+- Cloudflare Pages: immutable `https://99ad3bbc.call-of-doodie.pages.dev/`.
+- Health identity: immutable and `https://callofdoodie.wtf/` both report `deploy: 0647bb0d6787` and pass 7/7 shell checks.
+- Production courts: cutover 5/5, mode smoke, replay trust 3/3, shared-leaderboard isolation, Studio launch surfaces, and final backend health 5/5 pass.
+- Adverse evidence retained: predecessor workflow `34312512478` blocked a stale `HOT_CONTEXT`; three backend attempts saw shared-database timeouts before the final 5/5 recovery.
