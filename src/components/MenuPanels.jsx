@@ -160,6 +160,9 @@ export function MostWantedPanel({ onClose }) {
   const [enemyBests] = useState(() => {
     try { return loadCareerStats().enemyKillBests || {}; } catch { return {}; }
   });
+  const [hazardDeaths] = useState(() => {
+    try { return loadCareerStats().hazardDeaths || {}; } catch { return {}; }
+  });
   // S145 — the Nemesis Chronicle's promised dossier border finally renders:
   // the enemy behind the active chronicle gets a chapter-tiered case-file frame.
   const [nemesis] = useState(() => {
@@ -198,6 +201,22 @@ export function MostWantedPanel({ onClose }) {
             </div>
           );
         })}
+        {Object.keys(hazardDeaths).length > 0 && (
+          <div data-testid="most-wanted-hazards" style={{ marginTop: 16, paddingTop: 12, borderTop: "1px solid rgba(255,255,255,0.08)" }}>
+            <div style={{ fontSize: 11, fontWeight: 900, letterSpacing: 1.5, color: "#FF9900", marginBottom: 8 }}>⚠ HAZARDS</div>
+            {Object.entries(hazardDeaths)
+              .sort((a, b) => b[1] - a[1])
+              .map(([name, count]) => (
+                <div key={name} style={{ display: "flex", alignItems: "center", gap: 10, padding: "6px 6px", borderRadius: 6, marginBottom: 4, background: "rgba(255,153,0,0.05)", border: "1px solid rgba(255,153,0,0.18)" }}>
+                  <span style={{ fontSize: 20 }}>☣</span>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: 13, fontWeight: 700, color: "#FF9900" }}>{name}</div>
+                    <div style={{ fontSize: 9, color: "#666", fontFamily: "'Courier New',monospace" }}>killed you {count}×</div>
+                  </div>
+                </div>
+              ))}
+          </div>
+        )}
         <button onClick={onClose} style={{ ...BTN_P, marginTop: 16, width: "100%", maxWidth: 300 }}>← BACK</button>
       </div>
     </div>

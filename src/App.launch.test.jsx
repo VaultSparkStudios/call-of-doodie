@@ -123,6 +123,7 @@ vi.mock("./storage.js", () => ({
   loadWeeklyTopGhost: vi.fn(() => Promise.resolve(null)),
   saveStudioGameEvent: vi.fn(),
   recordDeathByEnemy: vi.fn(),
+  recordDeathByHazard: vi.fn(),
   loadRivalryHistory: vi.fn(() => []),
   getAdaptiveSpawnMods: vi.fn(() => ({})),
   getProximityRivals: vi.fn(() => []),
