@@ -1,0 +1,19 @@
+{
+  "contract": "mode-outcome-browser-proof-v1",
+  "capturedAt": "2026-09-09T21:49:09.901Z",
+  "url": "https://callofdoodie.wtf/",
+  "mode": "HOLD THE THRONE",
+  "difficulty": "INSANE",
+  "seed": 569639,
+  "title": "YOU DIED",
+  "outcome": "👑 0/3 THRONES HELD 2 lost · EAST THRONE at 0s/30s when it ended",
+  "runEndedAfterSeconds": 24,
+  "screenshot": "docs/visual-qa/new-modes/hold-the-throne-outcome.png",
+  "visualCanaries": {
+    "titleRed": 2805,
+    "actionOrange": 16817,
+    "verdictWhite": 4779,
+    "receiptGold": 431
+  },
+  "claim": "rendered-receipt-proof-not-gameplay-evidence"
+}

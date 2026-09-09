@@ -6,7 +6,7 @@ Public-safe launch roadmap summary.
 - [x] [SIL:3] **DONE S168** Lockdown wins every alarm-100 race; tick, crate, and kill cap transitions are covered and lockdown remains a last stand.
 - [x] [SIL:3] **DONE S168** Extraction settlement is exactly once; banked/won guards make later steps, kills, and waves inert.
 - [x] [SIL:3] **DONE S168** Fatal enemy frames stop before mode step or victory; recovered PLAYING can continue.
-- [x] [SIL:2] **DONE S168** Natural staging deaths for SEWER EXTRACTION and HOLD THE THRONE produce mode-specific rendered receipts.
+- [x] [SIL:2] **DONE S168** Natural staging and exact-production deaths for SEWER EXTRACTION and HOLD THE THRONE produce mode-specific receipts; fixed seeds, stable frames, decoded-pixel canaries, and direct cropped inspection make the proof reproducible.
 - [x] [SIL:2] **DONE S168** Closed the inherited js-yaml advisory with reviewed 4.3.2; security and supply-chain gates are green.
 - [ ] [SIL:1] Surface flood and lockdown in MOST WANTED as a separate hazards row.
 - [ ] [SIL:1] Open every lazy death-analysis subsection in a browser through an existing public flow.

@@ -10,7 +10,7 @@
 - Doctor truth — live doctor passes overall with 159 passing, one advisory failure, and blockingFailing 0; the older S167 blocker snapshot is stale.
 - Evidence boundary truth — no participant, device, provider, identity, mail, production-performance, publication, lifecycle, or fun/balance conclusion is claimed. Production proof follows the checkpoint.
 
-Overall status: recovered, implemented, fully tested, and staging-proven; exact-main CI/deploy and production verification are pending this checkpoint. SPARKED remains NO-GO.
+Overall status: recovered, implemented, fully tested, and staging-proven; exact-main CI/deploy and production verification are complete. SPARKED remains NO-GO.
 Last reviewed: 2026-09-09
 
 <!-- truth-audit-version: 1.1 -->

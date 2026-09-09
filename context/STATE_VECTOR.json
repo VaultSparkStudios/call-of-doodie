@@ -1,9 +1,9 @@
 {
   "vectorVersion": "1.0",
   "generatedAt": "2026-09-09",
-  "generatedAtMs": 1788987420265,
+  "generatedAtMs": 1788990754485,
   "session": 168,
-  "vectorHash": "d14c0b9da02d754a",
+  "vectorHash": "7f266915f8e13628",
   "silTotal": 997,
   "silAvg3": 997.3,
   "velocity": 6,
@@ -24,7 +24,7 @@
     "[SIL:1] [DATA-BLOCKED S154] [S144] Mobile touch button-size/density control — th"
   ],
   "health": "green",
-  "truthStatus": "recovered, implemented, fully tested, and staging-proven; exact-main CI/deploy and production verification are pending this checkpoint. SPARKED remains NO-GO.",
+  "truthStatus": "recovered, implemented, fully tested, and staging-proven; exact-main CI/deploy and production verification are complete. SPARKED remains NO-GO.",
   "genome": null,
   "ignisScore": 43701,
   "ignisGrade": "FORGE",
@@ -33,8 +33,8 @@
   "slug": "call-of-doodie",
   "type": null,
   "lifecycle": "deployed",
-  "nextMilestone": "Publish the recover S168 closeout checkpoint, require exact-head CI/deploy, verify extraction and throne receipts in production, then begin the full S169 arc. Hazards-row and lazy-analysis browser contracts remain repository-owned candidates.",
-  "currentFocus": "Session 168 recovered and staging-proven: alarm 100 owns evacuation races, extraction settlement is exactly once, fatal combat stops mode mechanics and victory, and natural extraction/throne debriefs are mode-validated. Trust-reviewed js-yaml 4.3.2 closes the inherited advisory.",
+  "nextMilestone": "Open Session 169 and run the requested full arc. Prime repository-owned candidates are the MOST WANTED hazards row, browser coverage for lazy death analysis, and reusable terminal-lifecycle contracts; external SPARKED gates remain separate.",
+  "currentFocus": "Session 168 is exact-main published and production-verified: terminal ordering and exactly-once extraction are live at ecec5573cfa5; deterministic extraction/throne receipts pass semantic, stable-frame, decoded-pixel, and direct cropped review.",
   "lastShipped": "alarm 100 precedes evacuation for tick, crate, and kill; lockdown remains a last stand; banking is idempotent.",
   "blockers": [
     "PostHog and project-scoped Sentry evidence remain unavailable; provider readiness is not represented as verified telemetry.",

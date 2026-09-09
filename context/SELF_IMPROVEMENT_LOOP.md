@@ -34,6 +34,8 @@ Brainstorm:
 
 **Committed to TASK_BOARD:** hazards row and lazy-analysis browser contract; lifecycle contract will be premise-tested in S169.
 
+Production follow-through addendum: ecec5573cfa5 passed workflow 34404857391 and deployed as 7d285e80. Both origins and every production court pass. Fixed-seed extraction/throne receipts carry stable-frame and decoded-pixel canaries; direct top/verdict crop inspection closed the earlier host-image gap. Score remains 997 because this adds proof and capture resilience rather than participant evidence.
+
 ## 2026-09-09 — Session 167 | Total: 997/1000 | Velocity: 6 | Debt: ↓
 
 SIL 997/1000: Found that the game's entire "learn from your death" memory had been running on nothing since S163 and gave it one honest authority; gave every mode a debrief that says what the run was worth; stopped the two scrolled arenas from hiding their own announcements; and retired a push gate that could not finish — without lowering a budget, bypassing a check, or claiming any participant evidence.

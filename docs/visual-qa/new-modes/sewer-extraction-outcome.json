@@ -1,0 +1,19 @@
+{
+  "contract": "mode-outcome-browser-proof-v1",
+  "capturedAt": "2026-09-09T21:48:30.018Z",
+  "url": "https://callofdoodie.wtf/",
+  "mode": "SEWER EXTRACTION",
+  "difficulty": "INSANE",
+  "seed": 92101,
+  "title": "YOU DIED",
+  "outcome": "📦 0 LOOT DOWN THE DRAIN 0 crates grabbed · alarm 2/100 · evac opens at alarm 60",
+  "runEndedAfterSeconds": 7,
+  "screenshot": "docs/visual-qa/new-modes/sewer-extraction-outcome.png",
+  "visualCanaries": {
+    "titleRed": 2808,
+    "actionOrange": 17217,
+    "verdictWhite": 4627,
+    "receiptGold": 433
+  },
+  "claim": "rendered-receipt-proof-not-gameplay-evidence"
+}

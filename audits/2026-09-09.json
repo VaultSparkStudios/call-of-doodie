@@ -4,7 +4,7 @@
   "session": 168,
   "project": "Call-Of-Doodie",
   "intent": "recover the cut-off S168, verify every inherited claim, finish terminal-order implementation, prove it on isolated staging, and create a clean recovery checkpoint before the next full arc",
-  "outcome": "recovered-implemented-tested-staging-proven-production-pending",
+  "outcome": "recovered-implemented-exact-production-verified",
   "shipped": [
     "alarm-100 precedence over evacuation across tick, crate and kill",
     "exactly-once extraction settlement across later hooks",
@@ -17,11 +17,12 @@
     "strict lint and deployable build; App 466.87 KB / 560 KB",
     "schema, public, runtime, entry, assets, dependency, security and supply-chain gates",
     "Studio Doctor overallPass true with blockingFailing 0",
-    "isolated staging 87715c0c with natural extraction and throne rendered receipts"
+    "isolated staging 87715c0c with natural extraction and throne rendered receipts",
+    "workflow 34404857391 passed exact source ecec5573cfa59ad712d830c2512f6f7f7291c482 and deployed immutable 7d285e80",
+    "canonical and immutable health serve ecec5573cfa5; shell 7/7 both, cutover 5/5, backend 5/5, replay 3/3, leaderboard isolation, launch surfaces and production mode smoke pass",
+    "seeded production extraction/throne receipts passed semantic contracts, stable-frame capture, decoded-pixel canaries and direct cropped inspection"
   ],
   "deferred": [
-    "direct image inspection on this host due DPAPI decode failure",
-    "production exact-head deployment and mode receipts until after checkpoint",
     "participant, physical-device, provider/mail/identity, performance, publication and SPARKED evidence"
   ],
   "sil": {
@@ -59,8 +60,7 @@
   "followUps": [
     "surface flood and lockdown in a separate MOST WANTED hazards row",
     "open lazy death analysis in a browser through an existing public flow",
-    "generalize terminal-order checks for future modes",
-    "verify exact recovery source in production"
+    "generalize terminal-order checks for future modes"
   ],
   "blockers": []
 }

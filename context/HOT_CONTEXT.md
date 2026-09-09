@@ -4,7 +4,7 @@
 
 ## Current Session
 
-- Session 168 terminal-order truth (2026-09-09) — SEWER EXTRACTION resolves lockdown before evacuation whenever a tick, crate, or kill reaches alarm 100. Lockdown remains a last stand. A successful extraction sets banked/won and later mode hooks become inert, so stash, score, alarm, crates, and pressure cannot change after settlement.
+- Session 168 production seal (2026-09-09) — exact source ecec5573cfa5 passed workflow 34404857391 and deployed immutable 7d285e80. Canonical and immutable health report that SHA; shell 7/7 both, cutover 5/5, backend 5/5, replay 3/3, leaderboard isolation, launch surfaces, and production mode smoke pass. Seeded natural extraction (92101) and throne (569639) receipts pass mode semantics, stable frames, decoded-pixel canaries, and direct top/verdict crop inspection.
 
 ## Open Work
 
@@ -103,7 +103,7 @@
 
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 221,585 bytes · SHA-256 `2a0ffc2c7adc…`
-- `context/TASK_BOARD.md` · 143,919 bytes · SHA-256 `66946b1bb9fb…`
+- `context/CURRENT_STATE.md` · 222,056 bytes · SHA-256 `e337f1fd8295…`
+- `context/TASK_BOARD.md` · 144,042 bytes · SHA-256 `f5d34e0e286e…`
 - `context/DECISIONS.md` · 145,631 bytes · SHA-256 `dbfce561940c…`
-- `docs/AUDIT_2026-09-09.json` · 28,819 bytes · SHA-256 `66f413f9b1c4…`
+- `docs/AUDIT_2026-09-09.json` · 28,903 bytes · SHA-256 `3a0f66bb5a76…`

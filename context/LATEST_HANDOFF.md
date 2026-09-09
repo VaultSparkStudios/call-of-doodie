@@ -12,7 +12,8 @@ Session Intent: Recover the cut-off S168 from repository evidence, prove inherit
 - Validation: Vitest 233/233 files and 1,372/1,372 assertions; strict lint; build (App 466.87 KB / 560 KB); schema, public, runtime, entry, asset, dependency, security, and supply-chain gates; Doctor overallPass true with blockingFailing 0.
 - Evidence boundary: browser automation read rendered debrief text and retained PNGs. Direct image inspection failed at DPAPI decode, so no direct pixel-review claim is made.
 - Creative Direction Record reviewed: no new creative direction.
-- Next: publish the recovery checkpoint, require exact-head CI/deploy, capture both modes on production, seal evidence, then open S169.
+- Production: source ecec5573cfa5 passed workflow 34404857391 and deployed immutable 7d285e80. Both origins report the SHA; all production courts pass. Seeded natural extraction/throne receipts pass semantic contracts, stable frames, decoded canaries, and direct cropped inspection.
+- Next: open S169 and run the requested fresh audit/implementation/closeout arc.
 
 ## Impact Summary
 

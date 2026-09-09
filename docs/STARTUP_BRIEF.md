@@ -20,7 +20,7 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ LAST SESSION (S168) - WHAT SHIPPED ══════════════════════════╗
-║  Session 168 recovered an interrupted tree; made extraction ala  ║
+║  Session 168 recovered an interrupted tree, made terminal order  ║
 ║  Tests  -                                                        ║
 ║  Deploy -                                                        ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -68,10 +68,9 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ✓  ███████░░░░░░░░░░░░░░░░░   28% used                          ║
-║     75,647 / 272,000 tok  ·  codex/codex-272k  · …               ║
-║     ~37,824 tok/turn  ·  cache 50%  ·  4 turns to compact        ║
-║     Verdict: CONTINUE                                            ║
+║  ⚠  ░░░░░░░░░░░░░░░░░░░░░░░░    1% used                          ║
+║     281,720 / 200,000 tok  ·  unknown  ·  heuristic-stale        ║
+║     Verdict: CONSIDER_CLOSEOUT  ← act now                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗

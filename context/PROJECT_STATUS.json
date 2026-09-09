@@ -4,26 +4,20 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 168 recovered and staging-proven: alarm 100 owns evacuation races, extraction settlement is exactly once, fatal combat stops mode mechanics and victory, and natural extraction/throne debriefs are mode-validated. Trust-reviewed js-yaml 4.3.2 closes the inherited advisory.",
-  "nextMilestone": "Publish the recover S168 closeout checkpoint, require exact-head CI/deploy, verify extraction and throne receipts in production, then begin the full S169 arc. Hazards-row and lazy-analysis browser contracts remain repository-owned candidates.",
+  "currentFocus": "Session 168 is exact-main published and production-verified: terminal ordering and exactly-once extraction are live at ecec5573cfa5; deterministic extraction/throne receipts pass semantic, stable-frame, decoded-pixel, and direct cropped review.",
+  "nextMilestone": "Open Session 169 and run the requested full arc. Prime repository-owned candidates are the MOST WANTED hazards row, browser coverage for lazy death analysis, and reusable terminal-lifecycle contracts; external SPARKED gates remain separate.",
   "testingSurfaces": [
     {
       "session": 168,
       "status": "green",
-      "type": "full-gates",
-      "command": "serialized Vitest 233/233 files and 1,372/1,372 assertions · strict lint · deployable build · App 466.87 KB / 560 KB · schema/public/runtime/entry/assets/dependency/security/supply-chain · Studio Doctor overallPass true, blockingFailing 0"
+      "type": "production-verification",
+      "command": "source ecec5573cfa5 · workflow 34404857391 · immutable 7d285e80 · shell 7/7 custom+immutable · cutover 5/5 · backend 5/5 · replay 3/3 · leaderboard isolation · launch surfaces · production mode smoke"
     },
     {
       "session": 168,
       "status": "green",
-      "type": "browser-proof",
-      "command": "staging immutable 87715c0c · natural SEWER EXTRACTION loss receipt (loot/crates/alarm) · natural HOLD THE THRONE loss receipt (held/lost/active throne); retained PNGs; direct image inspection host-blocked by DPAPI"
-    },
-    {
-      "session": 168,
-      "status": "resolved",
-      "type": "recovery-diagnostic",
-      "command": "initial full run passed 232 files/1,368 assertions but a worker did not start; isolated hot-context court exposed stale generated context; regeneration plus implementation produced authoritative 233/1,372 exit-0 rerun"
+      "type": "production-visual-proof",
+      "command": "SEWER EXTRACTION seed 92101 and HOLD THE THRONE seed 569639 natural losses · mode-specific receipts · stable frames · decoded canaries extraction 2808/17217/4627/433 and throne 2805/16817/4779/431 · direct top/verdict crop inspection"
     },
     {
       "session": 167,
@@ -135,11 +129,11 @@
   "sanitizationLastCleared": "2026-09-09",
   "sessionShellHygiene": {
     "session": 168,
-    "started": 4,
-    "closed": 4,
+    "started": 10,
+    "closed": 10,
     "running": 0,
-    "enumeratedAt": "2026-09-09T21:01:20.5220409Z",
-    "scope": "Agent-started long-running commands: two full serialized Vitest runs, one Studio Doctor update, and one derived-context render; all completed. Staging deployment and focused gates also exited normally. No subagents were started."
+    "enumeratedAt": "2026-09-09T21:50:30.435Z",
+    "scope": "All long-running commands completed: two recovery Vitest runs, doctor/autopilot, CI watch, production mode smoke, and four bounded natural-outcome attempts. Two nondeterministic throne attempts ended at their timeout; one post-output Chromium close hang was interrupted after the evidence write and replaced by a clean bounded run. No subagents."
   },
   "doctorScore": {
     "date": "2026-09-09",
@@ -155,7 +149,7 @@
     "total": 220,
     "score": 72
   },
-  "lastSessionSummary": "Session 168 recovered an interrupted tree; made extraction alarm precedence and settlement exactly-once, stopped mode logic after fatal combat while preserving revival, added mode-specific natural extraction/throne browser receipts, and closed the inherited js-yaml advisory. Full suite 233 files/1,372 assertions and doctor blockingFailing 0.",
+  "lastSessionSummary": "Session 168 recovered an interrupted tree, made terminal ordering and extraction settlement exact, closed the inherited js-yaml advisory, and published source ecec5573cfa5 through workflow 34404857391 to immutable 7d285e80. Production health, trust, mode smoke, deterministic receipt pixels and direct crop review pass.",
   "testsAssertionsPassing": 1372,
   "testsAssertionsTotal": 1372,
   "testsAssertionsFiles": 233,

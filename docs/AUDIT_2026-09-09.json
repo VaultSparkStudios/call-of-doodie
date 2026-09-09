@@ -570,7 +570,7 @@
       "slug": "natural-mode-outcome-proof",
       "status": "shipped",
       "outcome": "Extraction and throne debriefs now have mode-specific natural-run browser proof",
-      "verification": "L2 shipped on isolated S168 staging: SEWER EXTRACTION natural death rendered loot/crates/alarm evidence; HOLD THE THRONE natural loss rendered captured/lost/active-throne evidence. Capture helper advances visible intermission choices and rejects nonempty-but-wrong receipts. Screenshots retained; direct image-tool inspection was attempted but the host DPAPI sandbox failed before decode."
+      "verification": "L2 shipped and exact-production verified: staging plus production source ecec5573cfa5 naturally ended seeded SEWER EXTRACTION (92101) and HOLD THE THRONE (569639) runs with mode-specific receipts. The helper advances intermissions, binds explicit difficulty/seed, requires two stable frames, and rejects weak semantic or decoded-pixel evidence. Production canaries: extraction 2808/17217/4627/433 and throne 2805/16817/4779/431; final top/verdict crops directly inspected."
     }
   ]
 }

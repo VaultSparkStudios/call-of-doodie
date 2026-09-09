@@ -10,7 +10,13 @@
 - Validation: Vitest 233/233 files and 1,372/1,372 assertions; strict lint; build under budget; all repository gates; Doctor overallPass true and blockingFailing 0. Initial worker and stale-context failures remain recorded.
 - Creative Direction Record reviewed — no new direction. Direct PNG inspection failed at host DPAPI decode; claims remain bounded.
 
-Intent outcome: recovery, implementation, validation, and staging achieved; exact-main and production proof follow. SPARKED remains unpromoted.
+Intent outcome: recovery, implementation, validation, isolated staging, exact-main publication, and production proof achieved. SPARKED remains unpromoted.
+
+### Production follow-through
+
+- Recovery checkpoint ecec5573cfa5 passed workflow 34404857391 and deployed immutable 7d285e80. Both origins report the exact SHA and every production court passes.
+- Natural SEWER EXTRACTION seed 92101 and HOLD THE THRONE seed 569639 deaths produced mode-specific receipts. Capture accepts explicit seeds, advances intermissions, waits for stable frames, decodes color canaries, and writes machine-readable receipts.
+- Final extraction and throne top/verdict crops were directly inspected with no clipping, contrast, overflow, or missing-content defect. Intermittent large-image transport omissions were disproved by decoded pixels and independent crops.
 
 ## 2026-09-09 (Session 167 — the debrief names names, and announcements stay on screen)
 
