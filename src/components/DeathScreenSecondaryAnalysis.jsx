@@ -10,6 +10,7 @@ import { describeDamageSequence } from "../systems/damageSequence.js";
 export default function DeathScreenSecondaryAnalysis({ model }) {
   const {
     runModifier, card, buildGrade, weaponKills, leaderboard, wave, score, kills,
+    level, bestStreak, fmtTime, timeSurvived, totalDamage, crits, grenades, insightGraph,
     runNarrative, replayProofPresenter, runCoach, experimentMatched, nextContract,
     fairnessReceipt, wavePlanReceipt, performanceReceipt, debrief, collapseCoaching,
     postRunIntel, runHistory, nextRunDrill, recordPlaytestChoice, mode,

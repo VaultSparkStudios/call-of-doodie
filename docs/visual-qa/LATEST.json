@@ -1,22 +1,32 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-08-26T01:38:38.057Z",
-  "stagingUrl": "https://session-162-staging.call-of-doodie.pages.dev/",
-  "uiBaseRef": "917a3cf",
+  "capturedAt": "2026-09-09T00:48:45.737Z",
+  "stagingUrl": "https://session-166-staging.call-of-doodie.pages.dev/",
+  "uiBaseRef": "03830d1a3b5ac122d8c50d4f63edc35fc3d1876f",
   "uiHeadRef": "HEAD",
-  "workingTreeUiSha256": "493a4737e93c29902bbc6095eda96c6da172a21bd076a1a5e7def9f955a11d8b",
+  "workingTreeUiSha256": "ceb5dddd6eaa8c5d999bb0a9aa71ffc4ff2e50d72830bda5238bea3ac6f89719",
   "sourceMatrix": {
-    "receipt": "output/playwright/session-162-staging-visuals/visual-audit-receipt.json",
-    "sha256": "3997cd1804cf33ec5701cbd0cad04b340697b1787317f08370dc3b61df126a23",
+    "receipt": "output/playwright/session-166-staging/visual-audit-receipt.json",
+    "sha256": "fcb2c1221ebcc657c2bc65ace2e42e91384e65f390699fbfd22ce59f0ac6f2af",
     "checks": {
       "pass": true,
-      "total": 1020,
-      "passed": 1020,
+      "total": 969,
+      "passed": 969,
       "failures": []
     }
   },
   "touchedState": null,
-  "additionalTouchedStates": [],
+  "additionalTouchedStates": [
+    {
+      "surface": "Sewer Extraction loot/evac radar and first-open deferred death analysis",
+      "checks": {
+        "pass": true,
+        "checks": 40,
+        "passed": 40,
+        "failures": []
+      }
+    }
+  ],
   "themes": [
     "dark",
     "light"
@@ -24,7 +34,7 @@
   "captures": [
     {
       "file": "home-dark-mobile.png",
-      "sha256": "53d9d4ace55abde69af256bc93444849f211313207746c9b3e094bea75633f06",
+      "sha256": "835f7a52669c5a660c02d794f3fa5b2358457f30723b9e1565174c1649efbfe5",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -35,7 +45,7 @@
     },
     {
       "file": "home-light-desktop.png",
-      "sha256": "1faea70470bcdabcd44aeb2ca36a8e3d122d1cfc98fe1231aaf917f6c7a83cca",
+      "sha256": "2347f9369032d32edb33a59d1b686102f46500070529e4775737ab7a6dce2234",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -46,7 +56,7 @@
     },
     {
       "file": "login-dark-desktop.png",
-      "sha256": "fe8c4c4db682303f88457e06cc4ff5d432d07f1adaf12f716f429c6f723330fb",
+      "sha256": "92230bd3d3ebd70408595a40d31dbe6ec5434aaabb0c58094db83b5f537102b6",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -57,7 +67,7 @@
     },
     {
       "file": "auth-callback-light-mobile.png",
-      "sha256": "04cbe6aa2a03b820be9b23f1bf02416c04f01ea4dd29ad806c9fe79dfff49055",
+      "sha256": "4c7bcf7dc9bb32843c6f866f244673813fb63ca0aeda0061996decbabd471cff",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -68,7 +78,7 @@
     },
     {
       "file": "modes-dark-desktop.png",
-      "sha256": "569729072993ffa64860eb963c6ae7f75de46e1db89180873a4dba1b6b448aed",
+      "sha256": "929e4f60708bbaa5bfb7d0d1e127bb7ec5dcb9f5c9af732f56274da448847299",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -78,117 +88,161 @@
       "page": "Mode selection surface"
     },
     {
-      "file": "leaderboard-light-mobile.png",
-      "sha256": "b0d07f24470d3dffdd6bbf8726fbaab18a92ca27d218e5f3ad36f870774f33ce",
+      "file": "board-light-mobile.png",
+      "sha256": "4371abf0dcd6136cfdc1ba7ce6435794259bbb804ddd0b97b294ac223bda3e07",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
         "height": 1000
       },
-      "page": "Leaderboard surface"
+      "page": "Board surface"
     },
     {
-      "file": "order-evidence-hud-dark-390.png",
-      "sha256": "52d78eb9471d9f1e4a7e02201f0d86602580ffc10892a603e31bae2e003d3a17",
+      "file": "extraction-radar--sewer-night--390.png",
+      "sha256": "dfb37f9fc79bc9c57998d5b4d492cede948c1c23657e082e1248be18aea65740",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
         "height": 844
       },
-      "page": "Persisted corrective-order evidence in the live HUD"
+      "page": "Sewer Extraction live whole-arena loot radar"
     },
     {
-      "file": "order-evidence-hud-dark-1440.png",
-      "sha256": "79a1aa2440c46eae624bfd3e5485a51f03989e82666b3c6e24696ef61d60e976",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 1000
-      },
-      "page": "Persisted corrective-order evidence in the live HUD"
-    },
-    {
-      "file": "order-evidence-hud-light-390.png",
-      "sha256": "52d78eb9471d9f1e4a7e02201f0d86602580ffc10892a603e31bae2e003d3a17",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "page": "Persisted corrective-order evidence in the live HUD"
-    },
-    {
-      "file": "order-evidence-hud-light-1440.png",
-      "sha256": "79a1aa2440c46eae624bfd3e5485a51f03989e82666b3c6e24696ef61d60e976",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 1000
-      },
-      "page": "Persisted corrective-order evidence in the live HUD"
-    },
-    {
-      "file": "order-evidence-archive-dark-390.png",
-      "sha256": "b4023a1398162e30b7f3972bc82d34ec22345b99df2a38368cc0229aebfe3040",
+      "file": "extraction-evac-radar--sewer-night--390.png",
+      "sha256": "2fdebb1ae3fa5871cb8aff44e4b27ce3e92b1a34473763256c032e3c4daff95b",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
         "height": 844
       },
-      "page": "Bounded corrective-order evidence archive in Run History"
+      "page": "Sewer Extraction evac-open whole-arena radar (QA-forced threshold)"
     },
     {
-      "file": "order-evidence-archive-dark-1440.png",
-      "sha256": "47d1f22edb1ed9a0e3d7e5bbc1a758d38828715dd2ee90eebcadb673c9b61efc",
+      "file": "secondary-analysis--sewer-night--390.png",
+      "sha256": "3a2308c984cc1010d487059af386fb35217b313207176aa212f27fe82adaa530",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "page": "First-open deferred death analysis"
+    },
+    {
+      "file": "extraction-radar--sewer-night--1440.png",
+      "sha256": "832ccaec960c218665ef0e940d9e606304fbcdac5176120b6bdbee086e915552",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "page": "Bounded corrective-order evidence archive in Run History"
+      "page": "Sewer Extraction live whole-arena loot radar"
     },
     {
-      "file": "order-evidence-archive-light-390.png",
-      "sha256": "b4023a1398162e30b7f3972bc82d34ec22345b99df2a38368cc0229aebfe3040",
+      "file": "extraction-evac-radar--sewer-night--1440.png",
+      "sha256": "030049278e043117347894c3d30994414352f24da0d37a00ba179b8bde422c69",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "page": "Sewer Extraction evac-open whole-arena radar (QA-forced threshold)"
+    },
+    {
+      "file": "secondary-analysis--sewer-night--1440.png",
+      "sha256": "dc2263d3808dcf1c8f467e67bfafa28cf66313286dd88b12a88174d08c19893f",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "page": "First-open deferred death analysis"
+    },
+    {
+      "file": "extraction-radar--porcelain-day--390.png",
+      "sha256": "e9c35002455fce8a619842ab60706bfe0aaa72127e8a6cf9e07004f472017632",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
         "height": 844
       },
-      "page": "Bounded corrective-order evidence archive in Run History"
+      "page": "Sewer Extraction live whole-arena loot radar"
     },
     {
-      "file": "order-evidence-archive-light-1440.png",
-      "sha256": "47d1f22edb1ed9a0e3d7e5bbc1a758d38828715dd2ee90eebcadb673c9b61efc",
+      "file": "extraction-evac-radar--porcelain-day--390.png",
+      "sha256": "44615a60dfb7329cf3aaeffd2c44c7bad8b8915f73712fd5b7c5ef23b2d48143",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "page": "Sewer Extraction evac-open whole-arena radar (QA-forced threshold)"
+    },
+    {
+      "file": "secondary-analysis--porcelain-day--390.png",
+      "sha256": "e4d9f5188dac4f40a2a661a6739fd5f8bfd49266a482952868912b6e11d3f64e",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "page": "First-open deferred death analysis"
+    },
+    {
+      "file": "extraction-radar--porcelain-day--1440.png",
+      "sha256": "3c3c52be9e15eb267de88ee73447f313c76eb2d97b8ccb7d14abcfbb7d88edd9",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "page": "Bounded corrective-order evidence archive in Run History"
+      "page": "Sewer Extraction live whole-arena loot radar"
+    },
+    {
+      "file": "extraction-evac-radar--porcelain-day--1440.png",
+      "sha256": "be83b10e72cd3e3cca7020381cbbf0610fd24a4bccb015afe547332bae270071",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "page": "Sewer Extraction evac-open whole-arena radar (QA-forced threshold)"
+    },
+    {
+      "file": "secondary-analysis--porcelain-day--1440.png",
+      "sha256": "7385cbab51ae1f1fdb7cf00a22387f22990bfe7a9110c9bc650c5603911375b6",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "page": "First-open deferred death analysis"
     }
   ],
   "inspection": {
     "renderedPixelsReviewed": true,
     "reviewer": "Codex direct rendered-pixel review plus Playwright screenshot and analytics court",
     "findings": [
-      "The source matrix passed 1020/1020 checks across 20 routes, 2 project themes, and 390px, 768px, 1440px widths.",
+      "The source matrix passed 969/969 checks across 19 routes, 2 project themes, and 390px, 768px, 1440px widths.",
       "Representative Home, identity, Modes, and Leaderboard captures are hash-bound across both themes and complementary desktop/mobile viewports.",
       "No horizontal overflow, clipped primary action, page error, or measured contrast failure remains in the source matrix.",
-      "The live HUD carries persisted drill-specific evidence at 390px and 1440px without reviving the reset-only mastery claim.",
-      "The bounded Run History archive remains readable at 390px and 1440px, including its local, observed, non-causal evidence boundary."
+      "The hosted Sewer Extraction radar and first-open deferred death analysis passed 40/40 focused checks at 390px and 1440px in both project themes; the evac capture explicitly records its visual-only alarm-threshold injection."
     ],
     "fixesApplied": [
-      "Direct rendered-pixel review confirmed the persisted evidence HUD and bounded Run History archive are readable at 390px and 1440px in both project themes; no clipping, overlap, contrast, or causal-claim defect remained."
+      "Hosted first-open review caught and fixed the missing deferred-panel model values before release.",
+      "Direct review confirmed distinct gold loot and cyan evacuation pixels on the bounded whole-arena radar in both themes and viewport classes."
     ],
     "blockingDefectsOpen": 0,
     "subjectiveVisualReviewClaimed": true,

@@ -1,0 +1,128 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "/audit skill (S149)",
+  "generatedAt": "2026-08-11",
+  "session": 149,
+  "project": "call-of-doodie",
+  "type": "game-app",
+  "rubric": "nine-axis-launch-confidence-game-loop-and-interaction-sweep",
+  "meta": {
+    "generatedAt": "2026-08-11",
+    "project": "call-of-doodie",
+    "type": "game-app",
+    "rubric": "nine-axis-launch-confidence-game-loop-and-interaction-sweep",
+    "candidateCount": 30,
+    "promotedCount": 3,
+    "combinedPriority": 98.6,
+    "top3": ["next-run-contract-menu-bridge", "mobile-accessible-quick-deploy-grid", "adaptive-commanders-orders-surface"],
+    "livePremiseVerification": true,
+    "premiseEvidence": "Bounded sampler v2 covered 16 files / 120,000 preview characters across all nine repository categories. Studio Oracle returned evidence-found for the mobile native-select versus desktop-button premise (43 hits) and the split HomeV2 directive-rendering premise (15 hits). The Oracle's term matcher returned no-evidence for the cross-file negative nextRunContract handoff claim, so that result is not presented as a pass: direct source evidence is named instead — DeathScreen.jsx builds and renders debrief.nextRunContract, App.jsx supplies onMenu as a zero-argument state transition, and HomeV2 has no nextRunContract prop or pending-contract branch. A separate Oracle check confirmed the proposed death-animation sprite expansion is false/redundant: Modern deaths already use enemy/zombie atlases and emoji is the intentional Retro/fallback path.",
+    "baseline": {
+      "release": "FORGE, deployed/public-unlaunched. Direct main push and production deployment are authorized for this arc; SPARKED promotion is not implied.",
+      "quality": "Session 148 recovery closed with focused 71/71 plus architecture, lint, asset, schema, build, staging, and 1020/1020 hosted visual-audit checks. The attempted whole suite was explicitly inconclusive under host process contention.",
+      "architecture": "React 19/Vite 7 canvas shooter. HomeV2 still contains both mobile/desktop deploy configuration and four separate directive render paths; App remains below its 5,000-line budget after the haptics extraction.",
+      "gameLoop": "Fresh game-loop review scores design maturity 9.0/10 and identifies menu-to-run clarity, not core combat depth, as the highest-leverage remaining local gap.",
+      "cost": "All promoted work is deterministic client-side logic and existing Playwright/Vitest verification. No dependency, hosted inference, new service, or variable per-user cost is introduced."
+    }
+  },
+  "axisCoverage": {
+    "feature depth & refinement": "Carry the already-computed post-run contract back into the next menu decision instead of discarding the coaching loop on Return to Menu.",
+    "innovation": "Add a bounded death-to-menu intent handoff and reason-coded, agent-readable directive projection without hosted inference.",
+    "ui / ux / user-experience": "Replace the mobile native picker pair with compact accessible button groups and render one stable Commander's Orders surface.",
+    "feedback loop": "Re-run the existing mobile interaction receipt against the new button path and expose selected-state feedback through aria-pressed plus a polite status line.",
+    "gamification / engagement / immersion": "Make the previous run's concrete fix the next menu's highest-value order, preserving player intention across the death-to-redeploy transition.",
+    "ai / intelligence integration": "Use deterministic evidence-ranked local intelligence to choose one order; no probabilistic or paid model is warranted.",
+    "security": "No new security item survived: public proxy endpoints already carry origin and rate contracts, and identity/analytics expansion remains credential and product-authority gated.",
+    "speed / organization / efficiency": "Extract pure resolvers and focused components from HomeV2 so interaction behavior can be tested without mounting the whole 1,000+ line menu.",
+    "token / api cost reduction": "Keep recommendation resolution local and pure; extracted focused tests reduce repeated whole-App inspection and no API calls are added."
+  },
+  "items": [
+    {
+      "slug": "next-run-contract-menu-bridge",
+      "tier": "FIRE",
+      "axis": "feature depth & refinement / gamification / ai",
+      "effortHours": 4,
+      "impact": 8,
+      "innovation": 9,
+      "priority": 34.8,
+      "status": "complete",
+      "verification": "Shipped a bounded in-memory DeathScreen -> App -> HomeV2 contract handoff with pure sanitization, explicit precedence, dismiss/deploy consumption, and no fresh-boot fabrication. Covered by the 40 focused S149 assertions across contract, Home, death-flow, mobile-control, and audio-unlock courts.",
+      "why": "DeathScreen already computes a reasoned nextRunContract (focus, target, proof), but App's onMenu callback accepts nothing and HomeV2 receives no pending contract. Returning to the menu therefore breaks the strongest coaching continuity in the loop and falls back to generic history-derived guidance.",
+      "recipe": "Add a sanitized, in-memory pending next-run contract in App; pass debrief.nextRunContract through DeathScreen's Return to Menu action; give HomeV2 the bounded contract and clear it when the player deploys or explicitly dismisses it. Feed the contract into the Commander's Orders priority resolver with an observed-post-run reason code and never persist free text or call a hosted model.",
+      "measurement": "Unit-test sanitization, handoff, precedence, dismissal, and deploy consumption; render the carried focus/target/proof on the menu; confirm a fresh boot has no fabricated contract.",
+      "ladder": {
+        "L1": {"effortHours": 2, "recipe": "Pass a bounded contract through onMenu and render it above the deploy action until consumed."},
+        "L2": {"effortHours": 4, "recipe": "Full: pure sanitizer/resolver, one-session App state, dismiss/deploy consumption, reason-coded evidence projection, and focused tests."},
+        "L3": {"effortHours": 7, "recipe": "Add optional cross-refresh persistence with freshness/version contracts and a portable player-facing receipt."}
+      }
+    },
+    {
+      "slug": "mobile-accessible-quick-deploy-grid",
+      "tier": "FIRE",
+      "axis": "ui / ux / performance / feedback",
+      "effortHours": 5,
+      "impact": 9,
+      "innovation": 6,
+      "priority": 32.1,
+      "status": "complete",
+      "verification": "Shipped labelled 44px radiogroups with aria-checked state, roving keyboard navigation, immediate local acknowledgement, and a post-paint App commit. Final isolated staging Event Timing measured 16ms mobile and 40ms desktop against the historical 1408ms mobile baseline; the first-gesture AudioContext tax was removed through tested idle prewarm.",
+      "why": "The production mobile mode interaction measured 1408ms while its CDP trace showed no renderer task above 13.5ms. HomeV2 still uses two native selects only on mobile while desktop uses buttons, making a scoped accessible button-grid experiment the strongest repo-owned way to remove the browser-chrome picker path without claiming the hypothesis is physically confirmed.",
+      "recipe": "Extract a compact MobileDeployConfig using real buttons in labelled radiogroups, aria-checked or aria-pressed state, 44px minimum targets, visible focus, and a polite selection summary. Preserve selectMode/startTransition semantics, add keyboard and screen-reader regression coverage, then update the existing interaction capture to target the button and compare production-baseline versus staging action-to-render timing.",
+      "measurement": "Focused component tests must prove mode and difficulty selection plus accessible names/states. Staging receipt must record the new control kind, viewport, interaction duration, and threshold; an improvement is reported only from the actual capture.",
+      "ladder": {
+        "L1": {"effortHours": 3, "recipe": "Replace only the mobile mode select with a compact accessible button group and remeasure."},
+        "L2": {"effortHours": 5, "recipe": "Full: both mode and difficulty button groups, focused component extraction/tests, status feedback, and staging performance receipt."},
+        "L3": {"effortHours": 8, "recipe": "Add physical-device remote trace comparison and a reusable interaction-budget court across all front-door actions."}
+      }
+    },
+    {
+      "slug": "adaptive-commanders-orders-surface",
+      "tier": "ICE",
+      "axis": "ui / ux / engagement / organization",
+      "effortHours": 6,
+      "impact": 8,
+      "innovation": 7,
+      "priority": 31.7,
+      "status": "complete",
+      "verification": "Shipped one reason-coded Commander's Orders resolver/component with input-proof -> first-runs -> carried-contract -> Journey -> Run Intelligence precedence and one primary CTA. Final staging passed 1020/1020 route/theme/viewport checks plus image-capable inspection of both themes at 390px and 1440px; CANON-053 passed with six hash-bound captures.",
+      "why": "Session 147 unified only the outer chrome. HomeV2 still renders Journey, FIRST 3 RUNS, Run Intelligence, and Aim Check in separate blocks with duplicated arbitration, so players can still receive multiple directive shapes and the component cannot prove one-order precedence in a pure test.",
+      "recipe": "Create a pure buildCommandersOrder resolver with explicit precedence (input proof, first-three-run training, carried next-run contract, ranked Journey action, Run Intelligence fallback) and a single CommandersOrders component that owns label, evidence, one primary call to action, and optional dismiss. Replace the separate Journey/onboarding/ticker directive blocks while leaving unrelated status alerts outside the surface.",
+      "measurement": "Table-test every precedence branch and reason code, assert exactly one primary order/CTA in HomeV2, preserve onboarding step progress, and inspect the component at mobile/desktop in both themes through the CANON-053 staging visual loop.",
+      "ladder": {
+        "L1": {"effortHours": 3, "recipe": "Pure resolver plus one shared wrapper while retaining existing inner bodies."},
+        "L2": {"effortHours": 6, "recipe": "Full: one normalized order schema, single component/CTA, carried-contract support, all precedence tests, and removal of duplicate directive blocks."},
+        "L3": {"effortHours": 9, "recipe": "Add animated but reduced-motion-safe order transitions and human/agent portable evidence receipts."}
+      }
+    }
+  ],
+  "skipped": [
+    {"slug": "repeat-session-147-six-items", "reason": "WIN — commit 14c8339 already shipped all six items from AUDIT_2026-08-10; current source confirms every implementation."},
+    {"slug": "death-animation-sprite-expansion", "reason": "FALSE PREMISE — Oracle evidence and drawGame.js show Modern deaths already use enemy/zombie atlases; emoji is the pinned Retro/fallback contract."},
+    {"slug": "theme-prop-atlas-l2", "reason": "DEFER — task board gates expansion on production feedback that the current 16 cells read well; no participant evidence exists."},
+    {"slug": "numeric-balance-or-progression-retune", "reason": "CULL — no fresh playtest outcome demonstrates a broken curve; the progression audit and 9.0/10 loop review support current balance."},
+    {"slug": "hosted-ai-coach", "reason": "CULL — deterministic run intelligence has the required signals; hosted inference would add variable cost and latency without a measured gap."},
+    {"slug": "new-observability-or-auth-integration", "reason": "DEFER — PostHog and Obelisk credentials/product authority remain absent; Sentry scope is uncertain, so no project or key is guessed."},
+    {"slug": "full-suite-parallelism-rewrite", "reason": "CULL — Vitest already has a four-worker bound; S148 timed out amid 97 host Node processes and no repo-runner defect is established."},
+    {"slug": "multiplayer-or-multi-floor-buildout", "reason": "DEFER — S148 feasibility documents are design inputs, not authority to expand this launch arc into new architecture."}
+  ],
+  "executionLog": [
+    {
+      "session": 149,
+      "slug": "next-run-contract-menu-bridge",
+      "status": "complete",
+      "evidence": ["src/utils/commandersOrders.js", "src/App.jsx", "src/components/DeathScreen.jsx", "src/components/HomeV2.jsx", "src/systems/deathFlow.test.js"]
+    },
+    {
+      "session": 149,
+      "slug": "mobile-accessible-quick-deploy-grid",
+      "status": "complete",
+      "evidence": ["src/components/MobileDeployConfig.jsx", "src/components/MobileDeployConfig.test.jsx", "src/sounds.js", "src/sounds.test.js", "docs/performance/STAGING_SESSION_149_INP.json"]
+    },
+    {
+      "session": 149,
+      "slug": "adaptive-commanders-orders-surface",
+      "status": "complete",
+      "evidence": ["src/components/CommandersOrders.jsx", "src/utils/commandersOrders.test.js", "docs/visual-qa/LATEST.json", "output/playwright/staging-visuals/visual-audit-receipt.json"]
+    }
+  ]
+}

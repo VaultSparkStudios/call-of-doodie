@@ -1,0 +1,274 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "/audit skill (arc S144)",
+  "generatedAt": "2026-08-08",
+  "session": 144,
+  "project": "call-of-doodie",
+  "type": "game-app",
+  "rubric": "nine-axis-game-live-stats-feedback-and-mode-depth",
+  "meta": {
+    "generatedAt": "2026-08-08",
+    "project": "call-of-doodie",
+    "type": "game-app",
+    "rubric": "nine-axis-game-live-stats-feedback-and-mode-depth",
+    "candidateCount": 7,
+    "promotedCount": 7,
+    "combinedPriority": 150.2,
+    "top3": [
+      "doctrine-archive-career-collection",
+      "mobile-haptic-feedback",
+      "doctrine-near-miss-debrief-insight"
+    ],
+    "livePremiseVerification": true,
+    "premiseEvidence": "Every candidate premise was grepped against live source before inclusion: navigator.vibrate has zero call sites in src/ despite full touch-control support in MobileHUD.jsx; getArchetypeProgress/getNewlyUnlockedArchetypes in src/utils/buildArchetypes.js are computed but have zero render call sites outside their own module and own test file, and archetypeUnlocksRef resets every run with no localStorage persistence; no minimap/offscreen-indicator/edge-of-screen code exists anywhere in src/; no controlHandedness/leftHanded option exists in SETTINGS_DEFAULTS or MobileHUD.jsx; src/constants.js:756 still contains the literal string 'Pause to read the Bestiary' as a live loading-tip shown to players despite the Session 49 MOST WANTED rename across every other player-facing surface. The previously-flagged possible regression in buildWeaponDeathCoach was checked and disproven — it is intact and wired through runCoach.js/deathFlow.js/DeathScreen.jsx.",
+    "baseline": {
+      "release": "FORGE, deployed/public-unlaunched. Engineering READY; SPARKED remains NO-GO.",
+      "quality": "Session 143 closed with 1022/1022 tests passing, SIL 998/1000. docs/AUDIT_2026-08-06.md fully shipped (7/7).",
+      "architecture": "React 19/Vite 6 browser game; local career/meta state plus Supabase leaderboard/community-stats/functions.",
+      "gameLoop": "Deploy-survive-adapt-debrief-rematch spine is strong; the doctrine/archetype build-identity system (perk-combo classifier + capstones) is fully deterministic and zero-cost but under-exposed — it computes progress and near-misses that are never shown to the player, and never persists which doctrines have ever been forged.",
+      "cost": "All promoted items reuse existing local state, existing sound/coaching call sites, or trivial new localStorage keys. No new package, no hosted inference, no variable per-user paid service — consistent with SOUL cost-neutrality."
+    }
+  },
+  "axisCoverage": {
+    "gamification": "Persist doctrine-forging history as a permanent completionist collection and connect the weekly Gauntlet's fixed kit to the archetype system it already implicitly matches.",
+    "immersion": "Add haptic feedback on mobile hit/kill/boss-phase-2/low-HP cues to match the tactile signal desktop already gets from gamepad rumble.",
+    "ux": "Add off-screen threat-direction arrows for legibility under pressure, and a left-handed mirror layout for mobile touch controls.",
+    "ai": "Surface the already-computed, already-deterministic near-miss archetype signal on the death screen instead of leaving it uncalled dead code.",
+    "hygiene": "Fix a stale 'Bestiary' player-facing string that leaked past the Session 49 MOST WANTED rename."
+  },
+  "items": [
+    {
+      "slug": "doctrine-archive-career-collection",
+      "tier": "FIRE",
+      "axis": "gamification / retention / feature depth",
+      "effortHours": 4,
+      "impact": 8,
+      "innovation": 8,
+      "priority": 34,
+      "status": "complete",
+      "why": "archetypeUnlocksRef resets every run in src/App.jsx; unlike the 61 permanent achievements, forging a build doctrine (Trench, Gunslinger, Demolitionist, Tempo, ...) leaves zero lasting trace. This turns an already-shipped, zero-cost classifier into a permanent completionist meta-layer that fits 'Improvised doctrine' — the game keeps receipts on build history without prescribing one correct build.",
+      "recipe": "Add cod-doctrine-archive-v1 localStorage key (storage.js); flip a bit the first time each archetype's capstone fires by hooking the existing applyArchetypeCapstone call site; surface a small 'N/M doctrines forged' collection grid in MenuPanels.jsx next to the Meta Tree panel; unit-test the persistence helpers.",
+      "ladder": {
+        "L1": {
+          "effortHours": 1,
+          "recipe": "Track capstone-forged archetypes in a new localStorage set; no UI yet."
+        },
+        "L2": {
+          "effortHours": 4,
+          "recipe": "Full: persistence + MenuPanels collection grid + tests."
+        },
+        "L3": {
+          "effortHours": 7,
+          "recipe": "Add per-doctrine forge dates, first-forged callsign badge, and a DOCTRINE ARCHIVE share card."
+        }
+      }
+    },
+    {
+      "slug": "mobile-haptic-feedback",
+      "tier": "FIRE",
+      "axis": "gamification / immersion / ux-mobile",
+      "effortHours": 3,
+      "impact": 7,
+      "innovation": 6,
+      "priority": 25.8,
+      "status": "complete",
+      "why": "navigator.vibrate has zero call sites in src/ despite full touch-shoot/dash/grenade support in MobileHUD.jsx; desktop gets gamepad rumble but mobile touch play gets no tactile feedback at all on hit/kill/boss-phase-2/low-HP. Reinforces 'Readable chaos' (danger signal without visual noise) and is on-brand toilet-humor flavor ('rumble on the flush') for 'Comedy earns its frame'.",
+      "recipe": "Add src/utils/haptics.js wrapping capability-gated navigator.vibrate; add hapticsEnabled to SETTINGS_DEFAULTS (default on when 'vibrate' in navigator); key short vibration patterns to existing sound-cue call sites (hit, kill, boss phase-2 flash, low-HP heartbeat); add toggle to SettingsPanel.jsx.",
+      "ladder": {
+        "L1": {
+          "effortHours": 1,
+          "recipe": "Vibrate on hit + kill only."
+        },
+        "L2": {
+          "effortHours": 3,
+          "recipe": "Full cue set + settings toggle + capability gate."
+        },
+        "L3": {
+          "effortHours": 5,
+          "recipe": "Distinct patterns per enemy tier/boss phase, achievement unlock buzz."
+        }
+      }
+    },
+    {
+      "slug": "doctrine-near-miss-debrief-insight",
+      "tier": "HIGH",
+      "axis": "ai / intelligence integration / feature depth",
+      "effortHours": 3,
+      "impact": 7,
+      "innovation": 7,
+      "priority": 25.6,
+      "status": "complete",
+      "why": "getArchetypeProgress (src/utils/buildArchetypes.js) is fully computed but has zero render call sites outside its own module/tests. A player who ends a run one perk short of a capstone gets no signal at all. Purely local/deterministic composition of existing exports, so it is free per SOUL's proof-over-posture cost ethos, and it feeds 'Improvised doctrine' without ever claiming there's one correct build.",
+      "recipe": "At death, diff the run's final activePerks against BUILD_ARCHETYPES via the existing getArchetypeProgress export; if the closest unforged archetype is >=75% satisfied, add one DeathScreen coaching line ('One perk from TRENCH DOCTRINE — needed Fortify') reusing the existing evidence-ranked drawer pattern from collapseCoaching.js.",
+      "ladder": {
+        "L1": {
+          "effortHours": 1,
+          "recipe": "Console/analytics-only near-miss detection, no UI."
+        },
+        "L2": {
+          "effortHours": 3,
+          "recipe": "Full DeathScreen line + tests."
+        },
+        "L3": {
+          "effortHours": 5,
+          "recipe": "Also surface mid-run at wave-clear perk-bank prompts, not just death."
+        }
+      }
+    },
+    {
+      "slug": "weekly-gauntlet-doctrine-tag",
+      "tier": "HIGH",
+      "axis": "feature depth / gamification",
+      "effortHours": 2,
+      "impact": 5,
+      "innovation": 6,
+      "priority": 24,
+      "status": "complete",
+      "why": "getWeeklyGauntlet() (constants.js:1029) issues a fixed weekly loadout that implicitly IS a forced doctrine but never says which one, losing a natural tie-in between two mature systems that currently don't know about each other.",
+      "recipe": "Add a pure function mapping the Gauntlet's fixed perk/weapon set to its nearest BUILD_ARCHETYPES label; render as flavor text on the Gauntlet card ('This week's contract: TRENCH DOCTRINE').",
+      "ladder": {
+        "L1": {
+          "effortHours": 1,
+          "recipe": "Compute + log the label, no UI."
+        },
+        "L2": {
+          "effortHours": 2,
+          "recipe": "Full: label + Gauntlet card flavor text + test."
+        },
+        "L3": {
+          "effortHours": 4,
+          "recipe": "Rotate flavor copy per archetype for variety across weeks."
+        }
+      }
+    },
+    {
+      "slug": "offscreen-threat-direction-indicators",
+      "tier": "HIGH",
+      "axis": "ui / ux / feature depth",
+      "effortHours": 5,
+      "impact": 7,
+      "innovation": 6,
+      "priority": 19.2,
+      "status": "complete",
+      "why": "No minimap/offscreen-indicator/edge-of-screen code exists anywhere in src/. With 22 enemy types, Siege wave events, and boss spawns, an off-screen threat currently gives zero warning beyond stereo audio pan. Directly strengthens 'Readable chaos' — the pillar's literal definition is that threats stay legible under pressure.",
+      "recipe": "Add small triangular edge-of-viewport arrows in drawGame.js for enemies beyond the visible canvas, prioritized for boss/elite spawns and Siege-event bursts; suppress (or show a muted/delayed variant) during the Fog of War perk since reduced info is that perk's intentional tradeoff.",
+      "ladder": {
+        "L1": {
+          "effortHours": 2,
+          "recipe": "Boss/elite-only edge arrows."
+        },
+        "L2": {
+          "effortHours": 5,
+          "recipe": "Full: all off-screen threats, Fog of War suppression, tests."
+        },
+        "L3": {
+          "effortHours": 8,
+          "recipe": "Distance-scaled arrow intensity + directional audio-visual sync."
+        }
+      }
+    },
+    {
+      "slug": "mobile-handedness-and-density-controls",
+      "tier": "MED",
+      "axis": "ux / accessibility / mobile / launch-readiness",
+      "effortHours": 5,
+      "impact": 7,
+      "innovation": 5,
+      "priority": 16,
+      "status": "complete",
+      "why": "No controlHandedness/leftHanded option exists in SETTINGS_DEFAULTS or MobileHUD.jsx; touch shoot-stick/dash/grenade zones are fixed layout. Real accessibility value and directly supports the mobile/PWA launch-readiness pact.",
+      "recipe": "Add controlHandedness: 'right'|'left' to SETTINGS_DEFAULTS; mirror the touch zone layout in MobileHUD.jsx when 'left'; add a toggle to SettingsPanel.jsx.",
+      "ladder": {
+        "L1": {
+          "effortHours": 2,
+          "recipe": "Handedness mirror only, no density control."
+        },
+        "L2": {
+          "effortHours": 5,
+          "recipe": "Full: handedness + button-size/density option + tests."
+        },
+        "L3": {
+          "effortHours": 7,
+          "recipe": "Per-element drag-to-reposition touch zone editor."
+        }
+      }
+    },
+    {
+      "slug": "bestiary-tip-string-fix",
+      "tier": "MED",
+      "axis": "hygiene / player-facing copy",
+      "effortHours": 0.1,
+      "impact": 3,
+      "innovation": 2,
+      "priority": 5.6,
+      "status": "complete",
+      "why": "src/constants.js:756 still shows players the loading tip 'Pause to read the Bestiary. Know your enemy.' despite every other surface renaming to MOST WANTED since Session 49 (context/CURRENT_STATE.md). A genuine terminology leak reaching live players regardless of home version.",
+      "recipe": "Change the tip string in src/constants.js to reference MOST WANTED instead of Bestiary. Leave MenuScreen.jsx's internal showBestiary/gfocus('bestiary') variable names untouched — Session 49 explicitly left that legacy file alone and internal identifiers aren't player-facing.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.1,
+          "recipe": "One-line string fix."
+        },
+        "L2": {
+          "effortHours": 0.1,
+          "recipe": "Same — trivial fix, no further scope."
+        },
+        "L3": {
+          "effortHours": 0.1,
+          "recipe": "Same."
+        }
+      }
+    }
+  ],
+  "skipped": [
+    {
+      "slug": "posthog-analytics-funnel-comparison",
+      "reason": "Blocked on real production traffic data (home_v2_deploy vs front_door_action, 48h minimum) — already tracked as a founder/data-blocked genius-hit-list item, not an audit candidate."
+    },
+    {
+      "slug": "supabase-auth-membership-tier",
+      "reason": "Requires a founder product decision (paid tier vs guest-first identity model) before any implementation premise exists — already tracked as a founder-decision genius-hit-list item."
+    },
+    {
+      "slug": "additional-leaderboard-trust-hardening",
+      "reason": "The 08-06/08-08 audits (synthetic-leaderboard-isolation, community-stats reliability) exhaustively covered this axis this cycle; no new load-bearing gap surfaced in storage.js or the Supabase schema on this pass."
+    }
+  ],
+  "executionLog": [
+    {
+      "slug": "bestiary-tip-string-fix",
+      "status": "complete",
+      "notes": "One-line fix in src/constants.js:756; verified no remaining player-facing 'Bestiary' text (grep across constants.js/App.jsx/components)."
+    },
+    {
+      "slug": "doctrine-archive-career-collection",
+      "status": "complete",
+      "notes": "Added cod-doctrine-archive-v1 persistence (storage.js), hooked at the doctrine-forge threshold in App.jsx's perk-choice handler, and a DOCTRINE ARCHIVE collection grid in MenuPanels.jsx UpgradesPanel. Verification: 4 new storage tests pass, full build clean."
+    },
+    {
+      "slug": "doctrine-near-miss-debrief-insight",
+      "status": "complete",
+      "notes": "buildDoctrineNearMissTip in runCoach.js composes the existing getArchetypeProgress classifier against the permanent archive; wired into DeathScreen's coach panel as a 'Doctrine:' line. Verification: 5 new runCoach tests pass (22/22 in file)."
+    },
+    {
+      "slug": "weekly-gauntlet-doctrine-tag",
+      "status": "complete",
+      "notes": "gauntletLaunch.js now tags the launch with the nearest archetype via getPerkArchetypeMatches; rendered as flavor text on HomeV3's Gauntlet card and a title tooltip on HomeV2's quick chip. Also fixed a dead gauntlet.name field access in HomeV3 discovered while wiring this. Verification: 4 gauntletLaunch tests pass."
+    },
+    {
+      "slug": "mobile-haptic-feedback",
+      "status": "complete",
+      "notes": "New src/utils/haptics.js wraps navigator.vibrate, gated by the existing 'rumble' setting (relabeled Haptic Feedback to cover both gamepad and touch); wired at hit/crit/kill/boss-phase-2/low-HP/achievement call sites in App.jsx. Verification: 8 new haptics tests pass."
+    },
+    {
+      "slug": "mobile-handedness-and-density-controls",
+      "status": "complete",
+      "notes": "Shipped controlHandedness setting + resolveTouchStick pure helper (src/utils/touchHandedness.js) mirroring the move/aim touch-stick split in App.jsx; SettingsPanel toggle added. Button-size/density control descoped to a future ladder rung (L3) — not implemented this session. Verification: 3 new touchHandedness tests pass."
+    },
+    {
+      "slug": "offscreen-threat-direction-indicators",
+      "status": "complete",
+      "notes": "New src/utils/offscreenIndicators.js computes edge-of-viewport arrow geometry (pure, tested); drawGame.js renders arrows for every off-screen enemy, boss/elite prioritized by color+alpha, fully suppressed during Fog of War. Note: arrow anchoring is computed in world-space and inherits the ADS-zoom transform, so arrow position may shift slightly from the true screen edge while aim-down-sights zoom is active — cosmetic only, not a correctness issue. Verification: 10 new offscreenIndicators tests pass."
+    }
+  ]
+}

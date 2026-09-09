@@ -1,0 +1,217 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "/audit skill (S151)",
+  "generatedAt": "2026-08-12",
+  "session": 151,
+  "project": "call-of-doodie",
+  "type": "game-app",
+  "rubric": "nine-axis-product-game-loop-public-release",
+  "meta": {
+    "generatedAt": "2026-08-12",
+    "project": "call-of-doodie",
+    "type": "game-app",
+    "rubric": "nine-axis-product-game-loop-public-release",
+    "candidateCount": 31,
+    "promotedCount": 4,
+    "combinedPriority": 80.7,
+    "top3": [
+      "revenge-brief-first",
+      "canonical-weapon-mastery-authority",
+      "analytica-stats-twin-v1"
+    ],
+    "livePremiseVerification": true,
+    "premiseEvidence": "The bounded sampler covered 16 files and 120,000 preview characters across all repository categories. Studio Oracle found direct evidence for the mastery-authority, architecture-headroom, and stats-contract premises. The Oracle returned no-evidence for the cross-file debrief-order claim, so that premise was verified directly from DeathScreen.jsx: the ONE VERDICT card follows challenge outcome, modifier, build grade, Run DNA, nine statistics, coach evidence, and optional drill outcome. Canonical checkers independently reproduce the CANON-054 descriptor gap and the App architecture court reports exactly 10 lines of total headroom.",
+    "baseline": {
+      "release": "FORGE, deployed/public-unlaunched. Engineering changes may proceed through isolated staging and direct-to-main closeout; SPARKED promotion is not authorized or implied.",
+      "quality": "Session 150 is production-verified at 1,122/1,122 tests. Session 151 startup is synchronized and write-back-current; the fresh specialty review scores game-loop implementation maturity 8.8/10.",
+      "architecture": "React 19/Vite 7 canvas shooter. App.jsx passes its executable architecture court at 4,990/5,000 lines and a 1,752/1,775 game-loop span, leaving only 10 and 23 lines of headroom respectively.",
+      "gameLoop": "Core combat, progression, retention, and proof-qualified coaching are deep. Highest-value repo-owned gaps are the late rematch action and conflicting mastery semantics, not another content pack or numeric retune.",
+      "cost": "All promoted work is deterministic client-side or static-contract logic using existing tests and render/deploy tooling. No new dependency, hosted inference, service, or variable per-user cost is introduced."
+    }
+  },
+  "axisCoverage": {
+    "feature depth & refinement": "Make the existing death-to-rematch contract the first actionable debrief result and unify the progression authority it can recommend.",
+    "innovation": "Turn a dense post-run report into a revenge brief with progressive disclosure and expose one canonical, evidence-backed mastery target without hosted inference.",
+    "ui / ux / user-experience": "Place lesson, proof target, and RUN THE FIX before secondary build/stat analysis, then verify the mobile and desktop rendered hierarchy in both themes.",
+    "feedback loop": "Shorten death-to-corrective-action distance and preserve inspectable evidence behind disclosure instead of removing it.",
+    "gamification / engagement / immersion": "Replace contradictory account-level versus weapon-kill mastery labels with real per-weapon progress and the nearest next tier.",
+    "ai / intelligence integration": "Feed deterministic per-weapon mastery evidence into progression analysis; reject a hosted coach because local receipts already contain the relevant facts.",
+    "security": "No new security implementation survived verification. Public proxies already carry origin and quota contracts; Obelisk verification and provider credentials remain explicit release gates.",
+    "speed / organization / efficiency": "Extract deterministic arena/environment generation from App.jsx to restore architecture headroom and give the seeded environment its own focused court.",
+    "token / api cost reduction": "Keep all intelligence local, add no API calls, and use focused pure-module tests to reduce future whole-App inspection and regression cost."
+  },
+  "items": [
+    {
+      "slug": "revenge-brief-first",
+      "tier": "FIRE",
+      "axis": "ui / ux / feedback / engagement",
+      "effortHours": 4,
+      "impact": 9,
+      "innovation": 7,
+      "priority": 24.4,
+      "status": "implemented",
+      "why": "DeathScreen already builds one evidence-qualified RUN THE FIX action, but renders it only after challenge outcome, modifier, build grade, Run DNA, nine statistics, coach evidence, and optional drill outcome. The structure weakens the SOUL promise that humiliation becomes an immediate route back into mastery, especially at 390px.",
+      "recipe": "Move the ONE VERDICT / RUN THE FIX card directly after the death joke and optional challenge result. Keep the lesson, proof target, and action immediately visible; group modifier, build grade, Run DNA, statistics, detailed evidence, drill outcome, and other secondary analysis under one accessible progressive-disclosure section without deleting receipts.",
+      "measurement": "Component tests assert the verdict precedes build/stat analysis and remains the sole primary corrective action. Browser captures at 390px and 1440px in both themes prove the card hierarchy, focus order, disclosure reachability, and no overflow.",
+      "ladder": {
+        "L1": {
+          "effortHours": 2,
+          "recipe": "Move the existing verdict before build/stat cards and add an order regression test."
+        },
+        "L2": {
+          "effortHours": 4,
+          "recipe": "Full: early revenge brief, one accessible secondary-analysis disclosure, focus/order tests, and rendered-pixel verification."
+        },
+        "L3": {
+          "effortHours": 7,
+          "recipe": "Add a measured first-viewport court and reduced-motion-safe transition between the revenge brief and expanded analysis."
+        }
+      }
+    },
+    {
+      "slug": "canonical-weapon-mastery-authority",
+      "tier": "FIRE",
+      "axis": "feature depth / gamification / ai",
+      "effortHours": 5,
+      "impact": 8,
+      "innovation": 8,
+      "priority": 22.8,
+      "status": "implemented",
+      "why": "WeaponDock labels mastery from real per-weapon career kills, while Custom Loadouts, the progression runway, public contracts, and telemetry still call global account-level thresholds mastery. At a fresh profile, the account model reports three mastered weapons while every kill-tier model correctly reports ROOKIE.",
+      "recipe": "Make per-weapon career kills the sole mastery authority. Preserve account-level thresholds as explicitly named arsenal milestones rather than mastery; provide one pure resolver for weapon tier, next tier, kills remaining, and nearest mastery target; use it in docks, Custom Loadouts, Balance Lab/progression audit, gameplay contract, and mastery telemetry without changing weapon availability.",
+      "measurement": "Tests cover zero-kill truth, threshold crossings, nearest-target selection, absent per-weapon evidence, all-open availability, and consistent labels across consumers. The progression audit must never infer a weapon tier from total career kills alone.",
+      "ladder": {
+        "L1": {
+          "effortHours": 3,
+          "recipe": "Rename account-level badges to arsenal milestones and remove contradictory mastery copy from Custom Loadouts."
+        },
+        "L2": {
+          "effortHours": 5,
+          "recipe": "Full: one per-weapon-kill mastery contract, consumer migration, honest unavailable state, telemetry rename, and focused tests."
+        },
+        "L3": {
+          "effortHours": 8,
+          "recipe": "Add mastery-target projection to Commander's Orders with a portable, agent-readable progress receipt."
+        }
+      }
+    },
+    {
+      "slug": "analytica-stats-twin-v1",
+      "tier": "FIRE",
+      "axis": "feedback / ai / public contract",
+      "effortHours": 2,
+      "impact": 7,
+      "innovation": 6,
+      "priority": 21.0,
+      "status": "implemented",
+      "why": "The homepage and /stats surface already render live Community Stats on a 15-second poll, but public/stats-surface.json does not declare the Analytica feed version, homepage showcase, positive refreshSeconds, or refreshMechanism. The CANON-054 checker reproduces all four structural gaps.",
+      "recipe": "Upgrade the descriptor to analytica-feed-v1, declare the four homepage showcase metric IDs, refreshSeconds 15, and refreshMechanism poll while preserving the dated fallback snapshot and live API URL. Add a repo-local contract test that validates the descriptor against the rendered homepage metric IDs and the store poll interval, then rerun the canonical checker.",
+      "measurement": "check-stats-surface exits 0; public contract and focused descriptor tests pass; no metric value or freshness claim is fabricated or silently updated.",
+      "ladder": {
+        "L1": {
+          "effortHours": 1,
+          "recipe": "Add the four required descriptor fields and rerun the canonical checker."
+        },
+        "L2": {
+          "effortHours": 2,
+          "recipe": "Full: descriptor upgrade plus a local cross-surface contract test binding showcase IDs and poll cadence."
+        },
+        "L3": {
+          "effortHours": 4,
+          "recipe": "Add generated descriptor output from one shared stats contract and live feed schema validation."
+        }
+      }
+    },
+    {
+      "slug": "seeded-arena-environment-boundary",
+      "tier": "ICE",
+      "axis": "speed / organization / token cost",
+      "effortHours": 5,
+      "impact": 7,
+      "innovation": 5,
+      "priority": 12.5,
+      "status": "implemented",
+      "why": "App.jsx passes its architecture court with only 10 total lines and 23 game-loop-span lines of headroom. A large inline init block still owns seeded layouts, terrain, floor zones, theme props, and hazards even though those calculations are deterministic data generation rather than React orchestration.",
+      "recipe": "Extract a pure buildArenaEnvironment({ seed, width, height }) module that returns layout name, obstacles, terrain, map theme, floor zones, props, and hazards using the same random-call order and sprite mapping. Replace the inline App block with one assignment boundary and add deterministic fixtures that pin bounds, spawn safety, prop collision avoidance, hazard counts, and repeatability.",
+      "measurement": "Architecture headroom increases by at least 100 lines without changing game-loop span or random-call order; deterministic fixtures and existing run/replay courts pass; a fixed seed produces byte-equivalent environment data before and after extraction.",
+      "ladder": {
+        "L1": {
+          "effortHours": 3,
+          "recipe": "Extract named layouts and static theme-prop data while leaving generation loops in App."
+        },
+        "L2": {
+          "effortHours": 5,
+          "recipe": "Full: pure seeded environment builder, App integration, deterministic fixture parity, and architecture receipt."
+        },
+        "L3": {
+          "effortHours": 8,
+          "recipe": "Add versioned environment receipts to replay evidence and a visual seed gallery for regression triage."
+        }
+      }
+    }
+  ],
+  "skipped": [
+    {
+      "slug": "participant-playtest-outcomes",
+      "reason": "DEFER — no docs/PLAYTESTS corpus exists. The opt-in recorder is already implemented, but five-player/two-run evidence requires real participants and cannot be fabricated from code."
+    },
+    {
+      "slug": "prestige-numeric-retune",
+      "reason": "CULL — the 11,520-kill runway is distant and unvalidated, but no participant outcome proves a better curve. Preserve the honest scenario label and gather playtest/production evidence before tuning."
+    },
+    {
+      "slug": "offscreen-ads-arrow-correction",
+      "reason": "CULL — source confirms arrows render inside the ADS transform, but the task is explicitly cosmetic/report-gated and no visual or participant defect report exists."
+    },
+    {
+      "slug": "new-mode-weapon-or-balance-pack",
+      "reason": "CULL — the loop review found substantial content breadth and no fresh playtest outcome demonstrating a depth or balance deficit."
+    },
+    {
+      "slug": "hosted-ai-coach",
+      "reason": "CULL — deterministic run intelligence already carries the relevant evidence; hosted inference would add latency and variable cost without a measured player gap."
+    },
+    {
+      "slug": "obelisk-auth-verification",
+      "reason": "DEFER — routes and server delegation exist, but relying-party verification capability is missing and the status is honestly route-present-verification-deferred. Do not declare integration or create a project-local identity silo."
+    },
+    {
+      "slug": "provider-analytics-and-reply-mail",
+      "reason": "DEFER — PostHog/project-scoped Sentry, Zoho reply identity, and participant/production metrics remain credential or provider-dashboard gated."
+    },
+    {
+      "slug": "canon-010-agent-parity",
+      "reason": "ROUTE — the only skill-doctor issue is the machine-global Claude arc skill referencing §0. This project changed no skill registration; cross-repo correction belongs to Studio Ops through Ark."
+    },
+    {
+      "slug": "canon-055-startup-doc-diff",
+      "reason": "FALSE PREMISE — the checker was run against Session 151 startup-only derived/context changes before implementation, so no user-facing surface was expected. Re-run on the implementation diff at closeout."
+    }
+  ],
+  "executionLog": [
+    {
+      "slug": "seeded-arena-environment-boundary",
+      "rung": "L2",
+      "status": "implemented",
+      "evidence": "Pure arenaEnvironment boundary; 7 focused tests, App launch court, 40/40 legacy JSON parity, architecture green at 4,884/5,000 lines."
+    },
+    {
+      "slug": "canonical-weapon-mastery-authority",
+      "rung": "L2",
+      "status": "implemented",
+      "evidence": "Per-weapon kill mastery contract migrated through loadout UI, progression/Balance Lab, telemetry, public gameplay contract, generated pages, and 18 focused tests."
+    },
+    {
+      "slug": "revenge-brief-first",
+      "rung": "L2",
+      "status": "implemented",
+      "evidence": "ONE VERDICT/RUN THE FIX follows the challenge result; secondary analysis is one accessible disclosure; 12 death-flow tests and strict lint pass."
+    },
+    {
+      "slug": "analytica-stats-twin-v1",
+      "rung": "L2",
+      "status": "implemented",
+      "evidence": "Descriptor and visible tile share four metric IDs and a 15-second polling contract; 8 focused tests and CANON-054 checker pass."
+    }
+  ]
+}

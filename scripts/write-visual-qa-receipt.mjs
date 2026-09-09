@@ -122,6 +122,31 @@ if (operationModalDirArg) {
   }
 }
 
+const s166StateDirArg = valueAfter("--s166-state-dir", null);
+let s166StateReceipt = null;
+if (s166StateDirArg) {
+  const s166StateDir = path.resolve(root, s166StateDirArg);
+  s166StateReceipt = JSON.parse(fs.readFileSync(path.join(s166StateDir, "s166-visual-receipt.json"), "utf8"));
+  if (!s166StateReceipt?.summary?.pass) throw new Error("Refusing visual receipt: S166 Extraction/deferred-analysis state checks did not pass.");
+  for (const capture of s166StateReceipt.captures) {
+    for (const screenshot of capture.screenshots) {
+      selected.push({
+        source: path.join(s166StateDir, screenshot.file),
+        file: screenshot.file,
+        theme: capture.theme === "sewer-night" ? "dark" : "light",
+        projectTheme: capture.theme,
+        width: capture.width,
+        height: capture.height,
+        page: screenshot.file.startsWith("extraction-evac")
+          ? "Sewer Extraction evac-open whole-arena radar (QA-forced threshold)"
+          : screenshot.file.startsWith("extraction-radar")
+            ? "Sewer Extraction live whole-arena loot radar"
+            : "First-open deferred death analysis",
+      });
+    }
+  }
+}
+
 for (const capturePath of reviewedCapturePaths) {
   const source = path.resolve(root, capturePath);
   if (!fs.existsSync(source)) throw new Error(`Reviewed capture missing: ${capturePath}`);
@@ -200,6 +225,7 @@ const receipt = {
     ...(playtestStateReceipt ? [{ surface: "Playtest Flight Receipt and aggregate Playtest Command Post", checks: playtestStateReceipt.summary }] : []),
     ...(operationStateReceipt ? [{ surface: "Operation command deck and live arena interaction", checks: operationStateReceipt.summary }] : []),
     ...(operationModalReceipt ? [{ surface: "Operation completion receipt and opt-in paired playtest command post", checks: operationModalReceipt.summary }] : []),
+    ...(s166StateReceipt ? [{ surface: "Sewer Extraction loot/evac radar and first-open deferred death analysis", checks: s166StateReceipt.summary }] : []),
   ],
   themes: ["dark", "light"],
   captures,
@@ -224,6 +250,7 @@ const receipt = {
       ...(playtestStateReceipt ? [`The real deploy-to-defeat Playtest Flight Receipt and aggregate Command Post passed ${playtestStateReceipt.summary.passed}/${playtestStateReceipt.summary.checks} focused state checks at mobile and desktop in both themes.`] : []),
       ...(operationStateReceipt ? [`The hosted authored Operation deck and live arena interaction passed ${operationStateReceipt.summary.passed}/${operationStateReceipt.summary.checks} focused checks at 390px and 1440px in both project themes.`] : []),
       ...(operationModalReceipt ? [`The Operation completion receipt and expanded opt-in paired playtest command post passed ${operationModalReceipt.summary.passed}/${operationModalReceipt.summary.checks} focused checks at 390px and 1440px in both project themes.`] : []),
+      ...(s166StateReceipt ? [`The hosted Sewer Extraction radar and first-open deferred death analysis passed ${s166StateReceipt.summary.passed}/${s166StateReceipt.summary.checks} focused checks at 390px and 1440px in both project themes; the evac capture explicitly records its visual-only alarm-threshold injection.`] : []),
     ],
     fixesApplied: fixNotes.length ? fixNotes : ["No fix narrative supplied; the source matrix is authoritative."],
     blockingDefectsOpen: 0,

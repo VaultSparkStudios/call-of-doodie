@@ -1,0 +1,380 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "/audit skill (S145)",
+  "generatedAt": "2026-08-09",
+  "session": 145,
+  "project": "call-of-doodie",
+  "type": "game-app",
+  "rubric": "nine-axis-game-visual-overhaul-stats-and-site-freshness",
+  "meta": {
+    "generatedAt": "2026-08-09",
+    "project": "call-of-doodie",
+    "type": "game-app",
+    "rubric": "nine-axis-game-visual-overhaul-stats-and-site-freshness",
+    "candidateCount": 24,
+    "promotedCount": 18,
+    "combinedPriority": 353.6,
+    "top3": [
+      "game-canvas-dpr-crisp-rendering",
+      "weapon-sprite-arsenal-pack",
+      "community-stats-panel-and-page-v2"
+    ],
+    "livePremiseVerification": true,
+    "premiseEvidence": "Three parallel live-source surveys verified every premise before inclusion. Rendering: the game canvas at src/App.jsx:419-431 sets canvas.width to CSS pixels with no devicePixelRatio scaling while DemoCanvas.jsx:23-28 does scale to 2x; weapons render as four fillRect calls in src/utils/visualPrimitives.js:103-115 with zero weapon sprites in-game; enemies composite procedural orb + a ~100-line typeIndex detail switch (drawGame.js:578-676) + atlas sprite + emoji glyph (drawGame.js:858-862) simultaneously; no sprite animation frames exist anywhere (playerRenderPose.js returns bodyAngle 0 always); public/visual-assets/cod-karen-nemesis-v2.png is manifest-validated but has zero draw call sites; enemy-atlas total is ~724KB against the 1,500,000-byte budget in src/utils/enemyAtlasContract.js. Stats: CommunityStatsPanel.jsx is mounted in HomeV2.jsx:886, HomeV3.jsx:272, DeathScreen.jsx:1458, LeaderboardPanel.jsx:168, each with its own 15s interval and Supabase realtime channel; /stats/ (public/stats/index.html) restates the same five figures three times with no charts, trends, or breakdowns. Website: HomeV2.jsx:1493 prints 'HP {e.hp}' but ENEMY_TYPES uses 'health' (renders 'HP undefined'); scripts/lib/public-gameplay-contract.mjs:36 maps 6 REPLAY_DIFFICULTIES so /modes/ advertises 'Nightmare - Doodie' profiles the game does not offer (DIFFICULTIES has 4); NEW_FEATURES in src/constants.js:371-408 claims 49 achievements (live count 66) and omits everything after Run Draft; the parody disclaimer is absent from HomeV3.jsx footer and all 13 generated companion footers (generate-public-pages.mjs:106); /changelog/ newest entry is 2026-08-03 despite S142-144 shipping Sewer Zombies, Community Stats, and Doctrine Archive. Systems: src/utils/ghostStorage.js persists ghosts to sessionStorage only; docs/performance/STAGING_SESSION_142_INP.json records mobile INP 832ms vs 200ms pass:false; dist/assets App runtime chunk measured 579,724B vs the 560,000B ceiling in scripts/check-runtime-boundary.mjs; supabase/functions/validate-replay is deployed with ACAO * and no http-trust import while having zero client call sites; functions/_middleware.js emits no security headers; functions/api/obelisk-verify.js has no origin allowlist or quota.",
+    "baseline": {
+      "release": "FORGE, deployed/public-unlaunched. Engineering READY; SPARKED remains NO-GO behind existing external gates.",
+      "quality": "Session 144 closed at SIL 998/1000 with 1054/1054 tests passing across 185 files.",
+      "architecture": "React 19/Vite 7 canvas shooter; two-phase shell; 112 system modules; App.jsx 5,010 lines with a ~1,760-line game-loop closure; single monolithic drawGame.js renderer (1,498 lines) with no golden-image pins, so the renderer can be upgraded freely.",
+      "gameLoop": "Mechanical depth and telegraphing are elite; presentation lags design intent - 12 comedy weapons are grey bars, world objects are OS-dependent serif emoji, and the whole scene renders at 1x CSS pixels. The founder-directed focus areas this session are a massive in-game visual overhaul and a tremendous Community Stats panel + /stats/ page upgrade.",
+      "cost": "Every promoted item is local/deterministic or static-asset work through the existing sharp/chroma-key pipeline. No new hosted service, no paid inference, no variable per-user cost. ~776KB of unused enemy-atlas byte budget funds the new sprite work."
+    }
+  },
+  "axisCoverage": {
+    "visual": "Seven-item in-game overhaul: DPR-crisp canvas, weapon sprite pack, sprite-motion microsystem, projectile/impact FX, enemy render de-mud, arena theme identity, world-object sprite pack replacing emoji.",
+    "ux": "Community Stats panel + /stats/ page rebuilt around one shared live provider with trends and breakdowns; onboarding widgets merged into one adaptive Orders surface; site-wide correctness and freshness bundle.",
+    "gamification": "Ghost rivalry made permanent (localStorage), per-weapon mastery tracking, Nemesis dossier border actually rendered, prestige ritual moment.",
+    "ai": "Mid-run tactical whisper surfaces the existing deterministic intelligence stack during play instead of only at death.",
+    "performance": "Mobile INP 832ms remediation + runtime bundle ceiling recovery; adaptive degradation ladder extends __codReducedEffects beyond particle halving.",
+    "security": "Edge security headers, obelisk-verify origin/quota, validate-replay wire-or-remove decision, HMAC secret fallback check.",
+    "efficiency": "docs/ token diet archives ~200 historical audit/closeout files behind an index with a measured before/after context cost.",
+    "hygiene": "Redundancy consolidation: one registry-driven footer, Field Manual dedupe, TRUST OPS gated behind ?debug=ops, share-action consolidation, Support naming split."
+  },
+  "items": [
+    {
+      "slug": "game-canvas-dpr-crisp-rendering",
+      "tier": "FIRE",
+      "axis": "visual / ui-ux / performance",
+      "effortHours": 2,
+      "impact": 9,
+      "innovation": 5,
+      "priority": 28.1,
+      "status": "open",
+      "why": "The game canvas (src/App.jsx:419-431) sets canvas.width to container CSS pixels with no devicePixelRatio scaling, so the entire game renders soft and blurry on every retina laptop and modern phone - while the marketing DemoCanvas.jsx:23-28 already scales to DPR 2x. This is the single highest-leverage visual fix in the repo: every sprite, telegraph, and text glyph sharpens at once, and it makes all downstream sprite work look twice as good.",
+      "recipe": "Scale canvas backing store by min(devicePixelRatio, 2) in the resize path, ctx.setTransform(dpr,0,0,dpr,0,0) at frame start (before the existing shake/ADS transforms in drawGame.js:144-150), keep all game-space math in CSS pixels so hitboxes/aim are untouched, guard with the existing __codReducedEffects flag to drop back to 1x on sustained frame-budget pressure, and update the mini-radar and touch-joystick draw code that assumes 1x.",
+      "ladder": {
+        "L1": { "effortHours": 1, "recipe": "DPR backing-store scale + setTransform, capped at 2x, desktop only." },
+        "L2": { "effortHours": 2, "recipe": "Full: mobile too, perf-flag fallback to 1x, verify touch aim + radar alignment on Pixel 7 profile." },
+        "L3": { "effortHours": 4, "recipe": "Add crisp in-canvas typography pass: size text in viewport-relative units and snap to device pixels." }
+      }
+    },
+    {
+      "slug": "weapon-sprite-arsenal-pack",
+      "tier": "FIRE",
+      "axis": "visual / feature depth / gamification",
+      "effortHours": 8,
+      "impact": 9,
+      "innovation": 8,
+      "priority": 27.1,
+      "status": "open",
+      "why": "Twelve distinct comedy weapons (Rubber Chicken RPG, Plunger Launcher, Nuclear Kazoo...) all render as four grey fillRect calls plus a color square (src/utils/visualPrimitives.js:103-115). This is the widest gap between design intent and pixels in the game. The atlas byte budget has ~776KB of headroom and the sharp/chroma-key pipeline (scripts/generate-proprietary-visual-assets.mjs) already exists, so a full weapon atlas is pure authoring work with zero new infrastructure.",
+      "recipe": "Author 12 side-profile weapon SVGs in the signature-pack style (assets/source/), add a weapon-atlas entry to assets/visual-assets.json and a 4x3 grid contract in a new src/utils/weaponAtlasContract.js mirroring enemyAtlasContract.js, rasterize through the existing assets:generate pipeline, replace drawWeaponBarrel with an atlas blit rotated on the existing arm pivot (drawGame.js:1154) with the current fillRect path as load-failure fallback, and reuse the same cells in DesktopWeaponDock/MobileWeaponDock for UI consistency.",
+      "ladder": {
+        "L1": { "effortHours": 3, "recipe": "Six most-used weapons sprited, remainder on the current procedural path." },
+        "L2": { "effortHours": 8, "recipe": "Full 12-weapon atlas + dock integration + contract validation + fallback tests." },
+        "L3": { "effortHours": 12, "recipe": "Add per-weapon muzzle-flash sprites and mastery-tier visual variants (gold trim at max mastery)." }
+      }
+    },
+    {
+      "slug": "sprite-motion-microsystem",
+      "tier": "FIRE",
+      "axis": "visual / immersion",
+      "effortHours": 6,
+      "impact": 8,
+      "innovation": 8,
+      "priority": 26.7,
+      "status": "open",
+      "why": "There is zero sprite animation anywhere - every atlas cell is one static frame, enemies slide as rigid images, and the death animation animates only the emoji glyph (drawGame.js:1019-1026), not the sprite. A procedural transform microsystem (squash-stretch, lean-into-velocity, breathing idle, hit recoil, sprite-based death) gets 80% of the life of frame animation with zero new asset bytes.",
+      "recipe": "Add src/systems/spriteMotion.js: pure function mapping entity state (velocity vector, hitFlash, spawn age, death progress) to {scaleX, scaleY, rotation, offsetY} per frame; apply in the enemy and player atlas blit paths via ctx transforms (velocity lean up to 6deg, contact-squash on hitFlash, sin-phase idle breathing offset per entity id, spawn pop-in over 8 frames); replace the emoji death animation with the entity's own sprite doing a squash-fall-fade; respect gs.reducedMotion and __codReducedEffects by collapsing to static transforms.",
+      "ladder": {
+        "L1": { "effortHours": 2, "recipe": "Velocity lean + hit-recoil squash on enemies only." },
+        "L2": { "effortHours": 6, "recipe": "Full: player + enemies + spawn pop + sprite-based death anim + motion-preference gates + unit tests on the pure mapper." },
+        "L3": { "effortHours": 10, "recipe": "Per-class motion personalities (Karen stomp cadence, zombie shamble sway) and boss entrance choreography." }
+      }
+    },
+    {
+      "slug": "projectile-impact-fx-pass",
+      "tier": "FIRE",
+      "axis": "visual / immersion / game-feel",
+      "effortHours": 6,
+      "impact": 9,
+      "innovation": 7,
+      "priority": 26.3,
+      "status": "open",
+      "why": "Bullets are untextured ctx.arc circles with shadowBlur (drawGame.js:964-979); WEAPONS declares bulletTrail:true but no trail renders; there are no impact sparks, hit decals, or smoke, and the particle system is flat colored circles with no blend modes beyond one chromatic-split at heat 70. Combat feel is the core loop - this is where visual polish pays per-frame dividends.",
+      "recipe": "Add weapon-tinted tracer trails (short position ring-buffer per bullet, tapered polyline with globalCompositeOperation 'lighter'), impact sparks on bulletEnemyCollision (4-6 directional particles inheriting bullet angle), brief ground decals on grenade/rail hits (fading into the existing terrain decal layer), upgrade muzzle flash from a circle to a 3-frame star/cone shape, and give particles per-type shape and additive glow - all budgeted under the existing 150-particle cap and halved under __codReducedEffects.",
+      "ladder": {
+        "L1": { "effortHours": 2, "recipe": "Tracer trails + additive blend on existing particles only." },
+        "L2": { "effortHours": 6, "recipe": "Full: trails, impact sparks, decals, muzzle upgrade, perf-flag gating, cap-respecting budget tests." },
+        "L3": { "effortHours": 9, "recipe": "Shell casings, lingering smoke wisps on explosions, per-weapon impact signatures." }
+      }
+    },
+    {
+      "slug": "ghost-rivalry-persistence",
+      "tier": "FIRE",
+      "axis": "gamification / retention",
+      "effortHours": 2,
+      "impact": 7,
+      "innovation": 5,
+      "priority": 24.5,
+      "status": "open",
+      "why": "Ghost rivalry - the strongest built-in retention hook - persists to sessionStorage (src/utils/ghostStorage.js declares storageType 'session' on both read and write), so the rival ghost evaporates the moment the tab closes. A returning player can never race yesterday's best self. Promoting ghosts to localStorage through the existing fail-closed storage adapters makes the rivalry loop actually span sessions for ~2 hours of work.",
+      "recipe": "Switch ghostStorage.js to the localStorage adapter with a bounded best-ghost-per-mode key (cod-ghost-best-v1), keep the current session ghost as the in-run comparator, add last-vs-best selection in the ghost load path, migrate silently (absence = no ghost, as today), and extend ghostStorage.test.js for persistence, bounding, and corrupt-payload fallback.",
+      "ladder": {
+        "L1": { "effortHours": 1, "recipe": "localStorage swap + best-per-mode bounding." },
+        "L2": { "effortHours": 2, "recipe": "Full: best-vs-last selection, migration, tests." },
+        "L3": { "effortHours": 4, "recipe": "Ghost gallery in Run History with race-this-ghost launch buttons." }
+      }
+    },
+    {
+      "slug": "community-stats-panel-and-page-v2",
+      "tier": "FIRE",
+      "axis": "ui-ux / feature depth / founder-directed",
+      "effortHours": 8,
+      "impact": 9,
+      "innovation": 7,
+      "priority": 23.7,
+      "status": "open",
+      "why": "Founder-directed this session: improve the stats panel and full stats page tremendously. Today the panel (CommunityStatsPanel.jsx) is a plain 4x2 number grid at 8px type with no trends, comparisons, or records, and it is mounted in four places (HomeV2:886, HomeV3:272, DeathScreen:1458, LeaderboardPanel:168) each running its own 15s poller and its own Supabase realtime channel - two concurrent pollers whenever the leaderboard is open. /stats/ restates the same five numbers three times in static HTML with zero visualization. The data spine (run facts, coverage, feedback, 24h windows) is already live and trustworthy; presentation is the whole gap.",
+      "recipe": "Extract one shared module-level stats store (src/utils/communityStatsStore.js: single poller + single realtime channel + subscriber set, exposed via useSyncExternalStore) and make all four mounts subscribers; rebuild the panel with trend sparklines (client-side ring buffer of recent snapshots), YOU-vs-COMMUNITY comparison bars (accuracy, best wave, damage-per-run), a records strip (best wave / top score / most active day), and the feedback mix as a proportional bar instead of raw counts - all inline SVG, no chart library; rebuild /stats/ (registry cards + community-stats-live.js) around the same visual language: live hero grid, per-metric trend lines, mode/feedback breakdowns, a records section, and a dated milestones timeline replacing the three redundant prose restatements; keep the static snapshot fallback and honest coverage/freshness labels.",
+      "ladder": {
+        "L1": { "effortHours": 3, "recipe": "Shared store + subscriber refactor (kills duplicate pollers) + records strip in the panel." },
+        "L2": { "effortHours": 8, "recipe": "Full: panel v2 with sparklines and comparisons + /stats/ page rebuild with the same live module and milestone timeline." },
+        "L3": { "effortHours": 12, "recipe": "Add per-enemy/per-weapon community kill leaderboards from run-fact detail as coverage grows, plus a shareable stats card." }
+      }
+    },
+    {
+      "slug": "progression-loops-deepening",
+      "tier": "HIGH",
+      "axis": "gamification / feature depth",
+      "effortHours": 8,
+      "impact": 8,
+      "innovation": 7,
+      "priority": 23.6,
+      "status": "open",
+      "why": "Three progression systems are display layers rather than loops: Arsenal Mastery (src/utils/arsenalMastery.js, 33 lines) derives labels purely from account level with no per-weapon tracking; Nemesis Chronicle (25 lines) promises a dossier cosmetic border that has no rendering path; prestige is a runway forecast plus a flat multiplier with no reset ritual. Real per-weapon mastery gives every run a second progression axis and makes the new weapon sprites mean something.",
+      "recipe": "Add per-weapon kill/usage tracking to the existing career batch write (updateEnemyCareerStatsBatch pattern in storage.js), derive mastery tiers from actual per-weapon kills with legacy-safe fallback to the current account-level labels, surface tier + progress in the weapon docks and Loadout Builder, render the promised Nemesis dossier border in the Most Wanted panel using the existing chapter state, and add a one-screen prestige ritual (confirmation ceremony + doctrine-archive stamp) at level 25.",
+      "ladder": {
+        "L1": { "effortHours": 3, "recipe": "Per-weapon kill tracking + dock tier display only." },
+        "L2": { "effortHours": 8, "recipe": "Full: mastery tiers, nemesis border render, prestige ritual, tests." },
+        "L3": { "effortHours": 12, "recipe": "Mastery-gated cosmetic weapon variants tied into the weapon atlas L3." }
+      }
+    },
+    {
+      "slug": "midrun-tactical-whisper",
+      "tier": "HIGH",
+      "axis": "ai / intelligence integration",
+      "effortHours": 5,
+      "impact": 7,
+      "innovation": 8,
+      "priority": 22.9,
+      "status": "open",
+      "why": "The entire deterministic intelligence stack (insightGraph, runCoach, collapseCoaching, runIntelligence - all zero-LLM-cost pure functions) renders only on the death screen; nothing coaches the player while they can still act except roastDirector one-liners. The signals already computed mid-run (rivalPace deltas, collapse-precursor damage windows, doctrine near-miss at perk pick) can drive a rate-limited single-line tactical whisper with no new analysis code.",
+      "recipe": "Add src/systems/tacticalWhisper.js: pure selector taking existing per-frame receipts (rival pace delta, recent damage-window pattern, active doctrine progress) and returning at most one prioritized whisper with a cooldown ledger (>=20s between whispers, max 3 per wave); render through the existing addText transient channel in a distinct quiet style; show doctrine near-miss guidance inside the perk-choice modal where the decision actually happens; settings toggle, off under reducedMotion pressure, unit tests on the pure selector.",
+      "ladder": {
+        "L1": { "effortHours": 2, "recipe": "Rival-pace whisper only (ahead/behind at wave boundaries)." },
+        "L2": { "effortHours": 5, "recipe": "Full: three signal sources, cooldown ledger, perk-modal doctrine hint, toggle, tests." },
+        "L3": { "effortHours": 8, "recipe": "Whisper memory - suppress lines the player has demonstrably mastered (evidence-gated by career stats)." }
+      }
+    },
+    {
+      "slug": "enemy-render-demud",
+      "tier": "HIGH",
+      "axis": "visual / readability",
+      "effortHours": 5,
+      "impact": 8,
+      "innovation": 6,
+      "priority": 21.4,
+      "status": "open",
+      "why": "Every enemy composites four layers at once: procedural shaded orb + a ~100-line hand-drawn detail switch (drawGame.js:578-676) + the atlas sprite + an emoji glyph on top (drawGame.js:858-862). The proprietary atlas art the pipeline works hard to produce is literally covered by legacy programmer art, reading as muddy at gameplay size. Meanwhile cod-karen-nemesis-v2.png is shipped, manifest-validated, byte-budgeted, and never drawn.",
+      "recipe": "Make the atlas sprite the sole body when decoded: suppress the procedural orb, the typeIndex detail switch, and the emoji overlay for sprite-rendered enemies (keep all three as the load-failure/Retro fallback path); keep threat telegraphs, health bars, elite rings, and hit flashes as the only overlays; wire the Karen v2 sprite through getRuntimeCharacterSprite into the boss draw path; verify silhouette distinctness per the VISUAL_UX_MASTER_PLAN contract at gameplay size across all 22 types.",
+      "ladder": {
+        "L1": { "effortHours": 2, "recipe": "Suppress emoji overlay + orb under decoded sprites; leave detail switch." },
+        "L2": { "effortHours": 5, "recipe": "Full single-layer policy + Karen v2 wiring + fallback integrity tests." },
+        "L3": { "effortHours": 8, "recipe": "Per-type accessory anchor points (hats/props as separate small sprites) for elite variants." }
+      }
+    },
+    {
+      "slug": "arena-theme-identity-pass",
+      "tier": "HIGH",
+      "axis": "visual / immersion",
+      "effortHours": 8,
+      "impact": 8,
+      "innovation": 7,
+      "priority": 21.1,
+      "status": "open",
+      "why": "Eight map themes differ only in hex values across seven parallel hardcoded color arrays in drawGame.js (THEME_BG:153, FZ_FILL:175, TC:235, GRID_CLR:323, BORDER_CLR:333, VIGNETTE_CLR:359, WALL_T:434); a space arena and an arctic arena share identical geometry. Walls are flat fillRect + stripes with no texture or lighting; the four wall layouts are strong but visually anonymous.",
+      "recipe": "Consolidate the seven color arrays into one THEMES table with per-theme identity: a cached offscreen pattern tile per theme (procedurally drawn once - office carpet dots, bunker plate seams, arctic ice cracks), wall treatment (top-face highlight + drop shadow + themed edge trim, cached per layout), one theme-signature ambient effect (drifting snow, dust motes, floating stars - within the particle cap), and animated hotspot rings (rotating dashed arc + soft pulse) for objectives; all cached offscreen so per-frame cost is a pattern fill.",
+      "ladder": {
+        "L1": { "effortHours": 3, "recipe": "THEMES table consolidation + wall shadow/highlight treatment." },
+        "L2": { "effortHours": 8, "recipe": "Full: pattern tiles, ambient signature effects, animated hotspots, perf-flag gating." },
+        "L3": { "effortHours": 12, "recipe": "Per-theme prop sprite variants and layout-specific set dressing (bunker sandbags, office desks)." }
+      }
+    },
+    {
+      "slug": "world-object-sprite-pack",
+      "tier": "HIGH",
+      "axis": "visual / consistency",
+      "effortHours": 7,
+      "impact": 8,
+      "innovation": 6,
+      "priority": 18.9,
+      "status": "open",
+      "why": "Pickups, props, grenades, hazard icons, the escort cart, and the death animation are literal serif-font emoji glyphs (drawGame.js:279-321, 390-424) - they render differently per OS, share no light direction with the sprite art, and are the loudest remaining programmer-art signal. The pipeline and byte budget to replace them already exist.",
+      "recipe": "Author one world-object atlas (9 pickups, grenade, 3 hazard markers, escort cart, ~8 theme props) in the signature style through the existing SVG-to-WebP pipeline with a grid contract mirroring enemyAtlasContract.js; swap the emoji draw sites for atlas blits with the emoji path retained as load-failure fallback and as the Retro pack look; keep pickup glow rings and hazard warning pulses as overlays.",
+      "ladder": {
+        "L1": { "effortHours": 3, "recipe": "Pickups + grenade only (the most-seen objects)." },
+        "L2": { "effortHours": 7, "recipe": "Full atlas: pickups, hazards, escort cart, props, fallback tests, contract validation." },
+        "L3": { "effortHours": 10, "recipe": "Per-theme prop variants folded into the arena identity pass." }
+      }
+    },
+    {
+      "slug": "onboarding-funnel-merge",
+      "tier": "HIGH",
+      "axis": "ui-ux / onboarding",
+      "effortHours": 5,
+      "impact": 7,
+      "innovation": 6,
+      "priority": 18.7,
+      "status": "open",
+      "why": "A first-time HomeV2 visitor sees four separate what-to-do-next widgets at once - FIRST 3 RUNS strip (HomeV2.jsx:669-691), ORDERS/Journey card (652-667), Intel Ticker (1072-1101), and the Aim Check chip - three of which derive from the same career.totalRuns + actionStack inputs. Competing directives dilute the single most important conversion moment: getting run one started.",
+      "recipe": "Merge the four widgets into one adaptive Commander's Orders surface: pre-run-3 it renders the journey step as the hero directive with Aim Check folded in as its optional sub-action; post-onboarding it becomes the Intel Ticker slot; one dismissal model, one analytics event stream (keep front_door_action continuity); the underlying builders (firstRunsJourney, buildPlayerJourney, buildMenuIntelligence) stay as pure sources feeding one arbiter with unit tests on precedence.",
+      "ladder": {
+        "L1": { "effortHours": 2, "recipe": "Suppress Intel Ticker + Journey card while the FIRST 3 RUNS strip is active (visibility arbitration only)." },
+        "L2": { "effortHours": 5, "recipe": "Full merged surface with precedence arbiter + tests." },
+        "L3": { "effortHours": 8, "recipe": "Adaptive directive learns from observed hesitation (menu dwell before first deploy) - still fully local." }
+      }
+    },
+    {
+      "slug": "mobile-inp-and-bundle-gate",
+      "tier": "HIGH",
+      "axis": "performance / launch-readiness",
+      "effortHours": 5,
+      "impact": 9,
+      "innovation": 5,
+      "priority": 16.0,
+      "status": "open",
+      "why": "Two live red signals: docs/performance/STAGING_SESSION_142_INP.json records mobile 390x844 INP at 832ms vs the 200ms threshold (pass:false, on the narrow-viewport mode selector - a cited SPARKED blocker), and the built App runtime chunk measured 579,724B against the 560,000B ceiling enforced by scripts/check-runtime-boundary.mjs. These are launch-confidence gates, and the visual work above must not land on top of a failing budget.",
+      "recipe": "Profile the narrow-viewport mode-selector interaction (likely main-thread block during HomeV2 hydration - break up with startTransition or deferred mount of below-fold tabs); re-measure INP on staging with the existing capture harness; recover the runtime chunk budget by moving DeathScreen-only intelligence modules and MenuPanels sub-panels into their existing lazy boundaries; verify check-runtime-boundary passes on a fresh build before and after the visual items land.",
+      "ladder": {
+        "L1": { "effortHours": 2, "recipe": "Bundle-ceiling recovery via lazy-boundary moves only." },
+        "L2": { "effortHours": 5, "recipe": "Full: INP remediation + staging re-measure + budget verification." },
+        "L3": { "effortHours": 8, "recipe": "Add a production INP capture lane so the failing metric has a production baseline." }
+      }
+    },
+    {
+      "slug": "adaptive-perf-degradation-ladder",
+      "tier": "MEDIUM",
+      "axis": "performance / visual-stability",
+      "effortHours": 3,
+      "impact": 6,
+      "innovation": 5,
+      "priority": 12.9,
+      "status": "open",
+      "why": "useGameLoop.js builds a full frame histogram with hysteresis and drop-rate windows, then spends it on only three consumers: particle halving (drawGame.js:982), share-capture cadence, and a HUD banner. Shadows (shadowBlur is the most expensive canvas op in the renderer), trails, screen shake, and enemy detail ignore the flag entirely. With the new FX/DPR work landing, a real degradation ladder is what keeps low-end devices at 60fps.",
+      "recipe": "Define a three-step ladder keyed off the existing flag plus a severity counter: step 1 halves particles and disables new tracer trails; step 2 zeroes shadowBlur and ambient theme effects; step 3 drops DPR scaling back to 1x and disables sprite-motion transforms; each step logs to the existing assistActivations telemetry; unit-test the pure ladder resolver.",
+      "ladder": {
+        "L1": { "effortHours": 1, "recipe": "shadowBlur kill-switch under the existing flag." },
+        "L2": { "effortHours": 3, "recipe": "Full three-step ladder + telemetry + tests." },
+        "L3": { "effortHours": 5, "recipe": "Persist the device's landed step as a starting hint for next session." }
+      }
+    },
+    {
+      "slug": "website-freshness-correctness-bundle",
+      "tier": "HIGH",
+      "axis": "ui-ux / trust / hygiene",
+      "effortHours": 4,
+      "impact": 8,
+      "innovation": 3,
+      "priority": 11.6,
+      "status": "open",
+      "why": "Verified player-visible defects: HomeV2 Field Manual prints 'HP undefined' for every enemy (HomeV2.jsx:1493 reads e.hp; ENEMY_TYPES uses health); /modes/ advertises 6 difficulty profiles including Nightmare and Doodie while the game offers 4 (public-gameplay-contract.mjs:36 maps REPLAY_DIFFICULTIES instead of DIFFICULTIES); NEW_FEATURES claims 49 achievements (live: 66) and ends at Run Draft with nothing from S140-144; /changelog/ stops at Aug 3; the parody disclaimer - a legal-posture surface - is missing from HomeV3 and all 13 generated page footers; /stats/ prose says 'Command Deck', a name no UI uses; the Keep-exploring aside self-links on every generated page; index.html og:image is an SVG most platforms will not render; three different effective dates ship in one deploy (status.json 08-03, sitemap 08-07, stats-surface 08-08).",
+      "recipe": "Fix e.hp to e.health; map DIFFICULTIES into the public contract; rewrite NEW_FEATURES with S140-144 entries and live achievement count; add changelog entries for S142-144; inject the parody disclaimer line into renderFooterLinks output and the HomeV3 footer; rename Command Deck references to match the UI; exclude the current page from the Keep-exploring aside; derive all effectiveDates from PUBLIC_CONTENT_VERSION_DATE; export og-image as PNG alongside the SVG; regenerate public pages and re-run the public contract + visual audit.",
+      "ladder": {
+        "L1": { "effortHours": 1, "recipe": "The two hard errors only: HP undefined + difficulty count." },
+        "L2": { "effortHours": 4, "recipe": "Full bundle including disclaimer coverage, dates, changelog, metadata." },
+        "L3": { "effortHours": 6, "recipe": "Add a freshness lint that fails the build when NEW_FEATURES/changelog lag the session ledger." }
+      }
+    },
+    {
+      "slug": "website-redundancy-consolidation",
+      "tier": "MEDIUM",
+      "axis": "ui-ux / information-architecture",
+      "effortHours": 6,
+      "impact": 7,
+      "innovation": 4,
+      "priority": 11.7,
+      "status": "open",
+      "why": "Verified duplication: three hand-maintained footer renderers (HomeV2:1182, HomeV3:315, MenuScreen:1638) drift against the registry-generated footer; HomeV2 offers RULES / MOST WANTED / WHAT'S NEW as both command chips and Field Manual tabs from the same screen with different content depth; RunHistoryPanel exposes TRUST OPS telemetry (resim readiness, trace quality counts) to every player while equivalent surfaces are correctly gated behind ?debug=ops; DeathScreen carries six share/copy buttons; 'Support' means troubleshooting on the public site and donations in-app, colliding in HomeV3's footer.",
+      "recipe": "Generate one footer component from the route registry consumed by all three homes; collapse the duplicate HomeV2 entry points (chips open the Field Manual tab); move TRUST OPS behind the existing ?debug=ops gate; consolidate DeathScreen share actions into one SHARE menu with three intents (challenge link, image card, best moment); rename the in-app donate surfaces to SUPPORT THE DEV consistently and the public /support/ page title to Help & Troubleshooting.",
+      "ladder": {
+        "L1": { "effortHours": 2, "recipe": "TRUST OPS gating + HomeV2 duplicate entry-point collapse." },
+        "L2": { "effortHours": 6, "recipe": "Full: registry footer, share consolidation, Support naming split." },
+        "L3": { "effortHours": 9, "recipe": "Also unify career-stat depth (StatChips -> CareerStatsPanel -> Community YOU tab) behind one stats source map." }
+      }
+    },
+    {
+      "slug": "edge-security-hardening",
+      "tier": "MEDIUM",
+      "axis": "security",
+      "effortHours": 4,
+      "impact": 7,
+      "innovation": 3,
+      "priority": 8.1,
+      "status": "open",
+      "why": "Verified gaps at the Cloudflare edge while the Supabase layer is strong: functions/_middleware.js emits no security headers (no CSP, X-Frame-Options, or Permissions-Policy at the edge); functions/api/obelisk-verify.js accepts POSTs with no origin allowlist and no quota; supabase/functions/validate-replay is deployed with Access-Control-Allow-Origin * and no http-trust import yet has zero client call sites - a deployed, unauthenticated, unreferenced endpoint is pure attack surface; and every function falls back to the service-role key as HMAC secret when RUN_TOKEN_SIGNING_SECRET is unset.",
+      "recipe": "Add a security-header block (CSP report-only first, XFO DENY, Permissions-Policy minimal, HSTS) via public/_headers or the middleware; port the _shared/http-trust origin+bucket pattern into obelisk-verify; either wire validate-replay into the submit path behind http-trust with an advisory-verdict contract or remove it from the deploy set (decision recorded in DECISIONS.md); add a startup env audit warning when the HMAC secret is falling back to the service-role key.",
+      "ladder": {
+        "L1": { "effortHours": 1, "recipe": "Security headers + remove validate-replay from the deploy set." },
+        "L2": { "effortHours": 4, "recipe": "Full: headers, obelisk-verify hardening, validate-replay decision, secret-fallback audit." },
+        "L3": { "effortHours": 7, "recipe": "CSP enforce mode after a report-only soak + rate-limit telemetry on the CF endpoints." }
+      }
+    },
+    {
+      "slug": "docs-token-diet",
+      "tier": "MEDIUM",
+      "axis": "efficiency / token-cost",
+      "effortHours": 3,
+      "impact": 6,
+      "innovation": 4,
+      "priority": 10.3,
+      "status": "open",
+      "why": "docs/ carries ~150 historical AUDIT_* files and ~60 CLOSEOUT_BRIEF_* files; they dominate glob/sample surface area for every agent session in this repo even with STARTUP_BRIEF mitigation. Archiving history behind an index reduces per-session context cost for every future session at zero information loss. Measurement plan: record scripts/sample-codebase.mjs coverage stats and context-meter freshSessionBootstrap tokens before and after, and compare the next three sessions' audit-skill token spend against the 60k SLO baseline.",
+      "recipe": "Move all but the latest 5 AUDIT_* (md+json) and latest 5 CLOSEOUT_BRIEF_* into docs/archive/ with a generated docs/archive/INDEX.md (date, session, top-3 slugs per file); update any scripts that glob docs/ for latest-audit discovery (Hot Context semantic-latest selection already handles this per S141 - verify its test); record the before/after measurement in the closeout brief.",
+      "ladder": {
+        "L1": { "effortHours": 1, "recipe": "Archive move + index only." },
+        "L2": { "effortHours": 3, "recipe": "Full: script-compat verification, Hot Context test check, measurement receipts." },
+        "L3": { "effortHours": 5, "recipe": "Closeout-time auto-archival rule so the diet is permanent." }
+      }
+    },
+    {
+      "slug": "retro-pack-contract-guard",
+      "tier": "MEDIUM",
+      "axis": "hygiene / visual-stability",
+      "effortHours": 2,
+      "impact": 5,
+      "innovation": 4,
+      "priority": 10.9,
+      "status": "open",
+      "why": "The Retro visual pack (src/utils/visualPack.js, ~30 lines) is a full second render path branched inside the hot loop (drawGame.js:139, 535, 1113). Every overhaul item above must leave Retro pixel-faithful to the first-playable look, and nothing currently pins that contract - the visual tests pin exports, not render-path behavior. Without a guard, the de-mud and motion items will silently break the founder's preserved nostalgia mode.",
+      "recipe": "Add a render-path contract test that runs drawGame against a mock ctx in Retro mode and asserts the call-shape signature (no atlas drawImage, circle+emoji ops present, no sprite-motion transforms); document the Retro invariant in the visual master plan; make the new sprite-motion and de-mud branches explicitly no-op under Retro.",
+      "ladder": {
+        "L1": { "effortHours": 1, "recipe": "Mock-ctx call-shape assertion for Retro enemy + player draws." },
+        "L2": { "effortHours": 2, "recipe": "Full: invariant doc + no-op gates in new visual branches." },
+        "L3": { "effortHours": 4, "recipe": "Golden call-trace snapshot for both packs to catch any silent render-path drift." }
+      }
+    }
+  ],
+  "implementationPlan": {
+    "orderingPrinciple": "Batched by shared file surface to minimize re-reads and re-validations: correctness fixes and gate recovery first (small diffs, protects everything after), then one asset-pipeline batch (all new atlases generated and validated in a single assets:generate run), then one renderer batch (all drawGame.js work in a single pass over the hot loop), then component-layer batches (stats, progression, home), then edge/process items. Each phase ends at a green test/lint checkpoint so a cut-off session loses at most one phase.",
+    "phases": [
+      { "order": 1, "name": "Trust & gates", "items": ["website-freshness-correctness-bundle", "mobile-inp-and-bundle-gate", "retro-pack-contract-guard"], "rationale": "Player-visible wrong facts and failing budgets are fixed before any feature lands on top of them; the Retro guard must exist before renderer work begins." },
+      { "order": 2, "name": "Crisp foundation", "items": ["game-canvas-dpr-crisp-rendering", "adaptive-perf-degradation-ladder"], "rationale": "DPR scaling and the degradation ladder define the perf envelope all visual work must fit; two hours of work that doubles the payoff of every sprite that follows." },
+      { "order": 3, "name": "Asset batch", "items": ["weapon-sprite-arsenal-pack", "world-object-sprite-pack"], "rationale": "All SVG authoring, one assets:generate run, one manifest/contract validation cycle - atlas churn is the most expensive step to repeat." },
+      { "order": 4, "name": "Renderer batch", "items": ["enemy-render-demud", "sprite-motion-microsystem", "projectile-impact-fx-pass", "arena-theme-identity-pass"], "rationale": "One coordinated pass over drawGame.js and visualPrimitives.js while the file is hot in context; de-mud first (removes code), then motion, FX, and themes layer onto the cleaned paths." },
+      { "order": 5, "name": "Stats spotlight", "items": ["community-stats-panel-and-page-v2"], "rationale": "Founder-directed centerpiece; touches its own component + public-page surface, independent of the renderer files." },
+      { "order": 6, "name": "Loops & intelligence", "items": ["ghost-rivalry-persistence", "progression-loops-deepening", "midrun-tactical-whisper"], "rationale": "storage.js/App.jsx integration work; mastery display reuses the weapon atlas from phase 3." },
+      { "order": 7, "name": "Home & site streamlining", "items": ["onboarding-funnel-merge", "website-redundancy-consolidation"], "rationale": "HomeV2-heavy refactors last among features so earlier phases do not conflict with moved surfaces." },
+      { "order": 8, "name": "Hardening & diet", "items": ["edge-security-hardening", "docs-token-diet"], "rationale": "Independent of all UI work; docs archival last so this session's own artifacts are included in the sweep." }
+    ]
+  }
+}

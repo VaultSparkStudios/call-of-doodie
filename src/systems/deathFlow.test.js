@@ -115,6 +115,7 @@ describe("buildDeathScreenProps", () => {
     expect(source).toContain('const SecondaryRunAnalysis = lazy(() => import("./DeathScreenSecondaryAnalysis.jsx"))');
     expect(source).toContain("if (event.currentTarget.open) setSecondaryAnalysisRequested(true)");
     expect(source).toContain('<AsyncPanelBoundary label="run analysis">');
+    expect(source).toContain("level, bestStreak, fmtTime, timeSurvived, totalDamage, crits, grenades, insightGraph");
     expect(source).not.toContain("autoFocus");
     expect(secondarySource).not.toContain("autoFocus");
     expect(source.match(/data-testid="run-drill-outcome"/g)).toHaveLength(1);

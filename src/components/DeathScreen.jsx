@@ -712,6 +712,7 @@ export default function DeathScreen({
             <AsyncPanelBoundary label="run analysis">
               <SecondaryRunAnalysis model={{
                 runModifier, card, buildGrade, weaponKills, leaderboard, wave, score, kills,
+                level, bestStreak, fmtTime, timeSurvived, totalDamage, crits, grenades, insightGraph,
                 runNarrative, replayProofPresenter, runCoach, experimentMatched, nextContract,
                 fairnessReceipt, wavePlanReceipt, performanceReceipt, debrief, collapseCoaching,
                 postRunIntel, runHistory, nextRunDrill, recordPlaytestChoice, mode,

@@ -1,0 +1,144 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "/audit skill (S147)",
+  "generatedAt": "2026-08-10",
+  "session": 147,
+  "project": "call-of-doodie",
+  "type": "game-app",
+  "rubric": "nine-axis-perf-security-gamification-and-ai-hook-sweep",
+  "meta": {
+    "generatedAt": "2026-08-10",
+    "project": "call-of-doodie",
+    "type": "game-app",
+    "rubric": "nine-axis-perf-security-gamification-and-ai-hook-sweep",
+    "candidateCount": 6,
+    "promotedCount": 6,
+    "combinedPriority": 105.2,
+    "top3": [
+      "tactical-whisper-critical-health-tier",
+      "mobile-inp-regression-root-cause-trace",
+      "insight-graph-agent-projection-wiring"
+    ],
+    "livePremiseVerification": true,
+    "premiseEvidence": "Every item verified against live source at commit eee10dd before inclusion. Perf: context/DECISIONS.md S146 entry and docs/performance/STAGING_SESSION_142_INP.json record the mobile mode-selector INP at 1408ms (was 832ms), with the explicit next step being real Chrome trace tooling, not another grep-based guess; scripts/capture-staging-inp.mjs already exists and Playwright (@playwright/test ^1.62.1, package.json:99) exposes CDP-level tracing this repo has never used for this regression. Visual: drawGame.js:311-319 renders gs.props purely via ctx.fillText(pr.emoji) with zero atlas lookup, while App.jsx:934-943 defines 96 distinct theme emoji (8 themes x 12) against objectAtlasContract.js's WORLD_OBJECT_ATLAS_CONTRACT which only has 2 of 16 slots free (14 used by pickups/hazards/grenade/escort-cart, all of which already render via getWorldObjectSprite per drawGame.js:256,349,433,463) — the atlas pipeline is proven live, decorative props are the one remaining emoji-only draw path. UX: HomeV2.jsx:653-655,673-677,1075-1077 confirms the ORDERS card, FIRST 3 RUNS strip, and Intel Ticker are mutually-exclusion-arbitrated (each explicitly stands down for the others) but never merged into one surface. Gamification: src/systems/tacticalWhisper.js:44-45,74 shows selectTacticalWhisper already receives health/maxHealth and uses the 0.35 threshold only to suppress the rival-pace whisper, with no dedicated low-health branch despite the priority/cooldown scaffolding (lines 36-96) supporting one trivially. Security: functions/api/obelisk-verify.js:7-42 implements an ALLOWED_ORIGINS check plus consumeLocalRate (12 req/min) as documented S145 hardening, while functions/api/community-stats.js:15-63 proxies the same-class Supabase RPC with only a 5s upstream timeout and no origin allowlist or rate bucket — confirmed absent from every S142-146 DECISIONS.md entry, which cover data authority/coverage, not this endpoint's access control. AI: src/utils/insightGraph.js:83-84 computes graph.telemetry and graph.agentProjection on every buildInsightGraph() call (invoked live at DeathScreen.jsx:534 on every run-end); a repo-wide grep confirms zero consumers of either field — DeathScreen only reads .nodes/.verdict/.lesson/.fingerprint/.contradictions.",
+    "baseline": {
+      "release": "FORGE, deployed/public-unlaunched. Engineering READY; SPARKED remains NO-GO behind existing external gates.",
+      "quality": "Session 146 closed at SIL 976/1000 with 1098/1098 tests passing across 184 files.",
+      "architecture": "React 19/Vite 6 canvas shooter; weapon/enemy/world-object atlas pipeline (objectAtlasContract.js, enemyAtlasContract.js) is mature and proven for pickups/hazards/weapons/enemies; drawGame.js remains the single renderer.",
+      "gameLoop": "Core combat/visual loop is at a high polish bar after S145-146; remaining gaps are narrower and more surgical — a real perf trace, one uncovered engagement moment, one unhardened endpoint, one unused AI-ready payload, and cosmetic decorative-prop coverage.",
+      "cost": "Every item is local/deterministic engineering work or a config-pattern port from an existing sibling function. No new hosted service, no paid inference, no variable per-user cost increase (the security item reduces unbounded upstream RPC exposure, a cost decrease)."
+    }
+  },
+  "axisCoverage": {
+    "performance": "Real Playwright/CDP trace capture of the mobile mode-selector interaction to find the actual blocking task behind the 1408ms INP regression, replacing grep-based guessing.",
+    "visual": "Representative decorative-prop atlas coverage for the highest-traffic themes, closing the one remaining emoji-only draw path now that pickups/hazards/weapons/enemies are all atlas-backed.",
+    "ux": "Onboarding surface unification — merge FIRST 3 RUNS / ORDERS card / Intel Ticker arbitration into one adaptive container.",
+    "gamification": "Add a fourth tactical-whisper priority tier for the critical-health decision moment, the one state the S145 system was built to cover but doesn't.",
+    "security": "Port the proven obelisk-verify origin-allowlist + rate-limit pattern onto the unhardened community-stats proxy endpoint.",
+    "ai": "Wire the already-computed insightGraph.agentProjection payload into an existing outbound surface instead of leaving it fully computed and discarded every death."
+  },
+  "items": [
+    {
+      "slug": "tactical-whisper-critical-health-tier",
+      "tier": "FIRE",
+      "axis": "gamification / engagement / immersion",
+      "effortHours": 3,
+      "impact": 7,
+      "innovation": 6,
+      "priority": 25.2,
+      "status": "open",
+      "why": "selectTacticalWhisper (src/systems/tacticalWhisper.js:44-45,74) already receives health/maxHealth every call, but the only place they're read is a suppression gate on the rival-pace whisper — there is no whisper for the near-death moment itself, which is the single highest-leverage engagement point the deterministic, zero-cost whisper system was built to cover.",
+      "recipe": "Add a fourth priority branch in tacticalWhisper.js gated on health/maxHealth <= 0.35 (mirroring the existing suppression threshold so the two never conflict) that emits a short, non-intrusive 'CRITICAL HEALTH — DISENGAGE' style directive, respecting the existing cooldown/priority ledger (lines 36-96) so it never spams during sustained low-HP combat.",
+      "ladder": {
+        "L1": { "effortHours": 2, "recipe": "New priority-4 branch + threshold reuse, no new copy variants." },
+        "L2": { "effortHours": 3, "recipe": "Full: 2-3 rotating directive variants, cooldown/priority unit tests, verified against the existing whisper display in App.jsx." },
+        "L3": { "effortHours": 5, "recipe": "Escalating tiers (35% vs 15% HP get different urgency copy/visual treatment)." }
+      }
+    },
+    {
+      "slug": "mobile-inp-regression-root-cause-trace",
+      "tier": "FIRE",
+      "axis": "performance",
+      "effortHours": 3,
+      "impact": 8,
+      "innovation": 6,
+      "priority": 20.7,
+      "status": "open",
+      "why": "context/DECISIONS.md's S146 entry explicitly leaves this open because grepping HomeV2.jsx found no synchronous work on the interaction path, and names 'a dedicated performance session with real Chrome trace tooling' as the honest next step. Playwright's CDP tracing API can capture that trace programmatically in this repo right now — no manual DevTools session required.",
+      "recipe": "Extend scripts/capture-staging-inp.mjs (or add a sibling script) to wrap the mode-selector click in page.tracing.start({screenshots:false, categories:['devtools.timeline','disabled-by-default-devtools.timeline']})/page.tracing.stop({path}), parse the resulting trace JSON for long tasks and their top JS call frames during the interaction window, and record findings plus a root-cause hypothesis in context/DECISIONS.md — ship a real fix only if the trace makes the culprit unambiguous, otherwise record the trace evidence honestly per this repo's no-blind-fix pattern.",
+      "ladder": {
+        "L1": { "effortHours": 2, "recipe": "Capture + parse trace against production 390px viewport, report top long-task call frames as a DECISIONS.md finding." },
+        "L2": { "effortHours": 3, "recipe": "Full: trace both mobile/desktop, diff against the S142 832ms baseline, ship a fix only if root cause is unambiguous from the trace." },
+        "L3": { "effortHours": 6, "recipe": "Add trace capture as a permanent CI perf regression gate, not just a one-off investigation." }
+      }
+    },
+    {
+      "slug": "insight-graph-agent-projection-wiring",
+      "tier": "FIRE",
+      "axis": "ai / intelligence integration",
+      "effortHours": 2,
+      "impact": 5,
+      "innovation": 7,
+      "priority": 20.1,
+      "status": "open",
+      "why": "insightGraph.js:83-84 computes a fully structured, agent-readable projection (claim, verdict, lesson, action, evidence) on every death via DeathScreen.jsx:534, but nothing consumes graph.agentProjection or graph.telemetry — mirroring the exact 'computed and discarded' pattern S144 found and fixed for the Doctrine Archive classifier.",
+      "recipe": "Wire graph.agentProjection into the existing death-flow analytics event payload (the same Studio-event mechanism S142 used for debrief/replay/copy telemetry) so the structured summary actually reaches an outbound surface instead of being silently dropped; keep it additive so no existing DeathScreen consumer of .nodes/.verdict/.lesson changes shape.",
+      "ladder": {
+        "L1": { "effortHours": 1.5, "recipe": "Attach agentProjection as one extra field on the existing death analytics event." },
+        "L2": { "effortHours": 2, "recipe": "Full: also attach a trimmed telemetry summary to the score-submit fallback payload, add a unit test asserting the field is present and schema-shaped." },
+        "L3": { "effortHours": 4, "recipe": "Surface a human-readable rendering of agentProjection in a debug/coach panel behind the existing ?debug=ops gate." }
+      }
+    },
+    {
+      "slug": "community-stats-endpoint-hardening",
+      "tier": "FIRE",
+      "axis": "security",
+      "effortHours": 2,
+      "impact": 7,
+      "innovation": 4,
+      "priority": 15.5,
+      "status": "open",
+      "why": "functions/api/community-stats.js:15-63 proxies a Supabase RPC with only a 5s upstream timeout — no origin allowlist, no rate limit — while its sibling functions/api/obelisk-verify.js:7-42 already implements exactly this pattern (ALLOWED_ORIGINS set + consumeLocalRate at 12 req/min) as documented S145 hardening. An unthrottled public proxy is a live cost/abuse surface every request re-triggers a real upstream RPC call.",
+      "recipe": "Port the ALLOWED_ORIGINS check and consumeLocalRate bucket from obelisk-verify.js onto community-stats.js with the same fail-open-on-service-unavailable behavior used for validate-replay (per the S145 DECISIONS.md rationale), verified against the existing community-stats smoke/API tests so the public /stats/ page and live Command Deck panel keep working within the new bound.",
+      "ladder": {
+        "L1": { "effortHours": 1.5, "recipe": "Port origin allowlist + rate bucket verbatim, reuse existing thresholds." },
+        "L2": { "effortHours": 2, "recipe": "Full: tuned rate ceiling for a public read-heavy endpoint, regression test asserting 429 beyond the bound, smoke-test update." },
+        "L3": { "effortHours": 3, "recipe": "Add a shared http-trust helper so all three Pages Functions (obelisk-verify, validate-replay, community-stats) import one hardening module instead of three parallel copies." }
+      }
+    },
+    {
+      "slug": "onboarding-surface-unification",
+      "tier": "ICE",
+      "axis": "ui / ux / user-experience",
+      "effortHours": 5,
+      "impact": 6,
+      "innovation": 6,
+      "priority": 15.4,
+      "status": "open",
+      "why": "HomeV2.jsx:653-677,1075-1077 confirms the FIRST 3 RUNS strip, ORDERS card, and Intel Ticker remain three separate components that stand down for each other (S145 arbitration) rather than the single adaptive surface the S145/S146 audits both flagged as the remaining L2 rung — a new player still sees three visually distinct container styles depending on phase instead of one consistent Commander's Orders identity.",
+      "recipe": "Introduce one shared CommandersOrders wrapper component that owns the container chrome (border, padding, label style) and internally swaps its body between the onboarding-steps grid, the journey/ORDERS content, and the intel-ticker line based on the same phase logic already computed in HomeV2.jsx, so the visual frame never changes shape across phases even though its content does.",
+      "ladder": {
+        "L1": { "effortHours": 3, "recipe": "Shared outer container/label only; inner bodies stay as their current three implementations." },
+        "L2": { "effortHours": 5, "recipe": "Full: shared container + unified transition animation between phases + one HomeV2.test.jsx suite covering all three phase bodies." },
+        "L3": { "effortHours": 8, "recipe": "Extend the same unified surface into HomeV3.jsx and MenuScreen.jsx for full cross-surface consistency." }
+      }
+    },
+    {
+      "slug": "decorative-prop-sprite-coverage",
+      "tier": "ICE",
+      "axis": "visual / ui-ux",
+      "effortHours": 3,
+      "impact": 4,
+      "innovation": 4,
+      "priority": 8.3,
+      "status": "open",
+      "why": "drawGame.js:311-319 renders every gs.props entry via raw ctx.fillText(pr.emoji) with zero atlas involvement, the one remaining emoji-only draw path now that pickups, hazards, grenades, and the escort cart all resolve through getWorldObjectSprite. App.jsx:934-943 defines 96 distinct emoji across 8 themes, far more than the 2 free slots in the existing 16-slot WORLD_OBJECT_ATLAS_CONTRACT, so full coverage is a large authoring effort against a low-impact target (props render at 0.24-0.42 alpha with no collision, purely ambient).",
+      "recipe": "Given the atlas-slot ceiling, do not attempt full 96-prop coverage: add a second, dedicated theme-prop atlas sized for a representative subset (the 2-3 highest-visibility props per theme, ~16-24 cells) following the same integer-grid/byte-budget contract pattern as objectAtlasContract.js, wire drawGame.js:312-317 to look up a sprite first and fall back to the existing emoji fillText path for uncovered props, and leave the majority of ambient props on their current emoji path since the visual return does not justify a full 96-sprite authoring pass at this priority.",
+      "ladder": {
+        "L1": { "effortHours": 3, "recipe": "New 16-cell theme-prop atlas covering the 2 highest-visibility props per theme; emoji fallback for the rest." },
+        "L2": { "effortHours": 6, "recipe": "Expand to a 24-32 cell atlas covering roughly half of all theme props." },
+        "L3": { "effortHours": 12, "recipe": "Full 96-prop coverage across all 8 themes (multiple atlas sheets)." }
+      }
+    }
+  ]
+}
