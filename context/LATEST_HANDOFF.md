@@ -1,3 +1,28 @@
+# Latest Handoff — Session 166
+
+Session Intent: Run one complete `/arc` from the verified S165 closeout through a fresh premise-verified game audit, implement every repository-owned finding at the optimal rung, prove player-facing work with rendered desktop/mobile/theme evidence on isolated staging, clear the independent release gates, push directly to `main`, fully deploy the exact revision, verify production, and complete the canonical S166 closeout.
+
+## Where We Left Off (Session 166)
+
+- Shipped: all enemy, boss, and cluster spawn paths resolve against the arena, not the viewport. This closes the S165 camera follow-up before another mode adopts a scaled world.
+- Shipped: SEWER EXTRACTION uses a 1.5× arena. Its pure pressure model reaches 1.25× at that scale, is bounded, and returns the legacy multiplier for unscaled modes.
+- Shipped: the whole-arena radar projects remaining loot in gold and the open evacuation point in cyan through a pure tested model.
+- Shipped: secondary death analysis is first-open lazy. Immediate DeathScreen fell to 73.33 KB; the new deferred chunk is 18.50 KB.
+- Staged defect caught: opening the lazy panel initially raised `ReferenceError: level is not defined`. `AsyncPanelBoundary` contained the failure; the parent model and child destructuring were completed, and a source contract prevents regression.
+- Validation: 230 files / 1,343 assertions, strict lint, deployable build, schema/public/security/dependency/runtime/assets, browser E2E 19 pass / one intentional mobile skip, staging shell 7/7, route matrix 969/969, touched states 40/40, and 18 hash-bound captures across both themes and 390/1440px.
+- Pixel truth: all 18 captures received direct inspection. Mobile extraction, desktop Porcelain Day extraction, the radar crop, and first-open secondary analysis remain readable without overflow or crash; the evacuation radar contains measured cyan, gold, and green pixels.
+- Release: cost-neutral engineering FORGE is GO and staging is verified. SPARKED remains NO-GO behind current physical-device, participant, provider/mail, Obelisk identity, performance, publication, and explicit lifecycle evidence.
+- Deploy: direct-main publication and exact production verification are the remaining authorized follow-through. Do not claim completion until the final GitHub workflow and canonical/immutable production origins prove the exact revision.
+- Next: add a focused lazy-panel browser contract; collect consented extraction telemetry before tuning scale or pressure; keep the Obelisk credential gap founder-visible.
+
+## Impact Summary
+
+**Headline.** Sewer Extraction now asks the player to cross a real world, shows exactly what remains and where to escape, and keeps the post-death revenge action light enough to arrive on time.
+
+**Evidence.** Four audit items shipped; 230 files / 1,343 assertions; DeathScreen 73.33 KB plus an 18.50 KB deferred analysis chunk; staged pixels 969/969 broad + 40/40 touched; 18 directly reviewed captures; zero new dependencies, hosted inference, or variable per-user cost.
+
+---
+
 # Latest Handoff — Session 165
 
 Session Intent: Run one complete `/arc` — recover whatever the previous session left unfinished, audit against live code, implement everything found, close out, then push directly to `main` and deploy to production under explicit founder authorization.

@@ -2,6 +2,24 @@
 
 Public-safe decisions only. Detailed internal decision history is maintained privately.
 
+## 2026-09-08 — Session 166 — Large-arena pressure scales from world size, within a fixed bound
+
+**Decision:** `getArenaPressureScale` is the sole arena-size pressure authority. It returns 1 for an unscaled arena and rises linearly to 1.25 at SEWER EXTRACTION's 1.5× scale under a fixed cap; the mode's existing wave schedule remains the other pressure input.
+
+**Rationale:** A larger world dilutes encounters if population stays viewport-sized, but a square-area multiplier would overcorrect without participant evidence. The bounded linear rung restores purposeful travel pressure while keeping the tuning legible, deterministic, and reversible.
+
+## 2026-09-08 — Session 166 — Objective radar state comes from gameplay authority; evacuation injection is visual QA only
+
+**Decision:** The radar model receives the live remaining-loot collection and the real evacuation point/open flag. The S166 capture harness may set the live alarm to its open threshold only to deterministically reach the rendered evacuation state, and its receipt labels that action as visual-state injection rather than play evidence.
+
+**Rationale:** Rendered-pixel review needs stable access to transient states, but a QA shortcut must never become a claim that the run was naturally completed. Keeping projection pure and the injection explicit preserves both reproducibility and evidence honesty.
+
+## 2026-09-08 — Session 166 — Secondary death analysis loads on first intent, behind containment
+
+**Decision:** The primary verdict and revenge action remain in the immediate DeathScreen chunk. Secondary debrief/archive analysis loads only after the player first opens it and stays behind `AsyncPanelBoundary`; its complete data model is assembled by the parent and passed explicitly.
+
+**Rationale:** Death is the most timing-sensitive transition in the loop. Deferring 18.50 KB protects that beat, while first-intent loading avoids speculative cost. The staging-only missing-field defect proves the boundary and an explicit parent-child contract are both necessary.
+
 ## 2026-09-07 — Session 165 — The arena is a mode's choice; the viewport is never the world
 
 **Decision:** Simulation state is expressed in arena coordinates, and a mode declares how big that arena is with an optional `arena.scale` on its mode definition (`resolveArenaSize`, capped at 4× and never smaller than the viewport). A mode that declares nothing gets an arena exactly the size of the screen and a camera clamped to (0, 0), which makes every conversion the identity. `drawGame` applies a single camera translate at the existing shake/ADS seam so world-space draw calls need no changes; canvas, HUD, and screen-space overlays stay viewport-sized.

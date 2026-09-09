@@ -732,6 +732,23 @@
       },
       "delta": 0,
       "cause": "Session 163 shipped the founder-directed course correction: a mode-definition layer with BOSS GAUNTLET and HOLD THE THRO"
+    },
+    {
+      "date": "2026-09-09",
+      "session": 166,
+      "total": 0,
+      "maxTotal": 25,
+      "overallStatus": "all four S166 repository-owned audit items are implemented and staging-verified; production follow-through is in progress. SPARKED remains NO-GO.",
+      "lastReviewed": "2026-09-08",
+      "dimensions": {
+        "schema_alignment": 0,
+        "prompt_template_alignment": 0,
+        "derived_view_freshness": 0,
+        "handoff_continuity": 0,
+        "contradiction_density": 0
+      },
+      "delta": 0,
+      "cause": "Session 166 makes SEWER EXTRACTION a 1.5x world with arena-authoritative spawns, bounded 1.25x pressure, and gold-loot/c"
     }
   ]
 }

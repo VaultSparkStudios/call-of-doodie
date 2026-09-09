@@ -1,5 +1,19 @@
 # Work Log
 
+## 2026-09-08 (Session 166 — extraction becomes a journey, and the radar tells the truth)
+
+- Ran the complete repository-owned `/arc`: recovery and canon startup, game-loop review, fresh four-item premise-verified audit, implementation to saturation, isolated staging, rendered-pixel review, release gate, and canonical closeout under explicit direct-main/deploy authorization.
+- Made all enemy, boss, and cluster spawns arena-authoritative; expanded SEWER EXTRACTION to a 1.5× world; added a pure bounded arena-pressure multiplier that reaches 1.25× there and stays identity for unscaled modes.
+- Added a pure radar projection for remaining loot and the live evacuation point, rendered as gold and cyan on the existing whole-arena radar.
+- Extracted the secondary death analysis to a first-open 18.50 KB lazy chunk, lowering the immediate DeathScreen chunk to 73.33 KB.
+- The hosted first-open court found `ReferenceError: level is not defined` inside the new lazy child. The async boundary prevented a full-screen crash; the complete parent model is now passed and destructured, a regression assertion covers the contract, and the final four-profile matrix opens the analysis cleanly.
+- Validation: strict lint; 230 Vitest files / 1,343 assertions; deployable build; App 464.35 KB / 560 KB; schema, public claims/contract, security, dependency, asset, runtime, and release gates; serial Playwright 19 pass / one intentional mobile skip.
+- Staging: `https://session-166-staging.call-of-doodie.pages.dev/` passes shell 7/7, the full hosted route/theme/viewport matrix 969/969, and the touched-state matrix 40/40. Eighteen hash-bound captures span extraction loot, open evacuation, and first-open death analysis across Sewer Night/Porcelain Day and 390/1440px.
+- Directly inspected representative mobile/desktop/theme captures and a radar crop. The open-evacuation image contains measurable cyan, gold, and green radar pixels; no clipping, contrast failure, overflow, or contained error remains.
+- The canonical audit closes 7/7 premises with all four items shipped; the session-floor reports saturated. Creative Direction Record reviewed: no new creative direction was given; the founder's instruction was operational authorization.
+
+Intent outcome at write-back: implementation, staging, pixel proof, and engineering release gates achieved; direct-main publication and exact production verification remain in progress. SPARKED remains explicitly unpromoted.
+
 ## 2026-09-07 (Session 165 — a sewer bigger than the screen, and bots that fight back)
 
 - Ran the full recovery-checked `/arc` in one continuous single-terminal mission: triage, project profile, `/start` baseline, premise-verified audit, implementation, browser proof, closeout, direct-main publication, and production deployment under explicit founder authorization.

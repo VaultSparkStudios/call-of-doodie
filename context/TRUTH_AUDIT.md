@@ -1,3 +1,19 @@
+## 2026-09-08 — Session 166 — Extraction, radar, deferred-analysis, and pixel truth
+
+- World truth — enemy, boss, and cluster placement now consumes resolved arena dimensions. Focused tests prove scaled coordinates can leave the viewport while remaining inside the arena, and prove unscaled coordinates retain their old bounds.
+- Pressure truth — SEWER EXTRACTION declares `arena.scale: 1.5`; its pure bounded pressure function reaches 1.25 there and returns 1 for unscaled modes. This is deterministic tuning, not participant-validated balance.
+- Radar truth — one pure projection maps remaining loot and the open evacuation point into the whole-arena radar. Final staged pixels contain measured gold, cyan, and green marker colors; the cyan claim is based on rendered output, not DOM or source inspection.
+- Chunk truth — immediate DeathScreen is 73.33 KB and secondary analysis is an 18.50 KB first-open chunk. The first staged implementation omitted model fields and raised `ReferenceError: level is not defined`; `AsyncPanelBoundary` contained it. The parent-child contract is repaired and regression-checked, and all final first-open profiles are clean.
+- Validation truth — 230/230 Vitest files and 1,343/1,343 assertions, strict lint, deployable build, App 464.35 KB / 560 KB, schema/public/security/dependency/asset/runtime gates, and serial Playwright 19 pass / one intentional mobile skip are green.
+- Visual truth — `session-166-staging` passes shell 7/7, broad hosted pixels 969/969, touched states 40/40, and CANON-053 with 18 hash-bound captures across Sewer Night/Porcelain Day and 390/1440px. Representative extraction, radar, and opened-analysis frames were directly inspected.
+- Evidence-boundary truth — the capture harness's alarm-threshold assignment is labelled visual-state injection and proves only rendering of the open-evacuation state. No participant, physical-device, provider, identity, mail, performance, publication, or lifecycle evidence is claimed.
+- Release truth — cost-neutral engineering FORGE is GO on staging. SPARKED remains NO-GO. Direct-main publication and exact production verification remain pending until their receipts are appended.
+
+Overall status: all four S166 repository-owned audit items are implemented and staging-verified; production follow-through is in progress. SPARKED remains NO-GO.
+Last reviewed: 2026-09-08
+
+<!-- truth-audit-version: 1.1 -->
+
 ## 2026-09-07 — Session 165 — Camera, readability, gate, and evidence truth
 
 - Camera truth — simulation state is in arena coordinates and `drawGame` applies one camera translate at the pre-existing shake/ADS seam. A mode that declares no `arena.scale` gets an arena exactly the size of the viewport and a camera clamped to (0, 0); the identity of every conversion in that case is asserted directly in `camera.test.js`, so "existing modes are unchanged" is a tested claim, not an assurance.

@@ -4,6 +4,37 @@ pm run launch:qa and full suite before closeout.\n
 
 Detailed internal scoring, audit trends, and brainstorming are maintained privately.
 
+## 2026-09-08 — Session 166 | Total: 998/1000 | Velocity: 4 | Debt: ↓
+
+SIL 998/1000: Closed both concrete S165 gameplay/performance follow-ups, made extraction objectives readable in the world, and used staged rendered pixels to catch a lazy-boundary defect that every source/build/unit gate missed before it could reach production.
+
+| Category | Score | Δ | Rationale |
+|---|---:|---|---|
+| Dev Health | 100 | → | Strict lint, 230 files / 1,343 assertions, deployable build, App 464.35 KB / 560 KB, schema/public/security/dependency/assets/runtime gates, and serial Playwright 19 pass / one intentional skip are green. |
+| Creative Alignment | 100 | → | Extraction now earns distance, pressure, legible loot, and a visible escape; the death flow protects the immediate revenge action. These changes strengthen readable chaos and humiliation-to-revenge without prescribing a build. |
+| Momentum | 100 | → | Four premise-verified items advanced through implementation, focused review, staging, defect repair, recapture, and release gate in one continuous arc. |
+| Engagement | 99 | ↑ | A larger extraction route, visible objectives, and pressure scaled to space create genuine mechanical depth. The remaining point is withheld because no participant evidence proves the 1.5×/1.25× tuning is more fun. |
+| Process Quality | 100 | → | The session did not accept mechanical-green pixels: it opened the new lazy path on hosted staging, caught a real missing-model failure, repaired it, rebuilt, redeployed, and reran both broad and touched-state matrices. |
+| Cross-Repo Coherence | 100 | → | No sibling tree was edited. Studio gates and the repository-owned Cloudflare staging path were used as designed. |
+| Security Posture | 100 | → | No dependency, identity, secret, storage, or trust boundary changed; release security and the pre-push operational sweep remain blocking gates. |
+| Ecosystem Integration | 99 | ↓ | New behavior composes through existing mode, camera, radar, and async-panel authorities. External Obelisk/provider/mail evidence remains absent and is not laundered into this score. |
+| Capital Efficiency | 100 | → | Zero new dependencies, hosted inference, or variable per-user cost; all new logic is local and deterministic. |
+| Automation Coverage | 100 | ↑ | Pure spawn/pressure/radar courts, lazy-contract regression, full suite, serial browser E2E, hosted route matrix, and four-profile transient-state capture cover every shipped boundary; the pixel court proved its value by finding the one defect unit tests missed. |
+
+Rolling averages: 3-session 988.0 · 5-session 991.4.
+
+Top win: the hosted first-open interaction turned an apparently successful code split into an actionable, contained failure before release, then proved the repaired path across both themes and both target widths.
+Top gap: extraction scale and pressure have synthetic correctness evidence only; their fun and pacing remain unmeasured without consented participant runs.
+
+Intent outcome: implementation, staging, rendered-pixel proof, and engineering release readiness achieved; exact-main publication and production proof remain the authorized closeout follow-through.
+
+Brainstorm:
+1. Add a minimal-model browser court that opens every lazy death-analysis subsection before staging.
+2. Derive an opt-in extraction pacing receipt (loot path length, alarm timing, evac travel) without identifiers or causal claims.
+3. Let the radar preview an authored extraction route only after participant evidence shows players understand the current point markers.
+
+**Committed to TASK_BOARD:** [SIL:1] add the lazy death-analysis browser contract; [SIL:1] collect consented extraction telemetry before changing the pressure slope or arena scale.
+
 ## 2026-09-07 — Session 165 | Total: 997/1000 | Velocity: 5 | Debt: ↓
 
 SIL 997/1000: Recovered four days of missing session record, then found and fixed a production correctness defect that had made the flagship royale's bots inert since the mode shipped, gave the game its first scrolling camera behind a per-mode opt-in that leaves every existing mode byte-identical, repaired three camera-blind readability surfaces, moved ~11 KB off the death beat, and root-fixed two studio gates that were silently red on `main` — without lowering a single budget to get there.
