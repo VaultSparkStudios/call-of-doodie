@@ -1,5 +1,27 @@
 # Work Log
 
+## 2026-09-09 (Session 167 — the debrief names names, and announcements stay on screen)
+
+- Ran the complete repository-owned `/arc`: triage (not cut off; write-back current), canonical startup, game-loop review, a fresh four-item premise-verified audit (`docs/AUDIT_2026-09-09.json`, one AI-axis candidate rejected as a false premise), implementation to saturation, isolated staging, real-browser proof, direct-main publication, exact production verification, and canonical closeout under explicit founder authorization.
+- Found that killer attribution had never resolved in production (`_lastDamageBy` never written; `best.type` on enemies that carry `typeIndex`) and replaced it with `src/systems/deathAttribution.js`: observed damage record first, nearest live enemy as a labelled hypothesis, hazards named. Adaptive telegraphing now keys on `typeIndex`; royale flood damage is observed; run history stores a bounded attribution receipt.
+- Gave every mode a pure `outcome(gs)`; `getModeOutcomeReceipt` bounds it and the death/victory screen renders it under the title.
+- Added `addScreenText`/`announce` and a second floating-text pass outside the camera translate; migrated 57 App.jsx announcement sites and all mode callouts; a source contract forbids world-anchored centre announcements.
+- Passed resolved arena bounds plus viewport size and an announce channel to every mode hook; extraction wave crates now cover the 1.5× world after wave 1.
+- Corrected the public roadmap/changelog (sixteen-bot scrolling royale; S167 debrief entry) and regenerated the public contract after the content-date roll that CI run `34328869414` caught.
+- Replaced the Bash pre-push hook, which orphaned a third time on an ordinary push, with a one-process Node entrypoint and installer plus a regression court. Its first real push flagged a literal fixture in its own test file; fixed at source, no bypass.
+- Validation: strict lint 0; local Vitest 231 files / 1,359 tests (only the hot-context freshness court red before re-render); CI Linux 232/232 files green; deployable build with App 466.77 KB / 560 KB and DeathScreen 73.93 KB + 18.53 KB deferred; runtime/public/schema/security/dependency/asset/entry gates; windows-hide guard; serial Playwright 19 pass / 1 intentional mobile skip. The S167-start baseline run had 4 worker-timeout errors on the shared host and is recorded as contention, not a regression; the full rerun had none.
+- Staging: `session-167-staging` / immutable `43751b9d` shell 7/7 on both URLs; real-browser smoke across four modes, squad strip, profile route, and Operation BREACH; `scripts/capture-mode-outcome.mjs` let a royale run end naturally and read the rendered receipt.
+- Creative Direction Record reviewed — no new creative-direction entry; the founder's instruction was operational authorization to run the arc, push `main`, and deploy.
+
+Intent outcome: achieved through implementation, staging, browser proof, direct-main publication, and exact production verification. SPARKED remains explicitly unpromoted.
+
+### Production follow-through
+
+- First push of the implementation hung in the Bash pre-push hook; stopping only the orphaned hook worker let the already-scanned push complete, and the same four rules were rerun directly over the pushed range with zero findings before anything else moved.
+- Workflow `34328869414` for `34f5442` failed its quality job on route-contract/sitemap drift after the changelog commit rolled `PUBLIC_CONTENT_VERSION_DATE`; the failure is retained as a real red, not relabelled.
+- Workflow `34329814954` for head `0e82ca9fb761` passed quality (232/232 files) and build-and-deploy, publishing immutable `https://5fb26ff6.call-of-doodie.pages.dev/`.
+- Custom domain and immutable both report `deploy: 0e82ca9fb761`; shell 7/7 both, cutover 5/5, replay trust 3/3, shared-leaderboard isolation, launch surfaces, backend health 5/5, production mode smoke, and a production outcome capture ("FLUSHED #7 OF 17") pass.
+
 ## 2026-09-08 (Session 166 — extraction becomes a journey, and the radar tells the truth)
 
 - Ran the complete repository-owned `/arc`: recovery and canon startup, game-loop review, fresh four-item premise-verified audit, implementation to saturation, isolated staging, rendered-pixel review, release gate, and canonical closeout under explicit direct-main/deploy authorization.

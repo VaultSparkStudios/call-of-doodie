@@ -4,15 +4,19 @@
 
 ## Current Session
 
-- Session 165 (2026-09-07) — the arena is no longer required to be the screen. `src/systems/camera.js` adds a dead-zone follow camera with an arena clamp and world/screen conversion; a mode opts in with `arena.scale`, and any mode that does not gets an arena exactly the size of the viewport with the camera pinned at (0, 0), so every pre-S165 mode is unchanged. BOT ROYALE takes a 2× arena with sixteen bots. Simulation bounds (obstacle/prop generation, movement clamp, spawn formations, flow field, mode step) resolve against arena size; the canvas, HUD, and screen-space overlays stay viewport-sized; `drawGame` applies one camera translate at the existing shake/ADS seam.
+- Session 167 attribution truth (2026-09-09) — "what killed you" had never resolved in production: `handlePlayerDeath` read `gs._lastDamageBy`, which nothing wrote after the S163 enemy-frame extraction, then fell back to the nearest enemy's `.type`, a field enemies do not carry (they carry `typeIndex`). MOST WANTED killed-by counts, adaptive telegraphing (keyed on `e.type`), the Run Coach "what killed you" pattern, nemesis boss tracking, and ghost/run-history `killedByType` were all empty. `src/systems/deathAttribution.js` now resolves the last observed damage-sequence event first and the nearest live enemy by `typeIndex` as a labelled hypothesis; every consumer routes through it and run history carries a bounded `deathAttribution` receipt. BOT ROYALE flood damage is an observed hazard named "Sewer flood" instead of a silent health decrement.
 
 ## Open Work
 
 # Task Board
+## Session 167 - The debrief names names, modes say what the run was worth, announcements stay on screen
+- [ ] [SIL:1] Extend `capture-mode-outcome.mjs` to SEWER EXTRACTION and HOLD THE THRONE deaths so all four receipts have rendered proof, not just the royale.
+- [ ] [SIL:1] Surface non-enemy causes (flood, lockdown) in MOST WANTED as a separate "hazards" row now that attribution can name them.
+- [ ] [SIL:1] Decide whether extraction lockdown should end the run (source comment) or remain a last stand (code); the roadmap only promises "lockdown at 100".
+- [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET on the Pages project so Porcelain Passport verification and cloud backup stop answering 503.
 ## Session 166 - Extraction distance, pressure, radar objectives, and death-beat split
 - [ ] [SIL:1] Add a focused browser contract that opens every lazily mounted death-analysis subsection with a minimal model, so missing parent-to-child fields fail before staging.
 - [ ] [SIL:1] Collect consented extraction telemetry before changing the 1.25× pressure slope or 1.5× arena scale; synthetic distance and enemy-count math are not balance evidence.
-- [ ] [SIL:1] Replace the Windows `.git/hooks/pre-push` per-file Bash fan-out with a bounded Node entrypoint that composes the canonical secret scanner and router/path checks; S166's hook orphaned after two compliant attempts.
 - [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET on the Pages project so Porcelain Passport verification and cloud backup stop answering 503.
 ## Session 165 - Scrolling camera, live royale bots, death-beat diet, record recovery
 - [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET on the Pages project: neither is in the secrets gateway, so Porcelain Passport verification (and therefore cloud backup) answers 503 in production until they exist.
@@ -59,9 +63,6 @@
 ## Done
 ## Deferred
 - [ ] [SIL:1] [DATA-BLOCKED S147] Theme-prop atlas L2 expansion — extend `theme-prop-atlas-v1.webp` from 16 to ~32 cells only after production feedback confirms the current highest-visibility coverage reads well; no participant evidence exists yet.
-- [ ] Discord invite/community link when the community entry point is ready
-- [ ] [SIL:1] [S62 deferred] HomeV2 v1 fallback retirement — gate on ≥200ms Lighthouse LCP improvement confirmed on production (human measurement required)
-## Deferred to Project Agents
 
 ## Recent Decisions
 
@@ -103,7 +104,7 @@
 
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 217,192 bytes · SHA-256 `6c34e69e34a0…`
-- `context/TASK_BOARD.md` · 140,154 bytes · SHA-256 `71248518c4dd…`
-- `context/DECISIONS.md` · 141,284 bytes · SHA-256 `20640c655932…`
+- `context/CURRENT_STATE.md` · 220,335 bytes · SHA-256 `18a59224f8aa…`
+- `context/TASK_BOARD.md` · 142,701 bytes · SHA-256 `8bcaaa4ff01c…`
+- `context/DECISIONS.md` · 144,767 bytes · SHA-256 `8ca0c6a28fad…`
 - `docs/AUDIT_2026-09-09.json` · 21,681 bytes · SHA-256 `522b9db0884d…`

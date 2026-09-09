@@ -1,3 +1,21 @@
+## 2026-09-09 — Session 167 — Attribution, receipt, announcement, hook, and CI truth
+
+- Attribution truth — before this session no death ever resolved a killer: `gs._lastDamageBy` had no writer and the nearest-enemy fallback read `.type`, which spawned enemies never carry. `recordDeathByEnemy` therefore never fired, `_telegraphMult` was keyed on `undefined`, and every `killedByType` in ghosts and run history was null. This is stated as a production defect that existed from S163 through S166, not as a regression introduced here. The replacement reports `observed` when it comes from the damage record and `hypothesis` when it comes from proximity; no surface may promote the latter.
+- Hazard truth — the royale flood previously reduced health without an observed damage event, so a drowning left no trace in the final-damage receipt. It is now recorded as a hazard named "Sewer flood" with `typeIndex: null`, which keeps it out of every enemy's MOST WANTED count by construction.
+- Receipt truth — the mode outcome receipt is derived only from mode state and bounded to 80 characters per field. Rendered proof exists for a natural BOT ROYALE death on staging and on production; SEWER EXTRACTION, HOLD THE THRONE, and BOSS GAUNTLET receipts are proven by unit courts and a source contract only.
+- Announcement truth — `VX`/`VY` announcement sites were already camera-aware at push time (S165) and only drifted while the text lived; the twenty-eight `GW()/2` sites were genuinely world-anchored and off-screen in scrolled arenas. Both families are now screen-anchored; the distinction is recorded so the S165 claim is not overstated in either direction.
+- Audit truth — the AI-axis candidate "the insight graph ignores the observed damage receipt" was false: `buildCollapseCoaching` already consumes it and its primary node is the graph's top-ranked diagnosis. It is recorded as rejected on verification, not silently dropped.
+- Hook truth — the Bash pre-push hook orphaned on a third ordinary push. Stopping only the orphaned worker let the push complete; the same four rules were then rerun directly over the pushed range with zero findings. The Node replacement's first real push flagged a literal DB-URL fixture inside its own test file; the fixture was assembled at runtime instead of bypassing the gate.
+- CI truth — run `34328869414` for `34f5442` failed its quality job because the changelog commit rolled `PUBLIC_CONTENT_VERSION_DATE` and the committed route contract and sitemap drifted, the same pattern S165 recorded. The red is retained; run `34329814954` for `0e82ca9` passed 232/232 files, built, and deployed.
+- Tooling truth — `${OPS}/scripts/check-audit-premises.mjs` reported "No audit sidecar found" for this repo because it resolves its root from its own location; premises were verified by direct reads and greps and the checker's limitation is recorded rather than worked around. The local context meter reports 102.5% of a 1M limit for a model this session is not using; it was not used as a gate.
+- Evidence-boundary truth — no participant, physical-device, provider, identity, mail, performance, publication, or lifecycle evidence is claimed. The royale outcome capture is a rendered-receipt proof of wiring; a player standing still while bots fight is not gameplay evidence.
+- Release truth — head `0e82ca9fb761` is on `origin/main`; workflow `34329814954` published immutable `5fb26ff6`. Custom domain and immutable report the exact deploy id; shell 7/7 both, cutover 5/5, replay trust 3/3, leaderboard isolation, launch surfaces, backend health 5/5, production mode smoke, and production outcome capture pass.
+
+Overall status: all four S167 repository-owned audit items plus the hook root-fix and public-truth correction are implemented, exact-main published, and production-verified. SPARKED remains NO-GO.
+Last reviewed: 2026-09-09
+
+<!-- truth-audit-version: 1.1 -->
+
 ## 2026-09-08 — Session 166 — Extraction, radar, deferred-analysis, and pixel truth
 
 - World truth — enemy, boss, and cluster placement now consumes resolved arena dimensions. Focused tests prove scaled coordinates can leave the viewport while remaining inside the arena, and prove unscaled coordinates retain their old bounds.

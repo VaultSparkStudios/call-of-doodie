@@ -1,27 +1,27 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.1 -->
-<!-- generated-at: 2026-09-09 (Session 166 closeout) -->
+<!-- generated-at: 2026-09-09 (Session 167 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S166 ════════════════════╗
-║  Date: 2026-09-09  ·  SIL: 998/1000  ·  Velocity: 4 down         ║
-║  Mode: FOUNDER  ·  Agent: codex                                  ║
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S167 ════════════════════╗
+║  Date: 2026-09-09  ·  SIL: 997/1000  ·  Velocity: 6 down         ║
+║  Mode: FOUNDER  ·  Agent: claude-code                            ║
 ║  Live:  preview  →  https://callofdoodie.wtf/                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ Shipped: all enemy, boss, and cluster spawn paths resolve ag  ║
-║  ✓ Shipped: SEWER EXTRACTION uses a 1.5× arena. Its pure pressu  ║
-║  ✓ Shipped: the whole-arena radar projects remaining loot in go  ║
-║  ✓ Shipped: secondary death analysis is first-open lazy. Immedi  ║
-║  ✓ Staged defect caught: opening the lazy panel initially raise  ║
+║  ✓ Triage: no lock, clean tree, remote in sync, write-back curr  ║
+║  ✓ Found and fixed: "what killed you" had never resolved in pro  ║
+║  ✓ Shipped: per-mode `outcome(gs)` receipts bounded by `getMode  ║
+║  ✓ Shipped: screen-anchored floating text (`addScreenText`/`ann  ║
+║  ✓ Shipped: `onModeWaveStart` receives arena bounds plus viewpo  ║
 ╚════════════════════════════════════════════════════════════════╝
-╔══ SCORES · SIL 998/1000 ═══════════════════════════════════════╗
+╔══ SCORES · SIL 997/1000 ═══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
 ║    Alignment          100  ██████████                            ║
 ║    Momentum           100  ██████████                            ║
 ║    Engagement         99   ██████████                            ║
-║    Process Qual       100  ██████████                            ║
+║    Process Qual       99   ██████████                            ║
 ║    Coherence          100  ██████████                            ║
 ║    Security           100  ██████████                            ║
 ║    Ecosystem          99   ██████████                            ║
@@ -41,23 +41,23 @@
 ║  ✓ agent memory (Claude/Codex project memory)                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 40 files  ·  M:17 A:3 D:20 ?:0                         ║
-║  Ahead: 5  ·  Behind: 0                                          ║
+║  Changes: 15 files  ·  M:14 A:0 D:0 ?:1                          ║
+║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ DEPLOYMENT ══════════════════════════════════════════════════╗
-║  Staging:  https://session-166-staging.call-of-doodie.pages.dev  ║
+║  Staging:  https://session-167-staging.call-of-doodie.pages.dev  ║
 ║  Live:     https://callofdoodie.wtf/  ·  preview/FORGE (not yet  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
 ║  Doctor:        157/219                                          ║
 ║  Compliance:    —                                                ║
-║  Tests:         1343/1343                                        ║
+║  Tests:         1363/1363                                        ║
 ║  Validation:    full-fresh                                       ║
 ║  IGNIS:         9d ago                                           ║
 ║  Truth:         engineering-ready-sparked-no-go                  ║
 ║  Sanitization:  0d ago                                           ║
-║  shells:        0 started · 0 closed · 0 running                 ║
+║  shells:        5 started · 5 closed · 0 running                 ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ NEXT SESSION ════════════════════════════════════════════════╗
 ║  (no genius cache — run `node scripts/cache-genius-list.mjs`)    ║

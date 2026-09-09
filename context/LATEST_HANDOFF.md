@@ -1,3 +1,31 @@
+# Latest Handoff — Session 167
+
+Session Intent: Run one complete `/arc` from the verified S166 closeout — triage, canonical startup, game-loop review, a fresh premise-verified audit, implement every repository-owned finding, prove it on isolated staging and in a real browser, push directly to `main`, fully deploy, verify production, and complete the canonical S167 closeout under explicit founder authorization.
+
+## Where We Left Off (Session 167)
+
+- Triage: no lock, clean tree, remote in sync, write-back current through `7d099ca2`. Not cut off. Session identity fixed at S167 from the last closed-out SIL entry (S166).
+- Found and fixed: "what killed you" had never resolved in production. `_lastDamageBy` was never written and the nearest-enemy fallback read `.type` on enemies that carry `typeIndex`. `src/systems/deathAttribution.js` now resolves the observed damage record first and the nearest live enemy as a labelled hypothesis; MOST WANTED, adaptive telegraphing, Run Coach, nemesis tracking, ghosts, and run history all consume it. Royale flood damage is an observed hazard.
+- Shipped: per-mode `outcome(gs)` receipts bounded by `getModeOutcomeReceipt` and rendered under the death/victory title (`data-testid="mode-outcome"`). A natural royale death on production rendered "FLUSHED #7 OF 17 · 0 bots flushed · flood phase 1 · 6 still in the pipe".
+- Shipped: screen-anchored floating text (`addScreenText`/`announce`) painted outside the camera; 57 App.jsx announcement sites and every mode callout migrated; source contract forbids regression.
+- Shipped: `onModeWaveStart` receives arena bounds plus viewport; extraction wave crates cover the 1.5× world after wave 1.
+- Shipped: Node pre-push hook (`scripts/hooks/pre-push.mjs`, `scripts/install-hooks.mjs`) after the Bash hook orphaned a third time; first real push through it returned in seconds and caught a literal fixture in its own test, fixed at source.
+- Public truth: roadmap and changelog corrected (sixteen-bot scrolling royale; S167 debrief entry). The changelog commit rolled the derived content date, CI run `34328869414` failed on route-contract/sitemap drift (the S165 pattern), and the artifacts were regenerated after the commit landed.
+- Audit honesty: the AI-axis candidate "the insight graph ignores the damage receipt" was a false premise (collapse coaching already feeds it as the top-ranked node) and is recorded as rejected in `docs/AUDIT_2026-09-09.json`. The S166 lazy-panel browser contract is deferred with its reason.
+- Validation: strict lint 0; local Vitest 231 files / 1,359 tests with only the hot-context freshness court red before re-render; CI Linux 232/232 files green; deployable build; App 466.77 KB / 560 KB, DeathScreen 73.93 KB + 18.53 KB deferred; runtime/public/schema/security/dependency/asset/entry gates; windows-hide guard; serial Playwright 19 pass / 1 intentional mobile skip.
+- Staging: `https://session-167-staging.call-of-doodie.pages.dev/` (immutable `43751b9d`) shell 7/7 on both URLs; real-browser mode smoke 4 modes + squad + profile + BREACH; rendered outcome receipt captured after a natural royale death.
+- Deploy: head `0e82ca9fb761` passed workflow `34329814954` (quality + build-and-deploy) and published immutable `https://5fb26ff6.call-of-doodie.pages.dev/`. Custom domain and immutable both report `deploy: 0e82ca9fb761` and pass shell 7/7; cutover 5/5, replay trust 3/3, leaderboard isolation, launch surfaces, backend health 5/5, production mode smoke, and production outcome capture pass.
+- Known gaps: outcome receipts have rendered proof for the royale only; non-enemy hazards are attributed but not yet surfaced in MOST WANTED; extraction lockdown semantics (end vs last stand) still need a design call; OBELISK_VERIFY_URL/SECRET remain founder-only so `/api/profile` answers 503.
+- Next: extend the outcome capture to extraction and throne deaths; a hazards row in MOST WANTED; decide lockdown; keep the Obelisk credential gap founder-visible.
+
+## Impact Summary
+
+**Headline.** The debrief finally knows what killed you and what the run was worth, and the two scrolled arenas stopped hiding their own announcements.
+
+**Evidence.** Four audit items plus a hook root-fix and a public-truth correction shipped; one production correctness defect (dead killer attribution, live since S163) and one readability defect (world-anchored announcements) closed; CI 232/232 files; serial Playwright 19/1; staging and production shell 7/7; workflow `34329814954`; immutable `5fb26ff6`; exact health `0e82ca9fb761`; zero new dependencies, hosted inference, or variable per-user cost.
+
+---
+
 # Latest Handoff — Session 166
 
 Session Intent: Run one complete `/arc` from the verified S165 closeout through a fresh premise-verified game audit, implement every repository-owned finding at the optimal rung, prove player-facing work with rendered desktop/mobile/theme evidence on isolated staging, clear the independent release gates, push directly to `main`, fully deploy the exact revision, verify production, and complete the canonical S166 closeout.

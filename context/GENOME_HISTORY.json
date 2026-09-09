@@ -738,8 +738,8 @@
       "session": 166,
       "total": 0,
       "maxTotal": 25,
-      "overallStatus": "all four S166 repository-owned audit items are implemented and staging-verified; production follow-through is in progress. SPARKED remains NO-GO.",
-      "lastReviewed": "2026-09-08",
+      "overallStatus": "all four S167 repository-owned audit items plus the hook root-fix and public-truth correction are implemented, exact-main published, and production-verified. SPARKED remains NO-GO.",
+      "lastReviewed": "2026-09-09",
       "dimensions": {
         "schema_alignment": 0,
         "prompt_template_alignment": 0,
@@ -748,7 +748,24 @@
         "contradiction_density": 0
       },
       "delta": 0,
-      "cause": "Session 166 makes SEWER EXTRACTION a 1.5x world with arena-authoritative spawns, bounded 1.25x pressure, and gold-loot/c"
+      "cause": "Session 166 is exact-main published and production-verified: SEWER EXTRACTION is a 1.5x world with arena-authoritative s"
+    },
+    {
+      "date": "2026-09-09",
+      "session": 167,
+      "total": 0,
+      "maxTotal": 25,
+      "overallStatus": "all four S167 repository-owned audit items plus the hook root-fix and public-truth correction are implemented, exact-main published, and production-verified. SPARKED remains NO-GO.",
+      "lastReviewed": "2026-09-09",
+      "dimensions": {
+        "schema_alignment": 0,
+        "prompt_template_alignment": 0,
+        "derived_view_freshness": 0,
+        "handoff_continuity": 0,
+        "contradiction_density": 0
+      },
+      "delta": 0,
+      "cause": "Session 167 is exact-main published and production-verified: death attribution now resolves the observed damage record ("
     }
   ]
 }

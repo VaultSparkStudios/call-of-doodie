@@ -4,6 +4,37 @@ pm run launch:qa and full suite before closeout.\n
 
 Detailed internal scoring, audit trends, and brainstorming are maintained privately.
 
+## 2026-09-09 — Session 167 | Total: 997/1000 | Velocity: 6 | Debt: ↓
+
+SIL 997/1000: Found that the game's entire "learn from your death" memory had been running on nothing since S163 and gave it one honest authority; gave every mode a debrief that says what the run was worth; stopped the two scrolled arenas from hiding their own announcements; and retired a push gate that could not finish — without lowering a budget, bypassing a check, or claiming any participant evidence.
+
+| Category | Score | Δ | Rationale |
+|---|---:|---|---|
+| Dev Health | 100 | → | Strict lint 0; CI Linux 232/232 test files; deployable build with App 466.77 KB / 560 KB; runtime, public, schema, security, dependency, asset, entry, and windows-hide gates; serial Playwright 19 pass / 1 intentional skip. The baseline run's four worker timeouts were classified as host contention and did not recur. |
+| Creative Alignment | 100 | → | Pillar two (humiliation becomes revenge) and pillar five (proof over posture) both gained: the death verdict names its killer with an evidence level, and every mode's stake survives to the debrief. Readable chaos gained the announcements back. Nothing prescribes a build. |
+| Momentum | 100 | → | Triage, startup, review, audit, six shipped items, staging, browser proof, two workflow runs, production verification, and closeout ran as one single-terminal mission with no founder pause. |
+| Engagement | 99 | → | Real killers feed MOST WANTED, adaptive telegraphing, the Run Coach, and nemesis tracking for the first time; mode receipts add stakes. The withheld point is the same as before: no participant evidence says any of it is more fun. |
+| Process Quality | 99 | ↓ | Every premise was grepped against live code and one attractive candidate was rejected as false and recorded. The hook was root-fixed instead of bypassed, and its first finding was fixed at source. The point comes off because the changelog commit predictably rolled the public content date — S165 had recorded exactly this — and CI on `main` went red once before the regeneration landed. |
+| Cross-Repo Coherence | 100 | → | No sibling tree touched. The propagated `$OPS` premise checker resolves its own root and could not read this repo's sidecar; premises were verified locally and the limitation is recorded rather than worked around. |
+| Security Posture | 100 | → | No dependency, secret, identity, storage, or trust boundary changed. The pre-push gate is stronger: one process, same rules, a regression court, and it demonstrably fires. |
+| Ecosystem Integration | 99 | → | New behaviour composes through the existing mode-definition, damage-sequence, transient-presentation, and death-flow authorities. External Obelisk/provider/mail evidence remains absent and is not laundered into this score. |
+| Capital Efficiency | 100 | → | Zero new dependencies, hosted inference, or variable per-user cost; all new logic is local and deterministic. |
+| Automation Coverage | 100 | → | New courts: death attribution (4), mode outcome receipts (4), screen-anchored text (2), wave-start distribution and royale announce (2), run-history receipt, death-flow passthrough and source contract, pre-push hook (4), and a real-browser outcome capture that lets a run end naturally instead of injecting state. |
+
+Rolling averages: 3-session 997.3 · 5-session 991.8.
+
+Top win: reading the killer lookup instead of trusting it. `killerType = best.type` looked like a fallback; it was the only path, and it had returned `undefined` on every death for four sessions while every downstream system stayed green because they all handled "no killer" gracefully. Graceful degradation is how a dead feature hides.
+Top gap: the mode outcome receipt has rendered proof for the royale only; extraction and throne deaths are covered by unit courts and a source contract, not pixels.
+
+Intent outcome: achieved — audit, full implementation, staging, browser proof, direct-main publication, production verification, and closeout completed in one arc under explicit founder authorization.
+
+Brainstorm:
+1. A MOST WANTED "hazards" row so drownings and lockdowns are learnable causes rather than silent nulls.
+2. Extend the natural-death outcome capture to every mode and bind its captures into the CANON-053 receipt.
+3. Derive the public content date from the newest *content* commit rather than any commit touching `scripts/lib`, so a changelog edit cannot make its own push red.
+
+**Committed to TASK_BOARD:** [SIL:1] extend the outcome capture to extraction and throne deaths; [SIL:1] surface non-enemy causes in MOST WANTED.
+
 ## 2026-09-08 — Session 166 | Total: 998/1000 | Velocity: 4 | Debt: ↓
 
 SIL 998/1000: Closed both concrete S165 gameplay/performance follow-ups, made extraction objectives readable in the world, and used staged rendered pixels to catch a lazy-boundary defect that every source/build/unit gate missed before it could reach production.

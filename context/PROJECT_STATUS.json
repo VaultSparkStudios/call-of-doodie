@@ -4,9 +4,45 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 166 is exact-main published and production-verified: SEWER EXTRACTION is a 1.5x world with arena-authoritative spawns, bounded 1.25x pressure, gold-loot/cyan-evac radar objectives, and first-open lazy secondary death analysis. Workflow 34312878779 and immutable 99ad3bbc serve exact source 0647bb0d6787.",
-  "nextMilestone": "Add a focused lazy death-analysis browser contract and collect consented extraction pacing evidence before changing the arena scale or pressure slope. OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET remain founder-gated; all SPARKED external evidence remains separate.",
+  "currentFocus": "Session 167 is exact-main published and production-verified: death attribution now resolves the observed damage record (never resolved before, since S163), every mode renders an outcome receipt on the debrief, announcements are screen-anchored in scrolled arenas, wave-start mode context is arena-authoritative, and the pre-push gate is a one-process Node hook. Workflow 34329814954 and immutable 5fb26ff6 serve exact source 0e82ca9fb761.",
+  "nextMilestone": "Extend the natural-death outcome capture to SEWER EXTRACTION and HOLD THE THRONE, surface non-enemy hazards in MOST WANTED, and decide extraction lockdown semantics. OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET remain founder-gated; all SPARKED external evidence remains separate.",
   "testingSurfaces": [
+    {
+      "session": 167,
+      "status": "green",
+      "type": "production-verification",
+      "command": "source 0e82ca9fb761 · workflow 34329814954 · immutable 5fb26ff6 · immutable/custom shell 7/7 with exact deploy id · cutover 5/5 · replay 3/3 · leaderboard isolation · launch surfaces · backend health 5/5 · production mode smoke · production outcome capture (natural royale death → mode-outcome receipt rendered)"
+    },
+    {
+      "session": 167,
+      "status": "resolved",
+      "type": "ci-incident",
+      "command": "workflow 34328869414 for 34f5442 failed quality on route-contract/sitemap drift after the changelog commit rolled PUBLIC_CONTENT_VERSION_DATE (S165 pattern); regenerated after the commit landed; corrected workflow 34329814954 passed 232/232 files."
+    },
+    {
+      "session": 167,
+      "status": "green",
+      "type": "full-gates",
+      "command": "strict lint 0 · CI Vitest 232/232 files (local 231 files / 1,359 tests before the hook court; only the hot-context freshness court red before re-render) · deployable build · App 466.77 KB / 560 KB · DeathScreen 73.93 KB + deferred analysis 18.53 KB · runtime/public/schema/security/dependency/assets/entry gates · windows-hide guard"
+    },
+    {
+      "session": 167,
+      "status": "flaky",
+      "type": "unit-parallel",
+      "command": "S167-start baseline Vitest run reported 226 files / 1,307 tests passed with 4 vitest-pool worker timeouts on the shared host; the full rerun after implementation had zero timeouts. Classified as host contention, not a regression."
+    },
+    {
+      "session": 167,
+      "status": "green",
+      "type": "browser-proof",
+      "command": "Playwright serial 19 pass / 1 intentional mobile skip; staging (43751b9d) and production mode smoke across BOSS GAUNTLET, HOLD THE THRONE + squad, SEWER EXTRACTION, BOT ROYALE (16 BOTS LEFT), profile route, Operation BREACH; scripts/capture-mode-outcome.mjs let a royale run end naturally and read the rendered receipt on both"
+    },
+    {
+      "session": 167,
+      "status": "green",
+      "type": "push-gate",
+      "command": "Bash pre-push hook orphaned a third time; replaced by scripts/hooks/pre-push.mjs (same four rules, one process, 4-case court). First real push through it returned in seconds and flagged a literal fixture in its own test file, fixed at source; pushed range rescanned with zero findings."
+    },
     {
       "session": 166,
       "status": "green",
@@ -36,36 +72,6 @@
       "status": "green",
       "type": "visual-proof",
       "command": "staging shell 7/7 · route/theme/viewport 969/969 · touched extraction/evac/death-analysis states 40/40 · CANON-053 18 hash-bound captures directly inspected across two themes and 390/1440px"
-    },
-    {
-      "session": 165,
-      "status": "green",
-      "type": "full-gates",
-      "command": "strict lint 0 · Vitest 228 files / 1,330 assertions · deployable build · runtime boundary 462,810 B / 560,000 B · schema+coherence+architecture+storage+task+node · public contract + claims · security release gate · dependency + asset gates · hot-context currency · windows-hide guard"
-    },
-    {
-      "session": 165,
-      "status": "green",
-      "type": "browser-proof",
-      "command": "Playwright serial 19 pass / 1 intentional skip; smoke:modes real-browser five-scenario pass — BOSS GAUNTLET, HOLD THE THRONE, SEWER EXTRACTION, BOT ROYALE (banner '16 BOTS LEFT'), squad strip, Operation BREACH, /#profile; bot-royale capture directly reviewed and a canvas pixel probe confirmed the radar disc renders"
-    },
-    {
-      "session": 165,
-      "status": "flaky",
-      "type": "browser-parallel",
-      "command": "Playwright with default workers produced 6 cold-start timeouts on home-shell locators; re-run serially at 19 pass / 1 skip. Classified as worker contention on this machine, not a regression — the project's own recorded baseline is a serial run."
-    },
-    {
-      "session": 165,
-      "status": "green",
-      "type": "production-verification",
-      "command": "Staging 7ec01b37 shell 7/7 + launch surfaces before main; Cloudflare run 34148240262 green for source 0e66c18; production deployment 26c98eb2 immutable shell 7/7, callofdoodie.wtf 7/7, post-cutover 5/5, launch surfaces, replay trust 3/3, shared-leaderboard isolation; production smoke:modes five scenarios with BOT ROYALE reading '16 BOTS LEFT'"
-    },
-    {
-      "session": 165,
-      "status": "resolved",
-      "type": "ci-incident",
-      "command": "Cloudflare run 34147838525 failed on route-contract/sitemap drift. Root cause: PUBLIC_CONTENT_VERSION_DATE derives from the newest commit touching scripts/lib, which this session edited, so the generated public artifacts are only regenerable after that commit lands. Fixed in 0e66c18; diff is the date alone; the two failing test files pass 30/30."
     }
   ],
   "blockers": [
@@ -84,28 +90,28 @@
   "ignisScore": 43565,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-08-31",
-  "silSession": 166,
-  "silScore": 998,
-  "silAvg3": 988,
-  "silVelocity": 4,
+  "silSession": 167,
+  "silScore": 997,
+  "silAvg3": 997.3,
+  "silVelocity": 6,
   "silDebt": "down",
-  "silLastSession": 166,
-  "currentSession": 166,
+  "silLastSession": 167,
+  "currentSession": 167,
   "sessionMode": "founder",
-  "lastAgent": "codex",
-  "testsPassing": 1343,
-  "testsTotal": 1343,
+  "lastAgent": "claude-code",
+  "testsPassing": 1363,
+  "testsTotal": 1363,
   "entropyScore": 0.197,
   "entropyLastComputed": "2026-08-23",
   "silRubricVersion": "3.0",
   "silMax": 1000,
-  "silScoreLegacy500": 492,
+  "silScoreLegacy500": 499,
   "silCategoriesV3": {
     "devHealth": 100,
     "creativeAlignment": 100,
     "momentum": 100,
     "engagement": 99,
-    "processQuality": 100,
+    "processQuality": 99,
     "crossRepoCoherence": 100,
     "securityPosture": 100,
     "ecosystemIntegration": 99,
@@ -124,16 +130,16 @@
   "freeTierCostStatus": "cost-neutral",
   "runtimeUrl": "https://callofdoodie.wtf/",
   "stagingType": "cloudflare-pages",
-  "stagingUrl": "https://session-166-staging.call-of-doodie.pages.dev/",
+  "stagingUrl": "https://session-167-staging.call-of-doodie.pages.dev/",
   "testsLastRun": "2026-09-09",
   "sanitizationLastCleared": "2026-09-09",
   "sessionShellHygiene": {
-    "session": 166,
-    "started": 2,
-    "closed": 2,
+    "session": 167,
+    "started": 5,
+    "closed": 5,
     "running": 0,
-    "enumeratedAt": "2026-09-09T04:42:00.000Z",
-    "scope": "Two ordinary git-push jobs entered the Windows Bash pre-push wrapper and orphaned repo-specific hook workers; both jobs and only their identified workers were stopped. The canonical and equivalent security checks passed before the documented bounded bypass. No agent-started background shell or local preview server remains; unrelated pre-existing processes were not touched or counted."
+    "enumeratedAt": "2026-09-09T08:45:00.000Z",
+    "scope": "Agent-started background jobs: one Bash probe that hung and completed, one doctor run, two full Vitest runs, one serial Playwright run — all exited. One git push hung in the Bash pre-push hook; only that orphaned hook worker (PID 13372) was stopped. Five vite preview processes dating from 2026-09-03 belong to earlier sessions and were neither started nor stopped here."
   },
   "doctorScore": {
     "date": "2026-09-09",
@@ -149,14 +155,14 @@
     "total": 219,
     "score": 73
   },
-  "lastSessionSummary": "Session 166 shipped arena-authoritative spawns, a 1.5x SEWER EXTRACTION world with bounded 1.25x pressure, whole-arena loot and evacuation radar objectives, and first-open lazy secondary death analysis that reduced immediate DeathScreen to 73.33 KB. Hosted first-open pixels caught and closed a missing-model regression; exact source 0647bb0d6787 passed workflow 34312878779 and production shell/cutover/modes/replay/leaderboard/launch/backend courts.",
-  "testsAssertionsPassing": 1343,
-  "testsAssertionsTotal": 1343,
-  "testsAssertionsFiles": 230,
+  "lastSessionSummary": "Session 167 replaced a killer attribution that had never resolved (never-written _lastDamageBy; enemies carry typeIndex, not type) with an observed-damage-first resolver feeding MOST WANTED, adaptive telegraphing, Run Coach, nemesis, ghosts, and run history; gave every mode a bounded outcome receipt rendered on the debrief; made announcements screen-anchored in scrolled arenas; made wave-start mode context arena-authoritative; retired the orphaning Bash pre-push hook for a Node entrypoint; corrected the public roadmap/changelog. Head 0e82ca9fb761 passed workflow 34329814954 and every production court.",
+  "testsAssertionsPassing": 1363,
+  "testsAssertionsTotal": 1363,
+  "testsAssertionsFiles": 232,
   "testsFlaky": 0,
   "testsInconclusive": 0,
   "testsEnvBlocked": [],
   "testsDeferred": [],
   "testsBudgetExhausted": false,
-  "silAvg5": 991.4
+  "silAvg5": 991.8
 }

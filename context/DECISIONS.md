@@ -2,6 +2,34 @@
 
 Public-safe decisions only. Detailed internal decision history is maintained privately.
 
+## 2026-09-09 — Session 167 — The killer is whatever the damage record says, and the record says how sure it is
+
+**Decision:** `resolveDeathAttribution` is the sole authority for "what killed you". It reads the last observed damage-sequence event first (exact source type, name, and kind, including non-enemy hazards) and only then the nearest live enemy by `typeIndex`, and it labels the result `observed` or `hypothesis`. Every consumer — MOST WANTED, adaptive telegraphing, Run Coach, nemesis tracking, ghosts, run history — takes its killer from this one place, and run history stores the bounded receipt including the evidence level.
+
+**Rationale:** The previous lookup had silently never resolved, so every "learn from your death" system ran on nothing. A nearest-enemy guess is still useful, but only if it cannot be mistaken for proof; the evidence level makes that distinction visible on every surface that repeats it.
+
+**Boundaries:** Non-enemy hazards get a name and a kind but no enemy type, so they never inflate an enemy's MOST WANTED count. No participant or balance claim follows from the attribution.
+
+## 2026-09-09 — Session 167 — A mode's debrief must say what the run was worth in that mode
+
+**Decision:** Each mode definition owns a pure `outcome(gs)`; `getModeOutcomeReceipt` bounds it (80-character strings, control characters stripped, numeric stat or null) and the death/victory screen renders it directly under the title. Legacy modes return null and are unchanged.
+
+**Rationale:** Soul pillar two says a defeat must convert into a lesson. Loot lost, thrones held, bosses down against par, and placement are the lesson in those modes, and the previous label-only debrief dropped them at the exact moment they mattered.
+
+**Boundaries:** The receipt is local, derived only from mode state, and is not persisted to history or the leaderboard this session.
+
+## 2026-09-09 — Session 167 — Announcements are screen objects; the world only carries text about the world
+
+**Decision:** Floating text has two anchors. `addText` stays world-anchored and camera-translated (damage numbers, kill quotes, pickups). `addScreenText`/`announce` is viewport-anchored and painted after the camera restore. Anything addressed to the player rather than to a place — level-ups, doctrine, objectives, wave banners, mode phases — uses the screen anchor, and modes announce through the context rather than computing arena coordinates.
+
+**Rationale:** Under a scrolled camera a viewport-centre coordinate is a spot in the top-left of the world. The two scrolled modes were losing most of their announcements to that mistake, and a source contract now forbids reintroducing it.
+
+## 2026-09-09 — Session 167 — The pre-push gate is a Node process, not a Bash fan-out
+
+**Decision:** `scripts/hooks/pre-push.mjs` applies the four pre-push rules in one Node process over git's stdin contract; `scripts/install-hooks.mjs` installs a two-line shim. The Bash hook is retired. Bypass with `--no-verify` remains an exception that must be recorded here, not a workflow.
+
+**Rationale:** The Bash hook orphaned on three ordinary pushes across two sessions, hanging `git push` until its worker was killed. A gate that cannot finish is not a gate. The Node port keeps every rule byte-for-byte in intent, adds a regression court, and returned in seconds on its first real push, where it correctly flagged a literal fixture that was then fixed at source rather than bypassed.
+
 ## 2026-09-09 — Session 166 — Bypass the orphaning Windows pre-push wrapper only after equivalent checks pass
 
 **Decision:** S166 finalization pushes use `git push --no-verify` after two ordinary push attempts reached the repository's `pre-push` hook and never returned. The traced hook left repo-specific Git-Bash workers orphaned after the Git parent exited. Before every bypassed follow-up, the canonical staged secret scanner and a direct outgoing-diff scan reproducing the hook's credential, absolute-path, and Anthropic-router patterns must pass; settings sanitization and the gateway audit also ran before the first push.

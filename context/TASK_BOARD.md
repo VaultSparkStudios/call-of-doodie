@@ -2,6 +2,21 @@
 
 Public-safe launch roadmap summary.
 
+## Session 167 - The debrief names names, modes say what the run was worth, announcements stay on screen
+
+- [x] [SIL:3] **DONE S167** Death attribution: a pure resolver over the observed damage sequence with a labelled nearest-enemy fallback replaces a killer lookup that had never resolved (`_lastDamageBy` never written; enemies carry `typeIndex`, not `type`). MOST WANTED, adaptive telegraphing, Run Coach, nemesis tracking, ghosts, and run history now receive a real killer; royale flood damage is an observed hazard.
+- [x] [SIL:3] **DONE S167** Mode outcome receipts: every mode's `outcome(gs)` is bounded into `mode-outcome-v1` and rendered under the death/victory title (loot banked/lost, placement, thrones, bosses vs par). Rendered proof captured on staging by `scripts/capture-mode-outcome.mjs`.
+- [x] [SIL:2] **DONE S167** Screen-anchored announcements: `addScreenText`/`announce` painted outside the camera translate; 57 App.jsx sites and all mode callouts migrated; source contract forbids world-anchored centre announcements.
+- [x] [SIL:2] **DONE S167** Wave-start mode context is arena-authoritative (`resolveArenaBounds` + `viewW`/`viewH`); extraction wave crates cover the 1.5× world after wave 1.
+- [x] [SIL:2] **DONE S167** Replaced the orphaning Bash pre-push fan-out with `scripts/hooks/pre-push.mjs` + `scripts/install-hooks.mjs` (same four rules, one process, regression court). Closes the S166 follow-up.
+- [x] [SIL:1] **DONE S167** Public roadmap/changelog now describe the sixteen-bot scrolling royale and the S167 debrief; regenerated public contract after the content-date roll.
+- [ ] [SIL:1] Extend `capture-mode-outcome.mjs` to SEWER EXTRACTION and HOLD THE THRONE deaths so all four receipts have rendered proof, not just the royale.
+- [ ] [SIL:1] Surface non-enemy causes (flood, lockdown) in MOST WANTED as a separate "hazards" row now that attribution can name them.
+- [ ] [SIL:1] Decide whether extraction lockdown should end the run (source comment) or remain a last stand (code); the roadmap only promises "lockdown at 100".
+- [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET on the Pages project so Porcelain Passport verification and cloud backup stop answering 503.
+
+**Runway exception:** participant fun/balance outcomes, physical-device proof, provider/mail/identity evidence, current production Core Web Vitals, publication, and SPARKED promotion remain independently gated. The royale outcome capture is a rendered-receipt proof of wiring, not gameplay evidence.
+
 ## Session 166 - Extraction distance, pressure, radar objectives, and death-beat split
 
 - [x] [SIL:3] **DONE S166** Made large-arena spawns world-authoritative: enemy, boss, and cluster placements use resolved arena dimensions, with focused regression coverage for scaled and identity arenas.
@@ -10,7 +25,7 @@ Public-safe launch roadmap summary.
 - [x] [SIL:2] **DONE S166** Split secondary death analysis into an 18.50 KB first-open lazy chunk, reducing the immediate DeathScreen chunk to 73.33 KB; staged-browser first-open proof caught and closed a missing-model regression.
 - [ ] [SIL:1] Add a focused browser contract that opens every lazily mounted death-analysis subsection with a minimal model, so missing parent-to-child fields fail before staging.
 - [ ] [SIL:1] Collect consented extraction telemetry before changing the 1.25× pressure slope or 1.5× arena scale; synthetic distance and enemy-count math are not balance evidence.
-- [ ] [SIL:1] Replace the Windows `.git/hooks/pre-push` per-file Bash fan-out with a bounded Node entrypoint that composes the canonical secret scanner and router/path checks; S166's hook orphaned after two compliant attempts.
+- [x] [SIL:1] **DONE S167** Replace the Windows `.git/hooks/pre-push` per-file Bash fan-out with a bounded Node entrypoint that composes the canonical secret scanner and router/path checks; S166's hook orphaned after two compliant attempts.
 - [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET on the Pages project so Porcelain Passport verification and cloud backup stop answering 503.
 
 **Runway exception:** participant fun/balance outcomes, physical-device proof, provider/mail/identity evidence, current production Core Web Vitals, publication, and SPARKED promotion remain independently gated. A visual-state injection opened evacuation only for deterministic rendered-state QA and is not represented as gameplay evidence.
