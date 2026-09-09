@@ -34,6 +34,7 @@ import {
   loadDoctrineArchive,
   isDoctrineForged,
   recordDoctrineForge,
+  recordDeathByHazard,
 } from "./storage.js";
 
 // Formula: Math.floor(Math.sqrt(kills / 20)) + 1
@@ -551,5 +552,36 @@ describe("rhythm mastery tracking", () => {
     const before = getRhythmMastery();
     trackRhythmMasteryHit();
     expect(getRhythmMastery()).toBe(before + 1);
+  });
+});
+
+describe("recordDeathByHazard (S168)", () => {
+  it("increments the named hazard counter on each call", () => {
+    recordDeathByHazard("Sewer flood");
+    recordDeathByHazard("Sewer flood");
+    const career = loadCareerStats();
+    expect(career.hazardDeaths?.["Sewer flood"]).toBeGreaterThanOrEqual(2);
+  });
+
+  it("tracks distinct hazard names independently", () => {
+    recordDeathByHazard("Extraction lockdown");
+    const career = loadCareerStats();
+    expect(typeof career.hazardDeaths?.["Extraction lockdown"]).toBe("number");
+    expect(career.hazardDeaths?.["Extraction lockdown"]).toBeGreaterThanOrEqual(1);
+  });
+
+  it("rejects blank or non-string sourceName without throwing", () => {
+    expect(() => recordDeathByHazard("")).not.toThrow();
+    expect(() => recordDeathByHazard(null)).not.toThrow();
+    expect(() => recordDeathByHazard(undefined)).not.toThrow();
+  });
+
+  it("clamps sourceName to 40 characters", () => {
+    const long = "A".repeat(50);
+    recordDeathByHazard(long);
+    const career = loadCareerStats();
+    const keys = Object.keys(career.hazardDeaths || {}).filter((k) => k.startsWith("A"));
+    expect(keys.length).toBeGreaterThan(0);
+    expect(keys[0].length).toBeLessThanOrEqual(40);
   });
 });

@@ -9,7 +9,7 @@ import {
   WAVE_CHALLENGE_MUTATIONS, WEAPON_ARSENAL_MILESTONE_LEVELS, BOSS_GRUDGE_QUOTES,
   getWeeklyGauntlet,
 } from "./constants.js";
-import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, advanceMissionStreak, loadMetaProgress, getLockedCallsign, lockCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken, saveStudioGameEvent, loadStudioGameEvents, recordDeathByEnemy, loadRivalryHistory, loadTopGhosts, loadWeeklyTopGhost, loadExperimentIntent, getBossKillRecord, saveBossKillRecord, isNemesis, getAdaptiveSpawnMods, getProximityRivals, getWaveDeathCounts, getWeaponEvolutionState, getCommunityChokePoints, updateEnemyCareerStatsBatch, recordDoctrineForge } from "./storage.js";
+import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, advanceMissionStreak, loadMetaProgress, getLockedCallsign, lockCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken, saveStudioGameEvent, loadStudioGameEvents, recordDeathByEnemy, recordDeathByHazard, loadRivalryHistory, loadTopGhosts, loadWeeklyTopGhost, loadExperimentIntent, getBossKillRecord, saveBossKillRecord, isNemesis, getAdaptiveSpawnMods, getProximityRivals, getWaveDeathCounts, getWeaponEvolutionState, getCommunityChokePoints, updateEnemyCareerStatsBatch, recordDoctrineForge } from "./storage.js";
 import { spawnEnemy as _spawnEnemy, spawnBoss as _spawnBoss, BOSS_ROTATION, applyEliteType, getRandomEliteType, getWaveSpawnRng } from "./gameHelpers.js";
 import { preloadBossAtlas, preloadEnemyAtlasesForTypes, preloadObjectAtlases, preloadZombieAtlas } from "./utils/visualAssetLibrary.js";
 import { cosmeticRandom, createNamedRunRng, getRunRng, shuffleWithRng } from "./systems/runRng.js";
@@ -1664,6 +1664,9 @@ export default function CallOfDoodie() {
         const attribution = resolveDeathAttribution(gs);
         gs._deathAttribution = attribution;
         const killerType = attribution?.typeIndex ?? null;
+        if (attribution?.hazard && attribution.sourceName && !_victory) {
+          recordDeathByHazard(attribution.sourceName);
+        }
         if (killerType != null && !_victory) {
           gs._deathKillerType = killerType;
           recordDeathByEnemy(killerType);

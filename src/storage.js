@@ -753,6 +753,7 @@ const DEFAULT_CAREER = {
   totalPlayTime: 0,
   achievementsEver: [],
   enemyKillBests: {}, // typeIndex → { waveMax, careerKills, killedByCount }
+  hazardDeaths: {}, // sourceName → count (flood, lockdown, etc.)
 };
 
 export function loadCareerStats() {
@@ -1273,6 +1274,20 @@ export function recordDeathByEnemy(typeId) {
   const kbRec = career.enemyKillBests[typeId] || { waveMax: 0, careerKills: 0, killedByCount: 0 };
   kbRec.killedByCount = (kbRec.killedByCount || 0) + 1;
   career.enemyKillBests[typeId] = kbRec;
+  try { persistProgression(CAREER_KEY, JSON.stringify(career)); } catch {}
+}
+
+/**
+ * Record a hazard death (flood, lockdown, etc.) by sourceName.
+ * sourceName is already sanitised by resolveDeathAttribution to at most 40 chars.
+ */
+export function recordDeathByHazard(sourceName) {
+  if (!sourceName || typeof sourceName !== "string") return;
+  const key = sourceName.trim().slice(0, 40);
+  if (!key) return;
+  const career = loadCareerStats();
+  if (!career.hazardDeaths || typeof career.hazardDeaths !== "object") career.hazardDeaths = {};
+  career.hazardDeaths[key] = (career.hazardDeaths[key] || 0) + 1;
   try { persistProgression(CAREER_KEY, JSON.stringify(career)); } catch {}
 }
 
