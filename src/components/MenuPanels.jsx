@@ -211,7 +211,7 @@ export function MostWantedPanel({ onClose }) {
                   <span style={{ fontSize: 20 }}>☣</span>
                   <div style={{ flex: 1 }}>
                     <div style={{ fontSize: 13, fontWeight: 700, color: "#FF9900" }}>{name}</div>
-                    <div style={{ fontSize: 9, color: "#666", fontFamily: "'Courier New',monospace" }}>killed you {count}×</div>
+                    <div style={{ fontSize: 9, color: "#AAA", fontFamily: "'Courier New',monospace" }}>killed you {count}×</div>
                   </div>
                 </div>
               ))}
