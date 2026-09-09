@@ -16,7 +16,8 @@ describe("pre-push hook (S167 Node entrypoint)", () => {
     expect(scanFileText("x.txt", "ghp_" + "c".repeat(36))).toEqual(["  ⛔ GitHub PAT: x.txt"]);
     expect(scanFileText("x.txt", "AKIA" + "D".repeat(16))).toEqual(["  ⛔ AWS access key: x.txt"]);
     expect(scanFileText("x.txt", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9." + "e".repeat(60))).toEqual(["  ⚠  JWT token (service role?): x.txt"]);
-    expect(scanFileText("x.txt", "postgresql://user:hunter2hunter2@db.example")).toEqual(["  ⚠  DB connection string with password: x.txt"]);
+    // Assembled at runtime so this test file never carries a literal match for its own rule.
+    expect(scanFileText("x.txt", ["postgresql:", "", "user:hunter2hunter2@db.example"].join("/"))).toEqual(["  ⚠  DB connection string with password: x.txt"]);
     expect(scanFileText("docs/n.md", "see C:\\Users\\someone\\thing")).toEqual(["  ⚠  Absolute local path leak: docs/n.md"]);
     expect(scanFileText(".env", "X=1")).toEqual(["  ⛔ .env file committed: .env"]);
     expect(scanFileText("config/.env.local", "X=1")).toEqual(["  ⛔ .env file committed: config/.env.local"]);
