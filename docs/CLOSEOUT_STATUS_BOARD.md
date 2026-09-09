@@ -1,20 +1,20 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.1 -->
-<!-- generated-at: 2026-09-09 (Session 167 closeout) -->
+<!-- generated-at: 2026-09-09 (Session 168 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S167 ════════════════════╗
-║  Date: 2026-09-09  ·  SIL: 997/1000  ·  Velocity: 6 down         ║
-║  Mode: FOUNDER  ·  Agent: claude-code                            ║
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S168 ════════════════════╗
+║  Date: 2026-09-09  ·  SIL: 997/1000  ·  Velocity: 4 down         ║
+║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ║  Live:  preview  →  https://callofdoodie.wtf/                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ Triage: no lock, clean tree, remote in sync, write-back curr  ║
-║  ✓ Found and fixed: "what killed you" had never resolved in pro  ║
-║  ✓ Shipped: per-mode `outcome(gs)` receipts bounded by `getMode  ║
-║  ✓ Shipped: screen-anchored floating text (`addScreenText`/`ann  ║
-║  ✓ Shipped: `onModeWaveStart` receives arena bounds plus viewpo  ║
+║  ✓ Recovery: S167 was sealed at 9bc71d8; S168 had an authorized  ║
+║  ✓ Shipped: alarm 100 precedes evacuation for tick, crate, and   ║
+║  ✓ Shipped: fatal combat returns before mode stepping; step and  ║
+║  ✓ Shipped: the natural outcome harness selects difficulty, adv  ║
+║  ✓ Security: reviewed js-yaml 4.3.2 closes the inherited adviso  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 997/1000 ═══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
@@ -41,23 +41,23 @@
 ║  ✓ agent memory (Claude/Codex project memory)                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 15 files  ·  M:14 A:0 D:0 ?:1                          ║
+║  Changes: 29 files  ·  M:24 A:0 D:0 ?:5                          ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ DEPLOYMENT ══════════════════════════════════════════════════╗
-║  Staging:  https://session-167-staging.call-of-doodie.pages.dev  ║
+║  Staging:  https://session-168-staging.call-of-doodie.pages.dev  ║
 ║  Live:     https://callofdoodie.wtf/  ·  preview/FORGE (not yet  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
-║  Doctor:        157/219                                          ║
+║  Doctor:        157/220                                          ║
 ║  Compliance:    —                                                ║
-║  Tests:         1363/1363                                        ║
+║  Tests:         1372/1372                                        ║
 ║  Validation:    full-fresh                                       ║
-║  IGNIS:         9d ago                                           ║
+║  IGNIS:         1d ago                                           ║
 ║  Truth:         engineering-ready-sparked-no-go                  ║
-║  Sanitization:  0d ago                                           ║
-║  shells:        5 started · 5 closed · 0 running                 ║
+║  Sanitization:  1d ago                                           ║
+║  shells:        4 started · 4 closed · 0 running                 ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ NEXT SESSION ════════════════════════════════════════════════╗
 ║  (no genius cache — run `node scripts/cache-genius-list.mjs`)    ║

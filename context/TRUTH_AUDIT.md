@@ -1,3 +1,19 @@
+## 2026-09-09 — Session 168 — Recovery, terminal order, and evidence truth
+
+- Recovery truth — S167 was sealed at 9bc71d8; S168 was substantive uncommitted implementation under an authorized lock. No S168 write-back, commit, CI, or production claim existed.
+- Integrity truth — every changed JSON parsed, no changed NDJSON or debris existed, and ~/.claude.json is valid JSON. PowerShell object conversion objected to case-duplicate path keys, not JSON syntax.
+- Test truth — the first serialized suite passed 232 files/1,368 assertions but exited 1 when a worker never started. Isolation exposed stale Hot Context. After regeneration and implementation, the authoritative rerun passed 233 files/1,372 assertions with exit 0.
+- Extraction truth — alarm 100 defeats same-transition banking from time, crate, or kill. Lockdown remains a last stand. banked/won makes later hooks inert, so settlement is exactly once.
+- Terminal truth — fatal enemy damage returns before mode mechanics; mode step and victory reject dead/ending/ended state while recovered PLAYING remains valid.
+- Browser truth — staging 87715c0c naturally ended extraction and throne runs with mode-specific receipts. PNGs are retained. Direct image inspection failed before decode with a host DPAPI error; no pixel-quality judgment is inferred.
+- Dependency truth — the js-yaml advisory was real and is closed through reviewed 4.3.2. Security, dependency, and supply-chain courts are green.
+- Doctor truth — live doctor passes overall with 159 passing, one advisory failure, and blockingFailing 0; the older S167 blocker snapshot is stale.
+- Evidence boundary truth — no participant, device, provider, identity, mail, production-performance, publication, lifecycle, or fun/balance conclusion is claimed. Production proof follows the checkpoint.
+
+Overall status: recovered, implemented, fully tested, and staging-proven; exact-main CI/deploy and production verification are pending this checkpoint. SPARKED remains NO-GO.
+Last reviewed: 2026-09-09
+
+<!-- truth-audit-version: 1.1 -->
 ## 2026-09-09 — Session 167 — Attribution, receipt, announcement, hook, and CI truth
 
 - Attribution truth — before this session no death ever resolved a killer: `gs._lastDamageBy` had no writer and the nearest-enemy fallback read `.type`, which spawned enemies never carry. `recordDeathByEnemy` therefore never fired, `_telegraphMult` was keyed on `undefined`, and every `killedByType` in ghosts and run history was null. This is stated as a production defect that existed from S163 through S166, not as a regression introduced here. The replacement reports `observed` when it comes from the damage record and `hypothesis` when it comes from proximity; no surface may promote the latter.

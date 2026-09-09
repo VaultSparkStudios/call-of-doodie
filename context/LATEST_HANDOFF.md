@@ -1,3 +1,26 @@
+# Latest Handoff — Session 168
+
+Session Intent: Recover the cut-off S168 from repository evidence, prove inherited claims, finish terminal-order implementation and natural debrief evidence, close it behind a recovery checkpoint, then continue into a fresh full arc.
+
+## Where We Left Off (Session 168)
+
+- Recovery: S167 was sealed at 9bc71d8; S168 had an authorized lock and uncommitted audit/implementation. JSON/NDJSON and ~/.claude.json integrity passed. It died during implementation before write-back, commit, CI, or production.
+- Shipped: alarm 100 precedes evacuation for tick, crate, and kill; lockdown remains a last stand; banking is idempotent.
+- Shipped: fatal combat returns before mode stepping; step and victory reject terminal state but preserve recovered PLAYING flow.
+- Shipped: the natural outcome harness selects difficulty, advances intermissions, waits for ending, and validates mode-specific content. Staging 87715c0c retained extraction and throne loss receipts.
+- Security: reviewed js-yaml 4.3.2 closes the inherited advisory; audit and supply-chain courts are green.
+- Validation: Vitest 233/233 files and 1,372/1,372 assertions; strict lint; build (App 466.87 KB / 560 KB); schema, public, runtime, entry, asset, dependency, security, and supply-chain gates; Doctor overallPass true with blockingFailing 0.
+- Evidence boundary: browser automation read rendered debrief text and retained PNGs. Direct image inspection failed at DPAPI decode, so no direct pixel-review claim is made.
+- Creative Direction Record reviewed: no new creative direction.
+- Next: publish the recovery checkpoint, require exact-head CI/deploy, capture both modes on production, seal evidence, then open S169.
+
+## Impact Summary
+
+**Headline.** A dead player cannot evacuate after lockdown or win on the fatal frame, and extraction cannot bank twice.
+
+**Evidence.** Four recovered audit items plus a dependency repair; 233 files and 1,372 assertions; staging 87715c0c; two natural debrief receipts; zero blocking doctor findings and known dependency vulnerabilities.
+
+---
 # Latest Handoff — Session 167
 
 Session Intent: Run one complete `/arc` from the verified S166 closeout — triage, canonical startup, game-loop review, a fresh premise-verified audit, implement every repository-owned finding, prove it on isolated staging and in a real browser, push directly to `main`, fully deploy, verify production, and complete the canonical S167 closeout under explicit founder authorization.

@@ -3,6 +3,36 @@ pm run launch:qa and full suite before closeout.\n
 # Self-Improvement Loop
 
 Detailed internal scoring, audit trends, and brainstorming are maintained privately.
+## 2026-09-09 — Session 168 | Total: 997/1000 | Velocity: 4 | Debt: ↓
+
+SIL 997/1000: Recovered interrupted work without laundering it into a completed session, proved the full suite, closed terminal-order paths that could reward a dead player, made settlement exactly once, and obtained mode-specific natural debrief evidence while keeping image-tool and production boundaries explicit.
+
+| Category | Score | Δ | Rationale |
+|---|---:|---|---|
+| Dev Health | 100 | → | Vitest 233/233 files and 1,372/1,372 assertions, strict lint, build under budget, repository gates, and doctor blockingFailing 0. |
+| Creative Alignment | 100 | → | Lockdown remains a last stand; death cannot become evacuation or victory; debrief stakes remain authored. |
+| Momentum | 100 | → | Recovery, integrity, completion, dependency repair, validation, staging, and closeout ran without interruption. |
+| Engagement | 99 | → | Fair terminal order protects the revenge loop; no participant outcome is claimed. |
+| Process Quality | 99 | → | Committed and uncommitted truth stayed separate; worker and stale-context failures were investigated. Direct image inspection remained host-blocked. |
+| Cross-Repo Coherence | 100 | → | No sibling repository file was written. |
+| Security Posture | 100 | → | A real inherited advisory was resolved through reviewed registry evidence; security and supply-chain checks pass. |
+| Ecosystem Integration | 99 | → | Existing mode, combat, run-phase, staging, and receipt authorities compose the fix; external gates remain absent. |
+| Capital Efficiency | 100 | → | No paid service, hosted inference, runtime dependency, or variable cost was introduced. |
+| Automation Coverage | 100 | → | Courts cover alarm caps, exactly-once settlement, terminal/recovered state, frame order, and mode-specific receipts. |
+
+Rolling averages: 3-session 997.3 · 5-session 994.0.
+
+Top win: mode logic cannot award banking or victory after combat terminalizes the run.
+Top gap: retained screenshots could not receive direct image inspection because host DPAPI decoding failed; production proof follows the checkpoint.
+
+Intent outcome: achieved through recovery, implementation, validation, and staging; publication and production verification follow.
+
+Brainstorm:
+1. Give MOST WANTED a separate hazards row.
+2. Reach lazy death analysis in browser without a production test hook.
+3. Generalize terminal-order assertions into a lifecycle contract.
+
+**Committed to TASK_BOARD:** hazards row and lazy-analysis browser contract; lifecycle contract will be premise-tested in S169.
 
 ## 2026-09-09 — Session 167 | Total: 997/1000 | Velocity: 6 | Debt: ↓
 

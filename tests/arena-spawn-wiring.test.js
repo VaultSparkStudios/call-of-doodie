@@ -23,6 +23,15 @@ describe("large-arena spawn wiring", () => {
     expect(appSource).toContain("viewW: W, viewH: H, frame: frameCountRef.current, addText, addParticles, announce: _modeAnnounce");
     expect(appSource).not.toContain("onModeWaveStart(gs, modeDefRef.current, { W: GW(), H: GH()");
   });
+
+  it("ends a fatal combat frame before mode mechanics can award a victory (S168)", () => {
+    const enemyStep = appSource.indexOf("combat.stepEnemyFrame({");
+    const terminalGuard = appSource.indexOf("if ((gs.runPhase || RUN_PHASE.PLAYING) !== RUN_PHASE.PLAYING) return;", enemyStep);
+    const modeStep = appSource.indexOf("modeRuntimeRef.current.stepMode(", enemyStep);
+    expect(enemyStep).toBeGreaterThan(-1);
+    expect(terminalGuard).toBeGreaterThan(enemyStep);
+    expect(modeStep).toBeGreaterThan(terminalGuard);
+  });
 });
 
 describe("screen-anchored announcements (S167)", () => {

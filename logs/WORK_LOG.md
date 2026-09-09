@@ -1,4 +1,16 @@
 # Work Log
+## 2026-09-09 (Session 168 — recovered terminal order and exactly-once extraction)
+
+- Reconstructed the cut-off from its lock, S167 closeout, Git chronology, full dirty diff, and S168 audit. S167 was sealed; S168 was wholly uncommitted.
+- Validated changed JSON/NDJSON and ~/.claude.json; no half-written file or debris existed.
+- Made alarm 100 authoritative over evacuation, retained lockdown as a last stand, and made settled extraction inert across later hooks.
+- Stopped mode mechanics/victory after fatal damage while preserving recovered PLAYING state.
+- Extended natural outcome capture with difficulty, intermission progression, and mode-specific receipt contracts. Staging 87715c0c retained extraction and throne losses.
+- Closed the inherited js-yaml advisory with reviewed 4.3.2.
+- Validation: Vitest 233/233 files and 1,372/1,372 assertions; strict lint; build under budget; all repository gates; Doctor overallPass true and blockingFailing 0. Initial worker and stale-context failures remain recorded.
+- Creative Direction Record reviewed — no new direction. Direct PNG inspection failed at host DPAPI decode; claims remain bounded.
+
+Intent outcome: recovery, implementation, validation, and staging achieved; exact-main and production proof follow. SPARKED remains unpromoted.
 
 ## 2026-09-09 (Session 167 — the debrief names names, and announcements stay on screen)
 

@@ -1,12 +1,12 @@
 <!-- generated-by: scripts/render-startup-brief.mjs v3.1 -->
-<!-- generated-at: 2026-09-09 (Session 167 closeout) -->
-<!-- semantic-freshness: hash=84643661634d440d next=168 silSession=167 silScore=997 handoff=167 tests=- -->
+<!-- generated-at: 2026-09-09 (Session 168 closeout) -->
+<!-- semantic-freshness: hash=427b78d1c026b788 next=169 silSession=168 silScore=997 handoff=168 tests=- -->
 <!-- fast-boot-valid-until: next session if within 24h -->
 <!-- brief-coherent: true -->
 
 # Startup Brief — Call-Of-Doodie
 
-> **Fast-boot brief** — generated at Session 167 closeout · 2026-09-09.
+> **Fast-boot brief** — generated at Session 168 closeout · 2026-09-09.
 > Valid for next session if started within 24h. For sessions >24h later, load context files fresh (start.md §3).
 
 ---
@@ -15,25 +15,25 @@
 ╔════════════════════════════════════════════════════════════════╗
 ║  🚀 CALL-OF-DOODIE                                               ║
 ║  project · deployed/public-unlaunched · FORGE                    ║
-║  Session 168 · 2026-09-09 · FOUNDER MODE                         ║
+║  Session 169 · 2026-09-09 · FOUNDER MODE                         ║
 ║  Owner: VaultSpark Studios                                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ LAST SESSION (S167) - WHAT SHIPPED ══════════════════════════╗
-║  Session 167 replaced a killer attribution that had never resol  ║
+╔══ LAST SESSION (S168) - WHAT SHIPPED ══════════════════════════╗
+║  Session 168 recovered an interrupted tree; made extraction ala  ║
 ║  Tests  -                                                        ║
 ║  Deploy -                                                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ WHERE TO TEST · Call-Of-Doodie ══════════════════════════════╗
-║  Unit tests    → npm test — 1363/1363 passing ✓                  ║
-║  visual-proof → staging shell 7/7 · route/theme/viewport 969 ✓   ║
-║  browser-proof → Playwright serial 19 pass / 1 intentional m ✓   ║
-║  full-gates   → strict lint 0 · Vitest 230 files / 1,343 ass ✓   ║
+║  Unit tests    → npm test — 1372/1372 passing ✓                  ║
 ║  ci-incident  → workflow 34312512478 blocked stale HOT_CONTE ·   ║
 ║  production-verification → source 0647bb0d6787 · workflow 34 ✓   ║
 ║  push-gate    → Bash pre-push hook orphaned a third time; re ✓   ║
 ║  browser-proof → Playwright serial 19 pass / 1 intentional m ✓   ║
+║  unit-parallel → S167-start baseline Vitest run reported 226 ·   ║
+║  full-gates   → strict lint 0 · CI Vitest 232/232 files (loc ✓   ║
+║  ci-incident  → workflow 34328869414 for 34f5442 failed qual ·   ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ PROJECT PROFILE ═════════════════════════════════════════════╗
@@ -43,17 +43,17 @@
 ╔══ SCORE ═══════════════════════════════════════════════════════╗
 ║                                                                  ║
 ║    997/1000   ███████████████████████░   100%                    ║
-║    SIL v3.0  ·  Avg3: 998  ·  Velocity 6→                        ║
+║    SIL v3.0  ·  Avg3: 998  ·  Velocity 4→                        ║
 ║    Last active: 0d  ·  Last closeout: 0d  ·  (active = newest…   ║
-║    Trend  ▆▆▄▄▆  →  (last 5 sessions)                            ║
+║    Trend  ▆▄▄▆▄  →  (last 5 sessions)                            ║
 ║                                                                  ║
 ║    Category         Score  Bar        Spark   Δ                  ║
 ║    ─────────────── ────── ────────── ──────── ─                  ║
-║    Dev Health       100    ██████████  ████▇███ →                ║
-║    Alignment        100    ██████████  ████▇███ →                ║
+║    Dev Health       100    ██████████  ███▇████ →                ║
+║    Alignment        100    ██████████  ███▇████ →                ║
 ║    Momentum         100    ██████████  ████████ →                ║
 ║    Engagement        99    ██████████  ▇▇▇▇▇▇▇▇ →                ║
-║    Process Qual      99    ██████████  ▇██▇▇██▇ →                ║
+║    Process Qual      99    ██████████  ██▇▇██▇▇ →                ║
 ║    Coherence        100    ██████████  ········ →                ║
 ║    Security         100    ██████████  ········ →                ║
 ║    Ecosystem         99    ██████████  ········ →                ║
@@ -62,24 +62,25 @@
 ║                                                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ WHERE WE LEFT OFF  ·  Session 167 ═══════════════════════════╗
-║  Shipped:  per-mode `outcome(gs)` receipts bounded by `getModeO  ║
-║  Tests:    1363/1363 passing  ·  Deploy: N/A                     ║
+╔══ WHERE WE LEFT OFF  ·  Session 168 ═══════════════════════════╗
+║  Shipped:  alarm 100 precedes evacuation for tick, crate, and k  ║
+║  Tests:    1372/1372 passing  ·  Deploy: N/A                     ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
 ║  ✓  ███████░░░░░░░░░░░░░░░░░   28% used                          ║
-║     278,900 / 1,000,000 tok  ·  claude-code  ·  heuristic-stale  ║
+║     75,647 / 272,000 tok  ·  codex/codex-272k  · …               ║
+║     ~37,824 tok/turn  ·  cache 50%  ·  4 turns to compact        ║
 ║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         1363/1363 passing (2026-09-09)                 ║
-║  ✓  Velocity      6 →  ·  Debt: ↓                                ║
+║  ✓  Tests         1372/1372 passing (2026-09-09)                 ║
+║  ✓  Velocity      4 →  ·  Debt: ↓                                ║
 ║  ✓  Runway        0 repo-owned items — evidence-gated…           ║
 ║  ⛔  Context age   ?d                                             ║
-║  ⚠  IGNIS         43565 FORGE  ·  9d old                         ║
-║  ⛔  Truth         all four S167 repository-owned audit items…    ║
+║  ✓  IGNIS         43701 FORGE  ·  0d old                         ║
+║  ⛔  Truth         recovered, implemented, fully tested, and…     ║
 ║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs…        ║
 ║  ✓  Genome dims   all stable  (0/25)                             ║
 ║  ✓  Entropy       0.197  (healthy)                               ║
@@ -88,7 +89,7 @@
 ║  ✓  Templates     v3.3 aligned                                   ║
 ║  ⛔  Revenue sig.  not found  ⚠ stale                             ║
 ║  ✓  Deploy gaps   no gaps (run: ops deploy-gaps)                 ║
-║  ⛔  Doctor        157/219 (73%)  ·  2 failing                    ║
+║  ⛔  Doctor        157/220 (72%)  ·  1 failing                    ║
 ║  ⚠  Codex trust   local hooks/config not trusted                 ║
 ║  ✓  Canon adopt.  0/54 pending review                            ║
 ║  ✓  Cost          real $0.02/7d · 7d notional $0.12…             ║
@@ -114,13 +115,13 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ MOMENTUM METER ══════════════════════════════════════════════╗
-║  Velocity:   ▆▆▄▄▆  6→  (last 5 sessions)                        ║
+║  Velocity:   ▆▄▄▆▄  4→  (last 5 sessions)                        ║
 ║  Intent:     100% achieved last 5                                ║
-║  Streak:     ✓ 3 consecutive achieved-intent sessions            ║
+║  Streak:     ✓ 4 consecutive achieved-intent sessions            ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIL FORECAST (next session) ═════════════════════════════════╗
-║  Projected:  995/1000  (↓2 vs current 997)                       ║
+║  Projected:  996/1000  (↓1 vs current 997)                       ║
 ║  All categories forecast stable or rising.                       ║
 ║  Calibration: MAE 4.9 over last 10 forecasts                     ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -149,5 +150,5 @@
 
 ---
 
-*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 167 closeout · 2026-09-09*
+*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 168 closeout · 2026-09-09*
 *Run `node scripts/ops.mjs doctor` for live health check · `node scripts/ops.mjs genius-list` to refresh hit list*

@@ -91,6 +91,7 @@ export function onModeWaveStart(gs, modeDef, ctx = {}) {
  * ("win" | "lose") or null.
  */
 export function stepMode(gs, modeDef, ctx = {}) {
+  if (!gs || gs.player?.health <= 0 || gs.runPhase === "ending" || gs.runPhase === "ended") return null;
   if (Number.isFinite(ctx.frame)) gs.frame = ctx.frame;
   if (gs.allies?.length) stepAllies(gs, ctx);
   if (gs.activeVerbObjective) {

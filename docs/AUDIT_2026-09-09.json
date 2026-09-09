@@ -1,8 +1,8 @@
 {
   "schemaVersion": "2.1",
-  "generatedBy": "/audit skill (S167)",
-  "generatedAt": "2026-09-09T08:05:00.000Z",
-  "session": 167,
+  "generatedBy": "/audit skill (S168; preserves S167 execution history)",
+  "generatedAt": "2026-09-09T09:48:46.8921142Z",
+  "session": 168,
   "project": {
     "slug": "call-of-doodie",
     "type": "game",
@@ -38,6 +38,12 @@
       "head": "7d099ca2",
       "tests": "226 files / 1,307 assertions passed with 4 worker-timeout errors on the host at S167 start (230 files / 1,343 expected; timeouts classified as host contention, re-run in isolation)",
       "doctor": "blockingFailing 0 · 155/220 probes pass"
+    },
+    "s168Baseline": {
+      "tests": "Extraction reproduction: 7 failed, 1 passed before fixes",
+      "scope": "Lockdown remains last stand; no balance tuning or account changes",
+      "canon": "54 reconciled; zero ABSOLUTE gaps",
+      "head": "9bc71d8"
     }
   },
   "axisCoverage": {
@@ -375,10 +381,118 @@
           "recipe": "L2 plus crate placement biased away from the player so wave drops always require traversal."
         }
       }
+    },
+    {
+      "effortHours": 1,
+      "tier": "high",
+      "status": "shipped",
+      "innovation": 4,
+      "impact": 9,
+      "slug": "extraction-alarm-boundary",
+      "category": "features-depth",
+      "title": "Lockdown wins the alarm-100 extraction boundary",
+      "priority": 22.7,
+      "ladder": {
+        "L3": {
+          "recipe": "Require alarm below 100 before banking; test all three cap transitions and preserve last-stand behavior. Include adjacent state-boundary and repeated-call cases.",
+          "effortHours": 3
+        },
+        "L2": {
+          "recipe": "Require alarm below 100 before banking; test all three cap transitions and preserve last-stand behavior.",
+          "effortHours": 1
+        },
+        "L1": {
+          "recipe": "Require alarm below 100 before banking; test all three cap transitions and preserve last-stand behavior.",
+          "effortHours": 0.5
+        }
+      },
+      "recipe": "Require alarm below 100 before banking; test all three cap transitions and preserve last-stand behavior.",
+      "why": "step banks before applying lockdown, so a tick, crate, or kill reaching 100 at evac still banks loot."
+    },
+    {
+      "effortHours": 1,
+      "tier": "high",
+      "status": "shipped",
+      "innovation": 4,
+      "impact": 9,
+      "slug": "extraction-terminal-idempotency",
+      "category": "security",
+      "title": "Bank each extracted run once",
+      "priority": 22.7,
+      "ladder": {
+        "L3": {
+          "recipe": "Guard banked/won extraction state across step and hooks; verify unchanged stash, score, alarm and pickups after repeated calls. Include adjacent state-boundary and repeated-call cases.",
+          "effortHours": 3
+        },
+        "L2": {
+          "recipe": "Guard banked/won extraction state across step and hooks; verify unchanged stash, score, alarm and pickups after repeated calls.",
+          "effortHours": 1
+        },
+        "L1": {
+          "recipe": "Guard banked/won extraction state across step and hooks; verify unchanged stash, score, alarm and pickups after repeated calls.",
+          "effortHours": 0.5
+        }
+      },
+      "recipe": "Guard banked/won extraction state across step and hooks; verify unchanged stash, score, alarm and pickups after repeated calls.",
+      "why": "Repeated step and mode hooks mutate loot, alarm and persistent stash after a successful evacuation."
+    },
+    {
+      "effortHours": 2,
+      "tier": "high",
+      "status": "shipped",
+      "innovation": 5,
+      "impact": 10,
+      "slug": "fatal-frame-mode-boundary",
+      "category": "observability-honesty",
+      "title": "End combat frames before mode victory can follow death",
+      "priority": 25,
+      "ladder": {
+        "L3": {
+          "recipe": "Guard terminal/dead mode stepping and victory; stop the App frame after terminal combat. Test dead/ending/ended states and live recovery. Include adjacent state-boundary and repeated-call cases.",
+          "effortHours": 3
+        },
+        "L2": {
+          "recipe": "Guard terminal/dead mode stepping and victory; stop the App frame after terminal combat. Test dead/ending/ended states and live recovery.",
+          "effortHours": 2
+        },
+        "L1": {
+          "recipe": "Guard terminal/dead mode stepping and victory; stop the App frame after terminal combat. Test dead/ending/ended states and live recovery.",
+          "effortHours": 0.5
+        }
+      },
+      "recipe": "Guard terminal/dead mode stepping and victory; stop the App frame after terminal combat. Test dead/ending/ended states and live recovery.",
+      "why": "App continues from fatal enemy damage into mode stepping; extraction banks and victory adds score after terminalization."
+    },
+    {
+      "effortHours": 1,
+      "tier": "high",
+      "status": "shipped",
+      "innovation": 3,
+      "impact": 7,
+      "slug": "natural-mode-outcome-proof",
+      "category": "ui-ux-feedback",
+      "title": "Verify extraction and throne debriefs through natural browser deaths",
+      "priority": 13.2,
+      "ladder": {
+        "L3": {
+          "recipe": "Use existing capture-mode-outcome tool against staging and production for extraction and throne, inspect images and retain mode-specific evidence. Include adjacent state-boundary and repeated-call cases.",
+          "effortHours": 3
+        },
+        "L2": {
+          "recipe": "Use existing capture-mode-outcome tool against staging and production for extraction and throne, inspect images and retain mode-specific evidence.",
+          "effortHours": 1
+        },
+        "L1": {
+          "recipe": "Use existing capture-mode-outcome tool against staging and production for extraction and throne, inspect images and retain mode-specific evidence.",
+          "effortHours": 0.5
+        }
+      },
+      "recipe": "Use existing capture-mode-outcome tool against staging and production for extraction and throne, inspect images and retain mode-specific evidence.",
+      "why": "Existing S167 capture proves only royale and accepts any nonempty outcome; extraction and throne browser transitions remain unverified."
     }
   ],
   "totals": {
-    "count": 4,
+    "count": 8,
     "priority": 197.4,
     "top3": [
       "death-attribution-observed-damage",
@@ -433,6 +547,30 @@
       "status": "shipped",
       "outcome": "Give wave-start mode hooks the arena, not the viewport",
       "verification": "L2 shipped: onModeWaveStart receives resolveArenaBounds(gs, GW(), GH()) plus viewW/viewH; extraction wave crates land across the 1.5x arena. Courts: modeDefinition wave-start distribution 36/36 crates, arena-spawn-wiring contract green."
+    },
+    {
+      "slug": "extraction-alarm-boundary",
+      "status": "shipped",
+      "outcome": "Lockdown now wins every alarm-100 race with evacuation",
+      "verification": "L2 shipped: tick, crate, and kill transitions reaching alarm 100 cannot bank; lockdown removes the exit and preserves the authored last stand. Focused extraction/mode courts pass."
+    },
+    {
+      "slug": "extraction-terminal-idempotency",
+      "status": "shipped",
+      "outcome": "A successful extraction banks exactly once",
+      "verification": "L2 shipped: banked/won state guards step, kill, and wave hooks; repeated calls leave stash, score, alarm, pickups, and reinforcement pressure unchanged. Focused extraction court passes."
+    },
+    {
+      "slug": "fatal-frame-mode-boundary",
+      "status": "shipped",
+      "outcome": "Fatal combat frames stop before mode mechanics or victory",
+      "verification": "L2 shipped: App returns after enemy-frame terminalization; mode stepping and victory reject dead/ending/ended state while recovered PLAYING state continues. Runtime and source-order courts pass."
+    },
+    {
+      "slug": "natural-mode-outcome-proof",
+      "status": "shipped",
+      "outcome": "Extraction and throne debriefs now have mode-specific natural-run browser proof",
+      "verification": "L2 shipped on isolated S168 staging: SEWER EXTRACTION natural death rendered loot/crates/alarm evidence; HOLD THE THRONE natural loss rendered captured/lost/active-throne evidence. Capture helper advances visible intermission choices and rejects nonempty-but-wrong receipts. Screenshots retained; direct image-tool inspection was attempted but the host DPAPI sandbox failed before decode."
     }
   ]
 }

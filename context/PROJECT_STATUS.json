@@ -4,9 +4,27 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 167 is exact-main published and production-verified: death attribution now resolves the observed damage record (never resolved before, since S163), every mode renders an outcome receipt on the debrief, announcements are screen-anchored in scrolled arenas, wave-start mode context is arena-authoritative, and the pre-push gate is a one-process Node hook. Workflow 34329814954 and immutable 5fb26ff6 serve exact source 0e82ca9fb761.",
-  "nextMilestone": "Extend the natural-death outcome capture to SEWER EXTRACTION and HOLD THE THRONE, surface non-enemy hazards in MOST WANTED, and decide extraction lockdown semantics. OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET remain founder-gated; all SPARKED external evidence remains separate.",
+  "currentFocus": "Session 168 recovered and staging-proven: alarm 100 owns evacuation races, extraction settlement is exactly once, fatal combat stops mode mechanics and victory, and natural extraction/throne debriefs are mode-validated. Trust-reviewed js-yaml 4.3.2 closes the inherited advisory.",
+  "nextMilestone": "Publish the recover S168 closeout checkpoint, require exact-head CI/deploy, verify extraction and throne receipts in production, then begin the full S169 arc. Hazards-row and lazy-analysis browser contracts remain repository-owned candidates.",
   "testingSurfaces": [
+    {
+      "session": 168,
+      "status": "green",
+      "type": "full-gates",
+      "command": "serialized Vitest 233/233 files and 1,372/1,372 assertions · strict lint · deployable build · App 466.87 KB / 560 KB · schema/public/runtime/entry/assets/dependency/security/supply-chain · Studio Doctor overallPass true, blockingFailing 0"
+    },
+    {
+      "session": 168,
+      "status": "green",
+      "type": "browser-proof",
+      "command": "staging immutable 87715c0c · natural SEWER EXTRACTION loss receipt (loot/crates/alarm) · natural HOLD THE THRONE loss receipt (held/lost/active throne); retained PNGs; direct image inspection host-blocked by DPAPI"
+    },
+    {
+      "session": 168,
+      "status": "resolved",
+      "type": "recovery-diagnostic",
+      "command": "initial full run passed 232 files/1,368 assertions but a worker did not start; isolated hot-context court exposed stale generated context; regeneration plus implementation produced authoritative 233/1,372 exit-0 rerun"
+    },
     {
       "session": 167,
       "status": "green",
@@ -54,24 +72,6 @@
       "status": "resolved",
       "type": "ci-incident",
       "command": "workflow 34312512478 blocked stale HOT_CONTEXT after final closeout edits; deterministic rerender fixed it and corrected workflow 34312878779 passed. Local focused retry never started a worker under host contention and is not counted green."
-    },
-    {
-      "session": 166,
-      "status": "green",
-      "type": "full-gates",
-      "command": "strict lint 0 · Vitest 230 files / 1,343 assertions · deployable build · App 464.35 KB / 560 KB · DeathScreen 73.33 KB + deferred analysis 18.50 KB · schema/public/security/dependency/assets/runtime"
-    },
-    {
-      "session": 166,
-      "status": "green",
-      "type": "browser-proof",
-      "command": "Playwright serial 19 pass / 1 intentional mobile skip; hosted smoke covers BOSS GAUNTLET, HOLD THE THRONE + squad, SEWER EXTRACTION, BOT ROYALE, profile, and Operation BREACH"
-    },
-    {
-      "session": 166,
-      "status": "green",
-      "type": "visual-proof",
-      "command": "staging shell 7/7 · route/theme/viewport 969/969 · touched extraction/evac/death-analysis states 40/40 · CANON-053 18 hash-bound captures directly inspected across two themes and 390/1440px"
     }
   ],
   "blockers": [
@@ -87,20 +87,20 @@
   "audience": "public-unlaunched",
   "truthAuditStatus": "engineering-ready-sparked-no-go",
   "truthAuditLastRun": "2026-09-09",
-  "ignisScore": 43565,
+  "ignisScore": 43701,
   "ignisGrade": "FORGE",
-  "ignisLastComputed": "2026-08-31",
-  "silSession": 167,
+  "ignisLastComputed": "2026-09-09",
+  "silSession": 168,
   "silScore": 997,
   "silAvg3": 997.3,
-  "silVelocity": 6,
+  "silVelocity": 4,
   "silDebt": "down",
-  "silLastSession": 167,
-  "currentSession": 167,
+  "silLastSession": 168,
+  "currentSession": 168,
   "sessionMode": "founder",
-  "lastAgent": "claude-code",
-  "testsPassing": 1363,
-  "testsTotal": 1363,
+  "lastAgent": "codex",
+  "testsPassing": 1372,
+  "testsTotal": 1372,
   "entropyScore": 0.197,
   "entropyLastComputed": "2026-08-23",
   "silRubricVersion": "3.0",
@@ -130,39 +130,39 @@
   "freeTierCostStatus": "cost-neutral",
   "runtimeUrl": "https://callofdoodie.wtf/",
   "stagingType": "cloudflare-pages",
-  "stagingUrl": "https://session-167-staging.call-of-doodie.pages.dev/",
+  "stagingUrl": "https://session-168-staging.call-of-doodie.pages.dev/",
   "testsLastRun": "2026-09-09",
   "sanitizationLastCleared": "2026-09-09",
   "sessionShellHygiene": {
-    "session": 167,
-    "started": 5,
-    "closed": 5,
+    "session": 168,
+    "started": 4,
+    "closed": 4,
     "running": 0,
-    "enumeratedAt": "2026-09-09T08:45:00.000Z",
-    "scope": "Agent-started background jobs: one Bash probe that hung and completed, one doctor run, two full Vitest runs, one serial Playwright run — all exited. One git push hung in the Bash pre-push hook; only that orphaned hook worker (PID 13372) was stopped. Five vite preview processes dating from 2026-09-03 belong to earlier sessions and were neither started nor stopped here."
+    "enumeratedAt": "2026-09-09T21:01:20.5220409Z",
+    "scope": "Agent-started long-running commands: two full serialized Vitest runs, one Studio Doctor update, and one derived-context render; all completed. Staging deployment and focused gates also exited normally. No subagents were started."
   },
   "doctorScore": {
     "date": "2026-09-09",
-    "ranAt": "2026-09-09T04:10:04.730Z",
-    "overallPass": false,
+    "ranAt": "2026-09-09T20:56:32.918Z",
+    "overallPass": true,
     "passing": 157,
-    "warning": 57,
-    "failing": 2,
-    "blockingFailing": 1,
+    "warning": 59,
+    "failing": 1,
+    "blockingFailing": 0,
     "advisoryFailing": 1,
     "skipped": 3,
-    "ran": 216,
-    "total": 219,
-    "score": 73
+    "ran": 217,
+    "total": 220,
+    "score": 72
   },
-  "lastSessionSummary": "Session 167 replaced a killer attribution that had never resolved (never-written _lastDamageBy; enemies carry typeIndex, not type) with an observed-damage-first resolver feeding MOST WANTED, adaptive telegraphing, Run Coach, nemesis, ghosts, and run history; gave every mode a bounded outcome receipt rendered on the debrief; made announcements screen-anchored in scrolled arenas; made wave-start mode context arena-authoritative; retired the orphaning Bash pre-push hook for a Node entrypoint; corrected the public roadmap/changelog. Head 0e82ca9fb761 passed workflow 34329814954 and every production court.",
-  "testsAssertionsPassing": 1363,
-  "testsAssertionsTotal": 1363,
-  "testsAssertionsFiles": 232,
+  "lastSessionSummary": "Session 168 recovered an interrupted tree; made extraction alarm precedence and settlement exactly-once, stopped mode logic after fatal combat while preserving revival, added mode-specific natural extraction/throne browser receipts, and closed the inherited js-yaml advisory. Full suite 233 files/1,372 assertions and doctor blockingFailing 0.",
+  "testsAssertionsPassing": 1372,
+  "testsAssertionsTotal": 1372,
+  "testsAssertionsFiles": 233,
   "testsFlaky": 0,
   "testsInconclusive": 0,
   "testsEnvBlocked": [],
   "testsDeferred": [],
   "testsBudgetExhausted": false,
-  "silAvg5": 991.8
+  "silAvg5": 994
 }

@@ -1,0 +1,66 @@
+{
+  "schemaVersion": "1.3",
+  "date": "2026-09-09",
+  "session": 168,
+  "project": "Call-Of-Doodie",
+  "intent": "recover the cut-off S168, verify every inherited claim, finish terminal-order implementation, prove it on isolated staging, and create a clean recovery checkpoint before the next full arc",
+  "outcome": "recovered-implemented-tested-staging-proven-production-pending",
+  "shipped": [
+    "alarm-100 precedence over evacuation across tick, crate and kill",
+    "exactly-once extraction settlement across later hooks",
+    "fatal-frame boundary for mode step and victory with recovery preserved",
+    "mode-specific natural extraction and throne outcome capture",
+    "trust-reviewed js-yaml 4.3.2 advisory closure"
+  ],
+  "validation": [
+    "serialized Vitest 233 files and 1,372 assertions",
+    "strict lint and deployable build; App 466.87 KB / 560 KB",
+    "schema, public, runtime, entry, assets, dependency, security and supply-chain gates",
+    "Studio Doctor overallPass true with blockingFailing 0",
+    "isolated staging 87715c0c with natural extraction and throne rendered receipts"
+  ],
+  "deferred": [
+    "direct image inspection on this host due DPAPI decode failure",
+    "production exact-head deployment and mode receipts until after checkpoint",
+    "participant, physical-device, provider/mail/identity, performance, publication and SPARKED evidence"
+  ],
+  "sil": {
+    "score": 997,
+    "velocity": 4,
+    "debt": "down"
+  },
+  "headline": "Closed the fatal-frame loopholes and made extraction settlement exactly once",
+  "items": [
+    {
+      "title": "Alarm precedence and exactly-once extraction",
+      "projectImpact": 10,
+      "ecosystemImpact": 5,
+      "evidence": "sewerExtraction tests plus full suite"
+    },
+    {
+      "title": "Fatal-frame mode lifecycle boundary",
+      "projectImpact": 10,
+      "ecosystemImpact": 6,
+      "evidence": "modeDefinition/runtime/source-order courts"
+    },
+    {
+      "title": "Mode-specific natural debrief proof",
+      "projectImpact": 8,
+      "ecosystemImpact": 5,
+      "evidence": "staging 87715c0c rendered extraction and throne receipts"
+    },
+    {
+      "title": "Inherited advisory closure",
+      "projectImpact": 6,
+      "ecosystemImpact": 5,
+      "evidence": "package trust review; audit/security/supply-chain green"
+    }
+  ],
+  "followUps": [
+    "surface flood and lockdown in a separate MOST WANTED hazards row",
+    "open lazy death analysis in a browser through an existing public flow",
+    "generalize terminal-order checks for future modes",
+    "verify exact recovery source in production"
+  ],
+  "blockers": []
+}

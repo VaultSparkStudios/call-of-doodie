@@ -2363,7 +2363,7 @@ export default function CallOfDoodie() {
 
   // ── Mode victory (S163): a mode win condition ends the run as a win ──────
   const handleModeVictory = useCallback((gs) => {
-    if (!gs || gs._victory) return;
+    if (!gs || gs._victory || gs.player?.health <= 0 || gs.runPhase === RUN_PHASE.ENDING || gs.runPhase === RUN_PHASE.ENDED) return;
     gs._victory = true;
     gs.score += 5000;
     addText(gs, gs.player.x, gs.player.y - 60, "🏆 VICTORY", "#FFD700", true);
@@ -3299,6 +3299,8 @@ export default function CallOfDoodie() {
       setHealth,
       handlePlayerDeath,
     });
+
+    if ((gs.runPhase || RUN_PHASE.PLAYING) !== RUN_PHASE.PLAYING) return;
 
     // ── Mode mechanics: allies, zones, verb objectives, win/lose (S163) ──
     const modeVerdict = modeRuntimeRef.current ? modeRuntimeRef.current.stepMode(gs, modeDefRef.current, { W: AW, H: AH, viewW: W, viewH: H, frame: frameCountRef.current, addText, addParticles, announce: _modeAnnounce, spawnEnemy, setHealth, handlePlayerDeath }) : null;

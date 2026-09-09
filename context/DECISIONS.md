@@ -1388,3 +1388,11 @@ CANON-054 gap justification: the checker emitted malformed evidence while the da
 **Why:** Propagation selected Node 20 for the brief validator while Call of Doodie declares Node 22. The application and all 1,255 assertions were healthy; only the runtime-floor contract failed. Repair source `f76850a` and run `32883766091` prove Node 22 restores the exact release path.
 
 **Boundaries:** Do not lower the repository runtime contract, retry a known-bad tree, edit a sibling repository directly, or reinterpret this infrastructure repair as gameplay or SPARKED progress.
+
+## 2026-09-09 — Session 168 — Extraction lockdown is a last stand and owns alarm 100
+
+**Decision:** Preserve SEWER EXTRACTION lockdown as a playable last stand. If time, a crate, or a kill reaches alarm 100 on the evacuation point, lockdown takes precedence and removes evacuation. Once evacuation succeeds below 100, settlement is final and later mode hooks are inert.
+
+**Why:** The live mechanics already authored escalating reinforcements after lockdown, while the roadmap promises lockdown without promising immediate defeat. Preserving that consequence avoids inventing a new ending without participant evidence. Strict precedence and exactly-once banking close the race and persistence exploit.
+
+**Boundary:** This is deterministic correctness, not balance evidence. Forced defeat would require an explicit creative decision and public-contract update.

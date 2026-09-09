@@ -3,7 +3,7 @@
 // Loot crates drop across the arena. Every crate you grab and every kill raises
 // the alarm. At 60 the evac toilet opens; reach it to bank your loot into a
 // persistent stash. Die and the loot goes down the drain. At 100 the alarm
-// locks the exit and the run is over. Reuses the ESCAPE structure shape, the
+// locks the exit and leaves a last stand until death. Reuses the ESCAPE structure shape, the
 // pickup system, and the stash in storage.js.
 
 import { getRunRng } from "../systems/runRng.js";
@@ -59,6 +59,7 @@ export const SEWER_EXTRACTION = Object.freeze({
   },
 
   onWaveStart(gs, ctx) {
+    if (gs._extractBanked || gs._modeWon) return;
     for (let i = 0; i < CRATES_PER_WAVE; i += 1) spawnCrate(gs, ctx);
     // Screen-anchored (S167): the arena is 1.5× the screen, so a world-centre
     // callout would be off-screen for most of the run.
@@ -66,10 +67,12 @@ export const SEWER_EXTRACTION = Object.freeze({
   },
 
   onEnemyKilled(gs) {
+    if (gs._extractBanked || gs._modeWon) return;
     if (!gs._extractLocked) gs.alarm = Math.min(ALARM_LOCK, (gs.alarm || 0) + ALARM_PER_KILL);
   },
 
   step(gs, ctx) {
+    if (gs._extractBanked || gs._modeWon || gs.player?.health <= 0 || gs.runPhase === "ending" || gs.runPhase === "ended") return;
     const p = gs.player;
     const W = ctx.W || gs._W || 1280, H = ctx.H || gs._H || 720;
     if (!gs._extractLocked) gs.alarm = Math.min(ALARM_LOCK, (gs.alarm || 0) + ALARM_PER_SECOND / 60);
@@ -98,7 +101,7 @@ export const SEWER_EXTRACTION = Object.freeze({
       gs.structures = (gs.structures || []).filter((s) => s.id !== "evac-toilet").concat({ id: "evac-toilet", x, y, w: 64, h: 64, kind: "exit", alive: true });
       ctx.addText?.(gs, p.x, p.y - 60, "🚽 EVAC OPEN — GET TO THE TOILET", "#33E6FF", true);
     }
-    if (gs._extractOpen && !gs._extractLocked) {
+    if (gs._extractOpen && !gs._extractLocked && gs.alarm < ALARM_LOCK) {
       const exit = (gs.structures || []).find((s) => s.id === "evac-toilet");
       if (exit && Math.hypot(p.x - exit.x, p.y - exit.y) < 42) {
         const stash = loadStash();

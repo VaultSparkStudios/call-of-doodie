@@ -1,12 +1,10 @@
-# Implement Plan — Session 167 (docs/AUDIT_2026-09-09.json)
+# Implementation Plan — S168
 
-Re-sorted for efficiency: foundations before façades, same-seam items grouped, 🔥 first once the seam they share is fixed.
+1. Resolve extraction alarm precedence and make banking idempotent.
+2. Stop mode mechanics and victory after a fatal combat frame; preserve recovery.
+3. Verify real extraction and throne debriefs on staging and production.
+4. Complete existing test, release, public sanitization and closeout gates; push main and verify production.
 
-| Order | Slug | Rung | Why here |
-|---|---|---|---|
-| 1 | mode-wave-context-arena-authority | L2 | Smallest item and the seam the announcement helper also flows through. |
-| 2 | screen-anchored-announcements | L2 | Extends the same mode context and the floating-text primitive; unblocks readable mode callouts. |
-| 3 | death-attribution-observed-damage | L2 | Foundation for every "what killed you" consumer; observed flood damage lands here. |
-| 4 | mode-outcome-receipt | L2 | Façade over the mode layer and the death flow, after both are correct. |
+Wave 1: audit complete. Wave 2: implementation and regression tests in progress. Wave 3: deployment and closeout pending.
 
-Gate after each item: focused Vitest court for the touched modules + strict lint on touched files. Full suite, build, and the public/runtime gates run once before staging.
+The S167 audit history remains in the same sidecar. Last-stand lockdown behavior is preserved. No paid service, package, or public launch is introduced.

@@ -1,6 +1,18 @@
 # Task Board
 
 Public-safe launch roadmap summary.
+## Session 168 - Terminal order, exactly-once extraction, and mode-specific debrief proof
+
+- [x] [SIL:3] **DONE S168** Lockdown wins every alarm-100 race; tick, crate, and kill cap transitions are covered and lockdown remains a last stand.
+- [x] [SIL:3] **DONE S168** Extraction settlement is exactly once; banked/won guards make later steps, kills, and waves inert.
+- [x] [SIL:3] **DONE S168** Fatal enemy frames stop before mode step or victory; recovered PLAYING can continue.
+- [x] [SIL:2] **DONE S168** Natural staging deaths for SEWER EXTRACTION and HOLD THE THRONE produce mode-specific rendered receipts.
+- [x] [SIL:2] **DONE S168** Closed the inherited js-yaml advisory with reviewed 4.3.2; security and supply-chain gates are green.
+- [ ] [SIL:1] Surface flood and lockdown in MOST WANTED as a separate hazards row.
+- [ ] [SIL:1] Open every lazy death-analysis subsection in a browser through an existing public flow.
+- [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET so cloud backup stops answering 503.
+
+**Runway exception:** participant/balance, direct image-tool review on this host, physical-device, provider/mail/identity, production Core Web Vitals, publication, and SPARKED evidence remain gated.
 
 ## Session 167 - The debrief names names, modes say what the run was worth, announcements stay on screen
 
@@ -10,9 +22,9 @@ Public-safe launch roadmap summary.
 - [x] [SIL:2] **DONE S167** Wave-start mode context is arena-authoritative (`resolveArenaBounds` + `viewW`/`viewH`); extraction wave crates cover the 1.5× world after wave 1.
 - [x] [SIL:2] **DONE S167** Replaced the orphaning Bash pre-push fan-out with `scripts/hooks/pre-push.mjs` + `scripts/install-hooks.mjs` (same four rules, one process, regression court). Closes the S166 follow-up.
 - [x] [SIL:1] **DONE S167** Public roadmap/changelog now describe the sixteen-bot scrolling royale and the S167 debrief; regenerated public contract after the content-date roll.
-- [ ] [SIL:1] Extend `capture-mode-outcome.mjs` to SEWER EXTRACTION and HOLD THE THRONE deaths so all four receipts have rendered proof, not just the royale.
+- [x] [SIL:1] **DONE S168** Extend `capture-mode-outcome.mjs` to SEWER EXTRACTION and HOLD THE THRONE deaths with mode-specific real-browser rendered proof.
 - [ ] [SIL:1] Surface non-enemy causes (flood, lockdown) in MOST WANTED as a separate "hazards" row now that attribution can name them.
-- [ ] [SIL:1] Decide whether extraction lockdown should end the run (source comment) or remain a last stand (code); the roadmap only promises "lockdown at 100".
+- [x] [SIL:1] **DONE S168** Preserve extraction lockdown as a last stand and make it authoritative over same-frame evacuation at alarm 100.
 - [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET on the Pages project so Porcelain Passport verification and cloud backup stop answering 503.
 
 **Runway exception:** participant fun/balance outcomes, physical-device proof, provider/mail/identity evidence, current production Core Web Vitals, publication, and SPARKED promotion remain independently gated. The royale outcome capture is a rendered-receipt proof of wiring, not gameplay evidence.
