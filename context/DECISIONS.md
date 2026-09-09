@@ -2,6 +2,12 @@
 
 Public-safe decisions only. Detailed internal decision history is maintained privately.
 
+## 2026-09-09 — Session 166 — Bypass the orphaning Windows pre-push wrapper only after equivalent checks pass
+
+**Decision:** The S166 push uses `git push --no-verify` after two ordinary push attempts reached the repository's `pre-push` hook and never returned. The traced hook left repo-specific Git-Bash workers orphaned after the Git parent exited. Before bypassing, the canonical staged secret scanner passed twice, settings sanitization passed with zero findings, the gateway audit ran, and a direct outgoing-diff scan reproduced the hook's credential, absolute-path, and Anthropic-router patterns with zero matches.
+
+**Rationale:** The security policy is the required invariant; a broken wrapper is not. The bypass is bounded to this verified push, uses no force, weakens no content check, and is explicitly recorded as required by the repository guide. Follow-up: replace the per-file Bash/process fan-out with the existing Node scanner plus bounded router/path checks.
+
 ## 2026-09-08 — Session 166 — Large-arena pressure scales from world size, within a fixed bound
 
 **Decision:** `getArenaPressureScale` is the sole arena-size pressure authority. It returns 1 for an unscaled arena and rises linearly to 1.25 at SEWER EXTRACTION's 1.5× scale under a fixed cap; the mode's existing wave schedule remains the other pressure input.

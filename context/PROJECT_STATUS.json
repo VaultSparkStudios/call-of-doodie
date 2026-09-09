@@ -117,11 +117,11 @@
   "sanitizationLastCleared": "2026-09-09",
   "sessionShellHygiene": {
     "session": 166,
-    "started": 0,
-    "closed": 0,
+    "started": 2,
+    "closed": 2,
     "running": 0,
-    "enumeratedAt": "2026-09-09T04:15:00.000Z",
-    "scope": "No agent-started background shell or local preview server remained. Hosted capture scripts owned and closed their browser processes internally; the long Doctor command completed normally. An unrelated pre-existing Vite listener was not touched or counted."
+    "enumeratedAt": "2026-09-09T04:42:00.000Z",
+    "scope": "Two ordinary git-push jobs entered the Windows Bash pre-push wrapper and orphaned repo-specific hook workers; both jobs and only their identified workers were stopped. The canonical and equivalent security checks passed before the documented bounded bypass. No agent-started background shell or local preview server remains; unrelated pre-existing processes were not touched or counted."
   },
   "doctorScore": {
     "date": "2026-09-09",

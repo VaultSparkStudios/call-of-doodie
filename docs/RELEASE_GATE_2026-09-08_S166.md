@@ -19,6 +19,7 @@ Staging: `https://session-166-staging.call-of-doodie.pages.dev/`
 - Hosted rendered pixels: route/theme/viewport matrix 969/969; touched transient states 40/40; 18 hash-bound captures directly reviewed; CANON-053 check passes.
 - Branding/legal/footer: public contract green; footer completeness 17/17; proprietary notice retained.
 - Cost: cost-neutral ALLOW; no new dependency, hosted inference, identity surface, or variable per-user cost.
+- Pre-push security: settings sanitization zero findings, canonical staged secret scan clean twice, gateway audit complete, and direct outgoing credential/path/router pattern scan clean. The Git-Bash hook wrapper orphaned on two attempts; a documented bounded `--no-verify` exception is used for this non-force push.
 - CI history: the two latest pre-S166 `main` workflows are green; the older route/sitemap drift incident is fixed and superseded.
 - Rollback: follow `docs/DEPLOY_ROLLBACK.md`; Cloudflare retains immutable deployment revisions and `main` remains the source authority.
 

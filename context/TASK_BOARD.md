@@ -10,6 +10,7 @@ Public-safe launch roadmap summary.
 - [x] [SIL:2] **DONE S166** Split secondary death analysis into an 18.50 KB first-open lazy chunk, reducing the immediate DeathScreen chunk to 73.33 KB; staged-browser first-open proof caught and closed a missing-model regression.
 - [ ] [SIL:1] Add a focused browser contract that opens every lazily mounted death-analysis subsection with a minimal model, so missing parent-to-child fields fail before staging.
 - [ ] [SIL:1] Collect consented extraction telemetry before changing the 1.25× pressure slope or 1.5× arena scale; synthetic distance and enemy-count math are not balance evidence.
+- [ ] [SIL:1] Replace the Windows `.git/hooks/pre-push` per-file Bash fan-out with a bounded Node entrypoint that composes the canonical secret scanner and router/path checks; S166's hook orphaned after two compliant attempts.
 - [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET on the Pages project so Porcelain Passport verification and cloud backup stop answering 503.
 
 **Runway exception:** participant fun/balance outcomes, physical-device proof, provider/mail/identity evidence, current production Core Web Vitals, publication, and SPARKED promotion remain independently gated. A visual-state injection opened evacuation only for deterministic rendered-state QA and is not represented as gameplay evidence.
