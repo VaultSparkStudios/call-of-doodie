@@ -1,3 +1,28 @@
+# Latest Handoff — Session 170
+
+Session Intent: Run one complete `/arc` from synchronized main through startup, game-loop and nine-axis audit, complete repository-owned implementation, isolated staging, independent release gating, direct-main publication, exact production verification, and canonical closeout.
+
+## Where We Left Off (Session 170)
+
+- Shipped: Startup Brief cost provenance now uses the canonical plan-aware presenter; the optional v5 renderer is guarded by safe-spawn and fails closed when absent.
+- Shipped: repository-local `task-slice.mjs` and `audit-task-context.mjs` restore bounded, source-hashed audit input. The live board contracts from 144,495 bytes to 5,357 characters across 16 open items.
+- Shipped: the Windows process guard detects dynamic child-process imports. It immediately found an existing raw import in the public-claims checker, which now uses safe-spawn.
+- Audit: all three S170 candidates are shipped; the regenerated innovation pack contains no additional repository-local work.
+- Game-loop review: structural health remains about 9.5/10. No balance or breadth change was justified without participant, physical-device, or replay-parity evidence.
+- Validation: 237 Vitest files / 1,387 assertions, strict lint, deployable build, startup, protocol, schema, public, security, dependency, runtime, entry, asset, npm-audit, and supply-chain gates pass.
+- Staging: `https://session-170-staging.call-of-doodie.pages.dev/` and immutable `https://520a56d6.call-of-doodie.pages.dev/` pass shell 7/7; hosted route/theme/width checks pass 969/969.
+- Visual boundary: no UI/UX file changed. Fresh automated staging pixels are green, but direct host image inspection failed at CryptUnprotectData, so subjective pixel approval is not claimed.
+- Release boundary: engineering FORGE GO; SPARKED NO-GO. The project remains public-unlaunched and is not lifecycle-promoted.
+- Creative Direction Record reviewed: the founder authorized execution, main publication, and deployment; no new creative direction was introduced.
+- Next: publish and verify the exact production revision, then wait for external evidence or new founder-directed product scope.
+
+## Impact Summary
+
+**Headline.** The session machinery now proves its own cost, reads only the task context it needs, and cannot hide a dynamic child process from the Windows safety court.
+
+**Evidence.** Three audit items; 237 files / 1,387 assertions; staging shell 7/7 and 969/969 hosted checks; zero new dependency, runtime behavior, hosted inference, or variable per-user cost.
+
+---
 # Latest Handoff — Session 169
 
 Session Intent: Resume the full S169 /audit → /implement → /closeout arc from clean main at 13ecbdc; implement the three recovered audit findings, exhaust second-order innovations, run rendered-pixel QA, test, stage, deploy, verify production, commit, and push.

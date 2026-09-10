@@ -1,3 +1,4 @@
+import fs from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { evaluateStartupAcceptance, GENERATED_PRIVATE_PATHS } from '../scripts/lib/startup-acceptance.mjs';
 import { normalizeGeniusBlock, renderHumanPressureBlock } from '../scripts/lib/startup-brief-boxes.mjs';
@@ -63,5 +64,11 @@ describe('startup acceptance contract', () => {
 
     expect(receipt.ok).toBe(false);
     expect(receipt.issues.some((issue) => issue.startsWith('Brief format:'))).toBe(true);
+  });
+
+  it('wires the real renderer through the shared Max Plan presentation authority', () => {
+    const source = fs.readFileSync('scripts/render-startup-brief.mjs', 'utf8');
+    expect(source).toContain('presentCostSignal(v, { modelPlanMode: status.modelPlanMode === true })');
+    expect(source).not.toContain("await import('node:child_process')");
   });
 });

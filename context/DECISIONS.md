@@ -1418,3 +1418,11 @@ Why: Open work had been stranded outside the Genius List, falsely reporting exha
 ## 2026-09-09 — Session 169 — Canon conformance disposition
 
 CANON-045 remains a STRONG external integration gap because Obelisk verification credentials and relying-party proof are absent. CANON-054's conformance checker returned a malformed `GAP: }` even though the live `/stats/` surface, `stats-surface.json`, public contract, and Session 142 truth evidence are present; retain it as a named checker discrepancy rather than fabricating conformance.
+
+## 2026-09-09 — Session 170 — Engineering release remains distinct from SPARKED
+
+Decision: ship the cost-neutral protocol/tooling improvements as a normal FORGE engineering release, but do not promote the project to SPARKED. Repository validation and hosted staging prove deployability; they do not substitute for participant, physical-device, reply-as, provider-scoped telemetry, Obelisk, publication, current Core Web Vitals, direct-pixel, sitemap-score, or explicit lifecycle evidence.
+
+## 2026-09-09 — Session 170 — Audit context is bounded at source
+
+Decision: repository audits consume the source-hashed output of `scripts/task-slice.mjs` through `scripts/lib/audit-task-context.mjs`, not the entire long-lived Task Board. Protocol drift treats both files as required surfaces.

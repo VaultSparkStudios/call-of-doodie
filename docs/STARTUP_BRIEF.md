@@ -1,12 +1,12 @@
 <!-- generated-by: scripts/render-startup-brief.mjs v3.1 -->
-<!-- generated-at: 2026-09-10 (Session 169 closeout) -->
-<!-- semantic-freshness: hash=b5868e0df53c7861 next=170 silSession=169 silScore=999 handoff=169 tests=- -->
+<!-- generated-at: 2026-09-10 (Session 170 closeout) -->
+<!-- semantic-freshness: hash=20cf52a4238a5d29 next=171 silSession=170 silScore=997 handoff=170 tests=- -->
 <!-- fast-boot-valid-until: next session if within 24h -->
 <!-- brief-coherent: true -->
 
 # Startup Brief — Call-Of-Doodie
 
-> **Fast-boot brief** — generated at Session 169 closeout · 2026-09-10.
+> **Fast-boot brief** — generated at Session 170 closeout · 2026-09-10.
 > Valid for next session if started within 24h. For sessions >24h later, load context files fresh (start.md §3).
 
 ---
@@ -15,18 +15,18 @@
 ╔════════════════════════════════════════════════════════════════╗
 ║  🚀 CALL-OF-DOODIE                                               ║
 ║  project · deployed/public-unlaunched · FORGE                    ║
-║  Session 170 · 2026-09-10 · FOUNDER MODE                         ║
+║  Session 171 · 2026-09-10 · FOUNDER MODE                         ║
 ║  Owner: VaultSpark Studios                                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ LAST SESSION (S169) - WHAT SHIPPED ══════════════════════════╗
-║  Session 169 shipped three L3 audit items and one second-order   ║
+╔══ LAST SESSION (S170) - WHAT SHIPPED ══════════════════════════╗
+║  Session 170 shipped three protocol/tooling audit items, passed  ║
 ║  Tests  -                                                        ║
 ║  Deploy -                                                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ WHERE TO TEST · Call-Of-Doodie ══════════════════════════════╗
-║  Unit tests    → npm test — 1382/1382 passing ✓                  ║
+║  Unit tests    → npm test — 1387/1387 passing ✓                  ║
 ║  ci-incident  → workflow 34312512478 blocked stale HOT_CONTE ·   ║
 ║  production-verification → source 0647bb0d6787 · workflow 34 ✓   ║
 ║  push-gate    → Bash pre-push hook orphaned a third time; re ✓   ║
@@ -42,18 +42,18 @@
 
 ╔══ SCORE ═══════════════════════════════════════════════════════╗
 ║                                                                  ║
-║    999/1000   ███████████████████████░   100%                    ║
-║    SIL v3.0  ·  Avg3: 998  ·  Velocity 4→                        ║
+║    997/1000   ███████████████████████░   100%                    ║
+║    SIL v3.0  ·  Avg3: 998  ·  Velocity 3→                        ║
 ║    Last active: 0d  ·  Last closeout: 1d  ·  (active = newest…   ║
-║    Trend  ▄▄▆▄▄  →  (last 5 sessions)                            ║
+║    Trend  ▄▆▄▄▄  →  (last 5 sessions)                            ║
 ║                                                                  ║
 ║    Category         Score  Bar        Spark   Δ                  ║
 ║    ─────────────── ────── ────────── ──────── ─                  ║
-║    Dev Health       100    ██████████  ██▇█████ →                ║
-║    Alignment        100    ██████████  ██▇█████ →                ║
+║    Dev Health       100    ██████████  █▇██████ →                ║
+║    Alignment        100    ██████████  █▇██████ →                ║
 ║    Momentum         100    ██████████  ████████ →                ║
-║    Engagement       100    ██████████  ▇▇▇▇▇▇▇█ →                ║
-║    Process Qual      99    ██████████  █▇▇██▇▇▇ →                ║
+║    Engagement       100    ██████████  ▇▇▇▇▇▇██ →                ║
+║    Process Qual      97    ██████████  ▇▇██▇▇▇▇ ↓                ║
 ║    Coherence        100    ██████████  ········ →                ║
 ║    Security         100    ██████████  ········ →                ║
 ║    Ecosystem        100    ██████████  ········ →                ║
@@ -62,28 +62,28 @@
 ║                                                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ WHERE WE LEFT OFF  ·  Session 169 ═══════════════════════════╗
-║  Shipped:  typed environmental case files with stable IDs, boun  ║
-║  Tests:    1382/1382 passing  ·  Deploy: N/A                     ║
+╔══ WHERE WE LEFT OFF  ·  Session 170 ═══════════════════════════╗
+║  Shipped:  Startup Brief cost provenance now uses the canonical  ║
+║  Tests:    1387/1387 passing  ·  Deploy: N/A                     ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ✓  ██████░░░░░░░░░░░░░░░░░░   23% used                          ║
-║     63,124 / 272,000 tok  ·  codex/codex-272k  · …               ║
-║     ~31,562 tok/turn  ·  cache 50%  ·  5 turns to compact        ║
+║  ✓  ██████░░░░░░░░░░░░░░░░░░   24% used                          ║
+║     64,309 / 272,000 tok  ·  codex/codex-272k  · …               ║
+║     ~32,155 tok/turn  ·  cache 50%  ·  5 turns to compact        ║
 ║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         1382/1382 passing (2026-09-09)                 ║
-║  ✓  Velocity      4 →  ·  Debt: ↓                                ║
+║  ✓  Tests         1387/1387 passing (2026-09-10)                 ║
+║  ✓  Velocity      3 →  ·  Debt: ↓                                ║
 ║  ✓  Runway        0 repo-owned items — evidence-gated…           ║
 ║  ⛔  Context age   ?d                                             ║
 ║  ✓  IGNIS         43701 FORGE  ·  1d old                         ║
 ║  ⛔  Truth         recovered, implemented, fully tested, and…     ║
 ║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs…        ║
 ║  ✓  Genome dims   all stable  (0/25)                             ║
-║  ✓  Entropy       0.197  (healthy)                               ║
+║  ✓  Entropy       0.180  (healthy)                               ║
 ║  ✓  CDR           no gap detected                                ║
 ║  ✓  Patterns      no recurring pressure detected                 ║
 ║  ✓  Templates     v3.3 aligned                                   ║
@@ -92,7 +92,7 @@
 ║  ⛔  Doctor        163/220 (75%)  ·  2 failing                    ║
 ║  ⚠  Codex trust   local hooks/config not trusted                 ║
 ║  ✓  Canon adopt.  0/54 pending review                            ║
-║  ✓  Cost          real $0.08/7d · 7d notional $0.47…             ║
+║  ✓  Cost          flat-rate Max Plan · usage ledger…             ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ FOUNDER UNLOCKS ═════════════════════════════════════════════╗
@@ -115,15 +115,15 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ MOMENTUM METER ══════════════════════════════════════════════╗
-║  Velocity:   ▄▄▆▄▄  4→  (last 5 sessions)                        ║
+║  Velocity:   ▄▆▄▄▄  3→  (last 5 sessions)                        ║
 ║  Intent:     100% achieved last 5                                ║
-║  Streak:     ✓ 5 consecutive achieved-intent sessions            ║
+║  Streak:     — (last intent not achieved)                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIL FORECAST (next session) ═════════════════════════════════╗
-║  Projected:  998/1000  (↓1 vs current 999)                       ║
+║  Projected:  995/1000  (↓2 vs current 997)                       ║
 ║  All categories forecast stable or rising.                       ║
-║  Calibration: MAE 5.1 over last 10 forecasts                     ║
+║  Calibration: MAE 5 over last 10 forecasts                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ GENIUS HIT LIST ═════════════════════════════════════════════╗
@@ -150,5 +150,5 @@
 
 ---
 
-*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 169 closeout · 2026-09-10*
+*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 170 closeout · 2026-09-10*
 *Run `node scripts/ops.mjs doctor` for live health check · `node scripts/ops.mjs genius-list` to refresh hit list*

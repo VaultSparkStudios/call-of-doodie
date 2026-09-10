@@ -53,7 +53,7 @@ const RAW_CP_ALLOWLIST = new Set([
 ]);
 
 // A direct import/require of node:child_process (any quote/spacing, with or without node: prefix).
-const RAW_CP_RE = /(?:from\s*['"]|require\(\s*['"])(?:node:)?child_process['"]/;
+const RAW_CP_RE = /(?:from\s*['"]|require\(\s*['"]|import\(\s*['"])(?:node:)?child_process['"]/;
 
 // Scan a tree for scripts that import child_process directly instead of the hardened
 // wrapper. Pure file reads — no child spawns — safe to call in-process from a test.

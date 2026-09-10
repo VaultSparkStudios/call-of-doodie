@@ -20,7 +20,7 @@ import { fileURLToPath } from 'url';
 import { resolveTestSignal, testSignalSeverity, testSignalMark } from './lib/test-signal.mjs';
 import { spawnSync } from './lib/safe-spawn.mjs';
 import { renderTitleHeader, renderLastCompleted, renderTestItNow } from './lib/brief-blocks.mjs';
-import { selectCurrentTestingSurfaces } from './lib/brief-evidence.mjs';
+import { presentCostSignal, selectCurrentTestingSurfaces } from './lib/brief-evidence.mjs';
 import { parseUnifiedItems } from './lib/task-board.mjs';
 import { loadPortfolioTaskBoards } from './lib/cross-repo-tasks.mjs';
 import { loadIgnisInsight } from './lib/ignis-insight.mjs';
@@ -52,9 +52,13 @@ if (process.argv.includes('--help') || process.argv.includes('-h')) {
 // to render-startup-brief-v5.mjs (71% token reduction, validated S117). Default
 // remains v3.1 until 3-session hash-stability monitoring completes.
 if (process.argv.includes('--v5') || process.env.BRIEF_V5 === '1') {
-  const { spawnSync } = await import('node:child_process');
-  const r = spawnSync(node, [path.join(__dirname, 'render-startup-brief-v5.mjs'), ...process.argv.slice(2).filter(a => a !== '--v5')], { stdio: 'inherit', cwd: root });
-  process.exit(r.status ?? 0);
+  const v5Path = path.join(__dirname, 'render-startup-brief-v5.mjs');
+  if (!fs.existsSync(v5Path)) {
+    process.stderr.write('Startup brief v5 renderer is unavailable in this repository.\n');
+    process.exit(2);
+  }
+  const r = spawnSync(node, [v5Path, ...process.argv.slice(2).filter(a => a !== '--v5')], { stdio: 'inherit', cwd: root });
+  process.exit(r.status ?? 1);
 }
 
 // ── Constants ─────────────────────────────────────────────────────────────────
@@ -688,11 +692,9 @@ try {
   const ledEntries = readEntries(ledgerPath);
   if (ledEntries.length > 0) {
     const v = evaluateCostAnomaly(ledEntries);
-    sigCost = v.sig;
-    const realPart = `real $${v.realMetered7d.toFixed(2)}/7d`;
-    costDetail = v.notionalNote
-      ? `${realPart} · ${v.notionalNote}`
-      : `${realPart} · ${v.reasons[0] || 'normal'}`;
+    const presented = presentCostSignal(v, { modelPlanMode: status.modelPlanMode === true });
+    sigCost = presented.sig;
+    costDetail = presented.detail;
   }
 } catch { /* best-effort */ }
 

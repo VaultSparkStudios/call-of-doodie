@@ -32,6 +32,8 @@ const helpers = [
   { rel: "scripts/cache-genius-list.mjs", level: "optional", purpose: "keeps startup genius-list command executable" },
   { rel: "scripts/generate-genius-list.mjs", level: "optional", purpose: "renders brief startup recommendations" },
   { rel: "scripts/sample-codebase.mjs", level: "optional", purpose: "supports bounded audit code sampling" },
+  { rel: "scripts/task-slice.mjs", level: "required", purpose: "keeps canonical bounded TASK_BOARD audit context executable" },
+  { rel: "scripts/lib/audit-task-context.mjs", level: "required", purpose: "provides source-hashed bounded audit projections" },
   { rel: "scripts/studio-oracle.mjs", level: "required", purpose: "keeps audit premise verification executable" },
   { rel: "scripts/render-audit-md.mjs", level: "optional", purpose: "renders audit markdown from JSON sidecar" },
   { rel: "scripts/lib/audit-sidecar.mjs", level: "optional", purpose: "finds and updates audit JSON sidecars" },

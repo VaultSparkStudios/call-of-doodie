@@ -1,8 +1,8 @@
 {
   "schemaVersion": "2.1",
-  "generatedBy": "/audit skill (S169; preserves S167-S168 execution history)",
-  "generatedAt": "2026-09-10T01:04:40.654Z",
-  "session": 169,
+  "generatedBy": "/audit skill (S170; preserves S167-S169 execution history)",
+  "generatedAt": "2026-09-10T03:18:00Z",
+  "session": 170,
   "project": {
     "slug": "call-of-doodie",
     "type": "game",
@@ -20,12 +20,12 @@
     "sil-debt": 1
   },
   "meta": {
-    "candidateCount": 33,
-    "promotedCount": 3,
-    "combinedPriority": 197.4,
+    "candidateCount": 36,
+    "promotedCount": 6,
+    "combinedPriority": 272.3,
     "livePremiseVerification": true,
     "gameLoopReview": {
-      "source": "docs/GAME_LOOP_REVIEW_2026-09-09.md",
+      "source": "S170 live review of context/GAME_LOOP.md, current runtime surfaces, and absent docs/PLAYTESTS corpus",
       "loopTightness": 9.6,
       "progressionCurve": 9.3,
       "sessionEngagement": 9.6,
@@ -50,6 +50,12 @@
       "tests": "233 files / 1,372 assertions passed",
       "doctor": "overallPass true · blockingFailing 0",
       "cacheFinding": "Two unchecked S168 tasks are outside the active Now/Deferred projection."
+    },
+    "s170Baseline": {
+      "head": "e1b0348",
+      "startupAcceptance": "FAIL — Max Plan cost provenance missing from the rendered SIGNALS block",
+      "auditContext": "scripts/task-slice.mjs and scripts/lib/audit-task-context.mjs absent despite the canonical /audit command",
+      "windowsGuard": "dynamic import of node:child_process in render-startup-brief.mjs is invisible to the current source guard"
     }
   },
   "axisCoverage": {
@@ -116,7 +122,9 @@
       ]
     },
     "speed-organization-efficiency": {
-      "surviving": [],
+      "surviving": [
+        "bounded-audit-task-context"
+      ],
       "rejectedOnVerify": [
         {
           "slug": "death-screen-second-split",
@@ -136,7 +144,9 @@
       ]
     },
     "observability-honesty": {
-      "surviving": [],
+      "surviving": [
+        "startup-cost-provenance"
+      ],
       "rejectedOnVerify": [
         {
           "slug": "claim-royale-balance",
@@ -146,7 +156,9 @@
       ]
     },
     "sil-debt": {
-      "surviving": [],
+      "surviving": [
+        "dynamic-child-process-guard"
+      ],
       "rejectedOnVerify": [
         {
           "slug": "refresh-only-reports",
@@ -157,6 +169,125 @@
     }
   },
   "items": [
+    {
+      "slug": "startup-cost-provenance",
+      "title": "Restore truthful Max Plan cost provenance in the startup brief",
+      "category": "observability-honesty",
+      "tier": "critical",
+      "status": "shipped",
+      "effortHours": 0.5,
+      "impact": 9,
+      "innovation": 4,
+      "priority": 27.2,
+      "why": "The canonical S170 startup acceptance court fails because render-startup-brief.mjs rebuilds the cost row inline and omits the shared Max Plan presentation contract, even though PROJECT_STATUS declares modelPlanMode=true.",
+      "recipe": "Route the rendered cost row through presentCostSignal(), retain real-metered detail only outside Max Plan mode, and add a regression that renders the actual brief contract rather than testing the helper alone.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.25,
+          "recipe": "Use presentCostSignal() for the rendered row and rerun startup acceptance."
+        },
+        "L2": {
+          "effortHours": 0.5,
+          "recipe": "L1 plus a renderer-facing regression that pins Max Plan informational language."
+        },
+        "L3": {
+          "effortHours": 1,
+          "recipe": "L2 plus prove non-Max-plan metered-cost behavior remains unchanged."
+        }
+      },
+      "premises": [
+        {
+          "claim": "The generated startup brief omits the required flat-rate Max Plan provenance.",
+          "adapter": "grep-count",
+          "target": "docs/STARTUP_BRIEF.md",
+          "pattern": "flat-rate Max Plan",
+          "operator": "eq",
+          "expected": 0
+        }
+      ],
+      "executionLog": [
+        "L3 shipped: render-startup-brief routes cost through presentCostSignal using authoritative modelPlanMode; the generated brief contains the flat-rate informational provenance and startup acceptance passes format=true evidence=true flatRate=true."
+      ]
+    },
+    {
+      "slug": "bounded-audit-task-context",
+      "title": "Restore the canonical bounded TASK_BOARD audit projection",
+      "category": "speed-organization-efficiency",
+      "tier": "high",
+      "status": "shipped",
+      "effortHours": 2,
+      "impact": 9,
+      "innovation": 5,
+      "priority": 22.5,
+      "why": "The canonical /audit command fails locally because scripts/task-slice.mjs is missing, forcing a 144 KB board fallback and weakening the promised 8K-character audit boundary.",
+      "recipe": "Adopt the existing Studio internal task-slice and audit-task-context implementation, add its focused court, and register the helper in protocol drift so future propagation cannot silently remove it.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Add the two internal helper modules and prove the live audit-context command runs."
+        },
+        "L2": {
+          "effortHours": 1,
+          "recipe": "L1 plus bounded, source-hashed projection tests for open work and truncation."
+        },
+        "L3": {
+          "effortHours": 2,
+          "recipe": "L2 plus protocol-drift registration and live TASK_BOARD parity evidence."
+        }
+      },
+      "premises": [
+        {
+          "claim": "The canonical task-slice entrypoint is absent from this repository.",
+          "adapter": "file-exists",
+          "target": "scripts/task-slice.mjs",
+          "operator": "eq",
+          "expected": false
+        }
+      ],
+      "executionLog": [
+        "L3 shipped: adopted task-slice.mjs plus audit-task-context.mjs from the internal registry, retained all 16 active open rows from the 144,495-byte board in a 5,357-character projection, added focused identity/budget courts, and raised protocol drift to 44/44."
+      ]
+    },
+    {
+      "slug": "dynamic-child-process-guard",
+      "title": "Close the dynamic-import hole in the Windows child-process guard",
+      "category": "sil-debt",
+      "tier": "high",
+      "status": "shipped",
+      "effortHours": 1,
+      "impact": 8,
+      "innovation": 5,
+      "priority": 25.2,
+      "why": "render-startup-brief.mjs dynamically imports node:child_process for its v5 path, but check-windows-hide.mjs only recognizes static imports and reports a false green. The target renderer is absent locally, so that dormant path is also not fail-closed.",
+      "recipe": "Route the v5 spawn through safe-spawn, make the v5 branch fail clearly when its target is absent, extend the guard regex to dynamic imports, and add a focused regression fixture.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Remove the raw dynamic import and add windowsHide-safe behavior."
+        },
+        "L2": {
+          "effortHours": 1,
+          "recipe": "L1 plus dynamic-import detection and regression coverage."
+        },
+        "L3": {
+          "effortHours": 1.5,
+          "recipe": "L2 plus fail-closed missing-target behavior and source-scan parity."
+        }
+      },
+      "premises": [
+        {
+          "claim": "The startup renderer contains a dynamic raw child_process import invisible to the guard.",
+          "adapter": "grep-count",
+          "target": "scripts/render-startup-brief.mjs",
+          "pattern": "import of node:child_process",
+          "operator": "gte",
+          "expected": 1
+        }
+      ],
+      "executionLog": [
+        "L3 shipped: startup v5 routes through safe-spawn and fails closed when absent; the guard recognizes dynamic import(); its new CLI fixture catches the exact bypass; the newly exposed check-public-claims import now uses safe-spawn. Guard and 17 focused assertions pass."
+      ]
+    },
     {
       "slug": "typed-hazard-case-files",
       "title": "Turn observed hazards into honest MOST WANTED case files",
@@ -694,6 +825,24 @@
       "status": "shipped",
       "outcome": "Focused hazard evidence flows into the canonical visual receipt",
       "verification": "Second-order refinement shipped: write-visual-qa-receipt ingests and rejects failing hazard receipts, preserves unique screenshot names, records the touched surface, and hash-binds hosted captures into CANON-053 evidence."
+    },
+    {
+      "slug": "bounded-audit-task-context",
+      "status": "shipped",
+      "outcome": "Canonical audits read a bounded, source-hashed task projection",
+      "verification": "L3 shipped: adopted task-slice.mjs plus audit-task-context.mjs from the internal registry, retained all 16 active open rows from the 144,495-byte board in a 5,357-character projection, added focused identity/budget courts, and raised protocol drift to 44/44."
+    },
+    {
+      "slug": "dynamic-child-process-guard",
+      "status": "shipped",
+      "outcome": "Dynamic raw child-process imports can no longer hide behind a green Windows guard",
+      "verification": "L3 shipped: startup v5 routes through safe-spawn and fails closed when absent; the guard recognizes dynamic import(); its new CLI fixture catches the exact bypass; the newly exposed check-public-claims import now uses safe-spawn. Guard and 17 focused assertions pass."
+    },
+    {
+      "slug": "startup-cost-provenance",
+      "status": "shipped",
+      "outcome": "The startup brief again labels flat-rate Max Plan usage honestly",
+      "verification": "L3 shipped: render-startup-brief routes cost through presentCostSignal using authoritative modelPlanMode; the generated brief contains the flat-rate informational provenance and startup acceptance passes format=true evidence=true flatRate=true."
     }
   ]
 }

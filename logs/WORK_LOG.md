@@ -1632,3 +1632,16 @@ Intent outcome: achieved through implementation, isolated staging, pixel proof, 
 - Implemented the second-order hazard receipt bridge; exhausted the Genius List and innovation pack.
 - Passed local Vitest 235 files / 1,382 assertions, strict lint, deployable build, release/security/static courts, staging 969/969 + 72/72 + 28/28, and direct hosted pixel inspection.
 - Committed ca132413, pushed main, passed workflow 34429538894, deployed immutable 90e27a19, and verified canonical plus immutable exact health and production courts.
+
+## Session 170 —  2026-09-10 — Startup evidence, bounded audit context, and process-policy closure
+
+- Recovered a clean, synchronized S169 closeout and ran the full startup/canon/Ark/capability sequence as S170.
+- Reviewed the mature game loop at about 9.5/10 structural health; made no gameplay claim or tuning change without participant evidence.
+- Audited nine axes and shipped all three repository-owned findings: plan-aware startup cost provenance, bounded audit task context, and dynamic child-process enforcement.
+- Added five focused assertions; final corpus passes 237 files and 1,387/1,387 assertions. Strict lint, deployable build, schema, public, security, dependency, runtime, entry, asset, startup, protocol, npm-audit, and supply-chain gates pass.
+- Deployed isolated staging at session-170-staging / immutable 520a56d6; live shell passes 7/7 and the hosted route/theme/width court passes 969/969.
+- Release gate: engineering FORGE GO, SPARKED NO-GO. No lifecycle flip, participant outcome, physical-device result, provider readiness, Core Web Vitals, or subjective pixel approval is fabricated.
+- Host/tool incidents: the patch and image viewers failed with Windows CryptUnprotectData; scoped PowerShell writes and objective browser evidence were used. A mistakenly invoked performance capture was identified and stopped; all six tracked long-running processes are closed.
+- Creative Direction Record reviewed; no entry required.
+
+Intent outcome: implementation, validation, staging, and release readiness achieved; direct-main publication and exact production verification follow under explicit founder authority.

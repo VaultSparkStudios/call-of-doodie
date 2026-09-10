@@ -10,6 +10,7 @@
 
 import fs from "node:fs";
 import path from "node:path";
+import { spawnSync } from "./lib/safe-spawn.mjs";
 import { ACHIEVEMENTS, META_TREE_NODE_IDS, WEAPONS, ENEMY_TYPES } from "../src/constants.js";
 import { NEW_FEATURES } from "../src/config/changelog.js";
 import { ARENA_THEMES } from "../src/drawGame.js";
@@ -57,7 +58,6 @@ if (registrySrc.includes("opens directly on the main menu")) {
 
 // S163: README claims block must match runtime constants (scripts/sync-readme-claims.mjs).
 {
-  const { spawnSync } = await import("node:child_process");
   const r = spawnSync(process.execPath, ["scripts/sync-readme-claims.mjs", "--check"], { encoding: "utf8" });
   if (r.status !== 0) errors.push((r.stderr || r.stdout || "README claims drifted").trim());
 }

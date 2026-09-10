@@ -1,3 +1,13 @@
+## Session 170 - Startup evidence, bounded audit context, and process-policy closure
+
+- [x] [SIL:3] **DONE S170** Route Startup Brief cost provenance through the canonical plan-aware presenter; missing v5 rendering fails closed through safe-spawn.
+- [x] [SIL:3] **DONE S170** Restore repository-local task slicing and audit-context extraction with source hashes, bounded output, focused tests, and protocol-drift registration.
+- [x] [SIL:3] **DONE S170** Detect dynamic node:child_process imports and migrate the public-claims checker to safe-spawn.
+- [x] [SIL:2] **DONE S170** Pass 237 files / 1,387 assertions plus strict lint, deployable build, startup/protocol/security/public/schema/dependency/runtime/assets and supply-chain gates.
+- [x] [SIL:2] **DONE S170** Deploy isolated Cloudflare staging and pass shell 7/7 plus 969/969 hosted route/theme/width checks.
+- [ ] [SIL:2] **EVIDENCE** Collect participant, physical PWA/gamepad/media, current production Core Web Vitals, Zoho reply-as, scoped telemetry, Obelisk, publication, direct-pixel, sitemap ≥8/10, and explicit lifecycle evidence before SPARKED.
+
+**Runway exception:** every repository-owned S170 audit item is shipped. Remaining work is external evidence or a lifecycle decision; no gameplay tuning or feature breadth is invented to fill the session.
 # Task Board
 
 Public-safe launch roadmap summary.

@@ -11,7 +11,7 @@
 - Evidence boundary truth — no participant, device, provider, identity, mail, production-performance, publication, lifecycle, or fun/balance conclusion is claimed. Production proof follows the checkpoint.
 
 Overall status: recovered, implemented, fully tested, and staging-proven; exact-main CI/deploy and production verification are complete. SPARKED remains NO-GO.
-Last reviewed: 2026-09-09
+$12026-09-10
 
 <!-- truth-audit-version: 1.1 -->
 ## 2026-09-09 — Session 167 — Attribution, receipt, announcement, hook, and CI truth
@@ -28,7 +28,7 @@ Last reviewed: 2026-09-09
 - Release truth — head `0e82ca9fb761` is on `origin/main`; workflow `34329814954` published immutable `5fb26ff6`. Custom domain and immutable report the exact deploy id; shell 7/7 both, cutover 5/5, replay trust 3/3, leaderboard isolation, launch surfaces, backend health 5/5, production mode smoke, and production outcome capture pass.
 
 Overall status: all four S167 repository-owned audit items plus the hook root-fix and public-truth correction are implemented, exact-main published, and production-verified. SPARKED remains NO-GO.
-Last reviewed: 2026-09-09
+$12026-09-10
 
 <!-- truth-audit-version: 1.1 -->
 
@@ -47,7 +47,7 @@ Last reviewed: 2026-09-09
 - Push-gate truth — settings sanitization and canonical staged secret scans passed. The Bash pre-push wrapper orphaned on two ordinary attempts; the same outgoing credential, local-path, and Anthropic-router patterns are rerun directly before every bounded S166 `--no-verify` follow-up. No force push or content-gate bypass is authorized.
 
 Overall status: all four S166 repository-owned audit items are implemented, exact-main published, and production-verified. SPARKED remains NO-GO.
-Last reviewed: 2026-09-09
+$12026-09-10
 
 <!-- truth-audit-version: 1.1 -->
 
@@ -1486,4 +1486,17 @@ Last reviewed: 2026-07-29
 - Lifecycle truth — engineering deployment is green; SPARKED remains NO-GO pending external evidence and explicit lifecycle authorization.
 
 Overall status: green engineering deployment; SPARKED remains NO-GO.
-Last reviewed: 2026-09-09
+$12026-09-10
+
+## 2026-09-09 — Session 170 — Startup, audit-context, process, and staging truth
+
+- Cost truth — Startup Brief cost status is rendered by the canonical plan-aware presenter; Max/flat-rate plan mode is explicit instead of inferred from a generic label.
+- Audit-context truth — the live 144,495-byte Task Board yields a 5,357-character, source-hashed slice with 16 open items. Audit tools consume that bounded artifact and protocol drift requires both executables.
+- Process truth — dynamic `import("node:child_process")` is inside the Windows-hide policy surface. The first tightened run found and repaired the public-claims checker through safe-spawn.
+- Verification truth — 237/237 files and 1,387/1,387 assertions pass with strict lint, deployable build, startup/protocol/schema/public/security/dependency/runtime/entry/asset and supply-chain gates.
+- Staging truth — session-170-staging and immutable 520a56d6 pass live shell 7/7; the hosted nineteen-route, two-theme, three-width matrix passes 969/969.
+- Visual truth — no UI/UX source changed. Direct host image viewing failed at CryptUnprotectData, so no subjective pixel-review claim is made.
+- Release truth — cost-neutral engineering FORGE is GO. SPARKED remains NO-GO behind independently named external and lifecycle evidence.
+
+Overall status: green engineering staging; production publication is authorized and pending. SPARKED remains NO-GO.
+$12026-09-10

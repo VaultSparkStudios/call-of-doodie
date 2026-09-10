@@ -1,46 +1,41 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: 259f822f4cc5 -->
-<!-- generated-at: 2026-09-09T05:53:40.246Z -->
+<!-- source-hash: 0b012cda27de -->
+<!-- generated-at: 2026-09-10T03:09:12.620Z -->
 
 # LATEST_HANDOFF (compact)
 
-SESSION 166 HANDOFF SUMMARY
+SESSION 169 HANDOFF SUMMARY
 
-Status
-- Session 166 complete. Full /arc executed, deployed to main, production verified.
+Session: 169 (audit → implement → closeout arc from clean main 13ecbdc)
 
-Shipped This Session
-- All spawn paths (enemy/boss/cluster) resolve against arena, not viewport. Closes S165 camera follow-up.
-- SEWER EXTRACTION uses 1.5x arena; pure pressure model reaches 1.25x, bounded, legacy multiplier preserved for unscaled modes.
-- Whole-arena radar projects remaining loot (gold) and open evacuation point (cyan) via pure tested model.
-- Secondary death analysis now first-open lazy: immediate DeathScreen 73.33 KB, deferred chunk 18.50 KB.
-- Fixed staged defect: lazy panel raised ReferenceError level is not defined; contained by AsyncPanelBoundary, parent model and child destructuring completed, source contract added.
+Shipped this session:
+- Typed environmental case files: stable IDs, bounded migration, observed flood/mine death counts, exactly-once lockdown encounter counts, deterministic ordering, countermeasures.
+- Versioned lazy death-analysis browser contract: seven semantic landmarks, deferred loading, error fallback, overflow, both themes, mobile/desktop, top and NEXT DRILL states.
+- AST-backed latest-session orphan court: line-level reporting, correct founder/data/device/publication/cross-repo deferrals.
+- Second-order: canonical visual receipt ingests focused hazard receipts, fails closed, preserves unique captures, records touched surface.
 
-Current Intent
-- Continue product arc: audit, implement repository-owned findings, stage with pixel proof, release-gate, push to main, verify production, canonical closeout.
+Current intent:
+- Engineering deployment green; lifecycle stays public-unlaunched/FORGE.
+- Do not invent repo work to consume token budget; wait for participant/provider/device evidence or new founder-directed scope.
 
-Now Bucket (top 3)
-- Add focused lazy-panel browser contract (regression guard for the ReferenceError fix).
-- Collect consented extraction telemetry before tuning scale or pressure.
-- Continue DeathScreen diet / split remaining panels (debrief/archive were prior targets).
+Validation state:
+- Vitest 235/235 files, 1,382/1,382 assertions; strict lint; deployable build (App 469.22/560 KB).
+- Staging visual: full matrix 969/969, hazard 28/28, lazy analysis 72/72; 26 hash-bound captures.
+- Production: source ca1324136f8c, workflow 34429538894, immutable https://90e27a19.call-of-doodie.pages.dev/; edge health ca1324136f8c; hazard 28/28 + lazy analysis 72/72 pass.
 
-Blockers (top 3)
-- SPARKED NO-GO: blocked on physical-device, participant, provider/mail, performance, publication, lifecycle evidence.
-- Obelisk identity credential gap: OBELISK_VERIFY_URL / OBELISK_VERIFY_SECRET founder-only; /api/profile answers 503 in production.
-- No participant/device-farm/balance evidence for scaled arenas; tuning gated on real play data.
+Now bucket (top 3):
+- Await participant/provider/device evidence before tuning drills/balance/scale.
+- Await new founder-directed product scope.
+- Preserve current contracts (env case files, lazy analysis, orphan court) unchanged.
 
-Human-Blocked Items (with age)
-- Obelisk credentials (OBELISK_VERIFY_URL/SECRET): founder-only, unresolved since S163 (approx 3 sessions).
-- SPARKED external evidence set (participant/device/provider/mail/publication): unresolved since S155+ (10+ sessions).
-- Pages secrets for cloud backup, ghost race, duels, squads: pending founder action since S163.
+Blockers (top 3):
+- Unified Genius List: 0 executable / 6 deferred; no repo-local innovation candidates.
+- SPARKED NO-GO: requires external participant, physical-device, provider/mail evidence.
+- No repo-owned work available to advance without founder input.
 
-Latest Verified Production
-- Source 0647bb0d6787; workflow 34312878779 (lint, 1,343 assertions, build, Cloudflare deploy).
-- Immutable https://99ad3bbc.call-of-doodie.pages.dev/; canonical reports deploy 0647bb0d6787.
-- Shell 7/7 both origins; cutover 5/5, mode smoke, replay 3/3, leaderboard isolation, launch surfaces, backend health 5/5 pass.
+Human-blocked items (open, founder/external only):
+- Obelisk identity credentials (OBELISK_VERIFY_URL/SECRET) — founder-only; /api/profile returns 503. Multi-session standing.
+- Zoho reply-as, scoped telemetry, publication, explicit lifecycle evidence — external, standing.
+- SPARKED physical/participant/Core Web Vitals evidence — external, standing.
 
-Validation Baseline
-- 230 files / 1,343 assertions; strict lint; deployable build; all gates green; E2E 19 pass / 1 intentional mobile skip; route matrix 969/969; touched states 40/40; 18 hash-bound captures reviewed across both themes at 390/1440px.
-
-Next Session Pointer
-- Begin S167 from synchronized clean main; land the lazy-panel browser contract first, then run fresh audit arc.
+Next session pointer: No repo work pending; open only on new founder scope or arrival of participant/provider/device evidence.

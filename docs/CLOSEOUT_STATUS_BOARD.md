@@ -1,27 +1,27 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.1 -->
-<!-- generated-at: 2026-09-10 (Session 169 closeout) -->
+<!-- generated-at: 2026-09-10 (Session 170 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S169 ════════════════════╗
-║  Date: 2026-09-10  ·  SIL: 999/1000  ·  Velocity: 4 down         ║
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S170 ════════════════════╗
+║  Date: 2026-09-10  ·  SIL: 997/1000  ·  Velocity: 3 down         ║
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ║  Live:  preview  →  https://callofdoodie.wtf/                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ Shipped: typed environmental case files with stable IDs, bou  ║
-║  ✓ Shipped: a versioned lazy death-analysis browser contract co  ║
-║  ✓ Shipped: an AST-backed latest-session orphan court with line  ║
-║  ✓ Second order: the canonical visual receipt ingests focused h  ║
-║  ✓ Saturation: Unified Genius List 0 executable / 6 deferred; i  ║
+║  ✓ Shipped: Startup Brief cost provenance now uses the canonica  ║
+║  ✓ Shipped: repository-local `task-slice.mjs` and `audit-task-c  ║
+║  ✓ Shipped: the Windows process guard detects dynamic child-pro  ║
+║  ✓ Audit: all three S170 candidates are shipped; the regenerate  ║
+║  ✓ Game-loop review: structural health remains about 9.5/10. No  ║
 ╚════════════════════════════════════════════════════════════════╝
-╔══ SCORES · SIL 999/1000 ═══════════════════════════════════════╗
+╔══ SCORES · SIL 997/1000 ═══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
 ║    Alignment          100  ██████████                            ║
 ║    Momentum           100  ██████████                            ║
 ║    Engagement         100  ██████████                            ║
-║    Process Qual       99   ██████████                            ║
+║    Process Qual       97   ██████████                            ║
 ║    Coherence          100  ██████████                            ║
 ║    Security           100  ██████████                            ║
 ║    Ecosystem          100  ██████████                            ║
@@ -41,23 +41,23 @@
 ║  ✓ agent memory (Claude/Codex project memory)                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 0 files  ·  M:0 A:0 D:0 ?:0                            ║
+║  Changes: 31 files  ·  M:25 A:0 D:0 ?:6                          ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ DEPLOYMENT ══════════════════════════════════════════════════╗
-║  Staging:  https://session-169-staging.call-of-doodie.pages.dev  ║
+║  Staging:  https://session-170-staging.call-of-doodie.pages.dev  ║
 ║  Live:     https://callofdoodie.wtf/  ·  preview/FORGE (not yet  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
 ║  Doctor:        163/220                                          ║
 ║  Compliance:    —                                                ║
-║  Tests:         1382/1382                                        ║
+║  Tests:         1387/1387                                        ║
 ║  Validation:    full-fresh                                       ║
 ║  IGNIS:         1d ago                                           ║
 ║  Truth:         engineering-ready-sparked-no-go                  ║
-║  Sanitization:  1d ago                                           ║
-║  shells:        13 started · 13 closed · 0 running               ║
+║  Sanitization:  0d ago                                           ║
+║  shells:        6 started · 6 closed · 0 running                 ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ NEXT SESSION ════════════════════════════════════════════════╗
 ║  (no genius cache — run `node scripts/cache-genius-list.mjs`)    ║
