@@ -1695,3 +1695,8 @@ Intent outcome: achieved — clean recovery, honest backlog-hygiene closure, a r
 - Founder pre-authorized direct push/commit to main and full deploy for this session; committed and pushed directly to `main`.
 
 Intent outcome: achieved — backlog-hygiene discipline held (no stale lines, no invented scope), and a genuine coverage gap in two load-bearing pure systems was closed with focused, verified tests.
+
+### Deploy verification (S173)
+
+- Push `d5836f0` triggered GitHub Actions workflow `34506107877`: `quality` (lint + 240/240 test files) and `build-and-deploy` (build + Cloudflare Pages deploy) both passed in full.
+- Production `https://callofdoodie.wtf/_health` reports `"deploy":"d5836f07ed48"` — exact match to the pushed commit. `https://callofdoodie.wtf/` returns 200 OK.
