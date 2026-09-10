@@ -7,6 +7,7 @@ import {
   buildInputState,
   classifyTaskTitle,
   collectTaskWork,
+  findLatestSessionOrphans,
   inputStateMatches,
   summarizeTaskWork,
 } from "../scripts/lib/task-work.mjs";
@@ -22,6 +23,7 @@ describe("task work classification", () => {
   it.each([
     ["[SIL:2] Implement a repo-owned architecture extraction", "unblocked"],
     ["[BLOCKER S61] Update PostHog dashboard allowlist", "credential-blocked"],
+    ["[SIL:2] **FOUNDER** Set provider secret", "human-blocked"],
     ["[Human/Data] Capture production Lighthouse evidence", "data-blocked"],
     ["[DATA-BLOCKED S147] Expand only after production feedback", "data-blocked"],
     ["Physical launch QA - verify one real gamepad", "device-blocked"],
@@ -50,6 +52,13 @@ describe("task work classification", () => {
       { title: "Needs community destination", status: "community-blocked", executable: false },
     ];
     expect(locallyActionableSessionFloorItems({ items })).toEqual([items[0]]);
+  });
+
+  it("finds only executable work stranded in the latest session section", () => {
+    const markdown = `## Session 8 - old\n- [ ] Old local task\n\n## Session 9 - current\n- [ ] Ship current local fix\n- [ ] [BLOCKER] Add provider key\n\n## Now\n- [ ] Visible work\n`;
+    const receipt = findLatestSessionOrphans(markdown);
+    expect(receipt.latestSession).toBe(9);
+    expect(receipt.items.map((item) => item.body)).toEqual(["Ship current local fix"]);
   });
 
   it("fingerprints declared inputs instead of trusting cache age", () => {

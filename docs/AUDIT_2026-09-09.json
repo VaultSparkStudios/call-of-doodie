@@ -1,8 +1,8 @@
 {
   "schemaVersion": "2.1",
-  "generatedBy": "/audit skill (S168; preserves S167 execution history)",
-  "generatedAt": "2026-09-09T09:48:46.8921142Z",
-  "session": 168,
+  "generatedBy": "/audit skill (S169; preserves S167-S168 execution history)",
+  "generatedAt": "2026-09-10T01:04:40.654Z",
+  "session": 169,
   "project": {
     "slug": "call-of-doodie",
     "type": "game",
@@ -20,19 +20,19 @@
     "sil-debt": 1
   },
   "meta": {
-    "candidateCount": 27,
-    "promotedCount": 4,
+    "candidateCount": 33,
+    "promotedCount": 3,
     "combinedPriority": 197.4,
     "livePremiseVerification": true,
     "gameLoopReview": {
       "source": "docs/GAME_LOOP_REVIEW_2026-09-09.md",
-      "loopTightness": 9.4,
+      "loopTightness": 9.6,
       "progressionCurve": 9.3,
-      "sessionEngagement": 9.5,
-      "retentionHooks": 9,
-      "soulFidelity": 9.5,
-      "overall": 9.3,
-      "evidenceBoundary": "Structural review only; no participant fun, balance, retention, or physical-device claim."
+      "sessionEngagement": 9.6,
+      "retentionHooks": 9.2,
+      "soulFidelity": 9.7,
+      "overall": 9.5,
+      "evidenceBoundary": "Structural review only; no participant fun, balance, retention, causality, or physical-device claim."
     },
     "baseline": {
       "head": "7d099ca2",
@@ -44,6 +44,12 @@
       "scope": "Lockdown remains last stand; no balance tuning or account changes",
       "canon": "54 reconciled; zero ABSOLUTE gaps",
       "head": "9bc71d8"
+    },
+    "s169Baseline": {
+      "head": "13ecbdcb5b89",
+      "tests": "233 files / 1,372 assertions passed",
+      "doctor": "overallPass true · blockingFailing 0",
+      "cacheFinding": "Two unchecked S168 tasks are outside the active Now/Deferred projection."
     }
   },
   "axisCoverage": {
@@ -151,6 +157,87 @@
     }
   },
   "items": [
+    {
+      "slug": "typed-hazard-case-files",
+      "title": "Turn observed hazards into honest MOST WANTED case files",
+      "category": "gamification-immersion",
+      "tier": "critical",
+      "status": "shipped",
+      "effortHours": 3,
+      "impact": 10,
+      "innovation": 8,
+      "priority": 40,
+      "why": "The revenge loop remembers enemy killers but drops environmental pressure. The remote branch stores arbitrary display strings and cannot count lockdown because lockdown is not damage.",
+      "recipe": "Create a bounded hazard catalog with stable IDs and event-specific counters, record observed flood/mine deaths and extraction-lockdown encounters exactly once, render countermeasure case files, and cover migration, corruption, ordering, and UI behavior.",
+      "ladder": {
+        "L1": {
+          "effortHours": 1,
+          "recipe": "Record allowlisted environmental deaths and render a hazards row."
+        },
+        "L2": {
+          "effortHours": 2,
+          "recipe": "Use stable IDs, distinguish deaths from lockdown encounters, and cover storage plus UI behavior."
+        },
+        "L3": {
+          "effortHours": 3,
+          "recipe": "Ship typed case files, backwards-safe normalization, specific countermeasures, deterministic ordering, exactly-once lockdown evidence, focused courts, and rendered proof."
+        }
+      }
+    },
+    {
+      "slug": "lazy-analysis-browser-contract-v2",
+      "title": "Prove every promised lazy debrief landmark through a public run",
+      "category": "ui-ux-feedback",
+      "tier": "critical",
+      "status": "shipped",
+      "effortHours": 2,
+      "impact": 10,
+      "innovation": 7,
+      "priority": 35,
+      "why": "The existing S166 browser harness proves only BUILD GRADE after first-open, so later evidence and next-drill regressions can remain phantom-green.",
+      "recipe": "Give the lazy analysis stable semantic landmarks and upgrade the natural-run four-profile receipt to prove deferred loading, every required landmark, error-free rendering, no overflow, and readable captures.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.75,
+          "recipe": "Assert the lazy chunk opens without an error boundary."
+        },
+        "L2": {
+          "effortHours": 1.5,
+          "recipe": "Assert core evidence and next-drill landmarks on mobile and desktop."
+        },
+        "L3": {
+          "effortHours": 2,
+          "recipe": "Ship a versioned landmark contract across both themes and viewport classes with hash-bound screenshots and direct pixel review."
+        }
+      }
+    },
+    {
+      "slug": "task-lane-orphan-court",
+      "title": "Make runnable work impossible to strand in historical session sections",
+      "category": "speed-organization-efficiency",
+      "tier": "high",
+      "status": "shipped",
+      "effortHours": 1.5,
+      "impact": 8,
+      "innovation": 7,
+      "priority": 28.1,
+      "why": "Two unchecked S168 repo-owned tasks sit outside Now and Deferred, so the source-derived cache reports an exhausted executable runway.",
+      "recipe": "Add a shared orphaned-open-work receipt, fail the task-semantics court for actionable checkboxes outside active lanes, promote the live tasks into Now, and prove Genius cache parity.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Promote the tasks and regenerate the cache."
+        },
+        "L2": {
+          "effortHours": 1,
+          "recipe": "Add a shared orphan detector and regression court."
+        },
+        "L3": {
+          "effortHours": 1.5,
+          "recipe": "Report source locations, cover historical and gated distinctions, repair the live board, and prove cache/brief parity."
+        }
+      }
+    },
     {
       "id": 1,
       "slug": "death-attribution-observed-damage",
@@ -492,18 +579,18 @@
     }
   ],
   "totals": {
-    "count": 8,
-    "priority": 197.4,
+    "count": 11,
+    "priority": 384.2,
     "top3": [
-      "death-attribution-observed-damage",
-      "mode-outcome-receipt",
-      "screen-anchored-announcements"
+      "typed-hazard-case-files",
+      "lazy-analysis-browser-contract-v2",
+      "task-lane-orphan-court"
     ]
   },
   "innovationReserve": [
-    "non-enemy-causes-in-most-wanted",
-    "announcement-queue-stagger",
-    "traversal-biased-crate-drops"
+    "hazard-countermeasure-follow-through",
+    "debrief-landmark-contract-reuse",
+    "active-lane-source-of-truth"
   ],
   "skipped": [
     {
@@ -521,6 +608,18 @@
     {
       "slug": "new-account-flow",
       "reason": "GATED — Obelisk identity and reply-capable mail evidence are external release dependencies, not permission to invent local auth."
+    },
+    {
+      "slug": "remote-hazard-display-string-map",
+      "reason": "REJECTED ON VERIFY — the remote branch keys storage by sourceName and records only terminal damage attribution, so it cannot count extraction lockdown and would turn arbitrary display strings into durable identity."
+    },
+    {
+      "slug": "numeric-balance-retune-s169",
+      "reason": "DATA-BLOCKED — no new participant corpus supports balance or retention tuning."
+    },
+    {
+      "slug": "hosted-ai-debrief-s169",
+      "reason": "REJECTED ON VERIFY — local evidence already drives the verdict; hosted inference adds variable cost without a demonstrated gap."
     }
   ],
   "executionLog": [
@@ -571,6 +670,30 @@
       "status": "shipped",
       "outcome": "Extraction and throne debriefs now have mode-specific natural-run browser proof",
       "verification": "L2 shipped and exact-production verified: staging plus production source ecec5573cfa5 naturally ended seeded SEWER EXTRACTION (92101) and HOLD THE THRONE (569639) runs with mode-specific receipts. The helper advances intermissions, binds explicit difficulty/seed, requires two stable frames, and rejects weak semantic or decoded-pixel evidence. Production canaries: extraction 2808/17217/4627/433 and throne 2805/16817/4779/431; final top/verdict crops directly inspected."
+    },
+    {
+      "slug": "typed-hazard-case-files",
+      "status": "shipped",
+      "outcome": "MOST WANTED remembers observed environmental threats as typed case files",
+      "verification": "L3 shipped: stable allowlisted IDs, bounded backwards-safe storage, observed flood/mine deaths, exactly-once extraction-lockdown encounters, event-specific metrics, deterministic ordering, countermeasures, focused tests, and hosted rendered proof. Staging hazard court 28/28; full visual matrix 969/969."
+    },
+    {
+      "slug": "lazy-analysis-browser-contract-v2",
+      "status": "shipped",
+      "outcome": "Every promised lazy death-analysis section is browser-enforced",
+      "verification": "L3 shipped: seven stable semantic landmarks, first-open lazy-load and error-boundary assertions, natural-run capture through the public flow, next-drill bottom proof, both themes and 390/1440 widths. Staging court 72/72."
+    },
+    {
+      "slug": "task-lane-orphan-court",
+      "status": "shipped",
+      "outcome": "Executable work cannot silently remain in the latest historical session lane",
+      "verification": "L3 shipped: shared AST-backed latest-session detector, source line reporting, explicit founder-block classification, task-semantics failure, regression tests, promoted active work, and regenerated source-derived context."
+    },
+    {
+      "slug": "hazard-visual-receipt-bridge",
+      "status": "shipped",
+      "outcome": "Focused hazard evidence flows into the canonical visual receipt",
+      "verification": "Second-order refinement shipped: write-visual-qa-receipt ingests and rejects failing hazard receipts, preserves unique screenshot names, records the touched surface, and hash-binds hosted captures into CANON-053 evidence."
     }
   ]
 }

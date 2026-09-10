@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-09-09T00:48:45.737Z",
-  "stagingUrl": "https://session-166-staging.call-of-doodie.pages.dev/",
-  "uiBaseRef": "03830d1a3b5ac122d8c50d4f63edc35fc3d1876f",
+  "capturedAt": "2026-09-10T02:18:37.416Z",
+  "stagingUrl": "https://session-169-staging.call-of-doodie.pages.dev",
+  "uiBaseRef": "13ecbdc",
   "uiHeadRef": "HEAD",
-  "workingTreeUiSha256": "ceb5dddd6eaa8c5d999bb0a9aa71ffc4ff2e50d72830bda5238bea3ac6f89719",
+  "workingTreeUiSha256": "de693994074ae838bed2430a884a98b79e839d220785e7630bae7ea1a6d94aa8",
   "sourceMatrix": {
-    "receipt": "output/playwright/session-166-staging/visual-audit-receipt.json",
-    "sha256": "fcb2c1221ebcc657c2bc65ace2e42e91384e65f390699fbfd22ce59f0ac6f2af",
+    "receipt": "output/playwright/session-169-staging/visual-audit-receipt.json",
+    "sha256": "2f37e0af3e09a633b84e0b87332ad97bb29975e0b11423cef72a255e4d74343f",
     "checks": {
       "pass": true,
       "total": 969,
@@ -21,8 +21,17 @@
       "surface": "Sewer Extraction loot/evac radar and first-open deferred death analysis",
       "checks": {
         "pass": true,
-        "checks": 40,
-        "passed": 40,
+        "checks": 72,
+        "passed": 72,
+        "failures": []
+      }
+    },
+    {
+      "surface": "Observed hazard case files and event-specific countermeasures in Most Wanted",
+      "checks": {
+        "pass": true,
+        "passed": 28,
+        "checks": 28,
         "failures": []
       }
     }
@@ -45,7 +54,7 @@
     },
     {
       "file": "home-light-desktop.png",
-      "sha256": "2347f9369032d32edb33a59d1b686102f46500070529e4775737ab7a6dce2234",
+      "sha256": "4eb62911b4ac8a65ae8c34992bcbfefc043204f823bf3056bfa9a253516ea97f",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -100,7 +109,7 @@
     },
     {
       "file": "extraction-radar--sewer-night--390.png",
-      "sha256": "dfb37f9fc79bc9c57998d5b4d492cede948c1c23657e082e1248be18aea65740",
+      "sha256": "5d9f0b2b18733c38faaa3853462eb9c512bf4322cea78e307f9061e18c5d1e83",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -111,7 +120,7 @@
     },
     {
       "file": "extraction-evac-radar--sewer-night--390.png",
-      "sha256": "2fdebb1ae3fa5871cb8aff44e4b27ce3e92b1a34473763256c032e3c4daff95b",
+      "sha256": "98476444265c79ffa5d8ac711eb8987ef16453cac60d6f3843b66a4983f53187",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -122,7 +131,18 @@
     },
     {
       "file": "secondary-analysis--sewer-night--390.png",
-      "sha256": "3a2308c984cc1010d487059af386fb35217b313207176aa212f27fe82adaa530",
+      "sha256": "d339c096c32cb67f0a8a793e4b747d3b7c62cc1442137b9aca5b86fd7c02e63f",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "page": "First-open deferred death analysis"
+    },
+    {
+      "file": "secondary-analysis-next-drill--sewer-night--390.png",
+      "sha256": "ae24b1c4b648b590335550f987bab6295a1746fcc3781301130040d2904f0bb4",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -133,7 +153,7 @@
     },
     {
       "file": "extraction-radar--sewer-night--1440.png",
-      "sha256": "832ccaec960c218665ef0e940d9e606304fbcdac5176120b6bdbee086e915552",
+      "sha256": "9b230f17702eba02015f576cfa1c6e77cc2292e7d991f6ee33e02e21826fc745",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -144,7 +164,7 @@
     },
     {
       "file": "extraction-evac-radar--sewer-night--1440.png",
-      "sha256": "030049278e043117347894c3d30994414352f24da0d37a00ba179b8bde422c69",
+      "sha256": "1005544e6d3f2005cc57cc9e855a919a2b6eaaf0ab88fce60bdb51c2a240531e",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -155,7 +175,18 @@
     },
     {
       "file": "secondary-analysis--sewer-night--1440.png",
-      "sha256": "dc2263d3808dcf1c8f467e67bfafa28cf66313286dd88b12a88174d08c19893f",
+      "sha256": "f1271dedfaabe233b01e3187cfd44750076c67bce68cdbc9d9a4f9443ad50913",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "page": "First-open deferred death analysis"
+    },
+    {
+      "file": "secondary-analysis-next-drill--sewer-night--1440.png",
+      "sha256": "5bd321f22919ab9c1d9e39b83f8c5a47e6d072b5930a1b41ca206ba2daae1e1c",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -166,7 +197,7 @@
     },
     {
       "file": "extraction-radar--porcelain-day--390.png",
-      "sha256": "e9c35002455fce8a619842ab60706bfe0aaa72127e8a6cf9e07004f472017632",
+      "sha256": "95aa65fa83dd377eb71c8523de221393984d248b226359c0c27b0c9ca29d34cb",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -177,7 +208,7 @@
     },
     {
       "file": "extraction-evac-radar--porcelain-day--390.png",
-      "sha256": "44615a60dfb7329cf3aaeffd2c44c7bad8b8915f73712fd5b7c5ef23b2d48143",
+      "sha256": "f2d8ccdf589d79853bdbbf3d399db0ff232c08df1770d8cdf9f558872d3a1184",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -188,7 +219,18 @@
     },
     {
       "file": "secondary-analysis--porcelain-day--390.png",
-      "sha256": "e4d9f5188dac4f40a2a661a6739fd5f8bfd49266a482952868912b6e11d3f64e",
+      "sha256": "de28b0c411cd151d33c1d3611e317490edc37e39dbc3e1047e9da4c5e936cb7d",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "page": "First-open deferred death analysis"
+    },
+    {
+      "file": "secondary-analysis-next-drill--porcelain-day--390.png",
+      "sha256": "684d05c42e19b9d58c73a756eac30500dfe8c7757b34566aa6d7cc77032c9d97",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -199,7 +241,7 @@
     },
     {
       "file": "extraction-radar--porcelain-day--1440.png",
-      "sha256": "3c3c52be9e15eb267de88ee73447f313c76eb2d97b8ccb7d14abcfbb7d88edd9",
+      "sha256": "d88865c9ab4b9c59483ff10624fe11990034c4804214db80283d6fcb320e7242",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -210,7 +252,7 @@
     },
     {
       "file": "extraction-evac-radar--porcelain-day--1440.png",
-      "sha256": "be83b10e72cd3e3cca7020381cbbf0610fd24a4bccb015afe547332bae270071",
+      "sha256": "f6143308b141bd4cca6eba97f878866af33abd30880c91d821a914fbd265a8ad",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -221,7 +263,7 @@
     },
     {
       "file": "secondary-analysis--porcelain-day--1440.png",
-      "sha256": "7385cbab51ae1f1fdb7cf00a22387f22990bfe7a9110c9bc650c5603911375b6",
+      "sha256": "e8d56ad368293376f1a0ff719f3db13187119ece90643e983d644db8bdaae635",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -229,6 +271,61 @@
         "height": 1000
       },
       "page": "First-open deferred death analysis"
+    },
+    {
+      "file": "secondary-analysis-next-drill--porcelain-day--1440.png",
+      "sha256": "a7124c8b9f066863bc1d00766cdb80af7bf84dcb6f41cb706cf0aed4afcf5896",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "page": "First-open deferred death analysis"
+    },
+    {
+      "file": "hazard-case-files--sewer-night--390.png",
+      "sha256": "c6dda8efa7f0c97287f507632f78153aaf11d583c7e03b0a8529dfae6f8e9458",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "page": "Observed hazard case files in Most Wanted"
+    },
+    {
+      "file": "hazard-case-files--sewer-night--1440.png",
+      "sha256": "7e652b06df3ced40ae5d87b3125923b210061c4561a42aadd01a3fc8cb8709ac",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "page": "Observed hazard case files in Most Wanted"
+    },
+    {
+      "file": "hazard-case-files--porcelain-day--390.png",
+      "sha256": "566fc1afaac3a9e709e484c5ba3d5c42c7a106055a84af0e9a9e1b01d180f336",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "page": "Observed hazard case files in Most Wanted"
+    },
+    {
+      "file": "hazard-case-files--porcelain-day--1440.png",
+      "sha256": "eee0ce1735a6e6fda1a742749c6286b76594e8f9451c532874080a6da72431bc",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "page": "Observed hazard case files in Most Wanted"
     }
   ],
   "inspection": {
@@ -238,11 +335,11 @@
       "The source matrix passed 969/969 checks across 19 routes, 2 project themes, and 390px, 768px, 1440px widths.",
       "Representative Home, identity, Modes, and Leaderboard captures are hash-bound across both themes and complementary desktop/mobile viewports.",
       "No horizontal overflow, clipped primary action, page error, or measured contrast failure remains in the source matrix.",
-      "The hosted Sewer Extraction radar and first-open deferred death analysis passed 40/40 focused checks at 390px and 1440px in both project themes; the evac capture explicitly records its visual-only alarm-threshold injection."
+      "The hosted Sewer Extraction radar and first-open deferred death analysis passed 72/72 focused checks at 390px and 1440px in both project themes; the evac capture explicitly records its visual-only alarm-threshold injection.",
+      "The observed hazard case files passed 28/28 focused checks at 390px and 1440px in both project themes, including event-specific death/lockdown metrics and countermeasures."
     ],
     "fixesApplied": [
-      "Hosted first-open review caught and fixed the missing deferred-panel model values before release.",
-      "Direct review confirmed distinct gold loot and cyan evacuation pixels on the bounded whole-arena radar in both themes and viewport classes."
+      "S169 adds typed hazard case files with event-specific metrics and countermeasures, enforces every lazy death-analysis landmark, and binds both hosted states to the canonical receipt."
     ],
     "blockingDefectsOpen": 0,
     "subjectiveVisualReviewClaimed": true,

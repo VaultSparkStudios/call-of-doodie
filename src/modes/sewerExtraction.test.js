@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { SEWER_EXTRACTION } from "./sewerExtraction.js";
 import { createModeState, stepMode } from "../systems/modeDefinition.js";
 import { createSimState } from "../sim/stepSim.js";
-import { loadStash, saveStash } from "../storage.js";
+import { loadCareerStats, loadStash, saveStash } from "../storage.js";
 import { RUN_PHASE } from "../systems/runTermination.js";
 
 const ctx = { W: 1280, H: 720 };
@@ -73,6 +73,7 @@ describe("sewer extraction terminal boundaries", () => {
     for (let i = 0; i < 3; i += 1) expect(stepMode(gs, SEWER_EXTRACTION, ctx)).toBeNull();
     expect(gs.maxEnemiesThisWave).toBe(22);
     expect(gs._modeLost).not.toBe(true);
+    expect(loadCareerStats().hazardChronicle.extraction_lockdown.encounters).toBe(1);
     expect(gs._extractLocked).toBe(true);
     expect(loadStash()).toEqual(originalStash);
   });

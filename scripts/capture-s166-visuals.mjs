@@ -26,6 +26,15 @@ const profiles = profileFilter
   ? allProfiles.filter((profile) => `${profile.theme}-${profile.width}` === profileFilter)
   : allProfiles;
 const sha256 = (file) => crypto.createHash("sha256").update(fs.readFileSync(file)).digest("hex");
+const REQUIRED_ANALYSIS_LANDMARKS = Object.freeze([
+  "analysis-content",
+  "analysis-build-grade",
+  "analysis-run-stats",
+  "coach-evidence",
+  "analysis-tactical-debrief",
+  "analysis-run-intelligence",
+  "analysis-next-drill",
+]);
 fs.mkdirSync(outputDir, { recursive: true });
 
 async function captureProfile(browser, profile) {
@@ -126,9 +135,19 @@ async function captureProfile(browser, profile) {
   }
   const secondaryAfter = await page.evaluate(() => performance.getEntriesByType("resource")
     .some((entry) => entry.name.includes("DeathScreenSecondaryAnalysis")));
+  const landmarkChecks = [];
+  for (const id of REQUIRED_ANALYSIS_LANDMARKS) {
+    const landmark = page.getByTestId(id);
+    const visible = await landmark.isVisible().catch(() => false);
+    landmarkChecks.push({ id: `analysis-landmark-${id}`, ok: visible, actual: visible });
+  }
+  const analysisText = await analysis.innerText();
   const analysisFile = `secondary-analysis--${profile.theme}--${profile.width}.png`;
-  await analysis.scrollIntoViewIfNeeded();
+  await page.getByTestId("analysis-build-grade").scrollIntoViewIfNeeded();
   await page.screenshot({ path: path.join(outputDir, analysisFile), fullPage: false });
+  const nextDrillFile = `secondary-analysis-next-drill--${profile.theme}--${profile.width}.png`;
+  await page.getByTestId("analysis-next-drill").scrollIntoViewIfNeeded();
+  await page.screenshot({ path: path.join(outputDir, nextDrillFile), fullPage: false });
   const dimensions = await page.evaluate(() => ({
     theme: document.documentElement.dataset.codTheme,
     viewportWidth: innerWidth,
@@ -143,6 +162,8 @@ async function captureProfile(browser, profile) {
     { id: "secondary-not-eagerly-loaded", ok: secondaryBefore === false, actual: secondaryBefore },
     { id: "secondary-closed-initially", ok: initiallyOpen === false, actual: initiallyOpen },
     { id: "secondary-loaded-after-open", ok: secondaryAfter === true, actual: secondaryAfter },
+    { id: "no-analysis-error-fallback", ok: !/couldn.t load run analysis/i.test(analysisText), actual: analysisText.match(/couldn.t load run analysis/i)?.[0] || null },
+    ...landmarkChecks,
     { id: "no-horizontal-overflow", ok: dimensions.scrollWidth <= dimensions.viewportWidth + 1, actual: `${dimensions.scrollWidth}/${dimensions.viewportWidth}` },
     { id: "no-page-errors", ok: pageErrors.length === 0, actual: pageErrors },
   ];
@@ -151,7 +172,7 @@ async function captureProfile(browser, profile) {
     ...profile,
     banner: bannerText,
     stateInjection: "Alarm advanced to its documented 60 threshold on the live runtime ref solely to render the deterministic evac-open state.",
-    screenshots: [extractionFile, evacFile, analysisFile].map((file) => ({ file, sha256: sha256(path.join(outputDir, file)) })),
+    screenshots: [extractionFile, evacFile, analysisFile, nextDrillFile].map((file) => ({ file, sha256: sha256(path.join(outputDir, file)) })),
     checks,
     consoleErrors,
     pass: checks.every((check) => check.ok),
@@ -167,7 +188,8 @@ try {
 }
 const allChecks = captures.flatMap((capture) => capture.checks);
 const receipt = {
-  schemaVersion: "s166-touched-states-v1",
+  schemaVersion: "death-analysis-browser-proof-v2",
+  requiredAnalysisLandmarks: REQUIRED_ANALYSIS_LANDMARKS,
   generatedAt: new Date().toISOString(),
   baseUrl,
   captures,

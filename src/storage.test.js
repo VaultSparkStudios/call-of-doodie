@@ -34,6 +34,7 @@ import {
   loadDoctrineArchive,
   isDoctrineForged,
   recordDoctrineForge,
+  recordHazardEvent,
 } from "./storage.js";
 
 // Formula: Math.floor(Math.sqrt(kills / 20)) + 1
@@ -551,5 +552,25 @@ describe("rhythm mastery tracking", () => {
     const before = getRhythmMastery();
     trackRhythmMasteryHit();
     expect(getRhythmMastery()).toBe(before + 1);
+  });
+});
+
+
+describe("hazard chronicle persistence", () => {
+  it("records deaths and encounters under stable case ids", () => {
+    localStorage.clear();
+    expect(recordHazardEvent("sewer_flood", "death")).toBe(true);
+    expect(recordHazardEvent("extraction_lockdown", "encounter")).toBe(true);
+    expect(loadCareerStats().hazardChronicle).toEqual({
+      sewer_flood: { deaths: 1, encounters: 0 },
+      extraction_lockdown: { deaths: 0, encounters: 1 },
+    });
+  });
+
+  it("rejects unknown ids and events without mutating career state", () => {
+    localStorage.clear();
+    expect(recordHazardEvent("arbitrary-label", "death")).toBe(false);
+    expect(recordHazardEvent("sewer_flood", "guess")).toBe(false);
+    expect(loadCareerStats().hazardChronicle).toEqual({});
   });
 });

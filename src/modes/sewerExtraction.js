@@ -7,7 +7,7 @@
 // pickup system, and the stash in storage.js.
 
 import { getRunRng } from "../systems/runRng.js";
-import { loadStash, saveStash } from "../storage.js";
+import { loadStash, recordHazardEvent, saveStash } from "../storage.js";
 
 const ALARM_EVAC = 60;
 const ALARM_LOCK = 100;
@@ -115,6 +115,7 @@ export const SEWER_EXTRACTION = Object.freeze({
     }
     if (gs.alarm >= ALARM_LOCK && !gs._extractLocked) {
       gs._extractLocked = true;
+      recordHazardEvent("extraction_lockdown", "encounter");
       gs.structures = (gs.structures || []).filter((s) => s.id !== "evac-toilet");
       ctx.addText?.(gs, p.x, p.y - 60, "🚨 LOCKDOWN — THE EXIT IS SEALED", "#FF3B3B", true);
       gs.maxEnemiesThisWave = (gs.maxEnemiesThisWave || 5) + 12;

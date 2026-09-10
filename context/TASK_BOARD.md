@@ -8,8 +8,8 @@ Public-safe launch roadmap summary.
 - [x] [SIL:3] **DONE S168** Fatal enemy frames stop before mode step or victory; recovered PLAYING can continue.
 - [x] [SIL:2] **DONE S168** Natural staging and exact-production deaths for SEWER EXTRACTION and HOLD THE THRONE produce mode-specific receipts; fixed seeds, stable frames, decoded-pixel canaries, and direct cropped inspection make the proof reproducible.
 - [x] [SIL:2] **DONE S168** Closed the inherited js-yaml advisory with reviewed 4.3.2; security and supply-chain gates are green.
-- [ ] [SIL:1] Surface flood and lockdown in MOST WANTED as a separate hazards row.
-- [ ] [SIL:1] Open every lazy death-analysis subsection in a browser through an existing public flow.
+- [x] [MOVED TO NOW S169] [SIL:1] Surface flood and lockdown in MOST WANTED as a separate hazards row.
+- [x] [MOVED TO NOW S169] [SIL:1] Open every lazy death-analysis subsection in a browser through an existing public flow.
 - [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET so cloud backup stops answering 503.
 
 **Runway exception:** participant/balance, direct image-tool review on this host, physical-device, provider/mail/identity, production Core Web Vitals, publication, and SPARKED evidence remain gated.
@@ -23,7 +23,7 @@ Public-safe launch roadmap summary.
 - [x] [SIL:2] **DONE S167** Replaced the orphaning Bash pre-push fan-out with `scripts/hooks/pre-push.mjs` + `scripts/install-hooks.mjs` (same four rules, one process, regression court). Closes the S166 follow-up.
 - [x] [SIL:1] **DONE S167** Public roadmap/changelog now describe the sixteen-bot scrolling royale and the S167 debrief; regenerated public contract after the content-date roll.
 - [x] [SIL:1] **DONE S168** Extend `capture-mode-outcome.mjs` to SEWER EXTRACTION and HOLD THE THRONE deaths with mode-specific real-browser rendered proof.
-- [ ] [SIL:1] Surface non-enemy causes (flood, lockdown) in MOST WANTED as a separate "hazards" row now that attribution can name them.
+- [x] [SIL:1] **DONE S169** Surface non-enemy causes as typed MOST WANTED hazard case files with observed evidence and event-specific language.
 - [x] [SIL:1] **DONE S168** Preserve extraction lockdown as a last stand and make it authoritative over same-frame evacuation at alarm 100.
 - [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET on the Pages project so Porcelain Passport verification and cloud backup stop answering 503.
 
@@ -218,6 +218,9 @@ First checkpoint the bounded post-S159 propagation/CI/deploy recovery. Then begi
 **Runway exception:** the Unified Genius List has zero executable items and the generated innovation pack found no additional repository-local candidate beyond the implemented audit innovations. Remaining work requires participant, physical-device, credential/provider, publication, current performance, or explicit SPARKED evidence.
 
 ## Now
+
+- [x] [SIL:1] **DONE S169** Surface flood and lockdown in MOST WANTED as typed environmental case files; stable IDs, event-specific counts, countermeasures, migration, and hosted rendered proof shipped.
+- [x] [SIL:1] **DONE S169** Open every lazy death-analysis subsection through a natural public run; seven semantic landmarks, lazy-load/error checks, both themes, and mobile/desktop hosted proof pass.
 
 - [x] [SIL:3] **DONE S145** In-game visual overhaul — DPR-crisp canvas + degradation ladder, weapon/world-object sprite atlases, single-layer enemy sprites with procedural motion, FX pass (tracers/sparks/muzzle/additive/decals), arena theme identity table, pinned Retro contract.
 - [x] [SIL:3] **DONE S145** Community Stats v2 — shared store killing duplicate pollers, sparklines, records strip, YOU-vs-COMMUNITY bars, feedback bar, and the rebuilt live `/stats/` page.

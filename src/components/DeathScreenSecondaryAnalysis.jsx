@@ -22,7 +22,7 @@ export default function DeathScreenSecondaryAnalysis({ model }) {
   const damageSummary = describeDamageSequence(runHistory[0]?.damageReceipt);
 
   return (
-    <>
+    <div data-testid="analysis-content">
         {runModifier && (
           <div style={{ marginBottom: 10, padding: "5px 14px", borderRadius: 8, border: "1px solid rgba(255,215,0,0.3)", background: "rgba(255,215,0,0.06)", display: "inline-block" }}>
             <span style={{ color: "var(--cod-gold)", fontSize: 11, fontWeight: 700 }}>{runModifier.emoji} {runModifier.name.toUpperCase()}</span>
@@ -30,7 +30,7 @@ export default function DeathScreenSecondaryAnalysis({ model }) {
           </div>
         )}
 
-        <div style={{ ...card, marginBottom: 12, padding: "10px 12px", border: "1px solid rgba(255,215,0,0.24)", background: "linear-gradient(180deg,rgba(255,215,0,0.09),rgba(255,255,255,0.035))" }}>
+        <div data-testid="analysis-build-grade" style={{ ...card, marginBottom: 12, padding: "10px 12px", border: "1px solid rgba(255,215,0,0.24)", background: "linear-gradient(180deg,rgba(255,215,0,0.09),rgba(255,255,255,0.035))" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, marginBottom: 8 }}>
             <div style={{ textAlign: "left" }}>
               <div style={{ fontSize: 9, color: "#777", letterSpacing: 3 }}>BUILD GRADE</div>
@@ -109,7 +109,7 @@ export default function DeathScreenSecondaryAnalysis({ model }) {
           );
         })()}
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 6, marginBottom: 12 }}>
+        <div data-testid="analysis-run-stats" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 6, marginBottom: 12 }}>
           {[
             [score.toLocaleString(), "SCORE", "#FFD700"],
             [kills, "KILLS", "#0F0"],
@@ -251,7 +251,7 @@ export default function DeathScreenSecondaryAnalysis({ model }) {
           </div>
         )}
 
-        <div style={{ ...card, marginTop: 8, marginBottom: 12, textAlign: "left", border: "1px solid rgba(255,107,53,0.18)", background: "linear-gradient(180deg,rgba(255,107,53,0.08),rgba(255,255,255,0.04))" }}>
+        <div data-testid="analysis-tactical-debrief" style={{ ...card, marginTop: 8, marginBottom: 12, textAlign: "left", border: "1px solid rgba(255,107,53,0.18)", background: "linear-gradient(180deg,rgba(255,107,53,0.08),rgba(255,255,255,0.04))" }}>
           <div style={{ fontSize: 10, color: "#FFB36B", letterSpacing: 2, fontWeight: 900, marginBottom: 6 }}>TACTICAL DEBRIEF</div>
           <div style={{ fontSize: 18, color: "#FFF", fontWeight: 900, textTransform: "uppercase", letterSpacing: 1 }}>
             {debrief.verdict}
@@ -310,7 +310,7 @@ export default function DeathScreenSecondaryAnalysis({ model }) {
           )}
         </div>
 
-        <div style={{ ...card, marginBottom: 12, textAlign: "left", border: "1px solid rgba(0,229,255,0.18)", background: "linear-gradient(180deg,rgba(0,229,255,0.07),rgba(255,255,255,0.035))" }}>
+        <div data-testid="analysis-run-intelligence" style={{ ...card, marginBottom: 12, textAlign: "left", border: "1px solid rgba(0,229,255,0.18)", background: "linear-gradient(180deg,rgba(0,229,255,0.07),rgba(255,255,255,0.035))" }}>
           <div style={{ fontSize: 10, color: "var(--cod-cyan)", letterSpacing: 2, fontWeight: 900, marginBottom: 6 }}>RUN INTELLIGENCE</div>
           <div style={{ fontSize: 12, color: "#EAFBFF", lineHeight: 1.5 }}>
             {collapseCoaching.contributingFactor.label}: <span style={{ color: "#FFF", fontWeight: 700 }}>{collapseCoaching.contributingFactor.statement}</span>
@@ -341,7 +341,7 @@ export default function DeathScreenSecondaryAnalysis({ model }) {
               {postRunIntel.rivalry.prompt}
             </div>
           )}
-          <div style={{ marginTop: 10, padding: "9px 10px", borderRadius: 8, background: "rgba(255,107,53,0.08)", border: "1px solid rgba(255,107,53,0.28)" }}>
+          <div data-testid="analysis-next-drill" style={{ marginTop: 10, padding: "9px 10px", borderRadius: 8, background: "rgba(255,107,53,0.08)", border: "1px solid rgba(255,107,53,0.28)" }}>
             <div style={{ fontSize: 10, color: "#FFB36B", letterSpacing: 1.5, fontWeight: 900 }}>NEXT DRILL</div>
             <div style={{ fontSize: 12, color: "#FFF", fontWeight: 900, marginTop: 3 }}>{nextRunDrill.title}</div>
             <div style={{ fontSize: 10, color: "#DDD", lineHeight: 1.45, marginTop: 3 }}>{nextRunDrill.detail}</div>
@@ -375,6 +375,6 @@ export default function DeathScreenSecondaryAnalysis({ model }) {
           </div>
         </div>
 
-    </>
+    </div>
   );
 }

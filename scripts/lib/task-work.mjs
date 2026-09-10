@@ -1,7 +1,7 @@
 import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
-import { parseSectionCheckboxItems } from "./task-board.mjs";
+import { parseSectionCheckboxItems, parseTaskBoardAst } from "./task-board.mjs";
 
 export const GENIUS_INPUTS = [
   "context/TASK_BOARD.md",
@@ -38,6 +38,7 @@ export function classifyTaskTitle(title, section = "Now") {
   let status = "unblocked";
 
   if (/cross-repo|owned by another repo|\[ark\]/i.test(text)) status = "cross-repo-locked";
+  else if (/\*\*founder\*\*/i.test(text)) status = "human-blocked";
   else if (/\[data-blocked(?:[^\]]*)?\]|\[human\/data\]|lighthouse|funnel data|production (?:metric|traffic|measurement|feedback)|human measurement|participant evidence/i.test(text)) status = "data-blocked";
   else if (/physical launch qa|real gamepad|pwa install|full-run media|physical-device/i.test(text)) status = "device-blocked";
   else if (/itch\.io|publish the prepared|publication|launch announcement/i.test(text)) status = "publication-blocked";
@@ -69,6 +70,19 @@ export function classifyTaskTitle(title, section = "Now") {
       section,
     },
   };
+}
+
+export function findLatestSessionOrphans(markdown) {
+  const nodes = parseTaskBoardAst(markdown).filter((node) => node.kind === "checkbox" && !node.checked);
+  const sessionNumbers = nodes
+    .map((node) => Number.parseInt(node.section.match(/^Session (\d+)/i)?.[1] || "0", 10))
+    .filter((number) => number > 0);
+  const latestSession = Math.max(0, ...sessionNumbers);
+  const items = nodes
+    .filter((node) => Number.parseInt(node.section.match(/^Session (\d+)/i)?.[1] || "0", 10) === latestSession)
+    .map((node) => ({ ...node, classification: classifyTaskTitle(node.body, node.section) }))
+    .filter((node) => node.classification.executable);
+  return { schemaVersion: "latest-session-task-lanes-v1", latestSession, items };
 }
 
 export function collectTaskWork(markdown, sections = ["Now", "Deferred"]) {

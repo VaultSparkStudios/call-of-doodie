@@ -27,6 +27,7 @@ import { buildReplayCoveragePassport } from "../utils/replayCoverage.js";
 import { buildDrillEvidenceArchive } from "../systems/runDrill.js";
 import { isOpsDebug } from "../utils/debugFlags.js";
 import { COSMETICS, isCosmeticOwned, equipCosmetic } from "../utils/cosmeticTrack.js";
+import { buildHazardCaseFileRows } from "../utils/hazardCaseFiles.js";
 
 const OVERLAY = { position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 100, display: "flex", alignItems: "flex-start", justifyContent: "center", padding: "max(12px, env(safe-area-inset-top)) 12px max(18px, env(safe-area-inset-bottom))", overflowY: "auto", WebkitOverflowScrolling: "touch", backdropFilter: "blur(4px)" };
 const CARD = { background: "rgba(255,255,255,0.05)", borderRadius: 10, border: "1px solid rgba(255,255,255,0.1)", padding: "20px 16px", color: "#fff", maxHeight: "none", width: "100%", position: "relative", margin: "auto 0" };
@@ -160,6 +161,9 @@ export function MostWantedPanel({ onClose }) {
   const [enemyBests] = useState(() => {
     try { return loadCareerStats().enemyKillBests || {}; } catch { return {}; }
   });
+  const [hazardCases] = useState(() => {
+    try { return buildHazardCaseFileRows(loadCareerStats()); } catch { return []; }
+  });
   // S145 — the Nemesis Chronicle's promised dossier border finally renders:
   // the enemy behind the active chronicle gets a chapter-tiered case-file frame.
   const [nemesis] = useState(() => {
@@ -198,6 +202,21 @@ export function MostWantedPanel({ onClose }) {
             </div>
           );
         })}
+        {hazardCases.length > 0 && (
+          <section data-testid="most-wanted-hazards" aria-labelledby="most-wanted-hazards-title" style={{ marginTop: 16, paddingTop: 12, borderTop: "1px solid rgba(255,255,255,0.12)" }}>
+            <div id="most-wanted-hazards-title" style={{ fontSize: 11, fontWeight: 900, letterSpacing: 1.5, color: "#FFB347", marginBottom: 8 }}>⚠ ENVIRONMENTAL CASE FILES</div>
+            {hazardCases.map((hazard) => (
+              <article key={hazard.id} data-hazard-id={hazard.id} style={{ display: "grid", gridTemplateColumns: "28px 1fr", gap: 10, padding: "9px 8px", borderRadius: 6, marginBottom: 6, background: "rgba(255,179,71,0.07)", border: "1px solid rgba(255,179,71,0.24)", textAlign: "left" }}>
+                <span aria-hidden="true" style={{ fontSize: 21 }}>{hazard.icon}</span>
+                <div>
+                  <div style={{ fontSize: 13, fontWeight: 800, color: hazard.tone }}>{hazard.label}</div>
+                  <div style={{ fontSize: 10, color: "#D6D6D6", fontFamily: "'Courier New',monospace", marginTop: 2 }}>{hazard.metric}</div>
+                  <div style={{ fontSize: 10, color: "#B9C2CF", lineHeight: 1.4, marginTop: 4 }}>{hazard.countermeasure}</div>
+                </div>
+              </article>
+            ))}
+          </section>
+        )}
         <button onClick={onClose} style={{ ...BTN_P, marginTop: 16, width: "100%", maxWidth: 300 }}>← BACK</button>
       </div>
     </div>

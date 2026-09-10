@@ -147,6 +147,26 @@ if (s166StateDirArg) {
   }
 }
 
+const hazardStateDirArg = valueAfter("--hazard-state-dir", null);
+let hazardStateReceipt = null;
+if (hazardStateDirArg) {
+  const hazardStateDir = path.resolve(root, hazardStateDirArg);
+  hazardStateReceipt = JSON.parse(fs.readFileSync(path.join(hazardStateDir, "hazard-case-files-receipt.json"), "utf8"));
+  if (!hazardStateReceipt?.summary?.pass) throw new Error("Refusing visual receipt: hazard case-file state checks did not pass.");
+  for (const capture of hazardStateReceipt.captures) {
+    const screenshot = capture.screenshot?.file ?? capture.screenshot ?? capture.file;
+    selected.push({
+      source: path.join(hazardStateDir, screenshot),
+      file: screenshot,
+      theme: capture.theme === "sewer-night" ? "dark" : "light",
+      projectTheme: capture.theme,
+      width: capture.width,
+      height: capture.height,
+      page: "Observed hazard case files in Most Wanted",
+    });
+  }
+}
+
 for (const capturePath of reviewedCapturePaths) {
   const source = path.resolve(root, capturePath);
   if (!fs.existsSync(source)) throw new Error(`Reviewed capture missing: ${capturePath}`);
@@ -226,6 +246,7 @@ const receipt = {
     ...(operationStateReceipt ? [{ surface: "Operation command deck and live arena interaction", checks: operationStateReceipt.summary }] : []),
     ...(operationModalReceipt ? [{ surface: "Operation completion receipt and opt-in paired playtest command post", checks: operationModalReceipt.summary }] : []),
     ...(s166StateReceipt ? [{ surface: "Sewer Extraction loot/evac radar and first-open deferred death analysis", checks: s166StateReceipt.summary }] : []),
+    ...(hazardStateReceipt ? [{ surface: "Observed hazard case files and event-specific countermeasures in Most Wanted", checks: hazardStateReceipt.summary }] : []),
   ],
   themes: ["dark", "light"],
   captures,
@@ -251,6 +272,7 @@ const receipt = {
       ...(operationStateReceipt ? [`The hosted authored Operation deck and live arena interaction passed ${operationStateReceipt.summary.passed}/${operationStateReceipt.summary.checks} focused checks at 390px and 1440px in both project themes.`] : []),
       ...(operationModalReceipt ? [`The Operation completion receipt and expanded opt-in paired playtest command post passed ${operationModalReceipt.summary.passed}/${operationModalReceipt.summary.checks} focused checks at 390px and 1440px in both project themes.`] : []),
       ...(s166StateReceipt ? [`The hosted Sewer Extraction radar and first-open deferred death analysis passed ${s166StateReceipt.summary.passed}/${s166StateReceipt.summary.checks} focused checks at 390px and 1440px in both project themes; the evac capture explicitly records its visual-only alarm-threshold injection.`] : []),
+      ...(hazardStateReceipt ? [`The observed hazard case files passed ${hazardStateReceipt.summary.passed}/${hazardStateReceipt.summary.checks} focused checks at 390px and 1440px in both project themes, including event-specific death/lockdown metrics and countermeasures.`] : []),
     ],
     fixesApplied: fixNotes.length ? fixNotes : ["No fix narrative supplied; the source matrix is authoritative."],
     blockingDefectsOpen: 0,

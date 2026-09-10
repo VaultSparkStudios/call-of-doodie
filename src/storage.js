@@ -4,6 +4,7 @@ import { isSupporter } from "./utils/supporter.js";
 import { WEAPON_EVOLVED_NAMES } from "./constants.js";
 import { removeLocalState, writeLocalState } from "./utils/storageHealth.js";
 import { normalizeCommunityStats } from "./utils/gameStats.js";
+import { incrementHazardChronicle, normalizeHazardChronicle } from "./utils/hazardCaseFiles.js";
 import {
   buildCommunityStatsCacheRecord,
   COMMUNITY_STATS_CACHE_KEY,
@@ -753,13 +754,19 @@ const DEFAULT_CAREER = {
   totalPlayTime: 0,
   achievementsEver: [],
   enemyKillBests: {}, // typeIndex → { waveMax, careerKills, killedByCount }
+  hazardChronicle: {}, // stable hazard id → { deaths, encounters }
 };
 
 export function loadCareerStats() {
   try {
     const raw = localStorage.getItem(CAREER_KEY);
     if (!raw) return { ...DEFAULT_CAREER };
-    return { ...DEFAULT_CAREER, ...JSON.parse(raw) };
+    const parsed = JSON.parse(raw);
+    return {
+      ...DEFAULT_CAREER,
+      ...parsed,
+      hazardChronicle: normalizeHazardChronicle(parsed?.hazardChronicle, parsed?.hazardDeaths),
+    };
   } catch { return { ...DEFAULT_CAREER }; }
 }
 
@@ -1274,6 +1281,15 @@ export function recordDeathByEnemy(typeId) {
   kbRec.killedByCount = (kbRec.killedByCount || 0) + 1;
   career.enemyKillBests[typeId] = kbRec;
   try { persistProgression(CAREER_KEY, JSON.stringify(career)); } catch {}
+}
+
+export function recordHazardEvent(id, event) {
+  const career = loadCareerStats();
+  const next = incrementHazardChronicle(career.hazardChronicle, id, event);
+  if (JSON.stringify(next) === JSON.stringify(career.hazardChronicle)) return false;
+  career.hazardChronicle = next;
+  try { persistProgression(CAREER_KEY, JSON.stringify(career)); } catch { return false; }
+  return true;
 }
 
 export function updateEnemyCareerStatsBatch(killsByType) {
