@@ -4,7 +4,7 @@
 
 ## Current Session
 
-- Session 170 implementation truth ( 2026-09-10) — startup cost evidence now renders through the canonical plan-aware presenter; the absent v5 renderer fails closed instead of taking a raw child-process path.
+- Session 170 production seal (2026-09-10) — public-contract drift blocked workflow 34435876634 before deployment; regenerated date-bound route artifacts passed 30/30 focused checks. Exact source bb88eb48d57d passed workflow 34436020611 and deployed immutable d9842f42; both origins report that SHA and pass shell 7/7, cutover 5/5, backend 5/5, replay 3/3, leaderboard isolation, and launch surfaces.
 
 ## Open Work
 
@@ -78,18 +78,18 @@ Why: Open work had been stranded outside the Genius List, falsely reporting exha
 CANON-045 remains a STRONG external integration gap because Obelisk verification credentials and relying-party proof are absent. CANON-054's conformance checker returned a malformed `GAP: }` even though the live `/stats/` surface, `stats-surface.json`, public contract, and Session 142 truth evidence are present; retain it as a named checker discrepancy rather than fabricating conformance.
 
 
-## 2026-09-09 — Session 170 — Engineering release remains distinct from SPARKED
+## 2026-09-10 — Session 170 — Engineering release remains distinct from SPARKED
 
 Decision: ship the cost-neutral protocol/tooling improvements as a normal FORGE engineering release, but do not promote the project to SPARKED. Repository validation and hosted staging prove deployability; they do not substitute for participant, physical-device, reply-as, provider-scoped telemetry, Obelisk, publication, current Core Web Vitals, direct-pixel, sitemap-score, or explicit lifecycle evidence.
 
 
-## 2026-09-09 — Session 170 — Audit context is bounded at source
+## 2026-09-10 — Session 170 — Audit context is bounded at source
 
 Decision: repository audits consume the source-hashed output of `scripts/task-slice.mjs` through `scripts/lib/audit-task-context.mjs`, not the entire long-lived Task Board. Protocol drift treats both files as required surfaces.
 
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 224,992 bytes · SHA-256 `edfe831954e1…`
+- `context/CURRENT_STATE.md` · 225,395 bytes · SHA-256 `23d1ca28a890…`
 - `context/TASK_BOARD.md` · 145,813 bytes · SHA-256 `71958f080f96…`
-- `context/DECISIONS.md` · 148,346 bytes · SHA-256 `4b40b438a376…`
+- `context/DECISIONS.md` · 148,346 bytes · SHA-256 `2abfa580cc76…`
 - `docs/AUDIT_2026-09-09.json` · 42,925 bytes · SHA-256 `95e2ec5a86cd…`

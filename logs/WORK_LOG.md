@@ -1633,7 +1633,7 @@ Intent outcome: achieved through implementation, isolated staging, pixel proof, 
 - Passed local Vitest 235 files / 1,382 assertions, strict lint, deployable build, release/security/static courts, staging 969/969 + 72/72 + 28/28, and direct hosted pixel inspection.
 - Committed ca132413, pushed main, passed workflow 34429538894, deployed immutable 90e27a19, and verified canonical plus immutable exact health and production courts.
 
-## Session 170 —  2026-09-10 — Startup evidence, bounded audit context, and process-policy closure
+## Session 170 — 2026-09-10 — Startup evidence, bounded audit context, and process-policy closure
 
 - Recovered a clean, synchronized S169 closeout and ran the full startup/canon/Ark/capability sequence as S170.
 - Reviewed the mature game loop at about 9.5/10 structural health; made no gameplay claim or tuning change without participant evidence.
@@ -1645,3 +1645,12 @@ Intent outcome: achieved through implementation, isolated staging, pixel proof, 
 - Creative Direction Record reviewed; no entry required.
 
 Intent outcome: implementation, validation, staging, and release readiness achieved; direct-main publication and exact production verification follow under explicit founder authority.
+
+### Production follow-through
+
+- Initial workflow `34435876634` stopped in quality before deployment because the closeout crossed the public content date boundary and the committed route contract/sitemap still carried 2026-09-09.
+- Regenerated the five date-bound public artifacts, passed the public contract and focused 30/30 tests, and published seal `bb88eb48d57d2254a3cc4ba7798afd94e4e0d6fa`.
+- Workflow `34436020611` passed Linux lint, 237 test files / 1,387 assertions, build, and Cloudflare deployment.
+- Production immutable `d9842f42` and `https://callofdoodie.wtf/` report exact deploy `bb88eb48d57d`; shell 7/7 both, cutover 5/5, backend 5/5, replay trust 3/3, leaderboard isolation, and launch surfaces pass.
+
+Intent outcome: achieved through exact-main publication and verified production deployment. SPARKED remains explicitly unpromoted.

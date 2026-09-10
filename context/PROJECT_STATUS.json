@@ -4,9 +4,15 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 170 shipped startup cost provenance, bounded audit context, and dynamic child-process enforcement; isolated staging is green and production publication is authorized.",
-  "nextMilestone": "Publish and verify the exact S170 production revision; then wait for participant/provider/device evidence or new founder-directed scope.",
+  "currentFocus": "Session 170 is exact-main published and production-verified: startup cost provenance, bounded audit context, and dynamic child-process enforcement are live at bb88eb48d57d.",
+  "nextMilestone": "Wait for participant/provider/device evidence or a new founder-directed product scope; no executable repo-local items remain.",
   "testingSurfaces": [
+    {
+      "session": 170,
+      "status": "green",
+      "type": "production-verification",
+      "command": "source bb88eb48d57d · workflow 34436020611 · immutable d9842f42 · shell 7/7 both · cutover 5/5 · backend 5/5 · replay 3/3 · leaderboard isolation · launch surfaces"
+    },
     {
       "session": 170,
       "status": "green",
@@ -173,7 +179,7 @@
     "total": 220,
     "score": 75
   },
-  "lastSessionSummary": "Session 170 shipped three protocol/tooling audit items, passed 1,387 assertions and 969/969 hosted staging checks, and cleared the cost-neutral FORGE engineering release gate.",
+  "lastSessionSummary": "Session 170 shipped three protocol/tooling audit items, passed 1,387 assertions and 969/969 staging checks, recovered one date-bound CI drift, and published bb88eb48d57d through workflow 34436020611 to immutable d9842f42.",
   "testsAssertionsPassing": 1387,
   "testsAssertionsTotal": 1387,
   "testsAssertionsFiles": 237,

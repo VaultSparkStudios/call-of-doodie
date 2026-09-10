@@ -1,41 +1,38 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: 0b012cda27de -->
-<!-- generated-at: 2026-09-10T03:09:12.620Z -->
+<!-- source-hash: d492b6b512f3 -->
+<!-- generated-at: 2026-09-10T04:16:09.255Z -->
 
 # LATEST_HANDOFF (compact)
 
-SESSION 169 HANDOFF SUMMARY
+Handoff Summary — Session 170
 
-Session: 169 (audit → implement → closeout arc from clean main 13ecbdc)
+Session
+- Current: S170. Full /arc from synchronized main through startup, game-loop, nine-axis audit, staging, release gating, main publication, production verification, closeout.
 
-Shipped this session:
-- Typed environmental case files: stable IDs, bounded migration, observed flood/mine death counts, exactly-once lockdown encounter counts, deterministic ordering, countermeasures.
-- Versioned lazy death-analysis browser contract: seven semantic landmarks, deferred loading, error fallback, overflow, both themes, mobile/desktop, top and NEXT DRILL states.
-- AST-backed latest-session orphan court: line-level reporting, correct founder/data/device/publication/cross-repo deferrals.
-- Second-order: canonical visual receipt ingests focused hazard receipts, fails closed, preserves unique captures, records touched surface.
+Shipped This Session
+- Startup Brief cost provenance now uses canonical plan-aware presenter; optional v5 renderer guarded by safe-spawn, fails closed if absent.
+- Repository-local task-slice.mjs and audit-task-context.mjs restore bounded, source-hashed audit input; live board 144,495 bytes to 5,357 chars across 16 open items.
+- Windows process guard detects dynamic child-process imports; caught raw import in public-claims checker, now uses safe-spawn.
 
-Current intent:
-- Engineering deployment green; lifecycle stays public-unlaunched/FORGE.
-- Do not invent repo work to consume token budget; wait for participant/provider/device evidence or new founder-directed scope.
+State
+- All three S170 audit candidates shipped; no additional repo-local work in innovation pack.
+- Game-loop structural health ~9.5/10; no balance/breadth change justified without external evidence.
+- Validation: 237 Vitest files / 1,387 assertions; strict lint; deployable build; all gates pass (startup, protocol, schema, public, security, dependency, runtime, entry, asset, npm-audit, supply-chain).
+- Staging: session-170-staging + immutable 520a56d6 pass shell 7/7; hosted checks 969/969.
+- Production: source bb88eb48d57d2254 passed workflow 34436020611; deployed immutable d9842f42; health bb88eb48d57d; shell 7/7 both, cutover 5/5, backend 5/5, replay 3/3, leaderboard isolation, launch surfaces pass.
 
-Validation state:
-- Vitest 235/235 files, 1,382/1,382 assertions; strict lint; deployable build (App 469.22/560 KB).
-- Staging visual: full matrix 969/969, hazard 28/28, lazy analysis 72/72; 26 hash-bound captures.
-- Production: source ca1324136f8c, workflow 34429538894, immutable https://90e27a19.call-of-doodie.pages.dev/; edge health ca1324136f8c; hazard 28/28 + lazy analysis 72/72 pass.
+Now Bucket
+- Zero executable repository-owned items remain.
+- Wait for external evidence or founder-directed product scope; do not manufacture repo work to fill a session.
+- The extraction/throne outcome capture and MOST WANTED hazard row are already complete (S168/S169); historical unchecked copies are stale, not active work.
 
-Now bucket (top 3):
-- Await participant/provider/device evidence before tuning drills/balance/scale.
-- Await new founder-directed product scope.
-- Preserve current contracts (env case files, lazy analysis, orphan court) unchanged.
+Blockers / Human-Blocked
+- SPARKED NO-GO: public-unlaunched; not lifecycle-promoted. Engineering FORGE GO. (persistent, multi-session)
+- Direct host image inspection fails at CryptUnprotectData/DPAPI decode; subjective pixel approval not claimed. (S168-S170, ~3 sessions)
+- OBELISK_VERIFY_URL/SECRET founder-only; /api/profile answers 503 in production. (founder-blocked since S165, ~5 sessions)
 
-Blockers (top 3):
-- Unified Genius List: 0 executable / 6 deferred; no repo-local innovation candidates.
-- SPARKED NO-GO: requires external participant, physical-device, provider/mail evidence.
-- No repo-owned work available to advance without founder input.
+Release Boundary
+- SPARKED remains behind: participant, physical-device, replay-parity, current Core Web Vitals, provider/mail, identity, publication, explicit lifecycle evidence.
 
-Human-blocked items (open, founder/external only):
-- Obelisk identity credentials (OBELISK_VERIFY_URL/SECRET) — founder-only; /api/profile returns 503. Multi-session standing.
-- Zoho reply-as, scoped telemetry, publication, explicit lifecycle evidence — external, standing.
-- SPARKED physical/participant/Core Web Vitals evidence — external, standing.
-
-Next session pointer: No repo work pending; open only on new founder scope or arrival of participant/provider/device evidence.
+Next Session
+- Open S171; hold for external evidence or new founder scope rather than inventing repo work.

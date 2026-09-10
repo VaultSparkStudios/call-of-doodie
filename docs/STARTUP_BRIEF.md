@@ -44,7 +44,7 @@
 ║                                                                  ║
 ║    997/1000   ███████████████████████░   100%                    ║
 ║    SIL v3.0  ·  Avg3: 998  ·  Velocity 3→                        ║
-║    Last active: 0d  ·  Last closeout: 1d  ·  (active = newest…   ║
+║    Last active: 0d  ·  Last closeout: 0d  ·  (active = newest…   ║
 ║    Trend  ▄▆▄▄▄  →  (last 5 sessions)                            ║
 ║                                                                  ║
 ║    Category         Score  Bar        Spark   Δ                  ║
@@ -68,10 +68,9 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ✓  ██████░░░░░░░░░░░░░░░░░░   24% used                          ║
-║     64,309 / 272,000 tok  ·  codex/codex-272k  · …               ║
-║     ~32,155 tok/turn  ·  cache 50%  ·  5 turns to compact        ║
-║     Verdict: CONTINUE                                            ║
+║  ⚠  ░░░░░░░░░░░░░░░░░░░░░░░░    1% used                          ║
+║     287,559 / 200,000 tok  ·  unknown  ·  heuristic-stale        ║
+║     Verdict: CONSIDER_CLOSEOUT  ← act now                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
@@ -117,7 +116,7 @@
 ╔══ MOMENTUM METER ══════════════════════════════════════════════╗
 ║  Velocity:   ▄▆▄▄▄  3→  (last 5 sessions)                        ║
 ║  Intent:     100% achieved last 5                                ║
-║  Streak:     — (last intent not achieved)                        ║
+║  Streak:     ✓ 6 consecutive achieved-intent sessions            ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIL FORECAST (next session) ═════════════════════════════════╗

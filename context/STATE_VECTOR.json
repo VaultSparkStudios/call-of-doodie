@@ -1,9 +1,9 @@
 {
   "vectorVersion": "1.0",
   "generatedAt": "2026-09-10",
-  "generatedAtMs": 1789012995792,
+  "generatedAtMs": 1789013645050,
   "session": 170,
-  "vectorHash": "dd01096ae3f842d0",
+  "vectorHash": "f2a08516dbdda05c",
   "silTotal": 997,
   "silAvg3": 997.7,
   "velocity": 6,
@@ -33,8 +33,8 @@
   "slug": "call-of-doodie",
   "type": null,
   "lifecycle": "deployed",
-  "nextMilestone": "Publish and verify the exact S170 production revision; then wait for participant/provider/device evidence or new founder-directed scope.",
-  "currentFocus": "Session 170 shipped startup cost provenance, bounded audit context, and dynamic child-process enforcement; isolated staging is green and production publication is authorized.",
+  "nextMilestone": "Wait for participant/provider/device evidence or a new founder-directed product scope; no executable repo-local items remain.",
+  "currentFocus": "Session 170 is exact-main published and production-verified: startup cost provenance, bounded audit context, and dynamic child-process enforcement are live at bb88eb48d57d.",
   "lastShipped": "Startup Brief cost provenance now uses the canonical plan-aware presenter; the optional v5 renderer is guarded by safe-spawn and fails closed when absent.",
   "blockers": [
     "PostHog and project-scoped Sentry evidence remain unavailable; provider readiness is not represented as verified telemetry.",

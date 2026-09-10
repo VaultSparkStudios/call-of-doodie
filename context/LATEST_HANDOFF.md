@@ -14,13 +14,15 @@ Session Intent: Run one complete `/arc` from synchronized main through startup, 
 - Visual boundary: no UI/UX file changed. Fresh automated staging pixels are green, but direct host image inspection failed at CryptUnprotectData, so subjective pixel approval is not claimed.
 - Release boundary: engineering FORGE GO; SPARKED NO-GO. The project remains public-unlaunched and is not lifecycle-promoted.
 - Creative Direction Record reviewed: the founder authorized execution, main publication, and deployment; no new creative direction was introduced.
-- Next: publish and verify the exact production revision, then wait for external evidence or new founder-directed product scope.
+- CI recovery: workflow 34435876634 correctly blocked date-bound route-contract/sitemap drift before deployment. The generated artifacts were rebuilt and passed 30/30 focused contract checks.
+- Production: source `bb88eb48d57d2254a3cc4ba7798afd94e4e0d6fa` passed workflow `34436020611` and deployed immutable `https://d9842f42.call-of-doodie.pages.dev/`. Immutable and canonical health report `bb88eb48d57d`; shell 7/7 both, cutover 5/5, backend 5/5, replay 3/3, leaderboard isolation, and launch surfaces pass.
+- Next: wait for external evidence or new founder-directed product scope; do not manufacture repo work to fill a session.
 
 ## Impact Summary
 
 **Headline.** The session machinery now proves its own cost, reads only the task context it needs, and cannot hide a dynamic child process from the Windows safety court.
 
-**Evidence.** Three audit items; 237 files / 1,387 assertions; staging shell 7/7 and 969/969 hosted checks; zero new dependency, runtime behavior, hosted inference, or variable per-user cost.
+**Evidence.** Three audit items; 237 files / 1,387 assertions; staging 969/969; workflow 34436020611; immutable d9842f42; exact health bb88eb48d57d; production courts green; zero new dependency, runtime behavior, hosted inference, or variable per-user cost.
 
 ---
 # Latest Handoff — Session 169
