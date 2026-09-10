@@ -1,4 +1,9 @@
-const PERK_SYNERGIES = [
+import { PERKS, CURSED_PERKS } from "../constants.js";
+
+const _ALL_PERKS = [...PERKS, ...CURSED_PERKS];
+const _PERK_BY_ID = new Map(_ALL_PERKS.map(p => [p.id, p]));
+
+export const PERK_SYNERGIES = [
   {
     condition: (mods) => mods.hasVampire && mods.hasChainLightning && !mods._synergyStormVampire,
     flag: "_synergyStormVampire",
@@ -141,6 +146,33 @@ const PERK_SYNERGIES = [
     },
   },
 ];
+
+/**
+ * Returns synergies that would newly fire if `candidatePerk` were added to `activePerks`.
+ * Pure — does not mutate any real game state.
+ */
+export function getPerkSynergyPreview(candidatePerk, activePerks = []) {
+  if (!candidatePerk?.id) return [];
+
+  function buildMods(perks) {
+    const m = {};
+    for (const p of perks) {
+      const full = _PERK_BY_ID.get(p.id) ?? p;
+      try { full.apply?.(m, null); } catch { /* ignore gs-dependent side effects */ }
+    }
+    return m;
+  }
+
+  const modsBefore = buildMods(activePerks);
+  applyPerkSynergies(modsBefore); // marks already-active _synergy* flags
+
+  const modsAfter = buildMods([...activePerks, candidatePerk]);
+
+  return PERK_SYNERGIES.filter(s => {
+    if (modsBefore[s.flag]) return false; // already active
+    try { return s.condition(modsAfter); } catch { return false; }
+  }).map(s => ({ name: s.name, desc: s.desc }));
+}
 
 export function applyPerkSynergies(perkMods) {
   const unlocked = [];
