@@ -41,6 +41,10 @@ const helpers = [
   { rel: "scripts/render-state-vector.mjs", level: "required", purpose: "renders the canonical closeout state vector" },
   { rel: "scripts/compute-entropy.mjs", level: "required", purpose: "updates protocol entropy during closeout" },
   { rel: "scripts/append-genome-snapshot.mjs", level: "required", purpose: "appends the closeout genome snapshot" },
+  // S174: the three entries above assert the renderers EXIST. Presence is not
+  // currency — they were present and un-run for three closeouts. This one measures
+  // what they produce.
+  { rel: "scripts/check-closeout-artifact-currency.mjs", level: "required", purpose: "fails when a §3.7 renderer stopped running" },
   { rel: "scripts/sanitize-claude-settings.mjs", level: "required", purpose: "sanitizes local agent settings before push" },
   { rel: "scripts/lib/studio-ops-proxy.mjs", level: "required", purpose: "binds authoritative control-plane scripts to this project" },
   { rel: "scripts/record-skill-cost.mjs", level: "optional", purpose: "records closeout skill-cost snapshots" },

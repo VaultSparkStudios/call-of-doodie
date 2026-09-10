@@ -31,8 +31,12 @@ jobs:
         run: npm ci
 
       - name: Lint
-        # Flat config: plain lint run blocks on errors; strict warning cleanup stays local/optional for now
-        run: npx eslint src --report-unused-disable-directives
+        # S174: was `npx eslint src` (errors only) while the session protocol and every
+        # SIL claim cited `lint:strict`. Two rulers meant a warning regression could sit
+        # red locally for sessions while CI stayed green — it did, from Dependabot #151
+        # until S174. The entry-point false positive is fixed at source, so CI now runs
+        # the same strict gate the protocol quotes.
+        run: npm run lint:strict
 
       - name: Test
         run: npm test

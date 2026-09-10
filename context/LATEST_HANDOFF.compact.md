@@ -1,38 +1,37 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: d492b6b512f3 -->
-<!-- generated-at: 2026-09-10T04:16:09.255Z -->
+<!-- source-hash: fde28a4d551f -->
+<!-- generated-at: 2026-09-10T18:36:10.579Z -->
 
 # LATEST_HANDOFF (compact)
 
-Handoff Summary — Session 170
+Session 174 Handoff Summary
 
 Session
-- Current: S170. Full /arc from synchronized main through startup, game-loop, nine-axis audit, staging, release gating, main publication, production verification, closeout.
+- S174 closed. Ran one complete /arc from synchronized main under standing founder authorization.
 
-Shipped This Session
-- Startup Brief cost provenance now uses canonical plan-aware presenter; optional v5 renderer guarded by safe-spawn, fails closed if absent.
-- Repository-local task-slice.mjs and audit-task-context.mjs restore bounded, source-hashed audit input; live board 144,495 bytes to 5,357 chars across 16 open items.
-- Windows process guard detects dynamic child-process imports; caught raw import in public-claims checker, now uses safe-spawn.
+What Shipped
+- Fixed lint:strict (exit 1 since S172 Dependabot bump on src/main.jsx) with scoped entry override + entryFiles.test.js; wired lint:strict into both deploy CI workflows.
+- Added check-closeout-artifact-currency.mjs (+lib, 13 cases); wired into schema:lint, exposed as closeout:currency, registered in protocol-drift-check. Fixes STATE_VECTOR.json and GENOME_HISTORY.json stale since S170.
+- silAvg3/silAvg5 now derive from SIL ledger in write-project-status.mjs (recomputed-never-trusted); ends float-churn and 995-vs-997.7 disagreement.
+- coverage:check now reports NOT MEASURED instead of FAIL/ENOENT.
+- Verified: Vitest 243/243 files, 1,466/1,466 assertions; 14/14 static gates (up from 12/14); build + deployable build + security release gate green. App chunk 469.06 KB under 560 KB. No src/ runtime change. Committed and pushed direct to main; Actions deploys to Cloudflare Pages.
 
-State
-- All three S170 audit candidates shipped; no additional repo-local work in innovation pack.
-- Game-loop structural health ~9.5/10; no balance/breadth change justified without external evidence.
-- Validation: 237 Vitest files / 1,387 assertions; strict lint; deployable build; all gates pass (startup, protocol, schema, public, security, dependency, runtime, entry, asset, npm-audit, supply-chain).
-- Staging: session-170-staging + immutable 520a56d6 pass shell 7/7; hosted checks 969/969.
-- Production: source bb88eb48d57d2254 passed workflow 34436020611; deployed immutable d9842f42; health bb88eb48d57d; shell 7/7 both, cutover 5/5, backend 5/5, replay 3/3, leaderboard isolation, launch surfaces pass.
+Current Intent
+- Audit the measurement/observability layer (gates lying green while subject red/stale) and close findings with executable regression protection.
 
-Now Bucket
-- Zero executable repository-owned items remain.
-- Wait for external evidence or founder-directed product scope; do not manufacture repo work to fill a session.
-- The extraction/throne outcome capture and MOST WANTED hazard row are already complete (S168/S169); historical unchecked copies are stale, not active work.
+Now Bucket (top 3)
+- Backlog measurement layer audited once; next unexamined surface is generated public content and genome ledger duplicate/out-of-order session labels (SIL brainstorm item 2).
+- objectiveHandlers.js gameplay-completion cutover — still deliberately unshipped (third session, launch-risk).
+- If future session finds backlog clean again, proceed to public-content/genome-ledger audit.
 
-Blockers / Human-Blocked
-- SPARKED NO-GO: public-unlaunched; not lifecycle-promoted. Engineering FORGE GO. (persistent, multi-session)
-- Direct host image inspection fails at CryptUnprotectData/DPAPI decode; subjective pixel approval not claimed. (S168-S170, ~3 sessions)
-- OBELISK_VERIFY_URL/SECRET founder-only; /api/profile answers 503 in production. (founder-blocked since S165, ~5 sessions)
+Blockers (top 3)
+- Backlog remains founder-, credential-, hardware-, and data-blocked.
+- SPARKED release: NO-GO (engineering FORGE GO). Unchanged.
+- Genome ledger duplicate/out-of-order session labels — found, deliberately left unfixed.
 
-Release Boundary
-- SPARKED remains behind: participant, physical-device, replay-parity, current Core Web Vitals, provider/mail, identity, publication, explicit lifecycle evidence.
+Human-Blocked
+- Founder creative direction: none this session; CDR not appended.
+- SPARKED NO-GO: founder-owned, unchanged this session.
 
 Next Session
-- Open S171; hold for external evidence or new founder scope rather than inventing repo work.
+- Confirm backlog still clean, then audit generated public content and genome ledger session-label integrity.

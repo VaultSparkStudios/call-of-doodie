@@ -31,7 +31,8 @@ jobs:
         run: npm ci
 
       - name: Lint
-        run: npx eslint src --report-unused-disable-directives
+        # S174: one ruler — the strict gate the session protocol cites. See deploy.yml.
+        run: npm run lint:strict
 
       - name: Test
         run: npm test

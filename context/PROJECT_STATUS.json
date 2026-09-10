@@ -4,7 +4,7 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 173 pre-verified the live backlog against current code (no stale lines found), then closed a genuine test-coverage gap for the objectiveHandlers.js seven-verb Operation contract and the zones.js state machine, and pushed directly to main under standing founder authorization.",
+  "currentFocus": "Session 174 audited the measurement layer rather than the backlog: lint:strict had been red since S172 while two sessions reported it green, and two SESSION_PROTOCOL 3.7 renderers had silently not run for three sessions. All four findings shipped with executable regression protection.",
   "nextMilestone": "Wait for participant/provider/device evidence or a new founder-directed product scope; remaining open backlog is founder-decision-, credential-, hardware-, or data-blocked.",
   "testingSurfaces": [
     {
@@ -132,13 +132,13 @@
   "ignisScore": 43701,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-09-09",
-  "silSession": 173,
-  "silScore": 995,
-  "silAvg3": 995.0,
-  "silVelocity": 2,
+  "silSession": 174,
+  "silScore": 996,
+  "silAvg3": 994,
+  "silVelocity": 1,
   "silDebt": "down",
-  "silLastSession": 173,
-  "currentSession": 173,
+  "silLastSession": 174,
+  "currentSession": 174,
   "sessionMode": "founder",
   "lastAgent": "claude-code",
   "testsPassing": 1438,
@@ -151,7 +151,7 @@
   "silCategoriesV3": {
     "devHealth": 100,
     "creativeAlignment": 100,
-    "momentum": 99,
+    "momentum": 100,
     "engagement": 96,
     "processQuality": 100,
     "crossRepoCoherence": 100,
@@ -207,7 +207,9 @@
   "testsEnvBlocked": [],
   "testsDeferred": [],
   "testsBudgetExhausted": false,
-  "silAvg5": 996.2,
+  "silAvg5": 995.6,
   "testsAssertionsDeferred": [],
-  "testsAssertionsLastRun": "2026-09-10"
+  "testsAssertionsLastRun": "2026-09-10",
+  "lastShipped": "scripts/check-closeout-artifact-currency.mjs — measures each session-keyed closeout artifact against the SIL ledger, so a renderer that stops running fails loudly instead of passing on file presence.",
+  "truthStatus": "Measurement layer audited: lint:strict was red from S172 to S174 while two sessions reported it green, and two SESSION_PROTOCOL 3.7 renderers had not run since S170. All four findings implemented, fully tested (243 files / 1,466 assertions), 14/14 gates green, and pushed directly to main under standing founder authorization. SPARKED remains NO-GO."
 }

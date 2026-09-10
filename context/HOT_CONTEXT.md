@@ -4,13 +4,14 @@
 
 ## Current Session
 
-- Session 172 (2026-09-10) — ran a full `/arc` (start → audit → implement → closeout). Synced two pending Dependabot lockfile bumps (`@supabase/supabase-js`, dev-dependencies group) that had landed on origin, which required a root-fix `npm install` to resync `node_modules` after the pull — `check-dependency-tree.mjs`/the security release gate briefly reported `invalid:` version mismatches until the install ran. Pre-verified the live backlog against current code before writing new work (S171 precedent): the S144 "off-screen threat arrow ADS-zoom correction" TASK_BOARD line was stale — `getOffscreenThreatArrows` (`src/utils/offscreenIndicators.js`) already projects through `worldToThreatScreenPoint` with explicit `zoom`/`camX`/`camY`, and `drawGame.js` already passes `zoom: gs.adsZoom ? 1.28 : 1` plus camera offsets with a "screen-space by contract" comment; closed done-with-evidence rather than re-implemented. Remaining open backlog lines (Supabase Auth/membership decision, PostHog/Sentry dashboard allowlist, the `objectiveHandlers.js` gameplay cutover) were confirmed still genuinely founder-decision-gated, credential-gated, or too launch-risk-sensitive for an unattended single pass, and were left accurately tracked rather than blind-shipped. Full suite 238/238 files · 1,389/1,389 assertions, strict lint 0 errors, deployable build, and the security release gate all green.
+- Session 174 (2026-09-10) — ran a full `/arc` and, with the backlog already pre-verified as genuinely blocked for three sessions running, measured the **gates and artifacts** instead of the backlog a fourth time. Four real defects, all of the same class — a gate reporting green while the thing it measures is red or stale. (1) `npm run lint:strict` had been exiting 1 since Dependabot #151 (`78efba4`, merged during S172) bumped `eslint-plugin-react-refresh` 0.5.5 → 0.5.6, which extended `only-export-components` to flag a file with no exports and so began warning on the unchanged Vite entry `src/main.jsx`; S172 and S173 both recorded "strict lint 0 errors", true of the error count and false of the gate. Fixed at source with a scoped entry-point override (never by raising `--max-warnings`), guarded by `src/entryFiles.test.js`, and CI in both deploy workflows now runs `lint:strict` so one ruler governs. (2) `context/STATE_VECTOR.json` and `context/GENOME_HISTORY.json` had been stale since S170 — three consecutive closeouts skipped a `SESSION_PROTOCOL` §3.7 mandatory renderer while every probe stayed green, because `protocol-drift-check.mjs` asserts the renderer file *exists* and `check-writeback-currency.mjs` anchors only on the SIL ledger; STATE_VECTOR was publishing session 170 / silTotal 997 against PROJECT_STATUS's 173 / 995. `scripts/check-closeout-artifact-currency.mjs` now measures each artifact's own recorded session against the ledger, is wired into `schema:lint` and registered in `protocol-drift-check.mjs`, and reports an unreadable artifact as `unmeasurable` rather than fresh. (3) `silAvg3`/`silAvg5` were hand-authored with no authority — PROJECT_STATUS said 995 while STATE_VECTOR said 997.7 — and are now derived from the append-only SIL ledger at the single write path, ending a permanent `.0` float-churn loop. (4) `coverage:check` now reports `NOT MEASURED` rather than `FAIL` when coverage was simply never generated. Verified 243/243 files · 1,466/1,466 assertions, 14/14 static gates, build, deployable build, and security release gate all green; App chunk 469 KB unchanged, no player-facing bundle or gameplay change.
 
 ## Open Work
 
 ## Session 170 - Startup evidence, bounded audit context, and process-policy closure
 - [ ] [SIL:2] **EVIDENCE** Collect participant, physical PWA/gamepad/media, current production Core Web Vitals, Zoho reply-as, scoped telemetry, Obelisk, publication, direct-pixel, sitemap ≥8/10, and explicit lifecycle evidence before SPARKED.
 # Task Board
+## Session 174 - The gates themselves get measured
 ## Session 173 - Objective-verb and zone coverage gap closed
 ## Session 168 - Terminal order, exactly-once extraction, and mode-specific debrief proof
 - [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET so cloud backup stops answering 503.
@@ -62,7 +63,6 @@
 ## Deferred
 - [ ] [SIL:1] [DATA-BLOCKED S147] Theme-prop atlas L2 expansion — extend `theme-prop-atlas-v1.webp` from 16 to ~32 cells only after production feedback confirms the current highest-visibility coverage reads well; no participant evidence exists yet.
 - [ ] Discord invite/community link when the community entry point is ready
-- [ ] [SIL:1] [S62 deferred] HomeV2 v1 fallback retirement — gate on ≥200ms Lighthouse LCP improvement confirmed on production (human measurement required)
 
 ## Recent Decisions
 
@@ -91,9 +91,25 @@ Decision (S173): with the TASK_BOARD backlog re-verified as genuinely blocked (n
 
 Why: both modules are fully deterministic and load-bearing for Operations, HOLD THE THRONE, and SEWER EXTRACTION, yet had zero regression protection. Adding tests is a pure Dev Health/Process Quality improvement with zero risk of shipping an unreviewed gameplay change under an unattended single pass, consistent with S172's judgment to leave the actual behavioral cutover for a founder-directed session.
 
+Decision (S174): after three consecutive sessions correctly found no stale TASK_BOARD line, audited the **gates and artifacts** rather than running the same backlog pre-verification a fourth time — every static gate run individually with its exit code captured, and every closeout-owned artifact compared against git history.
+
+Why: S171, S172 and S173 all confirmed the backlog is genuinely blocked, so a fourth pass had a near-zero expected yield while the measurement layer itself had never been audited. It yielded four real defects, including a gate that had been exiting 1 for two sessions while both reported it green. When the backlog is verified-clean, the next place drift hides is the instruments.
+
+Decision (S174): fixed the `react-refresh/only-export-components` warning on the Vite entry with a scoped `eslint.config.js` override rather than raising `--max-warnings`, and promoted CI in both deploy workflows from plain `eslint src` to `npm run lint:strict`.
+
+Why: the number did not move — `src/main.jsx` is unchanged since S163 — the ruler did, via a Dependabot plugin bump. Raising the budget would hide every future warning to silence one false positive on an entry point that correctly has no exports. Running two different lint rulers (strict in the protocol, permissive in CI) is what let the regression sit red locally for two sessions while CI stayed green, so both now run the same one.
+
+Decision (S174): derived `silAvg3`/`silAvg5` from the append-only SIL ledger inside `write-project-status.mjs` instead of accepting hand-entered values, and made the derivation refuse a short window, correct only a field the status already publishes, and read the *target* repo's ledger.
+
+Why: both are pure functions of a ledger that already exists, so trusting a typed-in number gave two surfaces permission to disagree (995 vs 997.7) and created a float-formatting churn loop no closeout could win. The three restrictions were not defensive padding — the first prevents publishing a 5-session mean computed from 3 sessions, and the other two were added after `tests/doctor-score-sync.test.js` caught the first cut leaking this repo's history into an unrelated project's status file.
+
+Decision (S174): recorded `context/STUDIO_MANIFEST.json` and `context/MEMORY_INDEX.md` as verified NOT stale rather than adding them to the currency gate.
+
+Why: both look behind by git date, but the manifest regenerates byte-identically from PROJECT_STATUS and MEMORY_INDEX is a static navigation index with no writer and no session marker. Measuring them would require inventing a session marker for them — the same fabrication the gate exists to prevent. Writing the non-finding down stops a future session re-deriving it as a false positive.
+
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 229,049 bytes · SHA-256 `1d04c50e4077…`
-- `context/TASK_BOARD.md` · 148,634 bytes · SHA-256 `054e984d5787…`
-- `context/DECISIONS.md` · 149,928 bytes · SHA-256 `6524516f76d6…`
+- `context/CURRENT_STATE.md` · 231,225 bytes · SHA-256 `91acb98d82c3…`
+- `context/TASK_BOARD.md` · 152,996 bytes · SHA-256 `34a0e93125f3…`
+- `context/DECISIONS.md` · 152,682 bytes · SHA-256 `b8118086cd77…`
 - `docs/AUDIT_2026-09-10.json` · 3,950 bytes · SHA-256 `cc8ad101f848…`

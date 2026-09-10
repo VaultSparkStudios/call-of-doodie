@@ -1436,3 +1436,19 @@ Why: an unverified backlog line reads as outstanding work forever even after the
 Decision (S173): with the TASK_BOARD backlog re-verified as genuinely blocked (no stale lines this session), chose test-coverage-gap closure over inventing new gameplay scope — added focused unit tests for the untested `objectiveHandlers.js` (S163 seven-verb Operation contract) and `zones.js` (shared capturable-zone state machine) pure systems, rather than touching the flagged launch-risk-sensitive `objectiveHandlers.js` gameplay-completion cutover itself.
 
 Why: both modules are fully deterministic and load-bearing for Operations, HOLD THE THRONE, and SEWER EXTRACTION, yet had zero regression protection. Adding tests is a pure Dev Health/Process Quality improvement with zero risk of shipping an unreviewed gameplay change under an unattended single pass, consistent with S172's judgment to leave the actual behavioral cutover for a founder-directed session.
+
+Decision (S174): after three consecutive sessions correctly found no stale TASK_BOARD line, audited the **gates and artifacts** rather than running the same backlog pre-verification a fourth time — every static gate run individually with its exit code captured, and every closeout-owned artifact compared against git history.
+
+Why: S171, S172 and S173 all confirmed the backlog is genuinely blocked, so a fourth pass had a near-zero expected yield while the measurement layer itself had never been audited. It yielded four real defects, including a gate that had been exiting 1 for two sessions while both reported it green. When the backlog is verified-clean, the next place drift hides is the instruments.
+
+Decision (S174): fixed the `react-refresh/only-export-components` warning on the Vite entry with a scoped `eslint.config.js` override rather than raising `--max-warnings`, and promoted CI in both deploy workflows from plain `eslint src` to `npm run lint:strict`.
+
+Why: the number did not move — `src/main.jsx` is unchanged since S163 — the ruler did, via a Dependabot plugin bump. Raising the budget would hide every future warning to silence one false positive on an entry point that correctly has no exports. Running two different lint rulers (strict in the protocol, permissive in CI) is what let the regression sit red locally for two sessions while CI stayed green, so both now run the same one.
+
+Decision (S174): derived `silAvg3`/`silAvg5` from the append-only SIL ledger inside `write-project-status.mjs` instead of accepting hand-entered values, and made the derivation refuse a short window, correct only a field the status already publishes, and read the *target* repo's ledger.
+
+Why: both are pure functions of a ledger that already exists, so trusting a typed-in number gave two surfaces permission to disagree (995 vs 997.7) and created a float-formatting churn loop no closeout could win. The three restrictions were not defensive padding — the first prevents publishing a 5-session mean computed from 3 sessions, and the other two were added after `tests/doctor-score-sync.test.js` caught the first cut leaking this repo's history into an unrelated project's status file.
+
+Decision (S174): recorded `context/STUDIO_MANIFEST.json` and `context/MEMORY_INDEX.md` as verified NOT stale rather than adding them to the currency gate.
+
+Why: both look behind by git date, but the manifest regenerates byte-identically from PROJECT_STATUS and MEMORY_INDEX is a static navigation index with no writer and no session marker. Measuring them would require inventing a session marker for them — the same fabrication the gate exists to prevent. Writing the non-finding down stops a future session re-deriving it as a false positive.

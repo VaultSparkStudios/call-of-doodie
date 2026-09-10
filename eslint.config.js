@@ -29,4 +29,14 @@ export default [
       "no-unreachable": "warn",
     },
   },
+  // S174: Vite module entries are the HMR root, not hot-refreshed components, and
+  // correctly export nothing. eslint-plugin-react-refresh 0.5.6 (Dependabot #151,
+  // 78efba4) extended only-export-components to flag a file with NO exports, which
+  // turned the unchanged entry into a warning and took `lint:strict` red. Scope the
+  // rule off for entries rather than raising --max-warnings: the budget is not the
+  // thing that moved. src/entryFiles.test.js keeps this list matched to index.html.
+  {
+    files: ["src/main.jsx"],
+    rules: { "react-refresh/only-export-components": "off" },
+  },
 ];

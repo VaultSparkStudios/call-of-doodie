@@ -1,3 +1,34 @@
+## 2026-09-10 — Session 174 | Total: 996/1000 | Velocity: 1 | Debt: ↓
+
+SIL 996/1000: Ran a full `/arc` under standing founder authorization to push/deploy directly to main. Followed S171–S173's backlog pre-verification discipline, but pushed it one layer out: instead of re-checking the backlog a fourth time, measured the **gates and artifacts** themselves. Every one of the four findings is a real red or a real staleness discovered this session — a gate reporting green while the thing it measures is red or stale — not invented scope.
+
+| Category | Score | Δ | Rationale |
+|---|---:|---|---|
+| Dev Health | 100 | → | 243 files / 1,466 assertions (+28), 14/14 static gates, build, deployable build, and security release gate all green. `lint:strict` goes from exit 1 to exit 0. |
+| Creative Alignment | 100 | → | No gameplay, balance, copy, or bundle change; SOUL pillars untouched. App chunk 469 KB, unchanged and under the 560 KB gate. |
+| Momentum | 100 | ↑ | Full start→audit→implement→closeout→deploy in one continuous pass, including diagnosing and root-fixing a self-introduced regression mid-session without a founder pause. |
+| Engagement | 96 | → | No new player-facing value shipped; scored honestly rather than inflated, matching the S172/S173 precedent for infrastructure-only sessions. |
+| Process Quality | 100 | → | Found that S172 and S173 both reported "strict lint 0 errors" while `npm run lint:strict` exited 1 — the exit-code-vs-error-count trap — and traced it to a moved ruler (Dependabot #151), fixing the false positive at source rather than raising the warning budget. When the new SIL-average derivation broke `tests/doctor-score-sync.test.js`, the failure was diagnosed as a genuine defect in the fix (leaking this repo's ledger into foreign status files) and root-fixed; the test was never edited to accommodate it. |
+| Cross-Repo Coherence | 100 | → | All work stayed inside this repo. No sibling tree touched. |
+| Security Posture | 100 | → | No new dependency, no secret touched; security release gate green. |
+| Ecosystem Integration | 100 | → | The new currency gate follows existing probe conventions (declared-extractor table, `--json`, honest exit codes) and is registered in both `schema:lint` and `protocol-drift-check.mjs`, so it cannot itself go un-run. |
+| Capital Efficiency | 100 | → | Zero new package, hosted inference, runtime service, or per-user cost. |
+| Automation Coverage | 100 | → | Closed an entire unmeasured class: closeout-artifact currency now has an executable gate, 22 new assertions across two new courts, and CI now runs the same strict lint ruler the protocol cites. |
+
+Rolling averages: 3-session 994.0 · 5-session 995.6.
+
+Top win: `context/STATE_VECTOR.json` and `context/GENOME_HISTORY.json` had been stale since S170 — three consecutive closeouts skipped a `SESSION_PROTOCOL` §3.7 mandatory renderer while every probe stayed green, because `protocol-drift-check.mjs` asserts the renderer *file exists* and `check-writeback-currency.mjs` anchors only on the SIL ledger. Neither could see it. STATE_VECTOR was publishing session 170 / silTotal 997 while PROJECT_STATUS said 173 / 995. `scripts/check-closeout-artifact-currency.mjs` now measures each artifact's own recorded session against the ledger and fails loudly.
+
+Top gap: still no new player-facing value. The unblocked backlog remains saturated (founder-decision, credential, hardware, or data gated), and the `objectiveHandlers.js` gameplay-completion cutover remains a founder-supervised decision, deliberately unshipped for the third session running.
+
+Intent outcome: Achieved — measuring the gates rather than the backlog surfaced four genuine defects, all four shipped with executable regression protection, then closed out and deployed directly to main under standing founder authorization.
+
+Brainstorm:
+1. The currency gate covers only session-keyed artifacts, which is the correct boundary: `STUDIO_MANIFEST.json` and `MEMORY_INDEX.md` look stale by git date but are not (the manifest regenerates byte-identically from PROJECT_STATUS; MEMORY_INDEX is a static navigation index with no writer). Adding either would require inventing a session marker for it — the same fabrication the gate exists to prevent. Worth re-checking only if one of them ever becomes session-keyed.
+2. `GENOME_HISTORY.json` contains duplicate and out-of-order session numbers (162 twice; a snapshot labelled 166 carrying S167 prose). The currency gate takes the maximum so it cannot be fooled, but the history itself is not a clean ledger and deserves a separate honesty pass.
+3. The `deriveSilAverage` pattern generalizes: any PROJECT_STATUS field that is a pure function of an append-only ledger should be derived at the write path, never hand-entered. Survey the remaining hand-authored numeric fields for the same treatment.
+
+**Committed to TASK_BOARD:** `[SIL:1]` extend the closeout-currency declared-extractor table once MEMORY_INDEX/STUDIO_MANIFEST carry session markers; `[SIL:1]` genome-history honesty pass for duplicate/out-of-order session labels.
 ## 2026-09-10 — Session 173 | Total: 995/1000 | Velocity: 2 | Debt: ↓
 
 SIL 995/1000: Ran a full `/arc` under standing founder authorization to push/deploy directly to main. Pre-verified the live TASK_BOARD backlog against current code first (same discipline as S171/S172) and found no stale lines this session, so rather than inventing new gameplay scope, surveyed the codebase for genuine, safe, verifiable gaps and closed one: `objectiveHandlers.js` (the S163 seven-verb Operation objective contract) and `zones.js` (the shared capturable-zone state machine) are pure, load-bearing, and had zero dedicated test coverage.

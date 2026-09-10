@@ -564,6 +564,12 @@ Create `audits/YYYY-MM-DD.json` with schemaVersion 1.3.
 - `node scripts/ops.mjs doctor --update-json`
 - `node scripts/compute-entropy.mjs`
 - `node scripts/append-genome-snapshot.mjs`
+- `npm run closeout:currency` — **verifies the above actually ran.** Compares each
+  artifact's own recorded session against the SIL ledger. Added S174, after
+  STATE_VECTOR and GENOME_HISTORY sat three sessions stale while `protocol-drift-check`
+  reported the renderers "OK" (it checks the files exist, not that they ran). Also runs
+  inside `npm run schema:lint`. If a renderer genuinely cannot run, say so in the
+  closeout brief — do not leave the artifact silently behind.
 
 ### 3.8 Pre-push secrets scan
 

@@ -25,6 +25,7 @@ import { fileURLToPath } from 'node:url';
 
 // S156 #21: canonical list lives in lib/sil-categories.mjs (policy-drift extraction)
 import { V3_CATS as CATS } from './sil-categories.mjs';
+import { parseSilHistory } from './sil-history.mjs';
 import { describeBound } from './test-signal.mjs';
 // S196: SIL v6 dual-axis. Single write path — the Impact-axis invariant runs here
 // too (non-breaking: fires only when silImpactCategories is present), so there is
@@ -33,10 +34,49 @@ import { enforceSilV6Invariant } from './sil-v6.mjs';
 import { validateProjectStatusShape } from './project-status-contract.mjs';
 
 /**
+ * The append-only SIL ledger for a GIVEN repo root, or '' when unreadable (never throws).
+ *
+ * The root matters: `updateProjectStatusFile` writes status files belonging to other
+ * projects and to temp fixtures, and deriving their averages from THIS repo's ledger
+ * would import one project's history into another's status. Caught live by
+ * tests/doctor-score-sync.test.js while this derivation was being added.
+ *
+ * Read defensively — an unreadable ledger must degrade to "leave the averages alone",
+ * never to a crash.
+ */
+function readSilLedger(repoRoot) {
+  if (!repoRoot) return '';
+  try {
+    return fs.readFileSync(path.join(repoRoot, 'context', 'SELF_IMPROVEMENT_LOOP.md'), 'utf8');
+  } catch {
+    return '';
+  }
+}
+
+/**
+ * Mean total of the newest `window` SCORED sessions in the ledger, to one decimal.
+ *
+ * Returns null — meaning "leave the existing value alone" — when the ledger cannot
+ * supply a full window. A 3-session average computed from two sessions is a
+ * different statistic wearing the same field name, and publishing it would be the
+ * lie this invariant exists to prevent.
+ */
+export function deriveSilAverage(silText, window) {
+  const scored = parseSilHistory(silText, Number.POSITIVE_INFINITY)
+    .filter((entry) => Number.isFinite(entry.total));
+  if (scored.length < window) return null;
+  const mean = scored.slice(0, window).reduce((sum, entry) => sum + entry.total, 0) / window;
+  return Math.round(mean * 10) / 10;
+}
+
+/**
  * Pure invariant pass. Returns { status, violations } — status is a new object
  * with invariants applied; violations lists what was wrong (empty = clean).
+ *
+ * `repoRoot` selects whose SIL ledger the averages derive from; `silText` overrides it
+ * outright (tests, imported project paths). With neither, the averages are left alone.
  */
-export function enforceSilInvariant(status) {
+export function enforceSilInvariant(status, { silText = null, repoRoot = null } = {}) {
   const violations = [];
   const out = { ...status };
   const cats = out.silCategoriesV3;
@@ -67,6 +107,32 @@ export function enforceSilInvariant(status) {
       out.silMax = 1000;
     }
   }
+  // ── S174 [audit #3] · the averages were trusted, not derived ────────────────
+  // silScore has been recomputed-never-trusted since S154, but silAvg3/silAvg5 sat
+  // beside it as hand-entered numbers with no authority behind them. Measured live at
+  // S174: PROJECT_STATUS said silAvg3 995 while STATE_VECTOR said 997.7, and neither
+  // was compared to the ledger. The visible symptom was a churn loop in git history —
+  // a closeout hand-writes `995.0`, JSON.stringify below cannot preserve a trailing
+  // `.0`, and the next script write reverts it, forever.
+  //
+  // Both averages are a pure function of the append-only SIL ledger, so derive them
+  // from it under the same rule as silScore. Deliberately a no-op when the ledger is
+  // unreadable or too short: an average over fewer sessions than it claims to cover
+  // would be exactly the invented measurement CANON-031 forbids.
+  const ledgerText = silText ?? readSilLedger(repoRoot);
+  for (const [field, window] of [['silAvg3', 3], ['silAvg5', 5]]) {
+    // Correct an average the status already publishes; never introduce one. A status
+    // that does not track this field is not lying about it, and adding it here would
+    // make the writer a schema author instead of an invariant.
+    if (!(field in out)) continue;
+    const derived = deriveSilAverage(ledgerText, window);
+    if (derived == null) continue;
+    if (out[field] !== derived) {
+      violations.push({ field, value: out[field], fix: `recomputed to ${derived} (mean of the last ${window} scored SIL sessions)` });
+      out[field] = derived;
+    }
+  }
+
   // SIL v6 Impact-axis invariant (non-breaking — no-op unless silImpactCategories present).
   const v6 = enforceSilV6Invariant(out);
   for (const v of v6.violations) violations.push(v);
@@ -152,7 +218,7 @@ function writeProjectStatusUnlocked(repoRoot, status, {
   statusPath = null,
   requireSchema = true,
 } = {}) {
-  const { status: fixed, violations } = enforceSilInvariant(status);
+  const { status: fixed, violations } = enforceSilInvariant(status, { repoRoot });
   if (touchLastUpdated) fixed.lastUpdated = new Date().toISOString().slice(0, 10);
   validateStatusShape(fixed, repoRoot, { requireSchema });
   const p = statusPath || path.join(repoRoot, 'context', 'PROJECT_STATUS.json');
@@ -217,7 +283,7 @@ if (isMain) {
   const p = path.join(repoRoot, 'context', 'PROJECT_STATUS.json');
   if (!fs.existsSync(p)) { console.error(`⛔ no PROJECT_STATUS.json at ${p}`); process.exit(2); }
   const current = JSON.parse(fs.readFileSync(p, 'utf8'));
-  const { status: fixed, violations } = enforceSilInvariant(current);
+  const { status: fixed, violations } = enforceSilInvariant(current, { repoRoot });
   const shape = validateProjectStatusShape(fixed, repoRoot);
   if (!shape.ok) {
     console.error(`⛔ PROJECT_STATUS contract invalid (${shape.errors.length}):`);
@@ -256,4 +322,4 @@ if (isMain) {
   process.exit(0);
 }
 
-export default { enforceSilInvariant, withProjectStatusLock, writeProjectStatus, updateProjectStatus, updateProjectStatusFile };
+export default { enforceSilInvariant, deriveSilAverage, withProjectStatusLock, writeProjectStatus, updateProjectStatus, updateProjectStatusFile };
