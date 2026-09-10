@@ -15,18 +15,17 @@ describe("perkResolution", () => {
 
     const unlocked = applyPerkSynergies(mods);
 
+    // DEATH'S GAMBIT no longer fires here — it requires hasDeadMansHand
     expect(unlocked.map((entry) => entry.name)).toEqual([
       "🎯🔫 DEAD EYE",
       "⚡ DEATH'S DOOR",
       "🦅 SNIPER'S MARK",
       "🌪️ BLOODCOMBO",
-      "💀 DEATH'S GAMBIT",
     ]);
     expect(mods.lifesteal).toBeCloseTo(0.04);
     expect(mods.critBonus).toBeCloseTo(0.18);
     expect(mods.pierce).toBe(2);
     expect(mods.comboVampireMult).toBe(true);
-    expect(mods.deadManTripleExplosion).toBe(true);
 
     expect(applyPerkSynergies(mods)).toEqual([]);
   });
@@ -84,5 +83,15 @@ describe("getPerkSynergyPreview", () => {
 
   test("returns empty array when candidatePerk is null", () => {
     expect(getPerkSynergyPreview(null, [])).toEqual([]);
+  });
+
+  test("does not preview Death's Gambit when only Last Resort is picked (no Dead Man's Hand)", () => {
+    const result = getPerkSynergyPreview({ id: "last_resort" }, []);
+    expect(result.some(s => s.name === "💀 DEATH'S GAMBIT")).toBe(false);
+  });
+
+  test("previews Death's Gambit when Dead Man's Hand is active and Last Resort is the candidate", () => {
+    const result = getPerkSynergyPreview({ id: "last_resort" }, [{ id: "dead_mans_hand" }]);
+    expect(result.some(s => s.name === "💀 DEATH'S GAMBIT")).toBe(true);
   });
 });

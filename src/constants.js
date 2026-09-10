@@ -178,7 +178,7 @@ export const PERKS = [
   {
     id: "dead_mans_hand", name: "Dead Man's Hand", emoji: "🃏", tier: "rare",
     desc: "On death, trigger a massive explosion. Synergy: explosion triples with Last Resort",
-    apply: (mods, gs) => { if (gs) gs.deadMansHand = true; if (mods.hasLastResort) mods.deadManTripleExplosion = true; },
+    apply: (mods, gs) => { if (gs) gs.deadMansHand = true; mods.hasDeadMansHand = true; if (mods.hasLastResort) mods.deadManTripleExplosion = true; },
   },
   {
     id: "overclocked", name: "Overclocked", emoji: "🔧", tier: "uncommon",

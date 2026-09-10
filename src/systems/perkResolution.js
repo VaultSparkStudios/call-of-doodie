@@ -92,7 +92,7 @@ export const PERK_SYNERGIES = [
     },
   },
   {
-    condition: (mods) => mods.hasLastResort && (mods.deadManTripleExplosion || mods.hasLastResort) && !mods._synDeadLastResort,
+    condition: (mods) => mods.hasLastResort && mods.hasDeadMansHand && !mods._synDeadLastResort,
     flag: "_synDeadLastResort",
     name: "💀 DEATH'S GAMBIT",
     desc: "Dead Man's Hand explosion triples at low HP",
