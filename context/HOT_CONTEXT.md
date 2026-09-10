@@ -11,6 +11,7 @@
 ## Session 170 - Startup evidence, bounded audit context, and process-policy closure
 - [ ] [SIL:2] **EVIDENCE** Collect participant, physical PWA/gamepad/media, current production Core Web Vitals, Zoho reply-as, scoped telemetry, Obelisk, publication, direct-pixel, sitemap ≥8/10, and explicit lifecycle evidence before SPARKED.
 # Task Board
+## Session 173 - Objective-verb and zone coverage gap closed
 ## Session 168 - Terminal order, exactly-once extraction, and mode-specific debrief proof
 - [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET so cloud backup stops answering 503.
 ## Session 167 - The debrief names names, modes say what the run was worth, announcements stay on screen
@@ -62,7 +63,6 @@
 - [ ] [SIL:1] [DATA-BLOCKED S147] Theme-prop atlas L2 expansion — extend `theme-prop-atlas-v1.webp` from 16 to ~32 cells only after production feedback confirms the current highest-visibility coverage reads well; no participant evidence exists yet.
 - [ ] Discord invite/community link when the community entry point is ready
 - [ ] [SIL:1] [S62 deferred] HomeV2 v1 fallback retirement — gate on ≥200ms Lighthouse LCP improvement confirmed on production (human measurement required)
-## Deferred to Project Agents
 
 ## Recent Decisions
 
@@ -87,9 +87,13 @@ Decision: before generating new audit candidates, an open TASK_BOARD Deferred li
 
 Why: an unverified backlog line reads as outstanding work forever even after the code already closes it, which both wastes a future session's effort re-deriving the fix and erodes trust in the backlog as a source of truth.
 
+Decision (S173): with the TASK_BOARD backlog re-verified as genuinely blocked (no stale lines this session), chose test-coverage-gap closure over inventing new gameplay scope — added focused unit tests for the untested `objectiveHandlers.js` (S163 seven-verb Operation contract) and `zones.js` (shared capturable-zone state machine) pure systems, rather than touching the flagged launch-risk-sensitive `objectiveHandlers.js` gameplay-completion cutover itself.
+
+Why: both modules are fully deterministic and load-bearing for Operations, HOLD THE THRONE, and SEWER EXTRACTION, yet had zero regression protection. Adding tests is a pure Dev Health/Process Quality improvement with zero risk of shipping an unreviewed gameplay change under an unattended single pass, consistent with S172's judgment to leave the actual behavioral cutover for a founder-directed session.
+
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 227,867 bytes · SHA-256 `a16896c2542e…`
-- `context/TASK_BOARD.md` · 146,828 bytes · SHA-256 `5ee7e099a1d5…`
-- `context/DECISIONS.md` · 149,058 bytes · SHA-256 `b85a5867088f…`
+- `context/CURRENT_STATE.md` · 229,049 bytes · SHA-256 `1d04c50e4077…`
+- `context/TASK_BOARD.md` · 148,634 bytes · SHA-256 `054e984d5787…`
+- `context/DECISIONS.md` · 149,928 bytes · SHA-256 `6524516f76d6…`
 - `docs/AUDIT_2026-09-10.json` · 3,950 bytes · SHA-256 `cc8ad101f848…`

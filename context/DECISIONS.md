@@ -1432,3 +1432,7 @@ Decision: repository audits consume the source-hashed output of `scripts/task-sl
 Decision: before generating new audit candidates, an open TASK_BOARD Deferred line is re-verified against live code the same way a fresh candidate premise is. Two long-carried lines (royale target-list behavior pairing, "~92 KB DeathScreen chunk") were already resolved by S165/S166 and are now marked done-with-evidence instead of staying open indefinitely or being silently re-implemented.
 
 Why: an unverified backlog line reads as outstanding work forever even after the code already closes it, which both wastes a future session's effort re-deriving the fix and erodes trust in the backlog as a source of truth.
+
+Decision (S173): with the TASK_BOARD backlog re-verified as genuinely blocked (no stale lines this session), chose test-coverage-gap closure over inventing new gameplay scope — added focused unit tests for the untested `objectiveHandlers.js` (S163 seven-verb Operation contract) and `zones.js` (shared capturable-zone state machine) pure systems, rather than touching the flagged launch-risk-sensitive `objectiveHandlers.js` gameplay-completion cutover itself.
+
+Why: both modules are fully deterministic and load-bearing for Operations, HOLD THE THRONE, and SEWER EXTRACTION, yet had zero regression protection. Adding tests is a pure Dev Health/Process Quality improvement with zero risk of shipping an unreviewed gameplay change under an unattended single pass, consistent with S172's judgment to leave the actual behavioral cutover for a founder-directed session.

@@ -11,6 +11,15 @@
 # Task Board
 
 Public-safe launch roadmap summary.
+## Session 173 - Objective-verb and zone coverage gap closed
+
+- [x] [SIL:2] **DONE S173** Pre-verified the live backlog against current code (same discipline as S171/S172): every open TASK_BOARD line remains genuinely founder/credential/data/hardware-blocked; no stale line found this session.
+- [x] [SIL:2] **DONE S173** Added `src/systems/objectiveHandlers.test.js` (31 tests) covering all seven Operation verb handlers (BREACH/HOLD/ESCORT/HUNT/SABOTAGE/ESCAPE/BOSS) plus `startVerbObjective`/`clearVerbObjective`/`verbSpecFor`/`tickVerbObjective`/`getVerbObjectiveHud` — this 270-line pure behavioral-objective module (S163) had zero test coverage despite backing every Operation encounter, HOLD THE THRONE, and SEWER EXTRACTION objective resolution.
+- [x] [SIL:1] **DONE S173** Added `src/systems/zones.test.js` (18 tests) covering the capturable-zone primitive (`createZone`, `stepZones` state machine, `getActiveZone`, `summarizeZones`, `throneLayout`) shared by HOLD THE THRONE and the HOLD objective verb.
+- [x] [SIL:1] **DONE S173** Verified full suite 240/240 files, 1,438/1,438 assertions (+49 from the two new files), strict lint 0 errors, deployable build, security release gate, and dependency-tree check all green. No player-facing bundle or gameplay behavior changed.
+
+**Runway note:** remaining open backlog lines are the same founder-decision- (Supabase Auth/membership, dashboard allowlists), credential- (`OBELISK_VERIFY_URL`/`SECRET`), hardware- (physical PWA/gamepad QA), and data-blocked (theme-prop atlas L2, mobile touch density, `objectiveHandlers.js` gameplay-completion cutover) items already tracked. This session shipped test-only coverage for the underlying pure logic; the launch-risk-sensitive gameplay cutover itself remains deliberately unshipped per S172's judgment.
+
 ## Session 168 - Terminal order, exactly-once extraction, and mode-specific debrief proof
 
 - [x] [SIL:3] **DONE S168** Lockdown wins every alarm-100 race; tick, crate, and kill cap transitions are covered and lockdown remains a last stand.
