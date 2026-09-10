@@ -122,7 +122,7 @@
   "ignisLastComputed": "2026-09-09",
   "silSession": 171,
   "silScore": 999,
-  "silAvg3": 998.0,
+  "silAvg3": 998,
   "silVelocity": 2,
   "silDebt": "down",
   "silLastSession": 171,
@@ -194,7 +194,7 @@
   "testsEnvBlocked": [],
   "testsDeferred": [],
   "testsBudgetExhausted": false,
-  "silAvg5": 998.0,
+  "silAvg5": 998,
   "testsAssertionsDeferred": [],
   "testsAssertionsLastRun": "2026-09-10"
 }
