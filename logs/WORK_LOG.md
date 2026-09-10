@@ -1750,3 +1750,9 @@ Session Intent: run one complete `/arc` from synchronized main — triage, canon
 - Deploy: committed and pushed directly to `main` per standing founder authorization.
 
 Intent outcome: achieved — measuring the claims instead of the gates surfaced a real player-facing defect that ten sessions and every green gate had passed over, closed it at the root with a gate that reads the generated artifacts, and honoured the prior session's genome commitment by measurement rather than inheritance.
+
+### Deploy verification (S175)
+
+- Push `00eba3d` triggered GitHub Actions workflow `34536457004`: `quality` (Lint + Test) and `build-and-deploy` (Build + Cloudflare Pages Deploy) both passed in full; `gh run watch --exit-status` returned 0.
+- Production health endpoint reports `"deploy":"00eba3d0d429"` - exact match to the pushed commit. Site root returns 200 OK.
+- **Player-facing fix confirmed live, not merely deployed:** `https://callofdoodie.wtf/gameplay-contract.json` now serves `"Free-for-all against sixteen bots while the sewer floods inward."` and `https://callofdoodie.wtf/field-manual/` renders "BOT ROYALE is sixteen bots". A grep for the stale string returns 0 occurrences on both surfaces. The claim the player reads and the number the loop spawns finally agree in production.
