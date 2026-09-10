@@ -1,30 +1,30 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.1 -->
-<!-- generated-at: 2026-09-09 (Session 168 closeout) -->
+<!-- generated-at: 2026-09-10 (Session 169 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S168 ════════════════════╗
-║  Date: 2026-09-09  ·  SIL: 997/1000  ·  Velocity: 4 down         ║
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S169 ════════════════════╗
+║  Date: 2026-09-10  ·  SIL: 999/1000  ·  Velocity: 4 down         ║
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ║  Live:  preview  →  https://callofdoodie.wtf/                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ Recovery: S167 was sealed at 9bc71d8; S168 had an authorized  ║
-║  ✓ Shipped: alarm 100 precedes evacuation for tick, crate, and   ║
-║  ✓ Shipped: fatal combat returns before mode stepping; step and  ║
-║  ✓ Shipped: the natural outcome harness selects difficulty, adv  ║
-║  ✓ Security: reviewed js-yaml 4.3.2 closes the inherited adviso  ║
+║  ✓ Shipped: typed environmental case files with stable IDs, bou  ║
+║  ✓ Shipped: a versioned lazy death-analysis browser contract co  ║
+║  ✓ Shipped: an AST-backed latest-session orphan court with line  ║
+║  ✓ Second order: the canonical visual receipt ingests focused h  ║
+║  ✓ Saturation: Unified Genius List 0 executable / 6 deferred; i  ║
 ╚════════════════════════════════════════════════════════════════╝
-╔══ SCORES · SIL 997/1000 ═══════════════════════════════════════╗
+╔══ SCORES · SIL 999/1000 ═══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
 ║    Alignment          100  ██████████                            ║
 ║    Momentum           100  ██████████                            ║
-║    Engagement         99   ██████████                            ║
+║    Engagement         100  ██████████                            ║
 ║    Process Qual       99   ██████████                            ║
 ║    Coherence          100  ██████████                            ║
 ║    Security           100  ██████████                            ║
-║    Ecosystem          99   ██████████                            ║
+║    Ecosystem          100  ██████████                            ║
 ║    Capital            100  ██████████                            ║
 ║    Automation         100  ██████████                            ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -41,23 +41,23 @@
 ║  ✓ agent memory (Claude/Codex project memory)                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 27 files  ·  M:25 A:0 D:0 ?:2                          ║
+║  Changes: 0 files  ·  M:0 A:0 D:0 ?:0                            ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ DEPLOYMENT ══════════════════════════════════════════════════╗
-║  Staging:  https://session-168-staging.call-of-doodie.pages.dev  ║
+║  Staging:  https://session-169-staging.call-of-doodie.pages.dev  ║
 ║  Live:     https://callofdoodie.wtf/  ·  preview/FORGE (not yet  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
-║  Doctor:        157/220                                          ║
+║  Doctor:        163/220                                          ║
 ║  Compliance:    —                                                ║
-║  Tests:         1372/1372                                        ║
+║  Tests:         1382/1382                                        ║
 ║  Validation:    full-fresh                                       ║
 ║  IGNIS:         1d ago                                           ║
 ║  Truth:         engineering-ready-sparked-no-go                  ║
 ║  Sanitization:  1d ago                                           ║
-║  shells:        10 started · 10 closed · 0 running               ║
+║  shells:        13 started · 13 closed · 0 running               ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ NEXT SESSION ════════════════════════════════════════════════╗
 ║  (no genius cache — run `node scripts/cache-genius-list.mjs`)    ║
