@@ -1474,3 +1474,16 @@ Last reviewed: 2026-08-03
 
 Overall status: green engineering implementation; SPARKED remains NO-GO.
 Last reviewed: 2026-07-29
+
+## 2026-09-09 — Session 169 — Environmental case-file and debrief contract truth
+
+- Hazard truth — only sewer_flood, proximity_mine, and extraction_lockdown are durable IDs. Unknown and corrupted keys fail closed; legacy known death keys migrate.
+- Evidence truth — flood/mine deaths require observed attribution. Lockdown records one encounter at transition and never claims a death.
+- Debrief truth — seven semantic landmarks are required after the lazy panel opens; missing content or error fallback fails the hosted court.
+- Planning truth — latest historical executable checkboxes fail task semantics and expose their source lines; gated work remains deferred.
+- Visual truth — hosted staging matrix 969/969, hazard 28/28, lazy analysis 72/72; canonical receipt binds 26 captures across both themes. Direct reviewed states have zero blocking defects.
+- Production truth — ca1324136f8c passed workflow 34429538894, immutable 90e27a19 and canonical health match, and focused production courts pass.
+- Lifecycle truth — engineering deployment is green; SPARKED remains NO-GO pending external evidence and explicit lifecycle authorization.
+
+Overall status: green engineering deployment; SPARKED remains NO-GO.
+Last reviewed: 2026-09-09

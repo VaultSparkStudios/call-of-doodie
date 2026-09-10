@@ -1622,3 +1622,13 @@ Intent outcome: achieved through implementation, isolated staging, pixel proof, 
 - Independent gate: engineering FORGE GO; SPARKED NO-GO. Direct-main publication and exact production verification remain the authorized follow-through.
 - Creative Direction Record reviewed — no new creative-direction entry this session; the founder's request was operational authorization to run the existing arc, push `main`, and deploy.
 - Production follow-through: restaged exact closeout source `0864686b6b4f499276f7626a588d66f266db2c52` at immutable `9499adda`, pushed three commits directly to `main`, and passed quality/build/deploy workflow `32626881275` plus Dependabot workflow `32626942358`. Production immutable `017af042` and the custom domain report exact health; shell 7/7 both, cutover 5/5, backend 5/5, replay 3/3, leaderboard isolation, launch surfaces, and Operation pixels 48/48 pass.
+
+## Session 169 — 2026-09-09 — Hazard intelligence, lazy-analysis contract, and task-lane court
+
+- Recovered the S169 audit state on clean main 13ecbdc and verified the three promoted premises against live source.
+- Added typed hazard case files, event-specific persistence, exact-once lockdown evidence, MOST WANTED rendering, and focused storage/component/mode courts.
+- Added seven semantic debrief landmarks and upgraded the natural-run lazy browser court across themes and viewport classes.
+- Added the latest-session orphan detector to the shared task AST and made task semantics fail with source locations.
+- Implemented the second-order hazard receipt bridge; exhausted the Genius List and innovation pack.
+- Passed local Vitest 235 files / 1,382 assertions, strict lint, deployable build, release/security/static courts, staging 969/969 + 72/72 + 28/28, and direct hosted pixel inspection.
+- Committed ca132413, pushed main, passed workflow 34429538894, deployed immutable 90e27a19, and verified canonical plus immutable exact health and production courts.

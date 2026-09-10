@@ -66,44 +66,34 @@
 
 ## Recent Decisions
 
-## 2026-08-23 — Session 159 — Authored Operation verbs require spatial evidence
+## 2026-09-09 — Session 169 — Stable hazard identities and event-specific evidence
 
-**Decision:** Accept an Operation interaction only when it targets the current encounter's exact live object and the player's current collision-aware distance is within the authored interaction radius. Keyboard, controller, and touch use the same pure authority and rejection vocabulary.
+Decision: Environmental persistence uses a closed catalog of stable IDs. Display strings never become durable identity. Death-causing hazards increment deaths only from observed death attribution; extraction lockdown increments encounters once at its first transition because lockdown is a state change, not damage.
 
-**Why:** A named BREACH, HOLD, ESCORT, HUNT, SABOTAGE, or ESCAPE action is gameplay only if position matters. Remote button presses made the mission layer descriptive and allowed the most important authored verbs to bypass the arena.
-
-**Boundaries:** The authority is deterministic and local, adds no location export or server claim, retains every legacy-mode input path, and counts accepted evidence once. The player's collision radius is part of reachable distance so wall-mounted targets cannot become geometrically impossible.
+Why: This keeps MOST WANTED truthful across renamed copy, rejects corrupted/arbitrary keys, and avoids claiming lockdown killed a player when it merely sealed evacuation.
 
 
-## 2026-08-23 — Session 159 — Operation score is explainable local evidence
+## 2026-09-09 — Session 169 — Browser landmarks are the lazy-analysis contract
 
-**Decision:** Version the Operation receipt as `operation-score-v2` and derive its total from explicit objective, interaction, tempo, pressure, extraction, and route components captured from the live mission snapshot. Surface the breakdown to the player and retain v1 readability, but aggregate v2 only with other v2 receipts.
+Decision: Every promised secondary-analysis section has a stable semantic landmark, and the public-flow natural-run court must prove all landmarks after first open in both themes and viewport classes.
 
-**Why:** A predetermined score cannot teach, validate mastery, or support honest comparison. A bounded breakdown connects authored play to the revenge loop while remaining auditable and backwards-compatible.
-
-**Boundaries:** The score is local and advisory, never server-authoritative or leaderboard-compatible. No participant balance or fun claim follows from the formula; weights remain stable until real evidence supports tuning.
+Why: Chunk presence and one top section allowed deeper evidence regressions to remain phantom-green. The browser contract now covers the complete promise without adding a production test hook.
 
 
-## 2026-08-25 — Session 160 — Project runtime floors survive propagation
+## 2026-09-09 — Session 169 — Latest historical task lanes fail closed
 
-**Decision:** Every propagated GitHub Actions workflow must honor the receiving repository's declared Node floor. A bounded project-local repair may restore an authorized exact release, but the canonical template and its regression court remain owned by `studio-ops` and must be corrected through Ark.
+Decision: The task-semantics court rejects executable open items under the highest-numbered historical Session heading while preserving explicitly gated work. The active Now/Deferred lanes remain the source of truth for executable planning.
 
-**Why:** Propagation selected Node 20 for the brief validator while Call of Doodie declares Node 22. The application and all 1,255 assertions were healthy; only the runtime-floor contract failed. Repair source `f76850a` and run `32883766091` prove Node 22 restores the exact release path.
-
-**Boundaries:** Do not lower the repository runtime contract, retry a known-bad tree, edit a sibling repository directly, or reinterpret this infrastructure repair as gameplay or SPARKED progress.
+Why: Open work had been stranded outside the Genius List, falsely reporting exhaustion.
 
 
-## 2026-09-09 — Session 168 — Extraction lockdown is a last stand and owns alarm 100
+## 2026-09-09 — Session 169 — Canon conformance disposition
 
-**Decision:** Preserve SEWER EXTRACTION lockdown as a playable last stand. If time, a crate, or a kill reaches alarm 100 on the evacuation point, lockdown takes precedence and removes evacuation. Once evacuation succeeds below 100, settlement is final and later mode hooks are inert.
-
-**Why:** The live mechanics already authored escalating reinforcements after lockdown, while the roadmap promises lockdown without promising immediate defeat. Preserving that consequence avoids inventing a new ending without participant evidence. Strict precedence and exactly-once banking close the race and persistence exploit.
-
-**Boundary:** This is deterministic correctness, not balance evidence. Forced defeat would require an explicit creative decision and public-contract update.
+CANON-045 remains a STRONG external integration gap because Obelisk verification credentials and relying-party proof are absent. CANON-054's conformance checker returned a malformed `GAP: }` even though the live `/stats/` surface, `stats-surface.json`, public contract, and Session 142 truth evidence are present; retain it as a named checker discrepancy rather than fabricating conformance.
 
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 222,056 bytes · SHA-256 `e337f1fd8295…`
+- `context/CURRENT_STATE.md` · 223,491 bytes · SHA-256 `3b1457ea73c0…`
 - `context/TASK_BOARD.md` · 144,495 bytes · SHA-256 `dc12dd4bec04…`
-- `context/DECISIONS.md` · 145,631 bytes · SHA-256 `dbfce561940c…`
+- `context/DECISIONS.md` · 147,553 bytes · SHA-256 `5284c7dd10c8…`
 - `docs/AUDIT_2026-09-09.json` · 35,370 bytes · SHA-256 `23874e540d95…`

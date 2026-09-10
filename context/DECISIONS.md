@@ -1396,3 +1396,25 @@ CANON-054 gap justification: the checker emitted malformed evidence while the da
 **Why:** The live mechanics already authored escalating reinforcements after lockdown, while the roadmap promises lockdown without promising immediate defeat. Preserving that consequence avoids inventing a new ending without participant evidence. Strict precedence and exactly-once banking close the race and persistence exploit.
 
 **Boundary:** This is deterministic correctness, not balance evidence. Forced defeat would require an explicit creative decision and public-contract update.
+
+## 2026-09-09 — Session 169 — Stable hazard identities and event-specific evidence
+
+Decision: Environmental persistence uses a closed catalog of stable IDs. Display strings never become durable identity. Death-causing hazards increment deaths only from observed death attribution; extraction lockdown increments encounters once at its first transition because lockdown is a state change, not damage.
+
+Why: This keeps MOST WANTED truthful across renamed copy, rejects corrupted/arbitrary keys, and avoids claiming lockdown killed a player when it merely sealed evacuation.
+
+## 2026-09-09 — Session 169 — Browser landmarks are the lazy-analysis contract
+
+Decision: Every promised secondary-analysis section has a stable semantic landmark, and the public-flow natural-run court must prove all landmarks after first open in both themes and viewport classes.
+
+Why: Chunk presence and one top section allowed deeper evidence regressions to remain phantom-green. The browser contract now covers the complete promise without adding a production test hook.
+
+## 2026-09-09 — Session 169 — Latest historical task lanes fail closed
+
+Decision: The task-semantics court rejects executable open items under the highest-numbered historical Session heading while preserving explicitly gated work. The active Now/Deferred lanes remain the source of truth for executable planning.
+
+Why: Open work had been stranded outside the Genius List, falsely reporting exhaustion.
+
+## 2026-09-09 — Session 169 — Canon conformance disposition
+
+CANON-045 remains a STRONG external integration gap because Obelisk verification credentials and relying-party proof are absent. CANON-054's conformance checker returned a malformed `GAP: }` even though the live `/stats/` surface, `stats-surface.json`, public contract, and Session 142 truth evidence are present; retain it as a named checker discrepancy rather than fabricating conformance.
