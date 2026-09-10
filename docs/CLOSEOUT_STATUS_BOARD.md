@@ -1,27 +1,27 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.1 -->
-<!-- generated-at: 2026-09-10 (Session 170 closeout) -->
+<!-- generated-at: 2026-09-10 (Session 174 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S170 ════════════════════╗
-║  Date: 2026-09-10  ·  SIL: 997/1000  ·  Velocity: 3 down         ║
-║  Mode: FOUNDER  ·  Agent: codex                                  ║
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S174 ════════════════════╗
+║  Date: 2026-09-10  ·  SIL: 996/1000  ·  Velocity: 1 down         ║
+║  Mode: FOUNDER  ·  Agent: claude-code                            ║
 ║  Live:  preview  →  https://callofdoodie.wtf/                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ Shipped: Startup Brief cost provenance now uses the canonica  ║
-║  ✓ Shipped: repository-local `task-slice.mjs` and `audit-task-c  ║
-║  ✓ Shipped: the Windows process guard detects dynamic child-pro  ║
-║  ✓ Audit: all three S170 candidates are shipped; the regenerate  ║
-║  ✓ Game-loop review: structural health remains about 9.5/10. No  ║
+║  ✓ Triage: no session lock; tree clean but for one uncommitted   ║
+║  ✓ Audit method: S171/S172/S173 each pre-verified the TASK_BOAR  ║
+║  ✓ Shipped 1/4: `npm run lint:strict` had been exiting 1 since   ║
+║  ✓ Shipped 2/4: `context/STATE_VECTOR.json` and `context/GENOME  ║
+║  ✓ Shipped 3/4: `silAvg3`/`silAvg5` now derive from the append-  ║
 ╚════════════════════════════════════════════════════════════════╝
-╔══ SCORES · SIL 997/1000 ═══════════════════════════════════════╗
+╔══ SCORES · SIL 996/1000 ═══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
 ║    Alignment          100  ██████████                            ║
 ║    Momentum           100  ██████████                            ║
-║    Engagement         100  ██████████                            ║
-║    Process Qual       97   ██████████                            ║
+║    Engagement         96   ██████████                            ║
+║    Process Qual       100  ██████████                            ║
 ║    Coherence          100  ██████████                            ║
 ║    Security           100  ██████████                            ║
 ║    Ecosystem          100  ██████████                            ║
@@ -41,7 +41,7 @@
 ║  ✓ agent memory (Claude/Codex project memory)                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 14 files  ·  M:14 A:0 D:0 ?:0                          ║
+║  Changes: 1 files  ·  M:0 A:0 D:0 ?:1                            ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -52,12 +52,12 @@
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
 ║  Doctor:        163/220                                          ║
 ║  Compliance:    —                                                ║
-║  Tests:         1387/1387                                        ║
+║  Tests:         1438/1438                                        ║
 ║  Validation:    full-fresh                                       ║
-║  IGNIS:         1d ago                                           ║
+║  IGNIS:         2d ago                                           ║
 ║  Truth:         engineering-ready-sparked-no-go                  ║
-║  Sanitization:  0d ago                                           ║
-║  shells:        6 started · 6 closed · 0 running                 ║
+║  Sanitization:  1d ago                                           ║
+║  shells:        unknown · missing/stale enumeration              ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ NEXT SESSION ════════════════════════════════════════════════╗
 ║  (no genius cache — run `node scripts/cache-genius-list.mjs`)    ║
