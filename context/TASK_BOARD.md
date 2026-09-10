@@ -45,7 +45,7 @@ Public-safe launch roadmap summary.
 - [x] [SIL:3] **DONE S166** Expanded SEWER EXTRACTION to a 1.5× traversable arena and scaled its wave pressure to 1.25× through a bounded pure pressure model; all unscaled modes retain the prior multiplier.
 - [x] [SIL:2] **DONE S166** Added a pure objective-radar model and rendered remaining loot in gold plus the open evacuation point in cyan on the whole-arena radar.
 - [x] [SIL:2] **DONE S166** Split secondary death analysis into an 18.50 KB first-open lazy chunk, reducing the immediate DeathScreen chunk to 73.33 KB; staged-browser first-open proof caught and closed a missing-model regression.
-- [ ] [SIL:1] Add a focused browser contract that opens every lazily mounted death-analysis subsection with a minimal model, so missing parent-to-child fields fail before staging.
+- [x] [SIL:1] **DONE S171** Added a focused render contract (`src/components/DeathScreenSecondaryAnalysis.test.jsx`) that mounts the lazily loaded panel with a minimal model mirroring every field `DeathScreen.jsx` wires in, plus a second case exercising every optional receipt built from the real `pressureArc.js`/`damageSequence.js` finalizers — so a missing or renamed parent-to-child field throws in CI before it can reach staging.
 - [ ] [SIL:1] Collect consented extraction telemetry before changing the 1.25× pressure slope or 1.5× arena scale; synthetic distance and enemy-count math are not balance evidence.
 - [x] [SIL:1] **DONE S167** Replace the Windows `.git/hooks/pre-push` per-file Bash fan-out with a bounded Node entrypoint that composes the canonical secret scanner and router/path checks; S166's hook orphaned after two compliant attempts.
 - [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET on the Pages project so Porcelain Passport verification and cloud backup stop answering 503.
@@ -62,8 +62,8 @@ Public-safe launch roadmap summary.
 - [x] [SIL:2] **DONE S165** Recovered the Session 164 write-back debt: SIL, TRUTH_AUDIT, and WORK_LOG entries for the fifteen un-closed post-S163 commits, with the reused session number recorded rather than papered over.
 - [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET on the Pages project: neither is in the secrets gateway, so Porcelain Passport verification (and therefore cloud backup) answers 503 in production until they exist.
 - [ ] [SIL:2] Never continue work under a sealed session number — open the next number instead. Carried from the S164 SIL brainstorm.
-- [ ] [SIL:1] Pair every collection-shape assertion in a mode test with one behavioural effect assertion; the royale target-list length check passed green over an inert mode.
-- [ ] [SIL:1] DeathScreen remains the largest non-vendor lazy chunk at ~92 KB; the debrief/archive panels are the next split.
+- [x] [SIL:1] **VERIFIED STALE S171** Pair every collection-shape assertion in a mode test with one behavioural effect assertion — this was already closed the same session it was written: line 57 above and `src/systems/enemyTargeting.test.js` (identity-skip regression court, 5 cases) shipped in S165, before this backlog line was ever actioned. No inert-mode assertion exists in live code.
+- [x] [SIL:1] **VERIFIED STALE S171** DeathScreen remains the largest non-vendor lazy chunk at ~92 KB — line 47 above already records the S166 split to a 73.33 KB immediate chunk; a fresh `npm run build` this session reports 73.93 KB (`DeathScreen-*.js`) with `DeathScreenSecondaryAnalysis-*.js` at 18.75 KB alongside it. The "~92 KB" figure was already superseded when this line was carried forward.
 
 **Runway exception:** participant fun/balance outcomes, physical-device proof, provider/mail/identity evidence, publication, real-time co-op, and SPARKED promotion remain independently gated. The camera is proven by unit courts, the full suite, and a real-browser mode smoke; no device-farm or participant evidence is claimed.
 

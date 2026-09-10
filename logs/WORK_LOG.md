@@ -1654,3 +1654,14 @@ Intent outcome: implementation, validation, staging, and release readiness achie
 - Production immutable `d9842f42` and `https://callofdoodie.wtf/` report exact deploy `bb88eb48d57d`; shell 7/7 both, cutover 5/5, backend 5/5, replay trust 3/3, leaderboard isolation, and launch surfaces pass.
 
 Intent outcome: achieved through exact-main publication and verified production deployment. SPARKED remains explicitly unpromoted.
+
+## Session 171 — 2026-09-10 — Backlog verification, missing render contract, stale-gate root-fix
+
+- Recovered a clean, synchronized S170 closeout (write-back current through `1ad3e5b0`) and opened S171.
+- Instead of generating fresh audit candidates blind, pre-verified the live Deferred backlog against current code: most open lines are FOUNDER/DATA-blocked; two turned out to already be fixed by prior sessions and one was genuinely open.
+- Added `src/components/DeathScreenSecondaryAnalysis.test.jsx` covering the previously untested lazily-mounted death-debrief panel — a minimal-model render case plus an optional-receipts case built from the real `pressureArc.js`/`damageSequence.js` finalizers (a first hand-typed mock threw inside `describePressureArc`, corrected by using the real builders rather than the panel).
+- Marked the royale target-list collection/behavior pairing and the "~92 KB DeathScreen" backlog lines done-with-evidence: both were already resolved in S165/S166 and were stale, not open.
+- Regenerating `context/HOT_CONTEXT.json`/`.md` after the TASK_BOARD edit turned a would-be-red freshness gate green; root-fixed via `scripts/render-hot-context.mjs`, not skipped.
+- Passed full Vitest 238 files / 1,389 assertions, strict lint, deployable build, and the security release gate. No player-facing bundle or behavior changed.
+
+Intent outcome: achieved — audit-against-live-code discipline closed two stale backlog lines honestly and shipped one genuine coverage gap, all verified green.

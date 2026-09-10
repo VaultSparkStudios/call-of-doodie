@@ -1426,3 +1426,9 @@ Decision: ship the cost-neutral protocol/tooling improvements as a normal FORGE 
 ## 2026-09-10 — Session 170 — Audit context is bounded at source
 
 Decision: repository audits consume the source-hashed output of `scripts/task-slice.mjs` through `scripts/lib/audit-task-context.mjs`, not the entire long-lived Task Board. Protocol drift treats both files as required surfaces.
+
+## 2026-09-10 — Session 171 — Verify-before-implement applies to the Deferred backlog too
+
+Decision: before generating new audit candidates, an open TASK_BOARD Deferred line is re-verified against live code the same way a fresh candidate premise is. Two long-carried lines (royale target-list behavior pairing, "~92 KB DeathScreen chunk") were already resolved by S165/S166 and are now marked done-with-evidence instead of staying open indefinitely or being silently re-implemented.
+
+Why: an unverified backlog line reads as outstanding work forever even after the code already closes it, which both wastes a future session's effort re-deriving the fix and erodes trust in the backlog as a source of truth.

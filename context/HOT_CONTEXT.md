@@ -4,7 +4,7 @@
 
 ## Current Session
 
-- Session 170 production seal (2026-09-10) — public-contract drift blocked workflow 34435876634 before deployment; regenerated date-bound route artifacts passed 30/30 focused checks. Exact source bb88eb48d57d passed workflow 34436020611 and deployed immutable d9842f42; both origins report that SHA and pass shell 7/7, cutover 5/5, backend 5/5, replay 3/3, leaderboard isolation, and launch surfaces.
+- Session 171 (2026-09-10) — audited the live S165/S166-era deferred backlog against current code instead of trusting the labels: found `DeathScreenSecondaryAnalysis.jsx` (the lazily mounted death-debrief panel) had no render coverage of its own, so a missing/renamed parent-to-child field from `DeathScreen.jsx` would only surface live. Added `src/components/DeathScreenSecondaryAnalysis.test.jsx`, mounting the panel from a minimal model plus every optional receipt built through the real `pressureArc.js`/`damageSequence.js` finalizers. Verified two other long-carried backlog lines were already resolved by prior sessions and stale in the record — the royale self-targeting collection/behavior pairing (S165 `enemyTargeting.test.js`) and the "~92 KB DeathScreen chunk" figure (S166 already split it to 73.33 KB; a fresh build reports 73.93 KB) — and marked both done-with-evidence rather than re-implementing already-shipped work. Full suite 238/238 files · 1,389/1,389 assertions, strict lint, deployable build, and the security release gate all green.
 
 ## Open Work
 
@@ -16,14 +16,11 @@
 ## Session 167 - The debrief names names, modes say what the run was worth, announcements stay on screen
 - [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET on the Pages project so Porcelain Passport verification and cloud backup stop answering 503.
 ## Session 166 - Extraction distance, pressure, radar objectives, and death-beat split
-- [ ] [SIL:1] Add a focused browser contract that opens every lazily mounted death-analysis subsection with a minimal model, so missing parent-to-child fields fail before staging.
 - [ ] [SIL:1] Collect consented extraction telemetry before changing the 1.25× pressure slope or 1.5× arena scale; synthetic distance and enemy-count math are not balance evidence.
 - [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET on the Pages project so Porcelain Passport verification and cloud backup stop answering 503.
 ## Session 165 - Scrolling camera, live royale bots, death-beat diet, record recovery
 - [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET on the Pages project: neither is in the secrets gateway, so Porcelain Passport verification (and therefore cloud backup) answers 503 in production until they exist.
 - [ ] [SIL:2] Never continue work under a sealed session number — open the next number instead. Carried from the S164 SIL brainstorm.
-- [ ] [SIL:1] Pair every collection-shape assertion in a mode test with one behavioural effect assertion; the royale target-list length check passed green over an inert mode.
-- [ ] [SIL:1] DeathScreen remains the largest non-vendor lazy chunk at ~92 KB; the debrief/archive panels are the next split.
 ## Session 163 - Real modes, CPU squad, fixed timestep, single brand
 - [ ] [SIL:2] Deploy the S163 migration and edge-function change (profiles table, ghost_path column, submit-score ghostPath) and set OBELISK_VERIFY_SECRET / SUPABASE_SERVICE_ROLE_KEY on Pages so cloud backup and the remote ghost race light up.
 - [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET on the Pages project: neither is in the secrets gateway, so Porcelain Passport verification (and therefore cloud backup) answers 503 in production until they exist.
@@ -63,15 +60,11 @@
 - [ ] Optional: Ko-fi → leaderboard end-to-end test once the webhook is live and a real donation flows through
 ## Done
 ## Deferred
+- [ ] [SIL:1] [DATA-BLOCKED S147] Theme-prop atlas L2 expansion — extend `theme-prop-atlas-v1.webp` from 16 to ~32 cells only after production feedback confirms the current highest-visibility coverage reads well; no participant evidence exists yet.
+- [ ] Discord invite/community link when the community entry point is ready
+- [ ] [SIL:1] [S62 deferred] HomeV2 v1 fallback retirement — gate on ≥200ms Lighthouse LCP improvement confirmed on production (human measurement required)
 
 ## Recent Decisions
-
-## 2026-09-09 — Session 169 — Latest historical task lanes fail closed
-
-Decision: The task-semantics court rejects executable open items under the highest-numbered historical Session heading while preserving explicitly gated work. The active Now/Deferred lanes remain the source of truth for executable planning.
-
-Why: Open work had been stranded outside the Genius List, falsely reporting exhaustion.
-
 
 ## 2026-09-09 — Session 169 — Canon conformance disposition
 
@@ -87,9 +80,16 @@ Decision: ship the cost-neutral protocol/tooling improvements as a normal FORGE 
 
 Decision: repository audits consume the source-hashed output of `scripts/task-slice.mjs` through `scripts/lib/audit-task-context.mjs`, not the entire long-lived Task Board. Protocol drift treats both files as required surfaces.
 
+
+## 2026-09-10 — Session 171 — Verify-before-implement applies to the Deferred backlog too
+
+Decision: before generating new audit candidates, an open TASK_BOARD Deferred line is re-verified against live code the same way a fresh candidate premise is. Two long-carried lines (royale target-list behavior pairing, "~92 KB DeathScreen chunk") were already resolved by S165/S166 and are now marked done-with-evidence instead of staying open indefinitely or being silently re-implemented.
+
+Why: an unverified backlog line reads as outstanding work forever even after the code already closes it, which both wastes a future session's effort re-deriving the fix and erodes trust in the backlog as a source of truth.
+
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 225,395 bytes · SHA-256 `23d1ca28a890…`
-- `context/TASK_BOARD.md` · 145,813 bytes · SHA-256 `71958f080f96…`
-- `context/DECISIONS.md` · 148,346 bytes · SHA-256 `2abfa580cc76…`
+- `context/CURRENT_STATE.md` · 226,460 bytes · SHA-256 `cccdc2d768d7…`
+- `context/TASK_BOARD.md` · 146,565 bytes · SHA-256 `77dcc901c9e1…`
+- `context/DECISIONS.md` · 149,058 bytes · SHA-256 `b85a5867088f…`
 - `docs/AUDIT_2026-09-09.json` · 42,925 bytes · SHA-256 `95e2ec5a86cd…`
