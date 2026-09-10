@@ -4,7 +4,7 @@
 
 ## Current Session
 
-- Session 171 (2026-09-10) — audited the live S165/S166-era deferred backlog against current code instead of trusting the labels: found `DeathScreenSecondaryAnalysis.jsx` (the lazily mounted death-debrief panel) had no render coverage of its own, so a missing/renamed parent-to-child field from `DeathScreen.jsx` would only surface live. Added `src/components/DeathScreenSecondaryAnalysis.test.jsx`, mounting the panel from a minimal model plus every optional receipt built through the real `pressureArc.js`/`damageSequence.js` finalizers. Verified two other long-carried backlog lines were already resolved by prior sessions and stale in the record — the royale self-targeting collection/behavior pairing (S165 `enemyTargeting.test.js`) and the "~92 KB DeathScreen chunk" figure (S166 already split it to 73.33 KB; a fresh build reports 73.93 KB) — and marked both done-with-evidence rather than re-implementing already-shipped work. Full suite 238/238 files · 1,389/1,389 assertions, strict lint, deployable build, and the security release gate all green.
+- Session 172 (2026-09-10) — ran a full `/arc` (start → audit → implement → closeout). Synced two pending Dependabot lockfile bumps (`@supabase/supabase-js`, dev-dependencies group) that had landed on origin, which required a root-fix `npm install` to resync `node_modules` after the pull — `check-dependency-tree.mjs`/the security release gate briefly reported `invalid:` version mismatches until the install ran. Pre-verified the live backlog against current code before writing new work (S171 precedent): the S144 "off-screen threat arrow ADS-zoom correction" TASK_BOARD line was stale — `getOffscreenThreatArrows` (`src/utils/offscreenIndicators.js`) already projects through `worldToThreatScreenPoint` with explicit `zoom`/`camX`/`camY`, and `drawGame.js` already passes `zoom: gs.adsZoom ? 1.28 : 1` plus camera offsets with a "screen-space by contract" comment; closed done-with-evidence rather than re-implemented. Remaining open backlog lines (Supabase Auth/membership decision, PostHog/Sentry dashboard allowlist, the `objectiveHandlers.js` gameplay cutover) were confirmed still genuinely founder-decision-gated, credential-gated, or too launch-risk-sensitive for an unattended single pass, and were left accurately tracked rather than blind-shipped. Full suite 238/238 files · 1,389/1,389 assertions, strict lint 0 errors, deployable build, and the security release gate all green.
 
 ## Open Work
 
@@ -89,7 +89,7 @@ Why: an unverified backlog line reads as outstanding work forever even after the
 
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 226,460 bytes · SHA-256 `cccdc2d768d7…`
+- `context/CURRENT_STATE.md` · 227,867 bytes · SHA-256 `a16896c2542e…`
 - `context/TASK_BOARD.md` · 146,828 bytes · SHA-256 `5ee7e099a1d5…`
 - `context/DECISIONS.md` · 149,058 bytes · SHA-256 `b85a5867088f…`
 - `docs/AUDIT_2026-09-10.json` · 3,950 bytes · SHA-256 `cc8ad101f848…`
