@@ -1,26 +1,26 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.1 -->
-<!-- generated-at: 2026-09-10 (Session 174 closeout) -->
+<!-- generated-at: 2026-09-10 (Session 175 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S174 ════════════════════╗
-║  Date: 2026-09-10  ·  SIL: 996/1000  ·  Velocity: 1 down         ║
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S175 ════════════════════╗
+║  Date: 2026-09-10  ·  SIL: 998/1000  ·  Velocity: 1 down         ║
 ║  Mode: FOUNDER  ·  Agent: claude-code                            ║
 ║  Live:  preview  →  https://callofdoodie.wtf/                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ Triage: no session lock; tree clean but for one uncommitted   ║
-║  ✓ Audit method: S171/S172/S173 each pre-verified the TASK_BOAR  ║
-║  ✓ Shipped 1/4: `npm run lint:strict` had been exiting 1 since   ║
-║  ✓ Shipped 2/4: `context/STATE_VECTOR.json` and `context/GENOME  ║
-║  ✓ Shipped 3/4: `silAvg3`/`silAvg5` now derive from the append-  ║
+║  ✓ Triage: no session lock; tree clean; origin synced 0/0; `che  ║
+║  ✓ Audit method: S171–S173 pre-verified the backlog and correct  ║
+║  ✓ Shipped 1/4 — **BOT ROYALE had published two bot counts at o  ║
+║  ✓ Shipped 2/4 — **the class had no gate, and nothing read the   ║
+║  ✓ Shipped 3/4 — **generalized past mode prose.** `QUICK_RULES`  ║
 ╚════════════════════════════════════════════════════════════════╝
-╔══ SCORES · SIL 996/1000 ═══════════════════════════════════════╗
+╔══ SCORES · SIL 998/1000 ═══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
 ║    Alignment          100  ██████████                            ║
 ║    Momentum           100  ██████████                            ║
-║    Engagement         96   ██████████                            ║
+║    Engagement         98   ██████████                            ║
 ║    Process Qual       100  ██████████                            ║
 ║    Coherence          100  ██████████                            ║
 ║    Security           100  ██████████                            ║
@@ -41,7 +41,7 @@
 ║  ✓ agent memory (Claude/Codex project memory)                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 1 files  ·  M:0 A:0 D:0 ?:1                            ║
+║  Changes: 33 files  ·  M:26 A:0 D:0 ?:7                          ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝

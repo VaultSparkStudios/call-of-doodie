@@ -45,6 +45,7 @@ const helpers = [
   // currency — they were present and un-run for three closeouts. This one measures
   // what they produce.
   { rel: "scripts/check-closeout-artifact-currency.mjs", level: "required", purpose: "fails when a §3.7 renderer stopped running" },
+  { rel: "scripts/check-genome-ledger.mjs", level: "required", purpose: "fails on a new duplicate, gap, or reversed label in the genome ledger" },
   { rel: "scripts/sanitize-claude-settings.mjs", level: "required", purpose: "sanitizes local agent settings before push" },
   { rel: "scripts/lib/studio-ops-proxy.mjs", level: "required", purpose: "binds authoritative control-plane scripts to this project" },
   { rel: "scripts/record-skill-cost.mjs", level: "optional", purpose: "records closeout skill-cost snapshots" },

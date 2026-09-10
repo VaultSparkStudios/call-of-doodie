@@ -851,6 +851,23 @@
       },
       "delta": 0,
       "cause": "Session 174 audited the measurement layer rather than the backlog: lint:strict had been red since S172 while two session"
+    },
+    {
+      "date": "2026-09-10",
+      "session": 175,
+      "total": 0,
+      "maxTotal": 25,
+      "overallStatus": "audited the player-facing claims rather than the gates — BOT ROYALE had published both twelve and sixteen bots simultaneously since S165, across four live surfaces, with every gate green. Root-fixed at a single derived authority with executable regression protection over the generated artifacts, S174's genome commitment honoured by measurement (two of its inherited claims corrected as unsupported), fully tested (245 files / 1,488 assertions), 15/15 gates green, and pushed directly to main under standing founder authorization. SPARKED remains NO-GO.",
+      "lastReviewed": "2026-09-10",
+      "dimensions": {
+        "schema_alignment": 0,
+        "prompt_template_alignment": 0,
+        "derived_view_freshness": 0,
+        "handoff_continuity": 0,
+        "contradiction_density": 0
+      },
+      "delta": 0,
+      "cause": "Session 175 audited the player-facing claims rather than the gates: BOT ROYALE had published both twelve and sixteen bot"
     }
   ]
 }

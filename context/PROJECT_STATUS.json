@@ -4,9 +4,15 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 174 audited the measurement layer rather than the backlog: lint:strict had been red since S172 while two sessions reported it green, and two SESSION_PROTOCOL 3.7 renderers had silently not run for three sessions. All four findings shipped with executable regression protection.",
-  "nextMilestone": "Wait for participant/provider/device evidence or a new founder-directed product scope; remaining open backlog is founder-decision-, credential-, hardware-, or data-blocked.",
+  "currentFocus": "Session 175 audited the player-facing claims rather than the gates: BOT ROYALE had published both twelve and sixteen bots simultaneously since S165 across four live surfaces, with every gate green because each only verifies a generated artifact matches its source. Root-fixed at one derived authority (src/config/modeFacts.js) with a gate that reads the generated artifacts, and S174 genome commitment honoured by measurement — two of its inherited claims corrected as unsupported.",
+  "nextMilestone": "Wait for participant/provider/device evidence or a new founder-directed product scope; remaining open backlog is founder-decision-, credential-, hardware-, or data-blocked, plus one cross-repo Ark item on the genome writer.",
   "testingSurfaces": [
+    {
+      "session": 175,
+      "status": "green",
+      "type": "full-gates",
+      "command": "245/245 files · 1,490/1,490 assertions (+24) · 15/15 static gates (exit codes captured directly) · strict lint · build · deployable build · security release gate · App chunk 469.46 KB under the 560 KB gate"
+    },
     {
       "session": 173,
       "status": "green",
@@ -54,66 +60,6 @@
       "status": "green",
       "type": "hosted-visual-proof",
       "command": "session-169-staging · route/theme/width 969/969 · hazard 28/28 · lazy analysis 72/72 · 26 hash-bound captures · direct representative pixel inspection · CANON-053 pass"
-    },
-    {
-      "session": 168,
-      "status": "green",
-      "type": "production-verification",
-      "command": "source ecec5573cfa5 · workflow 34404857391 · immutable 7d285e80 · shell 7/7 custom+immutable · cutover 5/5 · backend 5/5 · replay 3/3 · leaderboard isolation · launch surfaces · production mode smoke"
-    },
-    {
-      "session": 168,
-      "status": "green",
-      "type": "production-visual-proof",
-      "command": "SEWER EXTRACTION seed 92101 and HOLD THE THRONE seed 569639 natural losses · mode-specific receipts · stable frames · decoded canaries extraction 2808/17217/4627/433 and throne 2805/16817/4779/431 · direct top/verdict crop inspection"
-    },
-    {
-      "session": 167,
-      "status": "green",
-      "type": "production-verification",
-      "command": "source 0e82ca9fb761 · workflow 34329814954 · immutable 5fb26ff6 · immutable/custom shell 7/7 with exact deploy id · cutover 5/5 · replay 3/3 · leaderboard isolation · launch surfaces · backend health 5/5 · production mode smoke · production outcome capture (natural royale death → mode-outcome receipt rendered)"
-    },
-    {
-      "session": 167,
-      "status": "resolved",
-      "type": "ci-incident",
-      "command": "workflow 34328869414 for 34f5442 failed quality on route-contract/sitemap drift after the changelog commit rolled PUBLIC_CONTENT_VERSION_DATE (S165 pattern); regenerated after the commit landed; corrected workflow 34329814954 passed 232/232 files."
-    },
-    {
-      "session": 167,
-      "status": "green",
-      "type": "full-gates",
-      "command": "strict lint 0 · CI Vitest 232/232 files (local 231 files / 1,359 tests before the hook court; only the hot-context freshness court red before re-render) · deployable build · App 466.77 KB / 560 KB · DeathScreen 73.93 KB + deferred analysis 18.53 KB · runtime/public/schema/security/dependency/assets/entry gates · windows-hide guard"
-    },
-    {
-      "session": 167,
-      "status": "flaky",
-      "type": "unit-parallel",
-      "command": "S167-start baseline Vitest run reported 226 files / 1,307 tests passed with 4 vitest-pool worker timeouts on the shared host; the full rerun after implementation had zero timeouts. Classified as host contention, not a regression."
-    },
-    {
-      "session": 167,
-      "status": "green",
-      "type": "browser-proof",
-      "command": "Playwright serial 19 pass / 1 intentional mobile skip; staging (43751b9d) and production mode smoke across BOSS GAUNTLET, HOLD THE THRONE + squad, SEWER EXTRACTION, BOT ROYALE (16 BOTS LEFT), profile route, Operation BREACH; scripts/capture-mode-outcome.mjs let a royale run end naturally and read the rendered receipt on both"
-    },
-    {
-      "session": 167,
-      "status": "green",
-      "type": "push-gate",
-      "command": "Bash pre-push hook orphaned a third time; replaced by scripts/hooks/pre-push.mjs (same four rules, one process, 4-case court). First real push through it returned in seconds and flagged a literal fixture in its own test file, fixed at source; pushed range rescanned with zero findings."
-    },
-    {
-      "session": 166,
-      "status": "green",
-      "type": "production-verification",
-      "command": "source 0647bb0d6787 · workflow 34312878779 · immutable 99ad3bbc · immutable/custom shell 7/7 with exact deploy id · cutover 5/5 · mode smoke · replay 3/3 · leaderboard isolation · launch surfaces · final backend health 5/5"
-    },
-    {
-      "session": 166,
-      "status": "resolved",
-      "type": "ci-incident",
-      "command": "workflow 34312512478 blocked stale HOT_CONTEXT after final closeout edits; deterministic rerender fixed it and corrected workflow 34312878779 passed. Local focused retry never started a worker under host contention and is not counted green."
     }
   ],
   "blockers": [
@@ -133,12 +79,12 @@
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-09-09",
   "silSession": 174,
-  "silScore": 996,
-  "silAvg3": 994,
+  "silScore": 998,
+  "silAvg3": 996.3,
   "silVelocity": 1,
   "silDebt": "down",
   "silLastSession": 174,
-  "currentSession": 174,
+  "currentSession": 175,
   "sessionMode": "founder",
   "lastAgent": "claude-code",
   "testsPassing": 1438,
@@ -152,7 +98,7 @@
     "devHealth": 100,
     "creativeAlignment": 100,
     "momentum": 100,
-    "engagement": 96,
+    "engagement": 98,
     "processQuality": 100,
     "crossRepoCoherence": 100,
     "securityPosture": 100,
@@ -207,7 +153,7 @@
   "testsEnvBlocked": [],
   "testsDeferred": [],
   "testsBudgetExhausted": false,
-  "silAvg5": 995.6,
+  "silAvg5": 995.8,
   "testsAssertionsDeferred": [],
   "testsAssertionsLastRun": "2026-09-10",
   "lastShipped": "scripts/check-closeout-artifact-currency.mjs — measures each session-keyed closeout artifact against the SIL ledger, so a renderer that stops running fails loudly instead of passing on file presence.",

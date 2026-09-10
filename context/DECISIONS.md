@@ -1452,3 +1452,31 @@ Why: both are pure functions of a ledger that already exists, so trusting a type
 Decision (S174): recorded `context/STUDIO_MANIFEST.json` and `context/MEMORY_INDEX.md` as verified NOT stale rather than adding them to the currency gate.
 
 Why: both look behind by git date, but the manifest regenerates byte-identically from PROJECT_STATUS and MEMORY_INDEX is a static navigation index with no writer and no session marker. Measuring them would require inventing a session marker for them — the same fabrication the gate exists to prevent. Writing the non-finding down stops a future session re-deriving it as a false positive.
+
+Decision (S175): after S174 audited the gates, audited the **player-facing claims** — every number the game states to a player, checked against the code that produces it — rather than re-auditing the gates or the backlog.
+
+Why: four consecutive sessions had closed with the same honest gap, no player-facing value, while the backlog stayed genuinely blocked and the `objectiveHandlers.js` cutover stayed too launch-risk-sensitive for an unattended pass. Auditing player-facing truth is the one lens that can close a real player-facing defect without inventing gameplay scope. It yielded one: BOT ROYALE had published both twelve and sixteen bots simultaneously since S165, across four live surfaces. When the backlog is verified-clean and the instruments have been audited, the next place drift hides is what the product says about itself.
+
+Decision (S175): fixed the royale bot-count drift by introducing `src/config/modeFacts.js` as a derived authority, rather than correcting the four stale literals in place.
+
+Why: a literal corrected by hand drifts again on the next balance change — that is exactly how this defect was born, when S165 edited `BOT_COUNT` and nothing else. The same derive-never-type rule already governs `silScore` (S154) and `silAvg3` (S174). The module is deliberately dependency-free so `modeCatalog.js` stays zero-cost for `App.jsx` under the S163 bundle diet and `quickRules.js` keeps the lazy MenuPanels split; the heavy mode runtime imports down into it, never the reverse. `spell()` throws on an unmapped value instead of falling back to a numeral, so a balance change that outgrows the table fails loudly rather than silently rewriting the voice of player-facing prose.
+
+Decision (S175): extended `check-public-claims.mjs` to read the **generated** public artifacts, not only the source modules.
+
+Why: both existing public gates passed for the entire ten-session drift, and both were correct — each verifies that a generated artifact matches its source. A generation check cannot prove its input is true. Nothing in the repo read `public/gameplay-contract.json` looking for a false claim, which is precisely where a wrong source becomes a published one. The new class failed on its first run against the stale contract, so the catch is proven rather than asserted.
+
+Decision (S175): excluded dated changelog entries from the mode-fact gate, and documented the exclusion in the gate source.
+
+Why: the September 3 changelog entry says "twelve bots" because twelve bots is what shipped that day, and the September 9 entry correctly records the raise to sixteen. Rewriting a dated record to satisfy a current constant would falsify history — the opposite of what the gate exists to do. Present-tense copy is pinned; history is left alone. Writing the boundary into the gate stops a future session "fixing" the record.
+
+Decision (S175): corrected two claims inherited from S174's genome brainstorm as unsupported, instead of implementing against them.
+
+Why: S174 recorded "duplicate and out-of-order session labels" and "a snapshot labelled 166 carrying S167 prose". Measured: the duplicates are real, but all 50 labels are monotonically non-decreasing — there is no out-of-order label — and the 166/167 case is not mechanically provable, because `overallStatus` legitimately persists unchanged across consecutive sessions and the same string is shared by 24 of the 50 rows. A gate built on that heuristic would fire on half the file. Shipping it would have looked productive and been a fabricated finding. Correcting a prior session's premise with evidence is worth more than implementing it faithfully.
+
+Decision (S175): declared the known genome-ledger defects as a dated `ACCEPTED_HISTORICAL_DEFECTS` baseline rather than repairing the data.
+
+Why: the ledger is append-only evidence. Deleting the duplicate rows or back-filling the four missing snapshots (S164, S165, S171, S172) would fabricate a record of closeouts that never ran — the exact failure this repo's canon exists to prevent, and the opposite of S165's precedent of recording a reused session number "rather than papering over it". The baseline keeps the debt visible and counted in every report while the gate fails on anything new. The actual root cause — the writer's `(date, session)` upsert key — lives in `vaultspark-studio-ops` and travels as Ark cargo per CANON-018; no sibling tree is edited from here.
+
+Decision (S175): shipped the `QUICK_RULES` boss-cadence binding in-session rather than carrying it as a follow-up item.
+
+Why: `check-task-semantics.mjs` correctly refused to let an executable item sit open in the newest session, and it was right to — "complete-all-means-complete-all". The item was genuinely executable: `QUICK_RULES` hand-typed "Boss every 5 waves" while `modeRules.js` independently declared `boss: { interval: 5, firstWave: 5 }`, the same two-numbers-one-truth shape as the royale count and one balance change from contradicting itself. The remaining follow-up is genuinely cross-repo-locked, not deferred by preference, and is labelled as such.

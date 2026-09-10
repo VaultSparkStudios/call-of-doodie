@@ -4,13 +4,15 @@
 
 ## Current Session
 
-- Session 174 (2026-09-10) — ran a full `/arc` and, with the backlog already pre-verified as genuinely blocked for three sessions running, measured the **gates and artifacts** instead of the backlog a fourth time. Four real defects, all of the same class — a gate reporting green while the thing it measures is red or stale. (1) `npm run lint:strict` had been exiting 1 since Dependabot #151 (`78efba4`, merged during S172) bumped `eslint-plugin-react-refresh` 0.5.5 → 0.5.6, which extended `only-export-components` to flag a file with no exports and so began warning on the unchanged Vite entry `src/main.jsx`; S172 and S173 both recorded "strict lint 0 errors", true of the error count and false of the gate. Fixed at source with a scoped entry-point override (never by raising `--max-warnings`), guarded by `src/entryFiles.test.js`, and CI in both deploy workflows now runs `lint:strict` so one ruler governs. (2) `context/STATE_VECTOR.json` and `context/GENOME_HISTORY.json` had been stale since S170 — three consecutive closeouts skipped a `SESSION_PROTOCOL` §3.7 mandatory renderer while every probe stayed green, because `protocol-drift-check.mjs` asserts the renderer file *exists* and `check-writeback-currency.mjs` anchors only on the SIL ledger; STATE_VECTOR was publishing session 170 / silTotal 997 against PROJECT_STATUS's 173 / 995. `scripts/check-closeout-artifact-currency.mjs` now measures each artifact's own recorded session against the ledger, is wired into `schema:lint` and registered in `protocol-drift-check.mjs`, and reports an unreadable artifact as `unmeasurable` rather than fresh. (3) `silAvg3`/`silAvg5` were hand-authored with no authority — PROJECT_STATUS said 995 while STATE_VECTOR said 997.7 — and are now derived from the append-only SIL ledger at the single write path, ending a permanent `.0` float-churn loop. (4) `coverage:check` now reports `NOT MEASURED` rather than `FAIL` when coverage was simply never generated. Verified 243/243 files · 1,466/1,466 assertions, 14/14 static gates, build, deployable build, and security release gate all green; App chunk 469 KB unchanged, no player-facing bundle or gameplay change.
+- Session 175 (2026-09-10) — ran a full `/arc` and audited the **player-facing claims** rather than the gates (S174) or the backlog (S171–S173). Found that BOT ROYALE has published two different bot counts simultaneously since S165: `src/modes/botRoyale.js` spawns `BOT_COUNT = 16`, while four live surfaces still claimed twelve — the `modeCatalog.js` blurb (in-game mode picker), its description (`/modes/`), `src/content/fieldManual.js` §5 (`/field-manual/` and the in-app quick reference), and the generated `public/gameplay-contract.json`, this project's published machine-readable claim — with `src/config/changelog.js` correctly advertising sixteen at the same time. Both public gates passed throughout because the generated artifacts faithfully reproduced their sources; the sources were wrong, and a generation check cannot prove its input true. `modeCatalog.js` calls itself the single source of truth for mode identity and is, for identity — ids, ordering, labels are pinned by `modeCatalog.test.js` — but the numbers inside its prose had no authority behind them at all. Root-fixed with `src/config/modeFacts.js`: the mode runtime imports its constants *down* from it (`botRoyale`, `bossGauntlet`, `holdTheThrone`, `sewerExtraction`) and player-facing prose composes *up* from it, under the same derive-never-type rule governing `silScore` since S154. `modeFacts.js` is dependency-free so `modeCatalog.js` stays free for `App.jsx` under the S163 bundle diet. `check-public-claims.mjs` gained a mode-fact class that reads the **generated** public artifacts — which no test and no prior gate read — and failed on first run against the stale contract, proving the catch. Verified every other mode number correct against its runtime constant (six bosses, three thrones, thirty-second capture, lockdown at 100), so the royale count was the only genuine drift; all four are bound to the authority anyway, closing the class rather than the instance. Separately honoured S174's genome-ledger commitment by measuring it: duplicates real (S123, S162 — the control-plane writer upserts on `(date, session)`, so a later-dated re-snapshot appends instead of updating), four snapshots missing entirely (S164/165/171/172 — closeouts that skipped the §3.7 renderer, invisible to a currency gate that reads only the maximum), and two of S174's inherited claims — "out-of-order labels" and "a snapshot labelled 166 carrying S167 prose" — corrected as **not supported by the data**. `scripts/check-genome-ledger.mjs` fails on any new duplicate, gap, or reversed label, with the known historical defects declared as visible dated debt rather than rewritten. Verified 245/245 files · 1,490/1,490 assertions (+2 files, +24), 15/15 static gates, build, deployable build and security release gate all green; App chunk 469.06 → 469.46 KB (+0.40 KB), far under the 560 KB gate. No gameplay, balance, or difficulty change.
 
 ## Open Work
 
 ## Session 170 - Startup evidence, bounded audit context, and process-policy closure
 - [ ] [SIL:2] **EVIDENCE** Collect participant, physical PWA/gamepad/media, current production Core Web Vitals, Zoho reply-as, scoped telemetry, Obelisk, publication, direct-pixel, sitemap ≥8/10, and explicit lifecycle evidence before SPARKED.
 # Task Board
+## Session 175 - The claims themselves get measured
+- [ ] [SIL:1] [ARK] **Cross-repo** Confirm `vaultspark-studio-ops` actioned the genome-writer cargo (the `(date, session)` upsert key that appends a duplicate row when a session is re-snapshotted on a later date) and, once repaired upstream, retire the matching `ACCEPTED_HISTORICAL_DEFECTS` entries by repair rather than by waiver. Owned by another repository and must travel through Studio Ark per CANON-018; this repo's gate can detect a new duplicate but cannot prevent one.
 ## Session 174 - The gates themselves get measured
 ## Session 173 - Objective-verb and zone coverage gap closed
 ## Session 168 - Terminal order, exactly-once extraction, and mode-specific debrief proof
@@ -61,8 +63,6 @@
 - [ ] Optional: Ko-fi → leaderboard end-to-end test once the webhook is live and a real donation flows through
 ## Done
 ## Deferred
-- [ ] [SIL:1] [DATA-BLOCKED S147] Theme-prop atlas L2 expansion — extend `theme-prop-atlas-v1.webp` from 16 to ~32 cells only after production feedback confirms the current highest-visibility coverage reads well; no participant evidence exists yet.
-- [ ] Discord invite/community link when the community entry point is ready
 
 ## Recent Decisions
 
@@ -107,9 +107,17 @@ Decision (S174): recorded `context/STUDIO_MANIFEST.json` and `context/MEMORY_IND
 
 Why: both look behind by git date, but the manifest regenerates byte-identically from PROJECT_STATUS and MEMORY_INDEX is a static navigation index with no writer and no session marker. Measuring them would require inventing a session marker for them — the same fabrication the gate exists to prevent. Writing the non-finding down stops a future session re-deriving it as a false positive.
 
+Decision (S175): after S174 audited the gates, audited the **player-facing claims** — every number the game states to a player, checked against the code that produces it — rather than re-auditing the gates or the backlog.
+
+Why: four consecutive sessions had closed with the same honest gap, no player-facing value, while the backlog stayed genuinely blocked and the `objectiveHandlers.js` cutover stayed too launch-risk-sensitive for an unattended pass. Auditing player-facing truth is the one lens that can close a real player-facing defect without inventing gameplay scope. It yielded one: BOT ROYALE had published both twelve and sixteen bots simultaneously since S165, across four live surfaces. When the backlog is verified-clean and the instruments have been audited, the next place drift hides is what the product says about itself.
+
+Decision (S175): fixed the royale bot-count drift by introducing `src/config/modeFacts.js` as a derived authority, rather than correcting the four stale literals in place.
+
+Why: a literal corrected by hand drifts again on the next balance change — that is exactly how this defect was born, when S165 edited `BOT_COUNT` and nothing else. The same derive-never-type rule already governs `silScore` (S154) and `silAvg3` (S174). The module is deliberately dependency-free so `modeCatalog.js` stays zero-cost for `App.jsx` under the S163 bundle diet and `quickRules.js` keeps the lazy MenuPanels split;
+
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 231,225 bytes · SHA-256 `91acb98d82c3…`
-- `context/TASK_BOARD.md` · 152,996 bytes · SHA-256 `34a0e93125f3…`
-- `context/DECISIONS.md` · 152,682 bytes · SHA-256 `b8118086cd77…`
+- `context/CURRENT_STATE.md` · 234,161 bytes · SHA-256 `0f46dcd0f08c…`
+- `context/TASK_BOARD.md` · 159,090 bytes · SHA-256 `61aab80b522b…`
+- `context/DECISIONS.md` · 157,778 bytes · SHA-256 `724ea8dcb63a…`
 - `docs/AUDIT_2026-09-10.json` · 3,950 bytes · SHA-256 `cc8ad101f848…`

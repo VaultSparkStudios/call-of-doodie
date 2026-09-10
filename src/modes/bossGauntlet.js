@@ -6,9 +6,10 @@
 
 import { BOSS_ROTATION } from "../gameHelpers.js";
 import { ENEMY_TYPES } from "../constants.js";
+import { BOSS_GAUNTLET_BOSS_COUNT, BOSS_GAUNTLET_PAR_SECONDS } from "../config/modeFacts.js";
 
-const BOSS_COUNT = 6;
-const PAR_SECONDS = 6 * 60;
+const BOSS_COUNT = BOSS_GAUNTLET_BOSS_COUNT;
+const PAR_SECONDS = BOSS_GAUNTLET_PAR_SECONDS;
 
 export const BOSS_GAUNTLET = Object.freeze({
   id: "boss_gauntlet",

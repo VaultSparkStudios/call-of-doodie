@@ -2,6 +2,8 @@
 // Values intentionally mirror the legacy App.jsx branches so a later caller can
 // migrate orchestration without changing player-visible behavior.
 
+import { STANDARD_BOSS_WAVE_INTERVAL } from "../config/modeFacts.js";
+
 export const LEGACY_MODE_IDS = Object.freeze([
   "standard", "score_attack", "daily_challenge", "cursed",
   "boss_rush", "speedrun", "gauntlet", "zombies",
@@ -27,7 +29,9 @@ function mode(overrides) {
     shop: true,
     waveDirectorEvents: true,
     zombies: false,
-    boss: { interval: 5, firstWave: 5, allowDeveloperBoss: true },
+    // S175: cadence derived from modeFacts so the "Boss every N waves" line in
+    // QUICK_RULES and this rule can never state different numbers.
+    boss: { interval: STANDARD_BOSS_WAVE_INTERVAL, firstWave: STANDARD_BOSS_WAVE_INTERVAL, allowDeveloperBoss: true },
     escalations: [],
     ...overrides,
   });

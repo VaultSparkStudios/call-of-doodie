@@ -7,6 +7,10 @@
 // disagree about which modes exist — modeCatalog.test.js pins that.
 
 import { REPLAY_MODES } from "../utils/replayCode.js";
+// S175: the numbers quoted in mode prose are derived, not typed. See
+// modeFacts.js for why (a ten-session-old "twelve bots" claim against a
+// sixteen-bot loop). This module stays cheap: modeFacts has no imports.
+import { BOT_ROYALE_BOT_COUNT, spell } from "./modeFacts.js";
 
 // S163: every legacy entry is tagged. "mode" = a different game; "ruleset" =
 // a challenge overlay on the survival loop. New replay-ineligible modes live in
@@ -27,7 +31,7 @@ export const MODE_CATALOG = Object.freeze([
 export const NEW_MODE_CATALOG = Object.freeze([
   { id: "boss_gauntlet",   kind: "mode", label: "Boss Gauntlet",   short: "Gauntlet",  arcadeLabel: "BOSS GAUNTLET",   emoji: "👑", icon: "♛", color: "#FF3333", blurb: "6 bosses · no trash · beat the par time", description: "Six bosses back to back, no filler. Clear all six to win.", replayEligible: false, isNew: true },
   { id: "sewer_extraction", kind: "mode", label: "Sewer Extraction", short: "Extract", arcadeLabel: "SEWER EXTRACTION", emoji: "📦", icon: "⇱", color: "#33E6FF", blurb: "Grab loot · alarm climbs · reach the evac toilet", description: "Loot crates while the alarm climbs. Extract to bank your stash; die and it goes down the drain.", replayEligible: false, isNew: true },
-  { id: "bot_royale", kind: "mode", label: "Bot Royale", short: "Royale", arcadeLabel: "BOT ROYALE", emoji: "🌊", icon: "◎", color: "#7CFFB8", blurb: "12 bots · shrinking flood · last one flushing wins", description: "Free-for-all against twelve bots while the sewer floods inward. Last one standing wins.", replayEligible: false, isNew: true },
+  { id: "bot_royale", kind: "mode", label: "Bot Royale", short: "Royale", arcadeLabel: "BOT ROYALE", emoji: "🌊", icon: "◎", color: "#7CFFB8", blurb: `${BOT_ROYALE_BOT_COUNT} bots · shrinking flood · last one flushing wins`, description: `Free-for-all against ${spell(BOT_ROYALE_BOT_COUNT)} bots while the sewer floods inward. Last one standing wins.`, replayEligible: false, isNew: true },
   { id: "hold_the_throne", kind: "mode", label: "Hold the Throne", short: "Throne",    arcadeLabel: "HOLD THE THRONE", emoji: "🪑", icon: "⚑", color: "#FFD34F", blurb: "Capture 3 thrones · CPU squad · Z/X/C orders", description: "King of the hill with a squad. Hold three thrones for thirty seconds each to win.", replayEligible: false, isNew: true },
 ]);
 

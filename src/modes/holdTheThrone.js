@@ -7,8 +7,9 @@
 
 import { createZone, getActiveZone, stepZones, throneLayout, ZONE_STATE } from "../systems/zones.js";
 import { issueAllyOrder } from "../systems/allyUnit.js";
+import { THRONE_CAPTURE_SECONDS } from "../config/modeFacts.js";
 
-const CAPTURE_SECONDS = 30;
+const CAPTURE_SECONDS = THRONE_CAPTURE_SECONDS;
 
 export const HOLD_THE_THRONE = Object.freeze({
   id: "hold_the_throne",

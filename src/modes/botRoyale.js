@@ -10,8 +10,11 @@ import { ENEMY_TYPES } from "../constants.js";
 import { getRunRng } from "../systems/runRng.js";
 import { retireEnemyWithoutDefeat } from "../systems/enemyDefeatLifecycle.js";
 import { applyObservedPlayerDamage } from "../systems/damageSequence.js";
+import { BOT_ROYALE_BOT_COUNT } from "../config/modeFacts.js";
 
-const BOT_COUNT = 16;
+// S175: the count lives in modeFacts so the mode picker, field manual, and
+// public gameplay contract quote the same number this loop actually spawns.
+const BOT_COUNT = BOT_ROYALE_BOT_COUNT;
 const BOT_TYPES = [0, 1, 2, 3, 5, 6, 7, 8]; // non-boss archetypes with sprites
 const HANDLES = ["xX_PlungerLord_Xx", "KarenSlayer99", "rentfree", "definitely_not_a_bot", "sewer_sommelier", "mom_said_no", "ratioed", "flushgod", "porcelain_prince", "wifi_password", "LowBatteryLarry", "clogmaster", "u_wot_m8", "BidetOrDieDay", "AFK_in_the_pipe", "touch_grass_420"];
 const FLOOD_PHASE_FRAMES = 24 * 60; // a larger arena needs longer between closes

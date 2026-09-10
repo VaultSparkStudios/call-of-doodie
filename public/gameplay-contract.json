@@ -506,7 +506,7 @@
       "id": "bot_royale",
       "label": "Bot Royale",
       "kind": "mode",
-      "objective": "Free-for-all against twelve bots while the sewer floods inward. Last one standing wins.",
+      "objective": "Free-for-all against sixteen bots while the sewer floods inward. Last one standing wins.",
       "seededReplayCode": false,
       "scoring": "local-only"
     },

@@ -8,9 +8,10 @@
 
 import { getRunRng } from "../systems/runRng.js";
 import { loadStash, recordHazardEvent, saveStash } from "../storage.js";
+import { EXTRACTION_ALARM_EVAC, EXTRACTION_ALARM_LOCK } from "../config/modeFacts.js";
 
-const ALARM_EVAC = 60;
-const ALARM_LOCK = 100;
+const ALARM_EVAC = EXTRACTION_ALARM_EVAC;
+const ALARM_LOCK = EXTRACTION_ALARM_LOCK;
 const ALARM_PER_KILL = 1.6;
 const ALARM_PER_CRATE = 4;
 const ALARM_PER_SECOND = 0.35;
