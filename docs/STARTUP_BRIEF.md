@@ -1,12 +1,12 @@
 <!-- generated-by: scripts/render-startup-brief.mjs v3.1 -->
-<!-- generated-at: 2026-09-10 (Session 170 closeout) -->
-<!-- semantic-freshness: hash=20cf52a4238a5d29 next=171 silSession=170 silScore=997 handoff=170 tests=- -->
+<!-- generated-at: 2026-09-10 (Session 172 closeout) -->
+<!-- semantic-freshness: hash=2558b78be5f02061 next=173 silSession=172 silScore=991 handoff=172 tests=- -->
 <!-- fast-boot-valid-until: next session if within 24h -->
 <!-- brief-coherent: true -->
 
 # Startup Brief — Call-Of-Doodie
 
-> **Fast-boot brief** — generated at Session 170 closeout · 2026-09-10.
+> **Fast-boot brief** — generated at Session 172 closeout · 2026-09-10.
 > Valid for next session if started within 24h. For sessions >24h later, load context files fresh (start.md §3).
 
 ---
@@ -15,18 +15,18 @@
 ╔════════════════════════════════════════════════════════════════╗
 ║  🚀 CALL-OF-DOODIE                                               ║
 ║  project · deployed/public-unlaunched · FORGE                    ║
-║  Session 171 · 2026-09-10 · FOUNDER MODE                         ║
+║  Session 173 · 2026-09-10 · FOUNDER MODE                         ║
 ║  Owner: VaultSpark Studios                                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ LAST SESSION (S170) - WHAT SHIPPED ══════════════════════════╗
-║  Session 170 shipped three protocol/tooling audit items, passed  ║
+╔══ LAST SESSION (S172) - WHAT SHIPPED ══════════════════════════╗
+║  Session 172 pre-verified the live backlog against current code  ║
 ║  Tests  -                                                        ║
 ║  Deploy -                                                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ WHERE TO TEST · Call-Of-Doodie ══════════════════════════════╗
-║  Unit tests    → npm test — 1387/1387 passing ✓                  ║
+║  Unit tests    → npm test — 1389/1389 passing ✓                  ║
 ║  ci-incident  → workflow 34312512478 blocked stale HOT_CONTE ·   ║
 ║  production-verification → source 0647bb0d6787 · workflow 34 ✓   ║
 ║  push-gate    → Bash pre-push hook orphaned a third time; re ✓   ║
@@ -42,44 +42,44 @@
 
 ╔══ SCORE ═══════════════════════════════════════════════════════╗
 ║                                                                  ║
-║    997/1000   ███████████████████████░   100%                    ║
-║    SIL v3.0  ·  Avg3: 998  ·  Velocity 3→                        ║
+║    991/1000   ███████████████████████░   99%                     ║
+║    SIL v3.0  ·  Avg3: 998  ·  Velocity 1→                        ║
 ║    Last active: 0d  ·  Last closeout: 0d  ·  (active = newest…   ║
-║    Trend  ▄▆▄▄▄  →  (last 5 sessions)                            ║
+║    Trend  ▄▄▄▂▂  →  (last 5 sessions)                            ║
 ║                                                                  ║
 ║    Category         Score  Bar        Spark   Δ                  ║
 ║    ─────────────── ────── ────────── ──────── ─                  ║
-║    Dev Health       100    ██████████  █▇██████ →                ║
-║    Alignment        100    ██████████  █▇██████ →                ║
-║    Momentum         100    ██████████  ████████ →                ║
-║    Engagement       100    ██████████  ▇▇▇▇▇▇██ →                ║
-║    Process Qual      97    ██████████  ▇▇██▇▇▇▇ ↓                ║
+║    Dev Health       100    ██████████  ████████ →                ║
+║    Alignment        100    ██████████  ████████ →                ║
+║    Momentum          98    ██████████  ███████▇ ↓                ║
+║    Engagement        96    ██████████  ▇▇▇▇██▇▇ ↓                ║
+║    Process Qual     100    ██████████  ██▇▇▇▇██ →                ║
 ║    Coherence        100    ██████████  ········ →                ║
 ║    Security         100    ██████████  ········ →                ║
 ║    Ecosystem        100    ██████████  ········ →                ║
 ║    Capital          100    ██████████  ········ →                ║
-║    Automation       100    ██████████  ········ →                ║
+║    Automation        97    ██████████  ········ →                ║
 ║                                                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ WHERE WE LEFT OFF  ·  Session 170 ═══════════════════════════╗
-║  Shipped:  Startup Brief cost provenance now uses the canonical  ║
-║  Tests:    1387/1387 passing  ·  Deploy: N/A                     ║
+╔══ WHERE WE LEFT OFF  ·  Session 172 ═══════════════════════════╗
+║  Shipped:  see LATEST_HANDOFF.md                                 ║
+║  Tests:    1389/1389 passing  ·  Deploy: N/A                     ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
 ║  ⚠  ░░░░░░░░░░░░░░░░░░░░░░░░    1% used                          ║
-║     287,559 / 200,000 tok  ·  unknown  ·  heuristic-stale        ║
+║     292,588 / 200,000 tok  ·  unknown  ·  heuristic-stale        ║
 ║     Verdict: CONSIDER_CLOSEOUT  ← act now                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         1387/1387 passing (2026-09-10)                 ║
-║  ✓  Velocity      3 →  ·  Debt: ↓                                ║
+║  ✓  Tests         1389/1389 passing (2026-09-10)                 ║
+║  ⚠  Velocity      1 →  ·  Debt: ↓                                ║
 ║  ✓  Runway        0 repo-owned items — evidence-gated…           ║
 ║  ⛔  Context age   ?d                                             ║
 ║  ✓  IGNIS         43701 FORGE  ·  1d old                         ║
-║  ⛔  Truth         recovered, implemented, fully tested, and…     ║
+║  ⛔  Truth         recovered (2 routine Dependabot commits…       ║
 ║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs…        ║
 ║  ✓  Genome dims   all stable  (0/25)                             ║
 ║  ✓  Entropy       0.180  (healthy)                               ║
@@ -114,15 +114,15 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ MOMENTUM METER ══════════════════════════════════════════════╗
-║  Velocity:   ▄▆▄▄▄  3→  (last 5 sessions)                        ║
+║  Velocity:   ▄▄▄▂▂  1→  (last 5 sessions)                        ║
 ║  Intent:     100% achieved last 5                                ║
-║  Streak:     ✓ 6 consecutive achieved-intent sessions            ║
+║  Streak:     ✓ 8 consecutive achieved-intent sessions            ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIL FORECAST (next session) ═════════════════════════════════╗
-║  Projected:  995/1000  (↓2 vs current 997)                       ║
-║  All categories forecast stable or rising.                       ║
-║  Calibration: MAE 5 over last 10 forecasts                       ║
+║  Projected:  982/1000  (↓9 vs current 991)                       ║
+║  At-risk:    Momentum Δ-4                                        ║
+║  Calibration: MAE 3.9 over last 10 forecasts                     ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ GENIUS HIT LIST ═════════════════════════════════════════════╗
@@ -149,5 +149,5 @@
 
 ---
 
-*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 170 closeout · 2026-09-10*
+*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 172 closeout · 2026-09-10*
 *Run `node scripts/ops.mjs doctor` for live health check · `node scripts/ops.mjs genius-list` to refresh hit list*

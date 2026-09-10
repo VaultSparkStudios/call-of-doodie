@@ -1,3 +1,13 @@
+## 2026-09-10 — Session 172 — Backlog-record truth and dependency-tree truth
+
+- Backlog-record truth — the S144 TASK_BOARD line "off-screen threat arrow ADS-zoom correction" claimed `offscreenIndicators.js` anchors arrows in world-space and inherits ADS-zoom drift. Live code disproves this: `getOffscreenThreatArrows` already projects every enemy through `worldToThreatScreenPoint` with explicit `zoom`/`camX`/`camY`, `drawGame.js` already passes `zoom: gs.adsZoom ? 1.28 : 1` plus camera offsets, and a code comment states the compass is "screen-space by contract." The line was closed done-with-evidence rather than re-implemented; the third consecutive session (S165/S166 stale lines closed at S171, this one at S172) in which a TASK_BOARD description had drifted from the code it described.
+- Dependency-tree truth — pulling two pending Dependabot commits (`@supabase/supabase-js`, dev-dependencies group) left `node_modules` out of sync with the updated `package-lock.json`; `check-dependency-tree.mjs` and the security release gate correctly caught this as `invalid:` version mismatches. `npm install` resynced it; re-run confirmed `dependency-tree-coherent: true` and 0 `npm audit` vulnerabilities. No masking, no gate loosening.
+- Evidence-boundary truth — no participant, physical-device, provider, identity, mail, performance, publication, or lifecycle evidence is claimed this session.
+
+Overall status: recovered (2 routine Dependabot commits synced, not a cut-off), implemented (one stale backlog line closed with evidence, one real dependency-tree gate root-fixed), fully tested, and pushed directly to main under standing founder authorization. SPARKED remains NO-GO.
+Last reviewed: 2026-09-10
+
+<!-- truth-audit-version: 1.1 -->
 ## 2026-09-09 — Session 168 — Recovery, terminal order, and evidence truth
 
 - Recovery truth — S167 was sealed at 9bc71d8; S168 was substantive uncommitted implementation under an authorized lock. No S168 write-back, commit, CI, or production claim existed.

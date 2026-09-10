@@ -1665,3 +1665,15 @@ Intent outcome: achieved through exact-main publication and verified production 
 - Passed full Vitest 238 files / 1,389 assertions, strict lint, deployable build, and the security release gate. No player-facing bundle or behavior changed.
 
 Intent outcome: achieved — audit-against-live-code discipline closed two stale backlog lines honestly and shipped one genuine coverage gap, all verified green.
+
+## Session 172 — 2026-09-10 — Backlog verification, dependency-tree root-fix, direct-to-main deploy
+
+- Recovered a clean, synchronized S171 closeout (write-back current through `9bd8c0f7`); origin was 2 commits ahead on routine Dependabot lockfile bumps, synced via `pull --rebase`.
+- Pre-verified the live TASK_BOARD backlog against current code before writing new work: the S144 "off-screen threat arrow ADS-zoom correction" line was stale — `offscreenIndicators.js`/`drawGame.js` already compute the compass in screen-space with explicit zoom/camera offsets. Closed done-with-evidence.
+- Confirmed remaining open backlog lines (Supabase Auth/membership decision, PostHog/Sentry dashboard allowlist, `objectiveHandlers.js` gameplay-completion cutover) are genuinely founder-decision-gated, credential-gated, or too launch-risk-sensitive for an unattended single pass — left accurately tracked, not blind-shipped.
+- Root-fixed a real gate failure: the two pulled Dependabot commits left `node_modules` out of sync with `package-lock.json`, which the security release gate's dependency-tree check caught as `invalid:` version mismatches; `npm install` resynced it.
+- Regenerated `context/HOT_CONTEXT.json`/`.md` after the TASK_BOARD edit (same freshness-gate pattern as S171).
+- Passed full Vitest 238 files / 1,389 assertions, strict lint (0 errors), deployable build, and the security release gate. No player-facing bundle or behavior changed.
+- Founder pre-authorized direct push/commit to main and full deploy via `/goal`; committed and pushed directly to `main`.
+
+Intent outcome: achieved — clean recovery, honest backlog-hygiene closure, a real dependency-tree gate root-fixed rather than masked, and a fully verified push to production.
