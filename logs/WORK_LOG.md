@@ -1677,3 +1677,9 @@ Intent outcome: achieved — audit-against-live-code discipline closed two stale
 - Founder pre-authorized direct push/commit to main and full deploy via `/goal`; committed and pushed directly to `main`.
 
 Intent outcome: achieved — clean recovery, honest backlog-hygiene closure, a real dependency-tree gate root-fixed rather than masked, and a fully verified push to production.
+
+### Deploy verification
+
+- Push `f7971b1` triggered workflow `34447864724`, which failed quality (`tests/hot-context.test.js` — HOT_CONTEXT went source-stale from the closeout edits landing after the mid-session regen). Root-fixed via `scripts/render-hot-context.mjs`, reconfirmed full suite 238/238 green locally, and pushed fix commit `ce2ce15`.
+- Workflow `34448310337` (for `ce2ce15`) passed quality (lint + 238/238 test files) and `build-and-deploy` (build + Cloudflare Pages deploy) in full.
+- Production `https://callofdoodie.wtf/_health` reports `"deploy":"ce2ce1582d62"` — exact match to the pushed commit. `https://callofdoodie.wtf/` returns 200 OK.
