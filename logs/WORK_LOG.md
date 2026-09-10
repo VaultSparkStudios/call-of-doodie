@@ -1720,3 +1720,9 @@ Session Intent: run one complete `/arc` from synchronized main — triage, canon
 - Deploy: committed and pushed directly to `main` per standing founder authorization.
 
 Intent outcome: achieved — measuring the gates instead of the backlog surfaced four real defects that four consecutive green sessions had passed over, all four shipped with executable regression protection.
+
+### Deploy verification (S174)
+
+- Push `2cb212d` triggered GitHub Actions workflow `34516343193`: `quality` (lint + 243/243 test files) and `build-and-deploy` (build + Cloudflare Pages deploy) both passed in full.
+- The `Lint` step ran the newly promoted `npm run lint:strict` and passed — confirming in CI that the entry-point override closes the `react-refresh` false positive and that the protocol's strict ruler is now the one CI enforces.
+- Production health endpoint reports `"deploy":"2cb212dc9cb0"` — exact match to the pushed commit. The site root returns 200 OK.
