@@ -17,6 +17,7 @@ const DIRECT_SYNERGY_MAP = {
   ],
   vampire: [
     { partners: ["chain_lightning"], label: "+6% lifesteal" },
+    { partners: ["last_resort"], label: "+4% lifesteal & +10% crit" },
   ],
   combo_master: [
     { partners: ["vampire"], label: "lifesteal×2 on combo" },
@@ -24,8 +25,13 @@ const DIRECT_SYNERGY_MAP = {
   magnetism: [
     { partners: ["hoarder"], label: "5× pickup range" },
   ],
-  hoarder: [
-    { partners: ["magnetism"], label: "5× pickup range" },
+  // hoarder intentionally absent: hoarder.apply() multiplies by 1.8 only; the 5× path lives in magnetism.apply()
+  adrenaline: [
+    { partners: ["turbo_boots"], label: "rush extends to 4s" },
+    { partners: ["parkour_pro"], label: "dash CD −40%" },
+  ],
+  parkour_pro: [
+    { partners: ["adrenaline"], label: "dash CD −40%" },
   ],
   penetrator: [
     { partners: ["eagle_eye"], label: "+10% crit" },
@@ -44,12 +50,22 @@ const DIRECT_SYNERGY_MAP = {
   dead_mans_hand: [
     { partners: ["last_resort"], label: "explosion triples" },
   ],
+  last_resort: [
+    { partners: ["vampire"], label: "+4% lifesteal & +10% crit" },
+    { partners: ["overclocked"], label: "+25% damage at low HP" },
+  ],
   overclocked: [
     { partners: ["scavenger"], label: "reloads drop ammo" },
     { partners: ["grenade_chain"], label: "reloads throw grenade" },
+    { partners: ["last_resort"], label: "+25% damage at low HP" },
   ],
   scavenger: [
     { partners: ["overclocked"], label: "reloads drop ammo" },
+    { partners: ["deep_pockets"], label: "+30% ammo & 50% more drops" },
+  ],
+  deep_pockets: [
+    { partners: ["scavenger"], label: "+30% ammo & 50% more drops" },
+    { partners: ["bullet_hose"], label: "+50% extra ammo" },
   ],
   bullet_hose: [
     { partners: ["deep_pockets"], label: "+50% extra ammo" },
@@ -62,9 +78,6 @@ const DIRECT_SYNERGY_MAP = {
   grenade_chain: [
     { partners: ["pyromaniac"], label: "+50% grenade dmg" },
     { partners: ["overclocked"], label: "reloads throw grenade" },
-  ],
-  adrenaline_rush: [
-    { partners: ["turbo_boots"], label: "rush extends to 4s" },
   ],
   pyromaniac: [
     { partners: ["grenadier"], label: "+50% grenade dmg" },

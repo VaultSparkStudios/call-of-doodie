@@ -92,4 +92,64 @@ describe("getActiveSynergiesForPick", () => {
     expect(result).toHaveLength(1);
     expect(result[0].label).toMatch(/grenade/i);
   });
+
+  test("detects vampire + last_resort DEATH'S DOOR synergy (picking vampire)", () => {
+    const result = getActiveSynergiesForPick(findPerk("vampire"), [findPerk("last_resort")]);
+    expect(result).toHaveLength(1);
+    expect(result[0].partnerId).toBe("last_resort");
+    expect(result[0].label).toMatch(/lifesteal/i);
+  });
+
+  test("detects last_resort + vampire DEATH'S DOOR synergy (picking last_resort)", () => {
+    const result = getActiveSynergiesForPick(findPerk("last_resort"), [findPerk("vampire")]);
+    expect(result).toHaveLength(1);
+    expect(result[0].partnerId).toBe("vampire");
+  });
+
+  test("detects overclocked + last_resort FRAGILE FURY synergy", () => {
+    const result = getActiveSynergiesForPick(findPerk("overclocked"), [findPerk("last_resort")]);
+    const fragileEntry = result.find((r) => r.partnerId === "last_resort");
+    expect(fragileEntry).toBeDefined();
+    expect(fragileEntry.label).toMatch(/damage/i);
+  });
+
+  test("detects adrenaline + turbo_boots NITRO RUSH synergy", () => {
+    const result = getActiveSynergiesForPick(findPerk("adrenaline"), [findPerk("turbo_boots")]);
+    expect(result).toHaveLength(1);
+    expect(result[0].partnerId).toBe("turbo_boots");
+    expect(result[0].label).toMatch(/rush/i);
+  });
+
+  test("detects adrenaline + parkour_pro AFTERBURNER synergy", () => {
+    const result = getActiveSynergiesForPick(findPerk("adrenaline"), [findPerk("parkour_pro")]);
+    expect(result).toHaveLength(1);
+    expect(result[0].partnerId).toBe("parkour_pro");
+    expect(result[0].label).toMatch(/dash/i);
+  });
+
+  test("detects parkour_pro + adrenaline AFTERBURNER synergy (reverse)", () => {
+    const result = getActiveSynergiesForPick(findPerk("parkour_pro"), [findPerk("adrenaline")]);
+    expect(result).toHaveLength(1);
+    expect(result[0].partnerId).toBe("adrenaline");
+  });
+
+  test("detects scavenger + deep_pockets PACK RAT synergy", () => {
+    const result = getActiveSynergiesForPick(findPerk("scavenger"), [findPerk("deep_pockets")]);
+    const packRat = result.find((r) => r.partnerId === "deep_pockets");
+    expect(packRat).toBeDefined();
+    expect(packRat.label).toMatch(/ammo/i);
+  });
+
+  test("detects deep_pockets + bullet_hose FULL ARMORY synergy (reverse)", () => {
+    const result = getActiveSynergiesForPick(findPerk("deep_pockets"), [findPerk("bullet_hose")]);
+    expect(result).toHaveLength(1);
+    expect(result[0].partnerId).toBe("bullet_hose");
+    expect(result[0].label).toMatch(/ammo/i);
+  });
+
+  test("hoarder does NOT show badge when magnetism is already active", () => {
+    // hoarder.apply() only multiplies by 1.8; the 5x path lives in magnetism.apply()
+    const result = getActiveSynergiesForPick(findPerk("hoarder"), [findPerk("magnetism")]);
+    expect(result).toEqual([]);
+  });
 });
