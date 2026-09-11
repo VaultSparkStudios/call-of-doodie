@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { PERK_TIER_COLORS } from "../constants.js";
 import { useGamepadNav } from "../hooks/useGamepadNav.js";
 import { getPerkArchetypeMatches, getPrimaryPerkArchetypeDelta } from "../utils/buildArchetypes.js";
+import { getActiveSynergiesForPick } from "../utils/perkSynergies.js";
 
 export default function PerkModal({
   options,
@@ -66,6 +67,7 @@ export default function PerkModal({
             const archetypeMatches = getPerkArchetypeMatches(perk);
             const favoredMatch = buildArchetype ? archetypeMatches.find(match => match.id === buildArchetype.id) : null;
             const doctrineDelta = previewDoctrineDeltas ? getPrimaryPerkArchetypeDelta(perk, activePerks) : null;
+            const activeSynergies = getActiveSynergiesForPick(perk, activePerks);
             const baseBg     = isCursed ? "rgba(255,30,60,0.08)"  : "rgba(255,255,255,0.05)";
             const focusBg    = isCursed ? "rgba(255,30,60,0.22)"  : "rgba(255,255,255,0.14)";
             return (
@@ -102,6 +104,28 @@ export default function PerkModal({
                       {archetypeMatches.map(match => (
                         <span key={match.id} style={{ fontSize: 9, color: favoredMatch?.id === match.id ? "#FFF" : match.color, background: favoredMatch?.id === match.id ? `${match.color}44` : `${match.color}22`, border: `1px solid ${match.color}55`, borderRadius: 4, padding: "2px 5px", letterSpacing: 0.5 }}>
                           {match.emoji} {favoredMatch?.id === match.id ? "FITS BUILD" : match.name.toUpperCase()}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  {activeSynergies.length > 0 && (
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginTop: 6 }}>
+                      {activeSynergies.map(syn => (
+                        <span
+                          key={syn.partnerId}
+                          data-testid={`synergy-active-${perk.id}-${syn.partnerId}`}
+                          style={{
+                            fontSize: 9,
+                            fontWeight: 900,
+                            letterSpacing: 0.5,
+                            color: "#FF88FF",
+                            background: "rgba(255,136,255,0.15)",
+                            border: "1px solid rgba(255,136,255,0.45)",
+                            borderRadius: 4,
+                            padding: "2px 6px",
+                          }}
+                        >
+                          ⚡ {syn.label}
                         </span>
                       ))}
                     </div>
