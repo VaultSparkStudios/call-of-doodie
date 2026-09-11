@@ -10,7 +10,7 @@ export const BUILD_ARCHETYPES = [
     capstoneDesc: "+8% damage reduction and +3% lifesteal.",
     doctrineForgeAt: 5,
     doctrineName: "Wall of Flesh",
-    doctrineDesc: "Your commitment is irreversible. +15% damage reduction, lifesteal on every hit. You are the front line — stop running.",
+    doctrineDesc: "Your commitment is irreversible. You are the front line — stop running. Recorded forever in the Doctrine Archive.",
   },
   {
     id: "gunslinger",
@@ -23,7 +23,7 @@ export const BUILD_ARCHETYPES = [
     capstoneDesc: "+10% crit chance and 12% faster fire rate.",
     doctrineForgeAt: 5,
     doctrineName: "Glass Cannon Oath",
-    doctrineDesc: "You've locked in. +20% crit damage, max fire rate bonus. No survivability perks will feel as good as your next kill.",
+    doctrineDesc: "You've locked in. No survivability perk will feel as good as your next kill. Recorded forever in the Doctrine Archive.",
   },
   {
     id: "demolitionist",
@@ -36,7 +36,7 @@ export const BUILD_ARCHETYPES = [
     capstoneDesc: "+12% damage and 20% faster grenade cooldown.",
     doctrineForgeAt: 4,
     doctrineName: "Scorched Earth Compact",
-    doctrineDesc: "Everything burns. +25% AOE radius, grenades chain twice as fast. The arena is a kill zone — own it.",
+    doctrineDesc: "Everything burns. The arena is a kill zone — own it. Recorded forever in the Doctrine Archive.",
   },
   {
     id: "tempo",
@@ -49,7 +49,7 @@ export const BUILD_ARCHETYPES = [
     capstoneDesc: "+15% combo duration, +20% pickup range, and 20% faster dash cooldown.",
     doctrineForgeAt: 5,
     doctrineName: "Perpetual Motion Doctrine",
-    doctrineDesc: "You never stop moving. Combo timers don't drop below 50% on dash. Speed is your armor — stopping is death.",
+    doctrineDesc: "You never stop moving. Speed is your armor — stopping is death. Recorded forever in the Doctrine Archive.",
   },
 ];
 

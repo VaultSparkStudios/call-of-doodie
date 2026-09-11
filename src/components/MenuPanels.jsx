@@ -6,6 +6,7 @@ import {
   loadDoctrineArchive,
 } from "../storage.js";
 import { BUILD_ARCHETYPES } from "../utils/buildArchetypes.js";
+import { STANDARD_BOSS_WAVE_INTERVAL } from "../config/modeFacts.js";
 import { encodeLoadout, decodeLoadout, isValidLoadoutCode } from "../utils/loadoutCode.js";
 import { copyChallengeUrl } from "../utils/challengeLinks.js";
 import { buildWeaponMasteryContract } from "../utils/arsenalMastery.js";
@@ -68,7 +69,7 @@ export function RulesPanel({ onClose }) {
         <div style={{ fontSize: 13, color: "#EEE", lineHeight: 2 }}>
           <div>🎯 <strong style={{ color: "var(--cod-orange)" }}>Objective:</strong> Survive as many waves as possible</div>
           <div>👾 <strong style={{ color: "var(--cod-orange)" }}>Enemies:</strong> Spawn in waves, each harder than the last</div>
-          <div>⚠️ <strong style={{ color: "var(--cod-orange)" }}>Boss Waves:</strong> Every 5th wave spawns a powerful boss!</div>
+          <div>⚠️ <strong style={{ color: "var(--cod-orange)" }}>Boss Waves:</strong> Every {STANDARD_BOSS_WAVE_INTERVAL}th wave spawns a powerful boss!</div>
           <div>⚡ <strong style={{ color: "var(--cod-orange)" }}>Combos:</strong> Kill quickly for score multipliers (2s window)</div>
           <div>🔥 <strong style={{ color: "var(--cod-orange)" }}>Killstreaks:</strong> Every 5 kills triggers a bonus attack</div>
           <div>💥 <strong style={{ color: "var(--cod-orange)" }}>Critical Hits:</strong> 15% chance for 2x damage (gold text)</div>
@@ -113,8 +114,8 @@ export function ControlsPanel({ onClose, isMobile, controllerType }) {
             <div>🖱 <span style={{ color: "var(--cod-orange)", fontWeight: 800 }}>Mouse</span> — Aim</div>
             <div>🔫 <span style={{ color: "var(--cod-orange)", fontWeight: 800 }}>Left Click</span> — Shoot</div>
             <div>🔄 <span style={{ color: "var(--cod-gold)", fontWeight: 800 }}>R</span> — Reload</div>
-            <div>🔢 <span style={{ color: "var(--cod-gold)", fontWeight: 800 }}>1 / 2 / 3 / 4</span> — Switch weapons</div>
-            <div>💣 <span style={{ color: "#FF4500", fontWeight: 800 }}>5 / Q / G</span> — Throw grenade</div>
+            <div>🔢 <span style={{ color: "var(--cod-gold)", fontWeight: 800 }}>1–9 / 0 / - / =</span> — Switch weapons</div>
+            <div>💣 <span style={{ color: "#FF4500", fontWeight: 800 }}>Q / G</span> — Throw grenade</div>
             <div>💨 <span style={{ color: "var(--cod-cyan)", fontWeight: 800 }}>Space / Shift</span> — Dash</div>
             <div>⏸ <span style={{ color: "var(--cod-gold)", fontWeight: 800 }}>Escape</span> — Pause / Resume</div>
           </div>

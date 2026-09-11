@@ -933,7 +933,7 @@
         {
           "tier": 3,
           "cost": 3000,
-          "description": "Start with +225% pickup range"
+          "description": "Start with +200% pickup range"
         }
       ]
     },

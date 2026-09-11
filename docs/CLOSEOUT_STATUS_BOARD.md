@@ -1,32 +1,32 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.1 -->
-<!-- generated-at: 2026-09-10 (Session 175 closeout) -->
+<!-- generated-at: 2026-09-11 (Session 176 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S175 ════════════════════╗
-║  Date: 2026-09-10  ·  SIL: 998/1000  ·  Velocity: 1 down         ║
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S176 ════════════════════╗
+║  Date: 2026-09-11  ·  SIL: 999/1000  ·  Velocity: 4 down         ║
 ║  Mode: FOUNDER  ·  Agent: claude-code                            ║
 ║  Live:  preview  →  https://callofdoodie.wtf/                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ Triage: no session lock; tree clean; origin synced 0/0; `che  ║
-║  ✓ Audit method: S171–S173 pre-verified the backlog and correct  ║
-║  ✓ Shipped 1/4 — **BOT ROYALE had published two bot counts at o  ║
-║  ✓ Shipped 2/4 — **the class had no gate, and nothing read the   ║
-║  ✓ Shipped 3/4 — **generalized past mode prose.** `QUICK_RULES`  ║
+║  ✓ Triage: no lock, tree clean, origin 0/0. `check-writeback-cu  ║
+║  ✓ Audit (`docs/AUDIT_2026-09-11.md`): S175's committed survey,  ║
+║  ✓ Code fixes (the copy stated the design, the code broke it):   ║
+║  ✓ Copy fixes (design intentional, copy wrong): Scavenger t3 +2  ║
+║  ✓ Record correction: S175's "genome writer reported as Ark car  ║
 ╚════════════════════════════════════════════════════════════════╝
-╔══ SCORES · SIL 998/1000 ═══════════════════════════════════════╗
+╔══ SCORES · SIL 999/1000 ═══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
 ║    Alignment          100  ██████████                            ║
 ║    Momentum           100  ██████████                            ║
-║    Engagement         98   ██████████                            ║
+║    Engagement         100  ██████████                            ║
 ║    Process Qual       100  ██████████                            ║
 ║    Coherence          100  ██████████                            ║
 ║    Security           100  ██████████                            ║
 ║    Ecosystem          100  ██████████                            ║
 ║    Capital            100  ██████████                            ║
-║    Automation         100  ██████████                            ║
+║    Automation         99   ██████████                            ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WRITE-BACK STATUS ═══════════════════════════════════════════╗
 ║  ✓ context/CURRENT_STATE.md                                      ║
@@ -38,10 +38,10 @@
 ║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
 ║  ✓ context/TRUTH_AUDIT.md                                        ║
 ║  ✓ context/PROJECT_STATUS.json                                   ║
-║  ✓ agent memory (Claude/Codex project memory)                    ║
+║  · agent memory (Claude/Codex project memory)                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 33 files  ·  M:26 A:0 D:0 ?:7                          ║
+║  Changes: 25 files  ·  M:22 A:3 D:0 ?:0                          ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -54,10 +54,10 @@
 ║  Compliance:    —                                                ║
 ║  Tests:         1438/1438                                        ║
 ║  Validation:    full-fresh                                       ║
-║  IGNIS:         2d ago                                           ║
+║  IGNIS:         3d ago                                           ║
 ║  Truth:         engineering-ready-sparked-no-go                  ║
-║  Sanitization:  1d ago                                           ║
-║  shells:        unknown · missing/stale enumeration              ║
+║  Sanitization:  2d ago                                           ║
+║  shells:        2 started · 2 closed · 0 running                 ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ NEXT SESSION ════════════════════════════════════════════════╗
 ║  (no genius cache — run `node scripts/cache-genius-list.mjs`)    ║

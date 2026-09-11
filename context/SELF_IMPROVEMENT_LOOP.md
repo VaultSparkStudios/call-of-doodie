@@ -1,3 +1,35 @@
+## 2026-09-11 — Session 176 | Total: 999/1000 | Velocity: 4 | Debt: ↓
+
+SIL 999/1000: Ran a full `/arc` under standing founder authorization to push/deploy directly to main. Took S175's committed `[SIL:2]` survey literally and widened it from mode prose to **every** number the game states to a player — perks, meta upgrades, meta tree, weekly themes, doctrines, controls, tips, coach. Found 13 verified drifts. Four were not copy at all but **gameplay bugs the copy exposed**, and those were fixed in code; the other nine were corrected in copy. Separately the arc's own triage misfired, and one line of S175's record turned out to be false.
+
+| Category | Score | Δ | Rationale |
+|---|---:|---|---|
+| Dev Health | 100 | → | 246 files, full suite green; strict lint, 7 static gates, `build`, `build:deployable`, security release gate all exit 0, each captured directly. App chunk 469.64 KB, under the 560 KB gate. |
+| Creative Alignment | 100 | → | SOUL pillar "Proof over posture" applied to the perk screen itself: the game no longer sells effects it does not deliver (doctrine stats that did nothing, a fire-rate node that slowed you). Flavor kept; only false numbers removed. |
+| Momentum | 100 | → | Full triage→audit→implement→closeout→deploy in one continuous pass. |
+| Engagement | 100 | ↑ | First session in five to change what a player actually experiences: the paid Hair Trigger node now speeds fire instead of slowing it, bought Speedster tiers survive loadout choice, and two synergies no longer depend on pick order. |
+| Process Quality | 100 | → | Verified every subagent-reported drift against live code before touching it (one — berserker "3×" — was also mis-keyed to the wrong enemy). Chose code-vs-copy per item by one stated rule rather than by convenience. Caught that S175's "reported as Ark cargo" claim was never executed. |
+| Cross-Repo Coherence | 100 | → | Shipped the two ops-bound findings as Ark cargo (`01K2912H…` genome writer, `01K2912J…` write-back pattern); no sibling tree touched. |
+| Security Posture | 100 | → | No dependency or secret change; security release gate green. |
+| Ecosystem Integration | 100 | → | Write-back probe fix follows the existing seal-commit pattern (subject + path boundary) and adds session attribution so it cannot launder real work. |
+| Capital Efficiency | 100 | → | Zero new package, service, or cost. |
+| Automation Coverage | 99 | ↓ | `copyTruth.test.js` pins the four order/direction bugs behaviorally and the copy corrections structurally, but the ~30 agreeing-but-hand-typed perk/shop/route numbers (the class that produced these bugs) are still not derived or gated. Scored down honestly. |
+
+Rolling averages: derived at the write path from this ledger.
+
+Top win: **the copy was a bug report nobody read.** "Hair Trigger: +10% fire rate" multiplied the shot gap by 1.10 — a node players paid meta currency for made them fire ~9% slower. "5× range with Hoarder" gave 9× or 3.6× depending on pick order; "+50% ammo with Deep Pockets" gave ×2.25 or ×1.5 depending on pick order; two starter loadouts silently deleted a purchased Speedster upgrade. Each was visible only by reading the copy against the code — exactly the S175 lens, one layer wider.
+
+Top gap: the DUP class is pinned, not derived. Perk/shop/route numbers still live twice (description + apply), which is the mechanism behind every drift found today.
+
+Intent outcome: Achieved — widened the claims audit from modes to every player-facing number, fixed four real gameplay bugs at the code and nine false claims at the copy, root-fixed a triage false positive, and corrected a false line in the prior session's record.
+
+Brainstorm:
+1. Perk descriptions could be generated from a per-perk `effects` table that `apply` also reads — the modeFacts pattern at perk scale. Large but mechanical; best done with the court already in place.
+2. Boss "Clone Decoy" and boss "Lifesteal" set flags nothing reads — dead abilities. Either wire them or delete them; never shown to players, so not urgent.
+3. The write-back probe's local copy is far behind ops' (S291/S319/S320 attribution, `--fix`). A deliberate re-propagation from ops, with this session's verification-record case added upstream, would retire the local fork.
+
+**Committed to TASK_BOARD:** `[SIL:2]` derive perk/meta-tree description numbers from the same values `apply` uses (start with the four court-pinned perks); `[SIL:1]` confirm ops actioned both S176 Ark cargos, then re-sync `check-writeback-currency.mjs` from ops.
+
 ## 2026-09-10 — Session 175 | Total: 998/1000 | Velocity: 3 | Debt: ↓
 
 SIL 998/1000: Ran a full `/arc` under standing founder authorization to push/deploy directly to main. S171–S173 each pre-verified the backlog and correctly found it saturated; S174 went one layer out and measured the **gates**. This session went one layer out again and measured the **claims** — every number the game states to a player, checked against the code that produces it. That lens was chosen deliberately: four consecutive sessions had closed with the same honest gap (no player-facing value), and auditing player-facing truth is the one audit that can close a real player-facing defect without inventing gameplay scope on a launch-sensitive branch.

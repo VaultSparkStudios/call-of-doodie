@@ -4,8 +4,8 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 175 audited the player-facing claims rather than the gates: BOT ROYALE had published both twelve and sixteen bots simultaneously since S165 across four live surfaces, with every gate green because each only verifies a generated artifact matches its source. Root-fixed at one derived authority (src/config/modeFacts.js) with a gate that reads the generated artifacts, and S174 genome commitment honoured by measurement — two of its inherited claims corrected as unsupported.",
-  "nextMilestone": "Wait for participant/provider/device evidence or a new founder-directed product scope; remaining open backlog is founder-decision-, credential-, hardware-, or data-blocked, plus one cross-repo Ark item on the genome writer.",
+  "currentFocus": "Session 176 read every player-facing number against the code: fixed four gameplay bugs the copy exposed (Hair Trigger slowed fire, two pick-order-dependent synergies, loadouts that deleted a purchased Speedster upgrade), corrected nine false claims (doctrine stats never built, weekly themes, controls, tips), root-fixed a triage false positive, and shipped an Ark cargo S175 had recorded but never sent.",
+  "nextMilestone": "Derive perk/meta-tree description numbers from the values apply uses; confirm ops actioned both S176 Ark cargos. Remaining backlog is founder-decision-, credential-, hardware-, or data-blocked.",
   "testingSurfaces": [
     {
       "session": 175,
@@ -70,7 +70,7 @@
     "Broad Cloudflare studio-access token should be rotated or narrowed after domain stabilization.",
     "CANON-045 remains an external Obelisk integration gap. CANON-054's checker emitted a malformed gap despite the live /stats surface and public contract; no ABSOLUTE canon gap is present."
   ],
-  "lastUpdated": "2026-09-10",
+  "lastUpdated": "2026-09-11",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
   "truthAuditStatus": "engineering-ready-sparked-no-go",
@@ -78,13 +78,13 @@
   "ignisScore": 43701,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-09-09",
-  "silSession": 174,
-  "silScore": 998,
-  "silAvg3": 996.3,
-  "silVelocity": 1,
+  "silSession": 176,
+  "silScore": 999,
+  "silAvg3": 997.7,
+  "silVelocity": 4,
   "silDebt": "down",
-  "silLastSession": 174,
-  "currentSession": 175,
+  "silLastSession": 176,
+  "currentSession": 176,
   "sessionMode": "founder",
   "lastAgent": "claude-code",
   "testsPassing": 1438,
@@ -98,13 +98,13 @@
     "devHealth": 100,
     "creativeAlignment": 100,
     "momentum": 100,
-    "engagement": 98,
+    "engagement": 100,
     "processQuality": 100,
     "crossRepoCoherence": 100,
     "securityPosture": 100,
     "ecosystemIntegration": 100,
     "capitalEfficiency": 100,
-    "automationCoverage": 100
+    "automationCoverage": 99
   },
   "silScoreV3MigratedAt": "2026-04-21",
   "modelTier": "T2_opusplan",
@@ -122,12 +122,12 @@
   "testsLastRun": "2026-09-10",
   "sanitizationLastCleared": "2026-09-10",
   "sessionShellHygiene": {
-    "session": 173,
-    "started": 1,
-    "closed": 1,
+    "session": 176,
+    "started": 2,
+    "closed": 2,
     "running": 0,
-    "enumeratedAt": "2026-09-10T13:00:00.000Z",
-    "scope": "One background shell this session (full Vitest suite) completed and was read via its output file; no running session work remains."
+    "enumeratedAt": "2026-09-11T20:18:26.513Z",
+    "scope": "Two background shells (baseline and post-change full Vitest suites) completed and were read via their output files; one in-process survey subagent completed."
   },
   "doctorScore": {
     "date": "2026-09-10",
@@ -144,7 +144,7 @@
     "score": 75,
     "note": "portfolio-wide doctor (cross-repo probes spanning sibling repos); the sole blocking finding (remedy-drift: scripts/refresh-test-count.mjs re-run 4x) is a studio-ops governance item outside call-of-doodie's own code/deploy surface, pre-existing before this session and unchanged by it."
   },
-  "lastSessionSummary": "Session 173 pre-verified the live backlog against current code (no stale lines found), then closed a genuine test-coverage gap: src/systems/objectiveHandlers.js (S163 seven-verb Operation contract) and src/systems/zones.js (shared capturable-zone state machine) had zero dedicated tests despite backing every Operation encounter, HOLD THE THRONE, and SEWER EXTRACTION. 240/240 files, 1,438/1,438 assertions (+49), strict lint, deployable build, security release gate, and dependency-tree check all green; no player-facing change.",
+  "lastSessionSummary": "Session 176: 13 verified copy-vs-runtime drifts (4 fixed in code, 9 in copy), write-back probe false positive fixed, missing S175 Ark cargo shipped. 246/246 files, 1,504/1,504 assertions, strict lint, 7 static gates, build and deployable build green.",
   "testsAssertionsPassing": 1438,
   "testsAssertionsTotal": 1438,
   "testsAssertionsFiles": 240,

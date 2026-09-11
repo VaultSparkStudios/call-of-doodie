@@ -51,7 +51,7 @@ const ENEMY_EVASION_TIPS = {
   6:  "Teleporters blink toward you — keep moving and don't commit to long reload cycles.",
   10: "Zigzaggers weave unpredictably — short bursts > sustained fire on them.",
   19: "Doomscroller freezes periodically — punish the freeze window with your heaviest weapon.",
-  20: "Berserker elites move 3× fast — prioritize them before clearing the wave.",
+  20: "The Algorithm goes viral — it briefly triples the spawn rate. Burn it down before the surge buries you.",
 };
 
 const ENEMY_COUNTER_VERBS = {

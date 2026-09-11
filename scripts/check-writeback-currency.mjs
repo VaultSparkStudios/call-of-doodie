@@ -72,6 +72,39 @@ export function isPostCloseoutSealCommit(commit = {}) {
 }
 
 /**
+ * S176 — the post-deploy verification record. This repo's closeout pushes, the
+ * push triggers the production deploy, and only THEN can the session record
+ * that production matches the commit — so that record necessarily lands after
+ * the SIL anchor. S174 (`9b253fa`) and S175 (`97705ae`) both did exactly this,
+ * and S176's triage read the second one as "a session ended without running
+ * closeout" about a session that had closed out completely.
+ *
+ * Attribution is by declaration, and three conditions must all hold, so a
+ * look-alike subject cannot launder real work:
+ *   1. the subject is the canonical `docs: record S<n> deploy verification…`;
+ *   2. every touched path is the WORK_LOG (the record, never code);
+ *   3. <n> is the session the SIL anchor already recorded — a verification of
+ *      an UN-closed session is still debt.
+ */
+export const DEPLOY_VERIFICATION_SUBJECT_RE = /^docs:\s+record\s+S(\d{1,4})\s+deploy\s+verification\b/i;
+export const DEPLOY_VERIFICATION_PATHS = new Set(['logs/WORK_LOG.md']);
+
+/** Session number of the newest SIL entry (`## <date> — Session <n> |`), or null. */
+export function anchorSessionFromSil(silText = '') {
+  const m = /^##\s+\d{4}-\d{2}-\d{2}\s+[—-]\s+Session\s+(\d{1,4})\b/m.exec(String(silText));
+  return m ? Number(m[1]) : null;
+}
+
+export function isPostCloseoutVerificationRecord(commit = {}, anchorSession = null) {
+  if (!Number.isFinite(anchorSession)) return false;
+  const m = DEPLOY_VERIFICATION_SUBJECT_RE.exec(String(commit.subject || ''));
+  if (!m || Number(m[1]) !== anchorSession) return false;
+  const files = Array.isArray(commit.files) ? commit.files : [];
+  if (!files.length) return false;
+  return files.every((file) => DEPLOY_VERIFICATION_PATHS.has(String(file).replace(/\\/g, '/')));
+}
+
+/**
  * Paths that are generated, appended by tooling, or pure receipts. A commit that
  * touches ONLY these is churn, not session work — regardless of its subject.
  */
@@ -111,7 +144,7 @@ export function isSubstantiveCommit(commit = {}) {
  *   substantive commit is older than this do we call it an abandoned closeout.
  *   Bounded AGE, never calendar-day identity (S266 freshness rule).
  */
-export function evaluateWriteBackCurrency({ commits = [], nowMs = null, staleHours = 12 } = {}) {
+export function evaluateWriteBackCurrency({ commits = [], nowMs = null, staleHours = 12, silText = '', silTextAt = null } = {}) {
   const now = Number.isFinite(nowMs) ? nowMs : Date.now();
   const anchorIdx = commits.findIndex((c) =>
     (c.files || []).some((f) => String(f).replace(/\\/g, '/') === WRITE_BACK_ANCHOR));
@@ -129,7 +162,12 @@ export function evaluateWriteBackCurrency({ commits = [], nowMs = null, staleHou
   }
 
   const anchor = commits[anchorIdx];
-  const debt = commits.slice(0, anchorIdx).filter(isSubstantiveCommit);
+  // The session the ANCHOR COMMIT recorded — read from the SIL as of that
+  // commit, never the working tree: mid-closeout the tree already holds the
+  // next session's uncommitted heading, which would un-attribute the verification.
+  const anchorSession = anchorSessionFromSil(typeof silTextAt === 'function' ? silTextAt(anchor.sha) : silText);
+  const debt = commits.slice(0, anchorIdx).filter((c) =>
+    isSubstantiveCommit(c) && !isPostCloseoutVerificationRecord(c, anchorSession));
 
   if (!debt.length) {
     return {
@@ -213,7 +251,12 @@ export function run(root = ROOT, opts = {}) {
   if (!fs.existsSync(path.join(root, '.git'))) {
     return { ok: true, unmeasured: true, debtCount: 0, debt: [], reason: 'not a git repository — write-back currency unmeasured' };
   }
-  return evaluateWriteBackCurrency({ commits: readCommits(root, opts.limit || 60), ...opts });
+  // Unreadable SIL at the anchor ⇒ '' ⇒ no verification exemption (fails closed).
+  const silTextAt = (sha) => {
+    const res = spawnSync('git', ['show', `${sha}:${WRITE_BACK_ANCHOR}`], { cwd: root, encoding: 'utf8', windowsHide: true });
+    return res.status === 0 ? String(res.stdout || '') : '';
+  };
+  return evaluateWriteBackCurrency({ commits: readCommits(root, opts.limit || 60), silTextAt, ...opts });
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === import.meta.filename) {

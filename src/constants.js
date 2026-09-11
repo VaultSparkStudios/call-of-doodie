@@ -144,7 +144,8 @@ export const PERKS = [
   },
   {
     id: "magnetism", name: "Magnetism", desc: "2× pickup collection range. Synergy: 5× range with Hoarder", emoji: "🧲", tier: "rare",
-    apply: (mods) => { mods.pickupRange = (mods.pickupRange || 30) * (mods.hasHoarder ? 5 : 2); },
+    // S176: the pair totals 5× in either pick order (was 9× Hoarder-first, 3.6× Magnetism-first).
+    apply: (mods) => { mods.pickupRange = (mods.pickupRange || 30) * (mods.hasHoarder ? 5 / 1.8 : 2); mods.hasMagnetism = true; },
   },
   {
     id: "penetrator", name: "Penetrator", desc: "Bullets pierce through 1 extra enemy. Synergy: +10% crit with Eagle Eye; +12% lifesteal per pierce with Bloodlust", emoji: "🔫", tier: "rare",
@@ -210,7 +211,7 @@ export const PERKS = [
   {
     id: "hoarder", name: "Hoarder", emoji: "🧺", tier: "uncommon",
     desc: "+80% pickup range · +50% ammo drops. Synergy: 5× total range with Magnetism",
-    apply: (mods) => { mods.pickupRange = (mods.pickupRange || 30) * 1.80; mods.ammoDropMult = (mods.ammoDropMult || 1) * 1.50; mods.hasHoarder = true; },
+    apply: (mods) => { mods.pickupRange = (mods.pickupRange || 30) * (mods.hasMagnetism ? 5 / 2 : 1.80); mods.ammoDropMult = (mods.ammoDropMult || 1) * 1.50; mods.hasHoarder = true; },
   },
   {
     id: "glass_mind", name: "Glass Mind", emoji: "🧠", tier: "rare",
@@ -220,7 +221,7 @@ export const PERKS = [
   {
     id: "bullet_hose", name: "Bullet Hose", emoji: "🔃", tier: "uncommon",
     desc: "+100% max ammo · +40% ammo restore. Synergy: +50% more ammo stacks with Deep Pockets",
-    apply: (mods) => { mods.ammoMult = (mods.ammoMult || 1) * 2.0; mods.ammoRestoreMult = (mods.ammoRestoreMult || 1) * 1.40; mods.hasBulletHose = true; if (mods.hasAmmoBoost) mods.ammoMult = (mods.ammoMult || 1) * 1.50; },
+    apply: (mods) => { mods.ammoMult = (mods.ammoMult || 1) * 2.0; mods.ammoRestoreMult = (mods.ammoRestoreMult || 1) * 1.40; mods.hasBulletHose = true; }, // S176: the Deep Pockets bonus is owned by the FULL ARMORY synergy alone (was applied twice when Deep Pockets came first)
   },
   {
     id: "crit_cascade", name: "Crit Cascade", emoji: "🌩️", tier: "rare",
@@ -258,7 +259,7 @@ export const CURSED_PERKS = [
     desc: "All enemies move 25% faster, but you gain +40% XP",
     apply: (mods, gs) => { mods.xpMult = (mods.xpMult || 1) * 1.4; if (gs) gs.enemySpeedMult = (gs.enemySpeedMult || 1) * 1.25; } },
   { id: "glass_jaw", name: "Glass Jaw", emoji: "💎", tier: "cursed",
-    desc: "You take double damage but deal +50% damage",
+    desc: "You take double damage (×1.65 on Hard, ×1.4 on Insane) but deal +50% damage",
     apply: (mods, gs) => { mods.damageMult = (mods.damageMult || 1) * 1.5; if (gs) gs.glassjaw = true; } },
   { id: "glass_legs", name: "Glass Legs", emoji: "🦿", tier: "cursed",
     desc: "+80% bullet damage · dash cooldown ×3",
@@ -330,7 +331,7 @@ export const META_UPGRADES = [
     tiers: [
       { cost: 300,  desc: "Start with +50% pickup range" },
       { cost: 1000, desc: "Start with +125% pickup range" },
-      { cost: 3000, desc: "Start with +225% pickup range" },
+      { cost: 3000, desc: "Start with +200% pickup range" },
     ],
   },
   {
@@ -715,10 +716,10 @@ export const TIPS = [
   "Tip: Florida Man has NO fear", "Tip: Grenades fix most social situations",
   "Tip: Dashing through enemies makes you feel cool", "Pro tip: Don't die",
   "Tip: The Plunger Launcher is not a toilet tool", "Tip: Combos = more points = more bragging",
-  "Tip: The HOA President files complaints while attacking", "Tip: Nuke pickups are 5% drop rate. Good luck.",
+  "Tip: The HOA President files complaints while attacking", "Tip: Nuke pickups are rare — bosses drop them more often. Good luck.",
   "Tip: Auto-aim is not cheating, it's accessibility", "Tip: Your mom says dinner's ready",
   "Tip: 15% crit chance = every bullet is a gamble", "Tip: The Conspiracy Bro knows what you did",
-  "Tip: Press 5 for grenade (the spicy option)", "Tip: Pause to read MOST WANTED. Know your enemy.",
+  "Tip: Press Q or G for grenade (the spicy option)", "Tip: Pause to read MOST WANTED. Know your enemy.",
   "Tip: Landlords are tanky AND ranged. Evict them fast.", "Tip: Crypto Bros zigzag like the market. HODL your aim.",
   "Tip: Kill milestones unlock bragging rights at 25/50/100+",
   "Tip: Level up to pick a perk. Choose wisely.", "Tip: Perks stack — grab the same one twice for double effect.",
@@ -959,7 +960,7 @@ export const WEEKLY_THEMES = [
   {
     id: 'corporate_uprising',
     label: '🏢 CORPORATE UPRISING',
-    themeDesc: 'Management has taken over. Karens spawn twice as often and shout twice as loud.',
+    themeDesc: 'Management has taken over. Everyone moves 10% faster and their complaints fly 30% faster.',
     statOverrides: { mutEnemySpeedExtra: 1.1, mutEnemyProjSpeed: 1.3 },
   },
   {
@@ -977,13 +978,13 @@ export const WEEKLY_THEMES = [
   {
     id: 'rush_hour',
     label: '🚗 RUSH HOUR',
-    themeDesc: 'Everybody is in a hurry. Spawn rate doubles; enemies move 30% faster.',
+    themeDesc: 'Everybody is in a hurry. Enemies move 30% faster and the opening wave floods in 50% faster.',
     statOverrides: { mutEnemySpeedExtra: 1.3, blitzSpawnMult: 1.5, blitzCount: 9999 },
   },
   {
     id: 'retro_wave',
     label: '👾 RETRO WAVE',
-    themeDesc: 'Old-school arcade rules. Enemies are pixel-tiny but wave counts are doubled.',
+    themeDesc: 'Old-school arcade rules. Enemies are pixel-tiny but waves are 80% bigger.',
     statOverrides: { mutEnemySizeMult: 0.65, waveEnemyMult: 1.8 },
   },
 ];

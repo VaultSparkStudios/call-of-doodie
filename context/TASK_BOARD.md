@@ -11,6 +11,18 @@
 # Task Board
 
 Public-safe launch roadmap summary.
+## Session 176 - Every player-facing number, not just the modes
+
+- [x] [SIL:3] **DONE S176** Hair Trigger (META tree `off2`, "+10% fire rate") multiplied the shot gap by 1.10 — a paid node that made players fire ~9% slower. Now 0.90, the convention every other fire-rate modifier uses.
+- [x] [SIL:3] **DONE S176** Pick-order bugs: Magnetism + Hoarder gave 9× or 3.6× instead of the stated 5×; Bullet Hose + Deep Pockets gave ×2.25 or ×1.5 instead of +50%. Both now exact in either order; the FULL ARMORY synergy owns the ammo bonus alone.
+- [x] [SIL:2] **DONE S176** Iron Tank / Speed Freak loadouts overwrote the purchased meta Speedster multiplier; base speed is now scaled by the tier.
+- [x] [SIL:2] **DONE S176** Nine copy corrections to match runtime (Scavenger t3, Glass Jaw, doctrine tooltips, three weekly themes, controls + grenade tip, The Algorithm coach tip, nuke tip, two "at low HP" synergies); RulesPanel boss cadence derived from `STANDARD_BOSS_WAVE_INTERVAL`. `src/config/copyTruth.test.js` court.
+- [x] [SIL:2] **DONE S176** `check-writeback-currency.mjs` false positive: a WORK_LOG-only `docs: record S<n> deploy verification` commit for the SIL-anchored session is no longer write-back debt (5 regression cases, fails closed without SIL).
+- [x] [SIL:1] **DONE S176** Shipped the genome-writer Ark cargo S175 recorded as shipped but never sent (`01K2912H…`), plus the write-back pattern (`01K2912J…`).
+- [x] [SIL:1] **CARRIED S176** Two executable follow-ups (perk-description derivation; dead boss Clone Decoy / Lifesteal abilities) moved to `## Next` with their reasons, not left orphaned in the session log.
+- [ ] [SIL:1] [ARK] Confirm ops actioned both S176 cargos (genome upsert key; write-back verification record), then re-sync `check-writeback-currency.mjs` from ops and retire the matching `ACCEPTED_HISTORICAL_DEFECTS` by repair.
+
+**Runway note:** the rest of the open backlog is unchanged — founder-decision-, credential-, hardware- and data-blocked, plus the deliberately unshipped `objectiveHandlers.js` gameplay cutover.
 ## Session 175 - The claims themselves get measured
 
 - [x] [SIL:3] **DONE S175** BOT ROYALE had published **two different bot counts at once since S165**. `src/modes/botRoyale.js` spawns `BOT_COUNT = 16`; four live player-facing surfaces still claimed twelve — the `modeCatalog.js` blurb (in-game mode picker), its description (`/modes/`), `src/content/fieldManual.js` §5 (`/field-manual/` + in-app quick reference), and the generated `public/gameplay-contract.json` (the published machine-readable claim) — while `src/config/changelog.js` correctly advertised sixteen. Neither public gate could see it: both verify that a generated artifact matches its source, and the source was wrong. Root-fixed with `src/config/modeFacts.js` as the single authority — the mode runtime imports its constants down from it and prose composes up from it, the derive-never-type rule that has governed `silScore` since S154. Kept dependency-free so `modeCatalog.js` remains zero-cost for `App.jsx` under the S163 bundle diet. `src/config/modeFacts.test.js` (11 cases) asserts each fact against real runtime behavior — that royale init actually spawns that many distinct bots, that `throneLayout()` really returns that many zones — not that a constant equals itself.
@@ -563,6 +575,8 @@ First checkpoint the bounded post-S159 propagation/CI/deploy recovery. Then begi
 - [ ] [Human/Data] [SIL:1] HomeV2 analytics funnel — compare `home_v2_deploy` vs legacy `front_door_action` completion rates after 48h of traffic
 
 ## Next
+- [ ] [SIL:2] **S176 carry** Derive perk / meta-tree description numbers from the same values `apply` uses — the DUP class (~30 agreeing hand-typed numbers) produced every S176 drift. Start with the four perks `src/config/copyTruth.test.js` already pins behaviorally.
+- [ ] [SIL:1] **S176 carry** Boss bonus abilities Clone Decoy and Lifesteal (`BOSS_ABILITY_POOL`) set flags nothing reads, so a boss that rolls them gets fewer real abilities. Never shown to players. Deleting them changes the seeded pick distribution (`gameHelpers.seededSpawn.test.js` snapshots `_bonusAbilities`); wiring them is new boss behavior — decide which with a balance pass, not unattended.
 - [x] [SIL:2] **DONE S84** Dev-toolchain vulnerability remediation — package-trust false positive for exact `vitest` was fixed in Studio Ops, then Call-Of-Doodie upgraded to `vitest@4.1.8`, `@vitest/coverage-v8@4.1.8`, `vite@7.3.5`, `@vitejs/plugin-react@5.1.4`, and exact npm overrides for patched transitive packages. Validation: `npm audit --json` 0 vulnerabilities, tests/build/e2e green.
 - [x] [SIL:3] **DONE S84** Playwright pointer 360 harness — `@playwright/test@1.60.0`, `playwright.config.ts`, and `tests/pointer-360.spec.ts` now drive the real canvas through `?debug=input` and assert the debug HUD reaches `pointer:4/4`.
 - [x] [SIL:2] **DONE S84** Adaptive enemy difficulty curve — repeated killer history now feeds spawn dampening and the run-start "Adapted for you" feedback chip in the current worktree.

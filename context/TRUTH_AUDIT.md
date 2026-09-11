@@ -1,3 +1,14 @@
+## 2026-09-11 — Session 176 — Perk, upgrade and control claim truth
+
+Status change: thirteen player-facing statements disagreed with the runtime, four of them because the runtime was wrong. Also two record corrections.
+
+- **Gameplay behaviour contradicted its own copy (fixed in code):** Hair Trigger slowed fire while claiming +10%; Magnetism+Hoarder and Bullet Hose+Deep Pockets produced pick-order-dependent values instead of the stated 5× / +50%; starter loadouts overwrote a purchased Speedster multiplier.
+- **Copy claimed what the runtime does not do (fixed in copy):** doctrine stat bonuses that were never implemented; weekly-theme multipliers (Karen spawn bias that does not exist, "doubles" for 1.5× first-wave-only, "doubled" for 1.8×); key 5 as grenade (it selects weapon 5); Scavenger +225% (+200%); Glass Jaw "double" (difficulty-scaled); a berserker tip filed under The Algorithm; nuke "5%"; two "at low HP" conditions that are unconditional.
+- **Record correction — S175:** S175's handoff, TASK_BOARD and SIL state the genome-writer `(date, session)` defect was "reported as Ark cargo per CANON-018". The Ark ledger contains no such cargo from this repo. It was shipped this session (`01K2912HNC37947D7B4D7CDB52`).
+- **Record correction — triage probe:** `check-writeback-currency.mjs` reported "a session ended without running closeout" about S175, which closed out on every surface. The flagged commit was S175's own post-deploy verification note. Probe corrected with attribution; the pattern shipped to ops (`01K2912JSP96A1A11F63ACDA42`).
+- Evidence boundary: no participant, device, provider, performance, or lifecycle evidence claimed. The balance effect of the four code fixes is the effect the copy already promised; no new tuning.
+
+Overall status: widened the claims audit from modes to every player-facing number — four gameplay bugs fixed where the code broke its stated design, nine false claims corrected, a triage false positive root-fixed, and a false S175 record line corrected with the missing Ark cargo actually shipped. Fully tested, gates green, pushed directly to main under standing founder authorization. SPARKED remains NO-GO.
 ## 2026-09-10 — Session 175 — Player-facing claim truth
 
 Status change: the repository published two different values for the same player-facing fact, on four live surfaces, for ten sessions, with every relevant gate green throughout. Recorded because this is a source-of-truth status change.

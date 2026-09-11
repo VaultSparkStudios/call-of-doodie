@@ -868,6 +868,23 @@
       },
       "delta": 0,
       "cause": "Session 175 audited the player-facing claims rather than the gates: BOT ROYALE had published both twelve and sixteen bot"
+    },
+    {
+      "date": "2026-09-11",
+      "session": 176,
+      "total": 0,
+      "maxTotal": 25,
+      "overallStatus": "widened the claims audit from modes to every player-facing number — four gameplay bugs fixed where the code broke its stated design, nine false claims corrected, a triage false positive root-fixed, and a false S175 record line corrected with the missing Ark cargo actually shipped. Fully tested, gates green, pushed directly to main under standing founder authorization. SPARKED remains NO-GO.",
+      "lastReviewed": "2026-09-10",
+      "dimensions": {
+        "schema_alignment": 0,
+        "prompt_template_alignment": 0,
+        "derived_view_freshness": 0,
+        "handoff_continuity": 0,
+        "contradiction_density": 0
+      },
+      "delta": 0,
+      "cause": "Session 176 read every player-facing number against the code: fixed four gameplay bugs the copy exposed (Hair Trigger sl"
     }
   ]
 }

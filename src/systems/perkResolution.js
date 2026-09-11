@@ -24,7 +24,7 @@ const PERK_SYNERGIES = [
     condition: (mods) => mods.hasVampire && mods.hasLastResort && !mods._synVampireLastResort,
     flag: "_synVampireLastResort",
     name: "⚡ DEATH'S DOOR",
-    desc: "+4% lifesteal & +10% crit at low HP",
+    desc: "+4% lifesteal & +10% crit",
     apply: (mods) => {
       mods.lifesteal = (mods.lifesteal || 0) + 0.04;
       mods.critBonus = (mods.critBonus || 0) + 0.1;
@@ -43,7 +43,7 @@ const PERK_SYNERGIES = [
     condition: (mods) => mods.hasOverclocked && mods.hasLastResort && !mods._synOCGlass,
     flag: "_synOCGlass",
     name: "💥 FRAGILE FURY",
-    desc: "+25% damage while at low HP",
+    desc: "+25% damage",
     apply: (mods) => {
       mods.damageMult = (mods.damageMult || 1) * 1.25;
     },

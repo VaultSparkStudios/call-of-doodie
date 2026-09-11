@@ -1480,3 +1480,11 @@ Why: the ledger is append-only evidence. Deleting the duplicate rows or back-fil
 Decision (S175): shipped the `QUICK_RULES` boss-cadence binding in-session rather than carrying it as a follow-up item.
 
 Why: `check-task-semantics.mjs` correctly refused to let an executable item sit open in the newest session, and it was right to — "complete-all-means-complete-all". The item was genuinely executable: `QUICK_RULES` hand-typed "Boss every 5 waves" while `modeRules.js` independently declared `boss: { interval: 5, firstWave: 5 }`, the same two-numbers-one-truth shape as the royale count and one balance change from contradicting itself. The remaining follow-up is genuinely cross-repo-locked, not deferred by preference, and is labelled as such.
+
+Decision (S176): for each player-facing number that disagreed with the runtime, fixed the **code** when the copy stated the design and the code broke it, and fixed the **copy** when the design was intentional.
+
+Why: a claims audit that only ever edits copy would have "corrected" Hair Trigger to "−9% fire rate" — ratifying a bug players paid for. Four items were bugs (inverted multiplier, two pick-order-dependent synergies, a loadout that deleted a purchased upgrade) and were fixed to deliver exactly what the copy promised, no more — no retune. The rest (difficulty-scaled Glass Jaw, first-wave-only Rush Hour spawn, unimplemented doctrine stats) are either intentional or would be new gameplay scope, so the copy now tells the truth instead. Doctrine stat effects were deliberately not implemented: that is a design decision for the founder, not a copy fix.
+
+Decision (S176): exempted post-deploy verification records from write-back debt only with session attribution to the SIL anchor, rather than adding the subject to the automation allowlist.
+
+Why: this repo pushes at closeout and verifies the deploy afterwards, so the verification note necessarily lands after the SIL anchor. An allowlist on the subject alone would let a mislabelled commit of an un-closed session pass; requiring WORK_LOG-only paths and `S<n>` == newest SIL session keeps the probe's original guarantee intact.

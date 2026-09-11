@@ -798,7 +798,8 @@ export default function CallOfDoodie() {
     // ── META TREE bonuses ──────────────────────────────────────────────────
     const _treeUnlocked = loadMetaTree();
     if (_treeUnlocked.has("off1")) perkModsRef.current.damageMult = (perkModsRef.current.damageMult || 1) * 1.05;
-    if (_treeUnlocked.has("off2")) perkModsRef.current.fireRateMult = (perkModsRef.current.fireRateMult || 1) * 1.10;
+    // fireRateMult scales the gap between shots (lower = faster). S176: was 1.10, which made the paid "+10% fire rate" node fire slower.
+    if (_treeUnlocked.has("off2")) perkModsRef.current.fireRateMult = (perkModsRef.current.fireRateMult || 1) * 0.90;
     if (_treeUnlocked.has("off3")) perkModsRef.current.critBonus = (perkModsRef.current.critBonus || 0) + 0.08;
     if (_treeUnlocked.has("off4")) gsRef.current._killFrenzyUnlocked = true;
     if (_treeUnlocked.has("def1")) { gsRef.current.player.health += 20; gsRef.current.player.maxHealth += 20; }
@@ -850,9 +851,10 @@ export default function CallOfDoodie() {
       gsRef.current.player.health = Math.max(20, Math.floor(gsRef.current.player.maxHealth * 0.60));
     } else if (loadout === "tank") {
       gsRef.current.player.health += 60; gsRef.current.player.maxHealth += 60;
-      gsRef.current.player.speed = 3.2;
+      // S176: loadout base speeds keep the meta Speedster bonus instead of overwriting it.
+      gsRef.current.player.speed = 3.2 * [1, 1.10, 1.22, 1.38][ut.speedster || 0];
     } else if (loadout === "speedster") {
-      gsRef.current.player.speed = 5.4;
+      gsRef.current.player.speed = 5.4 * [1, 1.10, 1.22, 1.38][ut.speedster || 0];
       perkModsRef.current.dashCDMult = (perkModsRef.current.dashCDMult || 1) * 0.60;
     }
     // ── Apply run modifier (seeded, one per run) ──────────────────────────────
