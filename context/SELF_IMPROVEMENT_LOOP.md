@@ -30,6 +30,10 @@ Brainstorm:
 
 **Committed to TASK_BOARD:** `[SIL:2]` derive perk/meta-tree description numbers from the same values `apply` uses (start with the four court-pinned perks); `[SIL:1]` confirm ops actioned both S176 Ark cargos, then re-sync `check-writeback-currency.mjs` from ops.
 
+### 2026-09-11 — Session 176 addendum | score unchanged
+
+Post-closeout record so the SIL anchor and the tree agree. `7bd6a3b` (the S176 closeout) failed CI on the date-bound public route artifacts — the commit itself rolled the git-derived content date, so `public:contract` passed on the uncommitted tree and drifted on landing (the S165/S167 pattern, now in memory). `cc8173c` regenerated the five artifacts (date/fingerprint churn only); workflow `34644859752` passed both jobs and production `/_health` reports `cc8173cdc36a`. Score, categories and commitments for S176 are unchanged.
+
 ## 2026-09-10 — Session 175 | Total: 998/1000 | Velocity: 3 | Debt: ↓
 
 SIL 998/1000: Ran a full `/arc` under standing founder authorization to push/deploy directly to main. S171–S173 each pre-verified the backlog and correctly found it saturated; S174 went one layer out and measured the **gates**. This session went one layer out again and measured the **claims** — every number the game states to a player, checked against the code that produces it. That lens was chosen deliberately: four consecutive sessions had closed with the same honest gap (no player-facing value), and auditing player-facing truth is the one audit that can close a real player-facing defect without inventing gameplay scope on a launch-sensitive branch.

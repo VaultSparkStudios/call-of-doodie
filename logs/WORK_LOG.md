@@ -1773,3 +1773,12 @@ Session Intent: run one complete `/arc` — triage, audit, implement every repos
 - Deploy: committed and pushed directly to `main` per standing founder authorization.
 
 Intent outcome: achieved — four gameplay bugs and nine false claims closed, a triage false positive root-fixed, and a false line in the prior session's record corrected with the missing action actually taken.
+
+### Deploy verification (S176)
+
+- Push `7bd6a3b` → workflow `34644503730`: `quality` failed on `public-contract` / `script-usage-smoke` — `route-contract.json` and `sitemap.xml` fingerprint the git-derived content date, which the commit itself rolled from 2026-09-10 to 2026-09-11 (the S165/S167 pattern; the gate passes on an uncommitted tree). `build-and-deploy` was skipped, so production never saw a broken build.
+- Fix `cc8173c` regenerated the five date-bound public artifacts (diff is `contentVersion`/`lastmod`/fingerprint only) → workflow `34644859752`: `quality` and `build-and-deploy` both succeeded.
+- Production `/_health` reports `"deploy":"cc8173cdc36a"` — exact match to the pushed commit; site root 200; `npm run live:site-check` 7/7.
+- Player-facing fix confirmed live: `https://callofdoodie.wtf/gameplay-contract.json` serves "Start with +200% pickup range" and contains no "+225%".
+- Ark: session-impact-summary broadcast `01K292LFT452B273132BDF7544`.
+- Shell hygiene correction: PROJECT_STATUS records 2 background shells; the true count is 3 started · 3 closed · 0 running (baseline suite, post-change suite, final pre-commit suite).
