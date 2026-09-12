@@ -101,6 +101,18 @@ export const ENEMY_TYPES = [
 ];
 
 // ===== PERKS =====
+// Balance constants — apply functions and desc strings both reference these,
+// so a balance change updates the player-facing copy automatically.
+const _pct = (m) => `+${Math.round((m - 1) * 100)}%`;
+const MAGNETISM_MULT = 2;
+const HOARDER_RANGE_MULT = 1.80;
+const PICKUP_SYNERGY_TOTAL = 5;       // Magnetism + Hoarder combined
+const HOARDER_AMMO_DROP_MULT = 1.50;
+const DEEP_POCKETS_AMMO_MULT = 1.50;
+const BULLET_HOSE_AMMO_MULT = 2.00;
+const BULLET_HOSE_RESTORE_MULT = 1.40;
+export const FULL_ARMORY_SYNERGY_MULT = 1.50; // also imported by perkResolution.js
+
 export const PERKS = [
   {
     id: "hollow_points", name: "Hollow Points", desc: "+25% bullet damage", emoji: "💥", tier: "common",
@@ -135,17 +147,19 @@ export const PERKS = [
     apply: (mods) => { mods.lifesteal = (mods.lifesteal || 0) + 0.08; mods.hasVampire = true; mods.hasBloodRegen = true; if (mods.hasChainLightning) mods.lifesteal += 0.06; },
   },
   {
-    id: "deep_pockets", name: "Deep Pockets", desc: "+50% max ammo on all weapons", emoji: "📦", tier: "uncommon",
-    apply: (mods) => { mods.ammoMult = (mods.ammoMult || 1) * 1.50; mods.hasAmmoBoost = true; },
+    id: "deep_pockets", name: "Deep Pockets", emoji: "📦", tier: "uncommon",
+    desc: `${_pct(DEEP_POCKETS_AMMO_MULT)} max ammo on all weapons`,
+    apply: (mods) => { mods.ammoMult = (mods.ammoMult || 1) * DEEP_POCKETS_AMMO_MULT; mods.hasAmmoBoost = true; },
   },
   {
     id: "combo_master", name: "Combo Master", desc: "+50% combo window time. Synergy: lifesteal doubles during combo with Vampire", emoji: "🌪️", tier: "uncommon",
     apply: (mods) => { mods.comboTimerMult = (mods.comboTimerMult || 1) * 1.50; mods.hasComboMaster = true; if (mods.hasVampire) mods.comboVampireMult = true; },
   },
   {
-    id: "magnetism", name: "Magnetism", desc: "2× pickup collection range. Synergy: 5× range with Hoarder", emoji: "🧲", tier: "rare",
+    id: "magnetism", name: "Magnetism", emoji: "🧲", tier: "rare",
     // S176: the pair totals 5× in either pick order (was 9× Hoarder-first, 3.6× Magnetism-first).
-    apply: (mods) => { mods.pickupRange = (mods.pickupRange || 30) * (mods.hasHoarder ? 5 / 1.8 : 2); mods.hasMagnetism = true; },
+    desc: `${MAGNETISM_MULT}× pickup collection range. Synergy: ${PICKUP_SYNERGY_TOTAL}× range with Hoarder`,
+    apply: (mods) => { mods.pickupRange = (mods.pickupRange || 30) * (mods.hasHoarder ? PICKUP_SYNERGY_TOTAL / HOARDER_RANGE_MULT : MAGNETISM_MULT); mods.hasMagnetism = true; },
   },
   {
     id: "penetrator", name: "Penetrator", desc: "Bullets pierce through 1 extra enemy. Synergy: +10% crit with Eagle Eye; +12% lifesteal per pierce with Bloodlust", emoji: "🔫", tier: "rare",
@@ -210,8 +224,8 @@ export const PERKS = [
   },
   {
     id: "hoarder", name: "Hoarder", emoji: "🧺", tier: "uncommon",
-    desc: "+80% pickup range · +50% ammo drops. Synergy: 5× total range with Magnetism",
-    apply: (mods) => { mods.pickupRange = (mods.pickupRange || 30) * (mods.hasMagnetism ? 5 / 2 : 1.80); mods.ammoDropMult = (mods.ammoDropMult || 1) * 1.50; mods.hasHoarder = true; },
+    desc: `${_pct(HOARDER_RANGE_MULT)} pickup range · ${_pct(HOARDER_AMMO_DROP_MULT)} ammo drops. Synergy: ${PICKUP_SYNERGY_TOTAL}× total range with Magnetism`,
+    apply: (mods) => { mods.pickupRange = (mods.pickupRange || 30) * (mods.hasMagnetism ? PICKUP_SYNERGY_TOTAL / MAGNETISM_MULT : HOARDER_RANGE_MULT); mods.ammoDropMult = (mods.ammoDropMult || 1) * HOARDER_AMMO_DROP_MULT; mods.hasHoarder = true; },
   },
   {
     id: "glass_mind", name: "Glass Mind", emoji: "🧠", tier: "rare",
@@ -220,8 +234,8 @@ export const PERKS = [
   },
   {
     id: "bullet_hose", name: "Bullet Hose", emoji: "🔃", tier: "uncommon",
-    desc: "+100% max ammo · +40% ammo restore. Synergy: +50% more ammo stacks with Deep Pockets",
-    apply: (mods) => { mods.ammoMult = (mods.ammoMult || 1) * 2.0; mods.ammoRestoreMult = (mods.ammoRestoreMult || 1) * 1.40; mods.hasBulletHose = true; }, // S176: the Deep Pockets bonus is owned by the FULL ARMORY synergy alone (was applied twice when Deep Pockets came first)
+    desc: `${_pct(BULLET_HOSE_AMMO_MULT)} max ammo · ${_pct(BULLET_HOSE_RESTORE_MULT)} ammo restore. Synergy: ${_pct(FULL_ARMORY_SYNERGY_MULT)} more ammo stacks with Deep Pockets`,
+    apply: (mods) => { mods.ammoMult = (mods.ammoMult || 1) * BULLET_HOSE_AMMO_MULT; mods.ammoRestoreMult = (mods.ammoRestoreMult || 1) * BULLET_HOSE_RESTORE_MULT; mods.hasBulletHose = true; }, // S176: the Deep Pockets bonus is owned by the FULL ARMORY synergy alone (was applied twice when Deep Pockets came first)
   },
   {
     id: "crit_cascade", name: "Crit Cascade", emoji: "🌩️", tier: "rare",
