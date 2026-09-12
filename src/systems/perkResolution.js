@@ -1,3 +1,5 @@
+import { FULL_ARMORY_SYNERGY_MULT } from "../constants.js";
+
 const PERK_SYNERGIES = [
   {
     condition: (mods) => mods.hasVampire && mods.hasChainLightning && !mods._synergyStormVampire,
@@ -135,9 +137,9 @@ const PERK_SYNERGIES = [
     condition: (mods) => mods.hasBulletHose && mods.hasAmmoBoost && !mods._synFullArmory,
     flag: "_synFullArmory",
     name: "📦 FULL ARMORY",
-    desc: "+50% extra max ammo on top of existing boost",
+    desc: `+${Math.round((FULL_ARMORY_SYNERGY_MULT - 1) * 100)}% extra max ammo on top of existing boost`,
     apply: (mods) => {
-      mods.ammoMult = (mods.ammoMult || 1) * 1.5;
+      mods.ammoMult = (mods.ammoMult || 1) * FULL_ARMORY_SYNERGY_MULT;
     },
   },
 ];
