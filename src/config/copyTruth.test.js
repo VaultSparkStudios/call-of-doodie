@@ -217,7 +217,10 @@ describe("S177 copy truth — META_TREE nodes apply their stated numbers (App.js
     expect(factor).toBeCloseTo(1.30, 6);
   });
 
-  it("cha1 (weekly mutation +25%) stores exactly 1.25", () => {
+  // _treeMutBoost is set by cha1 but currently never read — cha1 has no gameplay effect (pre-existing gap).
+  // This test pins the assignment literal so the value stays correct when the feature is wired up.
+  // TODO: replace with a behavioral test once _treeMutBoost is read in the weekly mutation apply path.
+  it("cha1 assignment stores 1.25 (source-only: _treeMutBoost currently unread)", () => {
     const line = app.split("\n").find((l) => l.includes('_treeUnlocked.has("cha1")'));
     const factor = Number(/_treeMutBoost\s*=\s*([\d.]+)/.exec(line)?.[1]);
     expect(factor).toBeCloseTo(1.25, 6);
