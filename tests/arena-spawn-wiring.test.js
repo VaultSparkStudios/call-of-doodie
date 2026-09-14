@@ -42,12 +42,32 @@ describe("screen-anchored announcements (S167)", () => {
     for (const source of modeSources) expect(source).not.toMatch(/addText\?\.\(gs, (ctx\.)?W \/ 2/);
   });
 
-  it("paints screen-anchored texts outside the camera translate", () => {
-    const worldPass = drawSource.indexOf("gs.floatingTexts.forEach(ft => { if (ft.screen !== true) _paintFloatingText(ft); });");
-    const restore = drawSource.indexOf("if (_ftCam) ctx.restore();", worldPass);
-    const screenPass = drawSource.indexOf("gs.floatingTexts.forEach(ft => { if (ft.screen === true) _paintFloatingText(ft); });", restore);
-    expect(worldPass).toBeGreaterThan(-1);
-    expect(restore).toBeGreaterThan(worldPass);
-    expect(screenPass).toBeGreaterThan(restore);
+  it("paints newest screen notices outside the camera transform", () => {
+    const start = drawSource.indexOf("if (_ftCam) { ctx.save(); ctx.translate(-_camX, -_camY); }");
+    const end = drawSource.indexOf("ctx.globalAlpha = 1;", start);
+    expect(start).toBeGreaterThan(-1);
+    expect(end).toBeGreaterThan(start);
+
+    let transform = { x: 0, y: 0 };
+    const stack = [], painted = [];
+    const ctx = {
+      save: () => stack.push({ ...transform }),
+      translate: (x, y) => { transform.x += x; transform.y += y; },
+      restore: () => { transform = stack.pop(); },
+    };
+    const gs = { floatingTexts: [
+      { text: "world", screen: false },
+      { text: "older notice", screen: true },
+      { text: "newest notice", screen: true },
+    ] };
+    // Execute the actual isolated draw pass, so equivalent loop syntax stays valid.
+    const paint = new Function("gs", "ctx", "_ftCam", "_camX", "_camY", "_paintFloatingText", drawSource.slice(start, end));
+    paint(gs, ctx, true, 160, 90, (text) => painted.push({ text: text.text, ...transform }));
+    expect(painted).toEqual([
+      { text: "world", x: -160, y: -90 },
+      { text: "newest notice", x: 0, y: 0 },
+      { text: "older notice", x: 0, y: 0 },
+    ]);
+    expect(stack).toHaveLength(0);
   });
 });
