@@ -4,7 +4,7 @@
 
 ## Current Session
 
-- Session 177 (2026-09-11) — Restored paid upgrades, weekly effects and boss abilities to their advertised behavior. Shared meta facts now drive descriptions and runtime; Hair Trigger delivers exactly +10% shots and Scavenger II exactly +125% range. Loadout, score and Kill Frenzy modifiers compose. Supply Drop grants one free coin-shop offer per wave, Gauntlet Ready supplies its opening extra perk, and Mutation Affinity scales favorable weekly bonuses. Weekly XP, pickup chance, projectile speed and magnet range now have live consumers. Jackpot XP excludes the separate weekly score multiplier. Clone Decoy is a finite visual-only ghost; Lifesteal heals live bosses only after actual enemy bullet damage. Zero-damage projectiles stay harmless. Speed Surge uses simulation frames; enrages persist; Algorithm volleys and shared ability cooldown staggering follow the authored behavior. Startup brief currency now checks the completed-session fingerprint and rejects a misleading next-session title. Validation: 250 test files / 1572 assertions; strict lint; deployable build App 472.72 KB; immutable staging 38cb07a7 shell 7/7. Production promotion pending final visual and security gates.
+- Session 177 (2026-09-11) — Restored paid upgrades, weekly effects and boss abilities to their advertised behavior. Shared meta facts now drive descriptions and runtime; Hair Trigger delivers exactly +10% shots and Scavenger II exactly +125% range. Loadout, score and Kill Frenzy modifiers compose. Supply Drop grants one free coin-shop offer per wave, Gauntlet Ready supplies its opening extra perk, and Mutation Affinity scales favorable weekly bonuses. Weekly XP, pickup chance, projectile speed and magnet range now have live consumers. Jackpot XP excludes the separate weekly score multiplier. Clone Decoy is a finite visual-only ghost; Lifesteal heals live bosses only after actual enemy bullet damage. Zero-damage projectiles stay harmless. Speed Surge uses simulation frames; enrages persist; Algorithm volleys and shared ability cooldown staggering follow the authored behavior. Startup brief currency now checks the completed-session fingerprint and rejects a misleading next-session title. Validation: 250 test files / 1572 assertions; strict lint; deployable build App 472.72 KB; immutable staging 38cb07a7 shell 7/7. S177 complete: production 9d6c3eafd501 verified; CI 250/250 files and 1583/1583 tests passed; shell, backend, replay, domain routing, leaderboard and launch-surface checks passed.
 
 ## Open Work
 
@@ -116,7 +116,7 @@ Why: both existing public gates passed for the entire ten-session
 
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 236,690 bytes · SHA-256 `d0d939ebadc0…`
-- `context/TASK_BOARD.md` · 163,238 bytes · SHA-256 `f0150d1e2cdf…`
+- `context/CURRENT_STATE.md` · 236,808 bytes · SHA-256 `cdafebd6da32…`
+- `context/TASK_BOARD.md` · 163,236 bytes · SHA-256 `427683dd4b1c…`
 - `context/DECISIONS.md` · 160,024 bytes · SHA-256 `c62a2c70ef47…`
 - `docs/AUDIT_2026-09-11_2.json` · 11,298 bytes · SHA-256 `c984bcd2d6b0…`

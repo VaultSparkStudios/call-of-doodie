@@ -4,7 +4,7 @@
   "session": 177,
   "project": "Call-Of-Doodie",
   "intent": "/arc, authorized direct main push and full deployment",
-  "outcome": "implementation-and-staging-verified-production-pending",
+  "outcome": "complete-deployed-verified",
   "headline": "Restored paid upgrades, weekly effects and boss abilities to their advertised behavior.",
   "shipped": [
     "Shared meta facts now drive descriptions and runtime; Hair Trigger delivers exactly +10% shots and Scavenger II exactly +125% range. Loadout, score and Kill Frenzy modifiers compose.",
@@ -15,17 +15,8 @@
     "Startup brief currency now checks the completed-session fingerprint and rejects a misleading next-session title."
   ],
   "validation": [
-    "Earlier complete suite: 250/250 files and 1572/1572 assertions passed (started 2026-09-11T23:38:46.938Z); this was before the final shop follow-up.",
-    "Final shop follow-up: focused 28/28 tests passed, including 11 new tests; this supplements the earlier full pass and is not a new full-suite run.",
-    "Deployable build passed; App chunk 472.72 KB. Strict lint passed for the affected sources.",
-    "npm run schema:lint: exit 0, completed 2026-09-14T01:50:24.422Z; full stdout/stderr recorded in .cache/s177-release-gates.json.",
-    "npm run public:contract: exit 0, completed 2026-09-14T01:50:01.400Z; full stdout/stderr recorded in .cache/s177-release-gates.json.",
-    "npm run security:release:audit: exit 0, completed 2026-09-14T01:51:02.867Z; full stdout/stderr recorded in .cache/s177-release-gates.json.",
-    "Public contract validates 28 files and public claims; security release audit reports 18 declared dependencies coherent and npm audit 0 vulnerabilities.",
-    "Closeout record currency passes for S177 startup brief, state vector and genome. Historical genome duplicates S123/S162 and missing S164/S165/S171/S172 remain acknowledged debt; no new ledger defect.",
-    "Final staging redeploy is in progress; exact URL and verification receipt remain pending. Earlier staging is not proof of the final source.",
-    "Final rendered-pixel review and production deployment verification remain pending. No SPARKED transition or public launch is claimed.",
-    "Final immutable staging 38cb07a7: shell7/7; 32 boss and20 meta states directly inspected; source hashes and before/after images in docs/visual-qa/LATEST.json."
+    "S177 complete: production 9d6c3eafd501 verified; CI 250/250 files and 1583/1583 tests passed; shell, backend, replay, domain routing, leaderboard and launch-surface checks passed.",
+    "Strict lint, build, public/schema/security gates passed; npm audit0 vulnerabilities;100 hash-bound visual captures."
   ],
   "sil": {
     "score": 950,
@@ -74,9 +65,7 @@
     }
   ],
   "followUps": [
-    "Verify the final immutable staging revision and complete rendered-pixel review.",
-    "Commit and push the authorized final source to main, deploy production, then verify exact production revision and live behavior.",
-    "Keep participant, physical-device, current Core Web Vitals, mail/provider, identity, publication, and other launch-tier evidence separate from this FORGE engineering update."
+    "Pre-existing Gauntlet arena sizing/toast clipping; ordinary-perk derivation; Developer timing; separate launch-tier evidence."
   ],
   "blockers": [],
   "verificationUpdatedAt": "2026-09-14T03:50:29.786Z",
@@ -130,5 +119,57 @@
       "source": "c2dadfff36cc44fd28d2766747fbf5efb7c6c01b",
       "method": "regular revert and redeploy; no history rewrite"
     }
+  },
+  "production": {
+    "session": 177,
+    "verifiedAt": "2026-09-14T06:15:24.550Z",
+    "sourceCommit": "9d6c3eafd501bbe1efefb655af6a406fb4b8a94d",
+    "workflowRunId": 34811355046,
+    "immutableUrl": "https://b5068126.call-of-doodie.pages.dev",
+    "productionUrl": "https://callofdoodie.wtf/",
+    "edge": {
+      "contract": "edge-health-v1",
+      "status": "edge-ready",
+      "service": "call-of-doodie",
+      "scope": "cloudflare-pages-edge-only",
+      "deploy": "9d6c3eafd501",
+      "checkedAt": "2026-09-14T06:14:49.147Z"
+    },
+    "tests": {
+      "files": 250,
+      "assertions": 1583
+    },
+    "checks": [
+      {
+        "script": "live-site-check.mjs",
+        "exitCode": 0
+      },
+      {
+        "script": "health-check.mjs",
+        "exitCode": 0
+      },
+      {
+        "script": "replay-trust-smoke.mjs",
+        "exitCode": 0
+      },
+      {
+        "script": "post-cutover-smoke.mjs",
+        "exitCode": 0
+      },
+      {
+        "script": "shared-leaderboard-check.mjs",
+        "exitCode": 0
+      },
+      {
+        "script": "launch-surface-check.mjs",
+        "exitCode": 0
+      }
+    ],
+    "visualReceipt": "visual-qa/LATEST.json",
+    "lifecycle": "FORGE; maintenance deployment, no SPARKED transition",
+    "limitations": [
+      "Pre-existing Gauntlet arena-sizing and world-space toast clipping reproduced before/after and tracked separately.",
+      "Participant outcomes, physical-device QA and other launch-tier evidence remain unmeasured."
+    ]
   }
 }

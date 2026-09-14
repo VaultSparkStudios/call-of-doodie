@@ -11,10 +11,10 @@ Session Intent: Complete /arc, direct commit/push to main, and full verified dep
 - Speed Surge uses simulation frames; enrages persist; Algorithm volleys and shared ability cooldown staggering follow the authored behavior.
 - Startup brief currency now checks the completed-session fingerprint and rejects a misleading next-session title.
 
-Validation: 250 test files / 1572 assertions; strict lint; deployable build App 472.72 KB; immutable staging 38cb07a7 shell 7/7. Production promotion pending final visual and security gates.
+Validation: 250 test files / 1572 assertions; strict lint; deployable build App 472.72 KB; immutable staging 38cb07a7 shell 7/7. S177 complete: production 9d6c3eafd501 verified; CI 250/250 files and 1583/1583 tests passed; shell, backend, replay, domain routing, leaderboard and launch-surface checks passed.
 
 ## Next
 
-- Verify remaining rendered shop and extra-perk states, finish release gates and publish main.
+- Investigate the separately tracked pre-existing Gauntlet arena sizing and clipped world-space toast.
 - Research candidates: derive remaining ordinary perk numbers; move Developer obstacle restoration to simulated time; examine overdue ability warning windows. These are separate from the completed selected audit.
 - SPARKED eligibility remains unproven: physical devices, participant feedback, current real-user performance, scoped telemetry, reply-capable email and identity integration require their own evidence.

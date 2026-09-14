@@ -20,7 +20,7 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ LAST SESSION (S177) - WHAT SHIPPED ══════════════════════════╗
-║  S177: runtime upgrades and boss abilities restored; full 250 f  ║
+║  S177 complete: production 9d6c3eafd501 verified; CI 250/250 fi  ║
 ║  Tests  -                                                        ║
 ║  Deploy -                                                        ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -68,14 +68,13 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ✓  ██████░░░░░░░░░░░░░░░░░░   25% used                          ║
-║     66,775 / 272,000 tok  ·  codex/codex-272k  · …               ║
-║     ~33,388 tok/turn  ·  cache 50%  ·  5 turns to compact        ║
-║     Verdict: CONTINUE                                            ║
+║  ⚠  ░░░░░░░░░░░░░░░░░░░░░░░░    1% used                          ║
+║     295,074 / 200,000 tok  ·  unknown  ·  heuristic-stale        ║
+║     Verdict: CONSIDER_CLOSEOUT  ← act now                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         250/250 passing (2026-09-11T23:48:28.182Z)     ║
+║  ✓  Tests         250/250 passing (2026-09-14T06:15:24.550Z)     ║
 ║  ✓  Velocity      5 ↑  ·  Debt: ↓                                ║
 ║  ✓  Runway        selected S177 audit complete; production…      ║
 ║  ⛔  Context age   ?d                                             ║
@@ -83,7 +82,7 @@
 ║  ⛔  Truth         S177 runtime contracts restored and tested;…   ║
 ║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs…        ║
 ║  ✓  Genome dims   all stable  (22/25)                            ║
-║  ✓  Entropy       0.180  (healthy)                               ║
+║  ✓  Entropy       0.207  (healthy)                               ║
 ║  ✓  CDR           no gap detected                                ║
 ║  ✓  Patterns      no recurring pressure detected                 ║
 ║  ✓  Templates     v3.3 aligned                                   ║

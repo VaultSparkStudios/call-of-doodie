@@ -7,7 +7,7 @@
 - [x] **DONE S177** Speed Surge uses simulation frames; enrages persist; Algorithm volleys and shared ability cooldown staggering follow the authored behavior.
 - [x] **DONE S177** Startup brief currency now checks the completed-session fingerprint and rejects a misleading next-session title.
 
-Wave reconciliation: Wave 1 startup complete; Wave 2 all five audit items implemented; Wave 3 staging deployed, final visual/security/production verification in progress.
+Wave reconciliation: 3 waves complete; 0 in progress; 0 open within the selected arc. Wave 3 includes staging, visual/security gates, main push and verified production.
 
 ## Session 170 - Startup evidence, bounded audit context, and process-policy closure
 

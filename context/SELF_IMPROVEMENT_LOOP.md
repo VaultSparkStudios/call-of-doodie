@@ -1265,7 +1265,7 @@ SIL +10: Closed five founder-visible defects and all four fresh audit items: Ene
 Sparkline (last 5 totals): █████
 Avgs — 3: 982.3 | 5: 987.6 | 10: 992.1
 Velocity trend: ↑ | Debt: ↓
-Momentum runway: selected S177 audit complete; production verification pending | Intent rate: not recomputed
+Momentum runway: selected S177 audit complete; production verification complete | Intent rate: not recomputed
 Last session: 2026-09-11 | Session 177 | Total: 950/1000 | Velocity: 5 | protocolVelocity: 5
 <!-- rolling-status-end -->
 
@@ -3321,7 +3321,7 @@ Restored paid upgrades, weekly effects and boss abilities to their advertised be
 | Capital Efficiency | 100 | No added packages, hosted AI calls or paid services. |
 | Automation Coverage | 94 | Scoped runtime and record evidence; no inherited perfect-score assumption. |
 
-Validation: 250 test files / 1572 assertions; strict lint; deployable build App 472.72 KB; immutable staging 9d82ff31 shell 7/7. Production promotion pending final visual and security gates.
+Validation: S177 complete: production 9d6c3eafd501 verified; CI 250/250 files and 1583/1583 tests passed; shell, backend, replay, domain routing, leaderboard and launch-surface checks passed. Visual source hashes verified;100 before/after captures retained.
 
 Score is this session's evidence-based assessment; the lower score than S176 reflects explicit limits, not a measured loss of player engagement. Rolling averages derive from this ledger.
 

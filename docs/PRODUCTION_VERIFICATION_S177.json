@@ -1,0 +1,52 @@
+{
+  "session": 177,
+  "verifiedAt": "2026-09-14T06:15:24.550Z",
+  "sourceCommit": "9d6c3eafd501bbe1efefb655af6a406fb4b8a94d",
+  "workflowRunId": 34811355046,
+  "immutableUrl": "https://b5068126.call-of-doodie.pages.dev",
+  "productionUrl": "https://callofdoodie.wtf/",
+  "edge": {
+    "contract": "edge-health-v1",
+    "status": "edge-ready",
+    "service": "call-of-doodie",
+    "scope": "cloudflare-pages-edge-only",
+    "deploy": "9d6c3eafd501",
+    "checkedAt": "2026-09-14T06:14:49.147Z"
+  },
+  "tests": {
+    "files": 250,
+    "assertions": 1583
+  },
+  "checks": [
+    {
+      "script": "live-site-check.mjs",
+      "exitCode": 0
+    },
+    {
+      "script": "health-check.mjs",
+      "exitCode": 0
+    },
+    {
+      "script": "replay-trust-smoke.mjs",
+      "exitCode": 0
+    },
+    {
+      "script": "post-cutover-smoke.mjs",
+      "exitCode": 0
+    },
+    {
+      "script": "shared-leaderboard-check.mjs",
+      "exitCode": 0
+    },
+    {
+      "script": "launch-surface-check.mjs",
+      "exitCode": 0
+    }
+  ],
+  "visualReceipt": "visual-qa/LATEST.json",
+  "lifecycle": "FORGE; maintenance deployment, no SPARKED transition",
+  "limitations": [
+    "Pre-existing Gauntlet arena-sizing and world-space toast clipping reproduced before/after and tracked separately.",
+    "Participant outcomes, physical-device QA and other launch-tier evidence remain unmeasured."
+  ]
+}
