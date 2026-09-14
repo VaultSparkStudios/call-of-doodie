@@ -23,7 +23,7 @@
          ── organization ────────────────────────────────────────────────────────────────────
          Closeout currency checks the completed-session fingerprint instead of trusting a
          next-session title. Release receipts distinguish the earlier full test pass, later
-         focused tests and verification that remains pending.
+         focused tests and completed production verification.
          → Closeout currency regression and schema:lint pass; exact gate receipt recorded.
 
   [1]  upgrade-fact-composition                                   PROJ 9  ·  ECOS 5
