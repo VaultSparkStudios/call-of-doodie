@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-09-14T03:51:13.274Z",
-  "stagingUrl": "https://38cb07a7.call-of-doodie.pages.dev",
+  "capturedAt": "2026-09-14T05:50:53.528Z",
+  "stagingUrl": "https://c0e169c4.call-of-doodie.pages.dev",
   "uiBaseRef": "c2dadff",
   "uiHeadRef": "S177 working tree; per-file source hashes below",
   "workingTreeUiSha256": "e86a4d8b06de6a961ed26ef1c341e07080526d4d9c7f1c070fe4ecfb2b64dae2",
@@ -101,6 +101,10 @@
     {
       "file": "src/utils/shopForecast.test.js",
       "sha256": "13c89dbda26677c9a21aaa10b9d6c4b760b4a59c349a1514ba5dae47437611f2"
+    },
+    {
+      "file": "public/status/index.html",
+      "sha256": "c0c337ea250c8676e3ea5766a463cf9530c42f74ce5fd8fc2bfe9b0856ef8482"
     }
   ],
   "themes": [
@@ -2789,6 +2793,50 @@
         },
         "documentOverflowX": false
       }
+    },
+    {
+      "file": "session-177/status-sewer-night-390.jpg",
+      "sha256": "3212d0b15e9e42d688fb8a02fafe67bbdcb8aedb5171d5e243087d1829533165",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "page": "Status page after date-bound public regeneration"
+    },
+    {
+      "file": "session-177/status-sewer-night-1440.jpg",
+      "sha256": "5e5262f27a0c6215c3c83f208276e68ee6cdad05b7cf3751689d875312bc86ca",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "page": "Status page after date-bound public regeneration"
+    },
+    {
+      "file": "session-177/status-porcelain-day-390.jpg",
+      "sha256": "0e3e3cf5b81723ecd2b604748103d5d819e7538f91ca7bf04f87ff291d19bbb6",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "page": "Status page after date-bound public regeneration"
+    },
+    {
+      "file": "session-177/status-porcelain-day-1440.jpg",
+      "sha256": "ef51a598a1ecd8efb70a302ac706d05899eba0c70f39a2581eea1a39cf4db688",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "page": "Status page after date-bound public regeneration"
     }
   ],
   "inspection": {
@@ -2799,7 +2847,8 @@
       "One free shop offer becomes paid after redemption with unchanged coin balance; Gauntlet bonus perk opens once and resolves. All 20 final meta captures have zero page errors or horizontal document overflow.",
       "Both baseline and final Gauntlet captures show pre-existing arena sizing and clipped world-space toast artifacts. These are outside the changed perk modal and remain a recorded follow-up, not a claim of full-site visual perfection.",
       "Disabled unaffordable shop rows remain deliberately dim. The selected free offer and perk choices are legible and reachable.",
-      "Synthetic local ownership and live-state fixture acceleration establish runtime behavior; these captures are not participant playtest evidence. Volley survivor count can decrease after obstacle collision; initial three-shot behavior is separately regression tested."
+      "Synthetic local ownership and live-state fixture acceleration establish runtime behavior; these captures are not participant playtest evidence. Volley survivor count can decrease after obstacle collision; initial three-shot behavior is separately regression tested.",
+      "After commit bdf5e50, five deterministic public artifacts changed only content dates/fingerprint. The status page was recaptured and directly inspected at390/1440 across both themes; gameplay source hashes remain unchanged."
     ],
     "fixesApplied": [
       "Free offers now show free-item guidance instead of normal-price warnings.",

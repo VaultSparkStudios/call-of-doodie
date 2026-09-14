@@ -1800,3 +1800,5 @@ The first broad run was red: stale Hot Context, a mixed source snapshot during f
 
 
 S177 final staging follow-through: S177: runtime upgrades and boss abilities restored; full 250 files/1572 tests passed, then final shop guidance 28/28; staging 38cb07a7 shell 7/7 and 52 final visual states reviewed. Production verification pending. Baseline and final Gauntlet captures expose pre-existing arena clipping; recorded separately. Free-offer price guidance corrected after visual inspection.
+
+S177: source committed bdf5e50. Date-dependent public files regenerated and staging c0e169c4 smoke verified. Final currency/shop focused run43/43 passes using thread workers after fork startup timed out without executing tests. Ark pattern-share01K2F6FUKH339505E569380E5F delivered; project-scoped IGNIS refresh requested through control plane.
