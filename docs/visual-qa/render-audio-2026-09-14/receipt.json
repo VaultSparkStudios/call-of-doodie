@@ -1,0 +1,1110 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-09-14T08:01:39.912Z",
+  "stagingUrl": "https://fa3b87e6.call-of-doodie.pages.dev",
+  "uiBaseRef": "87bd2a6",
+  "uiHeadRef": "Corrective rendering/audio working tree; source hashes below",
+  "themes": [
+    "dark",
+    "light"
+  ],
+  "sourceFiles": [
+    {
+      "file": "src/App.jsx",
+      "sha256": "8d2c41c186cda46fc5a643fb460c95f7a75c42cce8f9e3b50bcfa0e3402f3c7e"
+    },
+    {
+      "file": "src/drawGame.js",
+      "sha256": "8bf72b97cd0b91a3f45ab3619947dad50a0bf89c5373cc8e90332e42491a5209"
+    },
+    {
+      "file": "src/systems/camera.js",
+      "sha256": "3f7a4bc2c7e9ade000e8dc6997ffc3ff7dc1ed3f3e98cceaa00e0fec879febd9"
+    },
+    {
+      "file": "src/systems/camera.resize.test.js",
+      "sha256": "5cab3920166d6fd1255746e65982fb6f3cad83b59c507e026ea71eb9b5416537"
+    },
+    {
+      "file": "src/utils/canvasScale.js",
+      "sha256": "918ef3223108440b2461f780ff49846a755b7d610916215fcb6f620324c6abba"
+    },
+    {
+      "file": "src/utils/canvasScale.test.js",
+      "sha256": "acd98648ab3b45eded70cf713d965ac3287c8f92811a63507dfa6ef641210e27"
+    },
+    {
+      "file": "src/sounds.js",
+      "sha256": "1e4edd2028bc6581d6c768ad07a1e5f17b236e3260456654f412ae0d58338f52"
+    },
+    {
+      "file": "src/audio/audioBus.js",
+      "sha256": "ebbf94ac4f6b6031326f94e0fe08e4c7109d1283fbcc9af3244ea364b85b4ed1"
+    },
+    {
+      "file": "src/audio/voiceEnvelope.js",
+      "sha256": "71c23b747bba65290e2eb6c456ec8f275ac11a8006f4e228538c42af0d78374f"
+    },
+    {
+      "file": "src/audio/voiceEnvelope.test.js",
+      "sha256": "d488c6cb6422027276ea8d5d2f865c40039eb4cde4c1df339916d7c16c4931a0"
+    }
+  ],
+  "workingTreeUiSha256": "06451f9824228b4315ae73129b078deb3fcf1578deec804b14ff3eb92bc00ee4",
+  "captures": [
+    {
+      "file": "render-audio-2026-09-14/before-sewer-night-390-modern.jpg",
+      "sha256": "9259321720a68ec1eaa12784bafaf7cdf03cd6140a3f383f7e1fb69de7a8a4f3",
+      "phase": "before",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "Game arena: playing",
+      "pack": "modern",
+      "observed": {
+        "arena": [
+          800,
+          600
+        ],
+        "view": [
+          390,
+          844
+        ],
+        "camera": {
+          "x": 162.05463989695684,
+          "y": 0,
+          "arenaW": 800,
+          "arenaH": 600
+        },
+        "player": {
+          "x": 400,
+          "y": 300
+        }
+      },
+      "errors": []
+    },
+    {
+      "file": "render-audio-2026-09-14/before-sewer-night-390-retro.jpg",
+      "sha256": "38acfb1b516fee545f7162ab3e6b7d52e41f50af5337078d091875172c496919",
+      "phase": "before",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "Game arena: playing",
+      "pack": "retro",
+      "observed": {
+        "arena": [
+          800,
+          600
+        ],
+        "view": [
+          390,
+          844
+        ],
+        "camera": {
+          "x": 162.09789011801456,
+          "y": 0,
+          "arenaW": 800,
+          "arenaH": 600
+        },
+        "player": {
+          "x": 400,
+          "y": 300
+        }
+      },
+      "errors": []
+    },
+    {
+      "file": "render-audio-2026-09-14/before-sewer-night-844-rotated.jpg",
+      "sha256": "864d9bdbc1293c70c05aabc304bcf392707b1a71d8082e76d433a01ab1d4a0f0",
+      "phase": "before",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "page": "Game arena: rotated",
+      "pack": "retro",
+      "observed": {
+        "arena": [
+          800,
+          600
+        ],
+        "view": [
+          844,
+          334
+        ],
+        "camera": {
+          "x": 0,
+          "y": 94.43017863548687,
+          "arenaW": 800,
+          "arenaH": 600
+        },
+        "player": {
+          "x": 400,
+          "y": 300
+        }
+      },
+      "errors": []
+    },
+    {
+      "file": "render-audio-2026-09-14/before-sewer-night-1440-modern.jpg",
+      "sha256": "1765bcb83690dd6b13f067e18f3354f729ec8299cf62c2dbda6032292c68281b",
+      "phase": "before",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Game arena: playing",
+      "pack": "modern",
+      "observed": {
+        "arena": [
+          800,
+          600
+        ],
+        "view": [
+          1440,
+          900
+        ],
+        "camera": {
+          "x": 0,
+          "y": 0,
+          "arenaW": 800,
+          "arenaH": 600
+        },
+        "player": {
+          "x": 400,
+          "y": 300
+        }
+      },
+      "errors": []
+    },
+    {
+      "file": "render-audio-2026-09-14/before-sewer-night-1440-retro.jpg",
+      "sha256": "31135f639f3b27aecdddef49c013721002419ed3a7727b4fd9d2dbc0670b5942",
+      "phase": "before",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Game arena: playing",
+      "pack": "retro",
+      "observed": {
+        "arena": [
+          800,
+          600
+        ],
+        "view": [
+          1440,
+          900
+        ],
+        "camera": {
+          "x": 0,
+          "y": 0,
+          "arenaW": 800,
+          "arenaH": 600
+        },
+        "player": {
+          "x": 400,
+          "y": 300
+        }
+      },
+      "errors": []
+    },
+    {
+      "file": "render-audio-2026-09-14/before-porcelain-day-390-modern.jpg",
+      "sha256": "951f6fda143c668103040ac3948bef737c8e2e670e55e7d4308df33fd06abb48",
+      "phase": "before",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "Game arena: playing",
+      "pack": "modern",
+      "observed": {
+        "arena": [
+          800,
+          600
+        ],
+        "view": [
+          390,
+          844
+        ],
+        "camera": {
+          "x": 162.09413326074136,
+          "y": 0,
+          "arenaW": 800,
+          "arenaH": 600
+        },
+        "player": {
+          "x": 400,
+          "y": 300
+        }
+      },
+      "errors": []
+    },
+    {
+      "file": "render-audio-2026-09-14/before-porcelain-day-390-retro.jpg",
+      "sha256": "0ba8fb1947e79656e0c19a027aaa979e73e8811642d683c1fd17d22efa213e76",
+      "phase": "before",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "Game arena: playing",
+      "pack": "retro",
+      "observed": {
+        "arena": [
+          800,
+          600
+        ],
+        "view": [
+          390,
+          844
+        ],
+        "camera": {
+          "x": 162.09978867724556,
+          "y": 0,
+          "arenaW": 800,
+          "arenaH": 600
+        },
+        "player": {
+          "x": 400,
+          "y": 300
+        }
+      },
+      "errors": []
+    },
+    {
+      "file": "render-audio-2026-09-14/before-porcelain-day-844-rotated.jpg",
+      "sha256": "b024ce2e115392e58ef7cad1732c948a9e492117bd4fcd7c092ef8ca63e39598",
+      "phase": "before",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "page": "Game arena: rotated",
+      "pack": "retro",
+      "observed": {
+        "arena": [
+          800,
+          600
+        ],
+        "view": [
+          844,
+          334
+        ],
+        "camera": {
+          "x": 0,
+          "y": 96.02333640985569,
+          "arenaW": 800,
+          "arenaH": 600
+        },
+        "player": {
+          "x": 400,
+          "y": 300
+        }
+      },
+      "errors": []
+    },
+    {
+      "file": "render-audio-2026-09-14/before-porcelain-day-1440-modern.jpg",
+      "sha256": "021d44cb4e90ed0c8ccd0cf99c334015c9d7bbbd56c047ae065f0fd3fba37760",
+      "phase": "before",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Game arena: playing",
+      "pack": "modern",
+      "observed": {
+        "arena": [
+          800,
+          600
+        ],
+        "view": [
+          1440,
+          900
+        ],
+        "camera": {
+          "x": 0,
+          "y": 0,
+          "arenaW": 800,
+          "arenaH": 600
+        },
+        "player": {
+          "x": 400,
+          "y": 300
+        }
+      },
+      "errors": []
+    },
+    {
+      "file": "render-audio-2026-09-14/before-porcelain-day-1440-retro.jpg",
+      "sha256": "51bea912401e6d42edfb2bd7ce517ff41cc987a7bf08fc97e425ad72c89beabf",
+      "phase": "before",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Game arena: playing",
+      "pack": "retro",
+      "observed": {
+        "arena": [
+          800,
+          600
+        ],
+        "view": [
+          1440,
+          900
+        ],
+        "camera": {
+          "x": 0,
+          "y": 0,
+          "arenaW": 800,
+          "arenaH": 600
+        },
+        "player": {
+          "x": 400,
+          "y": 300
+        }
+      },
+      "errors": []
+    },
+    {
+      "file": "render-audio-2026-09-14/after-sewer-night-390-modern.jpg",
+      "sha256": "e63e803523159638fe04b79a1e1c172b4d548141e7ff6c23b2a9b29789456604",
+      "phase": "after",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "Game arena: playing",
+      "pack": "modern",
+      "observed": {
+        "arena": [
+          390,
+          836
+        ],
+        "view": [
+          390,
+          836
+        ],
+        "camera": {
+          "x": 0,
+          "y": 0,
+          "arenaW": 390,
+          "arenaH": 836
+        },
+        "player": {
+          "x": 195,
+          "y": 418
+        },
+        "depth": 0,
+        "underflow": false,
+        "text": {
+          "x": 195,
+          "y": 180,
+          "width": 187.4833984375,
+          "matrix": [
+            1,
+            0,
+            0,
+            1,
+            0,
+            0
+          ]
+        }
+      },
+      "errors": []
+    },
+    {
+      "file": "render-audio-2026-09-14/after-sewer-night-390-retro.jpg",
+      "sha256": "d0d2b2dbe963186d253e16663ce93a11aeb48cf59b27efb4525104ac48386b81",
+      "phase": "after",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "Game arena: playing",
+      "pack": "retro",
+      "observed": {
+        "arena": [
+          390,
+          836
+        ],
+        "view": [
+          390,
+          836
+        ],
+        "camera": {
+          "x": 0,
+          "y": 0,
+          "arenaW": 390,
+          "arenaH": 836
+        },
+        "player": {
+          "x": 195,
+          "y": 418
+        },
+        "depth": 0,
+        "underflow": false,
+        "text": {
+          "x": 195,
+          "y": 180,
+          "width": 187.4833984375,
+          "matrix": [
+            1,
+            0,
+            0,
+            1,
+            0,
+            0
+          ]
+        }
+      },
+      "errors": []
+    },
+    {
+      "file": "render-audio-2026-09-14/after-sewer-night-390-ads.jpg",
+      "sha256": "54dd9d4a886b92c9f45c3095a05015931f14841b7938fab35c847e9b403c25f7",
+      "phase": "after",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "Game arena: ads",
+      "pack": "retro",
+      "observed": {
+        "arena": [
+          390,
+          836
+        ],
+        "view": [
+          390,
+          836
+        ],
+        "camera": {
+          "x": 0,
+          "y": 0,
+          "arenaW": 390,
+          "arenaH": 836
+        },
+        "player": {
+          "x": 195,
+          "y": 418
+        },
+        "depth": 0,
+        "underflow": false,
+        "text": {
+          "x": 195,
+          "y": 180,
+          "width": 187.4833984375,
+          "matrix": [
+            1,
+            0,
+            0,
+            1,
+            0,
+            0
+          ]
+        }
+      },
+      "errors": []
+    },
+    {
+      "file": "render-audio-2026-09-14/after-sewer-night-844-rotated.jpg",
+      "sha256": "8911e64cd9952c89cea85fef963604d56c0a5b80fa4b74267d5ed7ce6ec7441b",
+      "phase": "after",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "page": "Game arena: rotated",
+      "pack": "retro",
+      "observed": {
+        "arena": [
+          844,
+          836
+        ],
+        "view": [
+          844,
+          326
+        ],
+        "camera": {
+          "x": 0,
+          "y": 255,
+          "arenaW": 844,
+          "arenaH": 836
+        },
+        "player": {
+          "x": 195,
+          "y": 418
+        },
+        "depth": 0,
+        "underflow": false,
+        "text": {
+          "x": 422,
+          "y": 145,
+          "width": 187.4833984375,
+          "matrix": [
+            1,
+            0,
+            0,
+            1,
+            0,
+            0
+          ]
+        }
+      },
+      "errors": []
+    },
+    {
+      "file": "render-audio-2026-09-14/after-sewer-night-1440-modern.jpg",
+      "sha256": "44b9ad8d7206a8c5cc482ead606c338df554cbaac71c1ff6e688467492bccdec",
+      "phase": "after",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Game arena: playing",
+      "pack": "modern",
+      "observed": {
+        "arena": [
+          1440,
+          900
+        ],
+        "view": [
+          1440,
+          900
+        ],
+        "camera": {
+          "x": 0,
+          "y": 0,
+          "arenaW": 1440,
+          "arenaH": 900
+        },
+        "player": {
+          "x": 720,
+          "y": 450
+        },
+        "depth": 0,
+        "underflow": false,
+        "text": {
+          "x": 720,
+          "y": 180,
+          "width": 187.4833984375,
+          "matrix": [
+            1,
+            0,
+            0,
+            1,
+            0,
+            0
+          ]
+        }
+      },
+      "errors": []
+    },
+    {
+      "file": "render-audio-2026-09-14/after-sewer-night-1440-retro.jpg",
+      "sha256": "543ab64ad918ff2ec2b9c289fde5cece43863e88a2b77469367d82ab7e2a73a0",
+      "phase": "after",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Game arena: playing",
+      "pack": "retro",
+      "observed": {
+        "arena": [
+          1440,
+          900
+        ],
+        "view": [
+          1440,
+          900
+        ],
+        "camera": {
+          "x": 0,
+          "y": 0,
+          "arenaW": 1440,
+          "arenaH": 900
+        },
+        "player": {
+          "x": 720,
+          "y": 450
+        },
+        "depth": 0,
+        "underflow": false,
+        "text": {
+          "x": 720,
+          "y": 180,
+          "width": 187.4833984375,
+          "matrix": [
+            1,
+            0,
+            0,
+            1,
+            0,
+            0
+          ]
+        }
+      },
+      "errors": []
+    },
+    {
+      "file": "render-audio-2026-09-14/after-sewer-night-1440-ads.jpg",
+      "sha256": "7a259738ba40578365118b5f3747e729dab8ed5795bdfe1212ba831df1ab631a",
+      "phase": "after",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Game arena: ads",
+      "pack": "retro",
+      "observed": {
+        "arena": [
+          1440,
+          900
+        ],
+        "view": [
+          1440,
+          900
+        ],
+        "camera": {
+          "x": 0,
+          "y": 0,
+          "arenaW": 1440,
+          "arenaH": 900
+        },
+        "player": {
+          "x": 720,
+          "y": 450
+        },
+        "depth": 0,
+        "underflow": false,
+        "text": {
+          "x": 720,
+          "y": 180,
+          "width": 187.4833984375,
+          "matrix": [
+            1,
+            0,
+            0,
+            1,
+            0,
+            0
+          ]
+        }
+      },
+      "errors": []
+    },
+    {
+      "file": "render-audio-2026-09-14/after-porcelain-day-390-modern.jpg",
+      "sha256": "1f927aca05cadb20836e90b06a5564595ad26217e8701c6a423053e4dac1e4f6",
+      "phase": "after",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "Game arena: playing",
+      "pack": "modern",
+      "observed": {
+        "arena": [
+          390,
+          836
+        ],
+        "view": [
+          390,
+          836
+        ],
+        "camera": {
+          "x": 0,
+          "y": 0,
+          "arenaW": 390,
+          "arenaH": 836
+        },
+        "player": {
+          "x": 195,
+          "y": 418
+        },
+        "depth": 0,
+        "underflow": false,
+        "text": {
+          "x": 195,
+          "y": 180,
+          "width": 187.4833984375,
+          "matrix": [
+            1,
+            0,
+            0,
+            1,
+            0,
+            0
+          ]
+        }
+      },
+      "errors": []
+    },
+    {
+      "file": "render-audio-2026-09-14/after-porcelain-day-390-retro.jpg",
+      "sha256": "ba5d6dd71168d536afcaf7e55ebf928df0242fad94e83d6c81515e52ba7bf1af",
+      "phase": "after",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "Game arena: playing",
+      "pack": "retro",
+      "observed": {
+        "arena": [
+          390,
+          836
+        ],
+        "view": [
+          390,
+          836
+        ],
+        "camera": {
+          "x": 0,
+          "y": 0,
+          "arenaW": 390,
+          "arenaH": 836
+        },
+        "player": {
+          "x": 195,
+          "y": 418
+        },
+        "depth": 0,
+        "underflow": false,
+        "text": {
+          "x": 195,
+          "y": 180,
+          "width": 187.4833984375,
+          "matrix": [
+            1,
+            0,
+            0,
+            1,
+            0,
+            0
+          ]
+        }
+      },
+      "errors": []
+    },
+    {
+      "file": "render-audio-2026-09-14/after-porcelain-day-390-ads.jpg",
+      "sha256": "41478be0a9c715025b488b6f80077d6a38eee08442ccfd3d95c303353fedfa40",
+      "phase": "after",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "Game arena: ads",
+      "pack": "retro",
+      "observed": {
+        "arena": [
+          390,
+          836
+        ],
+        "view": [
+          390,
+          836
+        ],
+        "camera": {
+          "x": 0,
+          "y": 0,
+          "arenaW": 390,
+          "arenaH": 836
+        },
+        "player": {
+          "x": 195,
+          "y": 418
+        },
+        "depth": 0,
+        "underflow": false,
+        "text": {
+          "x": 195,
+          "y": 180,
+          "width": 187.4833984375,
+          "matrix": [
+            1,
+            0,
+            0,
+            1,
+            0,
+            0
+          ]
+        }
+      },
+      "errors": []
+    },
+    {
+      "file": "render-audio-2026-09-14/after-porcelain-day-844-rotated.jpg",
+      "sha256": "c829d74cff2f9901c6bcd700a3afd72fb9130a18adae3bab57067e558c2c38cc",
+      "phase": "after",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "page": "Game arena: rotated",
+      "pack": "retro",
+      "observed": {
+        "arena": [
+          844,
+          836
+        ],
+        "view": [
+          844,
+          326
+        ],
+        "camera": {
+          "x": 0,
+          "y": 255,
+          "arenaW": 844,
+          "arenaH": 836
+        },
+        "player": {
+          "x": 195,
+          "y": 418
+        },
+        "depth": 0,
+        "underflow": false,
+        "text": {
+          "x": 422,
+          "y": 145,
+          "width": 187.4833984375,
+          "matrix": [
+            1,
+            0,
+            0,
+            1,
+            0,
+            0
+          ]
+        }
+      },
+      "errors": []
+    },
+    {
+      "file": "render-audio-2026-09-14/after-porcelain-day-1440-modern.jpg",
+      "sha256": "2a425ee53c815294356b038c8a49e2a342e9cd5cabb0c10a68369532375a2023",
+      "phase": "after",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Game arena: playing",
+      "pack": "modern",
+      "observed": {
+        "arena": [
+          1440,
+          900
+        ],
+        "view": [
+          1440,
+          900
+        ],
+        "camera": {
+          "x": 0,
+          "y": 0,
+          "arenaW": 1440,
+          "arenaH": 900
+        },
+        "player": {
+          "x": 720,
+          "y": 450
+        },
+        "depth": 0,
+        "underflow": false,
+        "text": {
+          "x": 720,
+          "y": 180,
+          "width": 187.4833984375,
+          "matrix": [
+            1,
+            0,
+            0,
+            1,
+            0,
+            0
+          ]
+        }
+      },
+      "errors": []
+    },
+    {
+      "file": "render-audio-2026-09-14/after-porcelain-day-1440-retro.jpg",
+      "sha256": "35e55de379ae117ca9b2b16c18e1b03e0c0937cd596bccd1db3df92d0cb9e8c4",
+      "phase": "after",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Game arena: playing",
+      "pack": "retro",
+      "observed": {
+        "arena": [
+          1440,
+          900
+        ],
+        "view": [
+          1440,
+          900
+        ],
+        "camera": {
+          "x": 0,
+          "y": 0,
+          "arenaW": 1440,
+          "arenaH": 900
+        },
+        "player": {
+          "x": 720,
+          "y": 450
+        },
+        "depth": 0,
+        "underflow": false,
+        "text": {
+          "x": 720,
+          "y": 180,
+          "width": 187.4833984375,
+          "matrix": [
+            1,
+            0,
+            0,
+            1,
+            0,
+            0
+          ]
+        }
+      },
+      "errors": []
+    },
+    {
+      "file": "render-audio-2026-09-14/after-porcelain-day-1440-ads.jpg",
+      "sha256": "35726747d5e42c683eb2bc073018f2182902ec2a5efd5a268d38886955ad284e",
+      "phase": "after",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Game arena: ads",
+      "pack": "retro",
+      "observed": {
+        "arena": [
+          1440,
+          900
+        ],
+        "view": [
+          1440,
+          900
+        ],
+        "camera": {
+          "x": 0,
+          "y": 0,
+          "arenaW": 1440,
+          "arenaH": 900
+        },
+        "player": {
+          "x": 720,
+          "y": 450
+        },
+        "depth": 0,
+        "underflow": false,
+        "text": {
+          "x": 720,
+          "y": 180,
+          "width": 187.4833984375,
+          "matrix": [
+            1,
+            0,
+            0,
+            1,
+            0,
+            0
+          ]
+        }
+      },
+      "errors": []
+    }
+  ],
+  "inspection": {
+    "renderedPixelsReviewed": true,
+    "reviewer": "Codex: direct image inspection of all 14 final staging states and baseline desktop/mobile captures",
+    "reviewedAt": "2026-09-14T08:01:39.913Z",
+    "scope": "Arena sizing, camera/scope/HUD layering, mobile dock and announcements; both character art packs",
+    "findings": [
+      "Before: 800x600 arena left large blank areas and persistent trails in desktop/mobile viewports.",
+      "After: every viewport covered, canvas transform stack balanced, announcements stay in screen space under camera motion and ADS.",
+      "Mobile radar and landscape announcements clear the top HUD; scope shading leaves HUD text readable.",
+      "QA character health and announcement lifetime are synthetic; arena dimensions, resize behavior and normal UI launch are not overridden."
+    ],
+    "fixesApplied": [
+      "Measure the real viewport before initializing the world; reserve one shared mobile dock height.",
+      "Expand live bounds on rotation without moving actors or rebuilding obstacles.",
+      "Clear the whole canvas; use world dimensions for arena borders; restore camera before HUD.",
+      "Fit screen text, move mobile radar below the header, and paint scope shading beneath screen overlays."
+    ],
+    "blockingDefectsOpen": 0
+  },
+  "audio": {
+    "peak": 0.7758751511573792,
+    "rms": 0.019623973172020387,
+    "clipped": 0,
+    "samples": 705600,
+    "rate": 44100,
+    "scope": "OfflineAudioContext: all 12 weapon identities and a dense combat sequence through the real bus graph",
+    "lifecycle": "Real Chrome button gestures: mute remains suspended on visibility event; unmute resumes; music/sfx/ui gain controls converge independently."
+  }
+}

@@ -19,7 +19,7 @@ const THEME_NAMES = ["OFFICE","BUNKER","FACTORY","RUINS","DESERT","FOREST","SPAC
 const THEME_EMOJIS = ["🏢","🪖","🏭","🏚️","🌵","🌲","🚀","🧊"];
 
 export default function HUD({
-  wave, timeSurvived, score, kills, deaths, health, ammo, isReloading,
+  wave, timeSurvived, score, kills, deaths, health, maxHealth, ammo, isReloading,
   currentWeapon, combo, comboTimer, killstreak, level, xp, xpNeeded,
   killFeed, username, grenadeReady, dashReady, extraLives, guardianAngelFlash,
   bankedPerkChoices, nextPerkLevel,
@@ -52,6 +52,7 @@ export default function HUD({
   const drillProgress = buildRunDrillLiveProgress(activeDrill, { wave, score });
   const weapon = WEAPONS[currentWeapon];
   const diff = DIFFICULTIES[difficulty] || DIFFICULTIES.normal;
+  const healthLimit = Math.max(1, maxHealth || diff.playerHP);
   const comboColor = combo >= 10 ? "#FF0000" : combo >= 5 ? "#FF4500" : combo >= 3 ? "#FFD700" : "#FFF";
   const upgStars = (idx) => "⭐".repeat(weaponUpgrades?.[idx] || 0);
 
@@ -83,7 +84,7 @@ export default function HUD({
       <MobileHUD
         isMobile={isMobile}
         wave={wave} timeSurvived={timeSurvived} score={score} kills={kills} deaths={deaths}
-        health={health} maxHealth={diff.playerHP} level={level}
+        health={health} maxHealth={healthLimit} level={level}
         currentWeapon={currentWeapon} ammo={ammo} isReloading={isReloading} extraLives={extraLives}
         fmtTime={fmtTime} onPause={onPause}
         activeDrill={activeDrill} drillProgress={drillProgress} practiceEvidence={practiceEvidence} runIntegrity={runIntegrity}
@@ -397,10 +398,10 @@ export default function HUD({
       <div style={{ position: "absolute", bottom: 8, left: 12, width: isMobile ? 100 : 180 }}>
         <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, color: "#DDD", marginBottom: 2 }}>
           <span>HP{extraLives > 0 ? " 😇" : ""}</span>
-          <span>{health}/{diff.playerHP}</span>
+          <span>{health}/{healthLimit}</span>
         </div>
         <div style={{ background: "rgba(255,255,255,0.15)", borderRadius: 3, height: 6, overflow: "hidden" }}>
-          <div style={{ width: Math.min(100, (health / diff.playerHP) * 100) + "%", height: "100%", borderRadius: 3, background: health > 60 ? "#0F0" : health > 30 ? "#FA0" : "#F00", transition: "width 0.2s" }} />
+          <div style={{ width: Math.min(100, (health / healthLimit) * 100) + "%", height: "100%", borderRadius: 3, background: health > 60 ? "#0F0" : health > 30 ? "#FA0" : "#F00", transition: "width 0.2s" }} />
         </div>
         {extraLives > 0 && <div style={{ fontSize: 9, color: "var(--cod-gold)", marginTop: 2 }}>Guardian Angel Active</div>}
       </div>

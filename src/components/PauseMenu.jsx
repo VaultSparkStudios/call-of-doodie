@@ -313,7 +313,7 @@ export default function PauseMenu({ wave, timeSurvived, score, isMobile, achieve
           <button onClick={() => { onRefreshLeaderboard?.(); setShowLb(true); }} style={{ ...pBtn, color: "var(--cod-cyan)", borderColor: "rgba(0,229,255,0.25)", ...(gfocus("leaderboard") ? focusRing : {}) }}>⚔️ LEADERBOARD</button>
           <button onClick={() => { soundUIOpen(); setShowSettings(true); }} style={{ ...pBtn, ...(gfocus("settings") ? focusRing : {}) }}>⚙ SETTINGS</button>
           <button onClick={onToggleMute} style={{ ...pBtn, color: musicMuted ? "#888" : "#0EF", ...(gfocus("music") ? focusRing : {}) }}>
-            {musicMuted ? "🔇 MUSIC: OFF" : "🔊 MUSIC: ON"}
+            {musicMuted ? "🔇 AUDIO: OFF" : "🔊 AUDIO: ON"}
           </button>
           {!musicMuted && (
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>

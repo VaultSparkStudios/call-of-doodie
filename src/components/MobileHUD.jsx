@@ -71,7 +71,7 @@ export default function MobileHUD({
       )}
 
       {modeHud && (modeHud.banner || modeHud.squad?.length > 0 || modeHud.verbObjective) && (
-        <div data-testid="hud-mode-panel" style={{ position: "absolute", left: 8, bottom: isMobile ? 92 : 104, maxWidth: isMobile ? 210 : 260, display: "flex", flexDirection: "column", gap: 3, pointerEvents: "none" }}>
+        <div data-testid="hud-mode-panel" style={{ position: "absolute", left: 8, bottom: isMobile ? 92 : 220, maxWidth: isMobile ? 210 : 260, display: "flex", flexDirection: "column", gap: 3, pointerEvents: "none" }}>
           {modeHud.banner && (
             <div data-testid="hud-mode-banner" style={{ padding: "4px 8px", border: "1px solid rgba(255,211,79,.35)", borderRadius: 8, background: "rgba(4,7,10,.82)", color: "var(--cod-gold)", fontSize: 9, fontWeight: 900, letterSpacing: .6, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
               {modeHud.banner}
@@ -107,7 +107,7 @@ export default function MobileHUD({
           )}
         </div>
       )}
-      <div style={{ position: "absolute", bottom: isMobile ? 8 : 18, left: isMobile ? 8 : "50%", right: isMobile ? 8 : "auto", width: isMobile ? "auto" : "min(680px, calc(100vw - 32px))", transform: isMobile ? "none" : "translateX(-50%)", display: "grid", gridTemplateColumns: "minmax(105px, 1fr) auto", alignItems: "end", gap: 8 }}>
+      <div data-testid="hud-vitals" style={{ position: "absolute", bottom: isMobile ? 8 : 132, left: isMobile ? 8 : "50%", right: isMobile ? 8 : "auto", width: isMobile ? "auto" : "min(680px, calc(100vw - 32px))", transform: isMobile ? "none" : "translateX(-50%)", display: "grid", gridTemplateColumns: "minmax(105px, 1fr) auto", alignItems: "end", gap: 8 }}>
         <div style={{ padding: "8px 10px", border: "1px solid rgba(255,255,255,.14)", borderRadius: 11, background: "rgba(4,7,10,.78)", backdropFilter: "blur(8px)" }}>
           <div style={{ display: "flex", justifyContent: "space-between", gap: 8, fontSize: 10, fontWeight: 850 }}><span>HEALTH{extraLives > 0 ? " · EXTRA LIFE" : ""}</span><span>{health}/{maxHealth}</span></div>
           <div style={{ height: 7, marginTop: 5, overflow: "hidden", borderRadius: 99, background: "rgba(255,255,255,.12)" }}>

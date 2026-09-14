@@ -138,3 +138,22 @@ export function buildArenaEnvironment({ seed, width, height }) {
     hazards,
   };
 }
+
+// Choose a safe starting point without changing the seeded map or consuming RNG.
+// Prefer the existing centre; search nearby rings only when hazards/walls cover it.
+export function findSafeArenaSpawn({ obstacles = [], hazards = [] }, width, height, preferred = { x: width / 2, y: height / 2 }) {
+  const radius = 24;
+  const start = { x: Math.max(radius, Math.min(width - radius, preferred.x)), y: Math.max(radius, Math.min(height - radius, preferred.y)) };
+  const safe = (x, y) => x >= radius && y >= radius && x <= width - radius && y <= height - radius
+    && !hazards.some(h => Math.hypot(x - h.x, y - h.y) < h.radius + radius)
+    && !obstacles.some(o => Math.hypot(x - Math.max(o.x, Math.min(o.x + o.w, x)), y - Math.max(o.y, Math.min(o.y + o.h, y))) < radius);
+  if (safe(start.x, start.y)) return start;
+  for (let distance = 24; distance <= Math.hypot(width, height); distance += 24) {
+    for (let step = 0; step < 16; step += 1) {
+      const angle = step * Math.PI / 8;
+      const x = start.x + Math.cos(angle) * distance, y = start.y + Math.sin(angle) * distance;
+      if (safe(x, y)) return { x, y };
+    }
+  }
+  return start;
+}

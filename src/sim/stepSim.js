@@ -24,7 +24,7 @@ import { takeQueuedEnemyDefeat, collectQueuedEnemyDefeats } from "../systems/ene
 import { createPressureArc } from "../systems/pressureArc.js";
 import { createDamageSequence } from "../systems/damageSequence.js";
 import { RUN_PHASE } from "../systems/runTermination.js";
-import { buildArenaEnvironment } from "../systems/arenaEnvironment.js";
+import { buildArenaEnvironment, findSafeArenaSpawn } from "../systems/arenaEnvironment.js";
 
 export const SIM_SCHEMA_VERSION = "sim-state-v1";
 
@@ -86,6 +86,7 @@ export function createSimState({
     try {
       const env = buildArenaEnvironment({ seed: gs.runSeed, width: W, height: H });
       Object.assign(gs, env);
+      Object.assign(gs.player, findSafeArenaSpawn(env, W, H, gs.player));
     } catch { /* arena is optional for kernel tests */ }
   }
   return gs;

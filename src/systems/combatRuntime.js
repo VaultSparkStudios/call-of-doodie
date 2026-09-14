@@ -24,4 +24,4 @@ export { applyObservedPlayerDamage, createDamageSequence, finalizeDamageSequence
 export { buildWavePlanReceipt, recordWavePlanSnapshot } from "./wavePlanReceipt.js";
 export { createBossWavePlan } from "./bossWaveFlow.js";
 export { getZombieOutbreakPlan, getZombieWaveEnemyCount, mutateEnemyForZombieMode } from "./zombieMode.js";
-export { buildArenaEnvironment } from "./arenaEnvironment.js";
+export { buildArenaEnvironment, findSafeArenaSpawn } from "./arenaEnvironment.js";

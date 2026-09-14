@@ -1438,6 +1438,7 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
 
   ctx.save(); // screen overlays, restored before the threat compass
   const _ftCam = (_camX !== 0 || _camY !== 0);
+  const _announcementRows = [];
   const _paintFloatingText = (ft) => {
     const _ftBig = ft.big === true || (typeof ft.text === "string" && ft.text.includes("💥"));
     const maxLife = _ftBig ? 90 : ft.quote ? 110 : 60;
@@ -1463,13 +1464,30 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
       }
       const half = ctx.measureText(ft.text).width / 2;
       x = Math.max(16 + half, Math.min(W - 16 - half, x));
+      // Simultaneous wave/level/reward notices need separate readable rows.
+      const fontHeight = Number(/([\d.]+)px/.exec(ctx.font)?.[1]) || 13;
+      const bottom = H - (isMobile ? 110 : 220);
+      const top = Math.max(120, Math.min(145, bottom - 31));
+      const place = (preferred) => {
+        let baseline = Math.max(top + fontHeight, preferred);
+        for (const row of [..._announcementRows].sort((a, b) => a.top - b.top)) {
+          if (baseline + 6 > row.top && baseline - fontHeight < row.bottom) baseline = row.bottom + fontHeight + 6;
+        }
+        return baseline <= bottom ? baseline : null;
+      };
+      y = place(y) ?? place(top + fontHeight);
+      if (y === null) return;
+      _announcementRows.push({ top: y - fontHeight, bottom: y + 6 });
     }
     ctx.strokeText(ft.text, x, y); ctx.fillText(ft.text, x, y);
   };
   if (_ftCam) { ctx.save(); ctx.translate(-_camX, -_camY); }
   gs.floatingTexts.forEach(ft => { if (ft.screen !== true) _paintFloatingText(ft); });
   if (_ftCam) ctx.restore();
-  gs.floatingTexts.forEach(ft => { if (ft.screen === true) _paintFloatingText(ft); });
+  // Recent notices take priority when a short landscape viewport fills up.
+  for (let i = gs.floatingTexts.length - 1; i >= 0; i -= 1) {
+    if (gs.floatingTexts[i].screen === true) _paintFloatingText(gs.floatingTexts[i]);
+  }
   ctx.globalAlpha = 1;
 
   // Mini-radar

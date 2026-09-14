@@ -851,6 +851,8 @@ export default function CallOfDoodie() {
     gsRef.current.floorZones = arena.floorZones;
     gsRef.current.props = arena.props;
     gsRef.current.hazards = arena.hazards;
+    Object.assign(gsRef.current.player, combatRuntimeRef.current.findSafeArenaSpawn(arena, aw, ah, gsRef.current.player));
+    updateCamera(gsRef.current.camera, gsRef.current.player, { viewW: w, viewH: h, snap: true });
     modeRuntimeRef.current?.createModeState(modeDefRef.current, gsRef.current, { W: aw, H: ah, viewW: w, viewH: h, addText, addParticles, announce: _modeAnnounce });
 
     // Show meta toast if upgrades active
@@ -3920,14 +3922,14 @@ export default function CallOfDoodie() {
       )}
 
       {/* Wave route select */}
-      {routePending && (
+      {routePending && !paused && (
         <AsyncPanelBoundary>
           <RouteSelectModal options={routeOptions} wave={wave} onSelect={applyRoute} buildArchetype={dominantArchetype} gs={gsRef.current} />
         </AsyncPanelBoundary>
       )}
 
       {/* Wave mutation challenge */}
-      {mutationPending && mutationOptions.length > 0 && (
+      {mutationPending && !paused && mutationOptions.length > 0 && (
         <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.88)", zIndex: 95, display: "flex", alignItems: "center", justifyContent: "center", padding: 16, backdropFilter: "blur(8px)" }}>
           <div style={{ background: "rgba(15,5,30,0.98)", border: "1px solid rgba(180,0,255,0.35)", borderRadius: 14, padding: "28px 24px", maxWidth: 460, width: "100%", color: "#FFF", boxShadow: "0 0 40px rgba(150,0,255,0.2)" }}>
             <div style={{ textAlign: "center", marginBottom: 20 }}>
@@ -3969,14 +3971,14 @@ export default function CallOfDoodie() {
       )}
 
       {/* Wave clear shop */}
-      {shopPending && (
+      {shopPending && !paused && (
         <AsyncPanelBoundary>
           <WaveShopModal options={shopOptions} wave={wave} onSelect={applyShopOption} boughtHistory={shopHistory} currentWeapon={currentWeapon} coins={coins} coinShopOptions={coinShopOptions} onCoinBuy={applyCoinShopItem} buildArchetype={dominantArchetype} gs={gsRef.current} />
         </AsyncPanelBoundary>
       )}
 
       {/* Perk selection modal */}
-      {perkPending && (
+      {perkPending && !paused && (
         <AsyncPanelBoundary>
           <PerkModal options={perkOptions} level={level} onSelect={applyPerk} buildArchetype={dominantArchetype} unlockedArchetypes={unlockedArchetypes} activePerks={activePerks} />
         </AsyncPanelBoundary>
@@ -4204,7 +4206,7 @@ export default function CallOfDoodie() {
       <HUD
         modeHud={modeRuntimeRef.current ? modeRuntimeRef.current.getModeHudModel(gsRef.current, modeDefRef.current) : null}
         wave={wave} timeSurvived={timeSurvived} score={score} kills={kills} deaths={deaths}
-        health={health} ammo={ammo} isReloading={isReloading} currentWeapon={currentWeapon}
+        health={health} maxHealth={gsRef.current?.player?.maxHealth} ammo={ammo} isReloading={isReloading} currentWeapon={currentWeapon}
         combo={combo} comboTimer={comboTimer} killstreak={killstreak}
         level={level} xp={xp} xpNeeded={xpNeeded} killFeed={killFeed} username={username}
         bankedPerkChoices={bankedPerkChoices} nextPerkLevel={nextPerkLevel}
