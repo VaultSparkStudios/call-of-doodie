@@ -46,7 +46,7 @@ import { detectControllerType, getPrimaryGamepad, readGamepadControls, rememberC
 import { getRandomPerks, getFullyCursedPerks } from "./utils/perkOptions.js";
 import { buildWeeklyGauntletLaunch } from "./utils/gauntletLaunch.js";
 import { scheduleIdleWork } from "./utils/deferredWork.js";
-import { applyCanvasScale, watchCanvasScale } from "./utils/canvasScale.js";
+import { applyCanvasScale, watchCanvasScale, measureGameViewport, MOBILE_DOCK_HEIGHT } from "./utils/canvasScale.js";
 import { captureGifFrame } from "./utils/gifCapture.js";
 import { getRouteOptions } from "./utils/routeOptions.js";
 import { useGameLoop } from "./hooks/useGameLoop.js";
@@ -86,7 +86,7 @@ import { buildStudioGameEvent } from "./utils/runIntelligence.js";
 import { addParticles, addScreenText, addText, announce } from "./systems/transientPresentation.js";
 import { buildIntegrityLocalSubmissionResult, getRunIntegrityReceipt, recordRunIntegrityFault } from "./systems/runIntegrity.js";
 import { planPauseTransition } from "./systems/pauseTransition.js";
-import { createCamera, resolveArenaBounds, resolveArenaSize, updateCamera, viewCenter } from "./systems/camera.js";
+import { createCamera, resolveArenaBounds, resolveArenaSize, resizeArenaViewport, updateCamera, viewCenter } from "./systems/camera.js";
 import { getInputActivityAge, releaseInputState } from "./systems/inputLifecycle.js";
 import { resolveRunEndAttempt, RUN_PHASE } from "./systems/runTermination.js";
 import { resolveDeathAttribution } from "./systems/deathAttribution.js";
@@ -434,15 +434,17 @@ export default function CallOfDoodie() {
   useEffect(() => {
     const resize = () => {
       if (containerRef.current) {
-        const w = containerRef.current.clientWidth;
-        const h = Math.max(0, containerRef.current.clientHeight - (isMobile ? 56 : 0));
+        const { w, h } = measureGameViewport(containerRef.current, isMobile);
         sizeRef.current = { w, h };
         applyCanvasScale(canvasRef.current, w, h);
+        resizeArenaViewport(gsRef.current, w, h);
       }
     };
     resize(); window.addEventListener("resize", resize);
     const unwatch = watchCanvasScale(() => canvasRef.current, () => sizeRef.current, resize);
-    return () => { window.removeEventListener("resize", resize); unwatch(); };
+    const observer = typeof ResizeObserver === "function" ? new ResizeObserver(resize) : null;
+    if (containerRef.current) observer?.observe(containerRef.current);
+    return () => { window.removeEventListener("resize", resize); observer?.disconnect(); unwatch(); };
   }, [screen, isMobile]);
 
   const GW = () => sizeRef.current.w;
@@ -580,7 +582,9 @@ export default function CallOfDoodie() {
 
   // ── Init game ─────────────────────────────────────────────────────────────
   const initGame = useCallback((forceSeed, startWave, practiceDrill = null) => {
-    const w = sizeRef.current.w, h = sizeRef.current.h;
+    const mobile = window.innerWidth <= 900 || window.matchMedia?.("(pointer: coarse)")?.matches === true;
+    const { w, h } = measureGameViewport(containerRef.current, mobile);
+    sizeRef.current = { w, h };
     const diff = DIFFICULTIES[difficultyRef.current] || DIFFICULTIES.normal;
     // Seed creation is intentionally nondeterministic; once chosen, every
     // score-affecting branch uses a named stream derived from this value.
@@ -3876,7 +3880,7 @@ export default function CallOfDoodie() {
       <canvas
         id="game-canvas"
         ref={canvasRef}
-        style={{ width: "100%", height: isMobile ? "calc(100% - 64px)" : "100%", display: "block", cursor: isMobile ? "default" : (gameSettings.crosshair !== "cross" ? "none" : "crosshair"),
+        style={{ width: "100%", height: isMobile ? `calc(100% - ${MOBILE_DOCK_HEIGHT}px)` : "100%", flexShrink: 0, display: "block", cursor: isMobile ? "default" : (gameSettings.crosshair !== "cross" ? "none" : "crosshair"),
           filter: colorblindMode ? "saturate(0.65) contrast(1.35) brightness(1.08) hue-rotate(-15deg)" : "none" }}
       />
 

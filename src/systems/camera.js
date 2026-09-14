@@ -103,6 +103,23 @@ export function resolveArenaSize(modeDef, viewW, viewH) {
  * Falling back to the viewport preserves the exact pre-scrolling contract and
  * keeps partially initialized/test states safe.
  */
+// Preserve actors and obstacles on rotation; expand instead of shrinking the world.
+export function resizeArenaViewport(state, viewW, viewH) {
+  if (!state?.player || viewW <= 0 || viewH <= 0) return;
+  const oldW = state._viewW || viewW, oldH = state._viewH || viewH;
+  state.arenaW = Math.max(state.arenaW || viewW, viewW);
+  state.arenaH = Math.max(state.arenaH || viewH, viewH);
+  state._viewW = viewW;
+  state._viewH = viewH;
+  state.camera ||= createCamera({ arenaW: state.arenaW, arenaH: state.arenaH });
+  state.camera.arenaW = state.arenaW;
+  state.camera.arenaH = state.arenaH;
+  for (const text of state.floatingTexts || []) {
+    if (text.screen === true) { text.x *= viewW / oldW; text.y *= viewH / oldH; }
+  }
+  updateCamera(state.camera, state.player, { viewW, viewH, snap: true });
+}
+
 export function resolveArenaBounds(state, viewW, viewH) {
   const arenaW = Number(state?.arenaW);
   const arenaH = Number(state?.arenaH);

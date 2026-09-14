@@ -32,7 +32,8 @@ export function initBusGraph(ctx) {
     // Music routes through a lowpass so last-stand can sweep the cutoff down.
     const musicFilter = ctx.createBiquadFilter();
     musicFilter.type = "lowpass";
-    musicFilter.frequency.value = 18000;
+    musicFilter.frequency.value = 7500;
+    musicFilter.Q.value = 0.5;
     musicFilter.connect(master);
 
     const buses = {
@@ -41,7 +42,20 @@ export function initBusGraph(ctx) {
       ambient: ctx.createGain(),
       ui: ctx.createGain(),
     };
-    buses.sfx.connect(master);
+    // Tame stacked weapon harmonics before the master limiter has to pump.
+    const sfxFilter = ctx.createBiquadFilter();
+    sfxFilter.type = "lowpass";
+    sfxFilter.frequency.value = 8500;
+    sfxFilter.Q.value = 0.5;
+    const sfxCompressor = ctx.createDynamicsCompressor();
+    sfxCompressor.threshold.value = -18;
+    sfxCompressor.knee.value = 12;
+    sfxCompressor.ratio.value = 3;
+    sfxCompressor.attack.value = 0.006;
+    sfxCompressor.release.value = 0.12;
+    buses.sfx.connect(sfxFilter);
+    sfxFilter.connect(sfxCompressor);
+    sfxCompressor.connect(master);
     buses.music.connect(musicFilter);
     buses.ambient.connect(master);
     buses.ui.connect(master);
@@ -49,7 +63,7 @@ export function initBusGraph(ctx) {
       buses[kind].gain.value = volumes[kind];
     }
 
-    _graph = { ctx, master, limiter, musicFilter, buses, volumes, muted: mutedFlag };
+    _graph = { ctx, master, limiter, musicFilter, sfxFilter, sfxCompressor, buses, volumes, muted: mutedFlag };
   } catch {
     _graph = null;
   }
@@ -114,6 +128,6 @@ export function setMusicLowpass(active) {
     const f = _graph.musicFilter.frequency;
     const now = _graph.ctx.currentTime;
     f.cancelScheduledValues(now);
-    f.setTargetAtTime(active ? 900 : 18000, now, active ? 0.12 : 0.25);
+    f.setTargetAtTime(active ? 900 : 7500, now, active ? 0.12 : 0.25);
   } catch { /* ignore */ }
 }

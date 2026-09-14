@@ -7,6 +7,16 @@ export function effectiveDpr() {
   return (window.__codPerfStep || 0) >= 3 ? 1 : Math.min(window.devicePixelRatio || 1, 2);
 }
 
+export const MOBILE_DOCK_HEIGHT = 64;
+
+// The game shell fills 100dvh, including before its canvas mounts on launch.
+export function measureGameViewport(container, mobile) {
+  return {
+    w: Math.max(1, container?.clientWidth || window.innerWidth),
+    h: Math.max(1, (container?.clientHeight || window.innerHeight) - (mobile ? MOBILE_DOCK_HEIGHT : 0)),
+  };
+}
+
 export function applyCanvasScale(canvas, cssWidth, cssHeight) {
   if (!canvas) return;
   const dpr = effectiveDpr();

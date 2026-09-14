@@ -219,6 +219,10 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   // math is unchanged — one root transform maps game space onto device pixels.
   const _dpr = W > 0 ? canvas.width / W : 1;
   ctx.setTransform(_dpr, 0, 0, _dpr, 0, 0);
+  // Repaint the whole viewport before camera/shake/zoom expose its edges.
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = "#0a0a0a";
+  ctx.fillRect(0, 0, W, H);
   // Degradation ladder step 2+: shadowBlur is the most expensive canvas state
   // in this renderer — an own-property override no-ops every write at once,
   // and deleting it restores the prototype accessor on recovery.
@@ -377,9 +381,9 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   const BORDER_CLR = gs.bossWave ? null : _theme.border;
   const bPulse = 0.25 + Math.sin(Date.now() / 900) * 0.12;
   ctx.strokeStyle = gs.bossWave ? `rgba(255,60,60,${bPulse})` : `${BORDER_CLR}${bPulse})`;
-  ctx.lineWidth = 3; ctx.strokeRect(4, 4, W - 8, H - 8); ctx.lineWidth = 1;
+  ctx.lineWidth = 3; ctx.strokeRect(4, 4, _AW - 8, _AH - 8); ctx.lineWidth = 1;
   const cSz = 18; ctx.strokeStyle = gs.bossWave ? "#FF5555" : (BORDER_CLR + "0.9)");
-  [[4,4,1,1],[W-4,4,-1,1],[4,H-4,1,-1],[W-4,H-4,-1,-1]].forEach(([cx,cy,sx,sy]) => {
+  [[4,4,1,1],[_AW-4,4,-1,1],[4,_AH-4,1,-1],[_AW-4,_AH-4,-1,-1]].forEach(([cx,cy,sx,sy]) => {
     ctx.beginPath(); ctx.moveTo(cx + sx*cSz, cy); ctx.lineTo(cx, cy); ctx.lineTo(cx, cy + sy*cSz); ctx.stroke();
   });
 
@@ -1230,6 +1234,7 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
       const _dist = Math.hypot(p.x - _gp.x, p.y - _gp.y);
       const _ahead = !_ghostAlive || _gf > _gp.f + 60; // ahead if ghost is dead or lagging 1s
       ctx.save();
+      ctx.setTransform(_dpr, 0, 0, _dpr, 0, 0);
       ctx.textAlign = "center"; ctx.font = "bold 10px monospace";
       ctx.fillStyle = _ahead ? "#00FF88" : "#FF4444";
       ctx.shadowColor = ctx.fillStyle; ctx.shadowBlur = 8;
@@ -1404,6 +1409,34 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   // Screen-anchored texts (S167 `addScreenText`) carry VIEWPORT coordinates and
   // are painted in a second pass with no camera offset at all, so announcements
   // stay on screen wherever the camera has scrolled.
+  ctx.restore(); // world camera/shake/ADS; player and weapon are already restored
+  // ── ADS scope overlay (drawn in screen space, outside zoom) ──
+  if (gs.adsZoom) {
+    // Dark vignette around edges
+    const vg = ctx.createRadialGradient(W / 2, H / 2, Math.min(W, H) * 0.22, W / 2, H / 2, Math.min(W, H) * 0.65);
+    vg.addColorStop(0, "rgba(0,0,0,0)");
+    vg.addColorStop(1, "rgba(0,0,0,0.72)");
+    ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
+    // Scope ring
+    ctx.save();
+    ctx.strokeStyle = "rgba(0,229,255,0.55)"; ctx.lineWidth = 1.5; ctx.globalAlpha = 0.8;
+    const sr = Math.min(W, H) * 0.22;
+    ctx.beginPath(); ctx.arc(W / 2, H / 2, sr, 0, Math.PI * 2); ctx.stroke();
+    // Crosshair lines through ring
+    ctx.strokeStyle = "rgba(0,229,255,0.4)"; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(W / 2 - sr, H / 2); ctx.lineTo(W / 2 + sr, H / 2); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(W / 2, H / 2 - sr); ctx.lineTo(W / 2, H / 2 + sr); ctx.stroke();
+    // Center dot
+    ctx.fillStyle = "rgba(0,229,255,0.9)"; ctx.shadowColor = "#00E5FF"; ctx.shadowBlur = 6;
+    ctx.beginPath(); ctx.arc(W / 2, H / 2, 2.5, 0, Math.PI * 2); ctx.fill();
+    ctx.shadowBlur = 0; ctx.globalAlpha = 1;
+    // ADS label
+    ctx.font = "bold 10px 'Courier New',monospace"; ctx.fillStyle = "rgba(0,229,255,0.6)";
+    ctx.textAlign = "center"; ctx.fillText("ADS", W / 2, H / 2 + sr + 18);
+    ctx.restore();
+  }
+
+  ctx.save(); // screen overlays, restored before the threat compass
   const _ftCam = (_camX !== 0 || _camY !== 0);
   const _paintFloatingText = (ft) => {
     const _ftBig = ft.big === true || (typeof ft.text === "string" && ft.text.includes("💥"));
@@ -1420,7 +1453,18 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
       ctx.font = "bold 13px monospace";
       ctx.strokeStyle = "#000"; ctx.lineWidth = 3;
     }
-    ctx.strokeText(ft.text, ft.x, ft.y); ctx.fillText(ft.text, ft.x, ft.y);
+    let x = ft.x, y = ft.y;
+    if (ft.screen === true) {
+      // Keep announcements below the top HUD after a portrait/landscape switch.
+      if (isMobile) y = Math.max(145, Math.min(H - 110, y));
+      const width = ctx.measureText(ft.text).width;
+      if (width > W - 32) {
+        ctx.font = ctx.font.replace(/([\d.]+)px/, (_, size) => `${Number(size) * (W - 32) / width}px`);
+      }
+      const half = ctx.measureText(ft.text).width / 2;
+      x = Math.max(16 + half, Math.min(W - 16 - half, x));
+    }
+    ctx.strokeText(ft.text, x, y); ctx.fillText(ft.text, x, y);
   };
   if (_ftCam) { ctx.save(); ctx.translate(-_camX, -_camY); }
   gs.floatingTexts.forEach(ft => { if (ft.screen !== true) _paintFloatingText(ft); });
@@ -1429,7 +1473,7 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   ctx.globalAlpha = 1;
 
   // Mini-radar
-  const rs = 45, rx = W - rs - 8, ry = isMobile ? 52 : 48;
+  const rs = isMobile ? 28 : 45, rx = W - rs - 8, ry = isMobile ? 104 : 48;
   ctx.globalAlpha = 0.35; ctx.fillStyle = "#000"; ctx.beginPath(); ctx.arc(rx, ry, rs, 0, Math.PI * 2); ctx.fill();
   ctx.strokeStyle = gs.bossWave ? "#F00" : "#0F0"; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(rx, ry, rs, 0, Math.PI * 2); ctx.stroke();
   ctx.globalAlpha = 0.7;
@@ -1783,32 +1827,6 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   }
 
   ctx.restore();
-
-  // ── ADS scope overlay (drawn in screen space, outside zoom) ──
-  if (gs.adsZoom) {
-    // Dark vignette around edges
-    const vg = ctx.createRadialGradient(W / 2, H / 2, Math.min(W, H) * 0.22, W / 2, H / 2, Math.min(W, H) * 0.65);
-    vg.addColorStop(0, "rgba(0,0,0,0)");
-    vg.addColorStop(1, "rgba(0,0,0,0.72)");
-    ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
-    // Scope ring
-    ctx.save();
-    ctx.strokeStyle = "rgba(0,229,255,0.55)"; ctx.lineWidth = 1.5; ctx.globalAlpha = 0.8;
-    const sr = Math.min(W, H) * 0.22;
-    ctx.beginPath(); ctx.arc(W / 2, H / 2, sr, 0, Math.PI * 2); ctx.stroke();
-    // Crosshair lines through ring
-    ctx.strokeStyle = "rgba(0,229,255,0.4)"; ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.moveTo(W / 2 - sr, H / 2); ctx.lineTo(W / 2 + sr, H / 2); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(W / 2, H / 2 - sr); ctx.lineTo(W / 2, H / 2 + sr); ctx.stroke();
-    // Center dot
-    ctx.fillStyle = "rgba(0,229,255,0.9)"; ctx.shadowColor = "#00E5FF"; ctx.shadowBlur = 6;
-    ctx.beginPath(); ctx.arc(W / 2, H / 2, 2.5, 0, Math.PI * 2); ctx.fill();
-    ctx.shadowBlur = 0; ctx.globalAlpha = 1;
-    // ADS label
-    ctx.font = "bold 10px 'Courier New',monospace"; ctx.fillStyle = "rgba(0,229,255,0.6)";
-    ctx.textAlign = "center"; ctx.fillText("ADS", W / 2, H / 2 + sr + 18);
-    ctx.restore();
-  }
 
   // Player-relative threat compass — screen-space by contract. Enemy world
   // positions are transformed around the same ADS focus as the arena, then

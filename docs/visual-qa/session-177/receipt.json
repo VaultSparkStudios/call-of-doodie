@@ -1,0 +1,2862 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-09-14T05:50:53.528Z",
+  "stagingUrl": "https://c0e169c4.call-of-doodie.pages.dev",
+  "uiBaseRef": "c2dadff",
+  "uiHeadRef": "S177 working tree; per-file source hashes below",
+  "workingTreeUiSha256": "e86a4d8b06de6a961ed26ef1c341e07080526d4d9c7f1c070fe4ecfb2b64dae2",
+  "sourceFiles": [
+    {
+      "file": "src/App.jsx",
+      "sha256": "f39710f1db9c7c35cfb95c6e90c17c859b66c698d01404a9987e613150d1c41f"
+    },
+    {
+      "file": "src/config/copyTruth.test.js",
+      "sha256": "dd47f47b27795b8da084077a62badd0cdb82699c267c3fe91537c4bf59b9b165"
+    },
+    {
+      "file": "src/config/upgradeFacts.js",
+      "sha256": "952458e42ba6ffd03fcfc6a32811c2c4e53e545dd31f1d8ee6049af14f385331"
+    },
+    {
+      "file": "src/config/upgradeFacts.test.js",
+      "sha256": "9f020ee34ce8b65a596ee7de78484e408bd4b565bfde71ed44064a61a77e1219"
+    },
+    {
+      "file": "src/config/weeklyMutationRuntime.js",
+      "sha256": "a6b515103a40d4c1bc9556493a067ac4218bcbd455a0a9254752ddc7ed3458a9"
+    },
+    {
+      "file": "src/config/weeklyMutationRuntime.test.js",
+      "sha256": "be533715d7a341a3ae72cbc92f4dade3d0c66c14ceec8b0cf8c7c4916eba7cbc"
+    },
+    {
+      "file": "src/constants.js",
+      "sha256": "fc226697b765a4471597e76dc9229da8d03a494a2f67a906f8d2f15b0388b4e8"
+    },
+    {
+      "file": "src/drawGame.js",
+      "sha256": "29f4b7381eb802f1a1aabcfdc6f4b57f59941777cdb8b46742a31ddd74600b60"
+    },
+    {
+      "file": "src/gameHelpers.js",
+      "sha256": "1e8f56ee8fda6d31d2b67485a11af8ad2f97e4f977ed62b73f932da590ebbe54"
+    },
+    {
+      "file": "src/modes/botRoyale.js",
+      "sha256": "e134ca18f90dd5058af10470ff73968fe90d0e7ad37d492c79d70c5f8950ffa6"
+    },
+    {
+      "file": "src/systems/allyUnit.js",
+      "sha256": "21c82693a476e4fa8560cefc9e22a2725f61a15564382abd77f8c08e0e114d8e"
+    },
+    {
+      "file": "src/systems/bossAbilities.js",
+      "sha256": "9d96753744e909e6000a1a4b20a521423ebd78e4f2ac0930890fb07ebb1b0eb8"
+    },
+    {
+      "file": "src/systems/bossAbilities.test.js",
+      "sha256": "e7eedee50b10fe5b0892b3187309f346bf1cfde9af0e0a79f9ae62c556334f00"
+    },
+    {
+      "file": "src/systems/combatResolution.js",
+      "sha256": "bee9d3d01aee03598580fc4b320c1bd681882cf06fd4802e77a206db46ed9e69"
+    },
+    {
+      "file": "src/systems/defeatEconomy.js",
+      "sha256": "5dd5aaa38098981dded53a4c5059cf6041c2f40f2e17687ddb270aeaecac984c"
+    },
+    {
+      "file": "src/systems/enemyFrame.js",
+      "sha256": "dec5c7f4ba0344ebc95a7e514f4eac54303c5eecabf0c04a0521b7c6cd89bcb6"
+    },
+    {
+      "file": "src/systems/enemyFrame.test.js",
+      "sha256": "bacaabb7e40fc70fad2b5c1c57c6c5f22ed5a98dfa99679d138e9febf0fd0f85"
+    },
+    {
+      "file": "src/systems/projectileFrame.js",
+      "sha256": "bac873ca46b569d665e473ec8a680da4dfb77f64bb926a501080e20d38ce0627"
+    },
+    {
+      "file": "src/systems/projectileFrame.test.js",
+      "sha256": "651a79c171d3fda7c871114adc0e71e962a44d27045c470804df2c5c885f3602"
+    },
+    {
+      "file": "src/systems/runTermination.js",
+      "sha256": "04a6ea9545a8fc843a94492f65410816ff0ad6def8bea797e340d2c05f8af159"
+    },
+    {
+      "file": "src/systems/shopOptions.js",
+      "sha256": "adf2be515fc57662c0da22574390b3b370f66c0849ca2f35c5b5e718d8d81433"
+    },
+    {
+      "file": "src/systems/shopResolution.js",
+      "sha256": "edcf881a5349d179e9a203856850ddbc6196c1b74ca8833117eac07febba5d07"
+    },
+    {
+      "file": "src/utils/shopForecast.js",
+      "sha256": "ba40306711b2a00811bbcfb47333078df0ddca5ef299e1661a82fc0d9e25282f"
+    },
+    {
+      "file": "src/utils/shopForecast.test.js",
+      "sha256": "13c89dbda26677c9a21aaa10b9d6c4b760b4a59c349a1514ba5dae47437611f2"
+    },
+    {
+      "file": "public/status/index.html",
+      "sha256": "c0c337ea250c8676e3ea5766a463cf9530c42f74ce5fd8fc2bfe9b0856ef8482"
+    }
+  ],
+  "themes": [
+    "dark",
+    "light"
+  ],
+  "matrices": [
+    {
+      "phase": "before",
+      "kind": "combat",
+      "capturedAt": "2026-09-14T01:56:02.347Z",
+      "origin": "https://callofdoodie.wtf",
+      "captures": 32
+    },
+    {
+      "phase": "before",
+      "kind": "meta",
+      "capturedAt": "2026-09-14T01:25:56.340Z",
+      "origin": "https://callofdoodie.wtf",
+      "captures": 12
+    },
+    {
+      "phase": "after",
+      "kind": "combat",
+      "capturedAt": "2026-09-14T03:49:24.176Z",
+      "origin": "https://38cb07a7.call-of-doodie.pages.dev",
+      "captures": 32
+    },
+    {
+      "phase": "after",
+      "kind": "meta",
+      "capturedAt": "2026-09-14T03:51:13.274Z",
+      "origin": "https://38cb07a7.call-of-doodie.pages.dev",
+      "captures": 20
+    }
+  ],
+  "captures": [
+    {
+      "file": "session-177/before-boss-abilities-sewer-night-390-modern.jpg",
+      "sha256": "3089b59fc03f39cf186fbb955090561ca35d69dd7839e3fd61099c49d38ea640",
+      "originalPngSha256": "fbcc89e8ae7f32d9005b55514dd82f51212dab6132647f18458f2c126233d3c2",
+      "phase": "before",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "boss-abilities-sewer-night-390-modern",
+      "pack": "modern",
+      "observed": {
+        "enemies": 1,
+        "clone": false,
+        "health": 50
+      }
+    },
+    {
+      "file": "session-177/before-boss-healing-sewer-night-390-modern.jpg",
+      "sha256": "29ab1451c18677803d376d92acea90ef2cd96c7894ae441b7d3e89b265618f0c",
+      "originalPngSha256": "47336f0e32d6d5fb83d64a372729c4f7e98f4a1211c47f41d9d6707747420fa7",
+      "phase": "before",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "boss-healing-sewer-night-390-modern",
+      "pack": "modern",
+      "observed": {
+        "enemies": 1,
+        "health": 50,
+        "clone": false,
+        "bullets": 0
+      }
+    },
+    {
+      "file": "session-177/before-boss-expired-sewer-night-390-modern.jpg",
+      "sha256": "b4cee011a7a9a6c89070b7fb3ec9cfe23f007a36ed53e0615c5340b3f0fc64ba",
+      "originalPngSha256": "11de473f461c9f33ecf85da4be002782dfe452512e97d723a53ad3c9f07f71fe",
+      "phase": "before",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "boss-expired-sewer-night-390-modern",
+      "pack": "modern",
+      "observed": {
+        "enemies": 1,
+        "health": 50,
+        "clone": false,
+        "bullets": 0
+      }
+    },
+    {
+      "file": "session-177/before-boss-volley-sewer-night-390-modern.jpg",
+      "sha256": "4e04f437cf7f4688561d79680f7db62cb3c02006de7ce2e1f4bedab032d0207f",
+      "originalPngSha256": "04af927a83e5bb1cbb17441f56f1231403726e7cd78fb7ab00241a3baa860901",
+      "phase": "before",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "boss-volley-sewer-night-390-modern",
+      "pack": "modern",
+      "observed": {
+        "enemies": 1,
+        "health": 100,
+        "clone": false,
+        "bullets": 1
+      }
+    },
+    {
+      "file": "session-177/before-boss-abilities-sewer-night-390-retro.jpg",
+      "sha256": "a8ba38de4cb2eec15dccc7788338ed44d3bcfe09b607fa13f58bbea2582d3237",
+      "originalPngSha256": "82bcba7962ee5a148137b72629560210cfe3b9f76ef9ff71fa611883285e65d1",
+      "phase": "before",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "boss-abilities-sewer-night-390-retro",
+      "pack": "retro",
+      "observed": {
+        "enemies": 1,
+        "clone": false,
+        "health": 50
+      }
+    },
+    {
+      "file": "session-177/before-boss-healing-sewer-night-390-retro.jpg",
+      "sha256": "6f29cd29aa361aa58a48d4ddecb65d32bf81761146f6b079bdc10002458d267d",
+      "originalPngSha256": "2bff060a08d1f4c638aff0b5154dc11921ef989660820b406e8b7b6ff7e0e4ca",
+      "phase": "before",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "boss-healing-sewer-night-390-retro",
+      "pack": "retro",
+      "observed": {
+        "enemies": 1,
+        "health": 50,
+        "clone": false,
+        "bullets": 0
+      }
+    },
+    {
+      "file": "session-177/before-boss-expired-sewer-night-390-retro.jpg",
+      "sha256": "40ca7a6edf0987c41e6b1d647dd65ab81af6ad2f7bbdd170dc096e219df74edb",
+      "originalPngSha256": "ce8ba6e41e6702f1f2eb3bc47c0b9e6cd0520c36f554a3818c0bb8e975233d4e",
+      "phase": "before",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "boss-expired-sewer-night-390-retro",
+      "pack": "retro",
+      "observed": {
+        "enemies": 1,
+        "health": 50,
+        "clone": false,
+        "bullets": 0
+      }
+    },
+    {
+      "file": "session-177/before-boss-volley-sewer-night-390-retro.jpg",
+      "sha256": "edfb668f6fd19c2eb3e68a8252123b91969026894ec791c33687734acd88be8a",
+      "originalPngSha256": "b04d6ffdb2a63d6d4df1a2ee1db2e53163e82d7d5d2312b49f10dcb6c3e4e51e",
+      "phase": "before",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "boss-volley-sewer-night-390-retro",
+      "pack": "retro",
+      "observed": {
+        "enemies": 1,
+        "health": 100,
+        "clone": false,
+        "bullets": 1
+      }
+    },
+    {
+      "file": "session-177/before-boss-abilities-sewer-night-1440-modern.jpg",
+      "sha256": "8fd11cc910cee38b6fce84441758e588d06695d94fd46f9a40187d1821a730a2",
+      "originalPngSha256": "2e066cb6cf40bd6cf5891fc7862e982213bf5ca42f7c670b4c5fb67c94854424",
+      "phase": "before",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "boss-abilities-sewer-night-1440-modern",
+      "pack": "modern",
+      "observed": {
+        "enemies": 1,
+        "clone": false,
+        "health": 50
+      }
+    },
+    {
+      "file": "session-177/before-boss-healing-sewer-night-1440-modern.jpg",
+      "sha256": "d09e2d54d8125f1b63b641719ecbdc46ef559e1b85ceec11abf07b9fa4e1cd32",
+      "originalPngSha256": "1b0491ce5b2face22f27941adcf39e399e52d24e78a1a3e01e21c62e91811345",
+      "phase": "before",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "boss-healing-sewer-night-1440-modern",
+      "pack": "modern",
+      "observed": {
+        "enemies": 1,
+        "health": 50,
+        "clone": false,
+        "bullets": 0
+      }
+    },
+    {
+      "file": "session-177/before-boss-expired-sewer-night-1440-modern.jpg",
+      "sha256": "8959e8a8dcc739063d3cb4c7ea301eee6825a0e4aad639128d9c5b865e45ab13",
+      "originalPngSha256": "fa3129985ecfa5d67ce67252a42f544bccf9a6aa76049484b51ed02d049e47ef",
+      "phase": "before",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "boss-expired-sewer-night-1440-modern",
+      "pack": "modern",
+      "observed": {
+        "enemies": 1,
+        "health": 50,
+        "clone": false,
+        "bullets": 0
+      }
+    },
+    {
+      "file": "session-177/before-boss-volley-sewer-night-1440-modern.jpg",
+      "sha256": "2bbdb409f7484804b1c991f49f149331b9f08f685db20c7c133bb83a6535457e",
+      "originalPngSha256": "9aa480496342d2aec40367dcd99821418799532d774fde031e301edcdfe93f46",
+      "phase": "before",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "boss-volley-sewer-night-1440-modern",
+      "pack": "modern",
+      "observed": {
+        "enemies": 1,
+        "health": 100,
+        "clone": false,
+        "bullets": 1
+      }
+    },
+    {
+      "file": "session-177/before-boss-abilities-sewer-night-1440-retro.jpg",
+      "sha256": "3a0c37a89a65d466d5d4fd93a62d5e8e0996efd9a58c231ff43bce59ba069329",
+      "originalPngSha256": "a7a96fa6a585eeb057acece6ddc5dd5cb0c872db43ed1e788ff5017bfb4bef48",
+      "phase": "before",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "boss-abilities-sewer-night-1440-retro",
+      "pack": "retro",
+      "observed": {
+        "enemies": 1,
+        "clone": false,
+        "health": 50
+      }
+    },
+    {
+      "file": "session-177/before-boss-healing-sewer-night-1440-retro.jpg",
+      "sha256": "20d440b9ed02696912c2835803770283fa36fbaa4e358de1228fc2a665592fd8",
+      "originalPngSha256": "a6a681d0dd2120b125c0bace67e14558c68fa6af93fbd632aa8ab375db0830bd",
+      "phase": "before",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "boss-healing-sewer-night-1440-retro",
+      "pack": "retro",
+      "observed": {
+        "enemies": 1,
+        "health": 50,
+        "clone": false,
+        "bullets": 0
+      }
+    },
+    {
+      "file": "session-177/before-boss-expired-sewer-night-1440-retro.jpg",
+      "sha256": "ab92075436d878a7a8cab56efd9ecd7f1780872834ac893aba27d2bb6078ea5b",
+      "originalPngSha256": "5c4a4818d03af3bd628c98486fa6a4bd21e7fe2fa3e298988b51cb16de3b607e",
+      "phase": "before",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "boss-expired-sewer-night-1440-retro",
+      "pack": "retro",
+      "observed": {
+        "enemies": 1,
+        "health": 50,
+        "clone": false,
+        "bullets": 0
+      }
+    },
+    {
+      "file": "session-177/before-boss-volley-sewer-night-1440-retro.jpg",
+      "sha256": "b8958140cc7c6353959e7af3aff251a16cdf023633196d4bfc45a994fd6925d2",
+      "originalPngSha256": "6fc0da2a8a0b49cee459ba3eb5ad9262de504f08e18e22e8119f5c99e9119b51",
+      "phase": "before",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "boss-volley-sewer-night-1440-retro",
+      "pack": "retro",
+      "observed": {
+        "enemies": 1,
+        "health": 100,
+        "clone": false,
+        "bullets": 0
+      }
+    },
+    {
+      "file": "session-177/before-boss-abilities-porcelain-day-390-modern.jpg",
+      "sha256": "7e73ef00a76ffc377392f09b685d496abf21204541e2ee8769a92820ab652cef",
+      "originalPngSha256": "5e98f05455df5b51bdfc88e2c696ec1e381b0a215af718916cb1d77c5b6b08f5",
+      "phase": "before",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "boss-abilities-porcelain-day-390-modern",
+      "pack": "modern",
+      "observed": {
+        "enemies": 1,
+        "clone": false,
+        "health": 50
+      }
+    },
+    {
+      "file": "session-177/before-boss-healing-porcelain-day-390-modern.jpg",
+      "sha256": "6470596dc1738613bc86a71e54ee3c758abf7a4948a9577f9f7c146ab588dc8d",
+      "originalPngSha256": "dcb7cb750748f62bc51090ac6232636b9ef23c9102bb54582f65200bbe249b43",
+      "phase": "before",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "boss-healing-porcelain-day-390-modern",
+      "pack": "modern",
+      "observed": {
+        "enemies": 1,
+        "health": 50,
+        "clone": false,
+        "bullets": 0
+      }
+    },
+    {
+      "file": "session-177/before-boss-expired-porcelain-day-390-modern.jpg",
+      "sha256": "6da5d05844ca05af2b5122117892b816398346014cf97230c0cf66d1703bd4e4",
+      "originalPngSha256": "55f2eac5bb1798b846acaf57b87dc5e835db5680728b9c533c693fe1ce9f69b0",
+      "phase": "before",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "boss-expired-porcelain-day-390-modern",
+      "pack": "modern",
+      "observed": {
+        "enemies": 1,
+        "health": 50,
+        "clone": false,
+        "bullets": 0
+      }
+    },
+    {
+      "file": "session-177/before-boss-volley-porcelain-day-390-modern.jpg",
+      "sha256": "c28f3f0b26cb679d3f680eee6a7070abc82be01820b8a0351c6dcbc67fa8a72f",
+      "originalPngSha256": "0889222d4b6c55834a25e0f6a2d2d6c58cf65954028b9415273cc9e6238425f8",
+      "phase": "before",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "boss-volley-porcelain-day-390-modern",
+      "pack": "modern",
+      "observed": {
+        "enemies": 1,
+        "health": 100,
+        "clone": false,
+        "bullets": 1
+      }
+    },
+    {
+      "file": "session-177/before-boss-abilities-porcelain-day-390-retro.jpg",
+      "sha256": "12f513003b4bf0ce49a42d7f81cbd025f3d668da182135bb7bb054bca382cc5a",
+      "originalPngSha256": "1bcba230047fb6fa4cd47cbe05b5d4af57864133a4666d644a325eff0f121861",
+      "phase": "before",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "boss-abilities-porcelain-day-390-retro",
+      "pack": "retro",
+      "observed": {
+        "enemies": 1,
+        "clone": false,
+        "health": 50
+      }
+    },
+    {
+      "file": "session-177/before-boss-healing-porcelain-day-390-retro.jpg",
+      "sha256": "13a7f1d7da95c399f806949182f9ed141091971dd2e522842df86e36c8846dc3",
+      "originalPngSha256": "801df70c5cf6a48c38ace005c4eb9bf66bb66912a480e41816ef2ac3b8ec6d18",
+      "phase": "before",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "boss-healing-porcelain-day-390-retro",
+      "pack": "retro",
+      "observed": {
+        "enemies": 1,
+        "health": 50,
+        "clone": false,
+        "bullets": 0
+      }
+    },
+    {
+      "file": "session-177/before-boss-expired-porcelain-day-390-retro.jpg",
+      "sha256": "7fc02856900710b1247c0dd324d5ce659908e6cc5580b816c5194e19006ff7e6",
+      "originalPngSha256": "0cb8b1ff945db5a3f17468d137a33377970bf79345b49bbd107b1e554b4b539e",
+      "phase": "before",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "boss-expired-porcelain-day-390-retro",
+      "pack": "retro",
+      "observed": {
+        "enemies": 1,
+        "health": 50,
+        "clone": false,
+        "bullets": 0
+      }
+    },
+    {
+      "file": "session-177/before-boss-volley-porcelain-day-390-retro.jpg",
+      "sha256": "92d16f5a18d9b2641037e768a0f5dd7fbf9403cc6082704f3e3586c48f539aec",
+      "originalPngSha256": "707abc23f8d9a4ff8b423c70041d12d848ea582adb0d92b7551d05b87a5d95d5",
+      "phase": "before",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "boss-volley-porcelain-day-390-retro",
+      "pack": "retro",
+      "observed": {
+        "enemies": 1,
+        "health": 100,
+        "clone": false,
+        "bullets": 0
+      }
+    },
+    {
+      "file": "session-177/before-boss-abilities-porcelain-day-1440-modern.jpg",
+      "sha256": "5024d45845bb3601f57cd0a1324ca3316c4bd945fe7ffab2d41be9f3ba36c7d8",
+      "originalPngSha256": "c0fe46803369d5dc885e2605e55ef2af14b8ad846c764ce62cd56f6d6030bca7",
+      "phase": "before",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "boss-abilities-porcelain-day-1440-modern",
+      "pack": "modern",
+      "observed": {
+        "enemies": 1,
+        "clone": false,
+        "health": 50
+      }
+    },
+    {
+      "file": "session-177/before-boss-healing-porcelain-day-1440-modern.jpg",
+      "sha256": "ebf2dc42bda09deb198fbd00fb6cae1df5ec85cd7a74cc547ba2f8355e48ed5e",
+      "originalPngSha256": "2f2f4afc2f698d18bd4bb99ce1a7d2dd29aa063260a6cf48da9025bd89d610ed",
+      "phase": "before",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "boss-healing-porcelain-day-1440-modern",
+      "pack": "modern",
+      "observed": {
+        "enemies": 1,
+        "health": 50,
+        "clone": false,
+        "bullets": 0
+      }
+    },
+    {
+      "file": "session-177/before-boss-expired-porcelain-day-1440-modern.jpg",
+      "sha256": "aa51f9c8e72e56c408f1fff37bbbb005c69f92343cbca8f3beb28f7656f1633b",
+      "originalPngSha256": "d323dcfa15e5bf554904e845b6a13b9a42b992cfa2421233d6a7e12aeb91013f",
+      "phase": "before",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "boss-expired-porcelain-day-1440-modern",
+      "pack": "modern",
+      "observed": {
+        "enemies": 1,
+        "health": 50,
+        "clone": false,
+        "bullets": 0
+      }
+    },
+    {
+      "file": "session-177/before-boss-volley-porcelain-day-1440-modern.jpg",
+      "sha256": "1cf4d632c2227574a62e911c6ab875685ccb4239572337dc679fc3c7e148446a",
+      "originalPngSha256": "06cc5917af1c798348d86d16ee53aac6d2d5bb5dda6cee9d3dd030fcac107212",
+      "phase": "before",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "boss-volley-porcelain-day-1440-modern",
+      "pack": "modern",
+      "observed": {
+        "enemies": 1,
+        "health": 100,
+        "clone": false,
+        "bullets": 0
+      }
+    },
+    {
+      "file": "session-177/before-boss-abilities-porcelain-day-1440-retro.jpg",
+      "sha256": "d186bbd7c7d23cfac49479d7a73c083b10ba38f5dfc289a48520c9ee7289c37d",
+      "originalPngSha256": "cb99e6fcea6d1fd19066b068ea8bf81af1fbb33836bca9d36518e392f0fe9218",
+      "phase": "before",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "boss-abilities-porcelain-day-1440-retro",
+      "pack": "retro",
+      "observed": {
+        "enemies": 1,
+        "clone": false,
+        "health": 50
+      }
+    },
+    {
+      "file": "session-177/before-boss-healing-porcelain-day-1440-retro.jpg",
+      "sha256": "160859f353a6cf7dfc28ffa8e8fe5c06c8afa734f6a602a5de835c60e20399cc",
+      "originalPngSha256": "f343cf87855e2ccd46b144eeaec74cda8ed03134757d1ebfb65fa5d810bba379",
+      "phase": "before",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "boss-healing-porcelain-day-1440-retro",
+      "pack": "retro",
+      "observed": {
+        "enemies": 1,
+        "health": 50,
+        "clone": false,
+        "bullets": 0
+      }
+    },
+    {
+      "file": "session-177/before-boss-expired-porcelain-day-1440-retro.jpg",
+      "sha256": "cd09a3e0ce59665f3f283b32b4b2b65e3a403676f796da99c314bce481565574",
+      "originalPngSha256": "47279e8621d1dc3df93b30d4c2a1d49fd58203392126d99a82d46dbdaef4681c",
+      "phase": "before",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "boss-expired-porcelain-day-1440-retro",
+      "pack": "retro",
+      "observed": {
+        "enemies": 1,
+        "health": 50,
+        "clone": false,
+        "bullets": 0
+      }
+    },
+    {
+      "file": "session-177/before-boss-volley-porcelain-day-1440-retro.jpg",
+      "sha256": "3cc85859e1e18ade97b4ff1fb3d91a85d807965e21e9f3f53a1a754a92aae304",
+      "originalPngSha256": "4584aef5a00b35aba51de2936efccea94b0d83d8bc5b776570e2a827c7071a05",
+      "phase": "before",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "boss-volley-porcelain-day-1440-retro",
+      "pack": "retro",
+      "observed": {
+        "enemies": 1,
+        "health": 100,
+        "clone": false,
+        "bullets": 0
+      }
+    },
+    {
+      "file": "session-177/before-supply-drop-shop-sewer-night-390.jpg",
+      "sha256": "84738635fa528fd57c58ebde368ceb65d2974d474439f3776949417ec358912f",
+      "originalPngSha256": "829213db732e5dcb7b88b745e0fcd85263a460ca5b76fbc86db612edff2bfe03",
+      "phase": "before",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "supply-drop-shop-sewer-night-390",
+      "pack": "modern",
+      "observed": {
+        "wave": 2,
+        "health": 100,
+        "maxHealth": 100,
+        "freeShopUnlocked": true,
+        "freeShopClaimWave": null,
+        "gauntletMode": false,
+        "bonusPerkUnlocked": true,
+        "bonusPerkGranted": false,
+        "perkSelectionVisible": false,
+        "heading": "WAVE 1 CLEAR!",
+        "coinRows": [
+          {
+            "text": "❤️‍🔥\nHP Augment\n+30 permanent max HP\n💩 22",
+            "disabled": true,
+            "cost": 22
+          },
+          {
+            "text": "💣\nPocket Nuke\nNuke all enemies on screen\n💩 28",
+            "disabled": true,
+            "cost": 28
+          },
+          {
+            "text": "💥\nGrenade Restock\nGrenade instantly ready\n💩 8",
+            "disabled": true,
+            "cost": 8
+          }
+        ],
+        "viewport": {
+          "width": 390,
+          "height": 900
+        },
+        "documentOverflowX": false
+      }
+    },
+    {
+      "file": "session-177/before-supply-drop-coin-rows-sewer-night-390.jpg",
+      "sha256": "84738635fa528fd57c58ebde368ceb65d2974d474439f3776949417ec358912f",
+      "originalPngSha256": "829213db732e5dcb7b88b745e0fcd85263a460ca5b76fbc86db612edff2bfe03",
+      "phase": "before",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "supply-drop-coin-rows-sewer-night-390",
+      "pack": "modern",
+      "observed": {
+        "wave": 2,
+        "health": 100,
+        "maxHealth": 100,
+        "freeShopUnlocked": true,
+        "freeShopClaimWave": null,
+        "gauntletMode": false,
+        "bonusPerkUnlocked": true,
+        "bonusPerkGranted": false,
+        "perkSelectionVisible": false,
+        "heading": "WAVE 1 CLEAR!",
+        "coinRows": [
+          {
+            "text": "❤️‍🔥\nHP Augment\n+30 permanent max HP\n💩 22",
+            "disabled": true,
+            "cost": 22
+          },
+          {
+            "text": "💣\nPocket Nuke\nNuke all enemies on screen\n💩 28",
+            "disabled": true,
+            "cost": 28
+          },
+          {
+            "text": "💥\nGrenade Restock\nGrenade instantly ready\n💩 8",
+            "disabled": true,
+            "cost": 8
+          }
+        ],
+        "viewport": {
+          "width": 390,
+          "height": 900
+        },
+        "documentOverflowX": false
+      }
+    },
+    {
+      "file": "session-177/before-gauntlet-ready-start-sewer-night-390.jpg",
+      "sha256": "e8f270e2fd0c9eaf2c93473a75f2b8976281fb9e83592cadc9622162c65ad898",
+      "originalPngSha256": "6370e65183d5f2bea05567a29dd2a39ab4ff70f185f3e0a5cbcb7a052c3f5404",
+      "phase": "before",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "gauntlet-ready-start-sewer-night-390",
+      "pack": "modern",
+      "observed": {
+        "wave": 1,
+        "health": 25,
+        "maxHealth": 25,
+        "freeShopUnlocked": true,
+        "freeShopClaimWave": null,
+        "gauntletMode": true,
+        "bonusPerkUnlocked": true,
+        "bonusPerkGranted": false,
+        "perkSelectionVisible": false,
+        "heading": null,
+        "coinRows": [],
+        "viewport": {
+          "width": 390,
+          "height": 900
+        },
+        "documentOverflowX": false
+      }
+    },
+    {
+      "file": "session-177/before-supply-drop-shop-sewer-night-1440.jpg",
+      "sha256": "76c809c3d7480441117a44120bc622cdf3219feaabf3ccde95f8705cf62b23f0",
+      "originalPngSha256": "c0c19b4d6bc0cc9e883cd0988c029653e44d9483c7e4a20d9c401cc7ebdbfc9e",
+      "phase": "before",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "supply-drop-shop-sewer-night-1440",
+      "pack": "modern",
+      "observed": {
+        "wave": 2,
+        "health": 100,
+        "maxHealth": 100,
+        "freeShopUnlocked": true,
+        "freeShopClaimWave": null,
+        "gauntletMode": false,
+        "bonusPerkUnlocked": true,
+        "bonusPerkGranted": false,
+        "perkSelectionVisible": false,
+        "heading": "WAVE 1 CLEAR!",
+        "coinRows": [
+          {
+            "text": "💣\nPocket Nuke\nNuke all enemies on screen\n💩 28",
+            "disabled": true,
+            "cost": 28
+          },
+          {
+            "text": "👼\nGuardian Angel\n+1 extra life\n💩 45",
+            "disabled": true,
+            "cost": 45
+          },
+          {
+            "text": "⏳\nBullet Time\n6 seconds of time dilation\n💩 14",
+            "disabled": true,
+            "cost": 14
+          }
+        ],
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "documentOverflowX": false
+      }
+    },
+    {
+      "file": "session-177/before-supply-drop-coin-rows-sewer-night-1440.jpg",
+      "sha256": "76c809c3d7480441117a44120bc622cdf3219feaabf3ccde95f8705cf62b23f0",
+      "originalPngSha256": "c0c19b4d6bc0cc9e883cd0988c029653e44d9483c7e4a20d9c401cc7ebdbfc9e",
+      "phase": "before",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "supply-drop-coin-rows-sewer-night-1440",
+      "pack": "modern",
+      "observed": {
+        "wave": 2,
+        "health": 100,
+        "maxHealth": 100,
+        "freeShopUnlocked": true,
+        "freeShopClaimWave": null,
+        "gauntletMode": false,
+        "bonusPerkUnlocked": true,
+        "bonusPerkGranted": false,
+        "perkSelectionVisible": false,
+        "heading": "WAVE 1 CLEAR!",
+        "coinRows": [
+          {
+            "text": "💣\nPocket Nuke\nNuke all enemies on screen\n💩 28",
+            "disabled": true,
+            "cost": 28
+          },
+          {
+            "text": "👼\nGuardian Angel\n+1 extra life\n💩 45",
+            "disabled": true,
+            "cost": 45
+          },
+          {
+            "text": "⏳\nBullet Time\n6 seconds of time dilation\n💩 14",
+            "disabled": true,
+            "cost": 14
+          }
+        ],
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "documentOverflowX": false
+      }
+    },
+    {
+      "file": "session-177/before-gauntlet-ready-start-sewer-night-1440.jpg",
+      "sha256": "0b557d008ce94000e98518a8a3d3c5a08c99e9495f953e2c0331e2783713cc20",
+      "originalPngSha256": "287f8defb54a98264fa29ac4282017dfc64a5fdc5f9a79deaa9dd97ccad6c80e",
+      "phase": "before",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "gauntlet-ready-start-sewer-night-1440",
+      "pack": "modern",
+      "observed": {
+        "wave": 1,
+        "health": 25,
+        "maxHealth": 25,
+        "freeShopUnlocked": true,
+        "freeShopClaimWave": null,
+        "gauntletMode": true,
+        "bonusPerkUnlocked": true,
+        "bonusPerkGranted": false,
+        "perkSelectionVisible": false,
+        "heading": null,
+        "coinRows": [],
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "documentOverflowX": false
+      }
+    },
+    {
+      "file": "session-177/before-supply-drop-shop-porcelain-day-390.jpg",
+      "sha256": "eeba16f5f5292ad80fb8926f75645a9b84ade66e16095d85c535c93b5c7ca8a6",
+      "originalPngSha256": "9ca26302de4245c4401eb83ad84c4558256b54ba5c8bfe37ed9a6a2b9ff074c9",
+      "phase": "before",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "supply-drop-shop-porcelain-day-390",
+      "pack": "modern",
+      "observed": {
+        "wave": 2,
+        "health": 100,
+        "maxHealth": 100,
+        "freeShopUnlocked": true,
+        "freeShopClaimWave": null,
+        "gauntletMode": false,
+        "bonusPerkUnlocked": true,
+        "bonusPerkGranted": false,
+        "perkSelectionVisible": false,
+        "heading": "WAVE 1 CLEAR!",
+        "coinRows": [
+          {
+            "text": "⏳\nBullet Time\n6 seconds of time dilation\n💩 14",
+            "disabled": true,
+            "cost": 14
+          },
+          {
+            "text": "❤️‍🔥\nHP Augment\n+30 permanent max HP\n💩 22",
+            "disabled": true,
+            "cost": 22
+          },
+          {
+            "text": "👼\nGuardian Angel\n+1 extra life\n💩 45",
+            "disabled": true,
+            "cost": 45
+          }
+        ],
+        "viewport": {
+          "width": 390,
+          "height": 900
+        },
+        "documentOverflowX": false
+      }
+    },
+    {
+      "file": "session-177/before-supply-drop-coin-rows-porcelain-day-390.jpg",
+      "sha256": "eeba16f5f5292ad80fb8926f75645a9b84ade66e16095d85c535c93b5c7ca8a6",
+      "originalPngSha256": "9ca26302de4245c4401eb83ad84c4558256b54ba5c8bfe37ed9a6a2b9ff074c9",
+      "phase": "before",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "supply-drop-coin-rows-porcelain-day-390",
+      "pack": "modern",
+      "observed": {
+        "wave": 2,
+        "health": 100,
+        "maxHealth": 100,
+        "freeShopUnlocked": true,
+        "freeShopClaimWave": null,
+        "gauntletMode": false,
+        "bonusPerkUnlocked": true,
+        "bonusPerkGranted": false,
+        "perkSelectionVisible": false,
+        "heading": "WAVE 1 CLEAR!",
+        "coinRows": [
+          {
+            "text": "⏳\nBullet Time\n6 seconds of time dilation\n💩 14",
+            "disabled": true,
+            "cost": 14
+          },
+          {
+            "text": "❤️‍🔥\nHP Augment\n+30 permanent max HP\n💩 22",
+            "disabled": true,
+            "cost": 22
+          },
+          {
+            "text": "👼\nGuardian Angel\n+1 extra life\n💩 45",
+            "disabled": true,
+            "cost": 45
+          }
+        ],
+        "viewport": {
+          "width": 390,
+          "height": 900
+        },
+        "documentOverflowX": false
+      }
+    },
+    {
+      "file": "session-177/before-gauntlet-ready-start-porcelain-day-390.jpg",
+      "sha256": "9feaee3aef9763fdefef4ebcf63f7ec3b23dbe0e49f88b4f92b4fc8163913c26",
+      "originalPngSha256": "a6cd67c78e09ec30dd17cf4ce6ee9dd0bce50976b45ca20969eb56a515cbf819",
+      "phase": "before",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "gauntlet-ready-start-porcelain-day-390",
+      "pack": "modern",
+      "observed": {
+        "wave": 1,
+        "health": 25,
+        "maxHealth": 25,
+        "freeShopUnlocked": true,
+        "freeShopClaimWave": null,
+        "gauntletMode": true,
+        "bonusPerkUnlocked": true,
+        "bonusPerkGranted": false,
+        "perkSelectionVisible": false,
+        "heading": null,
+        "coinRows": [],
+        "viewport": {
+          "width": 390,
+          "height": 900
+        },
+        "documentOverflowX": false
+      }
+    },
+    {
+      "file": "session-177/before-supply-drop-shop-porcelain-day-1440.jpg",
+      "sha256": "7187bfa8daeb175836b415bf1ca4baf67055f14f1b43392ae2801ab01bd5766e",
+      "originalPngSha256": "99569ea4e3e87290f5b194c7d193a985874e37c7608fd82d96c09a09622884eb",
+      "phase": "before",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "supply-drop-shop-porcelain-day-1440",
+      "pack": "modern",
+      "observed": {
+        "wave": 2,
+        "health": 100,
+        "maxHealth": 100,
+        "freeShopUnlocked": true,
+        "freeShopClaimWave": null,
+        "gauntletMode": false,
+        "bonusPerkUnlocked": true,
+        "bonusPerkGranted": false,
+        "perkSelectionVisible": false,
+        "heading": "WAVE 1 CLEAR!",
+        "coinRows": [
+          {
+            "text": "⏳\nBullet Time\n6 seconds of time dilation\n💩 14",
+            "disabled": true,
+            "cost": 14
+          },
+          {
+            "text": "❤️‍🔥\nHP Augment\n+30 permanent max HP\n💩 22",
+            "disabled": true,
+            "cost": 22
+          },
+          {
+            "text": "💥\nGrenade Restock\nGrenade instantly ready\n💩 8",
+            "disabled": true,
+            "cost": 8
+          }
+        ],
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "documentOverflowX": false
+      }
+    },
+    {
+      "file": "session-177/before-supply-drop-coin-rows-porcelain-day-1440.jpg",
+      "sha256": "7187bfa8daeb175836b415bf1ca4baf67055f14f1b43392ae2801ab01bd5766e",
+      "originalPngSha256": "99569ea4e3e87290f5b194c7d193a985874e37c7608fd82d96c09a09622884eb",
+      "phase": "before",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "supply-drop-coin-rows-porcelain-day-1440",
+      "pack": "modern",
+      "observed": {
+        "wave": 2,
+        "health": 100,
+        "maxHealth": 100,
+        "freeShopUnlocked": true,
+        "freeShopClaimWave": null,
+        "gauntletMode": false,
+        "bonusPerkUnlocked": true,
+        "bonusPerkGranted": false,
+        "perkSelectionVisible": false,
+        "heading": "WAVE 1 CLEAR!",
+        "coinRows": [
+          {
+            "text": "⏳\nBullet Time\n6 seconds of time dilation\n💩 14",
+            "disabled": true,
+            "cost": 14
+          },
+          {
+            "text": "❤️‍🔥\nHP Augment\n+30 permanent max HP\n💩 22",
+            "disabled": true,
+            "cost": 22
+          },
+          {
+            "text": "💥\nGrenade Restock\nGrenade instantly ready\n💩 8",
+            "disabled": true,
+            "cost": 8
+          }
+        ],
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "documentOverflowX": false
+      }
+    },
+    {
+      "file": "session-177/before-gauntlet-ready-start-porcelain-day-1440.jpg",
+      "sha256": "aecb16b165f15d61186660ff01d881e625448691a82b83ed2b7d8aea24b7b18f",
+      "originalPngSha256": "c69087f7afa7ca382933bcb01c005ea58cd5a402381ce08982dbcbab4d3f26b6",
+      "phase": "before",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "gauntlet-ready-start-porcelain-day-1440",
+      "pack": "modern",
+      "observed": {
+        "wave": 1,
+        "health": 25,
+        "maxHealth": 25,
+        "freeShopUnlocked": true,
+        "freeShopClaimWave": null,
+        "gauntletMode": true,
+        "bonusPerkUnlocked": true,
+        "bonusPerkGranted": false,
+        "perkSelectionVisible": false,
+        "heading": null,
+        "coinRows": [],
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "documentOverflowX": false
+      }
+    },
+    {
+      "file": "session-177/after-boss-abilities-sewer-night-390-modern.jpg",
+      "sha256": "428d6274c31980a1dcd0e5079557af2538b9f237347409642a907246c01cfee4",
+      "originalPngSha256": "21ee1ec699fbe589d95ffb5cdcc9e40517898fe949361eab3a049f7e0ea5ff8e",
+      "phase": "after",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "boss-abilities-sewer-night-390-modern",
+      "pack": "modern",
+      "observed": {
+        "enemies": 1,
+        "clone": true,
+        "health": 50
+      }
+    },
+    {
+      "file": "session-177/after-boss-healing-sewer-night-390-modern.jpg",
+      "sha256": "60cd6fb4120464bc491d11ea6b0d3af05072817ab4a43f199e3f739b878e805f",
+      "originalPngSha256": "55b00f1e18114f0a934d4a361de28d29b17e0f0fbe2f91edc172207288f8f676",
+      "phase": "after",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "boss-healing-sewer-night-390-modern",
+      "pack": "modern",
+      "observed": {
+        "enemies": 1,
+        "health": 52,
+        "clone": true,
+        "feedback": 2,
+        "bullets": 0
+      }
+    },
+    {
+      "file": "session-177/after-boss-expired-sewer-night-390-modern.jpg",
+      "sha256": "7d62e6ac193c25ee322f96f4c55979e625a2d1183a58ca2477a9a0d0f2e886fc",
+      "originalPngSha256": "5b87045fa9886300b74cabf0d85b65e11b5146d620ef861bbbbe25a06e4c4222",
+      "phase": "after",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "boss-expired-sewer-night-390-modern",
+      "pack": "modern",
+      "observed": {
+        "enemies": 1,
+        "health": 52,
+        "clone": false,
+        "feedback": 2,
+        "bullets": 0
+      }
+    },
+    {
+      "file": "session-177/after-boss-volley-sewer-night-390-modern.jpg",
+      "sha256": "000a2e7d26d8980e4c7ce337802a574ddb5af8066b23cda19b04f68b0d526134",
+      "originalPngSha256": "a3da19b129886593f8e02d76ac9ff1ffde0f9c1fe6ff56fc371ee21aadc152f2",
+      "phase": "after",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "boss-volley-sewer-night-390-modern",
+      "pack": "modern",
+      "observed": {
+        "enemies": 1,
+        "health": 100,
+        "clone": false,
+        "feedback": 2,
+        "bullets": 1
+      }
+    },
+    {
+      "file": "session-177/after-boss-abilities-sewer-night-390-retro.jpg",
+      "sha256": "3648d9cb148d84073431683e9e78cae3de6c893a42747d272060ccd1ae1425cc",
+      "originalPngSha256": "f96b347106b18ba4f27f80112152bfcdc830f39a7a74c8b244e3dde0b8b5a1f1",
+      "phase": "after",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "boss-abilities-sewer-night-390-retro",
+      "pack": "retro",
+      "observed": {
+        "enemies": 1,
+        "clone": true,
+        "health": 50
+      }
+    },
+    {
+      "file": "session-177/after-boss-healing-sewer-night-390-retro.jpg",
+      "sha256": "a8a3fbfe42ba6eaca4a65757113dc1c87bd825eabb8ecc7b4befa29ac0af5f9d",
+      "originalPngSha256": "9ea65002e99cb1bb19dc1393404fc7719d64af67578143c5472631efc61eb828",
+      "phase": "after",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "boss-healing-sewer-night-390-retro",
+      "pack": "retro",
+      "observed": {
+        "enemies": 1,
+        "health": 52,
+        "clone": true,
+        "feedback": 2,
+        "bullets": 0
+      }
+    },
+    {
+      "file": "session-177/after-boss-expired-sewer-night-390-retro.jpg",
+      "sha256": "9fc75324557d70f69a931157e2d634f41cc63ef01d8daae024309c6cd31b7a2f",
+      "originalPngSha256": "85c35c62b660799fcc209bbb3b5c5886187f22412eb9f715df531b527953d690",
+      "phase": "after",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "boss-expired-sewer-night-390-retro",
+      "pack": "retro",
+      "observed": {
+        "enemies": 1,
+        "health": 52,
+        "clone": false,
+        "feedback": 2,
+        "bullets": 0
+      }
+    },
+    {
+      "file": "session-177/after-boss-volley-sewer-night-390-retro.jpg",
+      "sha256": "316a8da84f654e3ec6bc097a7939d1af0cf789528619b0c9d8bcba5e0c482d0e",
+      "originalPngSha256": "ab4ccefa7a8dc1daddcd06b219eb29ccefaa6377b560e09269ea2d766cee4536",
+      "phase": "after",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "boss-volley-sewer-night-390-retro",
+      "pack": "retro",
+      "observed": {
+        "enemies": 1,
+        "health": 100,
+        "clone": false,
+        "feedback": 2,
+        "bullets": 1
+      }
+    },
+    {
+      "file": "session-177/after-boss-abilities-sewer-night-1440-modern.jpg",
+      "sha256": "69a9e27d5a735dec3a9c98f0f052a7cb956b51021016d0cb4feb467e461fa196",
+      "originalPngSha256": "ac8541c6030ed6e741bd6b0b49f3fd8f8cebdaba3fe5cee7c495370d45da2d39",
+      "phase": "after",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "boss-abilities-sewer-night-1440-modern",
+      "pack": "modern",
+      "observed": {
+        "enemies": 1,
+        "clone": true,
+        "health": 50
+      }
+    },
+    {
+      "file": "session-177/after-boss-healing-sewer-night-1440-modern.jpg",
+      "sha256": "77c4f799c704d6f7a3d310ee7fda7e6b859db00957bba417731f42a73b7b2831",
+      "originalPngSha256": "10ebb5eb344d532629adb72ebe526e0633b68be7e676f2cf635184cbbee79fed",
+      "phase": "after",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "boss-healing-sewer-night-1440-modern",
+      "pack": "modern",
+      "observed": {
+        "enemies": 1,
+        "health": 52,
+        "clone": true,
+        "feedback": 2,
+        "bullets": 0
+      }
+    },
+    {
+      "file": "session-177/after-boss-expired-sewer-night-1440-modern.jpg",
+      "sha256": "0ff1bdee4c53aab4f2642b925b1d19a79c72357fc77d0ea114e72d3a4c1be619",
+      "originalPngSha256": "27c81c9235e4332df8e8730d8a4a51ac0011cd758d68a9ef143e12b45cccf6c4",
+      "phase": "after",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "boss-expired-sewer-night-1440-modern",
+      "pack": "modern",
+      "observed": {
+        "enemies": 1,
+        "health": 52,
+        "clone": false,
+        "feedback": 2,
+        "bullets": 0
+      }
+    },
+    {
+      "file": "session-177/after-boss-volley-sewer-night-1440-modern.jpg",
+      "sha256": "233d16b34e2cbcea1d0111c95b0d1c999322143561efb7073ea1e115b8159253",
+      "originalPngSha256": "5d4815a26acc91e203e29cfc6599c2777bbfe2535921b4d0b5d6eeeeb545912c",
+      "phase": "after",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "boss-volley-sewer-night-1440-modern",
+      "pack": "modern",
+      "observed": {
+        "enemies": 1,
+        "health": 100,
+        "clone": false,
+        "feedback": 2,
+        "bullets": 3
+      }
+    },
+    {
+      "file": "session-177/after-boss-abilities-sewer-night-1440-retro.jpg",
+      "sha256": "473f31c76a17980f01ee83234883cfe25a1d93d722c3a0865eef797f36b58532",
+      "originalPngSha256": "f048ef1b4ea2179c98dbdad08d3d69dfcdf607724b33995056730ab5bf001684",
+      "phase": "after",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "boss-abilities-sewer-night-1440-retro",
+      "pack": "retro",
+      "observed": {
+        "enemies": 1,
+        "clone": true,
+        "health": 50
+      }
+    },
+    {
+      "file": "session-177/after-boss-healing-sewer-night-1440-retro.jpg",
+      "sha256": "d93bf2177b3cce54c2d96f991bff3d247b871216ff1bb4dc3796ac7be1e0cfd2",
+      "originalPngSha256": "c67a8baa85a4b153c3b50da21759e66115c293df74e060b0c62610f7f7574a8f",
+      "phase": "after",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "boss-healing-sewer-night-1440-retro",
+      "pack": "retro",
+      "observed": {
+        "enemies": 1,
+        "health": 52,
+        "clone": true,
+        "feedback": 2,
+        "bullets": 0
+      }
+    },
+    {
+      "file": "session-177/after-boss-expired-sewer-night-1440-retro.jpg",
+      "sha256": "af562bdef75e86dd5a879f9a4029a0c26ffb6f086c9a30617ec227e1c3319d8d",
+      "originalPngSha256": "dbbe97bd7ddf379f94b36890bbb9646c7a0ba475c5a1f7cbc5551b02c3343cfc",
+      "phase": "after",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "boss-expired-sewer-night-1440-retro",
+      "pack": "retro",
+      "observed": {
+        "enemies": 1,
+        "health": 52,
+        "clone": false,
+        "feedback": 2,
+        "bullets": 0
+      }
+    },
+    {
+      "file": "session-177/after-boss-volley-sewer-night-1440-retro.jpg",
+      "sha256": "1e19257df34a92611908a125f89b8e20e001f51156bb8e11addb4c32c12dce1c",
+      "originalPngSha256": "cb6cae4d9350455ff3a3d397a0f3e5b27bee93435ad49d6c248a59c65cf414b9",
+      "phase": "after",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "boss-volley-sewer-night-1440-retro",
+      "pack": "retro",
+      "observed": {
+        "enemies": 1,
+        "health": 100,
+        "clone": false,
+        "feedback": 2,
+        "bullets": 1
+      }
+    },
+    {
+      "file": "session-177/after-boss-abilities-porcelain-day-390-modern.jpg",
+      "sha256": "95450c9f972a5be4f470b04aa8ab29e7fd57c7daab2a9ce9df2e1c1fd636cff9",
+      "originalPngSha256": "a7c7c5fb5423e9f983c93e83e2bdc2a38d7da57a96111267b02624e1b67f2a5e",
+      "phase": "after",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "boss-abilities-porcelain-day-390-modern",
+      "pack": "modern",
+      "observed": {
+        "enemies": 1,
+        "clone": true,
+        "health": 50
+      }
+    },
+    {
+      "file": "session-177/after-boss-healing-porcelain-day-390-modern.jpg",
+      "sha256": "eb9f819c9ad4b876544a35b4388f99c54459800491d7bf195c2b041a21af75da",
+      "originalPngSha256": "8d89850c724fb944ed6044c008be0eac95bbd49361a89b4db03e6e30188f4d79",
+      "phase": "after",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "boss-healing-porcelain-day-390-modern",
+      "pack": "modern",
+      "observed": {
+        "enemies": 1,
+        "health": 52,
+        "clone": true,
+        "feedback": 2,
+        "bullets": 0
+      }
+    },
+    {
+      "file": "session-177/after-boss-expired-porcelain-day-390-modern.jpg",
+      "sha256": "045764d2fdb09b0d3121f5b0917609a9ce7290f0553692f2445074d26408c8cc",
+      "originalPngSha256": "9b9d36be7236816e7c367a5d3e2f08eb1f5cc33ddff11315230a80cb5b891b74",
+      "phase": "after",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "boss-expired-porcelain-day-390-modern",
+      "pack": "modern",
+      "observed": {
+        "enemies": 1,
+        "health": 52,
+        "clone": false,
+        "feedback": 2,
+        "bullets": 0
+      }
+    },
+    {
+      "file": "session-177/after-boss-volley-porcelain-day-390-modern.jpg",
+      "sha256": "16789b1a9913bb1581df29929968adf1d52ebd4c58a4d217d84ac298bbc6b47a",
+      "originalPngSha256": "f2c3d1491ce92409bf50ad7395388864101931486f3d4c8ba45252695f3bfe8a",
+      "phase": "after",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "boss-volley-porcelain-day-390-modern",
+      "pack": "modern",
+      "observed": {
+        "enemies": 1,
+        "health": 100,
+        "clone": false,
+        "feedback": 2,
+        "bullets": 0
+      }
+    },
+    {
+      "file": "session-177/after-boss-abilities-porcelain-day-390-retro.jpg",
+      "sha256": "3355162297486c7c5b6390fe870018074c7f3021b71d865f3729e06e8e6d9b44",
+      "originalPngSha256": "8d3581f563e9d9d050f49ad97b4b5aacd23d4c8fbb2e81cc2d748e102de9ac44",
+      "phase": "after",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "boss-abilities-porcelain-day-390-retro",
+      "pack": "retro",
+      "observed": {
+        "enemies": 1,
+        "clone": true,
+        "health": 50
+      }
+    },
+    {
+      "file": "session-177/after-boss-healing-porcelain-day-390-retro.jpg",
+      "sha256": "e1d219abde821f5fed43f8913713e9bf151cc082e15e44e7093987721ffc2e70",
+      "originalPngSha256": "5eb9b013c34d60e6992a9561af166c63cbb381d12afd15cafe438fac667cdb06",
+      "phase": "after",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "boss-healing-porcelain-day-390-retro",
+      "pack": "retro",
+      "observed": {
+        "enemies": 1,
+        "health": 52,
+        "clone": true,
+        "feedback": 2,
+        "bullets": 0
+      }
+    },
+    {
+      "file": "session-177/after-boss-expired-porcelain-day-390-retro.jpg",
+      "sha256": "4c8c3579b2e4ff38dca640e0db588dd86406d9e7ac75d6be74f2024907a83019",
+      "originalPngSha256": "56f56f06a31ec839f5d2273e69ee3c8b78cf73ac4587f57e9f6e90996ed84848",
+      "phase": "after",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "boss-expired-porcelain-day-390-retro",
+      "pack": "retro",
+      "observed": {
+        "enemies": 1,
+        "health": 52,
+        "clone": false,
+        "feedback": 2,
+        "bullets": 0
+      }
+    },
+    {
+      "file": "session-177/after-boss-volley-porcelain-day-390-retro.jpg",
+      "sha256": "d1b1970fd4c4fedcff77f2c87f09442c3c5b0f489052de188b523d6cb25d00ec",
+      "originalPngSha256": "13210c8dbbd9ea882f4fe9362ff2e1f43c0981b1079afeb5be17b7578dc6232f",
+      "phase": "after",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "boss-volley-porcelain-day-390-retro",
+      "pack": "retro",
+      "observed": {
+        "enemies": 1,
+        "health": 100,
+        "clone": false,
+        "feedback": 2,
+        "bullets": 3
+      }
+    },
+    {
+      "file": "session-177/after-boss-abilities-porcelain-day-1440-modern.jpg",
+      "sha256": "d55b8b068cf71209eb1433fe8e9dabf0b9fb107c122e888857306d151859fed4",
+      "originalPngSha256": "a04bdb960f9d4aaeba97fb198c752a92b01efd5796ae3ddd899986349df6489b",
+      "phase": "after",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "boss-abilities-porcelain-day-1440-modern",
+      "pack": "modern",
+      "observed": {
+        "enemies": 1,
+        "clone": true,
+        "health": 50
+      }
+    },
+    {
+      "file": "session-177/after-boss-healing-porcelain-day-1440-modern.jpg",
+      "sha256": "d2d1cf624c1e509ea53ce0f2def7603454cb8c7d01e94316216ac256cc6aa12c",
+      "originalPngSha256": "65bde3a4c7a7e3aaa4002a95bda7d17ca7187be189a7fc84296c6170bbb6f768",
+      "phase": "after",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "boss-healing-porcelain-day-1440-modern",
+      "pack": "modern",
+      "observed": {
+        "enemies": 1,
+        "health": 52,
+        "clone": true,
+        "feedback": 2,
+        "bullets": 0
+      }
+    },
+    {
+      "file": "session-177/after-boss-expired-porcelain-day-1440-modern.jpg",
+      "sha256": "6fabc0ea711dac4947046f3d9509ba6af911b44070fc0363f6151aaf72c5ef1f",
+      "originalPngSha256": "7eafa347f87cd3d351473e20a4985b65cdbbcfd23e124f83a6a2f23a03866671",
+      "phase": "after",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "boss-expired-porcelain-day-1440-modern",
+      "pack": "modern",
+      "observed": {
+        "enemies": 1,
+        "health": 52,
+        "clone": false,
+        "feedback": 2,
+        "bullets": 0
+      }
+    },
+    {
+      "file": "session-177/after-boss-volley-porcelain-day-1440-modern.jpg",
+      "sha256": "0928f29ed358a5e8c394dabd4dc00275d779b5899044c809b7df434924e51db4",
+      "originalPngSha256": "bd386a425394bb40107adf3652356bf91ce48ee7674c5f531009f761fbb7b0dc",
+      "phase": "after",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "boss-volley-porcelain-day-1440-modern",
+      "pack": "modern",
+      "observed": {
+        "enemies": 1,
+        "health": 100,
+        "clone": false,
+        "feedback": 2,
+        "bullets": 3
+      }
+    },
+    {
+      "file": "session-177/after-boss-abilities-porcelain-day-1440-retro.jpg",
+      "sha256": "561b0ac42d88f1fb8ace4078bdeed2aca793ec008f8df9eebe894b20da6319d2",
+      "originalPngSha256": "aaa2fd18a72199933df9c6ee45d1fef94349b5d483bab0c4742b3415d0a5ad71",
+      "phase": "after",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "boss-abilities-porcelain-day-1440-retro",
+      "pack": "retro",
+      "observed": {
+        "enemies": 1,
+        "clone": true,
+        "health": 50
+      }
+    },
+    {
+      "file": "session-177/after-boss-healing-porcelain-day-1440-retro.jpg",
+      "sha256": "4a06018dfe14dde69db21a65d12e5d9d3926307cce2d5b1aea4e164e0e18e73f",
+      "originalPngSha256": "6097ad15f4abb1c39cb4240059a26285772a5bf72f13a424ce41aaf8cb5b2684",
+      "phase": "after",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "boss-healing-porcelain-day-1440-retro",
+      "pack": "retro",
+      "observed": {
+        "enemies": 1,
+        "health": 52,
+        "clone": true,
+        "feedback": 2,
+        "bullets": 0
+      }
+    },
+    {
+      "file": "session-177/after-boss-expired-porcelain-day-1440-retro.jpg",
+      "sha256": "7122cbe84fc4fc3562f3b57c5de07e319f06f074d1a70762c501843f7d8e7b92",
+      "originalPngSha256": "e485805d60a292bb4b042fcc77e2b10359479e8acee3e2680d83717772b9ba3c",
+      "phase": "after",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "boss-expired-porcelain-day-1440-retro",
+      "pack": "retro",
+      "observed": {
+        "enemies": 1,
+        "health": 52,
+        "clone": false,
+        "feedback": 2,
+        "bullets": 0
+      }
+    },
+    {
+      "file": "session-177/after-boss-volley-porcelain-day-1440-retro.jpg",
+      "sha256": "27a68327a3738f70e4aa8d3da8e51f64ce688eb4d4ae5be25ec2a858a35352b4",
+      "originalPngSha256": "4ecaaa962aff0c98ab388e9e719e884a0b10d9c59d4f5f7e8c661e8c83eab1a9",
+      "phase": "after",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "boss-volley-porcelain-day-1440-retro",
+      "pack": "retro",
+      "observed": {
+        "enemies": 1,
+        "health": 100,
+        "clone": false,
+        "feedback": 2,
+        "bullets": 3
+      }
+    },
+    {
+      "file": "session-177/after-supply-drop-shop-sewer-night-390.jpg",
+      "sha256": "7621ff299043ca45451977e4201fa139726cdd956b692fc77500946c9b2f65a9",
+      "originalPngSha256": "a5de2e62c958dbf13a27596cafe9805edfff9bdd3b0654cccae641a2c14f56e8",
+      "phase": "after",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "supply-drop-shop-sewer-night-390",
+      "pack": "modern",
+      "observed": {
+        "wave": 2,
+        "coins": 0,
+        "health": 50,
+        "maxHealth": 50,
+        "freeShopUnlocked": true,
+        "freeShopClaimWave": null,
+        "gauntletMode": false,
+        "bonusPerkUnlocked": true,
+        "bonusPerkGranted": false,
+        "perkSelectionVisible": false,
+        "heading": "WAVE 1 CLEAR!",
+        "coinRows": [
+          {
+            "text": "❤️‍🔥\nHP Augment\n+30 permanent max HP\n💩 0",
+            "disabled": false,
+            "cost": 0
+          },
+          {
+            "text": "🔋\nFull Battery\nRefill all weapons\n💩 10",
+            "disabled": true,
+            "cost": 10
+          },
+          {
+            "text": "💣\nPocket Nuke\nNuke all enemies on screen\n💩 28",
+            "disabled": true,
+            "cost": 28
+          }
+        ],
+        "viewport": {
+          "width": 390,
+          "height": 900
+        },
+        "documentOverflowX": false
+      }
+    },
+    {
+      "file": "session-177/after-supply-drop-coin-rows-sewer-night-390.jpg",
+      "sha256": "7621ff299043ca45451977e4201fa139726cdd956b692fc77500946c9b2f65a9",
+      "originalPngSha256": "a5de2e62c958dbf13a27596cafe9805edfff9bdd3b0654cccae641a2c14f56e8",
+      "phase": "after",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "supply-drop-coin-rows-sewer-night-390",
+      "pack": "modern",
+      "observed": {
+        "wave": 2,
+        "coins": 0,
+        "health": 50,
+        "maxHealth": 50,
+        "freeShopUnlocked": true,
+        "freeShopClaimWave": null,
+        "gauntletMode": false,
+        "bonusPerkUnlocked": true,
+        "bonusPerkGranted": false,
+        "perkSelectionVisible": false,
+        "heading": "WAVE 1 CLEAR!",
+        "coinRows": [
+          {
+            "text": "❤️‍🔥\nHP Augment\n+30 permanent max HP\n💩 0",
+            "disabled": false,
+            "cost": 0
+          },
+          {
+            "text": "🔋\nFull Battery\nRefill all weapons\n💩 10",
+            "disabled": true,
+            "cost": 10
+          },
+          {
+            "text": "💣\nPocket Nuke\nNuke all enemies on screen\n💩 28",
+            "disabled": true,
+            "cost": 28
+          }
+        ],
+        "viewport": {
+          "width": 390,
+          "height": 900
+        },
+        "documentOverflowX": false
+      }
+    },
+    {
+      "file": "session-177/after-supply-drop-redeemed-sewer-night-390.jpg",
+      "sha256": "25abb5d9c826725d0ec00cc71edbbcf68adcc945b8fdb152ef9bbcf0af74107f",
+      "originalPngSha256": "f06f2b9c8f9e1ebc445df6fc021d327abd6f0042701adcf114e2622419d0c585",
+      "phase": "after",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "supply-drop-redeemed-sewer-night-390",
+      "pack": "modern",
+      "observed": {
+        "wave": 2,
+        "coins": 0,
+        "health": 80,
+        "maxHealth": 80,
+        "freeShopUnlocked": true,
+        "freeShopClaimWave": 2,
+        "gauntletMode": false,
+        "bonusPerkUnlocked": true,
+        "bonusPerkGranted": false,
+        "perkSelectionVisible": false,
+        "heading": "WAVE 1 CLEAR!",
+        "coinRows": [
+          {
+            "text": "❤️‍🔥\nHP Augment\n+30 permanent max HP\n💩 22",
+            "disabled": true,
+            "cost": 22
+          },
+          {
+            "text": "🔋\nFull Battery\nRefill all weapons\n💩 10",
+            "disabled": true,
+            "cost": 10
+          },
+          {
+            "text": "💣\nPocket Nuke\nNuke all enemies on screen\n💩 28",
+            "disabled": true,
+            "cost": 28
+          }
+        ],
+        "viewport": {
+          "width": 390,
+          "height": 900
+        },
+        "documentOverflowX": false
+      }
+    },
+    {
+      "file": "session-177/after-gauntlet-ready-start-sewer-night-390.jpg",
+      "sha256": "b2b213c89f79c0540cef0d15069c6ac9f3f8c2e68562a8925e73795d9bf1d877",
+      "originalPngSha256": "34fe357a68447454c15141ce8b955c4ff8feb611930b99d0df5544436d8e3369",
+      "phase": "after",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "gauntlet-ready-start-sewer-night-390",
+      "pack": "modern",
+      "observed": {
+        "wave": 1,
+        "coins": 0,
+        "health": 25,
+        "maxHealth": 25,
+        "freeShopUnlocked": true,
+        "freeShopClaimWave": null,
+        "gauntletMode": true,
+        "bonusPerkUnlocked": true,
+        "bonusPerkGranted": true,
+        "perkSelectionVisible": true,
+        "heading": "LEVEL 1 — PERK SELECT",
+        "coinRows": [],
+        "viewport": {
+          "width": 390,
+          "height": 900
+        },
+        "documentOverflowX": false
+      }
+    },
+    {
+      "file": "session-177/after-gauntlet-ready-chosen-sewer-night-390.jpg",
+      "sha256": "318a24c40ae44baf3b8519187c5a4f235d38d1ea7144deef09a423d2a10389dc",
+      "originalPngSha256": "46543cd93c496d074a83bb773dad14f20e38afd88604452335b3dcd65e134d4c",
+      "phase": "after",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "gauntlet-ready-chosen-sewer-night-390",
+      "pack": "modern",
+      "observed": {
+        "wave": 1,
+        "coins": 0,
+        "health": 25,
+        "maxHealth": 25,
+        "freeShopUnlocked": true,
+        "freeShopClaimWave": null,
+        "gauntletMode": true,
+        "bonusPerkUnlocked": true,
+        "bonusPerkGranted": true,
+        "perkSelectionVisible": false,
+        "heading": null,
+        "coinRows": [],
+        "viewport": {
+          "width": 390,
+          "height": 900
+        },
+        "documentOverflowX": false
+      }
+    },
+    {
+      "file": "session-177/after-supply-drop-shop-sewer-night-1440.jpg",
+      "sha256": "9e3f6c76c8e78ab4fff169bb665766ae8cacdc84a331af766bcc5922309dd2aa",
+      "originalPngSha256": "c848137616d9e2a3ecae767ba408e7439771d16c9b03a9a44cf64208ab8276f9",
+      "phase": "after",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "supply-drop-shop-sewer-night-1440",
+      "pack": "modern",
+      "observed": {
+        "wave": 2,
+        "coins": 0,
+        "health": 100,
+        "maxHealth": 100,
+        "freeShopUnlocked": true,
+        "freeShopClaimWave": null,
+        "gauntletMode": false,
+        "bonusPerkUnlocked": true,
+        "bonusPerkGranted": false,
+        "perkSelectionVisible": false,
+        "heading": "WAVE 1 CLEAR!",
+        "coinRows": [
+          {
+            "text": "⏳\nBullet Time\n6 seconds of time dilation\nBullet Time is free in this shop. Claim it without spending coins.\n💩 0",
+            "disabled": false,
+            "cost": 0
+          },
+          {
+            "text": "🔋\nFull Battery\nRefill all weapons\n💩 10",
+            "disabled": true,
+            "cost": 10
+          },
+          {
+            "text": "👼\nGuardian Angel\n+1 extra life\n💩 45",
+            "disabled": true,
+            "cost": 45
+          }
+        ],
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "documentOverflowX": false
+      }
+    },
+    {
+      "file": "session-177/after-supply-drop-coin-rows-sewer-night-1440.jpg",
+      "sha256": "9e3f6c76c8e78ab4fff169bb665766ae8cacdc84a331af766bcc5922309dd2aa",
+      "originalPngSha256": "c848137616d9e2a3ecae767ba408e7439771d16c9b03a9a44cf64208ab8276f9",
+      "phase": "after",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "supply-drop-coin-rows-sewer-night-1440",
+      "pack": "modern",
+      "observed": {
+        "wave": 2,
+        "coins": 0,
+        "health": 100,
+        "maxHealth": 100,
+        "freeShopUnlocked": true,
+        "freeShopClaimWave": null,
+        "gauntletMode": false,
+        "bonusPerkUnlocked": true,
+        "bonusPerkGranted": false,
+        "perkSelectionVisible": false,
+        "heading": "WAVE 1 CLEAR!",
+        "coinRows": [
+          {
+            "text": "⏳\nBullet Time\n6 seconds of time dilation\nBullet Time is free in this shop. Claim it without spending coins.\n💩 0",
+            "disabled": false,
+            "cost": 0
+          },
+          {
+            "text": "🔋\nFull Battery\nRefill all weapons\n💩 10",
+            "disabled": true,
+            "cost": 10
+          },
+          {
+            "text": "👼\nGuardian Angel\n+1 extra life\n💩 45",
+            "disabled": true,
+            "cost": 45
+          }
+        ],
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "documentOverflowX": false
+      }
+    },
+    {
+      "file": "session-177/after-supply-drop-redeemed-sewer-night-1440.jpg",
+      "sha256": "261db6367a2ad093e5d1df276185262d5e82d5772a00dbc29a34ee57d4b7b8f9",
+      "originalPngSha256": "b46bc581e11afb052c70ca3ce89b092ac2b0084a30f221610e5e15ee295bbad4",
+      "phase": "after",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "supply-drop-redeemed-sewer-night-1440",
+      "pack": "modern",
+      "observed": {
+        "wave": 2,
+        "coins": 0,
+        "health": 100,
+        "maxHealth": 100,
+        "freeShopUnlocked": true,
+        "freeShopClaimWave": 2,
+        "gauntletMode": false,
+        "bonusPerkUnlocked": true,
+        "bonusPerkGranted": false,
+        "perkSelectionVisible": false,
+        "heading": "WAVE 1 CLEAR!",
+        "coinRows": [
+          {
+            "text": "⏳\nBullet Time\n6 seconds of time dilation\n💩 14",
+            "disabled": true,
+            "cost": 14
+          },
+          {
+            "text": "🔋\nFull Battery\nRefill all weapons\n💩 10",
+            "disabled": true,
+            "cost": 10
+          },
+          {
+            "text": "👼\nGuardian Angel\n+1 extra life\n💩 45",
+            "disabled": true,
+            "cost": 45
+          }
+        ],
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "documentOverflowX": false
+      }
+    },
+    {
+      "file": "session-177/after-gauntlet-ready-start-sewer-night-1440.jpg",
+      "sha256": "f2c1b47967ee2ed393b1001747e8943e12d3df9262e25840217cd50a27e0eb3d",
+      "originalPngSha256": "f7b33bbba0fc376d4f8064f73b85169c48c251600bb2a5acda428886a13b9e40",
+      "phase": "after",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "gauntlet-ready-start-sewer-night-1440",
+      "pack": "modern",
+      "observed": {
+        "wave": 1,
+        "coins": 0,
+        "health": 25,
+        "maxHealth": 25,
+        "freeShopUnlocked": true,
+        "freeShopClaimWave": null,
+        "gauntletMode": true,
+        "bonusPerkUnlocked": true,
+        "bonusPerkGranted": true,
+        "perkSelectionVisible": true,
+        "heading": "LEVEL 1 — PERK SELECT",
+        "coinRows": [],
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "documentOverflowX": false
+      }
+    },
+    {
+      "file": "session-177/after-gauntlet-ready-chosen-sewer-night-1440.jpg",
+      "sha256": "bdc51d1196e5ed8803a25cff892b3bc16d0bef842bc826d46e8813f895de226c",
+      "originalPngSha256": "5b9340a76893efe4a47376452a5dc77cf74c2d8f9ba9199a6013ad53e641c9fb",
+      "phase": "after",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "gauntlet-ready-chosen-sewer-night-1440",
+      "pack": "modern",
+      "observed": {
+        "wave": 1,
+        "coins": 0,
+        "health": 25,
+        "maxHealth": 25,
+        "freeShopUnlocked": true,
+        "freeShopClaimWave": null,
+        "gauntletMode": true,
+        "bonusPerkUnlocked": true,
+        "bonusPerkGranted": true,
+        "perkSelectionVisible": false,
+        "heading": null,
+        "coinRows": [],
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "documentOverflowX": false
+      }
+    },
+    {
+      "file": "session-177/after-supply-drop-shop-porcelain-day-390.jpg",
+      "sha256": "3275db369f471559d56a22b8b34ebc151781b5e4b6b8ab8e73529c61a88f09f2",
+      "originalPngSha256": "bf7b82da17401a4c740ff02e4f05e6b260e9fd820fde2f243806b5baab51baa4",
+      "phase": "after",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "supply-drop-shop-porcelain-day-390",
+      "pack": "modern",
+      "observed": {
+        "wave": 2,
+        "coins": 0,
+        "health": 50,
+        "maxHealth": 50,
+        "freeShopUnlocked": true,
+        "freeShopClaimWave": null,
+        "gauntletMode": false,
+        "bonusPerkUnlocked": true,
+        "bonusPerkGranted": false,
+        "perkSelectionVisible": false,
+        "heading": "WAVE 1 CLEAR!",
+        "coinRows": [
+          {
+            "text": "👼\nGuardian Angel\n+1 extra life\n💩 0",
+            "disabled": false,
+            "cost": 0
+          },
+          {
+            "text": "💣\nPocket Nuke\nNuke all enemies on screen\n💩 28",
+            "disabled": true,
+            "cost": 28
+          },
+          {
+            "text": "🔋\nFull Battery\nRefill all weapons\n💩 10",
+            "disabled": true,
+            "cost": 10
+          }
+        ],
+        "viewport": {
+          "width": 390,
+          "height": 900
+        },
+        "documentOverflowX": false
+      }
+    },
+    {
+      "file": "session-177/after-supply-drop-coin-rows-porcelain-day-390.jpg",
+      "sha256": "3275db369f471559d56a22b8b34ebc151781b5e4b6b8ab8e73529c61a88f09f2",
+      "originalPngSha256": "bf7b82da17401a4c740ff02e4f05e6b260e9fd820fde2f243806b5baab51baa4",
+      "phase": "after",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "supply-drop-coin-rows-porcelain-day-390",
+      "pack": "modern",
+      "observed": {
+        "wave": 2,
+        "coins": 0,
+        "health": 50,
+        "maxHealth": 50,
+        "freeShopUnlocked": true,
+        "freeShopClaimWave": null,
+        "gauntletMode": false,
+        "bonusPerkUnlocked": true,
+        "bonusPerkGranted": false,
+        "perkSelectionVisible": false,
+        "heading": "WAVE 1 CLEAR!",
+        "coinRows": [
+          {
+            "text": "👼\nGuardian Angel\n+1 extra life\n💩 0",
+            "disabled": false,
+            "cost": 0
+          },
+          {
+            "text": "💣\nPocket Nuke\nNuke all enemies on screen\n💩 28",
+            "disabled": true,
+            "cost": 28
+          },
+          {
+            "text": "🔋\nFull Battery\nRefill all weapons\n💩 10",
+            "disabled": true,
+            "cost": 10
+          }
+        ],
+        "viewport": {
+          "width": 390,
+          "height": 900
+        },
+        "documentOverflowX": false
+      }
+    },
+    {
+      "file": "session-177/after-supply-drop-redeemed-porcelain-day-390.jpg",
+      "sha256": "0efcd40e0f2d5c454795c0bb118695feb82b185294b7eadc6a58a8290ff50085",
+      "originalPngSha256": "dcae956dde479df940225d92618b080d74c25fd631d53ee09d8689742417bee0",
+      "phase": "after",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "supply-drop-redeemed-porcelain-day-390",
+      "pack": "modern",
+      "observed": {
+        "wave": 2,
+        "coins": 0,
+        "health": 50,
+        "maxHealth": 50,
+        "freeShopUnlocked": true,
+        "freeShopClaimWave": 2,
+        "gauntletMode": false,
+        "bonusPerkUnlocked": true,
+        "bonusPerkGranted": false,
+        "perkSelectionVisible": false,
+        "heading": "WAVE 1 CLEAR!",
+        "coinRows": [
+          {
+            "text": "👼\nGuardian Angel\n+1 extra life\n💩 45",
+            "disabled": true,
+            "cost": 45
+          },
+          {
+            "text": "💣\nPocket Nuke\nNuke all enemies on screen\n💩 28",
+            "disabled": true,
+            "cost": 28
+          },
+          {
+            "text": "🔋\nFull Battery\nRefill all weapons\n💩 10",
+            "disabled": true,
+            "cost": 10
+          }
+        ],
+        "viewport": {
+          "width": 390,
+          "height": 900
+        },
+        "documentOverflowX": false
+      }
+    },
+    {
+      "file": "session-177/after-gauntlet-ready-start-porcelain-day-390.jpg",
+      "sha256": "a00e2f33b2885bb26e0a4078f685c03aec1c4b45ed1cdaa7d727a61fa9a2f346",
+      "originalPngSha256": "2c1bd5472c5c08b2de8880f605386138a17ccc5fb143ddcfbb528da31d4947f0",
+      "phase": "after",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "gauntlet-ready-start-porcelain-day-390",
+      "pack": "modern",
+      "observed": {
+        "wave": 1,
+        "coins": 0,
+        "health": 25,
+        "maxHealth": 25,
+        "freeShopUnlocked": true,
+        "freeShopClaimWave": null,
+        "gauntletMode": true,
+        "bonusPerkUnlocked": true,
+        "bonusPerkGranted": true,
+        "perkSelectionVisible": true,
+        "heading": "LEVEL 1 — PERK SELECT",
+        "coinRows": [],
+        "viewport": {
+          "width": 390,
+          "height": 900
+        },
+        "documentOverflowX": false
+      }
+    },
+    {
+      "file": "session-177/after-gauntlet-ready-chosen-porcelain-day-390.jpg",
+      "sha256": "5077fff259279be86d56a22b3da4d6b4de677e5cc3c4fa3b9ae1136c56fe0f28",
+      "originalPngSha256": "64fea0d9a9bd5fd8970d3cfc2379e2d2f135f274571905a832b14c43211a264c",
+      "phase": "after",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "gauntlet-ready-chosen-porcelain-day-390",
+      "pack": "modern",
+      "observed": {
+        "wave": 1,
+        "coins": 0,
+        "health": 25,
+        "maxHealth": 25,
+        "freeShopUnlocked": true,
+        "freeShopClaimWave": null,
+        "gauntletMode": true,
+        "bonusPerkUnlocked": true,
+        "bonusPerkGranted": true,
+        "perkSelectionVisible": false,
+        "heading": null,
+        "coinRows": [],
+        "viewport": {
+          "width": 390,
+          "height": 900
+        },
+        "documentOverflowX": false
+      }
+    },
+    {
+      "file": "session-177/after-supply-drop-shop-porcelain-day-1440.jpg",
+      "sha256": "e5ad5e12cd003342d9758fd8d8c3f8658f83e248c330d67220ae4e5ae61710e2",
+      "originalPngSha256": "c95b5b7806ad5ff5eb9b7be792a6f5d75061356a43e4a22486e5e0efd1f33db5",
+      "phase": "after",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "supply-drop-shop-porcelain-day-1440",
+      "pack": "modern",
+      "observed": {
+        "wave": 2,
+        "coins": 0,
+        "health": 100,
+        "maxHealth": 100,
+        "freeShopUnlocked": true,
+        "freeShopClaimWave": null,
+        "gauntletMode": false,
+        "bonusPerkUnlocked": true,
+        "bonusPerkGranted": false,
+        "perkSelectionVisible": false,
+        "heading": "WAVE 1 CLEAR!",
+        "coinRows": [
+          {
+            "text": "👼\nGuardian Angel\n+1 extra life\nGuardian Angel is free in this shop. Claim it without spending coins.\n💩 0",
+            "disabled": false,
+            "cost": 0
+          },
+          {
+            "text": "🔋\nFull Battery\nRefill all weapons\n💩 10",
+            "disabled": true,
+            "cost": 10
+          },
+          {
+            "text": "❤️‍🔥\nHP Augment\n+30 permanent max HP\n💩 22",
+            "disabled": true,
+            "cost": 22
+          }
+        ],
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "documentOverflowX": false
+      }
+    },
+    {
+      "file": "session-177/after-supply-drop-coin-rows-porcelain-day-1440.jpg",
+      "sha256": "e5ad5e12cd003342d9758fd8d8c3f8658f83e248c330d67220ae4e5ae61710e2",
+      "originalPngSha256": "c95b5b7806ad5ff5eb9b7be792a6f5d75061356a43e4a22486e5e0efd1f33db5",
+      "phase": "after",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "supply-drop-coin-rows-porcelain-day-1440",
+      "pack": "modern",
+      "observed": {
+        "wave": 2,
+        "coins": 0,
+        "health": 100,
+        "maxHealth": 100,
+        "freeShopUnlocked": true,
+        "freeShopClaimWave": null,
+        "gauntletMode": false,
+        "bonusPerkUnlocked": true,
+        "bonusPerkGranted": false,
+        "perkSelectionVisible": false,
+        "heading": "WAVE 1 CLEAR!",
+        "coinRows": [
+          {
+            "text": "👼\nGuardian Angel\n+1 extra life\nGuardian Angel is free in this shop. Claim it without spending coins.\n💩 0",
+            "disabled": false,
+            "cost": 0
+          },
+          {
+            "text": "🔋\nFull Battery\nRefill all weapons\n💩 10",
+            "disabled": true,
+            "cost": 10
+          },
+          {
+            "text": "❤️‍🔥\nHP Augment\n+30 permanent max HP\n💩 22",
+            "disabled": true,
+            "cost": 22
+          }
+        ],
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "documentOverflowX": false
+      }
+    },
+    {
+      "file": "session-177/after-supply-drop-redeemed-porcelain-day-1440.jpg",
+      "sha256": "4b3cd57bde94d47b91539ea7cf5c1121fe7ab83a3b9c2d63d4aae5e175d3479b",
+      "originalPngSha256": "c5e699fe1a101265545e54830e5c4ec1ba0069cc8e86b87a8bac189cd99ee7cf",
+      "phase": "after",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "supply-drop-redeemed-porcelain-day-1440",
+      "pack": "modern",
+      "observed": {
+        "wave": 2,
+        "coins": 0,
+        "health": 100,
+        "maxHealth": 100,
+        "freeShopUnlocked": true,
+        "freeShopClaimWave": 2,
+        "gauntletMode": false,
+        "bonusPerkUnlocked": true,
+        "bonusPerkGranted": false,
+        "perkSelectionVisible": false,
+        "heading": "WAVE 1 CLEAR!",
+        "coinRows": [
+          {
+            "text": "👼\nGuardian Angel\n+1 extra life\n💩 45",
+            "disabled": true,
+            "cost": 45
+          },
+          {
+            "text": "🔋\nFull Battery\nRefill all weapons\n💩 10",
+            "disabled": true,
+            "cost": 10
+          },
+          {
+            "text": "❤️‍🔥\nHP Augment\n+30 permanent max HP\n💩 22",
+            "disabled": true,
+            "cost": 22
+          }
+        ],
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "documentOverflowX": false
+      }
+    },
+    {
+      "file": "session-177/after-gauntlet-ready-start-porcelain-day-1440.jpg",
+      "sha256": "fe5de4a8e38bd5e1cd0982a03bfe5efbf366495d9ebb405c2375802f947e6e69",
+      "originalPngSha256": "3fc380595e89abd92779f6d0a58cfcecf51f282eb51cf3a9fbc5ef1cf824789a",
+      "phase": "after",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "gauntlet-ready-start-porcelain-day-1440",
+      "pack": "modern",
+      "observed": {
+        "wave": 1,
+        "coins": 0,
+        "health": 25,
+        "maxHealth": 25,
+        "freeShopUnlocked": true,
+        "freeShopClaimWave": null,
+        "gauntletMode": true,
+        "bonusPerkUnlocked": true,
+        "bonusPerkGranted": true,
+        "perkSelectionVisible": true,
+        "heading": "LEVEL 1 — PERK SELECT",
+        "coinRows": [],
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "documentOverflowX": false
+      }
+    },
+    {
+      "file": "session-177/after-gauntlet-ready-chosen-porcelain-day-1440.jpg",
+      "sha256": "c9cb3c6ff151753f8d3d51d1198e11a79eed64d6733dc6387ade3fe07a3b4c61",
+      "originalPngSha256": "0241797409cf5fe6ca74e811fb735be27c677971651ad52018b7cba90d4b278f",
+      "phase": "after",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "gauntlet-ready-chosen-porcelain-day-1440",
+      "pack": "modern",
+      "observed": {
+        "wave": 1,
+        "coins": 0,
+        "health": 25,
+        "maxHealth": 25,
+        "freeShopUnlocked": true,
+        "freeShopClaimWave": null,
+        "gauntletMode": true,
+        "bonusPerkUnlocked": true,
+        "bonusPerkGranted": true,
+        "perkSelectionVisible": false,
+        "heading": null,
+        "coinRows": [],
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "documentOverflowX": false
+      }
+    },
+    {
+      "file": "session-177/status-sewer-night-390.jpg",
+      "sha256": "3212d0b15e9e42d688fb8a02fafe67bbdcb8aedb5171d5e243087d1829533165",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "page": "Status page after date-bound public regeneration"
+    },
+    {
+      "file": "session-177/status-sewer-night-1440.jpg",
+      "sha256": "5e5262f27a0c6215c3c83f208276e68ee6cdad05b7cf3751689d875312bc86ca",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "page": "Status page after date-bound public regeneration"
+    },
+    {
+      "file": "session-177/status-porcelain-day-390.jpg",
+      "sha256": "0e3e3cf5b81723ecd2b604748103d5d819e7538f91ca7bf04f87ff291d19bbb6",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "page": "Status page after date-bound public regeneration"
+    },
+    {
+      "file": "session-177/status-porcelain-day-1440.jpg",
+      "sha256": "ef51a598a1ecd8efb70a302ac706d05899eba0c70f39a2581eea1a39cf4db688",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "page": "Status page after date-bound public regeneration"
+    }
+  ],
+  "inspection": {
+    "renderedPixelsReviewed": true,
+    "reviewer": "Codex direct image inspection: all 52 final states plus representative baseline combat and all baseline meta states",
+    "findings": [
+      "Final decoy ring and label, actual +2 HP feedback, expiry, and visible projectile fan reviewed in both themes, both render packs, and 390/1440 viewports.",
+      "One free shop offer becomes paid after redemption with unchanged coin balance; Gauntlet bonus perk opens once and resolves. All 20 final meta captures have zero page errors or horizontal document overflow.",
+      "Both baseline and final Gauntlet captures show pre-existing arena sizing and clipped world-space toast artifacts. These are outside the changed perk modal and remain a recorded follow-up, not a claim of full-site visual perfection.",
+      "Disabled unaffordable shop rows remain deliberately dim. The selected free offer and perk choices are legible and reachable.",
+      "Synthetic local ownership and live-state fixture acceleration establish runtime behavior; these captures are not participant playtest evidence. Volley survivor count can decrease after obstacle collision; initial three-shot behavior is separately regression tested.",
+      "After commit bdf5e50, five deterministic public artifacts changed only content dates/fingerprint. The status page was recaptured and directly inspected at390/1440 across both themes; gameplay source hashes remain unchanged."
+    ],
+    "fixesApplied": [
+      "Free offers now show free-item guidance instead of normal-price warnings.",
+      "Decoy placement includes arena edge inset and explicit DECOY label.",
+      "Volley screenshots allow shots to clear the boss silhouette before capture."
+    ],
+    "blockingDefectsOpen": 0,
+    "scope": "Changed boss effects, free shop offers and opening perk flow. Existing Gauntlet arena clipping recorded separately.",
+    "reviewedAt": "2026-09-14T05:18:55.288Z"
+  }
+}

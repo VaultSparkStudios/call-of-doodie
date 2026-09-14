@@ -27,3 +27,5 @@ coverage/
 # Private surfaces — never commit (sanitization 2026-06-03)
 ignis/output/
 artifacts/visual-audit/
+
+output/audio/

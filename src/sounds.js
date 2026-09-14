@@ -1,4 +1,5 @@
 // ===== WEB AUDIO SYNTHESIS — zero dependencies, no files needed =====
+import { scheduleVoiceEnvelope } from "./audio/voiceEnvelope.js";
 import {
   initBusGraph, busDest, setBusVolume, setMasterMuted, duckMusic, setMusicLowpass,
 } from "./audio/audioBus.js";
@@ -99,6 +100,7 @@ function _prewarmNoiseBuffers(ctx) {
 }
 
 function _unlockAudio() {
+  if (muted) return;
   if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
   if (!audioCtx) _createAudioContext();
 }
@@ -123,7 +125,7 @@ function getCtx() {
 
 // Re-unlock on visibility change (iOS suspends AudioContext when app backgrounds)
 if (typeof document !== "undefined") document.addEventListener("visibilitychange", () => {
-  if (document.visibilityState === "visible" && audioCtx && audioCtx.state === "suspended") {
+  if (!muted && document.visibilityState === "visible" && audioCtx && audioCtx.state === "suspended") {
     audioCtx.resume();
   }
 });
@@ -177,10 +179,11 @@ function tone(freq, duration, type = "square", vol = 0.08, freqEnd = null, start
     const endFreq = freqEnd !== null ? _detune(freqEnd, cents * 0.6) : null;
     osc.frequency.setValueAtTime(startFreq, t);
     if (endFreq !== null) osc.frequency.linearRampToValueAtTime(endFreq, t + duration);
-    gain.gain.setValueAtTime(vol * _rand(0.92, 1.08), t);
-    gain.gain.exponentialRampToValueAtTime(0.001, t + duration);
+    const peak = vol * _rand(0.96, 1.04) * (type === "square" ? 0.78 : type === "sawtooth" ? 0.88 : 1);
+    const stop = scheduleVoiceEnvelope(gain.gain, t, duration, peak);
+    osc.onended = () => { osc.disconnect(); gain.disconnect(); };
     osc.start(t);
-    osc.stop(t + duration);
+    osc.stop(stop);
   } catch {}
 }
 
@@ -197,10 +200,11 @@ function noise(duration, vol = 0.15, startDelay = 0, dest = null) {
     src.connect(gain);
     gain.connect(dest || _defaultDest(ctx));
     const t = ctx.currentTime + startDelay + _scheduleOffset;
-    gain.gain.setValueAtTime(vol, t);
-    gain.gain.exponentialRampToValueAtTime(0.001, t + duration);
+    const stop = scheduleVoiceEnvelope(gain.gain, t, duration, vol);
+    src.onended = () => { src.disconnect(); gain.disconnect(); };
     const maxOffset = Math.max(0, buf.duration - duration - 0.01);
-    src.start(t, _rand(0, maxOffset), duration + 0.02);
+    src.start(t, _rand(0, maxOffset));
+    src.stop(stop);
   } catch {}
 }
 
@@ -836,8 +840,11 @@ function _beatAction(ctx, beat, bar, chord = 1, section = 0) {
   const vol = 1.0;
   if (bar === 0 || bar === 4) { tone(75, beat * 0.45, "sine", 0.10 * vol, 38); noise(beat * 0.18, 0.07 * vol); }
   if (bar === 2 || bar === 6) { noise(beat * 0.22, 0.08 * vol); tone(220, beat * 0.15, "square", 0.03 * vol, 160); }
-  if (bar % 2 === 1) tone(7500, beat * 0.06, "square", 0.012 * vol, 5000);
-  tone(9000, beat * 0.03, "square", 0.008 * vol, 7000);
+  if (bar % 2 === 1) noise(beat * 0.065, 0.018 * vol);
+  noise(beat * 0.035, 0.012 * vol);
+  // A restrained call-and-response motif gives the groove a musical identity.
+  const melody = section === 1 ? [0, 392, 330, 0, 294, 0, 262, 294] : [220, 0, 262, 0, 294, 262, 0, 196];
+  if (melody[bar]) tone(melody[bar] * chord, beat * 0.65, "triangle", 0.018);
   const bass = [55, 55, 65, 55, 49, 55, 58, 55];
   tone(bass[bar] * chord, beat * 0.38, "sawtooth", 0.065 * vol, bass[bar] * chord * 0.88);
   if (section === 1) {
