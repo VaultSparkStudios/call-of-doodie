@@ -843,7 +843,9 @@ export default function CallOfDoodie() {
     }
     updateCamera(gsRef.current.camera, gsRef.current.player, { viewW: w, viewH: h, snap: true });
 
-    const arena = combatRuntimeRef.current.buildArenaEnvironment({ seed, width: aw, height: ah });
+    const _themePool = modeDefRef.current?.arena?.themePool;
+    const _forcedTheme = _themePool?.length ? _themePool[(Number(seed) >>> 0) % _themePool.length] : undefined;
+    const arena = combatRuntimeRef.current.buildArenaEnvironment({ seed, width: aw, height: ah, forcedTheme: _forcedTheme });
     gsRef.current._layoutName = arena.layoutName;
     gsRef.current.obstacles = arena.obstacles;
     gsRef.current.terrain = arena.terrain;

@@ -132,7 +132,7 @@ describe("buildArenaEnvironment", () => {
     expect(appSource).not.toContain('from "./systems/arenaEnvironment.js"');
     // S165: the environment is built at ARENA size, which may exceed the
     // viewport when a mode scales its arena and the camera scrolls over it.
-    expect(appSource).toContain("buildArenaEnvironment({ seed, width: aw, height: ah })");
+    expect(appSource).toContain("buildArenaEnvironment({ seed, width: aw, height: ah, forcedTheme: _forcedTheme })");
     expect(appSource).toContain("resolveArenaSize(modeDefRef.current, w, h)");
     expect(appSource).not.toContain("Math.imul(_ws, 1664525)");
   });

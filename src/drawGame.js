@@ -1463,6 +1463,11 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
       }
       const half = ctx.measureText(ft.text).width / 2;
       x = Math.max(16 + half, Math.min(W - 16 - half, x));
+    } else {
+      // World-anchored: clamp y to canvas bounds in screen space so texts near
+      // the arena top edge (player.y - 40/60 in Gauntlet etc.) don't vanish.
+      const screenY = y - _camY;
+      y = Math.max(16, Math.min(H - 16, screenY)) + _camY;
     }
     ctx.strokeText(ft.text, x, y); ctx.fillText(ft.text, x, y);
   };
