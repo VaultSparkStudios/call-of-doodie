@@ -38,7 +38,7 @@ function spawnBot(gs, index, ctx) {
     deathQuotes: ["gg ez", "lag", "my controller died", "reported", "this is rigged", "brb mom"],
     emoji: type.emoji, typeIndex,
     wobble: rng() * Math.PI * 2, hitFlash: 0,
-    ranged: true, projSpeed: 5.2, projRate: 95 + Math.floor(rng() * 50), shootTimer: -DROP_FRAMES,
+    ranged: true, projSpeed: 5.2 * (gs.mutEnemyProjSpeed || 1), projRate: 95 + Math.floor(rng() * 50), shootTimer: -DROP_FRAMES,
     _spawnX: 0, _spawnY: 0,
     isBossEnemy: false, freezeTimer: 0,
   };

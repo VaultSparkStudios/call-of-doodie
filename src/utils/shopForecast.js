@@ -86,6 +86,11 @@ export function getShopAdvisory(option, gs, wpnIdx = 0) {
 
   // ── Coin shop items ────────────────────────────────────────────────────────
 
+  if (id.startsWith("cs_") && option.cost === 0) return {
+    advisory: `${option.name || "This item"} is free in this shop. Claim it without spending coins.`,
+    urgency: "medium",
+  };
+
   if (id === "cs_fullhp") {
     if (hpPct < 0.25) return { advisory: "At this HP, this might be the only way to survive the next wave.", urgency: "high" };
     if (hpPct < 0.5) return { advisory: "Good value at this health level — full restore buys real buffer.", urgency: "medium" };
@@ -118,23 +123,24 @@ export function getShopAdvisory(option, gs, wpnIdx = 0) {
 
   if (id === "cs_extralife") {
     const coins = gs.coins || 0;
+    const cost = option.cost;
     return {
-      advisory: coins >= 45
-        ? "Guardian Angel is the highest-impact survival buy. Worth it when the run score is worth protecting."
-        : "Guardian Angel costs 45 coins — make sure you have enough without draining your economy.",
+      advisory: Number.isFinite(cost) && coins < cost
+        ? `Guardian Angel costs ${cost} coins — make sure you have enough without draining your economy.`
+        : "Guardian Angel is the highest-impact survival buy. Worth it when the run score is worth protecting.",
       urgency: wave >= 8 ? "medium" : "low",
     };
   }
 
   if (id === "cs_maxhp") {
     return {
-      advisory: "+30 permanent max HP for 22 coins. Compound value — earlier in the run = better return.",
+      advisory: `+30 permanent max HP${Number.isFinite(option.cost) ? ` for ${option.cost} coins` : ""}. Compound value — earlier in the run = better return.`,
       urgency: wave <= 8 ? "medium" : "low",
     };
   }
 
   if (id === "cs_ammo") {
-    return { advisory: "Cheapest efficiency buy at 10 coins. Worth it when any weapon is below 40% ammo.", urgency: "low" };
+    return { advisory: `Refill all weapons${Number.isFinite(option.cost) ? ` for ${option.cost} coins` : ""}. Worth it when any weapon is below 40% ammo.`, urgency: "low" };
   }
 
   return { advisory: option.desc || "", urgency: "low" };

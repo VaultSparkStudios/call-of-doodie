@@ -4,10 +4,11 @@
 
 ## Current Session
 
-- Session 176 (2026-09-11) — widened S175's claims audit from mode prose to every player-facing number. Four gameplay bugs fixed in code: META tree Hair Trigger (`off2`, "+10% fire rate") multiplied the shot gap by 1.10 and now uses 0.90 (lower gap = faster); Magnetism + Hoarder total exactly 5× pickup range in either pick order (was 9× / 3.6×); Bullet Hose + Deep Pockets add exactly +50% ammo in either order (the inline bonus double-applied with FULL ARMORY); Iron Tank / Speed Freak loadouts multiply their base speed by the meta Speedster tier instead of overwriting it. Nine copy corrections to match runtime: Scavenger tier 3 +200%, Glass Jaw per-difficulty damage, doctrine tooltips no longer claim stat effects (forging records to the Doctrine Archive and applies none), weekly themes Corporate Uprising / Rush Hour / Retro Wave quote their real overrides, controls panel and grenade tip show Q/G and weapon keys 1–9/0/-/=, The Algorithm's coach tip describes its viral surge, nuke tip, and two synergies no longer say "at low HP". RulesPanel boss cadence derives from `STANDARD_BOSS_WAVE_INTERVAL`. `src/config/copyTruth.test.js` pins all of it. Tooling: `check-writeback-currency.mjs` no longer reads a WORK_LOG-only `docs: record S<n> deploy verification` commit for the SIL-anchored session as write-back debt.
+- Session 177 (2026-09-11) — Restored paid upgrades, weekly effects and boss abilities to their advertised behavior. Shared meta facts now drive descriptions and runtime; Hair Trigger delivers exactly +10% shots and Scavenger II exactly +125% range. Loadout, score and Kill Frenzy modifiers compose. Supply Drop grants one free coin-shop offer per wave, Gauntlet Ready supplies its opening extra perk, and Mutation Affinity scales favorable weekly bonuses. Weekly XP, pickup chance, projectile speed and magnet range now have live consumers. Jackpot XP excludes the separate weekly score multiplier. Clone Decoy is a finite visual-only ghost; Lifesteal heals live bosses only after actual enemy bullet damage. Zero-damage projectiles stay harmless. Speed Surge uses simulation frames; enrages persist; Algorithm volleys and shared ability cooldown staggering follow the authored behavior. Startup brief currency now checks the completed-session fingerprint and rejects a misleading next-session title. Validation: 250 test files / 1572 assertions; strict lint; deployable build App 472.72 KB; immutable staging 38cb07a7 shell 7/7. Production promotion pending final visual and security gates.
 
 ## Open Work
 
+## Session 177 — Runtime promises and upgrade composition
 ## Session 170 - Startup evidence, bounded audit context, and process-policy closure
 - [ ] [SIL:2] **EVIDENCE** Collect participant, physical PWA/gamepad/media, current production Core Web Vitals, Zoho reply-as, scoped telemetry, Obelisk, publication, direct-pixel, sitemap ≥8/10, and explicit lifecycle evidence before SPARKED.
 # Task Board
@@ -62,14 +63,8 @@
 - [ ] [SIL:1] **S176 carry** Boss bonus abilities Clone Decoy and Lifesteal (`BOSS_ABILITY_POOL`) set flags nothing reads, so a boss that rolls them gets fewer real abilities. Never shown to players. Deleting them changes the seeded pick distribution (`gameHelpers.seededSpawn.test.js` snapshots `_bonusAbilities`); wiring them is new boss behavior — decide which with a balance pass, not unattended.
 - [ ] [SIL:2] Supabase Auth + Obelisk account bridge — implement magic-link/Google Auth, profiles, nullable leaderboard `user_id`, guest-to-account migration, and signed migration/callsign claim receipts.
 - [ ] [SIL:1] HomeV2/MenuScreen retirement gate — once Lighthouse + funnel data confirms HomeV2 wins, remove the legacy `?home=v1` path and reclaim the `MenuScreen` chunk
-- [ ] [SIL:1] [DATA-BLOCKED S154] [S144] Mobile touch button-size/density control — the descoped half of the S144 mobile-handedness audit item; add a touch-zone size/density setting once real mobile usage signals which sizes matter (`SETTINGS_DEFAULTS`, `MobileHUD.jsx`)
 
 ## Recent Decisions
-
-## 2026-09-09 — Session 169 — Canon conformance disposition
-
-CANON-045 remains a STRONG external integration gap because Obelisk verification credentials and relying-party proof are absent. CANON-054's conformance checker returned a malformed `GAP: }` even though the live `/stats/` surface, `stats-surface.json`, public contract, and Session 142 truth evidence are present; retain it as a named checker discrepancy rather than fabricating conformance.
-
 
 ## 2026-09-10 — Session 170 — Engineering release remains distinct from SPARKED
 
@@ -113,11 +108,15 @@ Why: four consecutive sessions had closed with the same honest gap, no player-fa
 
 Decision (S175): fixed the royale bot-count drift by introducing `src/config/modeFacts.js` as a derived authority, rather than correcting the four stale literals in place.
 
-Why: a literal corrected by hand drifts again on the next balance change — that is exactly how this defect was born, when S165 edited `BOT_COUNT` and nothing else. The same derive-never-type rule already governs `silScore` (S154) and `silAvg3` (S174). The module is deliberately dependency-free so `modeCatalog.js` stays zero-cost for `App.jsx` under the S163 bundle diet and `quickRules.js` keeps the lazy MenuPanels split;
+Why: a literal corrected by hand drifts again on the next balance change — that is exactly how this defect was born, when S165 edited `BOT_COUNT` and nothing else. The same derive-never-type rule already governs `silScore` (S154) and `silAvg3` (S174). The module is deliberately dependency-free so `modeCatalog.js` stays zero-cost for `App.jsx` under the S163 bundle diet and `quickRules.js` keeps the lazy MenuPanels split; the heavy mode runtime imports down into it, never the reverse. `spell()` throws on an unmapped value instead of falling back to a numeral, so a balance change that outgrows the table fails loudly rather than silently rewriting the voice of player-facing prose.
+
+Decision (S175): extended `check-public-claims.mjs` to read the **generated** public artifacts, not only the source modules.
+
+Why: both existing public gates passed for the entire ten-session
 
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 235,494 bytes · SHA-256 `df1ec8d4e5a5…`
-- `context/TASK_BOARD.md` · 161,830 bytes · SHA-256 `9ec2ef8c9878…`
-- `context/DECISIONS.md` · 159,178 bytes · SHA-256 `452b0b83d9e8…`
-- `docs/AUDIT_2026-09-10.json` · 3,950 bytes · SHA-256 `cc8ad101f848…`
+- `context/CURRENT_STATE.md` · 236,690 bytes · SHA-256 `d0d939ebadc0…`
+- `context/TASK_BOARD.md` · 163,238 bytes · SHA-256 `f0150d1e2cdf…`
+- `context/DECISIONS.md` · 160,024 bytes · SHA-256 `c62a2c70ef47…`
+- `docs/AUDIT_2026-09-11_2.json` · 11,298 bytes · SHA-256 `c984bcd2d6b0…`

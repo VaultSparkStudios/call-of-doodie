@@ -27,9 +27,11 @@ const SIL = [
 ].join("\n");
 
 /** Build a throwaway repo with the given artifact contents. */
-function fixture({ sil = SIL, stateVector, genome } = {}) {
+function fixture({ sil = SIL, stateVector, genome, brief = "<!-- semantic-freshness: next=174 silSession=173 -->" } = {}) {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), "cod-currency-"));
   fs.mkdirSync(path.join(root, "context"), { recursive: true });
+  fs.mkdirSync(path.join(root, "docs"), { recursive: true });
+  fs.writeFileSync(path.join(root, "docs", "STARTUP_BRIEF.md"), brief, "utf8");
   fs.writeFileSync(path.join(root, "context", "SELF_IMPROVEMENT_LOOP.md"), sil, "utf8");
   if (stateVector !== undefined) {
     fs.writeFileSync(path.join(root, "context", "STATE_VECTOR.json"), stateVector, "utf8");
@@ -54,6 +56,22 @@ describe("ledgerSession", () => {
 });
 
 describe("measureCloseoutArtifacts", () => {
+  it("rejects a freshly written brief with a stale completed-session fingerprint", () => {
+    const result = measureCloseoutArtifacts(fixture({
+      stateVector: vector(173), genome: genomeOf(173),
+      brief: '<!-- semantic-freshness: next=174 silSession=169 -->\n# Session 174',
+    }));
+    expect(result.ok).toBe(false);
+    expect(result.stale[0]).toMatchObject({ file: 'docs/STARTUP_BRIEF.md', recorded: 169, lag: 4 });
+  });
+
+  it("does not infer a completed session from a next-session title", () => {
+    const result = measureCloseoutArtifacts(fixture({
+      stateVector: vector(173), genome: genomeOf(173), brief: '# Session 174',
+    }));
+    expect(result.ok).toBe(false);
+    expect(result.unmeasurable[0].file).toBe('docs/STARTUP_BRIEF.md');
+  });
   it("passes when every artifact records the newest closed-out session", () => {
     const result = measureCloseoutArtifacts(fixture({ stateVector: vector(173), genome: genomeOf(172, 173) }));
     expect(result.authority).toBe(173);

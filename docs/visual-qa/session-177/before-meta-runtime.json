@@ -1,0 +1,449 @@
+{
+  "origin": "https://callofdoodie.wtf",
+  "phase": "before",
+  "capturedAt": "2026-09-14T01:25:56.340Z",
+  "scriptSha256": "fcc753da3fa0d2a03811add55f4f10996f0e3917a82cfe959d4bb3a8d68c449a",
+  "method": "Real localStorage ownership and UI launches; live game state accelerates first-wave completion only; normal reward callbacks and purchase handlers",
+  "captures": [
+    {
+      "file": "supply-drop-shop-sewer-night-390.png",
+      "sha256": "829213db732e5dcb7b88b745e0fcd85263a460ca5b76fbc86db612edff2bfe03",
+      "state": "supply-drop-shop",
+      "theme": "sewer-night",
+      "width": 390,
+      "observed": {
+        "wave": 2,
+        "health": 100,
+        "maxHealth": 100,
+        "freeShopUnlocked": true,
+        "freeShopClaimWave": null,
+        "gauntletMode": false,
+        "bonusPerkUnlocked": true,
+        "bonusPerkGranted": false,
+        "perkSelectionVisible": false,
+        "heading": "WAVE 1 CLEAR!",
+        "coinRows": [
+          {
+            "text": "❤️‍🔥\nHP Augment\n+30 permanent max HP\n💩 22",
+            "disabled": true,
+            "cost": 22
+          },
+          {
+            "text": "💣\nPocket Nuke\nNuke all enemies on screen\n💩 28",
+            "disabled": true,
+            "cost": 28
+          },
+          {
+            "text": "💥\nGrenade Restock\nGrenade instantly ready\n💩 8",
+            "disabled": true,
+            "cost": 8
+          }
+        ],
+        "viewport": {
+          "width": 390,
+          "height": 900
+        },
+        "documentOverflowX": false
+      },
+      "errors": []
+    },
+    {
+      "file": "supply-drop-coin-rows-sewer-night-390.png",
+      "sha256": "829213db732e5dcb7b88b745e0fcd85263a460ca5b76fbc86db612edff2bfe03",
+      "state": "supply-drop-coin-rows",
+      "theme": "sewer-night",
+      "width": 390,
+      "observed": {
+        "wave": 2,
+        "health": 100,
+        "maxHealth": 100,
+        "freeShopUnlocked": true,
+        "freeShopClaimWave": null,
+        "gauntletMode": false,
+        "bonusPerkUnlocked": true,
+        "bonusPerkGranted": false,
+        "perkSelectionVisible": false,
+        "heading": "WAVE 1 CLEAR!",
+        "coinRows": [
+          {
+            "text": "❤️‍🔥\nHP Augment\n+30 permanent max HP\n💩 22",
+            "disabled": true,
+            "cost": 22
+          },
+          {
+            "text": "💣\nPocket Nuke\nNuke all enemies on screen\n💩 28",
+            "disabled": true,
+            "cost": 28
+          },
+          {
+            "text": "💥\nGrenade Restock\nGrenade instantly ready\n💩 8",
+            "disabled": true,
+            "cost": 8
+          }
+        ],
+        "viewport": {
+          "width": 390,
+          "height": 900
+        },
+        "documentOverflowX": false
+      },
+      "errors": []
+    },
+    {
+      "file": "gauntlet-ready-start-sewer-night-390.png",
+      "sha256": "6370e65183d5f2bea05567a29dd2a39ab4ff70f185f3e0a5cbcb7a052c3f5404",
+      "state": "gauntlet-ready-start",
+      "theme": "sewer-night",
+      "width": 390,
+      "observed": {
+        "wave": 1,
+        "health": 25,
+        "maxHealth": 25,
+        "freeShopUnlocked": true,
+        "freeShopClaimWave": null,
+        "gauntletMode": true,
+        "bonusPerkUnlocked": true,
+        "bonusPerkGranted": false,
+        "perkSelectionVisible": false,
+        "heading": null,
+        "coinRows": [],
+        "viewport": {
+          "width": 390,
+          "height": 900
+        },
+        "documentOverflowX": false
+      },
+      "errors": []
+    },
+    {
+      "file": "supply-drop-shop-sewer-night-1440.png",
+      "sha256": "c0c19b4d6bc0cc9e883cd0988c029653e44d9483c7e4a20d9c401cc7ebdbfc9e",
+      "state": "supply-drop-shop",
+      "theme": "sewer-night",
+      "width": 1440,
+      "observed": {
+        "wave": 2,
+        "health": 100,
+        "maxHealth": 100,
+        "freeShopUnlocked": true,
+        "freeShopClaimWave": null,
+        "gauntletMode": false,
+        "bonusPerkUnlocked": true,
+        "bonusPerkGranted": false,
+        "perkSelectionVisible": false,
+        "heading": "WAVE 1 CLEAR!",
+        "coinRows": [
+          {
+            "text": "💣\nPocket Nuke\nNuke all enemies on screen\n💩 28",
+            "disabled": true,
+            "cost": 28
+          },
+          {
+            "text": "👼\nGuardian Angel\n+1 extra life\n💩 45",
+            "disabled": true,
+            "cost": 45
+          },
+          {
+            "text": "⏳\nBullet Time\n6 seconds of time dilation\n💩 14",
+            "disabled": true,
+            "cost": 14
+          }
+        ],
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "documentOverflowX": false
+      },
+      "errors": []
+    },
+    {
+      "file": "supply-drop-coin-rows-sewer-night-1440.png",
+      "sha256": "c0c19b4d6bc0cc9e883cd0988c029653e44d9483c7e4a20d9c401cc7ebdbfc9e",
+      "state": "supply-drop-coin-rows",
+      "theme": "sewer-night",
+      "width": 1440,
+      "observed": {
+        "wave": 2,
+        "health": 100,
+        "maxHealth": 100,
+        "freeShopUnlocked": true,
+        "freeShopClaimWave": null,
+        "gauntletMode": false,
+        "bonusPerkUnlocked": true,
+        "bonusPerkGranted": false,
+        "perkSelectionVisible": false,
+        "heading": "WAVE 1 CLEAR!",
+        "coinRows": [
+          {
+            "text": "💣\nPocket Nuke\nNuke all enemies on screen\n💩 28",
+            "disabled": true,
+            "cost": 28
+          },
+          {
+            "text": "👼\nGuardian Angel\n+1 extra life\n💩 45",
+            "disabled": true,
+            "cost": 45
+          },
+          {
+            "text": "⏳\nBullet Time\n6 seconds of time dilation\n💩 14",
+            "disabled": true,
+            "cost": 14
+          }
+        ],
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "documentOverflowX": false
+      },
+      "errors": []
+    },
+    {
+      "file": "gauntlet-ready-start-sewer-night-1440.png",
+      "sha256": "287f8defb54a98264fa29ac4282017dfc64a5fdc5f9a79deaa9dd97ccad6c80e",
+      "state": "gauntlet-ready-start",
+      "theme": "sewer-night",
+      "width": 1440,
+      "observed": {
+        "wave": 1,
+        "health": 25,
+        "maxHealth": 25,
+        "freeShopUnlocked": true,
+        "freeShopClaimWave": null,
+        "gauntletMode": true,
+        "bonusPerkUnlocked": true,
+        "bonusPerkGranted": false,
+        "perkSelectionVisible": false,
+        "heading": null,
+        "coinRows": [],
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "documentOverflowX": false
+      },
+      "errors": []
+    },
+    {
+      "file": "supply-drop-shop-porcelain-day-390.png",
+      "sha256": "9ca26302de4245c4401eb83ad84c4558256b54ba5c8bfe37ed9a6a2b9ff074c9",
+      "state": "supply-drop-shop",
+      "theme": "porcelain-day",
+      "width": 390,
+      "observed": {
+        "wave": 2,
+        "health": 100,
+        "maxHealth": 100,
+        "freeShopUnlocked": true,
+        "freeShopClaimWave": null,
+        "gauntletMode": false,
+        "bonusPerkUnlocked": true,
+        "bonusPerkGranted": false,
+        "perkSelectionVisible": false,
+        "heading": "WAVE 1 CLEAR!",
+        "coinRows": [
+          {
+            "text": "⏳\nBullet Time\n6 seconds of time dilation\n💩 14",
+            "disabled": true,
+            "cost": 14
+          },
+          {
+            "text": "❤️‍🔥\nHP Augment\n+30 permanent max HP\n💩 22",
+            "disabled": true,
+            "cost": 22
+          },
+          {
+            "text": "👼\nGuardian Angel\n+1 extra life\n💩 45",
+            "disabled": true,
+            "cost": 45
+          }
+        ],
+        "viewport": {
+          "width": 390,
+          "height": 900
+        },
+        "documentOverflowX": false
+      },
+      "errors": []
+    },
+    {
+      "file": "supply-drop-coin-rows-porcelain-day-390.png",
+      "sha256": "9ca26302de4245c4401eb83ad84c4558256b54ba5c8bfe37ed9a6a2b9ff074c9",
+      "state": "supply-drop-coin-rows",
+      "theme": "porcelain-day",
+      "width": 390,
+      "observed": {
+        "wave": 2,
+        "health": 100,
+        "maxHealth": 100,
+        "freeShopUnlocked": true,
+        "freeShopClaimWave": null,
+        "gauntletMode": false,
+        "bonusPerkUnlocked": true,
+        "bonusPerkGranted": false,
+        "perkSelectionVisible": false,
+        "heading": "WAVE 1 CLEAR!",
+        "coinRows": [
+          {
+            "text": "⏳\nBullet Time\n6 seconds of time dilation\n💩 14",
+            "disabled": true,
+            "cost": 14
+          },
+          {
+            "text": "❤️‍🔥\nHP Augment\n+30 permanent max HP\n💩 22",
+            "disabled": true,
+            "cost": 22
+          },
+          {
+            "text": "👼\nGuardian Angel\n+1 extra life\n💩 45",
+            "disabled": true,
+            "cost": 45
+          }
+        ],
+        "viewport": {
+          "width": 390,
+          "height": 900
+        },
+        "documentOverflowX": false
+      },
+      "errors": []
+    },
+    {
+      "file": "gauntlet-ready-start-porcelain-day-390.png",
+      "sha256": "a6cd67c78e09ec30dd17cf4ce6ee9dd0bce50976b45ca20969eb56a515cbf819",
+      "state": "gauntlet-ready-start",
+      "theme": "porcelain-day",
+      "width": 390,
+      "observed": {
+        "wave": 1,
+        "health": 25,
+        "maxHealth": 25,
+        "freeShopUnlocked": true,
+        "freeShopClaimWave": null,
+        "gauntletMode": true,
+        "bonusPerkUnlocked": true,
+        "bonusPerkGranted": false,
+        "perkSelectionVisible": false,
+        "heading": null,
+        "coinRows": [],
+        "viewport": {
+          "width": 390,
+          "height": 900
+        },
+        "documentOverflowX": false
+      },
+      "errors": []
+    },
+    {
+      "file": "supply-drop-shop-porcelain-day-1440.png",
+      "sha256": "99569ea4e3e87290f5b194c7d193a985874e37c7608fd82d96c09a09622884eb",
+      "state": "supply-drop-shop",
+      "theme": "porcelain-day",
+      "width": 1440,
+      "observed": {
+        "wave": 2,
+        "health": 100,
+        "maxHealth": 100,
+        "freeShopUnlocked": true,
+        "freeShopClaimWave": null,
+        "gauntletMode": false,
+        "bonusPerkUnlocked": true,
+        "bonusPerkGranted": false,
+        "perkSelectionVisible": false,
+        "heading": "WAVE 1 CLEAR!",
+        "coinRows": [
+          {
+            "text": "⏳\nBullet Time\n6 seconds of time dilation\n💩 14",
+            "disabled": true,
+            "cost": 14
+          },
+          {
+            "text": "❤️‍🔥\nHP Augment\n+30 permanent max HP\n💩 22",
+            "disabled": true,
+            "cost": 22
+          },
+          {
+            "text": "💥\nGrenade Restock\nGrenade instantly ready\n💩 8",
+            "disabled": true,
+            "cost": 8
+          }
+        ],
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "documentOverflowX": false
+      },
+      "errors": []
+    },
+    {
+      "file": "supply-drop-coin-rows-porcelain-day-1440.png",
+      "sha256": "99569ea4e3e87290f5b194c7d193a985874e37c7608fd82d96c09a09622884eb",
+      "state": "supply-drop-coin-rows",
+      "theme": "porcelain-day",
+      "width": 1440,
+      "observed": {
+        "wave": 2,
+        "health": 100,
+        "maxHealth": 100,
+        "freeShopUnlocked": true,
+        "freeShopClaimWave": null,
+        "gauntletMode": false,
+        "bonusPerkUnlocked": true,
+        "bonusPerkGranted": false,
+        "perkSelectionVisible": false,
+        "heading": "WAVE 1 CLEAR!",
+        "coinRows": [
+          {
+            "text": "⏳\nBullet Time\n6 seconds of time dilation\n💩 14",
+            "disabled": true,
+            "cost": 14
+          },
+          {
+            "text": "❤️‍🔥\nHP Augment\n+30 permanent max HP\n💩 22",
+            "disabled": true,
+            "cost": 22
+          },
+          {
+            "text": "💥\nGrenade Restock\nGrenade instantly ready\n💩 8",
+            "disabled": true,
+            "cost": 8
+          }
+        ],
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "documentOverflowX": false
+      },
+      "errors": []
+    },
+    {
+      "file": "gauntlet-ready-start-porcelain-day-1440.png",
+      "sha256": "c69087f7afa7ca382933bcb01c005ea58cd5a402381ce08982dbcbab4d3f26b6",
+      "state": "gauntlet-ready-start",
+      "theme": "porcelain-day",
+      "width": 1440,
+      "observed": {
+        "wave": 1,
+        "health": 25,
+        "maxHealth": 25,
+        "freeShopUnlocked": true,
+        "freeShopClaimWave": null,
+        "gauntletMode": true,
+        "bonusPerkUnlocked": true,
+        "bonusPerkGranted": false,
+        "perkSelectionVisible": false,
+        "heading": null,
+        "coinRows": [],
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "documentOverflowX": false
+      },
+      "errors": []
+    }
+  ]
+}

@@ -38,3 +38,5 @@
 - Use the docs in `plans/` for ongoing constraints and experiments
 - Preserve comedy-first tone while respecting the live deployed build
 - Use `docs/IMPROVEMENT_PLAN.md` when deciding whether a feature is polish, depth, trust, pacing, or architecture work
+
+- [Runtime maintenance notes](AGENT_MEMORY.md) — S177 upgrade, mutation and boss contracts.

@@ -5,6 +5,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { PERKS, WEEKLY_THEMES, TIPS } from "../constants.js";
+import { applyMetaTree } from "./upgradeFacts.js";
 import { applyPerkSynergies } from "../systems/perkResolution.js";
 import { BUILD_ARCHETYPES } from "../utils/buildArchetypes.js";
 
@@ -45,10 +46,9 @@ describe("S176 copy truth — runtime wiring in App.jsx", () => {
   const app = fs.readFileSync(path.resolve("src/App.jsx"), "utf8");
 
   it("Hair Trigger (+10% fire rate) shortens the shot gap — fireRateMult below 1", () => {
-    const line = app.split("\n").find((l) => l.includes('_treeUnlocked.has("off2")'));
-    const factor = Number(/\*\s*([\d.]+)\s*;/.exec(line)?.[1]);
-    expect(factor).toBeGreaterThan(0);
-    expect(factor).toBeLessThan(1);
+    const mods = {};
+    applyMetaTree(mods, { player: {} }, new Set(["off2"]));
+    expect(1 / mods.fireRateMult).toBeCloseTo(1.10, 8);
   });
 
   it("starter loadouts do not overwrite the purchased Speedster multiplier", () => {

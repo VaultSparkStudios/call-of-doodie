@@ -1,0 +1,134 @@
+{
+  "schemaVersion": "1.3",
+  "date": "2026-09-11",
+  "session": 177,
+  "project": "Call-Of-Doodie",
+  "intent": "/arc, authorized direct main push and full deployment",
+  "outcome": "implementation-and-staging-verified-production-pending",
+  "headline": "Restored paid upgrades, weekly effects and boss abilities to their advertised behavior.",
+  "shipped": [
+    "Shared meta facts now drive descriptions and runtime; Hair Trigger delivers exactly +10% shots and Scavenger II exactly +125% range. Loadout, score and Kill Frenzy modifiers compose.",
+    "Supply Drop grants one free coin-shop offer per wave, Gauntlet Ready supplies its opening extra perk, and Mutation Affinity scales favorable weekly bonuses.",
+    "Weekly XP, pickup chance, projectile speed and magnet range now have live consumers. Jackpot XP excludes the separate weekly score multiplier.",
+    "Clone Decoy is a finite visual-only ghost; Lifesteal heals live bosses only after actual enemy bullet damage. Zero-damage projectiles stay harmless.",
+    "Speed Surge uses simulation frames; enrages persist; Algorithm volleys and shared ability cooldown staggering follow the authored behavior.",
+    "Startup brief currency now checks the completed-session fingerprint and rejects a misleading next-session title."
+  ],
+  "validation": [
+    "Earlier complete suite: 250/250 files and 1572/1572 assertions passed (started 2026-09-11T23:38:46.938Z); this was before the final shop follow-up.",
+    "Final shop follow-up: focused 28/28 tests passed, including 11 new tests; this supplements the earlier full pass and is not a new full-suite run.",
+    "Deployable build passed; App chunk 472.72 KB. Strict lint passed for the affected sources.",
+    "npm run schema:lint: exit 0, completed 2026-09-14T01:50:24.422Z; full stdout/stderr recorded in .cache/s177-release-gates.json.",
+    "npm run public:contract: exit 0, completed 2026-09-14T01:50:01.400Z; full stdout/stderr recorded in .cache/s177-release-gates.json.",
+    "npm run security:release:audit: exit 0, completed 2026-09-14T01:51:02.867Z; full stdout/stderr recorded in .cache/s177-release-gates.json.",
+    "Public contract validates 28 files and public claims; security release audit reports 18 declared dependencies coherent and npm audit 0 vulnerabilities.",
+    "Closeout record currency passes for S177 startup brief, state vector and genome. Historical genome duplicates S123/S162 and missing S164/S165/S171/S172 remain acknowledged debt; no new ledger defect.",
+    "Final staging redeploy is in progress; exact URL and verification receipt remain pending. Earlier staging is not proof of the final source.",
+    "Final rendered-pixel review and production deployment verification remain pending. No SPARKED transition or public launch is claimed.",
+    "Final immutable staging 38cb07a7: shell7/7; 32 boss and20 meta states directly inspected; source hashes and before/after images in docs/visual-qa/LATEST.json."
+  ],
+  "sil": {
+    "score": 950,
+    "velocity": 5,
+    "debt": "down",
+    "previousScore": 999,
+    "delta": -49,
+    "rationale": "950 replaces an overstated near-perfect 999 with an evidence-bounded judgment: participant, physical-device, current production performance, provider and launch-tier evidence remain unmeasured; final release verification is pending. This is not a measured gameplay-quality regression."
+  },
+  "items": [
+    {
+      "title": "Shared meta facts now drive descriptions and runtime; Hair Trigger delivers exactly +10% shots and Scavenger II exactly +125% range. Loadout, score and Kill Frenzy modifiers compose.",
+      "projectImpact": 9,
+      "ecosystemImpact": 5,
+      "evidence": "Earlier full suite plus targeted runtime tests; final rendered-pixel review pending."
+    },
+    {
+      "title": "Supply Drop grants one free coin-shop offer per wave, Gauntlet Ready supplies its opening extra perk, and Mutation Affinity scales favorable weekly bonuses.",
+      "projectImpact": 9,
+      "ecosystemImpact": 5,
+      "evidence": "Earlier full suite plus targeted runtime tests; final rendered-pixel review pending."
+    },
+    {
+      "title": "Weekly XP, pickup chance, projectile speed and magnet range now have live consumers. Jackpot XP excludes the separate weekly score multiplier.",
+      "projectImpact": 9,
+      "ecosystemImpact": 5,
+      "evidence": "Earlier full suite plus targeted runtime tests; final rendered-pixel review pending."
+    },
+    {
+      "title": "Clone Decoy is a finite visual-only ghost; Lifesteal heals live bosses only after actual enemy bullet damage. Zero-damage projectiles stay harmless.",
+      "projectImpact": 9,
+      "ecosystemImpact": 5,
+      "evidence": "Earlier full suite plus targeted runtime tests; final rendered-pixel review pending."
+    },
+    {
+      "title": "Speed Surge uses simulation frames; enrages persist; Algorithm volleys and shared ability cooldown staggering follow the authored behavior.",
+      "projectImpact": 9,
+      "ecosystemImpact": 5,
+      "evidence": "Earlier full suite plus targeted runtime tests; final rendered-pixel review pending."
+    },
+    {
+      "title": "Startup brief currency now checks the completed-session fingerprint and rejects a misleading next-session title.",
+      "projectImpact": 7,
+      "ecosystemImpact": 7,
+      "evidence": "Closeout currency regression and schema:lint pass; exact gate receipt recorded."
+    }
+  ],
+  "followUps": [
+    "Verify the final immutable staging revision and complete rendered-pixel review.",
+    "Commit and push the authorized final source to main, deploy production, then verify exact production revision and live behavior.",
+    "Keep participant, physical-device, current Core Web Vitals, mail/provider, identity, publication, and other launch-tier evidence separate from this FORGE engineering update."
+  ],
+  "blockers": [],
+  "verificationUpdatedAt": "2026-09-14T03:50:29.786Z",
+  "releaseGates": [
+    {
+      "command": "npm run schema:lint",
+      "exitCode": 0,
+      "completedAt": "2026-09-14T01:50:24.422Z",
+      "receipt": ".cache/s177-release-gates.json"
+    },
+    {
+      "command": "npm run public:contract",
+      "exitCode": 0,
+      "completedAt": "2026-09-14T01:50:01.400Z",
+      "receipt": ".cache/s177-release-gates.json"
+    },
+    {
+      "command": "npm run security:release:audit",
+      "exitCode": 0,
+      "completedAt": "2026-09-14T01:51:02.867Z",
+      "receipt": ".cache/s177-release-gates.json"
+    }
+  ],
+  "testEvidence": {
+    "full": {
+      "passed": 1572,
+      "total": 1572,
+      "files": 250,
+      "startedAt": "2026-09-11T23:38:46.938Z",
+      "receipt": ".cache/s177-tests-final.json",
+      "scope": "earlier full suite before final shop follow-up"
+    },
+    "supplement": {
+      "passed": 28,
+      "total": 28,
+      "newTests": 11,
+      "scope": "final focused shop follow-up",
+      "verification": "reported by owning verification agent"
+    }
+  },
+  "release": {
+    "lifecycle": "FORGE",
+    "sparkedTransition": false,
+    "productionAuthorized": true,
+    "productionVerified": false,
+    "finalVisualReviewVerified": false,
+    "staging": {
+      "status": "redeploy-running-exact-url-pending"
+    },
+    "rollback": {
+      "source": "c2dadfff36cc44fd28d2766747fbf5efb7c6c01b",
+      "method": "regular revert and redeploy; no history rewrite"
+    }
+  }
+}

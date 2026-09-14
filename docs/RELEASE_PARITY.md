@@ -127,3 +127,25 @@ The generic Studio responsive helper explicitly skipped because it could not res
 Independent gate verdict: **DEPLOYED AND VERIFIED** for the authorized direct-main FORGE engineering update. **NO-GO** for SPARKED/public launch.
 
 SPARKED remains blocked by current CWV evidence, physical PWA/controller/full-run media proof, verified on-domain Zoho delivery and reply-as identity, public Itch.io publication, consented participant outcomes, project-scoped product analytics/error monitoring, functioning Obelisk relying-party verification, sitemap score ≥8/10, and explicit founder SPARKED approval.
+
+
+## Session 177 precommit release record
+
+Recorded 2026-09-14T03:50:29.786Z; session began 2026-09-11.
+
+- Earlier complete suite: 250/250 files and 1572/1572 assertions passed (started 2026-09-11T23:38:46.938Z); this was before the final shop follow-up.
+- Final shop follow-up: focused 28/28 tests passed, including 11 new tests; this supplements the earlier full pass and is not a new full-suite run.
+- Deployable build passed; App chunk 472.72 KB. Strict lint passed for the affected sources.
+- npm run schema:lint: exit 0, completed 2026-09-14T01:50:24.422Z; full stdout/stderr recorded in .cache/s177-release-gates.json.
+- npm run public:contract: exit 0, completed 2026-09-14T01:50:01.400Z; full stdout/stderr recorded in .cache/s177-release-gates.json.
+- npm run security:release:audit: exit 0, completed 2026-09-14T01:51:02.867Z; full stdout/stderr recorded in .cache/s177-release-gates.json.
+- Public contract validates 28 files and public claims; security release audit reports 18 declared dependencies coherent and npm audit 0 vulnerabilities.
+- Closeout record currency passes for S177 startup brief, state vector and genome. Historical genome duplicates S123/S162 and missing S164/S165/S171/S172 remain acknowledged debt; no new ledger defect.
+- Final staging redeploy is in progress; exact URL and verification receipt remain pending. Earlier staging is not proof of the final source.
+- Final rendered-pixel review and production deployment verification remain pending. No SPARKED transition or public launch is claimed.
+- Authorization: direct main commit/push and production deployment are explicitly authorized by the user.
+- Rollback: restore prior code `c2dadfff36cc44fd28d2766747fbf5efb7c6c01b` through a regular revert and redeploy; no force-push or reset is required.
+- Score: 950/1000 versus prior 999; the lower judgment reflects unmeasured external evidence and outstanding launch-tier gates, not a measured regression in game quality.
+- Verdict: FORGE engineering candidate only; final staging, direct-pixel review, production publication and exact-revision verification remain pending. No SPARKED flip or public launch is claimed.
+
+S177 final staging update: immutable https://38cb07a7.call-of-doodie.pages.dev passed shell7/7. All52 final changed-state screenshots reviewed at390/1440 in both themes; boss effects also cover modern/retro. Existing Gauntlet arena clipping is present before and after and tracked separately. Production promotion still pending. Recent main CI history has four successes and the S176 date-artifact failure repaired by cc8173c; newest main c2dadff passed.

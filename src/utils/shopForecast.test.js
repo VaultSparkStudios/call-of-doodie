@@ -14,6 +14,30 @@ function makeGs(overrides = {}) {
 }
 
 describe("getShopAdvisory", () => {
+  test.each(["cs_fullhp", "cs_nuke", "cs_timedil", "cs_grenade", "cs_extralife", "cs_maxhp", "cs_ammo"])("free %s never advises payment or saving coins", id => {
+    const { advisory } = getShopAdvisory({ id, cost: 0, normalCost: 45, name: "Supply reward" }, makeGs({ coins: 0 }));
+    expect(advisory).toContain("Supply reward is free in this shop");
+    expect(advisory).toContain("without spending coins");
+    expect(advisory).not.toMatch(/\d+ coins|saving coins|save coins|draining/);
+  });
+
+  test.each(["cs_maxhp", "cs_ammo"])("paid %s quotes its current offer price", id => {
+    expect(getShopAdvisory({ id, cost: 7 }, makeGs()).advisory).toContain("for 7 coins");
+    expect(getShopAdvisory({ id }, makeGs()).advisory).not.toMatch(/\d+ coins/);
+  });
+
+  test("free Guardian Angel guidance does not claim a paid price", () => {
+    const { advisory } = getShopAdvisory({ id: "cs_extralife", cost: 0, normalCost: 45 }, makeGs({ coins: 0 }));
+    expect(advisory).toContain("free in this shop");
+    expect(advisory).not.toMatch(/45|costs|draining/);
+  });
+
+  test("Guardian Angel affordability guidance uses the current offer price", () => {
+    expect(getShopAdvisory({ id: "cs_extralife", cost: 12 }, makeGs({ coins: 0 })).advisory).toContain("costs 12 coins");
+    expect(getShopAdvisory({ id: "cs_extralife", cost: 45 }, makeGs({ coins: 20 })).advisory).toContain("costs 45 coins");
+    expect(getShopAdvisory({ id: "cs_extralife", cost: 12 }, makeGs({ coins: 20 })).advisory).not.toContain("costs");
+  });
+
   test("returns advisory and urgency for health item at low HP", () => {
     const gs = makeGs({ player: { health: 20, maxHealth: 100 } });
     const { advisory, urgency } = getShopAdvisory({ id: "health" }, gs);

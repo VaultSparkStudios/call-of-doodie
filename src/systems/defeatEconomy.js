@@ -10,19 +10,23 @@ export function planEnemyDefeatScore({
   enemy = {},
   comboMult = 1,
   killScoreMult = 1,
+  weeklyKillScoreMult = 1,
   routeKillScoreMult = 1,
   activeObjective = null,
   playerPos = null,
 } = {}) {
+  const input = {
+    basePoints: enemy.points, comboMult, killScoreMult, routeKillScoreMult, activeObjective, playerPos,
+  };
+  const points = computeKillPoints(input);
+  // XP historically inherits score bonuses. Exclude only the weekly mutation's
+  // own score boost, because Jackpot promises separate score and XP bonuses.
+  const xpPoints = weeklyKillScoreMult > 1
+    ? computeKillPoints({ ...input, killScoreMult: killScoreMult / weeklyKillScoreMult })
+    : points;
   return {
-    points: computeKillPoints({
-      basePoints: enemy.points,
-      comboMult,
-      killScoreMult,
-      routeKillScoreMult,
-      activeObjective,
-      playerPos,
-    }),
+    points,
+    xpPoints,
     careerBoss: isCareerBossType(enemy.typeIndex),
     claim: "shared-enemy-defeat-economy-contract",
   };

@@ -1,0 +1,249 @@
+{
+  "schemaVersion": "2.1",
+  "session": 177,
+  "meta": {
+    "generatedAt": "2026-09-11",
+    "project": "call-of-doodie",
+    "type": "game",
+    "baseline": "c2dadff; clean worktree and origin 0/0; previous closeout verified",
+    "combinedPriority": 106.36999999999999
+  },
+  "items": [
+    {
+      "slug": "startup-brief-currency",
+      "axis": "speed-organization",
+      "tier": "high",
+      "impact": 6,
+      "innovation": 4,
+      "effortHours": 0.4,
+      "priority": 19,
+      "status": "shipped",
+      "why": "The S172 startup brief survived through S176 because the closeout artifact gate omitted its completed-session fingerprint.",
+      "recipe": "Extend the existing artifact gate to verify startup brief silSession against the SIL ledger; regression for misleading next-session title.",
+      "premise": {
+        "claim": "The S172 startup brief survived through S176 because the closeout artifact gate omitted its completed-session fingerprint.",
+        "adapter": "file-content",
+        "target": "scripts/lib/closeout-artifact-currency.mjs",
+        "operator": "contains",
+        "expected": "CLOSEOUT_ARTIFACTS"
+      },
+      "ladder": {
+        "L1": {
+          "effortHours": 0.2,
+          "recipe": "Verify and fix the first demonstrated defect with targeted regression."
+        },
+        "L2": {
+          "effortHours": 0.4,
+          "recipe": "Extend the existing artifact gate to verify startup brief silSession against the SIL ledger; regression for misleading next-session title."
+        },
+        "L3": {
+          "effortHours": 0.6000000000000001,
+          "recipe": "Extend the existing artifact gate to verify startup brief silSession against the SIL ledger; regression for misleading next-session title. Add adversarial boundary cases and rendered before/after evidence for affected state."
+        }
+      }
+    },
+    {
+      "slug": "upgrade-facts",
+      "axis": "feature-depth",
+      "tier": "high",
+      "impact": 8,
+      "innovation": 5,
+      "effortHours": 2,
+      "priority": 20,
+      "status": "shipped",
+      "why": "Meta descriptions and runtime duplicate numbers; Scavenger II gives 67 instead of 67.5, Hair Trigger's 0.90 interval is 11.11% rather than 10% more shots.",
+      "recipe": "Share numeric facts and pure application helpers; exact percentages; behavior tests at each tier and loadout.",
+      "premise": {
+        "claim": "Meta descriptions and runtime duplicate numbers; Scavenger II gives 67 instead of 67.5, Hair Trigger's 0.90 interval is 11.11% rather than 10% more shots.",
+        "adapter": "file-content",
+        "target": "src/App.jsx",
+        "operator": "contains",
+        "expected": "_tree"
+      },
+      "ladder": {
+        "L1": {
+          "effortHours": 1,
+          "recipe": "Verify and fix the first demonstrated defect with targeted regression."
+        },
+        "L2": {
+          "effortHours": 2,
+          "recipe": "Share numeric facts and pure application helpers; exact percentages; behavior tests at each tier and loadout."
+        },
+        "L3": {
+          "effortHours": 3,
+          "recipe": "Share numeric facts and pure application helpers; exact percentages; behavior tests at each tier and loadout. Add adversarial boundary cases and rendered before/after evidence for affected state."
+        }
+      }
+    },
+    {
+      "slug": "boss-frame-timing",
+      "axis": "gamification",
+      "tier": "high",
+      "impact": 8,
+      "innovation": 5,
+      "effortHours": 1,
+      "priority": 25.24,
+      "status": "shipped",
+      "why": "Speed Surge expires on a wall-clock timeout during pause and base-speed restoration can erase enrage; Algorithm special volley branch is unreachable.",
+      "recipe": "Use simulated delta timing and preserve enrage; emit the intended three-bullet volley from the reachable fire branch; behavioral regressions.",
+      "premise": {
+        "claim": "Speed Surge expires on a wall-clock timeout during pause and base-speed restoration can erase enrage; Algorithm special volley branch is unreachable.",
+        "adapter": "file-content",
+        "target": "src/systems/enemyFrame.js",
+        "operator": "contains",
+        "expected": "setTimeout"
+      },
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Verify and fix the first demonstrated defect with targeted regression."
+        },
+        "L2": {
+          "effortHours": 1,
+          "recipe": "Use simulated delta timing and preserve enrage; emit the intended three-bullet volley from the reachable fire branch; behavioral regressions."
+        },
+        "L3": {
+          "effortHours": 1.5,
+          "recipe": "Use simulated delta timing and preserve enrage; emit the intended three-bullet volley from the reachable fire branch; behavioral regressions. Add adversarial boundary cases and rendered before/after evidence for affected state."
+        }
+      }
+    },
+    {
+      "slug": "boss-ability-runtime",
+      "axis": "feature-depth",
+      "tier": "high",
+      "impact": 8,
+      "innovation": 5,
+      "effortHours": 2,
+      "priority": 20,
+      "status": "shipped",
+      "why": "Clone Decoy and Lifesteal are selectable boss abilities whose flags have no runtime consumers.",
+      "recipe": "Implement bounded presentation-only decoys and capped healing on actual damaging enemy bullet hits, preserving pool order and deterministic simulated time.",
+      "premise": {
+        "claim": "Clone Decoy and Lifesteal are selectable boss abilities whose flags have no runtime consumers.",
+        "adapter": "file-content",
+        "target": "src/constants.js",
+        "operator": "contains",
+        "expected": "cloneDecoySpawned"
+      },
+      "ladder": {
+        "L1": {
+          "effortHours": 1,
+          "recipe": "Verify and fix the first demonstrated defect with targeted regression."
+        },
+        "L2": {
+          "effortHours": 2,
+          "recipe": "Implement bounded presentation-only decoys and capped healing on actual damaging enemy bullet hits, preserving pool order and deterministic simulated time."
+        },
+        "L3": {
+          "effortHours": 3,
+          "recipe": "Implement bounded presentation-only decoys and capped healing on actual damaging enemy bullet hits, preserving pool order and deterministic simulated time. Add adversarial boundary cases and rendered before/after evidence for affected state."
+        }
+      }
+    },
+    {
+      "slug": "meta-tree-promises",
+      "axis": "feature-depth",
+      "tier": "high",
+      "impact": 8,
+      "innovation": 5,
+      "effortHours": 1.5,
+      "priority": 22.13,
+      "status": "shipped",
+      "why": "Free shop item, mutation boost and Gauntlet bonus perk are only initialization flags; purchased nodes have no effect.",
+      "recipe": "Connect each promised effect to its existing shop/mutation/Gauntlet path with one-time use and mode eligibility tests.",
+      "premise": {
+        "claim": "Free shop item, mutation boost and Gauntlet bonus perk are only initialization flags; purchased nodes have no effect.",
+        "adapter": "file-content",
+        "target": "src/App.jsx",
+        "operator": "contains",
+        "expected": "_tree"
+      },
+      "ladder": {
+        "L1": {
+          "effortHours": 0.75,
+          "recipe": "Verify and fix the first demonstrated defect with targeted regression."
+        },
+        "L2": {
+          "effortHours": 1.5,
+          "recipe": "Connect each promised effect to its existing shop/mutation/Gauntlet path with one-time use and mode eligibility tests."
+        },
+        "L3": {
+          "effortHours": 2.25,
+          "recipe": "Connect each promised effect to its existing shop/mutation/Gauntlet path with one-time use and mode eligibility tests. Add adversarial boundary cases and rendered before/after evidence for affected state."
+        }
+      }
+    }
+  ],
+  "skipped": [
+    {
+      "slug": "remaining-perk-derivation",
+      "reason": "Separate ordinary perk numeric class remains a follow-up; current selected scope covers all meta-upgrade/tree facts."
+    },
+    {
+      "slug": "developer-timer",
+      "reason": "Separate obstacle lifecycle candidate; no stronger whole-game deterministic replay claim made."
+    },
+    {
+      "slug": "participant-balance-retention",
+      "reason": "No participant data supports a balance or retention retune."
+    }
+  ],
+  "executionLog": [
+    {
+      "slug": "startup-brief-currency",
+      "status": "shipped",
+      "notes": "Extend the existing artifact gate to verify startup brief silSession against the SIL ledger; regression for misleading next-session title.",
+      "verification": "250 test files / 1572 assertions; strict lint; deployable build App 472.72 KB; immutable staging 9d82ff31 shell 7/7. Production promotion pending final visual and security gates.",
+      "ignisScore": null,
+      "ignisTier": "not-measured"
+    },
+    {
+      "slug": "upgrade-facts",
+      "status": "shipped",
+      "notes": "Share numeric facts and pure application helpers; exact percentages; behavior tests at each tier and loadout.",
+      "verification": "250 test files / 1572 assertions; strict lint; deployable build App 472.72 KB; immutable staging 9d82ff31 shell 7/7. Production promotion pending final visual and security gates.",
+      "ignisScore": null,
+      "ignisTier": "not-measured"
+    },
+    {
+      "slug": "boss-frame-timing",
+      "status": "shipped",
+      "notes": "Use simulated delta timing and preserve enrage; emit the intended three-bullet volley from the reachable fire branch; behavioral regressions.",
+      "verification": "250 test files / 1572 assertions; strict lint; deployable build App 472.72 KB; immutable staging 9d82ff31 shell 7/7. Production promotion pending final visual and security gates.",
+      "ignisScore": null,
+      "ignisTier": "not-measured"
+    },
+    {
+      "slug": "boss-ability-runtime",
+      "status": "shipped",
+      "notes": "Implement bounded presentation-only decoys and capped healing on actual damaging enemy bullet hits, preserving pool order and deterministic simulated time.",
+      "verification": "250 test files / 1572 assertions; strict lint; deployable build App 472.72 KB; immutable staging 9d82ff31 shell 7/7. Production promotion pending final visual and security gates.",
+      "ignisScore": null,
+      "ignisTier": "not-measured"
+    },
+    {
+      "slug": "meta-tree-promises",
+      "status": "shipped",
+      "notes": "Connect each promised effect to its existing shop/mutation/Gauntlet path with one-time use and mode eligibility tests.",
+      "verification": "250 test files / 1572 assertions; strict lint; deployable build App 472.72 KB; immutable staging 9d82ff31 shell 7/7. Production promotion pending final visual and security gates.",
+      "ignisScore": null,
+      "ignisTier": "not-measured"
+    }
+  ],
+  "gameLoopReview": {
+    "type": "structural judgment; no participant playtests available",
+    "scores": {
+      "tightness": 9.2,
+      "progression": 9.3,
+      "engagement": 8.9,
+      "retention": 9.2,
+      "soul": 9.4
+    },
+    "recommendations": [
+      "Bound selected boss effects",
+      "Use simulated timers with permanent-buff composition",
+      "Assert real attack cadence"
+    ]
+  }
+}

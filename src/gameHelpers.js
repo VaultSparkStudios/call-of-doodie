@@ -141,7 +141,7 @@ export function spawnBoss(gs, W, H, difficultyId, typeIndex) {
     deathQuotes: type.deathQuotes, emoji: type.emoji,
     typeIndex, wobble: 0, hitFlash: 0,
     ranged: type.ranged || false,
-    projSpeed: (type.projSpeed || 0) * 1.3,
+    projSpeed: (type.projSpeed || 0) * 1.3 * (gs.mutEnemyProjSpeed || 1),
     projRate: type.projRate ? Math.floor(type.projRate * 0.65) : 999,
     shootTimer: 0, isBossEnemy: true,
     chargeTimer: 0, chargeActive: false, chargeDx: 0, chargeDy: 0, chargeDuration: 0,

@@ -1263,12 +1263,10 @@ SIL +10: Closed five founder-visible defects and all four fresh audit items: Ene
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
 Sparkline (last 5 totals): █████
-Avgs — 3: 998.0 | 5: 998.0 | 10: 997.2
-  └ 3-session: Dev 100.0 | Align 100.0 | Momentum 100.0 | Engage 99.0 | Process 100.0 [N=3]
-Velocity trend: →  |  Protocol velocity: →  |  Debt: ↓
-Momentum runway: 0 repo-owned items — evidence-gated frontier exhausted  |  Intent rate: 100% (last 5 tracked)
-Last session: 2026-09-03 | Session 163 | Total: 995/1000 | Velocity: 6 | protocolVelocity: 6
-─────────────────────────────────────────────────────────────────────
+Avgs — 3: 982.3 | 5: 987.6 | 10: 992.1
+Velocity trend: ↑ | Debt: ↓
+Momentum runway: selected S177 audit complete; production verification pending | Intent rate: not recomputed
+Last session: 2026-09-11 | Session 177 | Total: 950/1000 | Velocity: 5 | protocolVelocity: 5
 <!-- rolling-status-end -->
 
 ## 2026-06-05 — Session 81 | Total: 1000/1000 | Velocity: 1 | Debt: ↓
@@ -3305,3 +3303,28 @@ Brainstorm:
 3. Off-screen arrow ADS-zoom correction — recompute edge projection in true screen-space (post-transform) instead of world-space if the current cosmetic drift under aim-down-sights zoom ever becomes a real complaint.
 
 **Committed to TASK_BOARD:** [SIL:1] implement mobile touch button-size/density control as a follow-up to controlHandedness; [SIL:1] recompute off-screen threat arrow anchoring in screen-space if ADS-zoom drift is ever reported as a real issue.
+
+## 2026-09-11 — Session 177 | Total: 950/1000 | Velocity: 5 | Debt: ↓
+
+Restored paid upgrades, weekly effects and boss abilities to their advertised behavior.
+
+| Category | Score | Rationale |
+|---|---:|---|
+| Dev Health | 98 | Scoped runtime and record evidence; no inherited perfect-score assumption. |
+| Creative Alignment | 98 | Scoped runtime and record evidence; no inherited perfect-score assumption. |
+| Momentum | 96 | Scoped runtime and record evidence; no inherited perfect-score assumption. |
+| Engagement | 90 | Structural gameplay fixes verified; participant engagement remains unmeasured. |
+| Process Quality | 92 | Final source is tested; initial concurrency and stale generated artifacts required correction. |
+| Cross-Repo Coherence | 96 | Scoped runtime and record evidence; no inherited perfect-score assumption. |
+| Security Posture | 96 | Scoped runtime and record evidence; no inherited perfect-score assumption. |
+| Ecosystem Integration | 90 | Existing identity and telemetry integration gaps remain visible. |
+| Capital Efficiency | 100 | No added packages, hosted AI calls or paid services. |
+| Automation Coverage | 94 | Scoped runtime and record evidence; no inherited perfect-score assumption. |
+
+Validation: 250 test files / 1572 assertions; strict lint; deployable build App 472.72 KB; immutable staging 9d82ff31 shell 7/7. Production promotion pending final visual and security gates.
+
+Score is this session's evidence-based assessment; the lower score than S176 reflects explicit limits, not a measured loss of player engagement. Rolling averages derive from this ledger.
+
+Brainstorm: declarative ordinary-perk facts; simulated Developer obstacle restoration; overdue ability telegraph windows. Selected second-order improvements completed: shared cooldown stagger, edge-safe decoy placement, exact XP/score separation.
+
+[SIL:2] Remaining ordinary-perk numeric derivation is a separate follow-up candidate. [SIL:1] Investigate Developer timer/telegraph behavior before changing its contract.

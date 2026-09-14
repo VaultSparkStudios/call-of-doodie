@@ -885,6 +885,23 @@
       },
       "delta": 0,
       "cause": "Session 176 read every player-facing number against the code: fixed four gameplay bugs the copy exposed (Hair Trigger sl"
+    },
+    {
+      "date": "2026-09-14",
+      "session": 177,
+      "total": 22,
+      "maxTotal": 25,
+      "overallStatus": "S177 runtime contracts restored and tested; staging verified, final production receipt pending. SPARKED evidence remains incomplete.",
+      "lastReviewed": "2026-09-14",
+      "dimensions": {
+        "schema_alignment": 5,
+        "prompt_template_alignment": 4,
+        "derived_view_freshness": 4,
+        "handoff_continuity": 5,
+        "contradiction_density": 4
+      },
+      "delta": 22,
+      "cause": "Restored paid upgrades, weekly effects and boss abilities to their advertised behavior."
     }
   ]
 }

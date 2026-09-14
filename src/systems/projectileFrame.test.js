@@ -71,3 +71,39 @@ describe("stepProjectileFrame", () => {
     expect(ctx.gs.enemies[0].health).toBeLessThan(100);
   });
 });
+
+describe("enemy bullet boss lifesteal integration", () => {
+  const makeBoss = (overrides = {}) => ({ isBossEnemy: true, hasLifesteal: true, health: 50, maxHealth: 100,
+    x: 150, y: 100, size: 32, ...overrides });
+  const bullet = (overrides = {}) => ({ x: 50, y: 50, vx: 0, vy: 0, life: 10, damage: 8, ...overrides });
+
+  it("awards healing for one actual damaging hit and consumes the bullet without a second heal", () => {
+    const ctx = runtime({ enemies: [makeBoss(), makeBoss({ health: 99 }), makeBoss({ _defeatPending: {} })], enemyBullets: [bullet(), bullet()] });
+    stepProjectileFrame(ctx);
+    expect(ctx.player.health).toBe(92);
+    expect(ctx.gs.enemies.map((enemy) => enemy.health)).toEqual([52, 100, 50]);
+    stepProjectileFrame(ctx);
+    expect(ctx.gs.enemies[0].health).toBe(52);
+  });
+
+  it.each(["dash", "invincible", "miss", "zero", "wall", "already-dead"])("does not heal for %s", (kind) => {
+    const ctx = runtime({ enemies: [makeBoss()], enemyBullets: [bullet()] });
+    if (kind === "dash") ctx.dashActive = true;
+    if (kind === "invincible") ctx.player.invincible = 5;
+    if (kind === "miss") ctx.gs.enemyBullets[0].x = 100;
+    if (kind === "zero") ctx.gs.enemyBullets[0].damage = 0;
+    if (kind === "wall") ctx.gs.obstacles = [{ x: 40, y: 40, w: 20, h: 20 }];
+    if (kind === "already-dead") ctx.player.health = 0;
+    stepProjectileFrame(ctx);
+    expect(ctx.gs.enemies[0].health).toBe(50);
+  });
+
+  it("does not collide player bullets with a boss's separate decoy", () => {
+    const ctx = runtime({ enemies: [makeBoss({ cloneDecoy: { x: 30, y: 30, size: 32, remainingFrames: 100 } })],
+      bullets: [{ x: 30, y: 30, vx: 0, vy: 0, life: 10, size: 5, damage: 25, color: "#FFF" }] });
+    stepProjectileFrame(ctx);
+    expect(ctx.gs.bullets[0].life).toBe(9);
+    expect(ctx.gs.enemies[0].health).toBe(50);
+    expect(ctx.stats.totalHits).toBe(0);
+  });
+});

@@ -9,6 +9,45 @@ import { drawOffscreenThreatArrows, getOffscreenThreatArrows } from "./utils/off
 import { getArenaLayers } from "./systems/backgroundLayer.js";
 import { buildRadarObjectiveMarkers, projectRadarPoint } from "./systems/radarModel.js";
 
+// Decoys are rendered separately and never enter targeting, radar or collision arrays.
+function drawBossDecoys(ctx, enemies, retroCharacters) {
+  for (const boss of enemies) {
+    const decoy = boss?.cloneDecoy;
+    if (!decoy || decoy.remainingFrames <= 0 || boss.health <= 0
+      || boss._defeatPending || boss._defeatResolved) continue;
+    const radius = decoy.size / 2;
+    const fade = Math.min(1, decoy.remainingFrames / 30);
+    ctx.save();
+    ctx.translate(decoy.x, decoy.y);
+    ctx.globalAlpha = 0.52 * fade;
+    const sprite = retroCharacters ? null
+      : (boss.isZombie && getRuntimeZombieSprite(boss.zombieVariant, true)) || getRuntimeEnemySprite(decoy.typeIndex);
+    if (sprite) {
+      const height = Math.max(92, radius * 3.7);
+      const width = height * (sprite.sourceWidth / sprite.sourceHeight);
+      const karenSprite = [1, 4, 13].includes(decoy.typeIndex) ? getRuntimeCharacterSprite("karen") : null;
+      if (karenSprite) ctx.drawImage(karenSprite, -width / 2, -height * 0.55, width, height);
+      else ctx.drawImage(sprite.image, sprite.sourceX, sprite.sourceY, sprite.sourceWidth, sprite.sourceHeight,
+        -width / 2, -height * 0.55, width, height);
+    } else {
+      drawRetroEnemyCharacter(ctx, decoy);
+    }
+    ctx.globalAlpha = fade;
+    ctx.strokeStyle = "#9AF5FF";
+    ctx.lineWidth = 2;
+    ctx.setLineDash([5, 5]);
+    ctx.beginPath(); ctx.arc(0, 0, radius + 8, 0, Math.PI * 2); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.font = "bold 10px monospace";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillStyle = "#081820";
+    ctx.fillRect(-25, radius + 12, 50, 16);
+    ctx.fillStyle = "#BAF8FF";
+    ctx.fillText("DECOY", 0, radius + 20);
+    ctx.restore();
+  }
+}
 // Per-enemy body-shape coordinate tables (hoisted out of the draw loop —
 // these were re-allocated as fresh array literals for every enemy, every
 // frame; the values never change, only where they're multiplied by `r`).
@@ -460,6 +499,7 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
 
   // Enemies
   const _enemiesDraw = gs.enemies || [];
+  drawBossDecoys(ctx, _enemiesDraw, retroCharacters);
   for (let _ei = 0; _ei < _enemiesDraw.length; _ei++) {
     const e = _enemiesDraw[_ei];
     if (!e) continue;
@@ -948,6 +988,18 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
         ctx.fillStyle = "rgba(0,0,0,0.6)"; ctx.fillRect(-bw / 2, by, bw, 3);
         ctx.fillStyle = bar.color; ctx.fillRect(-bw / 2, by, bw * ratio, 3);
       }
+    }
+    if (e.isBossEnemy && e.health > 0 && !e._defeatPending && !e._defeatResolved && e.lifestealFeedbackFrames > 0) {
+      ctx.save();
+      ctx.globalAlpha = Math.min(1, e.lifestealFeedbackFrames / 12);
+      ctx.strokeStyle = "#93FFB4"; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(0, 0, r + 5, 0, Math.PI * 2); ctx.stroke();
+      ctx.font = "bold 11px monospace"; ctx.textAlign = "center";
+      ctx.strokeStyle = "#07180C"; ctx.lineWidth = 4;
+      const healLabel = `+${Number((e.lifestealFeedbackAmount || 2).toFixed(1))} HP`;
+      ctx.strokeText(healLabel, 0, -r - 34);
+      ctx.fillStyle = "#B9FFD1"; ctx.fillText(healLabel, 0, -r - 34);
+      ctx.restore();
     }
     // Name label (+ nemesis 🎯 indicator)
     const _isNemBoss = e.isBossEnemy && gs.nemesisBossType === e.typeIndex;

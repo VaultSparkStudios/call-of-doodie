@@ -135,7 +135,7 @@ export function resolveEnemyProjectilePlayerHit({ projectile, player, dashActive
     projectileLife: 0,
     ...resolvePlayerDamage({
       player,
-      baseDamage: projectile?.damage || 8,
+      baseDamage: projectile?.damage ?? 8,
       invincibleFrames: 20,
       screenShake: 5,
       damageFlash: 8,

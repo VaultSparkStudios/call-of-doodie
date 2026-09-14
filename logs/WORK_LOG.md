@@ -1782,3 +1782,21 @@ Intent outcome: achieved — four gameplay bugs and nine false claims closed, a 
 - Player-facing fix confirmed live: `https://callofdoodie.wtf/gameplay-contract.json` serves "Start with +200% pickup range" and contains no "+225%".
 - Ark: session-impact-summary broadcast `01K292LFT452B273132BDF7544`.
 - Shell hygiene correction: PROJECT_STATUS records 2 background shells; the true count is 3 started · 3 closed · 0 running (baseline suite, post-change suite, final pre-commit suite).
+
+## 2026-09-11 — Session 177
+
+Intent: /arc then authorized direct main push and full deployment.
+
+- Shared meta facts now drive descriptions and runtime; Hair Trigger delivers exactly +10% shots and Scavenger II exactly +125% range. Loadout, score and Kill Frenzy modifiers compose.
+- Supply Drop grants one free coin-shop offer per wave, Gauntlet Ready supplies its opening extra perk, and Mutation Affinity scales favorable weekly bonuses.
+- Weekly XP, pickup chance, projectile speed and magnet range now have live consumers. Jackpot XP excludes the separate weekly score multiplier.
+- Clone Decoy is a finite visual-only ghost; Lifesteal heals live bosses only after actual enemy bullet damage. Zero-damage projectiles stay harmless.
+- Speed Surge uses simulation frames; enrages persist; Algorithm volleys and shared ability cooldown staggering follow the authored behavior.
+- Startup brief currency now checks the completed-session fingerprint and rejects a misleading next-session title.
+
+Verification: 250 test files / 1572 assertions; strict lint; deployable build App 472.72 KB; immutable staging 9d82ff31 shell 7/7. Production promotion pending final visual and security gates.
+
+The first broad run was red: stale Hot Context, a mixed source snapshot during final helper edits, and a launch-hook timeout. Regenerated context, froze source, and reran the complete suite with two workers; the final report is green. No failure was waived. Browser fixtures are staged diagnostic states, not participant evidence. Production receipt will be appended after promotion.
+
+
+S177 final staging follow-through: S177: runtime upgrades and boss abilities restored; full 250 files/1572 tests passed, then final shop guidance 28/28; staging 38cb07a7 shell 7/7 and 52 final visual states reviewed. Production verification pending. Baseline and final Gauntlet captures expose pre-existing arena clipping; recorded separately. Free-offer price guidance corrected after visual inspection.

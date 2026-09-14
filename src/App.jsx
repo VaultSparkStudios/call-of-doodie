@@ -1,3 +1,5 @@
+import { getRunXpGain, getPlayerProjectileSpeed, getPickupCollectionRange, shouldDropStandardPickup } from "./config/weeklyMutationRuntime.js";
+import { applyMetaUpgrades, applyMetaTree, finalizeMetaStart, multiplyKillScore, applyWeeklyMutationWithAffinity, consumeGauntletMetaChoice, metaUpgradeValue, metaIncrease, META_TREE_FACTS } from "./config/upgradeFacts.js";
 import { useState, useEffect, useRef, useCallback, useMemo, lazy } from "react";
 import AsyncPanelBoundary from "./components/AsyncPanelBoundary.jsx";
 import { drawGame } from "./drawGame.js";
@@ -709,6 +711,7 @@ export default function CallOfDoodie() {
     // Apply tiered meta upgrades
     const meta = loadMetaProgress();
     const ut = meta.upgradeTiers || {};
+    const treeUnlocked = loadMetaTree();
     gsRef.current.prestigeMult = 1 + (meta.prestige || 0) * 0.10;
     gsRef.current.blitzCount = 0;
     gsRef.current.hyperspeedActive = false;
@@ -729,94 +732,11 @@ export default function CallOfDoodie() {
     gsRef.current.developerBossSpawned = false;
     // Apply weekly mutation on top of normal game
     const _weeklyMut = getWeeklyMutation();
-    if (_weeklyMut) _weeklyMut.apply(gsRef.current);
+    applyWeeklyMutationWithAffinity(gsRef.current, _weeklyMut, treeUnlocked);
     gsRef.current.playerSkin = meta.playerSkin || "";
 
-    // XP gain (veteran)
-    const vtier = ut.veteran || 0;
-    if (vtier >= 3) perkModsRef.current.xpMult = 1.75;
-    else if (vtier >= 2) perkModsRef.current.xpMult = 1.45;
-    else if (vtier >= 1) perkModsRef.current.xpMult = 1.20;
-
-    // Dash cooldown (swift_boots)
-    const btier = ut.swift_boots || 0;
-    if (btier >= 3) perkModsRef.current.dashCDMult = 0.40;
-    else if (btier >= 2) perkModsRef.current.dashCDMult = 0.60;
-    else if (btier >= 1) perkModsRef.current.dashCDMult = 0.80;
-
-    // Ammo (deep_mag)
-    const atier = ut.deep_mag || 0;
-    if (atier >= 3) perkModsRef.current.ammoMult = 2.00;
-    else if (atier >= 2) perkModsRef.current.ammoMult = 1.60;
-    else if (atier >= 1) perkModsRef.current.ammoMult = 1.25;
-
-    // Damage (hardened)
-    const htier = ut.hardened || 0;
-    if (htier >= 3) perkModsRef.current.damageMult = 1.50;
-    else if (htier >= 2) perkModsRef.current.damageMult = 1.30;
-    else if (htier >= 1) perkModsRef.current.damageMult = 1.15;
-
-    // Pickup range (scavenger)
-    const stier = ut.scavenger || 0;
-    if (stier >= 3) perkModsRef.current.pickupRange = 90;
-    else if (stier >= 2) perkModsRef.current.pickupRange = 67;
-    else if (stier >= 1) perkModsRef.current.pickupRange = 45;
-
-    // HP (field_medic)
-    const mtier = ut.field_medic || 0;
-    const bonusHP = [0, 20, 50, 100][mtier] || 0;
-    if (bonusHP > 0) {
-      gsRef.current.player.health += bonusHP;
-      gsRef.current.player.maxHealth += bonusHP;
-    }
-
-    // Grenade cooldown (grenadier)
-    const gtier = ut.grenadier || 0;
-    if (gtier >= 3) perkModsRef.current.grenadeCDMult = 0.35;
-    else if (gtier >= 2) perkModsRef.current.grenadeCDMult = 0.55;
-    else if (gtier >= 1) perkModsRef.current.grenadeCDMult = 0.75;
-
-    // Crit chance (crit_master)
-    const ctier = ut.crit_master || 0;
-    if (ctier >= 3) perkModsRef.current.critBonus = 0.20;
-    else if (ctier >= 2) perkModsRef.current.critBonus = 0.12;
-    else if (ctier >= 1) perkModsRef.current.critBonus = 0.05;
-
-    // Move speed (speedster)
-    const sptier = ut.speedster || 0;
-    if (sptier >= 1 && gsRef.current.player) {
-      const smult = [1, 1.10, 1.22, 1.38][sptier];
-      gsRef.current.player.speed *= smult;
-    }
-
-    // Lifesteal (vampire_bite)
-    const vbtier = ut.vampire_bite || 0;
-    if (vbtier >= 3) perkModsRef.current.lifesteal = 0.10;
-    else if (vbtier >= 2) perkModsRef.current.lifesteal = 0.06;
-    else if (vbtier >= 1) perkModsRef.current.lifesteal = 0.03;
-
-    // ── META TREE bonuses ──────────────────────────────────────────────────
-    const _treeUnlocked = loadMetaTree();
-    if (_treeUnlocked.has("off1")) perkModsRef.current.damageMult = (perkModsRef.current.damageMult || 1) * 1.05;
-    // fireRateMult scales the gap between shots (lower = faster). S176: was 1.10, which made the paid "+10% fire rate" node fire slower.
-    if (_treeUnlocked.has("off2")) perkModsRef.current.fireRateMult = (perkModsRef.current.fireRateMult || 1) * 0.90;
-    if (_treeUnlocked.has("off3")) perkModsRef.current.critBonus = (perkModsRef.current.critBonus || 0) + 0.08;
-    if (_treeUnlocked.has("off4")) gsRef.current._killFrenzyUnlocked = true;
-    if (_treeUnlocked.has("def1")) { gsRef.current.player.health += 20; gsRef.current.player.maxHealth += 20; }
-    if (_treeUnlocked.has("def2")) gsRef.current._treeArmorMult = 0.92; // 8% damage reduction applied at hit
-    if (_treeUnlocked.has("def3")) gsRef.current._treeWaveHeal = 6;
-    if (_treeUnlocked.has("def4")) gsRef.current._treeLastStand = true;
-    if (_treeUnlocked.has("util1")) perkModsRef.current.ammoMult = (perkModsRef.current.ammoMult || 1) * 1.20;
-    if (_treeUnlocked.has("util2")) perkModsRef.current.xpMult = (perkModsRef.current.xpMult || 1) * 1.25;
-    if (_treeUnlocked.has("util3")) gsRef.current._treeCoinBonus = 1.30;
-    if (_treeUnlocked.has("util4")) gsRef.current._treeFreeShopItem = true;
-    if (_treeUnlocked.has("cha1")) gsRef.current._treeMutBoost = 1.25;
-    if (_treeUnlocked.has("cha2")) gsRef.current._treeCoinBonus = (gsRef.current._treeCoinBonus || 1) * 1.40;
-    if (_treeUnlocked.has("cha3")) gsRef.current._treeGauntletBonusPerk = true;
-    if (_treeUnlocked.has("cha4") && gsRef.current.cursedRunMode) gsRef.current.killScoreMult = (gsRef.current.killScoreMult || 1) * 2;
-
-    // Kill Frenzy base speed captured after all speed mods applied
-    if (gsRef.current._killFrenzyUnlocked) gsRef.current._killFrenzyBaseSpeed = gsRef.current.player.speed;
+    applyMetaUpgrades(perkModsRef.current, gsRef.current, ut);
+    applyMetaTree(perkModsRef.current, gsRef.current, treeUnlocked);
 
     // ── Reduced motion sync ────────────────────────────────────────────────
     gsRef.current.reducedMotion = settingsRef.current.reducedMotion === true
@@ -852,9 +772,9 @@ export default function CallOfDoodie() {
     } else if (loadout === "tank") {
       gsRef.current.player.health += 60; gsRef.current.player.maxHealth += 60;
       // S176: loadout base speeds keep the meta Speedster bonus instead of overwriting it.
-      gsRef.current.player.speed = 3.2 * [1, 1.10, 1.22, 1.38][ut.speedster || 0];
+      gsRef.current.player.speed = 3.2 * metaIncrease(metaUpgradeValue("speedster", ut.speedster));
     } else if (loadout === "speedster") {
-      gsRef.current.player.speed = 5.4 * [1, 1.10, 1.22, 1.38][ut.speedster || 0];
+      gsRef.current.player.speed = 5.4 * metaIncrease(metaUpgradeValue("speedster", ut.speedster));
       perkModsRef.current.dashCDMult = (perkModsRef.current.dashCDMult || 1) * 0.60;
     }
     // ── Apply run modifier (seeded, one per run) ──────────────────────────────
@@ -876,7 +796,7 @@ export default function CallOfDoodie() {
         break;
       case "double_trouble":
         gsRef.current.waveEnemyMult = 2;
-        gsRef.current.killScoreMult = 1.5;
+        multiplyKillScore(gsRef.current, 1.5);
         break;
       case "lightweight":
         perkModsRef.current.dashCDMult = (perkModsRef.current.dashCDMult || 1) * 0.5;
@@ -949,6 +869,7 @@ export default function CallOfDoodie() {
         if (gs) addScreenText(gs, sizeRef.current.w / 2, sizeRef.current.h / 2 - 40, "⚙ Adapted for you", "#88FF88", true);
       }, 800);
     }
+    finalizeMetaStart(gsRef.current);
     return seed;
   }, [leaderboard, _modeAnnounce]);
 
@@ -1074,7 +995,7 @@ export default function CallOfDoodie() {
   }, [openQueuedPerkSelection]);
   const addXp = useCallback((amount) => {
     const ref = xpRef.current;
-    const gain = Math.floor(amount * (perkModsRef.current.xpMult || 1));
+    const gain = getRunXpGain(amount, perkModsRef.current, gsRef.current);
     ref.xp += gain;
     const needed = getLevelXpNeeded(ref.level);
     if (ref.xp >= needed) {
@@ -1259,6 +1180,9 @@ export default function CallOfDoodie() {
     });
     if (!resolution) return;
     setCoins(resolution.coins);
+    if (cost === 0) setCoinShopOptions(options => options.map(option => (
+      option.normalCost == null ? option : { ...option, cost: option.normalCost }
+    )));
     if (resolution.defeatedEnemies?.length) {
       resolution.defeatedEnemies.forEach((en, ni) => { if (ni < 12) addParticles(gs, en.x, en.y, en.color, 8); });
     }
@@ -1470,7 +1394,7 @@ export default function CallOfDoodie() {
     const pierce = perkModsRef.current.pierce || 0;
     const bSize = weapon.bulletSize || (weaponIdx === 1 ? 8 : weaponIdx === 2 ? 2 : 4);
     const bLife = weapon.bulletLife || 60;
-    const bSpeed = weapon.bulletSpeed || 12;
+    const bSpeed = getPlayerProjectileSpeed(weapon, gs);
     const noRicochet = weaponIdx === 1; // RPG only
     const makeBullet = (ang) => ({
       x: p.x + Math.cos(angle) * 25, y: p.y + Math.sin(angle) * 25,
@@ -1911,6 +1835,7 @@ export default function CallOfDoodie() {
       enemy: e,
       comboMult,
       killScoreMult: gs.killScoreMult || 1,
+      weeklyKillScoreMult: gs._weeklyKillScoreMult || 1,
       routeKillScoreMult: gs.routeKillScoreMult || 1,
       activeObjective: gs.activeObjective || null,
       playerPos: p,
@@ -2009,7 +1934,7 @@ export default function CallOfDoodie() {
       }
     }
 
-    if (gs._killFrenzyUnlocked) gs._killFrenzyTimer = 90;
+    if (gs._killFrenzyUnlocked) gs._killFrenzyTimer = META_TREE_FACTS.killFrenzySeconds * 60;
     setScore(gs.score); setKills(gs.kills); setKillstreak(gs.killstreakCount);
     setBestStreak(statsRef.current.bestStreak); setTotalDamage(Math.floor(gs.totalDamage));
     if (!gs.newBestScore && gs.score > (gs.careerBest?.score || 0)) {
@@ -2043,7 +1968,7 @@ export default function CallOfDoodie() {
       }
     }
 
-    addXp(pts);
+    addXp(defeat.xpPoints);
     gs.killFlash = 6;
     if (gs.vampireMode) { p.health = Math.min(p.maxHealth, p.health + 3); setHealth(Math.floor(p.health)); }
     if (perkModsRef.current.adrenalineRush && p.health > 0 && p.health < p.maxHealth * 0.30) {
@@ -2108,7 +2033,7 @@ export default function CallOfDoodie() {
     const isShard = e.typeIndex === 16 && !e.isBossEnemy;
     if (!isShard) {
       if (e.isBossEnemy && extraLivesRef.current === 0 && lootRng() < 0.18) gs.pickups.push({ x: e.x, y: e.y, type: "guardian_angel", life: 600 });
-      else if ((e.isBossEnemy || lootRng() < 0.25) && !gs.siegeMode) spawnPickup(gs, e.x, e.y, e.isBossEnemy);
+      else if (shouldDropStandardPickup(gs, e.isBossEnemy, lootRng) && !gs.siegeMode) spawnPickup(gs, e.x, e.y, e.isBossEnemy);
     }
     achCheckRef.current = true;
     return true;
@@ -2249,7 +2174,14 @@ export default function CallOfDoodie() {
     const _draftPerk = gauntletLaunch ? PERKS[gauntletLaunch.startPerkIndex] : draftChosenRef.current;
     draftChosenRef.current = null;
     if (_draftPerk) {
-      setTimeout(() => applyPerk(_draftPerk), 80);
+      setTimeout(() => {
+        applyPerk(_draftPerk);
+        const bonus = consumeGauntletMetaChoice(gsRef.current);
+        if (bonus) {
+          bankedPerkChoicesRef.current += bonus;
+          openQueuedPerkSelection();
+        }
+      }, 80);
     }
     setShopPending(false); setShopOptions([]); setCoinShopOptions([]); shopPendingRef.current = false; setShopHistory([]);
     setRoutePending(false); setRouteOptions([]); routePendingRef.current = false;
@@ -2321,7 +2253,7 @@ export default function CallOfDoodie() {
         track("arsenal_milestone_snapshot", { accountLevel: _acctLevel, milestonesReached: _milestonesReached, totalWeapons: WEAPONS.length, availability: "all-open" });
       }
     } catch {}
-  }, [applyPerk, dailyChallengeMode, initGame, operationStateRef, releaseAllInputs, resetOperation, startOperation, starterLoadout]);
+  }, [applyPerk, dailyChallengeMode, initGame, openQueuedPerkSelection, operationStateRef, releaseAllInputs, resetOperation, startOperation, starterLoadout]);
 
   // ── Draft perk selection ───────────────────────────────────────────────────
   const applyDraftPerk = useCallback((perk) => {
@@ -2654,9 +2586,9 @@ export default function CallOfDoodie() {
       }
     }
 
-    // ── Kill Frenzy (META_TREE off4): +20% speed for 60f after kill ──
-    if ((gs._killFrenzyTimer || 0) > 0) { gs._killFrenzyTimer--; gs.player.speed = gs._killFrenzyBaseSpeed * 1.20; }
-    else if (gs._killFrenzyUnlocked && gs.player.speed === (gs._killFrenzyBaseSpeed || 0) * 1.20) {
+    // ── Kill Frenzy: shared duration and speed promise ──
+    if ((gs._killFrenzyTimer || 0) > 0) { gs._killFrenzyTimer--; gs.player.speed = gs._killFrenzyBaseSpeed * metaIncrease(META_TREE_FACTS.off4); }
+    else if (gs._killFrenzyUnlocked && gs.player.speed === (gs._killFrenzyBaseSpeed || 0) * metaIncrease(META_TREE_FACTS.off4)) {
       gs.player.speed = gs._killFrenzyBaseSpeed;
     }
 
@@ -3313,7 +3245,7 @@ export default function CallOfDoodie() {
     if (modeVerdict === "lose") { handlePlayerDeath(gs, { cause: "mode_objective_failed", allowRecovery: false }); return; }
 
     // ── Pickup collection ──
-    const pickupRange = perkModsRef.current.pickupRange || 30;
+    const pickupRange = getPickupCollectionRange(perkModsRef.current, gs);
     gs.pickups = combatRuntimeRef.current.stepAndCompactInPlace(gs.pickups, pk => {
       if (pk.type === "loot") { pk.life--; return pk.life > 0; }
       pk.life--;

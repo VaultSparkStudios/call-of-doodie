@@ -1,3 +1,5 @@
+import { WEEKLY_MAGNET_MULTIPLIER } from "./config/weeklyMutationRuntime.js";
+import { metaUpgradeDescription, META_TREE_FACTS as MTF } from "./config/upgradeFacts.js";
 // ===== WEAPONS =====
 export const WEAPONS = [
   { name: "Banana Blaster", upgradedName: "BLASTER PRIME", emoji: "🍌", damage: 15, fireRate: 200, ammo: 30, maxAmmo: 30, reloadTime: 1500, color: "#FFE135", sound: "PEEL!", spread: 0.03, desc: "Reliable sidearm. Peel & deal." },
@@ -289,81 +291,81 @@ export const META_UPGRADES = [
   {
     id: "veteran", name: "Veteran", emoji: "🎖️",
     tiers: [
-      { cost: 200,  desc: "Start each run with +20% XP gain" },
-      { cost: 700,  desc: "Start each run with +45% XP gain" },
-      { cost: 2000, desc: "Start each run with +75% XP gain" },
+      { cost: 200,  desc: metaUpgradeDescription("veteran", 1) },
+      { cost: 700,  desc: metaUpgradeDescription("veteran", 2) },
+      { cost: 2000, desc: metaUpgradeDescription("veteran", 3) },
     ],
   },
   {
     id: "field_medic", name: "Field Medic", emoji: "💊",
     tiers: [
-      { cost: 250,  desc: "Start each run with +20 max HP" },
-      { cost: 800,  desc: "Start each run with +50 max HP" },
-      { cost: 2500, desc: "Start each run with +100 max HP" },
+      { cost: 250,  desc: metaUpgradeDescription("field_medic", 1) },
+      { cost: 800,  desc: metaUpgradeDescription("field_medic", 2) },
+      { cost: 2500, desc: metaUpgradeDescription("field_medic", 3) },
     ],
   },
   {
     id: "swift_boots", name: "Swift Boots", emoji: "👟",
     tiers: [
-      { cost: 300,  desc: "Start with −20% dash cooldown" },
-      { cost: 900,  desc: "Start with −40% dash cooldown" },
-      { cost: 2800, desc: "Start with −60% dash cooldown" },
+      { cost: 300,  desc: metaUpgradeDescription("swift_boots", 1) },
+      { cost: 900,  desc: metaUpgradeDescription("swift_boots", 2) },
+      { cost: 2800, desc: metaUpgradeDescription("swift_boots", 3) },
     ],
   },
   {
     id: "deep_mag", name: "Deep Magazine", emoji: "📦",
     tiers: [
-      { cost: 200,  desc: "Start with +25% max ammo on all weapons" },
-      { cost: 700,  desc: "Start with +60% max ammo on all weapons" },
-      { cost: 2000, desc: "Start with +100% max ammo on all weapons" },
+      { cost: 200,  desc: metaUpgradeDescription("deep_mag", 1) },
+      { cost: 700,  desc: metaUpgradeDescription("deep_mag", 2) },
+      { cost: 2000, desc: metaUpgradeDescription("deep_mag", 3) },
     ],
   },
   {
     id: "hardened", name: "Hardened", emoji: "🛡️",
     tiers: [
-      { cost: 400,  desc: "Start each run with +15% bullet damage" },
-      { cost: 1200, desc: "Start each run with +30% bullet damage" },
-      { cost: 3500, desc: "Start each run with +50% bullet damage" },
+      { cost: 400,  desc: metaUpgradeDescription("hardened", 1) },
+      { cost: 1200, desc: metaUpgradeDescription("hardened", 2) },
+      { cost: 3500, desc: metaUpgradeDescription("hardened", 3) },
     ],
   },
   {
     id: "scavenger", name: "Scavenger", emoji: "🧲",
     tiers: [
-      { cost: 300,  desc: "Start with +50% pickup range" },
-      { cost: 1000, desc: "Start with +125% pickup range" },
-      { cost: 3000, desc: "Start with +200% pickup range" },
+      { cost: 300,  desc: metaUpgradeDescription("scavenger", 1) },
+      { cost: 1000, desc: metaUpgradeDescription("scavenger", 2) },
+      { cost: 3000, desc: metaUpgradeDescription("scavenger", 3) },
     ],
   },
   {
     id: "grenadier", name: "Grenadier", emoji: "💣",
     tiers: [
-      { cost: 400,  desc: "Start with −25% grenade cooldown" },
-      { cost: 1200, desc: "Start with −45% grenade cooldown" },
-      { cost: 3500, desc: "Start with −65% grenade cooldown" },
+      { cost: 400,  desc: metaUpgradeDescription("grenadier", 1) },
+      { cost: 1200, desc: metaUpgradeDescription("grenadier", 2) },
+      { cost: 3500, desc: metaUpgradeDescription("grenadier", 3) },
     ],
   },
   {
     id: "crit_master", name: "Crit Master", emoji: "🎯",
     tiers: [
-      { cost: 400,  desc: "Start each run with +5% crit chance" },
-      { cost: 1200, desc: "Start each run with +12% crit chance" },
-      { cost: 3500, desc: "Start each run with +20% crit chance" },
+      { cost: 400,  desc: metaUpgradeDescription("crit_master", 1) },
+      { cost: 1200, desc: metaUpgradeDescription("crit_master", 2) },
+      { cost: 3500, desc: metaUpgradeDescription("crit_master", 3) },
     ],
   },
   {
     id: "speedster", name: "Speedster", emoji: "⚡",
     tiers: [
-      { cost: 500,  desc: "Start each run with +10% move speed" },
-      { cost: 1500, desc: "Start each run with +22% move speed" },
-      { cost: 4000, desc: "Start each run with +38% move speed" },
+      { cost: 500,  desc: metaUpgradeDescription("speedster", 1) },
+      { cost: 1500, desc: metaUpgradeDescription("speedster", 2) },
+      { cost: 4000, desc: metaUpgradeDescription("speedster", 3) },
     ],
   },
   {
     id: "vampire_bite", name: "Vampire Bite", emoji: "🧛",
     tiers: [
-      { cost: 600,  desc: "Start with 3% lifesteal on every hit" },
-      { cost: 1800, desc: "Start with 6% lifesteal on every hit" },
-      { cost: 5000, desc: "Start with 10% lifesteal on every hit" },
+      { cost: 600,  desc: metaUpgradeDescription("vampire_bite", 1) },
+      { cost: 1800, desc: metaUpgradeDescription("vampire_bite", 2) },
+      { cost: 5000, desc: metaUpgradeDescription("vampire_bite", 3) },
     ],
   },
 ];
@@ -401,7 +403,7 @@ export const WEEKLY_MUTATIONS = [
   { id: "tiny_enemies",   emoji: "🔬", name: "Ant Farm",        desc: "All enemies are 60% of their normal size.", apply: gs => { gs.mutEnemySizeMult = 0.6; } },
   { id: "giant_enemies",  emoji: "🐋", name: "Kaiju Mode",      desc: "All enemies are 150% of their normal size.", apply: gs => { gs.mutEnemySizeMult = 1.5; } },
   { id: "rage_mode",      emoji: "🔴", name: "Permanent Rage",  desc: "All enemies spawn already enraged.", apply: gs => { gs.mutAlwaysEnraged = true; } },
-  { id: "magnet_world",   emoji: "🧲", name: "Magnetism",       desc: "Max pickup magnet radius for all players.", apply: gs => { gs.settPickupMagnet = 3; } },
+  { id: "magnet_world",   emoji: "🧲", name: "Magnetism",       desc: `At least ${WEEKLY_MAGNET_MULTIPLIER}× normal pickup radius.`, apply: gs => { gs.settPickupMagnet = WEEKLY_MAGNET_MULTIPLIER; } },
   { id: "speed_demons",   emoji: "👹", name: "Speed Demons",    desc: "Enemies move 1.6× faster.", apply: gs => { gs.mutEnemySpeedExtra = 1.6; } },
   { id: "bullet_hell",    emoji: "🌀", name: "Bullet Hell",     desc: "Ranged enemies fire 40% faster.", apply: gs => { gs.mutEnemyFireRateMult = 0.6; } },
   { id: "zombie_horde",   emoji: "🧟", name: "Zombie Horde",    desc: "2× enemies per wave but each has 50% HP.", apply: gs => { gs.waveEnemyMult = (gs.waveEnemyMult || 1) * 2; gs.mutEnemyHPMult = 0.5; } },
@@ -915,37 +917,37 @@ export const META_TREE = {
   offense: {
     label: "Offense", emoji: "⚔️", color: "#FF4444",
     nodes: [
-      { id: "off1", name: "Sharp Rounds",  emoji: "🔫", desc: "+5% bullet damage (all weapons)",              cost: 50  },
-      { id: "off2", name: "Hair Trigger",  emoji: "⚡", desc: "+10% fire rate",                               cost: 100, requires: "off1" },
-      { id: "off3", name: "Critical Mass", emoji: "🎯", desc: "+8% crit chance",                              cost: 200, requires: "off2" },
-      { id: "off4", name: "Kill Frenzy",   emoji: "🩸", desc: "+20% move speed for 1.5s after each kill",     cost: 450, requires: "off3" },
+      { id: "off1", name: "Sharp Rounds",  emoji: "🔫", desc: `+${MTF.off1}% bullet damage (all weapons)`,              cost: 50  },
+      { id: "off2", name: "Hair Trigger",  emoji: "⚡", desc: `+${MTF.off2}% fire rate`,                               cost: 100, requires: "off1" },
+      { id: "off3", name: "Critical Mass", emoji: "🎯", desc: `+${MTF.off3}% crit chance`,                              cost: 200, requires: "off2" },
+      { id: "off4", name: "Kill Frenzy",   emoji: "🩸", desc: `+${MTF.off4}% move speed for ${MTF.killFrenzySeconds}s after each kill`,     cost: 450, requires: "off3" },
     ],
   },
   defense: {
     label: "Defense", emoji: "🛡️", color: "#4488FF",
     nodes: [
-      { id: "def1", name: "Field Rations", emoji: "💊", desc: "+20 max HP at run start",                      cost: 50  },
-      { id: "def2", name: "Trauma Plates", emoji: "🪖", desc: "-8% incoming damage",                          cost: 100, requires: "def1" },
-      { id: "def3", name: "Field Medic",   emoji: "🏥", desc: "Heal 6 HP on each wave clear",                 cost: 200, requires: "def2" },
-      { id: "def4", name: "Last Stand",    emoji: "👊", desc: "Survive one lethal hit per run (restore 50 HP)", cost: 450, requires: "def3" },
+      { id: "def1", name: "Field Rations", emoji: "💊", desc: `+${MTF.def1} max HP at run start`,                      cost: 50  },
+      { id: "def2", name: "Trauma Plates", emoji: "🪖", desc: `-${MTF.def2}% incoming damage`,                          cost: 100, requires: "def1" },
+      { id: "def3", name: "Field Medic",   emoji: "🏥", desc: `Heal ${MTF.def3} HP on each wave clear`,                 cost: 200, requires: "def2" },
+      { id: "def4", name: "Last Stand",    emoji: "👊", desc: `Survive one lethal hit per run (restore ${MTF.def4} HP)`, cost: 450, requires: "def3" },
     ],
   },
   utility: {
     label: "Utility", emoji: "🔧", color: "#44CC44",
     nodes: [
-      { id: "util1", name: "Deep Pockets",  emoji: "🎒", desc: "+20% ammo capacity",                          cost: 50  },
-      { id: "util2", name: "Scholar",        emoji: "📚", desc: "+25% XP gain",                               cost: 100, requires: "util1" },
-      { id: "util3", name: "Scavenger Pro",  emoji: "💰", desc: "Enemies drop 30% more 💩 coins",             cost: 200, requires: "util2" },
-      { id: "util4", name: "Supply Drop",    emoji: "📦", desc: "Wave shop includes 1 guaranteed free item",  cost: 450, requires: "util3" },
+      { id: "util1", name: "Deep Pockets",  emoji: "🎒", desc: `+${MTF.util1}% ammo capacity`,                          cost: 50  },
+      { id: "util2", name: "Scholar",        emoji: "📚", desc: `+${MTF.util2}% XP gain`,                               cost: 100, requires: "util1" },
+      { id: "util3", name: "Scavenger Pro",  emoji: "💰", desc: `Enemies drop ${MTF.util3}% more 💩 coins`,             cost: 200, requires: "util2" },
+      { id: "util4", name: "Supply Drop",    emoji: "📦", desc: `Wave shop includes ${MTF.util4} guaranteed free item`,  cost: 450, requires: "util3" },
     ],
   },
   chaos: {
     label: "Chaos", emoji: "🌀", color: "#AA44FF",
     nodes: [
-      { id: "cha1", name: "Mutation Affinity", emoji: "🧬", desc: "Weekly mutation bonus effects +25%",       cost: 50  },
-      { id: "cha2", name: "Coin Magnet+",      emoji: "🪙", desc: "+40% Doodie Coin drops all run",          cost: 100, requires: "cha1" },
+      { id: "cha1", name: "Mutation Affinity", emoji: "🧬", desc: `Weekly mutation bonus effects +${MTF.cha1}%`,       cost: 50  },
+      { id: "cha2", name: "Coin Magnet+",      emoji: "🪙", desc: `+${MTF.cha2}% Doodie Coin drops all run`,          cost: 100, requires: "cha1" },
       { id: "cha3", name: "Gauntlet Ready",    emoji: "🏋️", desc: "Start Gauntlet runs with a bonus perk choice", cost: 200, requires: "cha2" },
-      { id: "cha4", name: "Pandemonium",       emoji: "💀", desc: "Cursed Runs grant 2× score multiplier",   cost: 450, requires: "cha3" },
+      { id: "cha4", name: "Pandemonium",       emoji: "💀", desc: `Cursed Runs grant ${MTF.cha4}× score multiplier`,   cost: 450, requires: "cha3" },
     ],
   },
 };

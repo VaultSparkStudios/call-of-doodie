@@ -1,3 +1,19 @@
+## 2026-09-11 — Session 177 — Runtime effects verified
+
+Overall status: S177 runtime contracts restored and tested; staging verified, final production receipt pending. SPARKED evidence remains incomplete.
+Last reviewed: 2026-09-14
+
+| Dimension | Score | Evidence |
+|---|---:|---|
+| Schema alignment | 5 | Local schema checks pass. |
+| Prompt/template alignment | 4 | Selected arc complete; portfolio doctor is distinct from local gates. |
+| Derived-view freshness | 4 | Startup, rolling status and handoff refreshed; release receipt still pending. |
+| Handoff continuity | 5 | S177 records name the pending production step. |
+| Contradiction density | 4 | Runtime claims corrected; external launch evidence remains unverified. |
+
+Five selected audit items now have runtime tests. Three paid meta effects and four weekly fields were previously inert; two boss abilities were selectable but inert. Shared facts close numeric duplication for meta upgrades/tree. The full suite passes; staging is deployed. Production, physical devices and participant outcomes remain separate evidence claims.
+
+
 ## 2026-09-11 — Session 176 — Perk, upgrade and control claim truth
 
 Status change: thirteen player-facing statements disagreed with the runtime, four of them because the runtime was wrong. Also two record corrections.

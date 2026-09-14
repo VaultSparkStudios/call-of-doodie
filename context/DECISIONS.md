@@ -1488,3 +1488,11 @@ Why: a claims audit that only ever edits copy would have "corrected" Hair Trigge
 Decision (S176): exempted post-deploy verification records from write-back debt only with session attribution to the SIL anchor, rather than adding the subject to the automation allowlist.
 
 Why: this repo pushes at closeout and verifies the deploy afterwards, so the verification note necessarily lands after the SIL anchor. An allowlist on the subject alone would let a mislabelled commit of an un-closed session pass; requiring WORK_LOG-only paths and `S<n>` == newest SIL session keeps the probe's original guarantee intact.
+
+## 2026-09-11 — S177 — Exact promises and bounded boss presentation
+
+Shared upgrade values drive the copy and execution. +10% fire rate means a shot interval divided by 1.10. Jackpot's independent XP multiplier must exclude its weekly score bonus so 2× XP does not silently become 6×. Other score-derived XP remains intact.
+
+Clone Decoy retains the ability pool's seeded order and stores one bounded presentation record outside enemy targeting/reward arrays. Lifesteal follows its existing global enemy-bullet wording, heals only after observed health loss, and cannot resurrect pending defeats.
+
+CANON-045 remains an existing external identity gap; CANON-054's conformance checker returned malformed evidence despite a live stats surface. No ABSOLUTE gap was reported. This maintenance deployment does not assert launch-tier eligibility.

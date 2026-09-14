@@ -1,3 +1,4 @@
+import { getPlayerProjectileSpeed } from "../config/weeklyMutationRuntime.js";
 // allyUnit — CPU teammates (S163).
 //
 // Allies are flat entities in `gs.allies`, shaped like enemies so the draw
@@ -186,7 +187,7 @@ function allyFire(gs, a, target) {
   const spread = (weapon.spread || 0.03) * 2;
   const ang = base + (rng() - 0.5) * spread;
   a.angle = ang;
-  const speed = weapon.bulletSpeed || 12;
+  const speed = getPlayerProjectileSpeed(weapon, gs);
   gs.bullets.push({
     x: a.x, y: a.y,
     vx: Math.cos(ang) * speed, vy: Math.sin(ang) * speed,

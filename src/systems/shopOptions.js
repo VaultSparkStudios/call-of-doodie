@@ -47,7 +47,7 @@ export function getShopOptions(gs, wpnIdx, rng = Math.random) {
 
 export function getCoinShopOptions(gs, rng = Math.random) {
   const p = gs?.player || { health: 100, maxHealth: 100 };
-  return shuffle([
+  const options = shuffle([
     { id: "cs_fullhp", emoji: "💖", name: "Full Restore", desc: "Restore to full HP", cost: 20, available: p.health < p.maxHealth },
     { id: "cs_nuke", emoji: "💣", name: "Pocket Nuke", desc: "Nuke all enemies on screen", cost: 28, available: true },
     { id: "cs_timedil", emoji: "⏳", name: "Bullet Time", desc: "6 seconds of time dilation", cost: 14, available: true },
@@ -56,4 +56,8 @@ export function getCoinShopOptions(gs, rng = Math.random) {
     { id: "cs_maxhp", emoji: "❤️‍🔥", name: "HP Augment", desc: "+30 permanent max HP", cost: 22, available: true },
     { id: "cs_ammo", emoji: "🔋", name: "Full Battery", desc: "Refill all weapons", cost: 10, available: true },
   ].filter(option => option.available), rng).slice(0, 3);
+  if (gs?._treeFreeShopItem && gs._treeFreeShopClaimWave !== gs.currentWave) {
+    options[0] = { ...options[0], normalCost: options[0].cost, cost: 0 };
+  }
+  return options;
 }

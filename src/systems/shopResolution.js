@@ -120,6 +120,10 @@ export function applyCoinShopEffect({
 }) {
   const player = gameState?.player;
   if (!gameState || !player || (gameState.coins || 0) < cost) return null;
+  if (cost === 0) {
+    if (!gameState._treeFreeShopItem || gameState._treeFreeShopClaimWave === gameState.currentWave) return null;
+    gameState._treeFreeShopClaimWave = gameState.currentWave;
+  }
 
   gameState.coins = (gameState.coins || 0) - cost;
   const result = {

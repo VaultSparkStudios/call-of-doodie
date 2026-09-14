@@ -45,6 +45,16 @@ import { parseSilHistory } from './sil-history.mjs';
  */
 export const CLOSEOUT_ARTIFACTS = [
   {
+    file: 'docs/STARTUP_BRIEF.md',
+    renderer: 'scripts/render-startup-brief.mjs',
+    protocol: 'SESSION_PROTOCOL §3.4',
+    // The next-session title is not evidence that the prior closeout ran.
+    session: (text) => {
+      const marker = text.match(/<!-- semantic-freshness:[^\n]*\bsilSession=(\d+)\b/);
+      return marker ? Number(marker[1]) : null;
+    },
+  },
+  {
     file: 'context/STATE_VECTOR.json',
     renderer: 'scripts/render-state-vector.mjs',
     protocol: 'SESSION_PROTOCOL §3.7',

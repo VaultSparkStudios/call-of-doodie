@@ -1,3 +1,4 @@
+import { META_TREE_FACTS } from "../config/upgradeFacts.js";
 export const RUN_PHASE = Object.freeze({
   PLAYING: "playing",
   ENDING: "ending",
@@ -25,7 +26,7 @@ export function resolveRunEndAttempt({
     return {
       kind: "recover",
       recovery: "meta-last-stand",
-      health: 50,
+      health: META_TREE_FACTS.def4,
       invincibleFrames: 120,
       phase: RUN_PHASE.PLAYING,
       cause,

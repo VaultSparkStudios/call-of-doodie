@@ -1,3 +1,14 @@
+## Session 177 — Runtime promises and upgrade composition
+
+- [x] **DONE S177** Shared meta facts now drive descriptions and runtime; Hair Trigger delivers exactly +10% shots and Scavenger II exactly +125% range. Loadout, score and Kill Frenzy modifiers compose.
+- [x] **DONE S177** Supply Drop grants one free coin-shop offer per wave, Gauntlet Ready supplies its opening extra perk, and Mutation Affinity scales favorable weekly bonuses.
+- [x] **DONE S177** Weekly XP, pickup chance, projectile speed and magnet range now have live consumers. Jackpot XP excludes the separate weekly score multiplier.
+- [x] **DONE S177** Clone Decoy is a finite visual-only ghost; Lifesteal heals live bosses only after actual enemy bullet damage. Zero-damage projectiles stay harmless.
+- [x] **DONE S177** Speed Surge uses simulation frames; enrages persist; Algorithm volleys and shared ability cooldown staggering follow the authored behavior.
+- [x] **DONE S177** Startup brief currency now checks the completed-session fingerprint and rejects a misleading next-session title.
+
+Wave reconciliation: Wave 1 startup complete; Wave 2 all five audit items implemented; Wave 3 staging deployed, final visual/security/production verification in progress.
+
 ## Session 170 - Startup evidence, bounded audit context, and process-policy closure
 
 - [x] [SIL:3] **DONE S170** Route Startup Brief cost provenance through the canonical plan-aware presenter; missing v5 rendering fails closed through safe-spawn.
@@ -722,3 +733,5 @@ First checkpoint the bounded post-S159 propagation/CI/deploy recovery. Then begi
 
 - cross-repo item owned by another repo agent:
 - [x] [SIL:2] **DONE S107** Deploy gate repair — `scripts/render-startup-brief.mjs` now normalizes plain `generate-genius-list --brief` output into a canonical boxed `GENIUS HIT LIST`, always renders a `HUMAN PRESSURE` tile with an honest empty state, and GitHub Actions has the missing Cloudflare Pages deploy secrets restored from the Studio Ops gateway. Validation: brief validator, lint, 550/550 tests, and build passing.
+
+- [ ] Investigate pre-existing Gauntlet initial arena sizing and clipped world-space perk toast; reproduced in both S176 production baseline and S177 staging captures.

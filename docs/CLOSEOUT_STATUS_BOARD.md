@@ -1,32 +1,31 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.1 -->
-<!-- generated-at: 2026-09-11 (Session 176 closeout) -->
+<!-- generated-at: 2026-09-14 (Session 177 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S176 ════════════════════╗
-║  Date: 2026-09-11  ·  SIL: 999/1000  ·  Velocity: 4 down         ║
-║  Mode: FOUNDER  ·  Agent: claude-code                            ║
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S177 ════════════════════╗
+║  Date: 2026-09-14  ·  SIL: 950/1000  ·  Velocity: 5 down         ║
+║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ║  Live:  preview  →  https://callofdoodie.wtf/                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ Triage: no lock, tree clean, origin 0/0. `check-writeback-cu  ║
-║  ✓ Audit (`docs/AUDIT_2026-09-11.md`): S175's committed survey,  ║
-║  ✓ Code fixes (the copy stated the design, the code broke it):   ║
-║  ✓ Copy fixes (design intentional, copy wrong): Scavenger t3 +2  ║
-║  ✓ Record correction: S175's "genome writer reported as Ark car  ║
+║  ✓ Shared meta facts now drive descriptions and runtime; Hair T  ║
+║  ✓ Supply Drop grants one free coin-shop offer per wave, Gauntl  ║
+║  ✓ Weekly XP, pickup chance, projectile speed and magnet range   ║
+║  ✓ Clone Decoy is a finite visual-only ghost; Lifesteal heals l  ║
 ╚════════════════════════════════════════════════════════════════╝
-╔══ SCORES · SIL 999/1000 ═══════════════════════════════════════╗
-║    Dev Health         100  ██████████                            ║
-║    Alignment          100  ██████████                            ║
-║    Momentum           100  ██████████                            ║
-║    Engagement         100  ██████████                            ║
-║    Process Qual       100  ██████████                            ║
-║    Coherence          100  ██████████                            ║
-║    Security           100  ██████████                            ║
-║    Ecosystem          100  ██████████                            ║
+╔══ SCORES · SIL 950/1000 ═══════════════════════════════════════╗
+║    Dev Health         98   ██████████                            ║
+║    Alignment          98   ██████████                            ║
+║    Momentum           96   ██████████                            ║
+║    Engagement         90   █████████░                            ║
+║    Process Qual       92   █████████░                            ║
+║    Coherence          96   ██████████                            ║
+║    Security           96   ██████████                            ║
+║    Ecosystem          90   █████████░                            ║
 ║    Capital            100  ██████████                            ║
-║    Automation         99   ██████████                            ║
+║    Automation         94   █████████░                            ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WRITE-BACK STATUS ═══════════════════════════════════════════╗
 ║  ✓ context/CURRENT_STATE.md                                      ║
@@ -41,23 +40,23 @@
 ║  · agent memory (Claude/Codex project memory)                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 25 files  ·  M:22 A:3 D:0 ?:0                          ║
+║  Changes: 50 files  ·  M:37 A:0 D:0 ?:13                         ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ DEPLOYMENT ══════════════════════════════════════════════════╗
-║  Staging:  https://session-170-staging.call-of-doodie.pages.dev  ║
+║  Staging:  https://session-177-staging.call-of-doodie.pages.dev  ║
 ║  Live:     https://callofdoodie.wtf/  ·  preview/FORGE (not yet  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
-║  Doctor:        163/220                                          ║
+║  Doctor:        167/221                                          ║
 ║  Compliance:    —                                                ║
-║  Tests:         1438/1438                                        ║
+║  Tests:         250/250                                          ║
 ║  Validation:    full-fresh                                       ║
-║  IGNIS:         3d ago                                           ║
+║  IGNIS:         5d ago                                           ║
 ║  Truth:         engineering-ready-sparked-no-go                  ║
-║  Sanitization:  2d ago                                           ║
-║  shells:        2 started · 2 closed · 0 running                 ║
+║  Sanitization:  4d ago                                           ║
+║  shells:        unknown · missing/stale enumeration              ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ NEXT SESSION ════════════════════════════════════════════════╗
 ║  (no genius cache — run `node scripts/cache-genius-list.mjs`)    ║

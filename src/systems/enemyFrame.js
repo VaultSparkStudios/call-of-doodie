@@ -8,6 +8,7 @@ import { getBossRangedBurstCount, triggerBossPhaseTwoTransition } from "./bossPh
 import { retireEnemyWithoutDefeat } from "./enemyDefeatLifecycle.js";
 import { applySergeantAura, buildEnemyFrameIndex, countSummonsFor, createEnemyFrameIndex } from "./frameIndex.js";
 import { buildFlowField, sampleFlowField } from "./flowField.js";
+import { stepBossDecoys } from "./bossAbilities.js";
 
 const MAX_DYING_ANIM = 20;
 
@@ -65,6 +66,7 @@ export function stepEnemyFrame({
   const p = player;
   const W = Number.isFinite(world.W) ? world.W : 1280;
   const H = Number.isFinite(world.H) ? world.H : 720;
+  stepBossDecoys(gs, world);
   // ── Flow field rebuild (every 30 frames or on significant player movement) ──
   gs._ffTimer = (gs._ffTimer || 0) + 1;
   const _ffPx = gs._ffPx || 0, _ffPy = gs._ffPy || 0;
@@ -90,7 +92,20 @@ export function stepEnemyFrame({
     const freezeMult = (gs.freezeTimer || 0) > 0 ? 0.35 : 1;
     const timeDilMult = (gs.timeDilationTimer || 0) > 0 ? 0.18 : 1;
     const _enrageMult = gs._chainEnrageLevel === 2 ? 1.20 : gs._chainEnrageLevel === 1 ? 1.10 : 1.0;
-    const buffedSpeed = e.speed * (e.buffed ? 1.35 : 1) * (gs.enemySpeedMult || 1) * freezeMult * timeDilMult * _enrageMult;
+    // Keep temporary speed in movement: restoring a saved base speed erased
+    // permanent enrages. Simulation frames also preserve bursts while paused.
+    if (e.isBossEnemy && e.hasSpeedSurge) {
+      e.speedSurgeFrames = Math.max(0, (e.speedSurgeFrames || 0) - 1);
+      e.speedSurgeTimer = (e.speedSurgeTimer || 0) + 1;
+      if (e.speedSurgeTimer >= e.speedSurgeCooldown) {
+        e.speedSurgeTimer = 0;
+        e.speedSurgeFrames = 120;
+        addText(gs, e.x, e.y - 50, "⚡ SPEED SURGE!", "#FF8800");
+      }
+      e.speedSurgeActive = e.speedSurgeFrames > 0;
+    }
+    const surgeMult = e.isBossEnemy && e.hasSpeedSurge && e.speedSurgeActive ? 2 : 1;
+    const buffedSpeed = e.speed * surgeMult * (e.buffed ? 1.35 : 1) * (gs.enemySpeedMult || 1) * freezeMult * timeDilMult * _enrageMult;
     // Flow field steering: sample flow field, fall back to direct angle if no cell data
     const ff = gs.flowField;
     let sx, sy;
@@ -163,11 +178,20 @@ export function stepEnemyFrame({
       if (e.shootTimer >= _enrageFireThresh) {
         e.shootTimer = 0;
         const pa = Math.atan2(t.y - e.y, t.x - e.x);
-        // Mega Karen phase 2: 5-bullet spread
-        const bCount = getBossRangedBurstCount(e);
+        // One timer owns ranged volleys; the old second Algorithm branch
+        // never fired after the generic branch reset shootTimer.
+        const algorithmSpread = e.isBossEnemy && e.typeIndex === 20;
+        const bCount = algorithmSpread ? 3 : getBossRangedBurstCount(e);
         for (let bi = 0; bi < bCount; bi++) {
-          const angle = pa + (bi - Math.floor(bCount / 2)) * 0.28;
-          gs.enemyBullets.push({ x: e.x, y: e.y, vx: Math.cos(angle) * e.projSpeed, vy: Math.sin(angle) * e.projSpeed, life: 90, size: 4, color: e.color, damage: 6 + e.typeIndex * 2, sourceType: e.typeIndex, sourceName: ENEMY_TYPES[e.typeIndex]?.name || e.name, sourceId: e.id ?? null });
+          const angle = pa + (bi - Math.floor(bCount / 2)) * (algorithmSpread ? 0.32 : 0.28);
+          gs.enemyBullets.push({
+            x: e.x, y: e.y, vx: Math.cos(angle) * e.projSpeed, vy: Math.sin(angle) * e.projSpeed,
+            life: algorithmSpread ? 100 : 90, size: algorithmSpread ? 5 : 4,
+            color: algorithmSpread ? "#1DA1F2" : e.color, damage: algorithmSpread ? 8 : 6 + e.typeIndex * 2,
+            sourceType: e.typeIndex,
+            sourceName: algorithmSpread ? `${ENEMY_TYPES[e.typeIndex]?.name || "Enemy"} spread` : ENEMY_TYPES[e.typeIndex]?.name || e.name,
+            sourceId: e.id ?? null,
+          });
         }
       }
     }
@@ -220,7 +244,7 @@ export function stepEnemyFrame({
       }
       // ── Shared ability stagger: prevents multiple abilities firing simultaneously ──
       if ((e.sharedAbilityCooldown || 0) > 0) e.sharedAbilityCooldown--;
-      const _abilityReady = (e.sharedAbilityCooldown || 0) <= 0;
+      const _abilityReady = () => (e.sharedAbilityCooldown || 0) <= 0;
       // At high waves (40+) scale ability timers up so they're less frequent
       const _waveScale = gs.currentWave >= 40 ? 1.4 : gs.currentWave >= 30 ? 1.2 : 1.0;
       // ── Shared boss abilities (scale per wave) ──────────────────────────
@@ -249,7 +273,7 @@ export function stepEnemyFrame({
       }
       if (e.hasTeleport) {
         e.teleportTimer++;
-        if (_abilityReady && e.teleportTimer >= Math.floor(480 * _waveScale)) {
+        if (_abilityReady() && e.teleportTimer >= Math.floor(480 * _waveScale)) {
           e.teleportTimer = 0;
           e.sharedAbilityCooldown = 90;
           const teleportRng = getRunRng(gs, "hazards");
@@ -269,15 +293,15 @@ export function stepEnemyFrame({
         // Warning flash: 1 second (60 frames) before the ring fires
         // Adaptive widen if player has been dying to this enemy type recently
         const _brWarn = Math.floor(60 * (gs._telegraphMult?.[e.typeIndex] || 1));
-        e.bulletRingWarning = _abilityReady && e.bulletRingTimer >= _brCap - _brWarn && e.bulletRingTimer < _brCap;
-        if (_abilityReady && e.bulletRingTimer >= _brCap) {
+        e.bulletRingWarning = _abilityReady() && e.bulletRingTimer >= _brCap - _brWarn && e.bulletRingTimer < _brCap;
+        if (_abilityReady() && e.bulletRingTimer >= _brCap) {
           e.bulletRingTimer = 0;
           e.bulletRingWarning = false;
           e.sharedAbilityCooldown = 120;
           const _brCount = gs.currentWave >= 40 ? 12 : 8;
           for (let _ri = 0; _ri < _brCount; _ri++) {
             const ba = (_ri / _brCount) * Math.PI * 2;
-            gs.enemyBullets.push({ x: e.x, y: e.y, vx: Math.cos(ba) * 4.5, vy: Math.sin(ba) * 4.5, life: 120, size: 5, color: "#FF6600", damage: 12, sourceType: e.typeIndex, sourceName: `${ENEMY_TYPES[e.typeIndex]?.name || "Boss"} bullet ring` });
+            gs.enemyBullets.push({ x: e.x, y: e.y, vx: Math.cos(ba) * 4.5 * (gs.mutEnemyProjSpeed || 1), vy: Math.sin(ba) * 4.5 * (gs.mutEnemyProjSpeed || 1), life: 120, size: 5, color: "#FF6600", damage: 12, sourceType: e.typeIndex, sourceName: `${ENEMY_TYPES[e.typeIndex]?.name || "Boss"} bullet ring` });
           }
           addText(gs, e.x, e.y - 80, "🔥 BULLET RING!", "#FF6600", true);
           addParticles(gs, e.x, e.y, "#FF6600", 14);
@@ -291,8 +315,8 @@ export function stepEnemyFrame({
           const _gsCap = Math.floor(420 * _waveScale);
           // Warning flash: 1.5 seconds (90 frames) before the slam triggers
           const _gsWarn = Math.floor(90 * (gs._telegraphMult?.[e.typeIndex] || 1));
-          e.groundSlamWarning = _abilityReady && e.groundSlamTimer >= _gsCap - _gsWarn && e.groundSlamTimer < _gsCap;
-          if (_abilityReady && e.groundSlamTimer >= _gsCap) {
+          e.groundSlamWarning = _abilityReady() && e.groundSlamTimer >= _gsCap - _gsWarn && e.groundSlamTimer < _gsCap;
+          if (_abilityReady() && e.groundSlamTimer >= _gsCap) {
             e.groundSlamTimer = 0; e.groundSlamWarning = false; e.groundSlamActive = true; e.groundSlamRadius = 0;
             e.sharedAbilityCooldown = 120;
             addText(gs, e.x, e.y - 80, "💥 GROUND SLAM!", "#FF4400", true);
@@ -326,19 +350,6 @@ export function stepEnemyFrame({
           e.health = Math.min(e.maxHealth, (e.health || 0) + (e.shieldRegenRate || 0.5));
         }
       }
-      // Speed surge: brief double-speed burst
-      if (e.hasSpeedSurge) {
-        e.speedSurgeTimer = (e.speedSurgeTimer || 0) + 1;
-        if (e.speedSurgeTimer >= e.speedSurgeCooldown) {
-          e.speedSurgeTimer = 0;
-          e.speedSurgeActive = true;
-          setTimeout(() => { if (e) e.speedSurgeActive = false; }, 2000);
-          addText(gs, e.x, e.y - 50, "⚡ SPEED SURGE!", "#FF8800");
-        }
-      }
-      if (e.speedSurgeActive) { e.speed = (e._baseSpeed || e.speed) * 2; }
-      else if (e._baseSpeed) { e.speed = e._baseSpeed; }
-      else { e._baseSpeed = e.speed; }
       // Bullet spray: ring of 8 bullets
       if (e.hasBulletSpray) {
         e.bulletSprayTimer = (e.bulletSprayTimer || 0) + 1;
@@ -478,15 +489,6 @@ export function stepEnemyFrame({
         addText(gs, e.x, e.y - 80, "📊 GOING VIRAL!", "#1DA1F2", true);
         addParticles(gs, e.x, e.y, "#1DA1F2", 25);
       }
-      // 3-shot spread every projRate instead of 1 shot
-      if (e.ranged && e.shootTimer >= e.projRate) {
-        e.shootTimer = 0;
-        const _pa = Math.atan2(t.y - e.y, t.x - e.x);
-        for (let _bi = -1; _bi <= 1; _bi++) {
-          const _ang = _pa + _bi * 0.32;
-          gs.enemyBullets.push({ x: e.x, y: e.y, vx: Math.cos(_ang) * e.projSpeed, vy: Math.sin(_ang) * e.projSpeed, life: 100, size: 5, color: "#1DA1F2", damage: 8, sourceType: e.typeIndex, sourceName: `${ENEMY_TYPES[e.typeIndex]?.name || "Enemy"} spread` });
-        }
-      }
     }
     // ── The Developer (21): debug mode, hotfix, merge conflict ──
     if (e.typeIndex === 21 && e.isBossEnemy) {
@@ -522,7 +524,7 @@ export function stepEnemyFrame({
             const _baseAng = (_set / 3) * Math.PI * 2;
             for (let _spread = -1; _spread <= 1; _spread++) {
               const _ang = _baseAng + _spread * 0.3;
-              gs.enemyBullets.push({ x: e.x, y: e.y, vx: Math.cos(_ang) * 5, vy: Math.sin(_ang) * 5, damage: 12, life: 80, size: 5, color: "#FF8800", sourceType: e.typeIndex, sourceName: `${ENEMY_TYPES[e.typeIndex]?.name || "Boss"} merge conflict` });
+              gs.enemyBullets.push({ x: e.x, y: e.y, vx: Math.cos(_ang) * 5 * (gs.mutEnemyProjSpeed || 1), vy: Math.sin(_ang) * 5 * (gs.mutEnemyProjSpeed || 1), damage: 12, life: 80, size: 5, color: "#FF8800", sourceType: e.typeIndex, sourceName: `${ENEMY_TYPES[e.typeIndex]?.name || "Boss"} merge conflict` });
             }
           }
         }

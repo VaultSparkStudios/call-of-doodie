@@ -1,0 +1,551 @@
+{
+  "origin": "https://callofdoodie.wtf",
+  "phase": "before",
+  "capturedAt": "2026-09-14T01:56:02.347Z",
+  "captures": [
+    {
+      "file": "boss-abilities-sewer-night-390-modern.png",
+      "theme": "sewer-night",
+      "width": 390,
+      "pack": "modern",
+      "state": {
+        "width": 390,
+        "height": 844,
+        "enemyCount": 1
+      },
+      "observed": {
+        "enemies": 1,
+        "clone": false,
+        "health": 50
+      },
+      "errors": []
+    },
+    {
+      "file": "boss-healing-sewer-night-390-modern.png",
+      "theme": "sewer-night",
+      "width": 390,
+      "pack": "modern",
+      "prepared": {
+        "health": 50,
+        "bullets": 1
+      },
+      "observed": {
+        "enemies": 1,
+        "health": 50,
+        "clone": false,
+        "bullets": 0
+      },
+      "errors": []
+    },
+    {
+      "file": "boss-expired-sewer-night-390-modern.png",
+      "theme": "sewer-night",
+      "width": 390,
+      "pack": "modern",
+      "prepared": {
+        "health": 50,
+        "bullets": 0
+      },
+      "observed": {
+        "enemies": 1,
+        "health": 50,
+        "clone": false,
+        "bullets": 0
+      },
+      "errors": []
+    },
+    {
+      "file": "boss-volley-sewer-night-390-modern.png",
+      "theme": "sewer-night",
+      "width": 390,
+      "pack": "modern",
+      "prepared": {
+        "health": 100,
+        "bullets": 0
+      },
+      "observed": {
+        "enemies": 1,
+        "health": 100,
+        "clone": false,
+        "bullets": 1
+      },
+      "errors": []
+    },
+    {
+      "file": "boss-abilities-sewer-night-390-retro.png",
+      "theme": "sewer-night",
+      "width": 390,
+      "pack": "retro",
+      "state": {
+        "width": 390,
+        "height": 844,
+        "enemyCount": 1
+      },
+      "observed": {
+        "enemies": 1,
+        "clone": false,
+        "health": 50
+      },
+      "errors": []
+    },
+    {
+      "file": "boss-healing-sewer-night-390-retro.png",
+      "theme": "sewer-night",
+      "width": 390,
+      "pack": "retro",
+      "prepared": {
+        "health": 50,
+        "bullets": 1
+      },
+      "observed": {
+        "enemies": 1,
+        "health": 50,
+        "clone": false,
+        "bullets": 0
+      },
+      "errors": []
+    },
+    {
+      "file": "boss-expired-sewer-night-390-retro.png",
+      "theme": "sewer-night",
+      "width": 390,
+      "pack": "retro",
+      "prepared": {
+        "health": 50,
+        "bullets": 0
+      },
+      "observed": {
+        "enemies": 1,
+        "health": 50,
+        "clone": false,
+        "bullets": 0
+      },
+      "errors": []
+    },
+    {
+      "file": "boss-volley-sewer-night-390-retro.png",
+      "theme": "sewer-night",
+      "width": 390,
+      "pack": "retro",
+      "prepared": {
+        "health": 100,
+        "bullets": 0
+      },
+      "observed": {
+        "enemies": 1,
+        "health": 100,
+        "clone": false,
+        "bullets": 1
+      },
+      "errors": []
+    },
+    {
+      "file": "boss-abilities-sewer-night-1440-modern.png",
+      "theme": "sewer-night",
+      "width": 1440,
+      "pack": "modern",
+      "state": {
+        "width": 1440,
+        "height": 900,
+        "enemyCount": 1
+      },
+      "observed": {
+        "enemies": 1,
+        "clone": false,
+        "health": 50
+      },
+      "errors": []
+    },
+    {
+      "file": "boss-healing-sewer-night-1440-modern.png",
+      "theme": "sewer-night",
+      "width": 1440,
+      "pack": "modern",
+      "prepared": {
+        "health": 50,
+        "bullets": 1
+      },
+      "observed": {
+        "enemies": 1,
+        "health": 50,
+        "clone": false,
+        "bullets": 0
+      },
+      "errors": []
+    },
+    {
+      "file": "boss-expired-sewer-night-1440-modern.png",
+      "theme": "sewer-night",
+      "width": 1440,
+      "pack": "modern",
+      "prepared": {
+        "health": 50,
+        "bullets": 0
+      },
+      "observed": {
+        "enemies": 1,
+        "health": 50,
+        "clone": false,
+        "bullets": 0
+      },
+      "errors": []
+    },
+    {
+      "file": "boss-volley-sewer-night-1440-modern.png",
+      "theme": "sewer-night",
+      "width": 1440,
+      "pack": "modern",
+      "prepared": {
+        "health": 100,
+        "bullets": 0
+      },
+      "observed": {
+        "enemies": 1,
+        "health": 100,
+        "clone": false,
+        "bullets": 1
+      },
+      "errors": []
+    },
+    {
+      "file": "boss-abilities-sewer-night-1440-retro.png",
+      "theme": "sewer-night",
+      "width": 1440,
+      "pack": "retro",
+      "state": {
+        "width": 1440,
+        "height": 900,
+        "enemyCount": 1
+      },
+      "observed": {
+        "enemies": 1,
+        "clone": false,
+        "health": 50
+      },
+      "errors": []
+    },
+    {
+      "file": "boss-healing-sewer-night-1440-retro.png",
+      "theme": "sewer-night",
+      "width": 1440,
+      "pack": "retro",
+      "prepared": {
+        "health": 50,
+        "bullets": 1
+      },
+      "observed": {
+        "enemies": 1,
+        "health": 50,
+        "clone": false,
+        "bullets": 0
+      },
+      "errors": []
+    },
+    {
+      "file": "boss-expired-sewer-night-1440-retro.png",
+      "theme": "sewer-night",
+      "width": 1440,
+      "pack": "retro",
+      "prepared": {
+        "health": 50,
+        "bullets": 0
+      },
+      "observed": {
+        "enemies": 1,
+        "health": 50,
+        "clone": false,
+        "bullets": 0
+      },
+      "errors": []
+    },
+    {
+      "file": "boss-volley-sewer-night-1440-retro.png",
+      "theme": "sewer-night",
+      "width": 1440,
+      "pack": "retro",
+      "prepared": {
+        "health": 100,
+        "bullets": 0
+      },
+      "observed": {
+        "enemies": 1,
+        "health": 100,
+        "clone": false,
+        "bullets": 0
+      },
+      "errors": []
+    },
+    {
+      "file": "boss-abilities-porcelain-day-390-modern.png",
+      "theme": "porcelain-day",
+      "width": 390,
+      "pack": "modern",
+      "state": {
+        "width": 390,
+        "height": 844,
+        "enemyCount": 1
+      },
+      "observed": {
+        "enemies": 1,
+        "clone": false,
+        "health": 50
+      },
+      "errors": []
+    },
+    {
+      "file": "boss-healing-porcelain-day-390-modern.png",
+      "theme": "porcelain-day",
+      "width": 390,
+      "pack": "modern",
+      "prepared": {
+        "health": 50,
+        "bullets": 1
+      },
+      "observed": {
+        "enemies": 1,
+        "health": 50,
+        "clone": false,
+        "bullets": 0
+      },
+      "errors": []
+    },
+    {
+      "file": "boss-expired-porcelain-day-390-modern.png",
+      "theme": "porcelain-day",
+      "width": 390,
+      "pack": "modern",
+      "prepared": {
+        "health": 50,
+        "bullets": 0
+      },
+      "observed": {
+        "enemies": 1,
+        "health": 50,
+        "clone": false,
+        "bullets": 0
+      },
+      "errors": []
+    },
+    {
+      "file": "boss-volley-porcelain-day-390-modern.png",
+      "theme": "porcelain-day",
+      "width": 390,
+      "pack": "modern",
+      "prepared": {
+        "health": 100,
+        "bullets": 0
+      },
+      "observed": {
+        "enemies": 1,
+        "health": 100,
+        "clone": false,
+        "bullets": 1
+      },
+      "errors": []
+    },
+    {
+      "file": "boss-abilities-porcelain-day-390-retro.png",
+      "theme": "porcelain-day",
+      "width": 390,
+      "pack": "retro",
+      "state": {
+        "width": 390,
+        "height": 844,
+        "enemyCount": 1
+      },
+      "observed": {
+        "enemies": 1,
+        "clone": false,
+        "health": 50
+      },
+      "errors": []
+    },
+    {
+      "file": "boss-healing-porcelain-day-390-retro.png",
+      "theme": "porcelain-day",
+      "width": 390,
+      "pack": "retro",
+      "prepared": {
+        "health": 50,
+        "bullets": 1
+      },
+      "observed": {
+        "enemies": 1,
+        "health": 50,
+        "clone": false,
+        "bullets": 0
+      },
+      "errors": []
+    },
+    {
+      "file": "boss-expired-porcelain-day-390-retro.png",
+      "theme": "porcelain-day",
+      "width": 390,
+      "pack": "retro",
+      "prepared": {
+        "health": 50,
+        "bullets": 0
+      },
+      "observed": {
+        "enemies": 1,
+        "health": 50,
+        "clone": false,
+        "bullets": 0
+      },
+      "errors": []
+    },
+    {
+      "file": "boss-volley-porcelain-day-390-retro.png",
+      "theme": "porcelain-day",
+      "width": 390,
+      "pack": "retro",
+      "prepared": {
+        "health": 100,
+        "bullets": 0
+      },
+      "observed": {
+        "enemies": 1,
+        "health": 100,
+        "clone": false,
+        "bullets": 0
+      },
+      "errors": []
+    },
+    {
+      "file": "boss-abilities-porcelain-day-1440-modern.png",
+      "theme": "porcelain-day",
+      "width": 1440,
+      "pack": "modern",
+      "state": {
+        "width": 1440,
+        "height": 900,
+        "enemyCount": 1
+      },
+      "observed": {
+        "enemies": 1,
+        "clone": false,
+        "health": 50
+      },
+      "errors": []
+    },
+    {
+      "file": "boss-healing-porcelain-day-1440-modern.png",
+      "theme": "porcelain-day",
+      "width": 1440,
+      "pack": "modern",
+      "prepared": {
+        "health": 50,
+        "bullets": 1
+      },
+      "observed": {
+        "enemies": 1,
+        "health": 50,
+        "clone": false,
+        "bullets": 0
+      },
+      "errors": []
+    },
+    {
+      "file": "boss-expired-porcelain-day-1440-modern.png",
+      "theme": "porcelain-day",
+      "width": 1440,
+      "pack": "modern",
+      "prepared": {
+        "health": 50,
+        "bullets": 0
+      },
+      "observed": {
+        "enemies": 1,
+        "health": 50,
+        "clone": false,
+        "bullets": 0
+      },
+      "errors": []
+    },
+    {
+      "file": "boss-volley-porcelain-day-1440-modern.png",
+      "theme": "porcelain-day",
+      "width": 1440,
+      "pack": "modern",
+      "prepared": {
+        "health": 100,
+        "bullets": 0
+      },
+      "observed": {
+        "enemies": 1,
+        "health": 100,
+        "clone": false,
+        "bullets": 0
+      },
+      "errors": []
+    },
+    {
+      "file": "boss-abilities-porcelain-day-1440-retro.png",
+      "theme": "porcelain-day",
+      "width": 1440,
+      "pack": "retro",
+      "state": {
+        "width": 1440,
+        "height": 900,
+        "enemyCount": 1
+      },
+      "observed": {
+        "enemies": 1,
+        "clone": false,
+        "health": 50
+      },
+      "errors": []
+    },
+    {
+      "file": "boss-healing-porcelain-day-1440-retro.png",
+      "theme": "porcelain-day",
+      "width": 1440,
+      "pack": "retro",
+      "prepared": {
+        "health": 50,
+        "bullets": 1
+      },
+      "observed": {
+        "enemies": 1,
+        "health": 50,
+        "clone": false,
+        "bullets": 0
+      },
+      "errors": []
+    },
+    {
+      "file": "boss-expired-porcelain-day-1440-retro.png",
+      "theme": "porcelain-day",
+      "width": 1440,
+      "pack": "retro",
+      "prepared": {
+        "health": 50,
+        "bullets": 0
+      },
+      "observed": {
+        "enemies": 1,
+        "health": 50,
+        "clone": false,
+        "bullets": 0
+      },
+      "errors": []
+    },
+    {
+      "file": "boss-volley-porcelain-day-1440-retro.png",
+      "theme": "porcelain-day",
+      "width": 1440,
+      "pack": "retro",
+      "prepared": {
+        "health": 100,
+        "bullets": 0
+      },
+      "observed": {
+        "enemies": 1,
+        "health": 100,
+        "clone": false,
+        "bullets": 0
+      },
+      "errors": []
+    }
+  ]
+}

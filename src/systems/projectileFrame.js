@@ -13,6 +13,7 @@ import {
 } from "./combatResolution.js";
 import { applyEnemyDamage } from "./enemyDefeatLifecycle.js";
 import { applyObservedPlayerDamage } from "./damageSequence.js";
+import { healBossesFromEnemyBullet } from "./bossAbilities.js";
 import { stepAndCompactInPlace } from "./transientLifecycle.js";
 import { addParticles, addText } from "./transientPresentation.js";
 import { stampArenaDecal } from "./backgroundLayer.js";
@@ -130,13 +131,14 @@ export function stepProjectileFrame({
       });
       if (!hit.hit) return;
       projectile.life = hit.projectileLife;
-      applyObservedPlayerDamage(gs, {
+      const observedHit = applyObservedPlayerDamage(gs, {
         healthAfter: hit.health,
         frame: currentFrame,
         kind: "projectile",
         sourceType: projectile.sourceType,
         sourceName: projectile.sourceName || "Enemy projectile",
       });
+      healBossesFromEnemyBullet(gs, observedHit.damage);
       p.invincible = hit.invincibleFrames;
       gs.screenShake = hit.screenShake;
       gs.damageFlash = hit.damageFlash;
