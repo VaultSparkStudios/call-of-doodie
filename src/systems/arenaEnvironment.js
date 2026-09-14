@@ -29,7 +29,7 @@ const THEME_PROPS = Object.freeze([
  * In particular, the floor-zone and prop loop limits intentionally re-roll on
  * every condition check because that is how the original inline generator ran.
  */
-export function buildArenaEnvironment({ seed, width, height }) {
+export function buildArenaEnvironment({ seed, width, height, forcedTheme }) {
   const w = width;
   const h = height;
   let worldSeed = seed;
@@ -85,7 +85,9 @@ export function buildArenaEnvironment({ seed, width, height }) {
     });
   }
 
-  const mapTheme = Math.floor(random() * 8);
+  const _seededTheme = Math.floor(random() * 8);
+  const mapTheme = (typeof forcedTheme === "number" && forcedTheme >= 0 && forcedTheme < THEME_PROPS.length)
+    ? forcedTheme : _seededTheme;
   const floorZones = [];
   for (let index = 0; index < 4 + Math.floor(random() * 4); index += 1) {
     floorZones.push({

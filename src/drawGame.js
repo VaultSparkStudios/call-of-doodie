@@ -1463,6 +1463,18 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
       }
       const half = ctx.measureText(ft.text).width / 2;
       x = Math.max(16 + half, Math.min(W - 16 - half, x));
+    } else {
+      // Nudge world-anchored text that narrowly overshoots the top/bottom canvas
+      // edge (player near arena boundary) so it stays visible. Texts for truly
+      // offscreen actors — bots fighting above the camera in a 2× scrolling arena —
+      // are left unclamped and naturally invisible.
+      const screenY = y - _camY;
+      if (screenY > -80) {
+        // Account for font ascent above the baseline so the full glyph stays on canvas.
+        // big=31px: stroke=5, ascent≈25 → topMargin 36; normal=13px: stroke=3 → 16.
+        const topMargin = _ftBig ? 36 : 16;
+        y = Math.max(topMargin, Math.min(H - 16, screenY)) + _camY;
+      }
     }
     ctx.strokeText(ft.text, x, y); ctx.fillText(ft.text, x, y);
   };
