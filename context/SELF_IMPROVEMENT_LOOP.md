@@ -3334,3 +3334,16 @@ Brainstorm: declarative ordinary-perk facts; simulated Developer obstacle restor
 The existing ten-category S177 assessment remains 950/1000; no new participant data justifies an engagement-score increase. Expanded runtime and visual checks uncovered and repaired mode launch ambiguity, a Throne dead-end, boss ordering, carried-over time, clipped retake text and an undefined boss-defeat helper. 257 files / 1,608 tests passed; strict lint and deployable build passed; public contract 28 files and claims passed; dependency audit zero vulnerabilities. Seventeen short natural-input runs cover all twelve desktop modes and Classic plus four new mobile modes. Four controlled six-boss sequences reached victory. Sixteen browser clock/ending cases and four Classic/Operation launch transitions passed. Seven Throne recovery paths were simulated independently. Final visual receipt and production promotion are being sealed.
 
 [SIL:1] Enable targeted undefined-reference checks on the orchestration path (implemented). [SIL:1] Keep normal input playtests distinct from accelerated end-state fixtures (implemented in the QA receipt).
+
+
+### S177 final closeout addendum — 2026-09-15 | score unchanged
+
+The ten-category S177 assessment remains 950/1000 (98 + 98 + 96 + 90 + 92 + 96 + 96 + 90 + 100 + 94). Velocity remains the original five-item ledger count; the four follow-through workstreams are separately reconciled on TASK_BOARD, not counted as a second session. Debt decreased through replay, placement, escort and respite repairs. Rolling averages remain derived from numbered SIL entries.
+
+Exact source 65f983937142 passed GitHub Actions 34926899773: 260 files / 1,639 tests. Strict lint, deployable build, public contract (28 files), claims, schema, security and supply-chain gates passed. All 12 modes received natural-input browser runs; Extraction and Bot Royale reached victory. Six assisted Operation routes completed 42 encounters with zero objective failures or browser errors; all six pause checks passed. Sixty-four hash-bound before/after captures cover dark/light and desktop/mobile. Production 7cb07a99 and callofdoodie.wtf report 65f983937142; shell 7/7 and desktop/mobile play, audio suspend/resume and six directly inspected production states passed.
+
+Assisted Operation runs used boosted health, position setup and lethal damage through the real enemy lifecycle; they did not force encounter indices or completion counters. Natural runs used normal controls. Physical gamepads/devices, participant balance and subjective audio listening remain unmeasured. FORGE/public-unlaunched status is unchanged.
+
+[SIL:1] Test replay from the actual death screen through draft and redeployment (completed, App.launch regression). [SIL:1] Cover authored objective transitions and real-arena navigation, not just isolated handler calls (completed, six routes plus escort simulations).
+
+Intent outcome: Achieved. Record correction: prior addendum wording about pending production is superseded by the exact verified release above.

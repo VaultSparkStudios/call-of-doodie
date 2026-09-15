@@ -1,3 +1,20 @@
+## 2026-09-15 — S177 final closeout
+
+Overall status: Operation and objective replay fixes are tested and production-verified; formal record reconciliation complete. SPARKED evidence remains incomplete.
+Last reviewed: 2026-09-15
+
+| Dimension | Score | Evidence |
+|---|---:|---|
+| Schema alignment | 5 | Status uses canonical writer and exact CI counts. |
+| Prompt/template alignment | 4 | Public-safe records preserve canonical closeout semantics; scoped control-plane refresh is separate. |
+| Derived-view freshness | 5 | State, handoff, task board and runtime memory reconciled to final release. |
+| Handoff continuity | 5 | Exact gameplay commit, deployment, outcome receipts and limits retained. |
+| Contradiction density | 4 | Corrected stale tasks; historical ledger claims retained with explicit superseding records. |
+
+Exact source 65f983937142 passed GitHub Actions 34926899773: 260 files / 1,639 tests. Strict lint, deployable build, public contract (28 files), claims, schema, security and supply-chain gates passed. All 12 modes received natural-input browser runs; Extraction and Bot Royale reached victory. Six assisted Operation routes completed 42 encounters with zero objective failures or browser errors; all six pause checks passed. Sixty-four hash-bound before/after captures cover dark/light and desktop/mobile. Production 7cb07a99 and callofdoodie.wtf report 65f983937142; shell 7/7 and desktop/mobile play, audio suspend/resume and six directly inspected production states passed.
+
+Assisted Operation runs used boosted health, position setup and lethal damage through the real enemy lifecycle; they did not force encounter indices or completion counters. Natural runs used normal controls. Physical gamepads/devices, participant balance and subjective audio listening remain unmeasured. FORGE/public-unlaunched status is unchanged.
+
 ## 2026-09-14 — S177 mode verification
 
 Overall status: Mode fixes, visual/audio corrections and controlled outcomes verified; production deployed and verified.

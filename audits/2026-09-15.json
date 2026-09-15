@@ -1,0 +1,117 @@
+{
+  "schemaVersion": "1.3",
+  "session": 177,
+  "date": "2026-09-15",
+  "headline": "Operation objectives, navigation, transitions and retries work through all six routes; objective debriefs match actual outcomes.",
+  "shipped": [
+    "Objective debrief advice and every replay action use the actual mode outcome; survival drills and wave-skip practice are suppressed for objective modes.",
+    "Operation retry opens the draft from the death screen, preserves mission and route, and restarts at encounter one.",
+    "Operation controls and targets occupy safe arena ground; escort carts navigate real walls; HUNT and authored finales wait for and resolve their intended enemies.",
+    "Sabotage reinforcement starts outside respite; boss-first completion cannot softlock the final interaction; pause excludes simulation time and keyboard/touch/controller held inputs combine correctly."
+  ],
+  "validation": "Exact source 65f983937142 passed GitHub Actions 34926899773: 260 files / 1,639 tests. Strict lint, deployable build, public contract (28 files), claims, schema, security and supply-chain gates passed. All 12 modes received natural-input browser runs; Extraction and Bot Royale reached victory. Six assisted Operation routes completed 42 encounters with zero objective failures or browser errors; all six pause checks passed. Sixty-four hash-bound before/after captures cover dark/light and desktop/mobile. Production 7cb07a99 and callofdoodie.wtf report 65f983937142; shell 7/7 and desktop/mobile play, audio suspend/resume and six directly inspected production states passed.",
+  "limits": "Assisted Operation runs used boosted health, position setup and lethal damage through the real enemy lifecycle; they did not force encounter indices or completion counters. Natural runs used normal controls. Physical gamepads/devices, participant balance and subjective audio listening remain unmeasured. FORGE/public-unlaunched status is unchanged.",
+  "production": {
+    "verifiedAt": "2026-09-15T04:01:19.857Z",
+    "commit": "65f983937142c533231bd94f0d3d7685d4dd4658",
+    "production": "https://callofdoodie.wtf",
+    "immutableProduction": "https://7cb07a99.call-of-doodie.pages.dev",
+    "staging": "https://f04e0cf1.call-of-doodie.pages.dev",
+    "workflow": 34926899773,
+    "ci": "success",
+    "tests": 1639,
+    "files": 260,
+    "shellAssertions": 7,
+    "productionRevision": "65f983937142",
+    "browser": {
+      "desktop": {
+        "errors": [],
+        "actions": [
+          {
+            "step": 0,
+            "type": "weapon-swap"
+          },
+          {
+            "type": "mute-cycle",
+            "before": {
+              "state": "running",
+              "rms": 0.0018097861650787658,
+              "peak": 0.0036355312913656235
+            },
+            "muted": {
+              "state": "suspended",
+              "rms": 0.001590304912162414,
+              "peak": 0.0024243686348199844
+            },
+            "resumed": {
+              "state": "running",
+              "rms": 0.00904096197142186,
+              "peak": 0.030500901862978935
+            }
+          },
+          {
+            "step": 28,
+            "modal": "WAVE 1 CLEAR!"
+          }
+        ]
+      },
+      "mobile": {
+        "errors": [],
+        "actions": [
+          {
+            "step": 0,
+            "type": "weapon-swap"
+          },
+          {
+            "type": "mute-cycle",
+            "before": {
+              "state": "running",
+              "rms": 0.0013693065890383687,
+              "peak": 0.0022560989018529654
+            },
+            "muted": {
+              "state": "suspended",
+              "rms": 0.0030247894085277875,
+              "peak": 0.01949169486761093
+            },
+            "resumed": {
+              "state": "running",
+              "rms": 0.022985644289389782,
+              "peak": 0.047622326761484146
+            }
+          }
+        ]
+      }
+    },
+    "visual": "Six final production states directly inspected",
+    "workingTree": "clean",
+    "localServer": "stopped"
+  },
+  "closeout": {
+    "intent": "explicit-founder",
+    "writeback": "10 surfaces reconciled",
+    "silScore": 950,
+    "scaffold": {
+      "tasks": 4,
+      "done": 4,
+      "inProgress": 0,
+      "open": 0
+    },
+    "state": "pre-publication",
+    "doctor": {
+      "passing": 169,
+      "warning": 48,
+      "failing": 1,
+      "blockingFailing": 0,
+      "advisoryFailing": 1
+    },
+    "ignis": {
+      "score": 44466,
+      "tier": "FORGE",
+      "date": "2026-09-15"
+    },
+    "cdr": "Appended to existing ignored local creative-direction ledger; direction summary preserved in signed Ark session impact cargo.",
+    "arkCargo": "01K2HKTE50775B1C1A798AB8D2",
+    "releaseReview": "Independent read-only record-maintenance review passed; no runtime/UI/dependency/workflow changes or material contradictions; exact new workflow verification follows push."
+  }
+}

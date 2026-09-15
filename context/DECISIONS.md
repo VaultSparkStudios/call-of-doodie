@@ -1502,3 +1502,15 @@ CANON-045 remains an existing external identity gap; CANON-054's conformance che
 Keep original gameplay under Classic Survival, with a direct entry before collapsed Operations. Distinguish different objectives from challenge rules without changing replay IDs. Preserve Boss Rush's three warmups and endless character; give the six-boss objective its explicit solo plan. One lost Throne permits a retake, preserving the documented second-loss ending. Run clocks use reset simulation frames.
 
 Browser outcome fixtures and normal input runs are separate evidence. No balance/retention or physical-controller claim follows from automated completion. No dependencies, paid per-player services, identity or licensing changes were introduced.
+
+
+## 2026-09-15 — S177 follow-through evidence and retry semantics
+
+Objective replay starts the same objective and never attaches a generic survival drill. Operation mission and route survive defeat; draft remains available outside the menu screen. Field objective geometry and escort navigation share actual arena collision evidence.
+
+Full Operation sequences are assisted functional evidence, not human balance proof. Normal controls reached real Extraction and Bot Royale wins. Preserve the existing S177 score and session identity; update derived artifacts without duplicating session snapshots. Record-only closeout deploy follows the already verified gameplay staging candidate.
+
+
+### S177 derived snapshot refresh
+
+The canonical genome writer still keys by date plus session and appended a second S177 row during this closeout. Reconciled only the current generated S177 snapshot into its existing session slot; prior historical rows are unchanged. The six historical defects remain visible to the genome ledger gate. IGNIS uses the installed CLI with this repository as its explicit target, because the touched-repository wrapper is scoped to the control plane.

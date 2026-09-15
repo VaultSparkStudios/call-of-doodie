@@ -1821,3 +1821,14 @@ Controlled boss lethal damage exposed a missing retainLastMatchingInPlace refere
 Closeout renderer produced a second S177 snapshot after UTC date rollover. Reconciled only this newly created duplicate into the existing S177 row, preserving the original session date and delta. Historical debt entries were not changed or waived. Portfolio doctor exited0 with blockingFailing0 (153 green,53 warnings,1 advisory failure); this is not a perfect project health score.
 
 S177 final mode production seal (2026-09-15T01:41:30.290Z): Production 4eab033d534f verified: CI successful, edge revision matched, public shell 7/7 passed. Desktop Classic reached wave 2; mobile Boss Gauntlet reached a normal death screen. Real keyboard/touch playtests and audio mute/resume passed without browser errors; six production captures were visually inspected. Evidence: docs/visual-qa/modes-2026-09-14/production.json. A following documentation-only commit records this completed runtime release.
+
+
+## 2026-09-15 — S177 final follow-through closeout
+
+Operation objectives, navigation, transitions and retries work through all six routes; objective debriefs match actual outcomes.
+
+Exact source 65f983937142 passed GitHub Actions 34926899773: 260 files / 1,639 tests. Strict lint, deployable build, public contract (28 files), claims, schema, security and supply-chain gates passed. All 12 modes received natural-input browser runs; Extraction and Bot Royale reached victory. Six assisted Operation routes completed 42 encounters with zero objective failures or browser errors; all six pause checks passed. Sixty-four hash-bound before/after captures cover dark/light and desktop/mobile. Production 7cb07a99 and callofdoodie.wtf report 65f983937142; shell 7/7 and desktop/mobile play, audio suspend/resume and six directly inspected production states passed.
+
+Assisted Operation runs used boosted health, position setup and lethal damage through the real enemy lifecycle; they did not force encounter indices or completion counters. Natural runs used normal controls. Physical gamepads/devices, participant balance and subjective audio listening remain unmeasured. FORGE/public-unlaunched status is unchanged.
+
+Founder explicitly requested all memory/context/CDR/task-board writebacks and direct-main commit, push and deploy. No hook bypass used.

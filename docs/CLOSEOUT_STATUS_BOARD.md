@@ -10,11 +10,10 @@
 ║  Live:  preview  →  https://callofdoodie.wtf/                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ Classic Survival has its own original-game card and play but  ║
-║  ✓ Descriptions explain Boss Rush warmups, endless Timed Surviv  ║
-║  ✓ Boss Gauntlet opens with a boss and advances through six dis  ║
-║  ✓ Throne recovery reactivates the first lost point after the r  ║
-║  ✓ Score Attack shows time remaining; Timed Survival shows tent  ║
+║  ✓ Objective debrief advice and every replay action use the act  ║
+║  ✓ Operation retry opens the draft from the death screen, prese  ║
+║  ✓ Operation controls and targets occupy safe arena ground; esc  ║
+║  ✓ Sabotage reinforcement starts outside respite; boss-first co  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 950/1000 ═══════════════════════════════════════╗
 ║    Dev Health         98   ██████████                            ║
@@ -41,23 +40,23 @@
 ║  · agent memory (Claude/Codex project memory)                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 20 files  ·  M:13 A:0 D:0 ?:7                          ║
+║  Changes: 20 files  ·  M:18 A:0 D:0 ?:2                          ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ DEPLOYMENT ══════════════════════════════════════════════════╗
-║  Staging:  https://138eef33.call-of-doodie.pages.dev  ·  cloudf  ║
+║  Staging:  https://f04e0cf1.call-of-doodie.pages.dev  ·  cloudf  ║
 ║  Live:     https://callofdoodie.wtf/  ·  preview/FORGE (not yet  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
-║  Doctor:        167/221                                          ║
+║  Doctor:        169/221                                          ║
 ║  Compliance:    —                                                ║
-║  Tests:         257/257                                          ║
+║  Tests:         260/260                                          ║
 ║  Validation:    full-fresh                                       ║
-║  IGNIS:         6d ago                                           ║
+║  IGNIS:         0d ago                                           ║
 ║  Truth:         engineering-ready-sparked-no-go                  ║
-║  Sanitization:  1d ago                                           ║
-║  shells:        18 started · 18 closed · 0 running               ║
+║  Sanitization:  0d ago                                           ║
+║  shells:        3 started · 3 closed · 0 running                 ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ NEXT SESSION ════════════════════════════════════════════════╗
 ║  (no genius cache — run `node scripts/cache-genius-list.mjs`)    ║

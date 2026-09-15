@@ -20,13 +20,13 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ LAST SESSION (S177) - WHAT SHIPPED ══════════════════════════╗
-║  S177 (2026-09-11, from SIL ledger): Total: 950/1000 | Velocity  ║
+║  S177 final: Operation/replay follow-through complete; 260 file  ║
 ║  Tests  -                                                        ║
 ║  Deploy -                                                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ WHERE TO TEST · Call-Of-Doodie ══════════════════════════════╗
-║  Unit tests    → npm test — 257/257 passing ✓                    ║
+║  Unit tests    → npm test — 260/260 passing ✓                    ║
 ║  hosted-visual-proof → session-169-staging · route/theme/wid ✓   ║
 ║  production-verification → source ca1324136f8c · workflow 34 ✓   ║
 ║  hosted-staging → session-170-staging · immutable 520a56d6 · ✓   ║
@@ -64,31 +64,31 @@
 
 ╔══ WHERE WE LEFT OFF  ·  Session 177 ═══════════════════════════╗
 ║  Shipped:  see LATEST_HANDOFF.md                                 ║
-║  Tests:    257/257 passing  ·  Deploy: N/A                       ║
+║  Tests:    260/260 passing  ·  Deploy: N/A                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
 ║  ⚠  ░░░░░░░░░░░░░░░░░░░░░░░░    1% used                          ║
-║     296,714 / 200,000 tok  ·  unknown  ·  heuristic-stale        ║
+║     298,824 / 200,000 tok  ·  unknown  ·  heuristic-stale        ║
 ║     Verdict: CONSIDER_CLOSEOUT  ← act now                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         257/257 passing (2026-09-14T06:15:24.550Z)     ║
+║  ✓  Tests         260/260 passing (2026-09-15T04:01:19.857Z)     ║
 ║  ✓  Velocity      5 ↑  ·  Debt: ↓                                ║
 ║  ✓  Runway        selected S177 audit complete; production…      ║
 ║  ⛔  Context age   ?d                                             ║
-║  ✓  IGNIS         43701 FORGE  ·  6d old                         ║
-║  ⛔  Truth         Mode fixes, visual/audio corrections and…      ║
+║  ✓  IGNIS         44466 FORGE  ·  0d old                         ║
+║  ⛔  Truth         Operation and objective replay fixes are…      ║
 ║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs…        ║
-║  ✓  Genome dims   all stable  (22/25)                            ║
+║  ✓  Genome dims   all stable  (23/25)                            ║
 ║  ✓  Entropy       0.207  (healthy)                               ║
 ║  ✓  CDR           no gap detected                                ║
 ║  ✓  Patterns      no recurring pressure detected                 ║
 ║  ✓  Templates     v3.3 aligned                                   ║
 ║  ⛔  Revenue sig.  not found  ⚠ stale                             ║
 ║  ✓  Deploy gaps   no gaps (run: ops deploy-gaps)                 ║
-║  ⛔  Doctor        167/221 (77%)  ·  1 failing                    ║
+║  ⛔  Doctor        169/221 (78%)  ·  1 failing                    ║
 ║  ⚠  Codex trust   local hooks/config not trusted                 ║
 ║  ✓  Canon adopt.  0/54 pending review                            ║
 ║  ✓  Cost          flat-rate Max Plan · usage ledger…             ║
@@ -116,7 +116,7 @@
 ╔══ MOMENTUM METER ══════════════════════════════════════════════╗
 ║  Velocity:   ▂▂▂▄▄  5↑  (last 5 sessions)                        ║
 ║  Intent:     ?% achieved last 5                                  ║
-║  Streak:     — (last intent not achieved)                        ║
+║  Streak:     ✓ 10 consecutive achieved-intent sessions           ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIL FORECAST (next session) ═════════════════════════════════╗
@@ -138,10 +138,7 @@
 ║  4. [SIL:1] [DATA-BLOCKED S147] Theme-prop atlas L2 expansion —  ║
 ║  extend `theme-prop-atlas-v1.webp` from 16 to ~32 cells only     ║
 ║  after production feedback confirms the current...               ║
-║  5. [SIL:1] [S62 deferred] HomeV2 v1 fallback retirement — gate  ║
-║  on ≥200ms Lighthouse LCP improvement confirmed on production    ║
-║  (human measurement required) [data-blocked]                     ║
-║  6. Discord invite/community link when the community entry       ║
+║  5. Discord invite/community link when the community entry       ║
 ║  point is ready [community-blocked]                              ║
 ╚════════════════════════════════════════════════════════════════╝
 

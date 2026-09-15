@@ -1,3 +1,15 @@
+## Session 177 — Final Operation and replay follow-through
+
+- [x] **DONE S177** Objective debrief advice and every replay action use the actual mode outcome; survival drills and wave-skip practice are suppressed for objective modes.
+- [x] **DONE S177** Operation retry opens the draft from the death screen, preserves mission and route, and restarts at encounter one.
+- [x] **DONE S177** Operation controls and targets occupy safe arena ground; escort carts navigate real walls; HUNT and authored finales wait for and resolve their intended enemies.
+- [x] **DONE S177** Sabotage reinforcement starts outside respite; boss-first completion cannot softlock the final interaction; pause excludes simulation time and keyboard/touch/controller held inputs combine correctly.
+- [x] **DONE S177** Complete extended natural mode tests, all six assisted Operation routes, final visual/audio verification and exact production deployment.
+
+Exact source 65f983937142 passed GitHub Actions 34926899773: 260 files / 1,639 tests. Strict lint, deployable build, public contract (28 files), claims, schema, security and supply-chain gates passed. All 12 modes received natural-input browser runs; Extraction and Bot Royale reached victory. Six assisted Operation routes completed 42 encounters with zero objective failures or browser errors; all six pause checks passed. Sixty-four hash-bound before/after captures cover dark/light and desktop/mobile. Production 7cb07a99 and callofdoodie.wtf report 65f983937142; shell 7/7 and desktop/mobile play, audio suspend/resume and six directly inspected production states passed.
+
+Scaffold: 4 follow-through tasks done; 0 in progress; 0 open. Participant and physical-device evidence stays separate.
+
 ## Session 177 — Mode clarity and live playtest follow-through
 
 - [x] **DONE S177** Classic Survival has its own original-game card and play button; alternate modes and survival challenges share a readable desktop/mobile picker.
@@ -8,7 +20,7 @@
 - [x] **DONE S177** Boss defeat effects use the existing runtime helper; App now rejects undefined references during lint. Boss intro geometry is centered and honors reduced motion.
 
 
-Validation: 257 files / 1,608 tests passed; strict lint and deployable build passed; public contract 28 files and claims passed; dependency audit zero vulnerabilities. Seventeen short natural-input runs cover all twelve desktop modes and Classic plus four new mobile modes. Four controlled six-boss sequences reached victory. Sixteen browser clock/ending cases and four Classic/Operation launch transitions passed. Seven Throne recovery paths were simulated independently. Final visual receipt and production promotion are being sealed.
+Validation: 257 files / 1,608 tests passed; strict lint and deployable build passed; public contract 28 files and claims passed; dependency audit zero vulnerabilities. Seventeen short natural-input runs cover all twelve desktop modes and Classic plus four new mobile modes. Four controlled six-boss sequences reached victory. Sixteen browser clock/ending cases and four Classic/Operation launch transitions passed. Seven Throne recovery paths were simulated independently. Superseded by the verified S177 final follow-through receipt below.
 
 ## Session 177 — Runtime promises and upgrade composition
 
@@ -599,10 +611,10 @@ First checkpoint the bounded post-S159 propagation/CI/deploy recovery. Then begi
 
 ## Next
 
-- [ ] Review end-of-run advice wording for objective victories and timed completion; accelerated fixtures expose survival-oriented recommendations after successful objectives.
+- [x] **DONE S177** Objective victory/loss advice and all retry actions now follow the actual objective receipt; timed-mode checks and objective replay guards pass.
 - [ ] Collect longer participant playtests for the four objective modes and all three Operations; short scripted input checks and controlled endings do not establish balance or physical-device feel.
-- [ ] [SIL:2] **S176 carry** Derive perk / meta-tree description numbers from the same values `apply` uses — the DUP class (~30 agreeing hand-typed numbers) produced every S176 drift. Start with the four perks `src/config/copyTruth.test.js` already pins behaviorally.
-- [ ] [SIL:1] **S176 carry** Boss bonus abilities Clone Decoy and Lifesteal (`BOSS_ABILITY_POOL`) set flags nothing reads, so a boss that rolls them gets fewer real abilities. Never shown to players. Deleting them changes the seeded pick distribution (`gameHelpers.seededSpawn.test.js` snapshots `_bonusAbilities`); wiring them is new boss behavior — decide which with a balance pass, not unattended.
+- [ ] [SIL:2] **S177 remainder** Derive ordinary-perk description numbers from the same values apply uses; meta upgrade/tree facts are already shared. Start with court-pinned ordinary perks.
+- [x] [SIL:1] **DONE S177** Clone Decoy and Lifesteal have tested runtime consumers: finite visual ghosts and healing only after real bullet damage.
 - [x] [SIL:2] **DONE S84** Dev-toolchain vulnerability remediation — package-trust false positive for exact `vitest` was fixed in Studio Ops, then Call-Of-Doodie upgraded to `vitest@4.1.8`, `@vitest/coverage-v8@4.1.8`, `vite@7.3.5`, `@vitejs/plugin-react@5.1.4`, and exact npm overrides for patched transitive packages. Validation: `npm audit --json` 0 vulnerabilities, tests/build/e2e green.
 - [x] [SIL:3] **DONE S84** Playwright pointer 360 harness — `@playwright/test@1.60.0`, `playwright.config.ts`, and `tests/pointer-360.spec.ts` now drive the real canvas through `?debug=input` and assert the debug HUD reaches `pointer:4/4`.
 - [x] [SIL:2] **DONE S84** Adaptive enemy difficulty curve — repeated killer history now feeds spawn dampening and the run-start "Adapted for you" feedback chip in the current worktree.
@@ -613,7 +625,7 @@ First checkpoint the bounded post-S159 propagation/CI/deploy recovery. Then begi
 - [ ] [SIL:2] Supabase Auth + Obelisk account bridge — implement magic-link/Google Auth, profiles, nullable leaderboard `user_id`, guest-to-account migration, and signed migration/callsign claim receipts.
 - [x] [SIL:1] **DONE S124 bounded slice** First-session control calibration — the target ring now observes real keyboard, pointer/touch, and gamepad direction evidence, disables verification until 4/4, and expires proof after 30 days. Analog dead-zone drift measurement remains part of physical device QA, not a fabricated local claim.
 - [x] [SIL:2] **DONE S68** Replay command trace contract — client trace binding already shipped in S67; S68 updates `validate-replay` to accept `traceDigest`/`traceLength` as a trace-backed replay contract and updates `submit-score` to reject malformed trace metadata before leaderboard insert.
-- [ ] [SIL:1] HomeV2/MenuScreen retirement gate — once Lighthouse + funnel data confirms HomeV2 wins, remove the legacy `?home=v1` path and reclaim the `MenuScreen` chunk
+- [x] [SIL:1] **DONE S163** Legacy HomeV3/MenuScreen and the home query switch were retired; current landing/menu surfaces own navigation.
 - [ ] [SIL:1] [DATA-BLOCKED S154] [S144] Mobile touch button-size/density control — the descoped half of the S144 mobile-handedness audit item; add a touch-zone size/density setting once real mobile usage signals which sizes matter (`SETTINGS_DEFAULTS`, `MobileHUD.jsx`)
 - [x] [SIL:1] **DONE (already resolved, closed S172)** [S144] Off-screen threat arrow ADS-zoom correction — verified live: `getOffscreenThreatArrows` (`src/utils/offscreenIndicators.js`) already projects enemy positions through `worldToThreatScreenPoint` (zoom + camX/camY-aware) before edge projection, and `drawGame.js` passes `zoom: gs.adsZoom ? 1.28 : 1` plus explicit camera offsets with a code comment stating the compass is "screen-space by contract." `offscreenIndicators.test.js` covers the unzoomed-vs-zoomed case directly. The described world-space drift does not exist in current code; this line was stale.
 - [ ] [SIL:2] Supabase Auth integration per `docs/AUTH_INTEGRATION_PLAN.md` — magic-link + Google OAuth, profiles table, leaderboard user_id backfill, grace-period dual-path on submit-score; trigger when traffic warrants or paid tier ships
@@ -740,7 +752,7 @@ First checkpoint the bounded post-S159 propagation/CI/deploy recovery. Then begi
 - [x] [SIL:2] **DONE S114** [S62 deferred] Coordinated enemy formations — wave-20+ spawn planning now promotes pressure/climax spawns into deterministic PINCER / ESCORT / FLANK archetypes with lane/role metadata and telemetry (`formationSet`); focused waveDirector tests cover cadence and bounds. Validation: focused 20/20, lint, full 596/596, build, replay gates, launch media check.
 - [x] [SIL:1] **DONE S117** [S62 deferred] Mid-run challenge contracts — optional per-wave bonus-coin objectives now spawn only when no Dynamic Objective is active, resolve on wave clear, render a HUD contract chip, and record completion/failure receipts in the existing objective summary. Validation: focused objectiveDirector 12/12, lint, full 603/603, build, replay gates, launch media check.
 - [x] [SIL:1] **DONE S68** [S62 deferred] Input-timeline digest contract — compact command trace metadata now reaches the edge contract (`traceDigest` + `traceLength`); deterministic resim remains a separate runner/storage milestone.
-- [ ] [SIL:1] [S62 deferred] HomeV2 v1 fallback retirement — gate on ≥200ms Lighthouse LCP improvement confirmed on production (human measurement required)
+- [x] [SIL:1] **DONE S163** Legacy home fallback retirement shipped; historical performance observations remain evidence, not an active removal task.
 - [x] [SIL:1] [S101 follow-up] **DONE S118** Full five-scene screenshot replacement — all five manifest screenshots now point at verified browser PNG captures for combat, Boss Rush, Loadout Builder, leaderboard, and mobile controls; `npm run launch:media-check` enforces browser-capture provenance and dimensions.
 - [x] [SIL:1] [S101 follow-up] **DONE S111** Death-submit extraction slice 2 — `deathFlow.js` now owns DeathScreen props plus debrief/score-submit fallback Studio event planning through tested pure builders.
 
@@ -749,4 +761,4 @@ First checkpoint the bounded post-S159 propagation/CI/deploy recovery. Then begi
 - cross-repo item owned by another repo agent:
 - [x] [SIL:2] **DONE S107** Deploy gate repair — `scripts/render-startup-brief.mjs` now normalizes plain `generate-genius-list --brief` output into a canonical boxed `GENIUS HIT LIST`, always renders a `HUMAN PRESSURE` tile with an honest empty state, and GitHub Actions has the missing Cloudflare Pages deploy secrets restored from the Studio Ops gateway. Validation: brief validator, lint, 550/550 tests, and build passing.
 
-- [ ] Investigate pre-existing Gauntlet initial arena sizing and clipped world-space perk toast; reproduced in both S176 production baseline and S177 staging captures.
+- [x] **DONE S177** Arena sizing, safe spawning and clipped world-space feedback were repaired and visually verified before the final mode and Operation follow-through.

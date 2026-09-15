@@ -28,3 +28,8 @@ Production 4eab033d534f verified: CI successful, edge revision matched, public s
 - [x] Desktop/mobile/theme visual review, regressions and release candidate preparation.
 
 Release sequence: immutable staging verification, exact-revision main CI/deployment, then production health and live-input checks. Detailed evidence: [playtest follow-up](PLAYTEST_FOLLOWUP_2026-09-14.md).
+
+
+## Final release reconciliation — 2026-09-15
+
+All four follow-through tasks complete; 0 in progress and 0 open. Staging f04e0cf1 verified before exact main workflow 34926899773 succeeded. Production 7cb07a99 serves 65f983937142 and passes shell 7/7 plus desktop/mobile input and audio checks. Formal record-only closeout follows this verified gameplay release.

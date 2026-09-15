@@ -2,20 +2,26 @@
 
 ## Where We Left Off (Session 177)
 
-Classic Survival is easy to find; mode objectives, boss progression, throne recovery and per-run clocks are corrected.
+Session Intent: Repair visuals/audio, make the original mode and alternatives clear, test every mode and all Operations, then finish closeout and deployment.
+Intent outcome: Achieved for the requested engineering work.
 
-- Classic Survival has its own original-game card and play button; alternate modes and survival challenges share a readable desktop/mobile picker.
-- Descriptions explain Boss Rush warmups, endless Timed Survival, optional Boss Gauntlet par, Extraction exit thresholds and Throne retry; numeric copy stays derived from gameplay facts.
-- Boss Gauntlet opens with a boss and advances through six distinct solo fights; the sixth defeat ends in victory without a seventh wave.
-- Throne recovery reactivates the first lost point after the remaining captures; a second loss ends the run. The retake notice fits mobile screens.
-- Score Attack shows time remaining; Timed Survival shows tenths; clocks reset each run. Classic and Operations clear previously selected alternate-mode flags.
-- Boss defeat effects use the existing runtime helper; App now rejects undefined references during lint. Boss intro geometry is centered and honors reduced motion.
+Operation objectives, navigation, transitions and retries work through all six routes; objective debriefs match actual outcomes.
 
-Validation: 257 files / 1,608 tests passed; strict lint and deployable build passed; public contract 28 files and claims passed; dependency audit zero vulnerabilities. Seventeen short natural-input runs cover all twelve desktop modes and Classic plus four new mobile modes. Four controlled six-boss sequences reached victory. Sixteen browser clock/ending cases and four Classic/Operation launch transitions passed. Seven Throne recovery paths were simulated independently. Production 4eab033d534f verified: CI successful, edge revision matched, public shell 7/7 passed. Desktop Classic reached wave 2; mobile Boss Gauntlet reached a normal death screen. Real keyboard/touch playtests and audio mute/resume passed without browser errors; six production captures were visually inspected.
+- Objective debrief advice and every replay action use the actual mode outcome; survival drills and wave-skip practice are suppressed for objective modes.
+- Operation retry opens the draft from the death screen, preserves mission and route, and restarts at encounter one.
+- Operation controls and targets occupy safe arena ground; escort carts navigate real walls; HUNT and authored finales wait for and resolve their intended enemies.
+- Sabotage reinforcement starts outside respite; boss-first completion cannot softlock the final interaction; pause excludes simulation time and keyboard/touch/controller held inputs combine correctly.
 
-Earlier session fixes to upgrade promises, boss abilities, arena sizing, safe spawning, health HUD and audio mixing remain in production history and retained visual/audio receipts.
+Exact source 65f983937142 passed GitHub Actions 34926899773: 260 files / 1,639 tests. Strict lint, deployable build, public contract (28 files), claims, schema, security and supply-chain gates passed. All 12 modes received natural-input browser runs; Extraction and Bot Royale reached victory. Six assisted Operation routes completed 42 encounters with zero objective failures or browser errors; all six pause checks passed. Sixty-four hash-bound before/after captures cover dark/light and desktop/mobile. Production 7cb07a99 and callofdoodie.wtf report 65f983937142; shell 7/7 and desktop/mobile play, audio suspend/resume and six directly inspected production states passed.
+
+Deploy: gameplay source 65f983937142 deployed to production; this record-only closeout will trigger the same main deployment workflow. Final receipt: audits/2026-09-15.json.
 
 ## Next
 
-- Release is verified; continue with the follow-ups below.
-- Review objective-aware result advice and collect participant balance evidence. Physical controllers were not tested; mapping tests use synthetic inputs. No claim that every mode or Operation was naturally completed.
+- Collect representative participant runs and physical controller/mobile evidence before balancing difficulty.
+- Continue ordinary-perk fact derivation; meta upgrade/tree facts already share runtime constants.
+- Review the Developer ability timer/telegraph contract against runtime before changing its promises.
+
+Assisted Operation runs used boosted health, position setup and lethal damage through the real enemy lifecycle; they did not force encounter indices or completion counters. Natural runs used normal controls. Physical gamepads/devices, participant balance and subjective audio listening remain unmeasured. FORGE/public-unlaunched status is unchanged.
+
+The append-only S177 SIL assessment stays 950/1000; these are follow-through fixes, not a new numbered session.

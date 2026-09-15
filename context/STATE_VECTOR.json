@@ -1,9 +1,9 @@
 {
   "vectorVersion": "1.0",
   "generatedAt": "2026-09-15",
-  "generatedAtMs": 1789436491721,
+  "generatedAtMs": 1789446063047,
   "session": 177,
-  "vectorHash": "b77457064475e614",
+  "vectorHash": "e0aefa6a6e1c9303",
   "silTotal": 950,
   "silAvg3": 982.3,
   "velocity": 5,
@@ -11,7 +11,7 @@
   "runway": "selected S177 audit complete; production verification complete",
   "intentRate": "not recomputed",
   "openNow": 3,
-  "openNext": 9,
+  "openNext": 6,
   "openBlocked": 0,
   "topNow": [
     "[SIL:2] [BLOCKER S61] [S60 follow-up · narrowed S112] Update PostHog/Sentry/Ko-f",
@@ -19,22 +19,22 @@
     "[Human/Data] [SIL:1] HomeV2 analytics funnel — compare `home_v2_deploy` vs legac"
   ],
   "topNext": [
-    "Review end-of-run advice wording for objective victories and timed completion; a",
     "Collect longer participant playtests for the four objective modes and all three ",
-    "[SIL:2] **S176 carry** Derive perk / meta-tree description numbers from the same"
+    "[SIL:2] **S177 remainder** Derive ordinary-perk description numbers from the sam",
+    "[SIL:2] Supabase Auth + Obelisk account bridge — implement magic-link/Google Aut"
   ],
   "health": "green",
-  "truthStatus": "Mode fixes, visual/audio corrections and controlled outcomes verified; production deployed and verified.",
+  "truthStatus": "Operation and objective replay fixes are tested and production-verified; formal record reconciliation complete. SPARKED evidence remains incomplete.",
   "genome": null,
-  "ignisScore": 43701,
+  "ignisScore": 44466,
   "ignisGrade": "FORGE",
-  "ignisAgeDays": 6,
+  "ignisAgeDays": 0,
   "name": "Call-Of-Doodie",
   "slug": "call-of-doodie",
   "type": null,
   "lifecycle": "deployed",
-  "nextMilestone": "Objective-aware debrief advice and participant balance evidence.",
-  "currentFocus": "Classic Survival is easy to find; mode objectives, boss progression, throne recovery and per-run clocks are corrected.",
+  "nextMilestone": "Participant/device evidence and ordinary-perk fact derivation.",
+  "currentFocus": "Operation objectives, navigation, transitions and retries work through all six routes; objective debriefs match actual outcomes.",
   "lastShipped": "see LATEST_HANDOFF.md",
   "blockers": [
     "PostHog and project-scoped Sentry evidence remain unavailable; provider readiness is not represented as verified telemetry.",
