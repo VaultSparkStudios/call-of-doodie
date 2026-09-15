@@ -149,21 +149,27 @@
   "runtimeUrl": "https://callofdoodie.wtf/",
   "stagingType": "cloudflare-pages",
   "stagingUrl": "https://f04e0cf1.call-of-doodie.pages.dev",
-  "testsLastRun": "2026-09-15T04:01:19.857Z",
+  "testsLastRun": "2026-09-15T04:32:39.879Z",
   "sanitizationLastCleared": "2026-09-15",
   "sessionShellHygiene": {
     "session": 177,
-    "enumeratedAt": "2026-09-15T04:20:59.476Z",
-    "started": 3,
-    "closed": 3,
+    "enumeratedAt": "2026-09-15T04:32:39.879Z",
+    "started": 9,
+    "closed": 9,
     "running": 0,
-    "scope": "Recovered follow-through Vite server 53593 and closeout command sessions 23448,31393; earlier 18-session mode-review ledger remains in git history.",
+    "scope": "Formal closeout phase yielded exec sessions only; earlier mode-review and gameplay server ledgers are retained in history.",
     "sessions": [
-      53593,
       23448,
-      31393
+      31393,
+      11375,
+      5532,
+      85488,
+      78796,
+      95025,
+      97413,
+      85142
     ],
-    "evidence": "Vite stopped in gameplay follow-through; both closeout sessions exited 0; CIM enumeration found no owned node test/server process."
+    "evidence": "All nine yielded sessions have exit receipts; final CIM enumeration found no owned node test/server/autopilot process. No beacon is configured and session lock is absent."
   },
   "doctorScore": {
     "date": "2026-09-15",
@@ -196,10 +202,10 @@
   "testsBudgetExhausted": false,
   "silAvg5": 987.6,
   "testsAssertionsDeferred": [],
-  "testsAssertionsLastRun": "2026-09-15T04:01:19.857Z",
+  "testsAssertionsLastRun": "2026-09-15T04:32:39.879Z",
   "lastShipped": "Objective debrief advice and every replay action use the actual mode outcome; survival drills and wave-skip practice are suppressed for objective modes. Operation retry opens the draft from the death screen, preserves mission and route, and restarts at encounter one. Operation controls and targets occupy safe arena ground; escort carts navigate real walls; HUNT and authored finales wait for and resolve their intended enemies. Sabotage reinforcement starts outside respite; boss-first completion cannot softlock the final interaction; pause excludes simulation time and keyboard/touch/controller held inputs combine correctly.",
   "truthStatus": "Operations, objective retries and visuals/audio verified; gameplay production deployed.",
   "testsFocusedSupplement": null,
-  "lastDeployCommit": "65f983937142c533231bd94f0d3d7685d4dd4658",
-  "lastDeployAt": "2026-09-15T04:01:19.857Z"
+  "lastDeployCommit": "47182750c90f4570de7e63513bbf0958955ce5b7",
+  "lastDeployAt": "2026-09-15T04:32:39.879Z"
 }

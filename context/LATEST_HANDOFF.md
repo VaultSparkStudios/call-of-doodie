@@ -14,7 +14,7 @@ Operation objectives, navigation, transitions and retries work through all six r
 
 Exact source 65f983937142 passed GitHub Actions 34926899773: 260 files / 1,639 tests. Strict lint, deployable build, public contract (28 files), claims, schema, security and supply-chain gates passed. All 12 modes received natural-input browser runs; Extraction and Bot Royale reached victory. Six assisted Operation routes completed 42 encounters with zero objective failures or browser errors; all six pause checks passed. Sixty-four hash-bound before/after captures cover dark/light and desktop/mobile. Production 7cb07a99 and callofdoodie.wtf report 65f983937142; shell 7/7 and desktop/mobile play, audio suspend/resume and six directly inspected production states passed.
 
-Deploy: gameplay source 65f983937142 deployed to production; this record-only closeout will trigger the same main deployment workflow. Final receipt: audits/2026-09-15.json.
+Deploy: closeout 47182750c90f deployed to production 4f370a9d; workflow 34928998935 passed 260 files / 1,639 tests. Live revision matched and shell 7/7 passed. Gameplay remains source-equivalent to verified 65f983937142. A final documentation receipt commit seals these results. Final receipt: audits/2026-09-15.json.
 
 ## Next
 

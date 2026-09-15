@@ -97,7 +97,7 @@
       "inProgress": 0,
       "open": 0
     },
-    "state": "pre-publication",
+    "state": "published-and-production-verified",
     "doctor": {
       "passing": 169,
       "warning": 48,
@@ -112,6 +112,21 @@
     },
     "cdr": "Appended to existing ignored local creative-direction ledger; direction summary preserved in signed Ark session impact cargo.",
     "arkCargo": "01K2HKTE50775B1C1A798AB8D2",
-    "releaseReview": "Independent read-only record-maintenance review passed; no runtime/UI/dependency/workflow changes or material contradictions; exact new workflow verification follows push."
+    "releaseReview": "Independent read-only record-maintenance review passed; no runtime/UI/dependency/workflow changes or material contradictions; exact new workflow verification follows push.",
+    "commit": "47182750c90f4570de7e63513bbf0958955ce5b7",
+    "workflow": 34928998935,
+    "immutableProduction": "https://4f370a9d.call-of-doodie.pages.dev",
+    "verifiedAt": "2026-09-15T04:32:39.879Z",
+    "tests": {
+      "files": 260,
+      "assertions": 1639
+    },
+    "liveShell": {
+      "passed": 7,
+      "total": 7
+    },
+    "lockCleared": true,
+    "ownedProcessesRunning": 0,
+    "receiptSeal": "Final documentation-only commit records this completed deployment; its CI deployment is verified separately before session handoff."
   }
 }

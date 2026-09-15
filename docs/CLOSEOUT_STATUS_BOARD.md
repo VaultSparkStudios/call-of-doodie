@@ -40,7 +40,7 @@
 ║  · agent memory (Claude/Codex project memory)                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 20 files  ·  M:18 A:0 D:0 ?:2                          ║
+║  Changes: 6 files  ·  M:6 A:0 D:0 ?:0                            ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -56,7 +56,7 @@
 ║  IGNIS:         0d ago                                           ║
 ║  Truth:         engineering-ready-sparked-no-go                  ║
 ║  Sanitization:  0d ago                                           ║
-║  shells:        3 started · 3 closed · 0 running                 ║
+║  shells:        9 started · 9 closed · 0 running                 ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ NEXT SESSION ════════════════════════════════════════════════╗
 ║  (no genius cache — run `node scripts/cache-genius-list.mjs`)    ║
