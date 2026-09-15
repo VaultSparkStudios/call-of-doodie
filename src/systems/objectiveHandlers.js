@@ -7,6 +7,7 @@
 //
 // State lives on `gs.activeVerbObjective` so it survives resimulation.
 
+import { findSafeArenaSpawn } from "./arenaEnvironment.js";
 import { createZone, stepZones, ZONE_STATE } from "./zones.js";
 import { spawnAlly } from "./allyUnit.js";
 import { getRunRng } from "./runRng.js";
@@ -28,6 +29,7 @@ const HANDLERS = {
     start(gs, spec = {}, ctx) {
       const { W, H } = worldOf(gs, ctx);
       const door = { id: spec.targetId || "breach-door", x: spec.x ?? W * 0.85, y: spec.y ?? H * 0.5, w: 28, h: 120, hp: spec.hp || 600, maxHp: spec.hp || 600, kind: "door", alive: true };
+      Object.assign(door, findSafeArenaSpawn(gs, W, H, door, { radius: 64 }));
       gs.structures = (gs.structures || []).filter((s) => s.id !== door.id).concat(door);
       addText(gs, door.x, door.y - 80, "🚪 BREACH THE DOOR", "#FFB347", true);
       return { verb: "BREACH", doorId: door.id, reinforced: false };
@@ -92,7 +94,7 @@ const HANDLERS = {
   ESCORT: {
     start(gs, spec = {}, ctx) {
       const { W, H } = worldOf(gs, ctx);
-      const waypoints = spec.waypoints || [{ x: W * 0.2, y: H * 0.5 }, { x: W * 0.5, y: H * 0.25 }, { x: W * 0.8, y: H * 0.5 }];
+      const waypoints = (spec.waypoints || [{ x: W * 0.2, y: H * 0.5 }, { x: W * 0.5, y: H * 0.25 }, { x: W * 0.8, y: H * 0.5 }]).map(point => findSafeArenaSpawn({ obstacles: gs.obstacles || [] }, W, H, point));
       const cart = spawnAlly(gs, "roomba", { x: waypoints[0].x, y: waypoints[0].y });
       Object.assign(cart, { name: "Plunger Cart", emoji: "🛒", color: "#AA44FF", personality: "cart", untargetable: false, health: 220, maxHealth: 220, speed: 1.6, size: 30, order: "carry", waypoints, waypointIndex: 1 });
       addText(gs, cart.x, cart.y - 40, "🚚 ESCORT THE CART", "#AA44FF", true);
@@ -122,6 +124,7 @@ const HANDLERS = {
       const rng = getRunRng(gs, "director");
       target.x = rng() < 0.5 ? W * 0.1 : W * 0.9;
       target.y = H * (0.2 + rng() * 0.6);
+      Object.assign(target, findSafeArenaSpawn(gs, W, H, target));
       target.fleeing = true;
       target.huntMark = true;
       target.health = Math.round((target.maxHealth || target.health) * 2.5);
@@ -131,8 +134,12 @@ const HANDLERS = {
       addText(gs, target.x, target.y - 40, "🎯 HUNT TARGET", "#FFD700", true);
       return { verb: "HUNT", targetId: target._huntId };
     },
-    tick(gs, state) {
-      if (!state.targetId) return "failed";
+    tick(gs, state, ctx) {
+      if (!state.targetId) {
+        const acquired = HANDLERS.HUNT.start(gs, state.spec, ctx);
+        if (!acquired.targetId) return "active";
+        state.targetId = acquired.targetId;
+      }
       const target = (gs.enemies || []).find((e) => e._huntId === state.targetId);
       if (!target) return "done";
       if (target._defeatResolved) return "done";
@@ -149,17 +156,21 @@ const HANDLERS = {
     start(gs, spec = {}, ctx) {
       const { W, H } = worldOf(gs, ctx);
       const pump = { id: spec.targetId || "sabotage-pump", x: spec.x ?? W * 0.5, y: spec.y ?? H * 0.8, w: 60, h: 60, kind: "pump", alive: true, channel: 0, channelFrames: spec.seconds ? spec.seconds * 60 : 180 };
+      Object.assign(pump, findSafeArenaSpawn(gs, W, H, pump, { radius: 32 }));
       gs.structures = (gs.structures || []).filter((s) => s.id !== pump.id).concat(pump);
-      gs.maxEnemiesThisWave = (gs.maxEnemiesThisWave || 5) + 6;
       addText(gs, pump.x, pump.y - 60, "🔧 SABOTAGE THE PUMP · hold E", "#FF6600", true);
-      return { verb: "SABOTAGE", pumpId: pump.id };
+      return { verb: "SABOTAGE", pumpId: pump.id, surgeStarted: false };
     },
     tick(gs, state) {
       const pump = (gs.structures || []).find((s) => s.id === state.pumpId);
       if (!pump) return "failed";
+      if (!state.surgeStarted && !gs._waveTransitDone && !gs._respiteLock) {
+        gs.maxEnemiesThisWave = (gs.maxEnemiesThisWave || 5) + 6;
+        state.surgeStarted = true;
+      }
       const p = gs.player;
       const near = Math.hypot(p.x - pump.x, p.y - pump.y) < 70;
-      if (near && gs._interactHeld) pump.channel += 1;
+      if (near && (gs._interactHeld || gs._operationInteractHeld?.touch || gs._operationInteractHeld?.controller)) pump.channel += 1;
       else pump.channel = Math.max(0, pump.channel - 2);
       if (pump.channel >= pump.channelFrames) {
         pump.alive = false;
@@ -181,6 +192,7 @@ const HANDLERS = {
     start(gs, spec = {}, ctx) {
       const { W, H } = worldOf(gs, ctx);
       const exit = { id: "escape-exit", x: spec.x ?? W * 0.92, y: spec.y ?? H * 0.12, w: 60, h: 60, kind: "exit", alive: true };
+      Object.assign(exit, findSafeArenaSpawn(gs, W, H, exit, { radius: 32 }));
       gs.structures = (gs.structures || []).filter((s) => s.id !== exit.id).concat(exit);
       gs.alarm = Math.max(0, Number(spec.alarmStart) || 0);
       addText(gs, gs.player.x, gs.player.y - 50, "🚨 ALARM — GET TO THE EXIT", "#FF4444", true);
@@ -206,8 +218,11 @@ const HANDLERS = {
 
   // BOSS — completion is the boss defeat; the host's boss flow already owns it.
   BOSS: {
-    start() { return { verb: "BOSS" }; },
-    tick(gs) { return gs.bossWave && (gs.enemies || []).some((e) => e.isBossEnemy && !e._defeatResolved) ? "active" : "done"; },
+    start(gs) { return { verb: "BOSS", engaged: (gs.enemies || []).some(e => e.isBossEnemy && !e._defeatResolved) }; },
+    tick(gs, state) {
+      if ((gs.enemies || []).some(e => e.isBossEnemy && !e._defeatResolved)) { state.engaged = true; return "active"; }
+      return state.engaged ? "done" : "active";
+    },
     hud() { return { label: "BOSS", pct: 0, color: "#FF3333" }; },
   },
 };

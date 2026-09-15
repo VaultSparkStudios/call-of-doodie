@@ -13,6 +13,7 @@ import { getPlayerProjectileSpeed } from "../config/weeklyMutationRuntime.js";
 //   revive — move to a downed ally and revive (auto when idle and one is down)
 //   carry  — move along `waypoints` (ESCORT primitive); never shoots
 
+import { buildFlowField, sampleFlowField } from "./flowField.js";
 import { WEAPONS } from "../constants.js";
 import { getRunRng } from "./runRng.js";
 import { addParticles, addText } from "./transientPresentation.js";
@@ -311,7 +312,17 @@ export function stepAllies(gs, { W = 1280, H = 720 } = {}) {
       }
     } else if (a.order === "carry" && Array.isArray(a.waypoints) && a.waypoints.length) {
       const wp = a.waypoints[Math.min(a.waypointIndex, a.waypoints.length - 1)];
-      const d = moveToward(a, wp.x, wp.y, speed * 0.6, gs);
+      const d = Math.hypot(wp.x - a.x, wp.y - a.y);
+      // Escort routes must navigate around the generated arena, not push forever into a wall.
+      if (a._carryTarget !== wp || a._carryObstacles !== gs.obstacles) {
+        a._carryFlow = buildFlowField(W, H, wp.x, wp.y, gs.obstacles || [], 12, { clearance: a.size / 2 + 3, diagonal: false });
+        a._carryTarget = wp; a._carryObstacles = gs.obstacles;
+      }
+      const steering = sampleFlowField(a._carryFlow, a.x, a.y);
+      const cell = a._carryFlow.cellSize;
+      const nextX = (Math.floor(a.x / cell) + Math.sign(steering?.sx || 0) + 0.5) * cell;
+      const nextY = (Math.floor(a.y / cell) + Math.sign(steering?.sy || 0) + 0.5) * cell;
+      moveToward(a, steering && d > cell * 1.5 ? nextX : wp.x, steering && d > cell * 1.5 ? nextY : wp.y, speed * 0.6, gs);
       if (d <= ARRIVE && a.waypointIndex < a.waypoints.length - 1) a.waypointIndex += 1;
       else if (d <= ARRIVE) a.carryComplete = true;
     } else if (a.order === "revive") {

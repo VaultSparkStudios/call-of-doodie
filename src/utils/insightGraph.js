@@ -56,6 +56,10 @@ export function resolveInsightNodes(rawNodes = []) {
 }
 
 export function buildInsightGraph({ runCoach = {}, collapseCoaching = {}, postRunIntel = {}, debrief = {}, runTheFix = {} } = {}) {
+  if (debrief.objective) {
+    runCoach = {}; postRunIntel = {};
+    collapseCoaching = { primary: { statement: debrief.collapseReason, evidenceLevel: "observed", reasonCode: debrief.nextRunContract.id } };
+  }
   const rawNodes = [
     evidenceNode({ id: "collapse-primary", kind: "diagnosis", topic: "collapse", statement: collapseCoaching.primary?.statement, evidenceLevel: collapseCoaching.primary?.evidenceLevel, reasonCode: collapseCoaching.primary?.reasonCode, polarity: "risk" }),
     evidenceNode({ id: "cross-run-killer", kind: "pattern", topic: "threat", statement: runCoach.crossRunTip || runCoach.killedBy, evidenceLevel: runCoach.crossRunTip ? "pattern" : "hypothesis", reasonCode: runCoach.enemyLab ? `enemy-${runCoach.enemyLab.enemyType}` : "death-summary", polarity: "risk" }),

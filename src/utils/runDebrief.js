@@ -1,3 +1,4 @@
+import { buildObjectiveDebrief } from "./objectiveDebrief.js";
 import { WEAPONS } from "../constants.js";
 
 function modeLabel({ scoreAttackMode, dailyChallengeMode, bossRushMode, cursedRunMode }) {
@@ -125,6 +126,8 @@ function nextRunContract({ runSeed, wave, kills, bestStreak, grenades, completed
   };
 }
 export function buildRunDebrief(input) {
+  const objective = buildObjectiveDebrief(input);
+  if (objective) return objective;
   const {
     score = 0,
     kills = 0,

@@ -166,11 +166,11 @@ describe("objectiveHandlers", () => {
       expect(tickVerbObjective(gs)).toBe("done");
     });
 
-    it("fails to start when no enemy exists and no spawner is provided", () => {
+    it("waits for a live spawner when initialized between waves", () => {
       const gs = baseGs();
       const state = startVerbObjective(gs, "HUNT", {});
       expect(state.targetId).toBeNull();
-      expect(tickVerbObjective(gs)).toBe("failed");
+      expect(tickVerbObjective(gs)).toBe("active");
     });
 
     it("spawns via ctx.spawnEnemy when the arena is empty", () => {
@@ -257,10 +257,10 @@ describe("objectiveHandlers", () => {
       expect(tickVerbObjective(gs)).toBe("done");
     });
 
-    it("is immediately done when there is no boss wave", () => {
+    it("waits for the finale boss to spawn before completing", () => {
       const gs = baseGs({ bossWave: false });
       startVerbObjective(gs, "BOSS", {});
-      expect(tickVerbObjective(gs)).toBe("done");
+      expect(tickVerbObjective(gs)).toBe("active");
     });
   });
 
@@ -318,8 +318,9 @@ describe("objectiveHandlers", () => {
     });
 
     it("does not re-tick a resolved objective", () => {
-      const gs = baseGs();
+      const gs = baseGs({ enemies: [{ isBossEnemy: true }] });
       startVerbObjective(gs, "BOSS", {});
+      gs.enemies = [];
       gs.bossWave = false;
       expect(tickVerbObjective(gs)).toBe("done");
       const resolvedFrame = gs.activeVerbObjective.resolvedFrame;

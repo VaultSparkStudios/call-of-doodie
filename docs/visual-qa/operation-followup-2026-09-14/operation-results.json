@@ -1,0 +1,2828 @@
+[
+  {
+    "opId": "blacksite-flush",
+    "route": "service-tunnel",
+    "width": 1440,
+    "theme": "sewer-night",
+    "method": "Controlled full encounter sequence: boosted health and positions, lethal damage to real enemies; actual objective timers, pointer/keyboard actions, wave/reward UI and completion persistence. No encounter or completion counters forced.",
+    "rooms": [
+      {
+        "index": 0,
+        "verb": "BREACH",
+        "frame": 20,
+        "failures": 0,
+        "bosses": []
+      },
+      {
+        "index": 1,
+        "verb": "HOLD",
+        "frame": 846,
+        "failures": 0,
+        "bosses": []
+      },
+      {
+        "index": 2,
+        "verb": "ESCORT",
+        "frame": 2749,
+        "failures": 0,
+        "bosses": []
+      },
+      {
+        "index": 3,
+        "verb": "HUNT",
+        "frame": 4180,
+        "failures": 0,
+        "bosses": []
+      },
+      {
+        "index": 4,
+        "verb": "SABOTAGE",
+        "frame": 6341,
+        "failures": 0,
+        "bosses": []
+      },
+      {
+        "index": 5,
+        "verb": "ESCAPE",
+        "frame": 7794,
+        "failures": 0,
+        "bosses": []
+      },
+      {
+        "index": 6,
+        "verb": "BOSS",
+        "frame": 8880,
+        "failures": 0,
+        "bosses": [
+          {
+            "type": 4,
+            "name": "Regional Manager Karen"
+          }
+        ]
+      }
+    ],
+    "errors": [],
+    "pause": {
+      "before": 873,
+      "after": 873,
+      "pass": true
+    },
+    "receipt": {
+      "schemaVersion": "operation-receipt-v1",
+      "scoringContract": "operation-score-v2",
+      "operationId": "blacksite-flush",
+      "mission": "BLACKSITE FLUSH",
+      "seed": 3101,
+      "status": "complete",
+      "completed": true,
+      "score": 13966,
+      "scoreBreakdown": {
+        "schemaVersion": "operation-score-v2",
+        "objective": 11850,
+        "interaction": 215,
+        "tempo": 1501,
+        "pressurePenalty": 100,
+        "extraction": 500,
+        "awarded": 13966
+      },
+      "act": 3,
+      "route": "service-tunnel",
+      "routeConsequence": {
+        "id": "tempo_bonus",
+        "label": "TEMPO RELIEF"
+      },
+      "campaignCarryIn": null,
+      "checkpoint": "7/7 encounters",
+      "encounterFingerprints": [
+        "a8d5b88c",
+        "99b0bda6",
+        "a2ce910c",
+        "d00d2762",
+        "2aa95090",
+        "824dfad8",
+        "743ff6ba"
+      ],
+      "trust": "local-deterministic-operation-receipt-not-server-authoritative",
+      "fingerprint": "a12236aa",
+      "arenaReceipt": {
+        "schemaVersion": "operation-arena-receipt-v0",
+        "contract": "deterministic-interaction-state-not-rendering-or-3d-physics",
+        "arenaId": "operation-00000c1d-1440x900",
+        "sequence": 8,
+        "stateFingerprint": "E25FFF32",
+        "transitionFingerprint": "2A9FF88D",
+        "transitions": [
+          {
+            "schemaVersion": "operation-arena-transition-v0",
+            "arenaId": "operation-00000c1d-1440x900",
+            "sequence": 1,
+            "targetId": "turret-northeast",
+            "kind": "turret",
+            "command": "power",
+            "inputSource": "keyboard",
+            "actorId": "route-map",
+            "before": {
+              "state": "offline",
+              "visual": {
+                "stateLabel": "OFFLINE",
+                "worldCue": "Turret unpowered",
+                "tone": "muted",
+                "pattern": "outline"
+              }
+            },
+            "after": {
+              "state": "powered",
+              "visual": {
+                "stateLabel": "POWERED",
+                "worldCue": "Auto-defense ready",
+                "tone": "ready",
+                "pattern": "solid"
+              }
+            },
+            "fingerprint": "3568F4BA"
+          },
+          {
+            "schemaVersion": "operation-arena-transition-v0",
+            "arenaId": "operation-00000c1d-1440x900",
+            "sequence": 2,
+            "targetId": "door-north",
+            "kind": "door",
+            "command": "open",
+            "inputSource": "keyboard",
+            "actorId": "player-1",
+            "before": {
+              "state": "closed",
+              "visual": {
+                "stateLabel": "CLOSED",
+                "worldCue": "Door sealed",
+                "tone": "warning",
+                "pattern": "outline"
+              }
+            },
+            "after": {
+              "state": "open",
+              "visual": {
+                "stateLabel": "OPEN",
+                "worldCue": "Passage clear",
+                "tone": "ready",
+                "pattern": "solid"
+              }
+            },
+            "fingerprint": "0BD69CE8"
+          },
+          {
+            "schemaVersion": "operation-arena-transition-v0",
+            "arenaId": "operation-00000c1d-1440x900",
+            "sequence": 3,
+            "targetId": "turret-northwest",
+            "kind": "turret",
+            "command": "power",
+            "inputSource": "keyboard",
+            "actorId": "player-1",
+            "before": {
+              "state": "offline",
+              "visual": {
+                "stateLabel": "OFFLINE",
+                "worldCue": "Turret unpowered",
+                "tone": "muted",
+                "pattern": "outline"
+              }
+            },
+            "after": {
+              "state": "powered",
+              "visual": {
+                "stateLabel": "POWERED",
+                "worldCue": "Auto-defense ready",
+                "tone": "ready",
+                "pattern": "solid"
+              }
+            },
+            "fingerprint": "F16DED13"
+          },
+          {
+            "schemaVersion": "operation-arena-transition-v0",
+            "arenaId": "operation-00000c1d-1440x900",
+            "sequence": 4,
+            "targetId": "valve-east",
+            "kind": "valve",
+            "command": "power",
+            "inputSource": "keyboard",
+            "actorId": "player-1",
+            "before": {
+              "state": "contaminated",
+              "visual": {
+                "stateLabel": "CONTAMINATED",
+                "worldCue": "Waste feed unsafe",
+                "tone": "danger",
+                "pattern": "diagonal-stripes"
+              }
+            },
+            "after": {
+              "state": "powered",
+              "visual": {
+                "stateLabel": "POWERED",
+                "worldCue": "Clean pressure online",
+                "tone": "ready",
+                "pattern": "solid"
+              }
+            },
+            "fingerprint": "37AD6F56"
+          },
+          {
+            "schemaVersion": "operation-arena-transition-v0",
+            "arenaId": "operation-00000c1d-1440x900",
+            "sequence": 5,
+            "targetId": "watchtower-center",
+            "kind": "watchtower",
+            "command": "enter",
+            "inputSource": "keyboard",
+            "actorId": "player-1",
+            "before": {
+              "state": "idle",
+              "visual": {
+                "stateLabel": "VACANT",
+                "worldCue": "Lookout available",
+                "tone": "muted",
+                "pattern": "outline"
+              }
+            },
+            "after": {
+              "state": "occupied",
+              "visual": {
+                "stateLabel": "OCCUPIED",
+                "worldCue": "Lookout sightline active",
+                "tone": "ready",
+                "pattern": "solid"
+              }
+            },
+            "fingerprint": "DB734E7A"
+          },
+          {
+            "schemaVersion": "operation-arena-transition-v0",
+            "arenaId": "operation-00000c1d-1440x900",
+            "sequence": 6,
+            "targetId": "pump-west",
+            "kind": "pump",
+            "command": "flood",
+            "inputSource": "keyboard",
+            "actorId": "player-1",
+            "before": {
+              "state": "drained",
+              "visual": {
+                "stateLabel": "DRAINED",
+                "worldCue": "Floor dry",
+                "tone": "ready",
+                "pattern": "solid"
+              }
+            },
+            "after": {
+              "state": "flooded",
+              "visual": {
+                "stateLabel": "FLOODED",
+                "worldCue": "Hazard water active",
+                "tone": "danger",
+                "pattern": "diagonal-stripes"
+              }
+            },
+            "fingerprint": "6C2F1618"
+          },
+          {
+            "schemaVersion": "operation-arena-transition-v0",
+            "arenaId": "operation-00000c1d-1440x900",
+            "sequence": 7,
+            "targetId": "extraction-toilet-alpha",
+            "kind": "extraction-toilet",
+            "command": "arm",
+            "inputSource": "keyboard",
+            "actorId": "player-1",
+            "before": {
+              "state": "locked",
+              "visual": {
+                "stateLabel": "LOCKED",
+                "worldCue": "Extraction unavailable",
+                "tone": "muted",
+                "pattern": "outline"
+              }
+            },
+            "after": {
+              "state": "ready",
+              "visual": {
+                "stateLabel": "READY",
+                "worldCue": "Extraction toilet armed",
+                "tone": "ready",
+                "pattern": "solid"
+              }
+            },
+            "fingerprint": "80B1E49E"
+          },
+          {
+            "schemaVersion": "operation-arena-transition-v0",
+            "arenaId": "operation-00000c1d-1440x900",
+            "sequence": 8,
+            "targetId": "pump-west",
+            "kind": "pump",
+            "command": "drain",
+            "inputSource": "keyboard",
+            "actorId": "player-1",
+            "before": {
+              "state": "flooded",
+              "visual": {
+                "stateLabel": "FLOODED",
+                "worldCue": "Hazard water active",
+                "tone": "danger",
+                "pattern": "diagonal-stripes"
+              }
+            },
+            "after": {
+              "state": "drained",
+              "visual": {
+                "stateLabel": "DRAINED",
+                "worldCue": "Floor dry",
+                "tone": "ready",
+                "pattern": "solid"
+              }
+            },
+            "fingerprint": "84DD97D0"
+          }
+        ]
+      },
+      "rivalReceipt": {
+        "schemaVersion": "operation-rival-receipt-v1",
+        "operationId": "blacksite-flush",
+        "seed": 3101,
+        "routeOptions": [
+          "service-tunnel"
+        ],
+        "scoringContract": "operation-score-v2",
+        "splits": [
+          {
+            "room": "blacksite-flush-breach",
+            "elapsedMs": 14083,
+            "score": 1173
+          },
+          {
+            "room": "blacksite-flush-hold",
+            "elapsedMs": 45800,
+            "score": 2564
+          },
+          {
+            "room": "blacksite-flush-escort",
+            "elapsedMs": 69650,
+            "score": 4247
+          },
+          {
+            "room": "blacksite-flush-hunt",
+            "elapsedMs": 105683,
+            "score": 6094
+          },
+          {
+            "room": "blacksite-flush-sabotage",
+            "elapsedMs": 129900,
+            "score": 8000
+          },
+          {
+            "room": "blacksite-flush-escape",
+            "elapsedMs": 148000,
+            "score": 10031
+          },
+          {
+            "room": "blacksite-flush-boss",
+            "elapsedMs": 152033,
+            "score": 13966
+          }
+        ],
+        "branchGhost": [
+          {
+            "fork": "deployment-route",
+            "choice": "service-tunnel",
+            "elapsedMs": 0
+          }
+        ],
+        "objectives": [
+          {
+            "id": "blacksite-flush-breach",
+            "outcome": "complete",
+            "elapsedMs": 152033
+          },
+          {
+            "id": "blacksite-flush-hold",
+            "outcome": "complete",
+            "elapsedMs": 152033
+          },
+          {
+            "id": "blacksite-flush-escort",
+            "outcome": "complete",
+            "elapsedMs": 152033
+          },
+          {
+            "id": "blacksite-flush-hunt",
+            "outcome": "complete",
+            "elapsedMs": 152033
+          },
+          {
+            "id": "blacksite-flush-sabotage",
+            "outcome": "complete",
+            "elapsedMs": 152033
+          },
+          {
+            "id": "blacksite-flush-escape",
+            "outcome": "complete",
+            "elapsedMs": 152033
+          },
+          {
+            "id": "blacksite-flush-boss",
+            "outcome": "complete",
+            "elapsedMs": 152033
+          }
+        ],
+        "ghostPath": [],
+        "result": {
+          "finalScore": 13966,
+          "completed": true,
+          "durationMs": 152033
+        },
+        "trust": {
+          "source": "untrusted-player-claim",
+          "combatAuthority": "none",
+          "scoreAuthority": "server-verification-required",
+          "leaderboardEligible": false
+        },
+        "privacy": "no-identity-no-free-text-bounded-gameplay-evidence",
+        "receiptFingerprint": "1ezrde8",
+        "payloadBytes": 1551
+      },
+      "rematchCartridge": {
+        "schemaVersion": "operation-rematch-cartridge-v1",
+        "operationId": "blacksite-flush",
+        "seed": 3101,
+        "routeOptions": [
+          "service-tunnel"
+        ],
+        "scoringContract": "operation-score-v2",
+        "rivalReceiptFingerprint": "1ezrde8",
+        "trust": "configuration-only-no-combat-or-score-authority",
+        "cartridgeFingerprint": "b6xg1o"
+      },
+      "durationSeconds": 152,
+      "runScore": 77269,
+      "routeSource": "player_selected"
+    },
+    "failures": 0,
+    "pass": true
+  },
+  {
+    "opId": "blacksite-flush",
+    "route": "executive-washroom",
+    "width": 390,
+    "theme": "porcelain-day",
+    "method": "Controlled full encounter sequence: boosted health and positions, lethal damage to real enemies; actual objective timers, pointer/keyboard actions, wave/reward UI and completion persistence. No encounter or completion counters forced.",
+    "rooms": [
+      {
+        "index": 0,
+        "verb": "BREACH",
+        "frame": 8,
+        "failures": 0,
+        "bosses": []
+      },
+      {
+        "index": 1,
+        "verb": "HOLD",
+        "frame": 846,
+        "failures": 0,
+        "bosses": []
+      },
+      {
+        "index": 2,
+        "verb": "ESCORT",
+        "frame": 2874,
+        "failures": 0,
+        "bosses": []
+      },
+      {
+        "index": 3,
+        "verb": "HUNT",
+        "frame": 3981,
+        "failures": 0,
+        "bosses": []
+      },
+      {
+        "index": 4,
+        "verb": "SABOTAGE",
+        "frame": 6431,
+        "failures": 0,
+        "bosses": []
+      },
+      {
+        "index": 5,
+        "verb": "ESCAPE",
+        "frame": 8035,
+        "failures": 0,
+        "bosses": []
+      },
+      {
+        "index": 6,
+        "verb": "BOSS",
+        "frame": 9297,
+        "failures": 0,
+        "bosses": [
+          {
+            "type": 4,
+            "name": "Regional Manager Karen"
+          }
+        ]
+      }
+    ],
+    "errors": [],
+    "pause": {
+      "before": 870,
+      "after": 870,
+      "pass": true
+    },
+    "receipt": {
+      "schemaVersion": "operation-receipt-v1",
+      "scoringContract": "operation-score-v2",
+      "operationId": "blacksite-flush",
+      "mission": "BLACKSITE FLUSH",
+      "seed": 3101,
+      "status": "complete",
+      "completed": true,
+      "score": 15345,
+      "scoreBreakdown": {
+        "schemaVersion": "operation-score-v2",
+        "objective": 11850,
+        "interaction": 215,
+        "tempo": 1488,
+        "pressurePenalty": 100,
+        "extraction": 500,
+        "awarded": 15345
+      },
+      "act": 3,
+      "route": "executive-washroom",
+      "routeConsequence": {
+        "id": "score_bonus",
+        "label": "SCORE PREMIUM"
+      },
+      "campaignCarryIn": null,
+      "checkpoint": "7/7 encounters",
+      "encounterFingerprints": [
+        "403372e9",
+        "eda478c4",
+        "8c7aab8f",
+        "37ddacff",
+        "4970dea7",
+        "56207151",
+        "faea3427"
+      ],
+      "trust": "local-deterministic-operation-receipt-not-server-authoritative",
+      "fingerprint": "4bce13db",
+      "arenaReceipt": {
+        "schemaVersion": "operation-arena-receipt-v0",
+        "contract": "deterministic-interaction-state-not-rendering-or-3d-physics",
+        "arenaId": "operation-00000c1d-390x836",
+        "sequence": 8,
+        "stateFingerprint": "4E199C6A",
+        "transitionFingerprint": "E8A32983",
+        "transitions": [
+          {
+            "schemaVersion": "operation-arena-transition-v0",
+            "arenaId": "operation-00000c1d-390x836",
+            "sequence": 1,
+            "targetId": "extraction-toilet-bravo",
+            "kind": "extraction-toilet",
+            "command": "contaminate",
+            "inputSource": "keyboard",
+            "actorId": "route-map",
+            "before": {
+              "state": "locked",
+              "visual": {
+                "stateLabel": "LOCKED",
+                "worldCue": "Extraction unavailable",
+                "tone": "muted",
+                "pattern": "outline"
+              }
+            },
+            "after": {
+              "state": "contaminated",
+              "visual": {
+                "stateLabel": "CONTAMINATED",
+                "worldCue": "Extraction unsafe",
+                "tone": "danger",
+                "pattern": "diagonal-stripes"
+              }
+            },
+            "fingerprint": "28DBF7A6"
+          },
+          {
+            "schemaVersion": "operation-arena-transition-v0",
+            "arenaId": "operation-00000c1d-390x836",
+            "sequence": 2,
+            "targetId": "door-north",
+            "kind": "door",
+            "command": "open",
+            "inputSource": "touch",
+            "actorId": "player-1",
+            "before": {
+              "state": "closed",
+              "visual": {
+                "stateLabel": "CLOSED",
+                "worldCue": "Door sealed",
+                "tone": "warning",
+                "pattern": "outline"
+              }
+            },
+            "after": {
+              "state": "open",
+              "visual": {
+                "stateLabel": "OPEN",
+                "worldCue": "Passage clear",
+                "tone": "ready",
+                "pattern": "solid"
+              }
+            },
+            "fingerprint": "DC8E4BEF"
+          },
+          {
+            "schemaVersion": "operation-arena-transition-v0",
+            "arenaId": "operation-00000c1d-390x836",
+            "sequence": 3,
+            "targetId": "turret-northwest",
+            "kind": "turret",
+            "command": "power",
+            "inputSource": "touch",
+            "actorId": "player-1",
+            "before": {
+              "state": "offline",
+              "visual": {
+                "stateLabel": "OFFLINE",
+                "worldCue": "Turret unpowered",
+                "tone": "muted",
+                "pattern": "outline"
+              }
+            },
+            "after": {
+              "state": "powered",
+              "visual": {
+                "stateLabel": "POWERED",
+                "worldCue": "Auto-defense ready",
+                "tone": "ready",
+                "pattern": "solid"
+              }
+            },
+            "fingerprint": "AF61EF98"
+          },
+          {
+            "schemaVersion": "operation-arena-transition-v0",
+            "arenaId": "operation-00000c1d-390x836",
+            "sequence": 4,
+            "targetId": "valve-east",
+            "kind": "valve",
+            "command": "power",
+            "inputSource": "touch",
+            "actorId": "player-1",
+            "before": {
+              "state": "contaminated",
+              "visual": {
+                "stateLabel": "CONTAMINATED",
+                "worldCue": "Waste feed unsafe",
+                "tone": "danger",
+                "pattern": "diagonal-stripes"
+              }
+            },
+            "after": {
+              "state": "powered",
+              "visual": {
+                "stateLabel": "POWERED",
+                "worldCue": "Clean pressure online",
+                "tone": "ready",
+                "pattern": "solid"
+              }
+            },
+            "fingerprint": "F0B26323"
+          },
+          {
+            "schemaVersion": "operation-arena-transition-v0",
+            "arenaId": "operation-00000c1d-390x836",
+            "sequence": 5,
+            "targetId": "watchtower-center",
+            "kind": "watchtower",
+            "command": "enter",
+            "inputSource": "touch",
+            "actorId": "player-1",
+            "before": {
+              "state": "idle",
+              "visual": {
+                "stateLabel": "VACANT",
+                "worldCue": "Lookout available",
+                "tone": "muted",
+                "pattern": "outline"
+              }
+            },
+            "after": {
+              "state": "occupied",
+              "visual": {
+                "stateLabel": "OCCUPIED",
+                "worldCue": "Lookout sightline active",
+                "tone": "ready",
+                "pattern": "solid"
+              }
+            },
+            "fingerprint": "50135E51"
+          },
+          {
+            "schemaVersion": "operation-arena-transition-v0",
+            "arenaId": "operation-00000c1d-390x836",
+            "sequence": 6,
+            "targetId": "pump-west",
+            "kind": "pump",
+            "command": "flood",
+            "inputSource": "touch",
+            "actorId": "player-1",
+            "before": {
+              "state": "drained",
+              "visual": {
+                "stateLabel": "DRAINED",
+                "worldCue": "Floor dry",
+                "tone": "ready",
+                "pattern": "solid"
+              }
+            },
+            "after": {
+              "state": "flooded",
+              "visual": {
+                "stateLabel": "FLOODED",
+                "worldCue": "Hazard water active",
+                "tone": "danger",
+                "pattern": "diagonal-stripes"
+              }
+            },
+            "fingerprint": "B2CF75DB"
+          },
+          {
+            "schemaVersion": "operation-arena-transition-v0",
+            "arenaId": "operation-00000c1d-390x836",
+            "sequence": 7,
+            "targetId": "extraction-toilet-alpha",
+            "kind": "extraction-toilet",
+            "command": "arm",
+            "inputSource": "touch",
+            "actorId": "player-1",
+            "before": {
+              "state": "locked",
+              "visual": {
+                "stateLabel": "LOCKED",
+                "worldCue": "Extraction unavailable",
+                "tone": "muted",
+                "pattern": "outline"
+              }
+            },
+            "after": {
+              "state": "ready",
+              "visual": {
+                "stateLabel": "READY",
+                "worldCue": "Extraction toilet armed",
+                "tone": "ready",
+                "pattern": "solid"
+              }
+            },
+            "fingerprint": "20B36C15"
+          },
+          {
+            "schemaVersion": "operation-arena-transition-v0",
+            "arenaId": "operation-00000c1d-390x836",
+            "sequence": 8,
+            "targetId": "pump-west",
+            "kind": "pump",
+            "command": "drain",
+            "inputSource": "touch",
+            "actorId": "player-1",
+            "before": {
+              "state": "flooded",
+              "visual": {
+                "stateLabel": "FLOODED",
+                "worldCue": "Hazard water active",
+                "tone": "danger",
+                "pattern": "diagonal-stripes"
+              }
+            },
+            "after": {
+              "state": "drained",
+              "visual": {
+                "stateLabel": "DRAINED",
+                "worldCue": "Floor dry",
+                "tone": "ready",
+                "pattern": "solid"
+              }
+            },
+            "fingerprint": "C7337C1B"
+          }
+        ]
+      },
+      "rivalReceipt": {
+        "schemaVersion": "operation-rival-receipt-v1",
+        "operationId": "blacksite-flush",
+        "seed": 3101,
+        "routeOptions": [
+          "executive-washroom"
+        ],
+        "scoringContract": "operation-score-v2",
+        "splits": [
+          {
+            "room": "blacksite-flush-breach",
+            "elapsedMs": 14083,
+            "score": 1290
+          },
+          {
+            "room": "blacksite-flush-hold",
+            "elapsedMs": 47883,
+            "score": 2816
+          },
+          {
+            "room": "blacksite-flush-escort",
+            "elapsedMs": 66333,
+            "score": 4677
+          },
+          {
+            "room": "blacksite-flush-hunt",
+            "elapsedMs": 107183,
+            "score": 6698
+          },
+          {
+            "room": "blacksite-flush-sabotage",
+            "elapsedMs": 133916,
+            "score": 8789
+          },
+          {
+            "room": "blacksite-flush-escape",
+            "elapsedMs": 154950,
+            "score": 11016
+          },
+          {
+            "room": "blacksite-flush-boss",
+            "elapsedMs": 158816,
+            "score": 15345
+          }
+        ],
+        "branchGhost": [
+          {
+            "fork": "deployment-route",
+            "choice": "executive-washroom",
+            "elapsedMs": 0
+          }
+        ],
+        "objectives": [
+          {
+            "id": "blacksite-flush-breach",
+            "outcome": "complete",
+            "elapsedMs": 158816
+          },
+          {
+            "id": "blacksite-flush-hold",
+            "outcome": "complete",
+            "elapsedMs": 158816
+          },
+          {
+            "id": "blacksite-flush-escort",
+            "outcome": "complete",
+            "elapsedMs": 158816
+          },
+          {
+            "id": "blacksite-flush-hunt",
+            "outcome": "complete",
+            "elapsedMs": 158816
+          },
+          {
+            "id": "blacksite-flush-sabotage",
+            "outcome": "complete",
+            "elapsedMs": 158816
+          },
+          {
+            "id": "blacksite-flush-escape",
+            "outcome": "complete",
+            "elapsedMs": 158816
+          },
+          {
+            "id": "blacksite-flush-boss",
+            "outcome": "complete",
+            "elapsedMs": 158816
+          }
+        ],
+        "ghostPath": [],
+        "result": {
+          "finalScore": 15345,
+          "completed": true,
+          "durationMs": 158816
+        },
+        "trust": {
+          "source": "untrusted-player-claim",
+          "combatAuthority": "none",
+          "scoreAuthority": "server-verification-required",
+          "leaderboardEligible": false
+        },
+        "privacy": "no-identity-no-free-text-bounded-gameplay-evidence",
+        "receiptFingerprint": "1sgeq9c",
+        "payloadBytes": 1559
+      },
+      "rematchCartridge": {
+        "schemaVersion": "operation-rematch-cartridge-v1",
+        "operationId": "blacksite-flush",
+        "seed": 3101,
+        "routeOptions": [
+          "executive-washroom"
+        ],
+        "scoringContract": "operation-score-v2",
+        "rivalReceiptFingerprint": "1sgeq9c",
+        "trust": "configuration-only-no-combat-or-score-authority",
+        "cartridgeFingerprint": "65ymsp"
+      },
+      "durationSeconds": 158,
+      "runScore": 99029,
+      "routeSource": "player_selected"
+    },
+    "failures": 0,
+    "pass": true
+  },
+  {
+    "opId": "porcelain-siege",
+    "route": "laundry-annex",
+    "width": 1440,
+    "theme": "sewer-night",
+    "method": "Controlled full encounter sequence: boosted health and positions, lethal damage to real enemies; actual objective timers, pointer/keyboard actions, wave/reward UI and completion persistence. No encounter or completion counters forced.",
+    "rooms": [
+      {
+        "index": 0,
+        "verb": "BREACH",
+        "frame": 18,
+        "failures": 0,
+        "bosses": []
+      },
+      {
+        "index": 1,
+        "verb": "HOLD",
+        "frame": 849,
+        "failures": 0,
+        "bosses": []
+      },
+      {
+        "index": 2,
+        "verb": "ESCORT",
+        "frame": 2765,
+        "failures": 0,
+        "bosses": []
+      },
+      {
+        "index": 3,
+        "verb": "HUNT",
+        "frame": 4229,
+        "failures": 0,
+        "bosses": []
+      },
+      {
+        "index": 4,
+        "verb": "SABOTAGE",
+        "frame": 6368,
+        "failures": 0,
+        "bosses": []
+      },
+      {
+        "index": 5,
+        "verb": "ESCAPE",
+        "frame": 7826,
+        "failures": 0,
+        "bosses": []
+      },
+      {
+        "index": 6,
+        "verb": "BOSS",
+        "frame": 8913,
+        "failures": 0,
+        "bosses": [
+          {
+            "type": 9,
+            "name": "Deputy Landlord"
+          }
+        ]
+      }
+    ],
+    "errors": [],
+    "pause": {
+      "before": 875,
+      "after": 875,
+      "pass": true
+    },
+    "receipt": {
+      "schemaVersion": "operation-receipt-v1",
+      "scoringContract": "operation-score-v2",
+      "operationId": "porcelain-siege",
+      "mission": "PORCELAIN SIEGE",
+      "seed": 4102,
+      "status": "complete",
+      "completed": true,
+      "score": 13966,
+      "scoreBreakdown": {
+        "schemaVersion": "operation-score-v2",
+        "objective": 11850,
+        "interaction": 215,
+        "tempo": 1501,
+        "pressurePenalty": 100,
+        "extraction": 500,
+        "awarded": 13966
+      },
+      "act": 3,
+      "route": "laundry-annex",
+      "routeConsequence": {
+        "id": "tempo_bonus",
+        "label": "TEMPO RELIEF"
+      },
+      "campaignCarryIn": null,
+      "checkpoint": "7/7 encounters",
+      "encounterFingerprints": [
+        "0892258d",
+        "70472ebc",
+        "aca2c564",
+        "b53457e8",
+        "46c06e49",
+        "56a5f7e5",
+        "9ea4ac4e"
+      ],
+      "trust": "local-deterministic-operation-receipt-not-server-authoritative",
+      "fingerprint": "932b0019",
+      "arenaReceipt": {
+        "schemaVersion": "operation-arena-receipt-v0",
+        "contract": "deterministic-interaction-state-not-rendering-or-3d-physics",
+        "arenaId": "operation-00001006-1440x900",
+        "sequence": 8,
+        "stateFingerprint": "289C5373",
+        "transitionFingerprint": "17AC2DE6",
+        "transitions": [
+          {
+            "schemaVersion": "operation-arena-transition-v0",
+            "arenaId": "operation-00001006-1440x900",
+            "sequence": 1,
+            "targetId": "turret-northeast",
+            "kind": "turret",
+            "command": "power",
+            "inputSource": "keyboard",
+            "actorId": "route-map",
+            "before": {
+              "state": "offline",
+              "visual": {
+                "stateLabel": "OFFLINE",
+                "worldCue": "Turret unpowered",
+                "tone": "muted",
+                "pattern": "outline"
+              }
+            },
+            "after": {
+              "state": "powered",
+              "visual": {
+                "stateLabel": "POWERED",
+                "worldCue": "Auto-defense ready",
+                "tone": "ready",
+                "pattern": "solid"
+              }
+            },
+            "fingerprint": "99100289"
+          },
+          {
+            "schemaVersion": "operation-arena-transition-v0",
+            "arenaId": "operation-00001006-1440x900",
+            "sequence": 2,
+            "targetId": "door-north",
+            "kind": "door",
+            "command": "open",
+            "inputSource": "keyboard",
+            "actorId": "player-1",
+            "before": {
+              "state": "closed",
+              "visual": {
+                "stateLabel": "CLOSED",
+                "worldCue": "Door sealed",
+                "tone": "warning",
+                "pattern": "outline"
+              }
+            },
+            "after": {
+              "state": "open",
+              "visual": {
+                "stateLabel": "OPEN",
+                "worldCue": "Passage clear",
+                "tone": "ready",
+                "pattern": "solid"
+              }
+            },
+            "fingerprint": "02EC196F"
+          },
+          {
+            "schemaVersion": "operation-arena-transition-v0",
+            "arenaId": "operation-00001006-1440x900",
+            "sequence": 3,
+            "targetId": "turret-northwest",
+            "kind": "turret",
+            "command": "power",
+            "inputSource": "keyboard",
+            "actorId": "player-1",
+            "before": {
+              "state": "offline",
+              "visual": {
+                "stateLabel": "OFFLINE",
+                "worldCue": "Turret unpowered",
+                "tone": "muted",
+                "pattern": "outline"
+              }
+            },
+            "after": {
+              "state": "powered",
+              "visual": {
+                "stateLabel": "POWERED",
+                "worldCue": "Auto-defense ready",
+                "tone": "ready",
+                "pattern": "solid"
+              }
+            },
+            "fingerprint": "C973BC8A"
+          },
+          {
+            "schemaVersion": "operation-arena-transition-v0",
+            "arenaId": "operation-00001006-1440x900",
+            "sequence": 4,
+            "targetId": "valve-east",
+            "kind": "valve",
+            "command": "power",
+            "inputSource": "keyboard",
+            "actorId": "player-1",
+            "before": {
+              "state": "contaminated",
+              "visual": {
+                "stateLabel": "CONTAMINATED",
+                "worldCue": "Waste feed unsafe",
+                "tone": "danger",
+                "pattern": "diagonal-stripes"
+              }
+            },
+            "after": {
+              "state": "powered",
+              "visual": {
+                "stateLabel": "POWERED",
+                "worldCue": "Clean pressure online",
+                "tone": "ready",
+                "pattern": "solid"
+              }
+            },
+            "fingerprint": "D3E54389"
+          },
+          {
+            "schemaVersion": "operation-arena-transition-v0",
+            "arenaId": "operation-00001006-1440x900",
+            "sequence": 5,
+            "targetId": "watchtower-center",
+            "kind": "watchtower",
+            "command": "enter",
+            "inputSource": "keyboard",
+            "actorId": "player-1",
+            "before": {
+              "state": "idle",
+              "visual": {
+                "stateLabel": "VACANT",
+                "worldCue": "Lookout available",
+                "tone": "muted",
+                "pattern": "outline"
+              }
+            },
+            "after": {
+              "state": "occupied",
+              "visual": {
+                "stateLabel": "OCCUPIED",
+                "worldCue": "Lookout sightline active",
+                "tone": "ready",
+                "pattern": "solid"
+              }
+            },
+            "fingerprint": "11C7D777"
+          },
+          {
+            "schemaVersion": "operation-arena-transition-v0",
+            "arenaId": "operation-00001006-1440x900",
+            "sequence": 6,
+            "targetId": "pump-west",
+            "kind": "pump",
+            "command": "flood",
+            "inputSource": "keyboard",
+            "actorId": "player-1",
+            "before": {
+              "state": "drained",
+              "visual": {
+                "stateLabel": "DRAINED",
+                "worldCue": "Floor dry",
+                "tone": "ready",
+                "pattern": "solid"
+              }
+            },
+            "after": {
+              "state": "flooded",
+              "visual": {
+                "stateLabel": "FLOODED",
+                "worldCue": "Hazard water active",
+                "tone": "danger",
+                "pattern": "diagonal-stripes"
+              }
+            },
+            "fingerprint": "6E0C3993"
+          },
+          {
+            "schemaVersion": "operation-arena-transition-v0",
+            "arenaId": "operation-00001006-1440x900",
+            "sequence": 7,
+            "targetId": "extraction-toilet-alpha",
+            "kind": "extraction-toilet",
+            "command": "arm",
+            "inputSource": "keyboard",
+            "actorId": "player-1",
+            "before": {
+              "state": "locked",
+              "visual": {
+                "stateLabel": "LOCKED",
+                "worldCue": "Extraction unavailable",
+                "tone": "muted",
+                "pattern": "outline"
+              }
+            },
+            "after": {
+              "state": "ready",
+              "visual": {
+                "stateLabel": "READY",
+                "worldCue": "Extraction toilet armed",
+                "tone": "ready",
+                "pattern": "solid"
+              }
+            },
+            "fingerprint": "3FDB9845"
+          },
+          {
+            "schemaVersion": "operation-arena-transition-v0",
+            "arenaId": "operation-00001006-1440x900",
+            "sequence": 8,
+            "targetId": "pump-west",
+            "kind": "pump",
+            "command": "drain",
+            "inputSource": "keyboard",
+            "actorId": "player-1",
+            "before": {
+              "state": "flooded",
+              "visual": {
+                "stateLabel": "FLOODED",
+                "worldCue": "Hazard water active",
+                "tone": "danger",
+                "pattern": "diagonal-stripes"
+              }
+            },
+            "after": {
+              "state": "drained",
+              "visual": {
+                "stateLabel": "DRAINED",
+                "worldCue": "Floor dry",
+                "tone": "ready",
+                "pattern": "solid"
+              }
+            },
+            "fingerprint": "2B7C3773"
+          }
+        ]
+      },
+      "rivalReceipt": {
+        "schemaVersion": "operation-rival-receipt-v1",
+        "operationId": "porcelain-siege",
+        "seed": 4102,
+        "routeOptions": [
+          "laundry-annex"
+        ],
+        "scoringContract": "operation-score-v2",
+        "splits": [
+          {
+            "room": "porcelain-siege-breach",
+            "elapsedMs": 14133,
+            "score": 1173
+          },
+          {
+            "room": "porcelain-siege-hold",
+            "elapsedMs": 46066,
+            "score": 2563
+          },
+          {
+            "room": "porcelain-siege-escort",
+            "elapsedMs": 70466,
+            "score": 4245
+          },
+          {
+            "room": "porcelain-siege-hunt",
+            "elapsedMs": 106133,
+            "score": 6093
+          },
+          {
+            "room": "porcelain-siege-sabotage",
+            "elapsedMs": 130433,
+            "score": 7999
+          },
+          {
+            "room": "porcelain-siege-escape",
+            "elapsedMs": 148550,
+            "score": 10030
+          },
+          {
+            "room": "porcelain-siege-boss",
+            "elapsedMs": 152400,
+            "score": 13966
+          }
+        ],
+        "branchGhost": [
+          {
+            "fork": "deployment-route",
+            "choice": "laundry-annex",
+            "elapsedMs": 0
+          }
+        ],
+        "objectives": [
+          {
+            "id": "porcelain-siege-breach",
+            "outcome": "complete",
+            "elapsedMs": 152400
+          },
+          {
+            "id": "porcelain-siege-hold",
+            "outcome": "complete",
+            "elapsedMs": 152400
+          },
+          {
+            "id": "porcelain-siege-escort",
+            "outcome": "complete",
+            "elapsedMs": 152400
+          },
+          {
+            "id": "porcelain-siege-hunt",
+            "outcome": "complete",
+            "elapsedMs": 152400
+          },
+          {
+            "id": "porcelain-siege-sabotage",
+            "outcome": "complete",
+            "elapsedMs": 152400
+          },
+          {
+            "id": "porcelain-siege-escape",
+            "outcome": "complete",
+            "elapsedMs": 152400
+          },
+          {
+            "id": "porcelain-siege-boss",
+            "outcome": "complete",
+            "elapsedMs": 152400
+          }
+        ],
+        "ghostPath": [],
+        "result": {
+          "finalScore": 13966,
+          "completed": true,
+          "durationMs": 152400
+        },
+        "trust": {
+          "source": "untrusted-player-claim",
+          "combatAuthority": "none",
+          "scoreAuthority": "server-verification-required",
+          "leaderboardEligible": false
+        },
+        "privacy": "no-identity-no-free-text-bounded-gameplay-evidence",
+        "receiptFingerprint": "1vxeq5t",
+        "payloadBytes": 1549
+      },
+      "rematchCartridge": {
+        "schemaVersion": "operation-rematch-cartridge-v1",
+        "operationId": "porcelain-siege",
+        "seed": 4102,
+        "routeOptions": [
+          "laundry-annex"
+        ],
+        "scoringContract": "operation-score-v2",
+        "rivalReceiptFingerprint": "1vxeq5t",
+        "trust": "configuration-only-no-combat-or-score-authority",
+        "cartridgeFingerprint": "beyebd"
+      },
+      "durationSeconds": 152,
+      "runScore": 90318,
+      "routeSource": "player_selected"
+    },
+    "failures": 0,
+    "pass": true
+  },
+  {
+    "opId": "porcelain-siege",
+    "route": "boiler-room",
+    "width": 390,
+    "theme": "porcelain-day",
+    "method": "Controlled full encounter sequence: boosted health and positions, lethal damage to real enemies; actual objective timers, pointer/keyboard actions, wave/reward UI and completion persistence. No encounter or completion counters forced.",
+    "rooms": [
+      {
+        "index": 0,
+        "verb": "BREACH",
+        "frame": 8,
+        "failures": 0,
+        "bosses": []
+      },
+      {
+        "index": 1,
+        "verb": "HOLD",
+        "frame": 863,
+        "failures": 0,
+        "bosses": []
+      },
+      {
+        "index": 2,
+        "verb": "ESCORT",
+        "frame": 2928,
+        "failures": 0,
+        "bosses": []
+      },
+      {
+        "index": 3,
+        "verb": "HUNT",
+        "frame": 4014,
+        "failures": 0,
+        "bosses": []
+      },
+      {
+        "index": 4,
+        "verb": "SABOTAGE",
+        "frame": 6511,
+        "failures": 0,
+        "bosses": []
+      },
+      {
+        "index": 5,
+        "verb": "ESCAPE",
+        "frame": 8122,
+        "failures": 0,
+        "bosses": []
+      },
+      {
+        "index": 6,
+        "verb": "BOSS",
+        "frame": 9381,
+        "failures": 0,
+        "bosses": [
+          {
+            "type": 9,
+            "name": "Deputy Landlord"
+          }
+        ]
+      }
+    ],
+    "errors": [],
+    "pause": {
+      "before": 898,
+      "after": 898,
+      "pass": true
+    },
+    "receipt": {
+      "schemaVersion": "operation-receipt-v1",
+      "scoringContract": "operation-score-v2",
+      "operationId": "porcelain-siege",
+      "mission": "PORCELAIN SIEGE",
+      "seed": 4102,
+      "status": "complete",
+      "completed": true,
+      "score": 15344,
+      "scoreBreakdown": {
+        "schemaVersion": "operation-score-v2",
+        "objective": 11850,
+        "interaction": 215,
+        "tempo": 1487,
+        "pressurePenalty": 100,
+        "extraction": 500,
+        "awarded": 15344
+      },
+      "act": 3,
+      "route": "boiler-room",
+      "routeConsequence": {
+        "id": "score_bonus",
+        "label": "SCORE PREMIUM"
+      },
+      "campaignCarryIn": null,
+      "checkpoint": "7/7 encounters",
+      "encounterFingerprints": [
+        "eb53d913",
+        "95d9eae5",
+        "261b2483",
+        "f95d3b93",
+        "7629f51e",
+        "81c8d4b6",
+        "ecc88404"
+      ],
+      "trust": "local-deterministic-operation-receipt-not-server-authoritative",
+      "fingerprint": "796e1a76",
+      "arenaReceipt": {
+        "schemaVersion": "operation-arena-receipt-v0",
+        "contract": "deterministic-interaction-state-not-rendering-or-3d-physics",
+        "arenaId": "operation-00001006-390x836",
+        "sequence": 8,
+        "stateFingerprint": "A86F4E9B",
+        "transitionFingerprint": "6BAF5EE4",
+        "transitions": [
+          {
+            "schemaVersion": "operation-arena-transition-v0",
+            "arenaId": "operation-00001006-390x836",
+            "sequence": 1,
+            "targetId": "extraction-toilet-bravo",
+            "kind": "extraction-toilet",
+            "command": "contaminate",
+            "inputSource": "keyboard",
+            "actorId": "route-map",
+            "before": {
+              "state": "locked",
+              "visual": {
+                "stateLabel": "LOCKED",
+                "worldCue": "Extraction unavailable",
+                "tone": "muted",
+                "pattern": "outline"
+              }
+            },
+            "after": {
+              "state": "contaminated",
+              "visual": {
+                "stateLabel": "CONTAMINATED",
+                "worldCue": "Extraction unsafe",
+                "tone": "danger",
+                "pattern": "diagonal-stripes"
+              }
+            },
+            "fingerprint": "A1F513C5"
+          },
+          {
+            "schemaVersion": "operation-arena-transition-v0",
+            "arenaId": "operation-00001006-390x836",
+            "sequence": 2,
+            "targetId": "door-north",
+            "kind": "door",
+            "command": "open",
+            "inputSource": "touch",
+            "actorId": "player-1",
+            "before": {
+              "state": "closed",
+              "visual": {
+                "stateLabel": "CLOSED",
+                "worldCue": "Door sealed",
+                "tone": "warning",
+                "pattern": "outline"
+              }
+            },
+            "after": {
+              "state": "open",
+              "visual": {
+                "stateLabel": "OPEN",
+                "worldCue": "Passage clear",
+                "tone": "ready",
+                "pattern": "solid"
+              }
+            },
+            "fingerprint": "F3D78BE4"
+          },
+          {
+            "schemaVersion": "operation-arena-transition-v0",
+            "arenaId": "operation-00001006-390x836",
+            "sequence": 3,
+            "targetId": "turret-northwest",
+            "kind": "turret",
+            "command": "power",
+            "inputSource": "touch",
+            "actorId": "player-1",
+            "before": {
+              "state": "offline",
+              "visual": {
+                "stateLabel": "OFFLINE",
+                "worldCue": "Turret unpowered",
+                "tone": "muted",
+                "pattern": "outline"
+              }
+            },
+            "after": {
+              "state": "powered",
+              "visual": {
+                "stateLabel": "POWERED",
+                "worldCue": "Auto-defense ready",
+                "tone": "ready",
+                "pattern": "solid"
+              }
+            },
+            "fingerprint": "2E34BA7D"
+          },
+          {
+            "schemaVersion": "operation-arena-transition-v0",
+            "arenaId": "operation-00001006-390x836",
+            "sequence": 4,
+            "targetId": "valve-east",
+            "kind": "valve",
+            "command": "power",
+            "inputSource": "touch",
+            "actorId": "player-1",
+            "before": {
+              "state": "contaminated",
+              "visual": {
+                "stateLabel": "CONTAMINATED",
+                "worldCue": "Waste feed unsafe",
+                "tone": "danger",
+                "pattern": "diagonal-stripes"
+              }
+            },
+            "after": {
+              "state": "powered",
+              "visual": {
+                "stateLabel": "POWERED",
+                "worldCue": "Clean pressure online",
+                "tone": "ready",
+                "pattern": "solid"
+              }
+            },
+            "fingerprint": "367310F0"
+          },
+          {
+            "schemaVersion": "operation-arena-transition-v0",
+            "arenaId": "operation-00001006-390x836",
+            "sequence": 5,
+            "targetId": "watchtower-center",
+            "kind": "watchtower",
+            "command": "enter",
+            "inputSource": "touch",
+            "actorId": "player-1",
+            "before": {
+              "state": "idle",
+              "visual": {
+                "stateLabel": "VACANT",
+                "worldCue": "Lookout available",
+                "tone": "muted",
+                "pattern": "outline"
+              }
+            },
+            "after": {
+              "state": "occupied",
+              "visual": {
+                "stateLabel": "OCCUPIED",
+                "worldCue": "Lookout sightline active",
+                "tone": "ready",
+                "pattern": "solid"
+              }
+            },
+            "fingerprint": "CBB103F8"
+          },
+          {
+            "schemaVersion": "operation-arena-transition-v0",
+            "arenaId": "operation-00001006-390x836",
+            "sequence": 6,
+            "targetId": "pump-west",
+            "kind": "pump",
+            "command": "flood",
+            "inputSource": "touch",
+            "actorId": "player-1",
+            "before": {
+              "state": "drained",
+              "visual": {
+                "stateLabel": "DRAINED",
+                "worldCue": "Floor dry",
+                "tone": "ready",
+                "pattern": "solid"
+              }
+            },
+            "after": {
+              "state": "flooded",
+              "visual": {
+                "stateLabel": "FLOODED",
+                "worldCue": "Hazard water active",
+                "tone": "danger",
+                "pattern": "diagonal-stripes"
+              }
+            },
+            "fingerprint": "CDD8660C"
+          },
+          {
+            "schemaVersion": "operation-arena-transition-v0",
+            "arenaId": "operation-00001006-390x836",
+            "sequence": 7,
+            "targetId": "extraction-toilet-alpha",
+            "kind": "extraction-toilet",
+            "command": "arm",
+            "inputSource": "touch",
+            "actorId": "player-1",
+            "before": {
+              "state": "locked",
+              "visual": {
+                "stateLabel": "LOCKED",
+                "worldCue": "Extraction unavailable",
+                "tone": "muted",
+                "pattern": "outline"
+              }
+            },
+            "after": {
+              "state": "ready",
+              "visual": {
+                "stateLabel": "READY",
+                "worldCue": "Extraction toilet armed",
+                "tone": "ready",
+                "pattern": "solid"
+              }
+            },
+            "fingerprint": "5ECABA52"
+          },
+          {
+            "schemaVersion": "operation-arena-transition-v0",
+            "arenaId": "operation-00001006-390x836",
+            "sequence": 8,
+            "targetId": "pump-west",
+            "kind": "pump",
+            "command": "drain",
+            "inputSource": "touch",
+            "actorId": "player-1",
+            "before": {
+              "state": "flooded",
+              "visual": {
+                "stateLabel": "FLOODED",
+                "worldCue": "Hazard water active",
+                "tone": "danger",
+                "pattern": "diagonal-stripes"
+              }
+            },
+            "after": {
+              "state": "drained",
+              "visual": {
+                "stateLabel": "DRAINED",
+                "worldCue": "Floor dry",
+                "tone": "ready",
+                "pattern": "solid"
+              }
+            },
+            "fingerprint": "31BAD2FC"
+          }
+        ]
+      },
+      "rivalReceipt": {
+        "schemaVersion": "operation-rival-receipt-v1",
+        "operationId": "porcelain-siege",
+        "seed": 4102,
+        "routeOptions": [
+          "boiler-room"
+        ],
+        "scoringContract": "operation-score-v2",
+        "splits": [
+          {
+            "room": "porcelain-siege-breach",
+            "elapsedMs": 14366,
+            "score": 1290
+          },
+          {
+            "room": "porcelain-siege-hold",
+            "elapsedMs": 48783,
+            "score": 2815
+          },
+          {
+            "room": "porcelain-siege-escort",
+            "elapsedMs": 66883,
+            "score": 4677
+          },
+          {
+            "room": "porcelain-siege-hunt",
+            "elapsedMs": 108516,
+            "score": 6697
+          },
+          {
+            "room": "porcelain-siege-sabotage",
+            "elapsedMs": 135366,
+            "score": 8788
+          },
+          {
+            "room": "porcelain-siege-escape",
+            "elapsedMs": 156350,
+            "score": 11015
+          },
+          {
+            "room": "porcelain-siege-boss",
+            "elapsedMs": 160250,
+            "score": 15344
+          }
+        ],
+        "branchGhost": [
+          {
+            "fork": "deployment-route",
+            "choice": "boiler-room",
+            "elapsedMs": 0
+          }
+        ],
+        "objectives": [
+          {
+            "id": "porcelain-siege-breach",
+            "outcome": "complete",
+            "elapsedMs": 160250
+          },
+          {
+            "id": "porcelain-siege-hold",
+            "outcome": "complete",
+            "elapsedMs": 160250
+          },
+          {
+            "id": "porcelain-siege-escort",
+            "outcome": "complete",
+            "elapsedMs": 160250
+          },
+          {
+            "id": "porcelain-siege-hunt",
+            "outcome": "complete",
+            "elapsedMs": 160250
+          },
+          {
+            "id": "porcelain-siege-sabotage",
+            "outcome": "complete",
+            "elapsedMs": 160250
+          },
+          {
+            "id": "porcelain-siege-escape",
+            "outcome": "complete",
+            "elapsedMs": 160250
+          },
+          {
+            "id": "porcelain-siege-boss",
+            "outcome": "complete",
+            "elapsedMs": 160250
+          }
+        ],
+        "ghostPath": [],
+        "result": {
+          "finalScore": 15344,
+          "completed": true,
+          "durationMs": 160250
+        },
+        "trust": {
+          "source": "untrusted-player-claim",
+          "combatAuthority": "none",
+          "scoreAuthority": "server-verification-required",
+          "leaderboardEligible": false
+        },
+        "privacy": "no-identity-no-free-text-bounded-gameplay-evidence",
+        "receiptFingerprint": "1mafzgf",
+        "payloadBytes": 1545
+      },
+      "rematchCartridge": {
+        "schemaVersion": "operation-rematch-cartridge-v1",
+        "operationId": "porcelain-siege",
+        "seed": 4102,
+        "routeOptions": [
+          "boiler-room"
+        ],
+        "scoringContract": "operation-score-v2",
+        "rivalReceiptFingerprint": "1mafzgf",
+        "trust": "configuration-only-no-combat-or-score-authority",
+        "cartridgeFingerprint": "i98tca"
+      },
+      "durationSeconds": 160,
+      "runScore": 77469,
+      "routeSource": "player_selected"
+    },
+    "failures": 0,
+    "pass": true
+  },
+  {
+    "opId": "final-notice",
+    "route": "records-office",
+    "width": 1440,
+    "theme": "sewer-night",
+    "method": "Controlled full encounter sequence: boosted health and positions, lethal damage to real enemies; actual objective timers, pointer/keyboard actions, wave/reward UI and completion persistence. No encounter or completion counters forced.",
+    "rooms": [
+      {
+        "index": 0,
+        "verb": "BREACH",
+        "frame": 7,
+        "failures": 0,
+        "bosses": []
+      },
+      {
+        "index": 1,
+        "verb": "HOLD",
+        "frame": 840,
+        "failures": 0,
+        "bosses": []
+      },
+      {
+        "index": 2,
+        "verb": "ESCORT",
+        "frame": 2767,
+        "failures": 0,
+        "bosses": []
+      },
+      {
+        "index": 3,
+        "verb": "HUNT",
+        "frame": 4233,
+        "failures": 0,
+        "bosses": []
+      },
+      {
+        "index": 4,
+        "verb": "SABOTAGE",
+        "frame": 6386,
+        "failures": 0,
+        "bosses": []
+      },
+      {
+        "index": 5,
+        "verb": "ESCAPE",
+        "frame": 7838,
+        "failures": 0,
+        "bosses": []
+      },
+      {
+        "index": 6,
+        "verb": "BOSS",
+        "frame": 8925,
+        "failures": 0,
+        "bosses": [
+          {
+            "type": 3,
+            "name": "The HOA Board"
+          }
+        ]
+      }
+    ],
+    "errors": [],
+    "pause": {
+      "before": 875,
+      "after": 875,
+      "pass": true
+    },
+    "receipt": {
+      "schemaVersion": "operation-receipt-v1",
+      "scoringContract": "operation-score-v2",
+      "operationId": "final-notice",
+      "mission": "FINAL NOTICE",
+      "seed": 5103,
+      "status": "complete",
+      "completed": true,
+      "score": 14079,
+      "scoreBreakdown": {
+        "schemaVersion": "operation-score-v2",
+        "objective": 11850,
+        "interaction": 215,
+        "tempo": 1514,
+        "pressurePenalty": 0,
+        "extraction": 500,
+        "awarded": 14079
+      },
+      "act": 3,
+      "route": "records-office",
+      "routeConsequence": {
+        "id": "tempo_bonus",
+        "label": "TEMPO RELIEF"
+      },
+      "campaignCarryIn": null,
+      "checkpoint": "7/7 encounters",
+      "encounterFingerprints": [
+        "19170e58",
+        "db476a37",
+        "98e0c44d",
+        "740d1a33",
+        "370f47ae",
+        "bcdb6339",
+        "a394bd40"
+      ],
+      "trust": "local-deterministic-operation-receipt-not-server-authoritative",
+      "fingerprint": "96006c74",
+      "arenaReceipt": {
+        "schemaVersion": "operation-arena-receipt-v0",
+        "contract": "deterministic-interaction-state-not-rendering-or-3d-physics",
+        "arenaId": "operation-000013ef-1440x900",
+        "sequence": 8,
+        "stateFingerprint": "3166D69D",
+        "transitionFingerprint": "64991F82",
+        "transitions": [
+          {
+            "schemaVersion": "operation-arena-transition-v0",
+            "arenaId": "operation-000013ef-1440x900",
+            "sequence": 1,
+            "targetId": "turret-northeast",
+            "kind": "turret",
+            "command": "power",
+            "inputSource": "keyboard",
+            "actorId": "route-map",
+            "before": {
+              "state": "offline",
+              "visual": {
+                "stateLabel": "OFFLINE",
+                "worldCue": "Turret unpowered",
+                "tone": "muted",
+                "pattern": "outline"
+              }
+            },
+            "after": {
+              "state": "powered",
+              "visual": {
+                "stateLabel": "POWERED",
+                "worldCue": "Auto-defense ready",
+                "tone": "ready",
+                "pattern": "solid"
+              }
+            },
+            "fingerprint": "029D9141"
+          },
+          {
+            "schemaVersion": "operation-arena-transition-v0",
+            "arenaId": "operation-000013ef-1440x900",
+            "sequence": 2,
+            "targetId": "door-north",
+            "kind": "door",
+            "command": "open",
+            "inputSource": "keyboard",
+            "actorId": "player-1",
+            "before": {
+              "state": "closed",
+              "visual": {
+                "stateLabel": "CLOSED",
+                "worldCue": "Door sealed",
+                "tone": "warning",
+                "pattern": "outline"
+              }
+            },
+            "after": {
+              "state": "open",
+              "visual": {
+                "stateLabel": "OPEN",
+                "worldCue": "Passage clear",
+                "tone": "ready",
+                "pattern": "solid"
+              }
+            },
+            "fingerprint": "AD444CB7"
+          },
+          {
+            "schemaVersion": "operation-arena-transition-v0",
+            "arenaId": "operation-000013ef-1440x900",
+            "sequence": 3,
+            "targetId": "turret-northwest",
+            "kind": "turret",
+            "command": "power",
+            "inputSource": "keyboard",
+            "actorId": "player-1",
+            "before": {
+              "state": "offline",
+              "visual": {
+                "stateLabel": "OFFLINE",
+                "worldCue": "Turret unpowered",
+                "tone": "muted",
+                "pattern": "outline"
+              }
+            },
+            "after": {
+              "state": "powered",
+              "visual": {
+                "stateLabel": "POWERED",
+                "worldCue": "Auto-defense ready",
+                "tone": "ready",
+                "pattern": "solid"
+              }
+            },
+            "fingerprint": "C88F0252"
+          },
+          {
+            "schemaVersion": "operation-arena-transition-v0",
+            "arenaId": "operation-000013ef-1440x900",
+            "sequence": 4,
+            "targetId": "valve-east",
+            "kind": "valve",
+            "command": "power",
+            "inputSource": "keyboard",
+            "actorId": "player-1",
+            "before": {
+              "state": "contaminated",
+              "visual": {
+                "stateLabel": "CONTAMINATED",
+                "worldCue": "Waste feed unsafe",
+                "tone": "danger",
+                "pattern": "diagonal-stripes"
+              }
+            },
+            "after": {
+              "state": "powered",
+              "visual": {
+                "stateLabel": "POWERED",
+                "worldCue": "Clean pressure online",
+                "tone": "ready",
+                "pattern": "solid"
+              }
+            },
+            "fingerprint": "BEE5FBB1"
+          },
+          {
+            "schemaVersion": "operation-arena-transition-v0",
+            "arenaId": "operation-000013ef-1440x900",
+            "sequence": 5,
+            "targetId": "watchtower-center",
+            "kind": "watchtower",
+            "command": "enter",
+            "inputSource": "keyboard",
+            "actorId": "player-1",
+            "before": {
+              "state": "idle",
+              "visual": {
+                "stateLabel": "VACANT",
+                "worldCue": "Lookout available",
+                "tone": "muted",
+                "pattern": "outline"
+              }
+            },
+            "after": {
+              "state": "occupied",
+              "visual": {
+                "stateLabel": "OCCUPIED",
+                "worldCue": "Lookout sightline active",
+                "tone": "ready",
+                "pattern": "solid"
+              }
+            },
+            "fingerprint": "0C6AEBBF"
+          },
+          {
+            "schemaVersion": "operation-arena-transition-v0",
+            "arenaId": "operation-000013ef-1440x900",
+            "sequence": 6,
+            "targetId": "pump-west",
+            "kind": "pump",
+            "command": "flood",
+            "inputSource": "keyboard",
+            "actorId": "player-1",
+            "before": {
+              "state": "drained",
+              "visual": {
+                "stateLabel": "DRAINED",
+                "worldCue": "Floor dry",
+                "tone": "ready",
+                "pattern": "solid"
+              }
+            },
+            "after": {
+              "state": "flooded",
+              "visual": {
+                "stateLabel": "FLOODED",
+                "worldCue": "Hazard water active",
+                "tone": "danger",
+                "pattern": "diagonal-stripes"
+              }
+            },
+            "fingerprint": "080FDAEB"
+          },
+          {
+            "schemaVersion": "operation-arena-transition-v0",
+            "arenaId": "operation-000013ef-1440x900",
+            "sequence": 7,
+            "targetId": "extraction-toilet-alpha",
+            "kind": "extraction-toilet",
+            "command": "arm",
+            "inputSource": "keyboard",
+            "actorId": "player-1",
+            "before": {
+              "state": "locked",
+              "visual": {
+                "stateLabel": "LOCKED",
+                "worldCue": "Extraction unavailable",
+                "tone": "muted",
+                "pattern": "outline"
+              }
+            },
+            "after": {
+              "state": "ready",
+              "visual": {
+                "stateLabel": "READY",
+                "worldCue": "Extraction toilet armed",
+                "tone": "ready",
+                "pattern": "solid"
+              }
+            },
+            "fingerprint": "80C43CCD"
+          },
+          {
+            "schemaVersion": "operation-arena-transition-v0",
+            "arenaId": "operation-000013ef-1440x900",
+            "sequence": 8,
+            "targetId": "pump-west",
+            "kind": "pump",
+            "command": "drain",
+            "inputSource": "keyboard",
+            "actorId": "player-1",
+            "before": {
+              "state": "flooded",
+              "visual": {
+                "stateLabel": "FLOODED",
+                "worldCue": "Hazard water active",
+                "tone": "danger",
+                "pattern": "diagonal-stripes"
+              }
+            },
+            "after": {
+              "state": "drained",
+              "visual": {
+                "stateLabel": "DRAINED",
+                "worldCue": "Floor dry",
+                "tone": "ready",
+                "pattern": "solid"
+              }
+            },
+            "fingerprint": "9716FF6B"
+          }
+        ]
+      },
+      "rivalReceipt": {
+        "schemaVersion": "operation-rival-receipt-v1",
+        "operationId": "final-notice",
+        "seed": 5103,
+        "routeOptions": [
+          "records-office"
+        ],
+        "scoringContract": "operation-score-v2",
+        "splits": [
+          {
+            "room": "final-notice-breach",
+            "elapsedMs": 13983,
+            "score": 1173
+          },
+          {
+            "room": "final-notice-hold",
+            "elapsedMs": 46100,
+            "score": 2563
+          },
+          {
+            "room": "final-notice-escort",
+            "elapsedMs": 70533,
+            "score": 4245
+          },
+          {
+            "room": "final-notice-hunt",
+            "elapsedMs": 106433,
+            "score": 6092
+          },
+          {
+            "room": "final-notice-sabotage",
+            "elapsedMs": 130633,
+            "score": 7999
+          },
+          {
+            "room": "final-notice-escape",
+            "elapsedMs": 148750,
+            "score": 10030
+          },
+          {
+            "room": "final-notice-boss",
+            "elapsedMs": 148783,
+            "score": 14079
+          }
+        ],
+        "branchGhost": [
+          {
+            "fork": "deployment-route",
+            "choice": "records-office",
+            "elapsedMs": 0
+          }
+        ],
+        "objectives": [
+          {
+            "id": "final-notice-breach",
+            "outcome": "complete",
+            "elapsedMs": 148783
+          },
+          {
+            "id": "final-notice-hold",
+            "outcome": "complete",
+            "elapsedMs": 148783
+          },
+          {
+            "id": "final-notice-escort",
+            "outcome": "complete",
+            "elapsedMs": 148783
+          },
+          {
+            "id": "final-notice-hunt",
+            "outcome": "complete",
+            "elapsedMs": 148783
+          },
+          {
+            "id": "final-notice-sabotage",
+            "outcome": "complete",
+            "elapsedMs": 148783
+          },
+          {
+            "id": "final-notice-escape",
+            "outcome": "complete",
+            "elapsedMs": 148783
+          },
+          {
+            "id": "final-notice-boss",
+            "outcome": "complete",
+            "elapsedMs": 148783
+          }
+        ],
+        "ghostPath": [],
+        "result": {
+          "finalScore": 14079,
+          "completed": true,
+          "durationMs": 148783
+        },
+        "trust": {
+          "source": "untrusted-player-claim",
+          "combatAuthority": "none",
+          "scoreAuthority": "server-verification-required",
+          "leaderboardEligible": false
+        },
+        "privacy": "no-identity-no-free-text-bounded-gameplay-evidence",
+        "receiptFingerprint": "r5re4q",
+        "payloadBytes": 1505
+      },
+      "rematchCartridge": {
+        "schemaVersion": "operation-rematch-cartridge-v1",
+        "operationId": "final-notice",
+        "seed": 5103,
+        "routeOptions": [
+          "records-office"
+        ],
+        "scoringContract": "operation-score-v2",
+        "rivalReceiptFingerprint": "r5re4q",
+        "trust": "configuration-only-no-combat-or-score-authority",
+        "cartridgeFingerprint": "1wu8v5n"
+      },
+      "durationSeconds": 148,
+      "runScore": 84862,
+      "routeSource": "player_selected"
+    },
+    "failures": 0,
+    "pass": true
+  },
+  {
+    "opId": "final-notice",
+    "route": "executive-penthouse",
+    "width": 390,
+    "theme": "porcelain-day",
+    "method": "Controlled full encounter sequence: boosted health and positions, lethal damage to real enemies; actual objective timers, pointer/keyboard actions, wave/reward UI and completion persistence. No encounter or completion counters forced.",
+    "rooms": [
+      {
+        "index": 0,
+        "verb": "BREACH",
+        "frame": 8,
+        "failures": 0,
+        "bosses": []
+      },
+      {
+        "index": 1,
+        "verb": "HOLD",
+        "frame": 841,
+        "failures": 0,
+        "bosses": []
+      },
+      {
+        "index": 2,
+        "verb": "ESCORT",
+        "frame": 2897,
+        "failures": 0,
+        "bosses": []
+      },
+      {
+        "index": 3,
+        "verb": "HUNT",
+        "frame": 4005,
+        "failures": 0,
+        "bosses": []
+      },
+      {
+        "index": 4,
+        "verb": "SABOTAGE",
+        "frame": 6452,
+        "failures": 0,
+        "bosses": []
+      },
+      {
+        "index": 5,
+        "verb": "ESCAPE",
+        "frame": 8059,
+        "failures": 0,
+        "bosses": []
+      },
+      {
+        "index": 6,
+        "verb": "BOSS",
+        "frame": 9318,
+        "failures": 0,
+        "bosses": [
+          {
+            "type": 3,
+            "name": "The HOA Board"
+          }
+        ]
+      }
+    ],
+    "errors": [],
+    "pause": {
+      "before": 859,
+      "after": 859,
+      "pass": true
+    },
+    "receipt": {
+      "schemaVersion": "operation-receipt-v1",
+      "scoringContract": "operation-score-v2",
+      "operationId": "final-notice",
+      "mission": "FINAL NOTICE",
+      "seed": 5103,
+      "status": "complete",
+      "completed": true,
+      "score": 15344,
+      "scoreBreakdown": {
+        "schemaVersion": "operation-score-v2",
+        "objective": 11850,
+        "interaction": 215,
+        "tempo": 1487,
+        "pressurePenalty": 100,
+        "extraction": 500,
+        "awarded": 15344
+      },
+      "act": 3,
+      "route": "executive-penthouse",
+      "routeConsequence": {
+        "id": "score_bonus",
+        "label": "SCORE PREMIUM"
+      },
+      "campaignCarryIn": null,
+      "checkpoint": "7/7 encounters",
+      "encounterFingerprints": [
+        "89e502ae",
+        "fcf261bd",
+        "922a315f",
+        "e7b00d8f",
+        "99a1b68f",
+        "9899e5dc",
+        "5a49813e"
+      ],
+      "trust": "local-deterministic-operation-receipt-not-server-authoritative",
+      "fingerprint": "01604c89",
+      "arenaReceipt": {
+        "schemaVersion": "operation-arena-receipt-v0",
+        "contract": "deterministic-interaction-state-not-rendering-or-3d-physics",
+        "arenaId": "operation-000013ef-390x836",
+        "sequence": 8,
+        "stateFingerprint": "06640FF9",
+        "transitionFingerprint": "7D743950",
+        "transitions": [
+          {
+            "schemaVersion": "operation-arena-transition-v0",
+            "arenaId": "operation-000013ef-390x836",
+            "sequence": 1,
+            "targetId": "extraction-toilet-bravo",
+            "kind": "extraction-toilet",
+            "command": "contaminate",
+            "inputSource": "keyboard",
+            "actorId": "route-map",
+            "before": {
+              "state": "locked",
+              "visual": {
+                "stateLabel": "LOCKED",
+                "worldCue": "Extraction unavailable",
+                "tone": "muted",
+                "pattern": "outline"
+              }
+            },
+            "after": {
+              "state": "contaminated",
+              "visual": {
+                "stateLabel": "CONTAMINATED",
+                "worldCue": "Extraction unsafe",
+                "tone": "danger",
+                "pattern": "diagonal-stripes"
+              }
+            },
+            "fingerprint": "5E5F7B4D"
+          },
+          {
+            "schemaVersion": "operation-arena-transition-v0",
+            "arenaId": "operation-000013ef-390x836",
+            "sequence": 2,
+            "targetId": "door-north",
+            "kind": "door",
+            "command": "open",
+            "inputSource": "touch",
+            "actorId": "player-1",
+            "before": {
+              "state": "closed",
+              "visual": {
+                "stateLabel": "CLOSED",
+                "worldCue": "Door sealed",
+                "tone": "warning",
+                "pattern": "outline"
+              }
+            },
+            "after": {
+              "state": "open",
+              "visual": {
+                "stateLabel": "OPEN",
+                "worldCue": "Passage clear",
+                "tone": "ready",
+                "pattern": "solid"
+              }
+            },
+            "fingerprint": "75CCDFAC"
+          },
+          {
+            "schemaVersion": "operation-arena-transition-v0",
+            "arenaId": "operation-000013ef-390x836",
+            "sequence": 3,
+            "targetId": "turret-northwest",
+            "kind": "turret",
+            "command": "power",
+            "inputSource": "touch",
+            "actorId": "player-1",
+            "before": {
+              "state": "offline",
+              "visual": {
+                "stateLabel": "OFFLINE",
+                "worldCue": "Turret unpowered",
+                "tone": "muted",
+                "pattern": "outline"
+              }
+            },
+            "after": {
+              "state": "powered",
+              "visual": {
+                "stateLabel": "POWERED",
+                "worldCue": "Auto-defense ready",
+                "tone": "ready",
+                "pattern": "solid"
+              }
+            },
+            "fingerprint": "7DD5DDE5"
+          },
+          {
+            "schemaVersion": "operation-arena-transition-v0",
+            "arenaId": "operation-000013ef-390x836",
+            "sequence": 4,
+            "targetId": "valve-east",
+            "kind": "valve",
+            "command": "power",
+            "inputSource": "touch",
+            "actorId": "player-1",
+            "before": {
+              "state": "contaminated",
+              "visual": {
+                "stateLabel": "CONTAMINATED",
+                "worldCue": "Waste feed unsafe",
+                "tone": "danger",
+                "pattern": "diagonal-stripes"
+              }
+            },
+            "after": {
+              "state": "powered",
+              "visual": {
+                "stateLabel": "POWERED",
+                "worldCue": "Clean pressure online",
+                "tone": "ready",
+                "pattern": "solid"
+              }
+            },
+            "fingerprint": "DCD286B8"
+          },
+          {
+            "schemaVersion": "operation-arena-transition-v0",
+            "arenaId": "operation-000013ef-390x836",
+            "sequence": 5,
+            "targetId": "watchtower-center",
+            "kind": "watchtower",
+            "command": "enter",
+            "inputSource": "touch",
+            "actorId": "player-1",
+            "before": {
+              "state": "idle",
+              "visual": {
+                "stateLabel": "VACANT",
+                "worldCue": "Lookout available",
+                "tone": "muted",
+                "pattern": "outline"
+              }
+            },
+            "after": {
+              "state": "occupied",
+              "visual": {
+                "stateLabel": "OCCUPIED",
+                "worldCue": "Lookout sightline active",
+                "tone": "ready",
+                "pattern": "solid"
+              }
+            },
+            "fingerprint": "8231E240"
+          },
+          {
+            "schemaVersion": "operation-arena-transition-v0",
+            "arenaId": "operation-000013ef-390x836",
+            "sequence": 6,
+            "targetId": "pump-west",
+            "kind": "pump",
+            "command": "flood",
+            "inputSource": "touch",
+            "actorId": "player-1",
+            "before": {
+              "state": "drained",
+              "visual": {
+                "stateLabel": "DRAINED",
+                "worldCue": "Floor dry",
+                "tone": "ready",
+                "pattern": "solid"
+              }
+            },
+            "after": {
+              "state": "flooded",
+              "visual": {
+                "stateLabel": "FLOODED",
+                "worldCue": "Hazard water active",
+                "tone": "danger",
+                "pattern": "diagonal-stripes"
+              }
+            },
+            "fingerprint": "0402F2E4"
+          },
+          {
+            "schemaVersion": "operation-arena-transition-v0",
+            "arenaId": "operation-000013ef-390x836",
+            "sequence": 7,
+            "targetId": "extraction-toilet-alpha",
+            "kind": "extraction-toilet",
+            "command": "arm",
+            "inputSource": "touch",
+            "actorId": "player-1",
+            "before": {
+              "state": "locked",
+              "visual": {
+                "stateLabel": "LOCKED",
+                "worldCue": "Extraction unavailable",
+                "tone": "muted",
+                "pattern": "outline"
+              }
+            },
+            "after": {
+              "state": "ready",
+              "visual": {
+                "stateLabel": "READY",
+                "worldCue": "Extraction toilet armed",
+                "tone": "ready",
+                "pattern": "solid"
+              }
+            },
+            "fingerprint": "3C723F5A"
+          },
+          {
+            "schemaVersion": "operation-arena-transition-v0",
+            "arenaId": "operation-000013ef-390x836",
+            "sequence": 8,
+            "targetId": "pump-west",
+            "kind": "pump",
+            "command": "drain",
+            "inputSource": "touch",
+            "actorId": "player-1",
+            "before": {
+              "state": "flooded",
+              "visual": {
+                "stateLabel": "FLOODED",
+                "worldCue": "Hazard water active",
+                "tone": "danger",
+                "pattern": "diagonal-stripes"
+              }
+            },
+            "after": {
+              "state": "drained",
+              "visual": {
+                "stateLabel": "DRAINED",
+                "worldCue": "Floor dry",
+                "tone": "ready",
+                "pattern": "solid"
+              }
+            },
+            "fingerprint": "D44E7594"
+          }
+        ]
+      },
+      "rivalReceipt": {
+        "schemaVersion": "operation-rival-receipt-v1",
+        "operationId": "final-notice",
+        "seed": 5103,
+        "routeOptions": [
+          "executive-penthouse"
+        ],
+        "scoringContract": "operation-score-v2",
+        "splits": [
+          {
+            "room": "final-notice-breach",
+            "elapsedMs": 14000,
+            "score": 1290
+          },
+          {
+            "room": "final-notice-hold",
+            "elapsedMs": 48266,
+            "score": 2815
+          },
+          {
+            "room": "final-notice-escort",
+            "elapsedMs": 66733,
+            "score": 4676
+          },
+          {
+            "room": "final-notice-hunt",
+            "elapsedMs": 107533,
+            "score": 6697
+          },
+          {
+            "room": "final-notice-sabotage",
+            "elapsedMs": 134316,
+            "score": 8788
+          },
+          {
+            "room": "final-notice-escape",
+            "elapsedMs": 155300,
+            "score": 11015
+          },
+          {
+            "room": "final-notice-boss",
+            "elapsedMs": 159200,
+            "score": 15344
+          }
+        ],
+        "branchGhost": [
+          {
+            "fork": "deployment-route",
+            "choice": "executive-penthouse",
+            "elapsedMs": 0
+          }
+        ],
+        "objectives": [
+          {
+            "id": "final-notice-breach",
+            "outcome": "complete",
+            "elapsedMs": 159200
+          },
+          {
+            "id": "final-notice-hold",
+            "outcome": "complete",
+            "elapsedMs": 159200
+          },
+          {
+            "id": "final-notice-escort",
+            "outcome": "complete",
+            "elapsedMs": 159200
+          },
+          {
+            "id": "final-notice-hunt",
+            "outcome": "complete",
+            "elapsedMs": 159200
+          },
+          {
+            "id": "final-notice-sabotage",
+            "outcome": "complete",
+            "elapsedMs": 159200
+          },
+          {
+            "id": "final-notice-escape",
+            "outcome": "complete",
+            "elapsedMs": 159200
+          },
+          {
+            "id": "final-notice-boss",
+            "outcome": "complete",
+            "elapsedMs": 159200
+          }
+        ],
+        "ghostPath": [],
+        "result": {
+          "finalScore": 15344,
+          "completed": true,
+          "durationMs": 159200
+        },
+        "trust": {
+          "source": "untrusted-player-claim",
+          "combatAuthority": "none",
+          "scoreAuthority": "server-verification-required",
+          "leaderboardEligible": false
+        },
+        "privacy": "no-identity-no-free-text-bounded-gameplay-evidence",
+        "receiptFingerprint": "1rc14ii",
+        "payloadBytes": 1516
+      },
+      "rematchCartridge": {
+        "schemaVersion": "operation-rematch-cartridge-v1",
+        "operationId": "final-notice",
+        "seed": 5103,
+        "routeOptions": [
+          "executive-penthouse"
+        ],
+        "scoringContract": "operation-score-v2",
+        "rivalReceiptFingerprint": "1rc14ii",
+        "trust": "configuration-only-no-combat-or-score-authority",
+        "cartridgeFingerprint": "qlvsna"
+      },
+      "durationSeconds": 159,
+      "runScore": 95441,
+      "routeSource": "player_selected"
+    },
+    "failures": 0,
+    "pass": true
+  }
+]

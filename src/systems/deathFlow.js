@@ -1,3 +1,4 @@
+import { getOperation } from "./operationCampaign.js";
 import { buildStudioGameEvent } from "../utils/runIntelligence.js";
 import { buildRunRngFairnessReceipt } from "./runRng.js";
 import { buildWavePlanReceipt } from "./wavePlanReceipt.js";
@@ -12,16 +13,16 @@ export function buildRunTheFixContract({
   rematchWave = null,
 } = {}) {
   const nextContract = debrief?.nextRunContract || {};
-  const evidence = collapseCoaching?.contributingFactor || collapseCoaching?.primary || null;
+  const evidence = debrief.objective ? null : collapseCoaching?.contributingFactor || collapseCoaching?.primary || null;
   const diagnosis = evidence?.statement
     || debrief?.collapseReason
     || String(postRunIntel?.cause || "pressure breakdown").replace(/_/g, " ");
   const target = nextContract.target || nextRunDrill.detail || "Survive one more wave with one deliberate adjustment.";
   const proof = nextContract.proof || "Win condition: finish the target and bank the result.";
   const seeded = Number(runSeed) > 0;
-  const canRematch = seeded && Number(rematchWave) > 0 && Number(wave) > 1;
+  const canRematch = !debrief.objective && seeded && Number(rematchWave) > 0 && Number(wave) > 1;
 
-  let action = { type: "new_run", label: nextRunDrill.cta || "RUN THE FIX" };
+  let action = { type: "new_run", label: debrief.replayLabel || nextRunDrill.cta || "RUN THE FIX" };
   if (canRematch) {
     action = {
       type: "rematch",
@@ -32,7 +33,7 @@ export function buildRunTheFixContract({
   } else if (seeded && nextRunDrill.action === "replay_seed") {
     action = {
       type: "replay_seed",
-      label: nextRunDrill.cta || `REPLAY #${runSeed}`,
+      label: debrief.replayLabel || nextRunDrill.cta || `REPLAY #${runSeed}`,
       seed: Number(runSeed),
     };
   }
@@ -113,10 +114,15 @@ export function buildDeathScreenProps({
   peakMoment,
   communityChokeWaves,
 } = {}) {
+  const operation = gs?.operationMode ? getOperation(gs.operationId) : null;
+  const encounter = operation?.encounters[Math.min(6, Math.max(0, gs?.operationEncounterIndex || 0))];
+  const outcome = operation ? { modeId: "operation", operationId: operation.id, label: operation.title, victory: false,
+    headline: (gs.operationEncounterIndex || 0) + "/7 ENCOUNTERS CLEARED", detail: "Stopped at " + (encounter?.verb || "the opening") + " · " + (encounter?.title || operation.title) } : modeOutcome;
+  const restart = operation && onStartGame ? (seed, options = {}) => onStartGame(seed, { ...options, operationMode: true, operationId: operation.id, operationRoute: gs.operationRoute }) : onStartGame;
   return {
     victory: !!victory,
-    modeLabel: modeLabel || null,
-    modeOutcome: modeOutcome?.headline ? modeOutcome : null,
+    modeLabel: operation?.title || modeLabel || null,
+    modeOutcome: outcome?.headline ? outcome : null,
     duelResult: duelResult || null,
     score,
     kills,
@@ -141,7 +147,7 @@ export function buildDeathScreenProps({
     onLoadMore,
     username,
     DIFFICULTIES,
-    onStartGame,
+    onStartGame: restart,
     onMenu,
     onRefreshLeaderboard,
     onSubmitScore,

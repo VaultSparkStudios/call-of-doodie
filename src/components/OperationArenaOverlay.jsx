@@ -15,6 +15,7 @@ export default function OperationArenaOverlay({
   missionScore = 0,
   directorReason = "",
   onInteract,
+  onInteractHeld,
   gamepadConnected = false,
 }) {
   const action = getOperationEncounterAction(encounter);
@@ -34,6 +35,7 @@ export default function OperationArenaOverlay({
   ) || (
     action?.command === "drain" && target?.state === "drained"
   );
+  const channel = verbOf(encounter) === "SABOTAGE";
   const pressedRef = useRef(false);
   const inRange = proximitySnapshot?.available === true && proximitySnapshot.inRange === true;
   const trigger = () => {
@@ -53,14 +55,21 @@ export default function OperationArenaOverlay({
   }, [action, completed, inRange, onInteract]);
 
   useEffect(() => {
-    if (!gamepadConnected || !action || completed || typeof navigator.getGamepads !== "function") return undefined;
+    if (!gamepadConnected || !action || (completed && !channel) || typeof navigator.getGamepads !== "function") return undefined;
     const id = setInterval(() => {
       const pressed = Boolean(navigator.getGamepads()?.find(Boolean)?.buttons?.[0]?.pressed);
-      if (pressed && !pressedRef.current && inRange) onInteract?.({ ...action, inputSource: "controller" });
+      if (pressed && !pressedRef.current && inRange && !completed) onInteract?.({ ...action, inputSource: "controller" });
+      if (channel) onInteractHeld?.(pressed && inRange, "controller");
       pressedRef.current = pressed;
     }, 80);
-    return () => clearInterval(id);
-  }, [action, completed, gamepadConnected, inRange, onInteract]);
+    return () => { clearInterval(id); pressedRef.current = false; if (channel) onInteractHeld?.(false, "controller"); };
+  }, [action, channel, completed, gamepadConnected, inRange, onInteract, onInteractHeld]);
+
+  useEffect(() => {
+    const release = () => { onInteractHeld?.(false); onInteractHeld?.(false, "controller"); };
+    window.addEventListener("blur", release);
+    return () => { window.removeEventListener("blur", release); release(); };
+  }, [onInteractHeld]);
 
   if (!arenaState || !encounter) return null;
   const encounterNumber = Number(progress?.encounterNumber || progress?.index + 1 || 1);
@@ -98,9 +107,12 @@ export default function OperationArenaOverlay({
       <span style={{ display: "block", marginTop: 3, color: "#AFC4CD", fontSize: 10, lineHeight: 1.35 }}>
         {encounter.description || encounter.objective || action?.benefit}
       </span>
+      <span data-testid="operation-field-task" style={{ display: "block", marginTop: 5, color: "#EAFBFF", fontSize: 10, lineHeight: 1.4 }}>
+        {{ BREACH: "Open the north door, then shoot the marked breach door and clear the room.", HOLD: "Power the turret, then defend the marked point for 30 seconds and clear enemies.", ESCORT: "Pressurize the lane, then protect the cart until it reaches its destination.", HUNT: "Take the watchtower, defeat the marked target and clear the room.", SABOTAGE: "Flood the west pump, then stay beside it and hold SABOTAGE for 3 seconds.", ESCAPE: "Arm extraction, reach the marked exit before the alarm fills, then clear enemies.", BOSS: "Drain the floor and defeat the Operation boss and its reinforcements." }[verbOf(encounter)]}
+      </span>
       {directorReason && <span style={{ display: "block", marginTop: 5, color: "#FFD57B", fontSize: 9 }}>DIRECTOR: {directorReason}</span>}
       {objectiveState && <span data-testid="operation-objective-status" style={{ display: "block", marginTop: 5, color: objectiveState.actionComplete ? "#7CFFB8" : "#FFD57B", fontSize: 9, fontWeight: 900 }}>
-        {objectiveState.actionComplete ? "OBJECTIVE CONFIRMED" : objectiveState.reinforcementCount > 0 ? `OBJECTIVE REQUIRED · REINFORCEMENTS ${objectiveState.reinforcementCount}` : "OBJECTIVE ACTION REQUIRED"}
+        {objectiveState.actionComplete ? "LINK CONFIRMED · FINISH FIELD TASK" : objectiveState.reinforcementCount > 0 ? `OBJECTIVE REQUIRED · REINFORCEMENTS ${objectiveState.reinforcementCount}` : "OBJECTIVE ACTION REQUIRED"}
       </span>}
       {action && !completed && <div
         data-testid="operation-proximity-status"
@@ -126,8 +138,12 @@ export default function OperationArenaOverlay({
         <button
           type="button"
           data-testid="operation-interact"
-          disabled={completed || !inRange}
+          disabled={(completed && !channel) || !inRange}
           onClick={trigger}
+          onPointerDown={(event) => { if (channel && inRange) { event.currentTarget.setPointerCapture?.(event.pointerId); trigger(); onInteractHeld?.(true); } }}
+          onPointerUp={() => { if (channel) onInteractHeld?.(false); }}
+          onPointerCancel={() => { if (channel) onInteractHeld?.(false); }}
+          onLostPointerCapture={() => { if (channel) onInteractHeld?.(false); }}
           style={{
             width: "100%",
             minHeight: 48,
@@ -143,7 +159,7 @@ export default function OperationArenaOverlay({
             cursor: completed || !inRange ? "not-allowed" : "pointer",
           }}
         >
-          {completed
+          {channel && completed && inRange ? "HOLD TO SABOTAGE · E / A / TOUCH" : completed
             ? `✓ ${cue?.stateLabel || "INTERACTION COMPLETE"}`
             : inRange
               ? `${action.label} · E / A / USE`

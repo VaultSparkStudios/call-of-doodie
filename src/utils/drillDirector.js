@@ -18,6 +18,9 @@ export function buildNextRunDrill({
     mode,
   };
 
+  if (debrief?.objective) {
+    return { ...base, id: debrief.nextRunContract.id, title: debrief.nextRunContract.focus, detail: debrief.nextRunContract.target, cta: debrief.replayLabel };
+  }
   if (runCoach?.brain?.chokeWarning) {
     return {
       ...base,

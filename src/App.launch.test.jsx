@@ -158,8 +158,8 @@ vi.mock("./components/DraftScreen.jsx", () => ({
 }));
 
 vi.mock("./components/DeathScreen.jsx", () => ({
-  default: function DeathScreenMock() {
-    return <div>death-screen</div>;
+  default: function DeathScreenMock({ onStartGame }) {
+    return <button data-testid="retry-run" onClick={() => onStartGame()}>death-screen</button>;
   },
 }));
 
@@ -278,6 +278,18 @@ describe("CallOfDoodie launch smoke", () => {
 
     expect(container.querySelector("#game-canvas")).not.toBeNull();
     expect(issueRunTokenMock).toHaveBeenCalledTimes(1);
+    const { useGameLoop } = await import("./hooks/useGameLoop.js");
+    const report = vi.spyOn(console, "error").mockImplementation(() => {});
+    await act(async () => { useGameLoop.mock.calls.at(-1)[3].onError(new Error("test run end")); });
+    await flush();
+    await act(async () => { container.querySelector("[data-testid=retry-run]").click(); });
+    await flush();
+    expect(container.textContent).toContain("draft-skip");
+    await act(async () => { container.querySelector("button").click(); });
+    await flush();
+    expect(container.querySelector("#game-canvas")).not.toBeNull();
+    expect(issueRunTokenMock).toHaveBeenCalledTimes(2);
+    report.mockRestore();
     expect(issueRunTokenMock).toHaveBeenCalledWith({
       mode: null,
       difficulty: "normal",

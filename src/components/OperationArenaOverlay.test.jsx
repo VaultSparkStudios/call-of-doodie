@@ -88,4 +88,19 @@ describe("OperationArenaOverlay", () => {
     act(() => vi.advanceTimersByTime(81));
     expect(onInteract).not.toHaveBeenCalled();
   });
+  it("channels sabotage with touch and releases on cancel or unmount", () => {
+    const hold=vi.fn();render({encounter:{verb:"SABOTAGE"},objectiveState:{actionComplete:true},onInteractHeld:hold});
+    const button=container.querySelector("[data-testid=operation-interact]");expect(button.disabled).toBe(false);
+    act(()=>button.dispatchEvent(new Event("pointerdown",{bubbles:true})));expect(hold).toHaveBeenLastCalledWith(true);
+    act(()=>button.dispatchEvent(new Event("pointercancel",{bubbles:true})));expect(hold).toHaveBeenLastCalledWith(false);
+    act(()=>button.dispatchEvent(new Event("pointerdown",{bubbles:true})));
+    act(()=>root.unmount());root=null;expect(hold).toHaveBeenCalledWith(false);
+  });
+  it("keeps controller hold active after the sabotage link is confirmed", () => {
+    vi.useFakeTimers();const hold=vi.fn();let pressed=true;
+    Object.defineProperty(navigator,"getGamepads",{configurable:true,value:()=>[{buttons:[{pressed}]}]});
+    render({encounter:{verb:"SABOTAGE"},objectiveState:{actionComplete:true},onInteractHeld:hold,gamepadConnected:true});
+    act(()=>vi.advanceTimersByTime(81));expect(hold).toHaveBeenLastCalledWith(true, "controller");
+    pressed=false;act(()=>vi.advanceTimersByTime(81));expect(hold).toHaveBeenLastCalledWith(false, "controller");
+  });
 });

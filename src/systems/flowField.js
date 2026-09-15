@@ -1,6 +1,6 @@
 export const FF_CELL = 24;
 
-export function buildFlowField(W, H, px, py, obstacles = [], cellSize = FF_CELL) {
+export function buildFlowField(W, H, px, py, obstacles = [], cellSize = FF_CELL, { clearance = 10, diagonal = true } = {}) {
   const cols = Math.ceil(W / cellSize);
   const rows = Math.ceil(H / cellSize);
   const blocked = new Uint8Array(cols * rows);
@@ -9,7 +9,7 @@ export function buildFlowField(W, H, px, py, obstacles = [], cellSize = FF_CELL)
       const cx = (c + 0.5) * cellSize;
       const cy = (r + 0.5) * cellSize;
       for (const ob of obstacles) {
-        if (cx > ob.x - 10 && cx < ob.x + ob.w + 10 && cy > ob.y - 10 && cy < ob.y + ob.h + 10) {
+        if (cx > ob.x - clearance && cx < ob.x + ob.w + clearance && cy > ob.y - clearance && cy < ob.y + ob.h + clearance) {
           blocked[r * cols + c] = 1;
           break;
         }
@@ -29,6 +29,7 @@ export function buildFlowField(W, H, px, py, obstacles = [], cellSize = FF_CELL)
   while (qi < queue.length) {
     const [cc, cr] = queue[qi++];
     for (const [dc, dr] of DIRS) {
+      if (!diagonal && dc && dr) continue;
       const nc = cc + dc;
       const nr = cr + dr;
       if (nc < 0 || nc >= cols || nr < 0 || nr >= rows) continue;

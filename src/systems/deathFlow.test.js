@@ -276,3 +276,10 @@ describe("buildDeathScreenProps", () => {
     });
   });
 });
+
+it("retries a failed Operation from its first encounter on the same route", () => {
+  const start=vi.fn();const props=buildDeathScreenProps({gs:{operationMode:true,operationId:"porcelain-siege",operationRoute:"boiler-room",operationEncounterIndex:4},onStartGame:start});
+  expect(props.modeOutcome).toMatchObject({modeId:"operation",headline:"4/7 ENCOUNTERS CLEARED"});
+  expect(props.modeOutcome.detail).toContain("SABOTAGE");props.onStartGame(4102,{drill:{id:"retry"}});
+  expect(start).toHaveBeenCalledWith(4102,expect.objectContaining({operationMode:true,operationId:"porcelain-siege",operationRoute:"boiler-room"}));
+});

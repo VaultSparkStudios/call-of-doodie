@@ -19,3 +19,12 @@ The five original audit items remain implemented; fresh live review adds these r
 - [x] Canonical closeout, commit/push main, staging-to-production verification.
 
 Production 4eab033d534f verified: CI successful, edge revision matched, public shell 7/7 passed. Desktop Classic reached wave 2; mobile Boss Gauntlet reached a normal death screen. Real keyboard/touch playtests and audio mute/resume passed without browser errors; six production captures were visually inspected.
+
+## Additional playthroughs and Operation completion
+
+- [x] Objective-aware victory/failure advice and safe same-mode retry.
+- [x] Operation touch/controller sabotage, objective clarity, HUNT initialization, authored finales and pause-safe timing.
+- [x] Longer natural-input mode runs and complete three-Operation route/encounter checks.
+- [x] Desktop/mobile/theme visual review, regressions and release candidate preparation.
+
+Release sequence: immutable staging verification, exact-revision main CI/deployment, then production health and live-input checks. Detailed evidence: [playtest follow-up](PLAYTEST_FOLLOWUP_2026-09-14.md).

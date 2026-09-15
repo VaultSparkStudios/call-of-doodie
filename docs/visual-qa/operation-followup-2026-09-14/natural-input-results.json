@@ -1,0 +1,374 @@
+[
+  {
+    "mode": "standard",
+    "width": 1440,
+    "theme": "sewer-night",
+    "method": "Real keyboard/mouse or multi-touch inputs; read-only game observations; no health, map, perk or combat overrides",
+    "observedWave": 3,
+    "outcome": "death",
+    "outcomeText": "💀\nYOU DIED\n\n\"Mom called dinner. Right on time.\"\n\n🟡 NORMAL MODE\nONE VERDICT\n96% · OBSERVED\n29.5 recorded damage across 59 hits ended as a attrition finish; 2 landed in the final t",
+    "audioCycles": [
+      {
+        "type": "mute-cycle",
+        "before": {
+          "state": "running",
+          "rms": 0.0042549176738615165,
+          "peak": 0.0071645379066467285
+        },
+        "muted": {
+          "state": "suspended",
+          "rms": 0.004526217687685238,
+          "peak": 0.007466036826372147
+        },
+        "resumed": {
+          "state": "running",
+          "rms": 0.006152150616681513,
+          "peak": 0.012888501398265362
+        }
+      }
+    ],
+    "peakObserved": 0.021142181009054184,
+    "errors": []
+  },
+  {
+    "mode": "boss_gauntlet",
+    "width": 1440,
+    "theme": "sewer-night",
+    "method": "Real keyboard/mouse or multi-touch inputs; read-only game observations; no health, map, perk or combat overrides",
+    "observedWave": 1,
+    "outcome": "death",
+    "outcomeText": "💀\nYOU DIED\nBOSS GAUNTLET\n☠ 0/6 BOSSES DOWN\nstopped by Mega Karen · 9s of 360s par used\n\n\"L + ratio + you got eliminated\"\n\n🟡 NORMAL MODE\nONE VERDICT\n96% · OBSERVED\n☠ 0/6 BOSSES DO",
+    "audioCycles": [
+      {
+        "type": "mute-cycle",
+        "before": {
+          "state": "running",
+          "rms": 0.003122668699151486,
+          "peak": 0.006154967937618494
+        },
+        "muted": {
+          "state": "suspended",
+          "rms": 0.0033948975108826955,
+          "peak": 0.005975667852908373
+        },
+        "resumed": {
+          "state": "running",
+          "rms": 0.007317951450974481,
+          "peak": 0.015157528221607208
+        }
+      }
+    ],
+    "peakObserved": 0.0010065532987937331,
+    "errors": []
+  },
+  {
+    "mode": "sewer_extraction",
+    "width": 1440,
+    "theme": "sewer-night",
+    "method": "Real keyboard/mouse or multi-touch inputs; read-only game observations; no health, map, perk or combat overrides",
+    "observedWave": 3,
+    "outcome": "victory",
+    "outcomeText": "🏆\nVICTORY\nSEWER EXTRACTION\n🚽 72 LOOT BANKED\n1 crate carried out · alarm 66/100\n\n\"🏆 Every last one of them, flushed. The sewer is yours.\"\n\n🟡 NORMAL MODE\nONE VERDICT\n96% · OBSERV",
+    "audioCycles": [
+      {
+        "type": "mute-cycle",
+        "before": {
+          "state": "running",
+          "rms": 0.04180193740353214,
+          "peak": 0.08702870458364487
+        },
+        "muted": {
+          "state": "suspended",
+          "rms": 0.003204432989857797,
+          "peak": 0.00817054696381092
+        },
+        "resumed": {
+          "state": "running",
+          "rms": 0.003961947214340878,
+          "peak": 0.01297108456492424
+        }
+      }
+    ],
+    "peakObserved": 0.15052057802677155,
+    "errors": []
+  },
+  {
+    "mode": "bot_royale",
+    "width": 1440,
+    "theme": "sewer-night",
+    "method": "Real keyboard/mouse or multi-touch inputs; read-only game observations; no health, map, perk or combat overrides",
+    "observedWave": 1,
+    "outcome": "victory",
+    "outcomeText": "🏆\nVICTORY\nBOT ROYALE\n🏆 LAST ONE FLUSHING\n5 bots flushed · flood phase 2\n\n\"🏆 Every last one of them, flushed. The sewer is yours.\"\n\n🟡 NORMAL MODE\nONE VERDICT\n96% · OBSERVED\n🏆 L",
+    "audioCycles": [
+      {
+        "type": "mute-cycle",
+        "before": {
+          "state": "running",
+          "rms": 0.024432382456675377,
+          "peak": 0.044878050684928894
+        },
+        "muted": {
+          "state": "suspended",
+          "rms": 0.023489122405750053,
+          "peak": 0.03317281976342201
+        },
+        "resumed": {
+          "state": "running",
+          "rms": 0.006889325379440665,
+          "peak": 0.017255328595638275
+        }
+      }
+    ],
+    "peakObserved": 0.11452801525592804,
+    "errors": []
+  },
+  {
+    "mode": "hold_the_throne",
+    "width": 1440,
+    "theme": "sewer-night",
+    "method": "Real keyboard/mouse or multi-touch inputs; read-only game observations; no health, map, perk or combat overrides",
+    "observedWave": 2,
+    "outcome": "death",
+    "outcomeText": "💀\nYOU DIED\nHOLD THE THRONE\n👑 2/3 THRONES HELD\n2 lost\n\n\"Game over. Touch grass. Come back never.\"\n\n🟡 NORMAL MODE\nONE VERDICT\n96% · OBSERVED\n👑 2/3 THRONES HELD · 2 lost\nLesson: S",
+    "audioCycles": [
+      {
+        "type": "mute-cycle",
+        "before": {
+          "state": "running",
+          "rms": 0.0031805723416890343,
+          "peak": 0.00515867630019784
+        },
+        "muted": {
+          "state": "suspended",
+          "rms": 0.006823920049018401,
+          "peak": 0.012372010387480259
+        },
+        "resumed": {
+          "state": "running",
+          "rms": 0.029185809164269327,
+          "peak": 0.16408595442771912
+        }
+      }
+    ],
+    "peakObserved": 0.3231125473976135,
+    "errors": []
+  },
+  {
+    "mode": "zombies",
+    "width": 1440,
+    "theme": "sewer-night",
+    "method": "Real keyboard/mouse or multi-touch inputs; read-only game observations; no health, map, perk or combat overrides",
+    "observedWave": 3,
+    "outcome": "death",
+    "outcomeText": "💀\nYOU DIED\n\n\"Resume: 0 waves. Interests: getting wrecked.\"\n\n🟡 NORMAL MODE🧟 SEWER ZOMBIES\nONE VERDICT\n96% · OBSERVED\n50.5 recorded damage across 17 hits ended as a attrition fini",
+    "audioCycles": [
+      {
+        "type": "mute-cycle",
+        "before": {
+          "state": "running",
+          "rms": 0.00650877279070918,
+          "peak": 0.013878158293664455
+        },
+        "muted": {
+          "state": "suspended",
+          "rms": 0.0046196974863904035,
+          "peak": 0.00866048876196146
+        },
+        "resumed": {
+          "state": "running",
+          "rms": 0.004814292357303813,
+          "peak": 0.013663980178534985
+        }
+      }
+    ],
+    "peakObserved": 0.14636799693107605,
+    "errors": []
+  },
+  {
+    "mode": "score_attack",
+    "width": 390,
+    "theme": "porcelain-day",
+    "method": "Real keyboard/mouse or multi-touch inputs; read-only game observations; no health, map, perk or combat overrides",
+    "observedWave": 3,
+    "outcome": "death",
+    "outcomeText": "💀\nYOU DIED\n\n\"Death speedrun any% complete\"\n\n🟡 NORMAL MODE⏱ SCORE ATTACK\nONE VERDICT\n96% · OBSERVED\n99 recorded damage across 3 hits ended as a burst finish; 99 landed in the fina",
+    "audioCycles": [
+      {
+        "type": "mute-cycle",
+        "before": {
+          "state": "running",
+          "rms": 0.019992784702492102,
+          "peak": 0.06364047527313232
+        },
+        "muted": {
+          "state": "suspended",
+          "rms": 0.004811077522436059,
+          "peak": 0.007581355515867472
+        },
+        "resumed": {
+          "state": "running",
+          "rms": 0.0064990504454971254,
+          "peak": 0.02049664407968521
+        }
+      }
+    ],
+    "peakObserved": 0.1049162968993187,
+    "errors": []
+  },
+  {
+    "mode": "daily_challenge",
+    "width": 390,
+    "theme": "porcelain-day",
+    "method": "Real keyboard/mouse or multi-touch inputs; read-only game observations; no health, map, perk or combat overrides",
+    "observedWave": 2,
+    "outcome": "death",
+    "outcomeText": "💀\nYOU DIED\n\n\"Killed by: Lag (sure buddy)\"\n\n🟡 NORMAL MODE📅 DAILY CHALLENGE\nONE VERDICT\n96% · OBSERVED\n45 recorded damage across 6 hits ended as a mixed finish; 29 landed in the f",
+    "audioCycles": [
+      {
+        "type": "mute-cycle",
+        "before": {
+          "state": "running",
+          "rms": 0.003752943577475197,
+          "peak": 0.005122325383126736
+        },
+        "muted": {
+          "state": "suspended",
+          "rms": 0.0032778328818092567,
+          "peak": 0.004755283705890179
+        },
+        "resumed": {
+          "state": "running",
+          "rms": 0.005256972854645231,
+          "peak": 0.021100018173456192
+        }
+      }
+    ],
+    "peakObserved": 0.013298990204930305,
+    "errors": []
+  },
+  {
+    "mode": "cursed",
+    "width": 390,
+    "theme": "porcelain-day",
+    "method": "Real keyboard/mouse or multi-touch inputs; read-only game observations; no health, map, perk or combat overrides",
+    "observedWave": 1,
+    "outcome": "death",
+    "outcomeText": "💀\nYOU DIED\n\n\"Killed by: Lag (sure buddy)\"\n\n🟡 NORMAL MODE☠ CURSED\nONE VERDICT\n96% · OBSERVED\n92 recorded damage across 8 hits ended as a burst finish; 46 landed in the final two s",
+    "audioCycles": [
+      {
+        "type": "mute-cycle",
+        "before": {
+          "state": "running",
+          "rms": 0.0034261375332039455,
+          "peak": 0.00567349698394537
+        },
+        "muted": {
+          "state": "suspended",
+          "rms": 0.003393229507379019,
+          "peak": 0.005211877170950174
+        },
+        "resumed": {
+          "state": "running",
+          "rms": 0.014235560667662147,
+          "peak": 0.08609970659017563
+        }
+      }
+    ],
+    "peakObserved": 0.0011275935685262084,
+    "errors": []
+  },
+  {
+    "mode": "boss_rush",
+    "width": 390,
+    "theme": "porcelain-day",
+    "method": "Real keyboard/mouse or multi-touch inputs; read-only game observations; no health, map, perk or combat overrides",
+    "observedWave": 2,
+    "outcome": "death",
+    "outcomeText": "💀\nYOU DIED\n\n\"360 no-scoped by a toddler\"\n\n🟡 NORMAL MODE☠ BOSS RUSH\nONE VERDICT\n96% · OBSERVED\n142 recorded damage across 5 hits ended as a burst finish; 107 landed in the final t",
+    "audioCycles": [
+      {
+        "type": "mute-cycle",
+        "before": {
+          "state": "running",
+          "rms": 0.0033619184801169954,
+          "peak": 0.004880098160356283
+        },
+        "muted": {
+          "state": "suspended",
+          "rms": 0.0033162513867976457,
+          "peak": 0.004602471832185984
+        },
+        "resumed": {
+          "state": "running",
+          "rms": 0.002256747399038856,
+          "peak": 0.004426978994160891
+        }
+      }
+    ],
+    "peakObserved": 0.005165006499737501,
+    "errors": []
+  },
+  {
+    "mode": "speedrun",
+    "width": 390,
+    "theme": "porcelain-day",
+    "method": "Real keyboard/mouse or multi-touch inputs; read-only game observations; no health, map, perk or combat overrides",
+    "observedWave": 2,
+    "outcome": "death",
+    "outcomeText": "💀\nYOU DIED\n\n\"Even the bots felt bad for you\"\n\n🟡 NORMAL MODE\nONE VERDICT\n96% · OBSERVED\n52 recorded damage across 7 hits ended as a attrition finish; 20 landed in the final two se",
+    "audioCycles": [
+      {
+        "type": "mute-cycle",
+        "before": {
+          "state": "running",
+          "rms": 0.005153233134875168,
+          "peak": 0.01000128872692585
+        },
+        "muted": {
+          "state": "suspended",
+          "rms": 0.004686603987129567,
+          "peak": 0.006495404522866011
+        },
+        "resumed": {
+          "state": "running",
+          "rms": 0.006629349014960082,
+          "peak": 0.024299494922161102
+        }
+      }
+    ],
+    "peakObserved": 0.025051254779100418,
+    "errors": []
+  },
+  {
+    "mode": "gauntlet",
+    "width": 390,
+    "theme": "porcelain-day",
+    "method": "Real keyboard/mouse or multi-touch inputs; read-only game observations; no health, map, perk or combat overrides",
+    "observedWave": 2,
+    "outcome": "death",
+    "outcomeText": "💀\nYOU DIED\n\n\"Controller ran away in shame\"\n\n🟡 NORMAL MODE\nONE VERDICT\n96% · OBSERVED\n2 recorded damage across 1 hit ended as a mixed finish; 2 landed in the final two seconds, le",
+    "audioCycles": [
+      {
+        "type": "mute-cycle",
+        "before": {
+          "state": "running",
+          "rms": 0.001504976747181219,
+          "peak": 0.0036316479090601206
+        },
+        "muted": {
+          "state": "suspended",
+          "rms": 0.021390251016867826,
+          "peak": 0.0642644390463829
+        },
+        "resumed": {
+          "state": "running",
+          "rms": 0.06524344178653461,
+          "peak": 0.20644618570804596
+        }
+      }
+    ],
+    "peakObserved": 0.2044980823993683,
+    "errors": []
+  }
+]

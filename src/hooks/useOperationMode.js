@@ -1,3 +1,4 @@
+import { operationElapsedMs } from "../systems/operationRuntimeRules.js";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { track } from "../utils/analytics.js";
 import { saveRunToHistory, saveStudioGameEvent } from "../storage.js";
@@ -32,7 +33,7 @@ export function restoreOperationPlayerScore() {
 }
 
 export function useOperationMode({
-  gsRef, modeRuntimeRef = { current: null }, sizeRef, frameMonitorRef, startTimeRef, difficultyRef, statsRef, activePerksRef, modeRefs,
+  gsRef, modeRuntimeRef = { current: null }, sizeRef, frameMonitorRef, difficultyRef, statsRef, activePerksRef, modeRefs,
   setScore, setHealth, setPaused, setPauseReason, setLiveAnnounce,
 }) {
   const stateRef = useRef(null);
@@ -95,7 +96,7 @@ export function useOperationMode({
     nextState = chooseOperationRoute(nextState, route);
     const campaignCarryIn = deriveOperationCampaignCarryIn(loadOperationCampaignProgress(), operation.id);
     nextState = { ...nextState, campaignCarryIn };
-    let nextArena = createOperationArenaState({ width: sizeRef.current.w, height: sizeRef.current.h, seed });
+    let nextArena = createOperationArenaState({ width: sizeRef.current.w, height: sizeRef.current.h, seed, obstacles: gsRef.current?.obstacles || [], hazards: gsRef.current?.hazards || [] });
     nextArena = applyOperationArenaTransition(nextArena, routeIndex === 0
       ? { targetId: "turret-northeast", command: "power", inputSource: "keyboard", actorId: "route-map" }
       : { targetId: "extraction-toilet-bravo", command: "contaminate", inputSource: "keyboard", actorId: "route-map" });
@@ -113,6 +114,7 @@ export function useOperationMode({
     // S163: the encounter verb is behavioral. Start its handler once the run state exists.
     queueMicrotask(() => { const g = gsRef.current; const rt = modeRuntimeRef.current; if (g?.operationMode && encounter?.verb && rt) { rt.clearVerbObjective(g); rt.startVerbObjective(g, encounter.verb, rt.verbSpecFor(encounter.verb, encounter), { W: sizeRef.current.w, H: sizeRef.current.h }); } });
     return {
+      _operationStartFrame: gsRef.current?.frame || 0,
       operationMode: true, operationId: operation.id, operationRoute: route, operationRouteSource: routeSource,
       operationEncounterIndex: 0, operationEncounterVerb: encounter?.verb || null,
       _operationInteractionKeys: new Set(), _operationInteractionBonuses: {}, _operationInteractionTotal: 0,
@@ -120,6 +122,14 @@ export function useOperationMode({
       _operationPressureMultiplier: Number(nextState.routeConsequence?.pressureMultiplier) || 1,
     };
   }, [chooseLiveDirective, gsRef, modeRuntimeRef, sizeRef]);
+
+  const setInteractHeld = useCallback((held, source = "touch") => {
+    const gs = gsRef.current;
+    if (gs && (source === "touch" || source === "controller")) {
+      gs._operationInteractHeld ||= {};
+      gs._operationInteractHeld[source] = Boolean(held);
+    }
+  }, [gsRef]);
 
   const interact = useCallback((action) => {
     const gs = gsRef.current;
@@ -172,14 +182,14 @@ export function useOperationMode({
       addText(gs, gs.player.x, gs.player.y - 48, `OBJECTIVE LINKED · ${String(effect.id || "confirmed").toUpperCase()}`, "#72E8FF", true);
       soundOperationObjective(encounter.verb);
       setLiveAnnounce(`${contract.label} confirmed. ${contract.benefit}`);
-      setDirective(chooseLiveDirective(encounter, currentState, nextObjective, gs, Date.now() - startTimeRef.current));
+      setDirective(chooseLiveDirective(encounter, currentState, nextObjective, gs, operationElapsedMs(gs)));
       track("operation_arena_interaction", { operationId: currentState.operationId, encounterId: encounter.id, encounterVerb: encounter.verb, targetId: action.targetId, command: action.command, sequence: nextArena.sequence });
       return { accepted: true, reasonCode: "INTERACTION_ACCEPTED", proximity };
     } catch (error) {
       recordRunIntegrityFault(gs, { stage: "operation_arena_interaction", error, wave: gs.currentWave });
       return { accepted: false, reasonCode: "INTERACTION_REJECTED", proximity };
     }
-  }, [chooseLiveDirective, gsRef, setHealth, setLiveAnnounce, setScore, startTimeRef]);
+  }, [chooseLiveDirective, gsRef, setHealth, setLiveAnnounce, setScore]);
 
   const resolveWave = useCallback(() => {
     const gs = gsRef.current;
@@ -197,16 +207,16 @@ export function useOperationMode({
     setObjectiveState(objectiveResult.objectiveState);
     if (!objectiveResult.advance || !verbDone) {
       gs._operationPressureMultiplier = 1 + Math.min(0.9, objectiveResult.objectiveState.reinforcementCount * 0.15);
-      const blockedDirector = chooseLiveDirective(encounter, currentState, objectiveResult.objectiveState, gs, Date.now() - startTimeRef.current);
+      const blockedDirector = chooseLiveDirective(encounter, currentState, objectiveResult.objectiveState, gs, operationElapsedMs(gs));
       setDirective(blockedDirector);
       addText(gs, gs.player.x, gs.player.y - 64, "OBJECTIVE INCOMPLETE · REINFORCEMENTS", "#FFD57B", true);
       soundOperationReinforcement(objectiveResult.objectiveState.reinforcementCount);
       const requiredAction = getOperationEncounterAction(encounter);
       setLiveAnnounce(`${requiredAction?.label || "Objective action"} required. Reinforcements ${objectiveResult.objectiveState.reinforcementCount}.`);
       track("operation_objective_blocked", { operationId: currentState.operationId, encounterId: encounter.id, encounterVerb: encounter.verb, reasonCode: objectiveResult.reasonCode, reinforcementCount: objectiveResult.objectiveState.reinforcementCount });
-      return { handled: true, completed: false, blocked: true, reasonCode: objectiveResult.reasonCode, nextState: currentState };
+      return { handled: true, completed: false, blocked: true, reinforcementCount: objectiveResult.objectiveState.reinforcementCount, reasonCode: objectiveResult.reasonCode, nextState: currentState };
     }
-    const elapsedTotalMs = Math.max(0, Date.now() - startTimeRef.current);
+    const elapsedTotalMs = Math.max(0, operationElapsedMs(gs));
     const previousSplitMs = Math.max(0, Number(gs._operationSplits.at(-1)?.elapsedMs) || 0);
     const encounterElapsedMs = Math.max(0, elapsedTotalMs - previousSplitMs);
     const director = chooseLiveDirective(encounter, currentState, objectiveResult.objectiveState, gs, elapsedTotalMs);
@@ -228,7 +238,7 @@ export function useOperationMode({
       const nextEncounter = getCurrentEncounter(nextState);
       const nextObjective = createOperationObjectiveState(nextEncounter);
       objectiveRef.current = nextObjective; setObjectiveState(nextObjective);
-      { const rt = modeRuntimeRef.current; if (rt) { rt.clearVerbObjective(gs); if (nextEncounter?.verb) rt.startVerbObjective(gs, nextEncounter.verb, rt.verbSpecFor(nextEncounter.verb, nextEncounter), { W: sizeRef.current.w, H: sizeRef.current.h }); } }
+      { const rt = modeRuntimeRef.current; if (rt) { rt.clearVerbObjective(gs); if (nextEncounter?.verb) rt.startVerbObjective(gs, nextEncounter.verb, Object.assign(rt.verbSpecFor(nextEncounter.verb, nextEncounter), nextEncounter.verb === "SABOTAGE" ? arenaRef.current.interactables.find((item) => item.id === "pump-west")?.position : {}), { W: sizeRef.current.w, H: sizeRef.current.h }); } }
       const nextTarget = arenaRef.current.interactables.find((item) => item.id === getOperationEncounterAction(nextEncounter)?.targetId) || null;
       setProximitySnapshot(buildOperationProximitySnapshot({ player: gs.player, target: nextTarget }));
       gs._operationPressureMultiplier = Number(nextState.routeConsequence?.pressureMultiplier) || 1;
@@ -236,7 +246,7 @@ export function useOperationMode({
       setDirective(chooseLiveDirective(nextEncounter, nextState, nextObjective, gs, elapsedTotalMs));
       return { handled: true, completed: false, nextState };
     }
-    const durationMs = Math.max(0, Date.now() - startTimeRef.current);
+    const durationMs = Math.max(0, operationElapsedMs(gs));
     const rivalReceipt = buildOperationReplayReceipt({
       operationId: nextState.operationId, seed: nextState.seed, routeOptions: [nextState.route],
       scoringContract: nextState.scoringContract, splits: gs._operationSplits, branchGhost: gs._operationBranches,
@@ -251,7 +261,7 @@ export function useOperationMode({
     setPaused(true); setPauseReason("operation_complete"); setLiveAnnounce(`${receipt.mission} complete. Score ${receipt.score}.`); soundWaveClear(); restoreOperationPlayerScore();
     const historyEntry = createRunHistoryEntry({
       score: gs.score, kills: gs.kills, wave: gs.currentWave,
-      timeSeconds: Math.floor((Date.now() - startTimeRef.current) / 1000), difficulty: difficultyRef.current,
+      timeSeconds: Math.floor((operationElapsedMs(gs)) / 1000), difficulty: difficultyRef.current,
       flags: readRunModeFlags(...modeRefs), runSeed: nextState.seed, modifier: gs.runModifier || null,
       integrityReceipt: getRunIntegrityReceipt(gs), performanceReceipt: frameMonitorRef.current?.snapshot?.() || null,
       totalDamage: gs.totalDamage, totalShots: statsRef.current.totalShots || 0, totalHits: statsRef.current.totalHits || 0,
@@ -264,7 +274,7 @@ export function useOperationMode({
     track("operation_complete", { ...event, runScore: gs.score, durationSeconds: historyEntry.time, evidenceScope: "local-deterministic-not-causal-or-server-authoritative" });
     saveStudioGameEvent(buildStudioGameEvent("operation_complete", { surface: "operation_runtime", ...event }));
     return { handled: true, completed: true, nextState, receipt };
-  }, [chooseLiveDirective, difficultyRef, frameMonitorRef, gsRef, modeRefs, modeRuntimeRef, setLiveAnnounce, setPauseReason, setPaused, sizeRef, startTimeRef, statsRef]);
+  }, [chooseLiveDirective, difficultyRef, frameMonitorRef, gsRef, modeRefs, modeRuntimeRef, setLiveAnnounce, setPauseReason, setPaused, sizeRef, statsRef]);
 
-  return { stateRef, arenaRef, objectiveRef, completeRef, state, arenaState, objectiveState, proximitySnapshot, directive, completeReceipt, start, reset, interact, resolveWave, setCompleteReceipt };
+  return { stateRef, arenaRef, objectiveRef, completeRef, state, arenaState, objectiveState, proximitySnapshot, directive, completeReceipt, start, reset, interact, setInteractHeld, resolveWave, setCompleteReceipt };
 }

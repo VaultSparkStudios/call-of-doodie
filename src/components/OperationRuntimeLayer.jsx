@@ -6,14 +6,14 @@ import { getCurrentEncounter } from "../systems/operationDirector.js";
 const CAMPAIGN_GATE = Object.freeze({
   campaignEnabled: true,
   continueAvailable: true,
-  campaignMessage: "Local route continuity is active; broader campaign expansion remains gated until at least 10 evidence-bound paired receipts. Continue returns to the command deck.",
+  campaignMessage: "Your route choices carry into later Operations on this device. Continue returns to the command deck.",
   coopEnabled: false,
-  coopMessage: "Realtime co-op remains gated until at least 20 paired receipts and the authoritative capacity court pass.",
+  coopMessage: "These are solo Operations with computer-controlled allies. Online co-op is not available.",
 });
 
 export default function OperationRuntimeLayer({
   operationState, operationArenaState, operationObjectiveState, operationProximitySnapshot, operationDirective, operationCompleteReceipt,
-  paused, gamepadConnected, onInteract, onContinue, onRematch,
+  paused, gamepadConnected, onInteract, onInteractHeld, onContinue, onRematch,
 }) {
   const encounter = getCurrentEncounter(operationState);
   return <>
@@ -27,6 +27,7 @@ export default function OperationRuntimeLayer({
         missionScore={operationState.score}
         directorReason={operationDirective?.directive || operationDirective?.reasonCode || ""}
         onInteract={onInteract}
+        onInteractHeld={onInteractHeld}
         gamepadConnected={gamepadConnected}
       />
     )}

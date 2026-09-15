@@ -12,6 +12,7 @@ import {
   getWeeklyGauntlet,
 } from "./constants.js";
 import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, advanceMissionStreak, loadMetaProgress, getLockedCallsign, lockCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken, saveStudioGameEvent, loadStudioGameEvents, recordDeathByEnemy, recordHazardEvent, loadRivalryHistory, loadTopGhosts, loadWeeklyTopGhost, loadExperimentIntent, getBossKillRecord, saveBossKillRecord, isNemesis, getAdaptiveSpawnMods, getProximityRivals, getWaveDeathCounts, getWeaponEvolutionState, getCommunityChokePoints, updateEnemyCareerStatsBatch, recordDoctrineForge } from "./storage.js";
+import { createOperationBossPlan } from "./systems/operationRuntimeRules.js";
 import { spawnEnemy as _spawnEnemy, spawnBoss as _spawnBoss, BOSS_ROTATION, applyEliteType, getRandomEliteType, getWaveSpawnRng } from "./gameHelpers.js";
 import { preloadBossAtlas, preloadEnemyAtlasesForTypes, preloadObjectAtlases, preloadZombieAtlas } from "./utils/visualAssetLibrary.js";
 import { cosmeticRandom, createNamedRunRng, getRunRng, shuffleWithRng } from "./systems/runRng.js";
@@ -2846,6 +2847,15 @@ export default function CallOfDoodie() {
       if (gs.operationMode) {
         const operationResult = resolveOperationWave({ player: p });
         if (operationResult.completed) return;
+        if (operationResult.blocked) {
+          gs._waveTransitDone = false;
+          gs.bossWave = false;
+          setBossWaveActive(false);
+          gs.enemiesThisWave = 0;
+          gs.maxEnemiesThisWave = 3 + Math.min(6, operationResult.reinforcementCount || 0);
+          gs.spawnTimer = 0;
+          return;
+        }
       }
       const contractResult = combatRuntimeRef.current.resolveWaveChallengeContract(gs);
       if (contractResult) {
@@ -3053,7 +3063,7 @@ export default function CallOfDoodie() {
         setMusicIntensity(true);
         gs.screenShake = 20;
         // ── Boss rotation: Karen→Splitter→Juggernaut→Summoner→Landlord, cycling ──
-        const bossPlan = modeDefRef.current?.bossWavePlan?.(gs) || combatRuntimeRef.current.createBossWavePlan({
+        const bossPlan = createOperationBossPlan(gs, ENEMY_TYPES) || modeDefRef.current?.bossWavePlan?.(gs) || combatRuntimeRef.current.createBossWavePlan({
           currentWave: gs.currentWave,
           bossRushMode: gs.bossRushMode,
           developerBossSpawned: gs.developerBossSpawned,
@@ -3110,7 +3120,10 @@ export default function CallOfDoodie() {
         bossPlan.warningLines.forEach((line, index) => {
           addScreenText(gs, SX, SY + 45 + (index * 20), line.text, line.color);
         });
-        bossPlan.spawnBosses.forEach((bossType) => spawnBoss(gs, bossType));
+        bossPlan.spawnBosses.forEach((bossType) => {
+          spawnBoss(gs, bossType);
+          if (bossPlan.operationBossName) gs.enemies.at(-1).name = bossPlan.operationBossName;
+        });
         if (bossPlan.escortCount > 0) {
           for (let escortIdx = 0; escortIdx < bossPlan.escortCount; escortIdx++) spawnEnemy(gs);
           gs.maxEnemiesThisWave += bossPlan.escortCount;
@@ -3742,10 +3755,11 @@ export default function CallOfDoodie() {
     );
   }
 
+  if (draftPending) {
+    return <AsyncPanelBoundary><DraftScreen options={draftOptions} onSelect={applyDraftPerk} /></AsyncPanelBoundary>;
+  }
+
   if (screen === "menu") {
-    if (draftPending) {
-      return <AsyncPanelBoundary><DraftScreen options={draftOptions} onSelect={applyDraftPerk} /></AsyncPanelBoundary>;
-    }
     // S163: HomeV2 (arcade CRT) is the only front door. The legacy home query switch and
     // the MenuScreen/HomeV3 alternates were retired with the single-brand decision.
     const Home = HomeV2;
@@ -3896,8 +3910,8 @@ export default function CallOfDoodie() {
 
       <AsyncPanelBoundary label="Operation interface">
         <OperationRuntimeLayer {...{
-          operationState, operationArenaState, operationObjectiveState, operationProximitySnapshot, operationDirective, operationCompleteReceipt, paused, gamepadConnected,
-          onInteract: applyOperationInteraction, onContinue: returnFromOperationToMenu, onRematch: rematchCompletedOperation,
+          operationState, operationArenaState, operationObjectiveState, operationProximitySnapshot, operationDirective, operationCompleteReceipt, paused: paused || perkPending || shopPending || routePending || Boolean(bossCutscene) || Boolean(waveAnnounce) || mutationPending, gamepadConnected,
+          onInteract: applyOperationInteraction, onInteractHeld: operationRuntime.setInteractHeld, onContinue: returnFromOperationToMenu, onRematch: rematchCompletedOperation,
         }} />
       </AsyncPanelBoundary>
       {/* Pause menu */}

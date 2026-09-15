@@ -1,3 +1,5 @@
+import { findSafeArenaSpawn } from "./arenaEnvironment.js";
+
 export const OPERATION_ARENA_SCHEMA_VERSION = "operation-arena-state-v0";
 
 export const OPERATION_INTERACTABLE_KINDS = Object.freeze([
@@ -134,7 +136,7 @@ function makeInteractable([id, kind, xRatio, yRatio, radius], width, height, mir
  * Creates a deterministic renderer-neutral Operation arena. Positions are
  * bounded 2D interaction metadata, never a full 3D physics representation.
  */
-export function createOperationArenaState({ width = 960, height = 640, seed = 0 } = {}) {
+export function createOperationArenaState({ width = 960, height = 640, seed = 0, obstacles = [], hazards = [] } = {}) {
   const arenaWidth = integer(width);
   const arenaHeight = integer(height);
   if (arenaWidth < MIN_WIDTH || arenaHeight < MIN_HEIGHT) {
@@ -153,6 +155,9 @@ export function createOperationArenaState({ width = 960, height = 640, seed = 0 
     )),
     transitionReceipts: [],
   };
+  for (const item of state.interactables) {
+    item.position = findSafeArenaSpawn({ obstacles, hazards }, arenaWidth, arenaHeight, item.position, { radius: Math.max(32, item.interactionRadius) });
+  }
   const validation = validateOperationArenaState(state);
   if (!validation.valid) throw new RangeError(validation.errors.join("; "));
   return state;

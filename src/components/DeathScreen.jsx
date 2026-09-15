@@ -310,15 +310,16 @@ export default function DeathScreen({
   const diff = DIFFICULTIES[difficulty] || DIFFICULTIES.normal;
   const ghostDeathReadout = buildGhostDeathReadout(ghostData, ENEMY_TYPES);
   const rankIndex = Math.min(Math.floor(kills / 10), RANK_NAMES.length - 1);
-  const mode = zombiesMode ? "zombies"
+  const mode = modeOutcome?.modeId || (zombiesMode ? "zombies"
     : bossRushMode ? "boss_rush"
     : cursedRunMode ? "cursed"
       : scoreAttackMode ? "score_attack"
         : dailyChallengeMode ? "daily_challenge"
           : _speedrunMode ? "speedrun"
             : _gauntletMode ? "gauntlet"
-              : "standard";
+              : "standard");
   const debrief = buildRunDebrief({
+    victory, modeOutcome,
     score,
     kills,
     wave,
@@ -521,7 +522,7 @@ export default function DeathScreen({
     drillOutcomeEventKeyRef.current = drillOutcome.receiptId;
   }, [drillEvidence, drillOutcome]);
 
-  const makeDrillLaunch = (launchKind) => buildDrillLaunchPayload(nextRunDrill, debrief.nextRunContract, {
+  const makeDrillLaunch = (launchKind) => debrief.objective ? null : buildDrillLaunchPayload(nextRunDrill, debrief.nextRunContract, {
     baselineWave: wave,
     baselineScore: score,
     launchKind,
@@ -549,7 +550,7 @@ export default function DeathScreen({
       mode,
     }));
     const launchKind = runTheFix.action.type === "rematch" ? "rematch" : runTheFix.action.type === "replay_seed" ? "replay_seed" : "new_run";
-    const drill = makeDrillLaunch(launchKind);
+    const drill = debrief.objective ? null : makeDrillLaunch(launchKind);
     if (runTheFix.action.type === "rematch") {
       onStartGame(runTheFix.action.seed, {
         startWave: runTheFix.action.startWave,
@@ -607,9 +608,9 @@ export default function DeathScreen({
         <span>ONE VERDICT</span><span>{Math.round(insightGraph.verdict.confidence * 100)}% · {insightGraph.verdict.evidenceLevel.replaceAll("_", " ").toUpperCase()}</span>
       </div>
       <div style={{ marginTop: 9, fontSize: 16, color: "#FFF", fontWeight: 900 }}>{insightGraph.verdict.statement}</div>
-      <div style={{ marginTop: 7, fontSize: 11, color: "#FFD7C2", lineHeight: 1.5 }}>
+      {insightGraph.lesson !== runTheFix.target && <div style={{ marginTop: 7, fontSize: 11, color: "#FFD7C2", lineHeight: 1.5 }}>
         <strong style={{ color: "#FF9A67" }}>Lesson:</strong> {insightGraph.lesson}
-      </div>
+      </div>}
       <div style={{ marginTop: 8, padding: "9px 10px", borderRadius: 7, background: "rgba(0,0,0,0.28)", border: "1px solid rgba(255,255,255,0.1)" }}>
         <div style={{ fontSize: 11, color: "#FFF", lineHeight: 1.45 }}>{runTheFix.target}</div>
         <div style={{ marginTop: 4, fontSize: 10, color: "var(--cod-cyan)", lineHeight: 1.45 }}>Proof target: {runTheFix.proof}</div>
@@ -1220,7 +1221,7 @@ export default function DeathScreen({
           {runSeed > 0 && (
             <button aria-label={`Replay seed ${runSeed} — same map`} onClick={() => { recordPlaytestChoice("replay_seed"); track("debrief_replay_seed", { seed: runSeed, score, wave, intelligenceCause: postRunIntel.cause }); onStartGame(runSeed); }} style={{ ...btnS, minWidth: 130, fontSize: 13 }}>🔄 REPLAY #{runSeed}</button>
           )}
-          {runSeed > 0 && rematchWave != null && (
+          {!debrief.objective && runSeed > 0 && rematchWave != null && (
             <button
               aria-label={`Rematch wave ${rematchWave} — practice the wave that killed you on the same seed`}
               onClick={() => {
