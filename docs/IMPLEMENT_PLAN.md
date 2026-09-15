@@ -7,3 +7,15 @@ Session Intent: Complete the authorized arc, direct-main push and verified deplo
 - Wave 3: Full quality gates, staging deployment, visual inspection, canonical closeout, main push and production verification — complete.
 
 The audit JSON is the execution source. Existing helpers/renderers are reused; no packages or paid services are added. Production promotion follows verified staging. Launch-tier eligibility remains separately measured.
+
+## Mode review follow-through — 2026-09-14
+
+The five original audit items remain implemented; fresh live review adds these required corrections before final closeout.
+
+- [x] Repair throne recovery and explicit six-boss opening/sequence; verify success and failure paths.
+- [x] Make Classic Survival (original game) prominent; group other modes, survival challenges and Operations; shared plain-language goals/endings on desktop/mobile.
+- [x] Restore visible mode timers and correct misleading mode descriptions.
+- [x] Complete focused runtime tests, full quality checks, real input playtests and rendered desktop/mobile/theme review; record exact limitations.
+- [x] Canonical closeout, commit/push main, staging-to-production verification.
+
+Validation complete for runtime/copy/clocks. Final release seal remains pending until remote/main and production match.

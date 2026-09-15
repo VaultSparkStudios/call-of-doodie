@@ -1,19 +1,20 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.1 -->
-<!-- generated-at: 2026-09-14 (Session 177 closeout) -->
+<!-- generated-at: 2026-09-15 (Session 177 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
 ╔══ SESSION CLOSEOUT · Call-Of-Doodie · S177 ════════════════════╗
-║  Date: 2026-09-14  ·  SIL: 950/1000  ·  Velocity: 5 down         ║
+║  Date: 2026-09-15  ·  SIL: 950/1000  ·  Velocity: 5 down         ║
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ║  Live:  preview  →  https://callofdoodie.wtf/                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ Shared meta facts now drive descriptions and runtime; Hair T  ║
-║  ✓ Supply Drop grants one free coin-shop offer per wave, Gauntl  ║
-║  ✓ Weekly XP, pickup chance, projectile speed and magnet range   ║
-║  ✓ Clone Decoy is a finite visual-only ghost; Lifesteal heals l  ║
+║  ✓ Classic Survival has its own original-game card and play but  ║
+║  ✓ Descriptions explain Boss Rush warmups, endless Timed Surviv  ║
+║  ✓ Boss Gauntlet opens with a boss and advances through six dis  ║
+║  ✓ Throne recovery reactivates the first lost point after the r  ║
+║  ✓ Score Attack shows time remaining; Timed Survival shows tent  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 950/1000 ═══════════════════════════════════════╗
 ║    Dev Health         98   ██████████                            ║
@@ -34,28 +35,28 @@
 ║  ✓ logs/WORK_LOG.md                                              ║
 ║  ✓ context/DECISIONS.md                                          ║
 ║  ✓ context/SELF_IMPROVEMENT_LOOP.md                              ║
-║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
+║  ✓ docs/CREATIVE_DIRECTION_RECORD.md                             ║
 ║  ✓ context/TRUTH_AUDIT.md                                        ║
 ║  ✓ context/PROJECT_STATUS.json                                   ║
 ║  · agent memory (Claude/Codex project memory)                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 16 files  ·  M:15 A:0 D:0 ?:1                          ║
+║  Changes: 44 files  ·  M:37 A:0 D:0 ?:7                          ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ DEPLOYMENT ══════════════════════════════════════════════════╗
-║  Staging:  https://session-177-staging.call-of-doodie.pages.dev  ║
+║  Staging:  https://138eef33.call-of-doodie.pages.dev  ·  cloudf  ║
 ║  Live:     https://callofdoodie.wtf/  ·  preview/FORGE (not yet  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
 ║  Doctor:        167/221                                          ║
 ║  Compliance:    —                                                ║
-║  Tests:         250/250                                          ║
+║  Tests:         257/257                                          ║
 ║  Validation:    full-fresh                                       ║
-║  IGNIS:         5d ago                                           ║
+║  IGNIS:         6d ago                                           ║
 ║  Truth:         engineering-ready-sparked-no-go                  ║
-║  Sanitization:  0d ago                                           ║
+║  Sanitization:  1d ago                                           ║
 ║  shells:        unknown · missing/stale enumeration              ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ NEXT SESSION ════════════════════════════════════════════════╗

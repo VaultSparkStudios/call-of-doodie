@@ -17,9 +17,14 @@ export default function MobileHUD({
   vsScore, vsName, topGhosts, weeklyRival, bankedPerkChoices,
   nextPerkLevel, cursedHideScore, activeWaveContract, grenadeReady, dashReady,
   combo, killstreak, experimentMatched, reducedEffects,
-  modeHud = null,
+  modeHud = null, scoreAttackTimeLeft = null, speedrunMode = false, runElapsedSeconds = 0,
 }) {
   const [detailsOpen, setDetailsOpen] = useState(false);
+  const countdown = Number.isFinite(scoreAttackTimeLeft);
+  const clockSeconds = countdown ? Math.ceil(Math.max(0, scoreAttackTimeLeft) / 60) : speedrunMode ? runElapsedSeconds : timeSurvived;
+  const clockLabel = countdown ? "TIME LEFT" : speedrunMode ? "STOPWATCH" : "TIME";
+  const clockTenths = Math.round(Math.max(0, clockSeconds) * 10);
+  const clockText = speedrunMode && !countdown ? `${Math.floor(clockTenths / 600)}:${((clockTenths % 600) / 10).toFixed(1).padStart(4, "0")}` : fmtTime(clockSeconds);
   const weapon = WEAPONS[currentWeapon];
   const model = buildResponsiveHudModel({
     score, combo, killstreak, grenadeReady, dashReady, isReloading,
@@ -38,8 +43,8 @@ export default function MobileHUD({
           <div style={{ marginTop: 2, fontSize: 12, fontWeight: 900, whiteSpace: "nowrap" }}>WAVE {wave}</div>
         </div>
         <div style={{ minWidth: 84, textAlign: "center" }}>
-          <div style={{ color: "#93A3B3", fontSize: 9, fontWeight: 800, letterSpacing: 1 }}>TIME</div>
-          <div style={{ marginTop: 2, fontSize: 13, fontWeight: 900 }}>{fmtTime(timeSurvived)}</div>
+          <div style={{ color: "#93A3B3", fontSize: 9, fontWeight: 800, letterSpacing: 1 }}>{clockLabel}</div>
+          <div data-testid="hud-mode-clock" style={{ marginTop: 2, fontSize: 13, fontWeight: 900, color: countdown && clockSeconds <= 30 ? "#FF7878" : "#FFF" }}>{clockText}</div>
         </div>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 5 }}>
           <div style={{ minWidth: 62, textAlign: "right" }}>
@@ -75,6 +80,7 @@ export default function MobileHUD({
           {modeHud.banner && (
             <div data-testid="hud-mode-banner" style={{ padding: "4px 8px", border: "1px solid rgba(255,211,79,.35)", borderRadius: 8, background: "rgba(4,7,10,.82)", color: "var(--cod-gold)", fontSize: 9, fontWeight: 900, letterSpacing: .6, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
               {modeHud.banner}
+              {modeHud.progress?.label === "PAR" && <div data-testid="hud-par-time" style={{marginTop:4,fontSize:11}}>Target time left: {fmtTime(Math.ceil(modeHud.progress.value))}</div>}
               {modeHud.progress && (
                 <span style={{ display: "block", marginTop: 3, height: 4, background: "rgba(255,255,255,.12)", borderRadius: 2, overflow: "hidden" }}>
                   <span style={{ display: "block", height: "100%", width: `${Math.round(Math.max(0, Math.min(1, modeHud.progress.pct)) * 100)}%`, background: modeHud.progress.pressure > 0.5 ? "#FF4F46" : "#FFD34F" }} />

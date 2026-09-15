@@ -19,7 +19,7 @@ describe("large-arena spawn wiring", () => {
 
   it("hands every mode hook the arena plus the viewport and an announce channel (S167)", () => {
     expect(appSource).toContain("onModeWaveStart(gs, modeDefRef.current, { ...resolveArenaBounds(gs, GW(), GH()), viewW: GW(), viewH: GH(), addText, addParticles, announce: _modeAnnounce })");
-    expect(appSource).toContain("createModeState(modeDefRef.current, gsRef.current, { W: aw, H: ah, viewW: w, viewH: h, addText, addParticles, announce: _modeAnnounce })");
+    expect(appSource).toContain("createModeState(modeDefRef.current, gsRef.current, { W: aw, H: ah, viewW: w, viewH: h, addText, addParticles, announce: _modeAnnounce, spawnBoss: (state, type) => _spawnBoss(state, aw, ah, difficultyRef.current, type) })");
     expect(appSource).toContain("viewW: W, viewH: H, frame: frameCountRef.current, addText, addParticles, announce: _modeAnnounce");
     expect(appSource).not.toContain("onModeWaveStart(gs, modeDefRef.current, { W: GW(), H: GH()");
   });

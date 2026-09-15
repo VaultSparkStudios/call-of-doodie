@@ -63,6 +63,15 @@ export const HOLD_THE_THRONE = Object.freeze({
         ctx.addText?.(gs, ev.zone.x, ev.zone.y - 40, "⚠ CONTESTED", "#FF8800");
       }
     }
+    // A single lost point can be retaken after the remaining points. Without
+    // this recovery, two captures + one loss has neither an objective nor an ending.
+    if (!getActiveZone(gs) && gs._thronesLost === 1 && gs._thronesCaptured < 3) {
+      const retry = gs.zones.find((zone) => zone.state === ZONE_STATE.LOST);
+      if (retry) {
+        Object.assign(retry, { state: ZONE_STATE.IDLE, active: true, progress: 0, pressure: 0 });
+        ctx.announce?.(gs, `↩ RETAKE ${retry.label} · LAST CHANCE`, "#FFBB44", true);
+      }
+    }
     // Score trickle while holding.
     const zone = getActiveZone(gs);
     if (zone && zone.state === ZONE_STATE.HELD && (gs.frame || 0) % 60 === 0) gs.score += 25;

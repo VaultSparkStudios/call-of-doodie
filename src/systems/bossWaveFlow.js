@@ -53,7 +53,7 @@ export function getBossWaveWarningLines({ currentWave, primaryBoss, secondaryBos
   return [];
 }
 
-export function createBossWavePlan({ currentWave, bossRushMode, developerBossSpawned, bossRotation, enemyTypes }) {
+export function createBossWavePlan({ currentWave, bossRushMode, developerBossSpawned, bossRotation, enemyTypes, singleBoss = false }) {
   const slot = bossRushMode
     ? (currentWave - 1) % bossRotation.length
     : (Math.floor(currentWave / 5) - 1) % bossRotation.length;
@@ -79,7 +79,7 @@ export function createBossWavePlan({ currentWave, bossRushMode, developerBossSpa
     };
   }
 
-  const isDual = currentWave >= (bossRushMode ? 3 : 15);
+  const isDual = !singleBoss && currentWave >= (bossRushMode ? 3 : 15);
   return {
     isDeveloperWave: false,
     markDeveloperBossSpawned: false,
@@ -93,7 +93,7 @@ export function createBossWavePlan({ currentWave, bossRushMode, developerBossSpa
       }] : []),
     ],
     spawnBosses: isDual ? [primaryBoss, secondaryBoss] : [primaryBoss],
-    escortCount: !isDual && currentWave >= 7 ? 2 : 0,
+    escortCount: !singleBoss && !isDual && currentWave >= 7 ? 2 : 0,
     setLiveAnnounce: true,
     warningLines: getBossWaveWarningLines({
       currentWave,

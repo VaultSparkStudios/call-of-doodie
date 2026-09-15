@@ -107,7 +107,7 @@ export default function OperationCommandDeck({ onStart, palette = FALLBACK_PALET
     >
       <div style={{ textAlign: "center", marginBottom: 12 }}>
         <div style={{ color: colors.accent, fontSize: 10, fontWeight: 900, letterSpacing: 2.5 }}>
-          PRIMARY DEPLOYMENT PATH
+          OBJECTIVE MISSIONS
         </div>
         <h2 id="operation-command-title" style={{ margin: "5px 0 3px", fontSize: 22, letterSpacing: 1.5 }}>
           OPERATIONS

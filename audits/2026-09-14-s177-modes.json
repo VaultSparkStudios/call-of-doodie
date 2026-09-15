@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "1.3",
+  "session": 177,
+  "date": "2026-09-14",
+  "headline": "Classic Survival is easy to find; mode objectives, boss progression, throne recovery and per-run clocks are corrected.",
+  "shipped": [
+    "Classic Survival has its own original-game card and play button; alternate modes and survival challenges share a readable desktop/mobile picker.",
+    "Descriptions explain Boss Rush warmups, endless Timed Survival, optional Boss Gauntlet par, Extraction exit thresholds and Throne retry; numeric copy stays derived from gameplay facts.",
+    "Boss Gauntlet opens with a boss and advances through six distinct solo fights; the sixth defeat ends in victory without a seventh wave.",
+    "Throne recovery reactivates the first lost point after the remaining captures; a second loss ends the run. The retake notice fits mobile screens.",
+    "Score Attack shows time remaining; Timed Survival shows tenths; clocks reset each run. Classic and Operations clear previously selected alternate-mode flags.",
+    "Boss defeat effects use the existing runtime helper; App now rejects undefined references during lint. Boss intro geometry is centered and honors reduced motion."
+  ],
+  "validation": "257 files / 1,608 tests passed; strict lint and deployable build passed; public contract 28 files and claims passed; dependency audit zero vulnerabilities. Seventeen short natural-input runs cover all twelve desktop modes and Classic plus four new mobile modes. Four controlled six-boss sequences reached victory. Sixteen browser clock/ending cases and four Classic/Operation launch transitions passed. Seven Throne recovery paths were simulated independently. Final visual receipt and production promotion are being sealed.",
+  "outcome": "verified-corrective-update-production-pending",
+  "limits": [
+    {
+      "title": "Natural completion not universal",
+      "why": "Controlled outcomes and short input runs prove different things; no claim that every mode or Operation was played through naturally."
+    }
+  ]
+}

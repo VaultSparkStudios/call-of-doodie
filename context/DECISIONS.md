@@ -1496,3 +1496,9 @@ Shared upgrade values drive the copy and execution. +10% fire rate means a shot 
 Clone Decoy retains the ability pool's seeded order and stores one bounded presentation record outside enemy targeting/reward arrays. Lifesteal follows its existing global enemy-bullet wording, heals only after observed health loss, and cannot resurrect pending defeats.
 
 CANON-045 remains an existing external identity gap; CANON-054's conformance checker returned malformed evidence despite a live stats surface. No ABSOLUTE gap was reported. This maintenance deployment does not assert launch-tier eligibility.
+
+### 2026-09-14 — S177 mode clarity follow-through
+
+Keep original gameplay under Classic Survival, with a direct entry before collapsed Operations. Distinguish different objectives from challenge rules without changing replay IDs. Preserve Boss Rush's three warmups and endless character; give the six-boss objective its explicit solo plan. One lost Throne permits a retake, preserving the documented second-loss ending. Run clocks use reset simulation frames.
+
+Browser outcome fixtures and normal input runs are separate evidence. No balance/retention or physical-controller claim follows from automated completion. No dependencies, paid per-player services, identity or licensing changes were introduced.

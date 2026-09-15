@@ -29,6 +29,11 @@ export default [
       "no-unreachable": "warn",
     },
   },
+  // The live orchestration path must never ship an undefined runtime helper.
+  {
+    files: ["src/App.jsx"],
+    rules: { "no-undef": "error" },
+  },
   // S174: Vite module entries are the HMR root, not hot-refreshed components, and
   // correctly export nothing. eslint-plugin-react-refresh 0.5.6 (Dependabot #151,
   // 78efba4) extended only-export-components to flag a file with NO exports, which

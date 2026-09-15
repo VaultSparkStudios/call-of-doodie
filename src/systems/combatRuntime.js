@@ -19,7 +19,7 @@ export { spawnPickup } from "./pickupSpawning.js";
 export { applyPlayerMovement, buildPointerAimSweepReport, computePointerAimAngle, resolveAimFrame, resolveMovementVector } from "./gameStep.js";
 export { stampArenaDecal } from "./backgroundLayer.js";
 export { compactTruthyInPlace } from "./frameIndex.js";
-export { stepAndCompactInPlace, stepTransientEffectsInPlace } from "./transientLifecycle.js";
+export { retainLastMatchingInPlace, stepAndCompactInPlace, stepTransientEffectsInPlace } from "./transientLifecycle.js";
 export { applyObservedPlayerDamage, createDamageSequence, finalizeDamageSequence } from "./damageSequence.js";
 export { buildWavePlanReceipt, recordWavePlanSnapshot } from "./wavePlanReceipt.js";
 export { createBossWavePlan } from "./bossWaveFlow.js";

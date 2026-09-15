@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import ModePicker from "./ModePicker.jsx";
 
 export default function MobileDeployConfig({
   modes,
@@ -72,30 +73,7 @@ export default function MobileDeployConfig({
   return (
     <div data-testid="mobile-deploy-config" style={{ display: "grid", gap: 12, minWidth: "min(310px, calc(100vw - 58px))" }}>
       <strong style={{ color: isLight ? palette.accent : "#FFB36B", fontSize: 15, letterSpacing: 1.2 }}>QUICK DEPLOY CONFIG</strong>
-      <div>
-        <div id="mobile-mode-label" style={{ color: palette?.muted || "#AAA", fontSize: 13, letterSpacing: 0.8, marginBottom: 7 }}>MODE</div>
-        <div role="radiogroup" aria-labelledby="mobile-mode-label" style={groupStyle}>
-          {modes.map((mode, index) => {
-            const selected = mode.id === acknowledgedModeId;
-            return (
-              <button
-                key={mode.id}
-                type="button"
-                role="radio"
-                aria-checked={selected}
-                tabIndex={selected ? 0 : -1}
-                aria-label={`${mode.label} mode`}
-                data-mode-id={mode.id}
-                onClick={() => chooseMode(mode.id)}
-                onKeyDown={(event) => moveRadio(event, modes.map((item) => item.id), index, chooseMode)}
-                style={optionStyle(selected, mode.color)}
-              >
-                {mode.emoji} {mode.label}
-              </button>
-            );
-          })}
-        </div>
-      </div>
+      <ModePicker modes={modes} modeId={acknowledgedModeId} onSelectMode={chooseMode} palette={palette} />
       <div>
         <div id="mobile-difficulty-label" style={{ color: palette?.muted || "#AAA", fontSize: 13, letterSpacing: 0.8, marginBottom: 7 }}>DIFFICULTY</div>
         <div role="radiogroup" aria-labelledby="mobile-difficulty-label" style={groupStyle}>

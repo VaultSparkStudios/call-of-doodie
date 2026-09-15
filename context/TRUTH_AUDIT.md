@@ -1,3 +1,15 @@
+## 2026-09-14 — S177 mode verification
+
+Overall status: Mode fixes, visual/audio corrections and controlled outcomes verified; final production promotion pending.
+Last reviewed: 2026-09-14
+
+Classic Survival is easy to find; mode objectives, boss progression, throne recovery and per-run clocks are corrected.
+
+257 files / 1,608 tests passed; strict lint and deployable build passed; public contract 28 files and claims passed; dependency audit zero vulnerabilities. Seventeen short natural-input runs cover all twelve desktop modes and Classic plus four new mobile modes. Four controlled six-boss sequences reached victory. Sixteen browser clock/ending cases and four Classic/Operation launch transitions passed. Seven Throne recovery paths were simulated independently. Final visual receipt and production promotion are being sealed.
+
+Testing is automated Chrome input plus deterministic/controlled state checks, not participant proof or universal natural-play completion. Existing result advice can still be survival-oriented after objective victory; tracked separately.
+
+
 ## 2026-09-11 — Session 177 — Runtime effects verified
 
 Overall status: S177 runtime contracts restored and tested; staging verified, production verified. SPARKED evidence remains incomplete.

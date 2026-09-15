@@ -62,6 +62,19 @@ function saveVerifiedInput() {
 }
 
 describe("HomeV2", () => {
+  it("identifies a selected new mode and keeps the original game first", async () => {
+    const host=document.createElement("div");document.body.appendChild(host);const tree=createRoot(host);
+    await act(async()=>tree.render(<HomeV2 {...baseProps} gameModeId="boss_gauntlet" />));
+    expect(host.querySelector('[data-testid="front-door-deploy"]').textContent).toContain("BOSS GAUNTLET");
+    expect(host.querySelector('[data-mode-id="boss_gauntlet"]').getAttribute("aria-checked")).toBe("true");
+    expect(host.querySelector('[data-testid="classic-start"]')).toBeTruthy();
+    const intro=host.querySelector('[aria-label="Original game"]');
+    const operations=host.querySelector('[data-testid="operation-command-deck"]');
+    expect(intro.compareDocumentPosition(operations)&Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(operations.closest("details").open).toBe(false);
+    await act(async()=>tree.unmount());host.remove();
+  });
+
   let container, root;
   afterEach(() => {
     act(() => root?.unmount());
@@ -92,7 +105,7 @@ describe("HomeV2", () => {
     expect(container.textContent).toContain("CALL OF DOODIE");
     expect(container.textContent).toContain("DEPLOY");
 
-    const deployBtn = [...container.querySelectorAll("button")].find(b => /DEPLOY/.test(b.textContent));
+    const deployBtn = container.querySelector('[data-testid="front-door-deploy"]');
     expect(deployBtn).toBeTruthy();
     await act(async () => { deployBtn.click(); });
     expect(onStart).toHaveBeenCalledTimes(1);

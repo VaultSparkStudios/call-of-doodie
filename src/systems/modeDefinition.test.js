@@ -43,7 +43,7 @@ describe("mode definition layer (S163)", () => {
     expect(gs.replayEligible).toBe(false);
     expect(isModeBossWave(def, gs, false)).toBe(true);
     expect(getModeWaveEnemyCount(def, { currentWave: 1 }, 40)).toBe(1);
-    expect(getModeWaveEnemyCount(def, { currentWave: 5 }, 40)).toBe(2);
+    expect(getModeWaveEnemyCount(def, { currentWave: 5 }, 40)).toBe(1);
     for (let i = 0; i < 5; i += 1) def.onBossDefeated(gs);
     expect(stepMode(gs, def, { ...noText, frame: 100 })).toBeNull();
     def.onBossDefeated(gs);

@@ -32,7 +32,7 @@ describe("OperationCommandDeck", () => {
     await render();
 
     expect(container.querySelector("[data-testid=operation-command-deck]")).not.toBeNull();
-    expect(container.textContent).toContain("PRIMARY DEPLOYMENT PATH");
+    expect(container.textContent).toContain("OBJECTIVE MISSIONS");
     expect(container.textContent).toContain("3 AUTHORED OPERATIONS · 7 ENCOUNTERS EACH · 12–18 MIN");
     expect(container.querySelectorAll("article")).toHaveLength(3);
     expect(container.querySelectorAll('input[type="radio"]')).toHaveLength(6);
@@ -113,7 +113,7 @@ describe("OperationCommandDeck", () => {
   it("is integrated above the explicitly preserved Arcade and Rivals front door", () => {
     const source = readFileSync(resolve(process.cwd(), "src/components/HomeV2.jsx"), "utf8");
     const operationIndex = source.indexOf("<OperationCommandDeck");
-    const arcadeIndex = source.indexOf("ARCADE &amp; RIVALS");
+    const arcadeIndex = source.indexOf("MODES &amp; CHALLENGES");
     const legacyDeployIndex = source.indexOf('data-testid="front-door-deploy"');
 
     expect(source).toContain('import OperationCommandDeck from "./OperationCommandDeck.jsx";');

@@ -78,6 +78,16 @@ export function createModeState(modeDef, gs, ctx = {}) {
     gs.mapTheme = pool[(Number(gs.runSeed) >>> 0) % pool.length];
   }
   modeDef.init?.(gs, ctx);
+  const openingBossPlan = modeDef.bossWavePlan?.(gs);
+  if (openingBossPlan) {
+    gs.bossWave = true;
+    gs.maxEnemiesThisWave = openingBossPlan.spawnBosses.length;
+    gs.enemiesThisWave = 0;
+    for (const type of openingBossPlan.spawnBosses) {
+      if (ctx.spawnBoss) { ctx.spawnBoss(gs, type); gs.enemiesThisWave += 1; }
+    }
+    modeDef.onWaveStart?.(gs, ctx);
+  }
   return gs;
 }
 

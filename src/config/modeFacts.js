@@ -85,6 +85,7 @@ export function spell(value) {
  * `modeFacts.test.js` asserts each one against the real mode runtime.
  */
 export const PLAYER_FACING_MODE_FACTS = Object.freeze([
+  { key: "EXTRACTION_ALARM_EVAC", value: EXTRACTION_ALARM_EVAC, owner: "src/modes/sewerExtraction.js", noun: "alarm" },
   { key: "BOT_ROYALE_BOT_COUNT", value: BOT_ROYALE_BOT_COUNT, owner: "src/modes/botRoyale.js", noun: "bots" },
   { key: "BOSS_GAUNTLET_BOSS_COUNT", value: BOSS_GAUNTLET_BOSS_COUNT, owner: "src/modes/bossGauntlet.js", noun: "bosses" },
   { key: "THRONE_COUNT", value: THRONE_COUNT, owner: "src/systems/zones.js", noun: "thrones" },

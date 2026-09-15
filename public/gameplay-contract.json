@@ -490,7 +490,7 @@
       "id": "boss_gauntlet",
       "label": "Boss Gauntlet",
       "kind": "mode",
-      "objective": "Six bosses back to back, no filler. Clear all six to win.",
+      "objective": "Fight six bosses in order, one at a time. Defeat all six to win; beating the six-minute target is optional. Bosses may summon reinforcements.",
       "seededReplayCode": false,
       "scoring": "local-only"
     },
@@ -498,7 +498,7 @@
       "id": "sewer_extraction",
       "label": "Sewer Extraction",
       "kind": "mode",
-      "objective": "Loot crates while the alarm climbs. Extract to bank your stash; die and it goes down the drain.",
+      "objective": "Collect crates and reach the evac toilet to bank your loot. The exit opens at alarm 60 and locks at 100. Die before extracting and the haul is lost.",
       "seededReplayCode": false,
       "scoring": "local-only"
     },
@@ -514,7 +514,7 @@
       "id": "hold_the_throne",
       "label": "Hold the Throne",
       "kind": "mode",
-      "objective": "King of the hill with a squad. Hold three thrones for thirty seconds each to win.",
+      "objective": "Hold each of three thrones for thirty uncontested seconds to win. You can retake one lost throne; a second loss ends the run. Your squad helps defend.",
       "seededReplayCode": false,
       "scoring": "local-only"
     }

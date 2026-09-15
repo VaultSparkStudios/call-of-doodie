@@ -3328,3 +3328,9 @@ Score is this session's evidence-based assessment; the lower score than S176 ref
 Brainstorm: declarative ordinary-perk facts; simulated Developer obstacle restoration; overdue ability telegraph windows. Selected second-order improvements completed: shared cooldown stagger, edge-safe decoy placement, exact XP/score separation.
 
 [SIL:2] Remaining ordinary-perk numeric derivation is a separate follow-up candidate. [SIL:1] Investigate Developer timer/telegraph behavior before changing its contract.
+
+### S177 continued verification — 2026-09-14
+
+The existing ten-category S177 assessment remains 950/1000; no new participant data justifies an engagement-score increase. Expanded runtime and visual checks uncovered and repaired mode launch ambiguity, a Throne dead-end, boss ordering, carried-over time, clipped retake text and an undefined boss-defeat helper. 257 files / 1,608 tests passed; strict lint and deployable build passed; public contract 28 files and claims passed; dependency audit zero vulnerabilities. Seventeen short natural-input runs cover all twelve desktop modes and Classic plus four new mobile modes. Four controlled six-boss sequences reached victory. Sixteen browser clock/ending cases and four Classic/Operation launch transitions passed. Seven Throne recovery paths were simulated independently. Final visual receipt and production promotion are being sealed.
+
+[SIL:1] Enable targeted undefined-reference checks on the orchestration path (implemented). [SIL:1] Keep normal input playtests distinct from accelerated end-state fixtures (implemented in the QA receipt).

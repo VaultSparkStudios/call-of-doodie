@@ -31,7 +31,7 @@ export default function HUD({
   vsScore, vsName,
   synergyChargeReady, onSynergyCharge,
   cursedHideScore,
-  speedrunMode, startTime,
+  speedrunMode, startTime, scoreAttackTimeLeft = null, runElapsedSeconds = 0,
   missions, missionDoneSet,
   hud, heat, topGhosts, weeklyRival,
   modeHud = null,
@@ -95,7 +95,7 @@ export default function HUD({
         activeWaveContract={activeWaveContract} grenadeReady={grenadeReady} dashReady={dashReady}
         combo={combo} killstreak={killstreak} experimentMatched={experimentMatched}
         reducedEffects={Boolean(reducedEffects)}
-        modeHud={modeHud}
+        modeHud={modeHud} scoreAttackTimeLeft={scoreAttackTimeLeft} speedrunMode={speedrunMode} runElapsedSeconds={runElapsedSeconds}
       />
     );
   }

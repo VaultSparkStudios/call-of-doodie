@@ -1,9 +1,9 @@
 {
   "vectorVersion": "1.0",
-  "generatedAt": "2026-09-14",
-  "generatedAtMs": 1789367144775,
+  "generatedAt": "2026-09-15",
+  "generatedAtMs": 1789436044384,
   "session": 177,
-  "vectorHash": "edf68b157261abd7",
+  "vectorHash": "2c16a7bf66e79a02",
   "silTotal": 950,
   "silAvg3": 982.3,
   "velocity": 5,
@@ -11,7 +11,7 @@
   "runway": "selected S177 audit complete; production verification complete",
   "intentRate": "not recomputed",
   "openNow": 3,
-  "openNext": 7,
+  "openNext": 9,
   "openBlocked": 0,
   "topNow": [
     "[SIL:2] [BLOCKER S61] [S60 follow-up · narrowed S112] Update PostHog/Sentry/Ko-f",
@@ -19,22 +19,22 @@
     "[Human/Data] [SIL:1] HomeV2 analytics funnel — compare `home_v2_deploy` vs legac"
   ],
   "topNext": [
-    "[SIL:2] **S176 carry** Derive perk / meta-tree description numbers from the same",
-    "[SIL:1] **S176 carry** Boss bonus abilities Clone Decoy and Lifesteal (`BOSS_ABI",
-    "[SIL:2] Supabase Auth + Obelisk account bridge — implement magic-link/Google Aut"
+    "Review end-of-run advice wording for objective victories and timed completion; a",
+    "Collect longer participant playtests for the four objective modes and all three ",
+    "[SIL:2] **S176 carry** Derive perk / meta-tree description numbers from the same"
   ],
   "health": "green",
-  "truthStatus": "S177 runtime contracts restored and tested; staging verified, production verified. SPARKED evidence remains incomplete.",
+  "truthStatus": "Mode fixes, visual/audio corrections and controlled outcomes verified; final production promotion pending.",
   "genome": null,
   "ignisScore": 43701,
   "ignisGrade": "FORGE",
-  "ignisAgeDays": 5,
+  "ignisAgeDays": 6,
   "name": "Call-Of-Doodie",
   "slug": "call-of-doodie",
   "type": null,
   "lifecycle": "deployed",
-  "nextMilestone": "Resolve separately scoped Gauntlet rendering and remaining launch evidence.",
-  "currentFocus": "S177 runtime promises restored and deployed; next investigate existing Gauntlet canvas sizing.",
+  "nextMilestone": "Verify exact-source production deployment, then objective-aware debrief and participant balance evidence.",
+  "currentFocus": "Classic Survival is easy to find; mode objectives, boss progression, throne recovery and per-run clocks are corrected.",
   "lastShipped": "see LATEST_HANDOFF.md",
   "blockers": [
     "PostHog and project-scoped Sentry evidence remain unavailable; provider readiness is not represented as verified telemetry.",

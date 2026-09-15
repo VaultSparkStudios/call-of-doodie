@@ -582,6 +582,7 @@ export default function CallOfDoodie() {
 
   // ── Init game ─────────────────────────────────────────────────────────────
   const initGame = useCallback((forceSeed, startWave, practiceDrill = null) => {
+    frameCountRef.current = 0;
     const mobile = window.innerWidth <= 900 || window.matchMedia?.("(pointer: coarse)")?.matches === true;
     const { w, h } = measureGameViewport(containerRef.current, mobile);
     sizeRef.current = { w, h };
@@ -853,7 +854,7 @@ export default function CallOfDoodie() {
     gsRef.current.hazards = arena.hazards;
     Object.assign(gsRef.current.player, combatRuntimeRef.current.findSafeArenaSpawn(arena, aw, ah, gsRef.current.player));
     updateCamera(gsRef.current.camera, gsRef.current.player, { viewW: w, viewH: h, snap: true });
-    modeRuntimeRef.current?.createModeState(modeDefRef.current, gsRef.current, { W: aw, H: ah, viewW: w, viewH: h, addText, addParticles, announce: _modeAnnounce });
+    modeRuntimeRef.current?.createModeState(modeDefRef.current, gsRef.current, { W: aw, H: ah, viewW: w, viewH: h, addText, addParticles, announce: _modeAnnounce, spawnBoss: (state, type) => _spawnBoss(state, aw, ah, difficultyRef.current, type) });
 
     // Show meta toast if upgrades active
     const metaSnap = loadMetaProgress();
@@ -1901,7 +1902,7 @@ export default function CallOfDoodie() {
       addParticles(gs, e.x, e.y, e.color, 50);
       addParticles(gs, e.x, e.y, "#FFD700", 30);
       addParticles(gs, e.x, e.y, "#FFFFFF", 20);
-      retainLastMatchingInPlace(gs.floatingTexts, (text) => text.big, 4);
+      combatRuntimeRef.current.retainLastMatchingInPlace(gs.floatingTexts, (text) => text.big, 4);
       addScreenText(gs, SX, SY - H / 6, "☠ BOSS ELIMINATED ☠", "#FF0000", true);
       if (100 > bestMomentRef.current.score) bestMomentRef.current = { ts: Date.now(), score: 100 };
       if (e.typeIndex === 20) gs.algorithmSurge = false;
@@ -2074,6 +2075,13 @@ export default function CallOfDoodie() {
   const startGame = useCallback(async (forceSeed, challengeOpts = {}) => {
     setPendingNextRunContract(null);
     const requestedOperation = challengeOpts.operationId ? getOperation(challengeOpts.operationId) : null;
+    // Operations own their rules. A previously selected arcade mode must not
+    // inject its bosses, flood, timer, weekly kit, or victory condition.
+    if (requestedOperation) {
+      gameModeIdRef.current = "standard"; setGameModeId("standard");
+      scoreAttackRef.current = dailyChallengeRef.current = cursedRunRef.current = bossRushRef.current = speedrunRef.current = gauntletRef.current = zombiesRef.current = false;
+      setScoreAttackMode(false); setDailyChallengeMode(false); setCursedRunMode(false); setBossRushMode(false); setSpeedrunMode(false); setGauntletMode(false); setZombiesMode(false);
+    }
     // S163 bundle diet: only new modes and Operations pay for the mode runtime chunk.
     if (needsModeRuntime(gameModeIdRef.current, { operation: !!requestedOperation })) {
       modeRuntimeRef.current = await loadModeRuntime(gameModeIdRef.current, { operation: !!requestedOperation });
@@ -2089,7 +2097,7 @@ export default function CallOfDoodie() {
       challengeOpts = { ...challengeOpts, gauntletWeek: gauntletLaunch.week };
     }
     // Show pre-deployment perk draft (skip in Daily Challenge to preserve seed fairness)
-    if (!draftShownRef.current && !dailyChallengeMode && !gauntletLaunch) {
+    if (!draftShownRef.current && !dailyChallengeRef.current && !gauntletLaunch) {
       const draftSeed = Number(forceSeed);
       const draftRng = Number.isFinite(draftSeed) && draftSeed > 0
         ? createNamedRunRng({ seed: draftSeed, wave: 1, name: "choices" })
@@ -2172,7 +2180,7 @@ export default function CallOfDoodie() {
         difficulty: difficultyRef.current,
       }, _intent);
     } catch { experimentMatchedRef.current = null; }
-    setActivePerks([]); activePerksRef.current = []; setPerkPending(false); setPerkOptions([]); setBossWaveActive(false); setBossWaveBanner(false);
+    setActivePerks([]); activePerksRef.current = []; setPerkPending(false); setPerkOptions([]); setBossWaveActive(Boolean(gsRef.current?.bossWave)); setBossWaveBanner(false);
     archetypeUnlocksRef.current = new Set();
     doctrineForgedRunRef.current = new Set();
     setUnlockedArchetypes([]);
@@ -2211,7 +2219,7 @@ export default function CallOfDoodie() {
     setMusicLowpass(false); // clear any lingering last-stand muffle from the previous run
     preloadBossAtlas(); // warm boss sprites before the first boss wave (S155)
     setTimeout(() => {
-      startMusic(false);
+      startMusic(Boolean(gsRef.current?.bossWave));
       startAmbient(gsRef.current?.mapTheme ?? 0);
     }, 200); // small delay to let audio context resume
     // ── Analytics: game start ──
@@ -2259,7 +2267,7 @@ export default function CallOfDoodie() {
         track("arsenal_milestone_snapshot", { accountLevel: _acctLevel, milestonesReached: _milestonesReached, totalWeapons: WEAPONS.length, availability: "all-open" });
       }
     } catch {}
-  }, [applyPerk, dailyChallengeMode, initGame, openQueuedPerkSelection, operationStateRef, releaseAllInputs, resetOperation, startOperation, starterLoadout]);
+  }, [applyPerk, initGame, openQueuedPerkSelection, operationStateRef, releaseAllInputs, resetOperation, startOperation, starterLoadout]);
 
   // ── Draft perk selection ───────────────────────────────────────────────────
   const applyDraftPerk = useCallback((perk) => {
@@ -2812,7 +2820,7 @@ export default function CallOfDoodie() {
       }
     }
     // Wave cleared
-    if (gs.enemies.length === 0 && gs.enemiesThisWave >= gs.maxEnemiesThisWave) {
+    if (gs.enemies.length === 0 && gs.enemiesThisWave >= gs.maxEnemiesThisWave && !modeDefRef.current?.winCondition?.(gs)) {
       // Respite gate: count down after high-threat wave before advancing
       if (gs._respiteLock) {
         gs._respiteTimer = (gs._respiteTimer || 1) - 1;
@@ -3045,7 +3053,7 @@ export default function CallOfDoodie() {
         setMusicIntensity(true);
         gs.screenShake = 20;
         // ── Boss rotation: Karen→Splitter→Juggernaut→Summoner→Landlord, cycling ──
-        const bossPlan = combatRuntimeRef.current.createBossWavePlan({
+        const bossPlan = modeDefRef.current?.bossWavePlan?.(gs) || combatRuntimeRef.current.createBossWavePlan({
           currentWave: gs.currentWave,
           bossRushMode: gs.bossRushMode,
           developerBossSpawned: gs.developerBossSpawned,
@@ -4105,7 +4113,7 @@ export default function CallOfDoodie() {
           position: "absolute", inset: 0, zIndex: 180, display: "flex",
           alignItems: "center", justifyContent: "center",
           background: "rgba(0,0,0,0.82)", backdropFilter: "blur(8px)",
-          animation: "bossIn 0.45s cubic-bezier(0.22,1,0.36,1) forwards",
+          animation: gsRef.current?.reducedMotion ? "none" : "bossOverlayIn 0.45s cubic-bezier(0.22,1,0.36,1) forwards",
           pointerEvents: "none",
         }}>
           {/* Scanline overlay */}
@@ -4204,6 +4212,8 @@ export default function CallOfDoodie() {
       {/* HUD overlay */}
       <AsyncPanelBoundary>
       <HUD
+        scoreAttackTimeLeft={gsRef.current?.scoreAttackMode ? gsRef.current.scoreAttackTimeLeft : null}
+        runElapsedSeconds={frameCountRef.current / 60}
         modeHud={modeRuntimeRef.current ? modeRuntimeRef.current.getModeHudModel(gsRef.current, modeDefRef.current) : null}
         wave={wave} timeSurvived={timeSurvived} score={score} kills={kills} deaths={deaths}
         health={health} maxHealth={gsRef.current?.player?.maxHealth} ammo={ammo} isReloading={isReloading} currentWeapon={currentWeapon}
@@ -4279,6 +4289,7 @@ export default function CallOfDoodie() {
         @keyframes ammoPulseYellow { 0%,100% { opacity:1 } 50% { opacity:.55 } }
         @keyframes ammoPulseRed { 0%,100% { opacity:1 } 50% { opacity:.35 } }
         @keyframes slideDown { from { opacity:0; transform:translateX(-50%) translateY(-20px) } to { opacity:1; transform:translateX(-50%) translateY(0) } }
+        @keyframes bossOverlayIn { from { opacity:0; transform:scale(0.9) } to { opacity:1; transform:scale(1) } }
         @keyframes bossIn { from { opacity:0; transform:translate(-50%,-50%) scale(0.5) } to { opacity:1; transform:translate(-50%,-50%) scale(1) } }
         * { box-sizing:border-box; margin:0 }
         body { margin:0; overflow:hidden }

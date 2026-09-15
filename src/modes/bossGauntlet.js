@@ -5,6 +5,7 @@
 // time, and no filler enemies to farm.
 
 import { BOSS_ROTATION } from "../gameHelpers.js";
+import { createBossWavePlan } from "../systems/bossWaveFlow.js";
 import { ENEMY_TYPES } from "../constants.js";
 import { BOSS_GAUNTLET_BOSS_COUNT, BOSS_GAUNTLET_PAR_SECONDS } from "../config/modeFacts.js";
 
@@ -33,7 +34,15 @@ export const BOSS_GAUNTLET = Object.freeze({
   // Every wave is a boss wave, from wave 1.
   isBossWave() { return true; },
 
-  waveEnemyCount(gs) { return gs.currentWave >= 4 ? 2 : 1; },
+  waveEnemyCount() { return 1; },
+
+  bossWavePlan(gs) {
+    return createBossWavePlan({
+      currentWave: Math.max(1, Math.min(BOSS_COUNT, gs.currentWave || 1)),
+      bossRushMode: true, developerBossSpawned: false,
+      bossRotation: BOSS_ROTATION, enemyTypes: ENEMY_TYPES, singleBoss: true,
+    });
+  },
 
   onWaveStart(gs, ctx) {
     const idx = Math.min(BOSS_COUNT - 1, Math.max(0, (gs.currentWave || 1) - 1));

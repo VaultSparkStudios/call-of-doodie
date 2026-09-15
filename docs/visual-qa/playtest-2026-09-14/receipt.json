@@ -1,0 +1,1700 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-09-14T20:23:00.324Z",
+  "stagingUrl": "https://1ac10bba.call-of-doodie.pages.dev",
+  "uiBaseRef": "2cdb8c7",
+  "uiHeadRef": "Corrective working tree; exact source hashes below",
+  "themes": [
+    "dark",
+    "light"
+  ],
+  "sourceFiles": [
+    {
+      "file": "src/App.jsx",
+      "sha256": "beb6facddd2de59b05b56d677bed0c351a86710160d99870ee07c5d432d5f130"
+    },
+    {
+      "file": "src/components/HUD.health.test.jsx",
+      "sha256": "e3e77fb7175b8a7a027bddf2360da8360bf789d277f518ded86ca1e555fab3fd"
+    },
+    {
+      "file": "src/components/HUD.jsx",
+      "sha256": "da6508e02ab02e45c994a5995e10f1548025279e54a7462400f4e7c5dad345ac"
+    },
+    {
+      "file": "src/components/MobileHUD.jsx",
+      "sha256": "48b342492cfa639647772be562b07b67afdb18f1208a1d9c19f0636ca436f65e"
+    },
+    {
+      "file": "src/components/PauseMenu.jsx",
+      "sha256": "1726010d71d7299946dd125bb88f1ee86c99d0e5e832d41a6253527af020b394"
+    },
+    {
+      "file": "src/drawGame.js",
+      "sha256": "fed85f52327c17baef17cb046a47eb676263869217986eef1c1aedfc5f1be0c9"
+    },
+    {
+      "file": "src/sim/stepSim.js",
+      "sha256": "38a526e4610d724e995b3b88ee0036dad066fddbd3f673e6180fff1ab40841ee"
+    },
+    {
+      "file": "src/systems/arenaEnvironment.js",
+      "sha256": "e9dfb00a023c8d351c71bdef9819928675246cd0768cd3f622afdf341af9b061"
+    },
+    {
+      "file": "src/systems/arenaSpawn.test.js",
+      "sha256": "5d3467e45a7a51f691de50035a002e0b38c24970fb9fa1b0c9cd6395046d0c20"
+    },
+    {
+      "file": "src/systems/combatRuntime.js",
+      "sha256": "d9f3a0fa89d4c8433e02da25090a694d8928907399db1f6dca8f4e60cdb19a6a"
+    }
+  ],
+  "workingTreeUiSha256": "c899a3160c97d620aaeaa030eee82ef9a5b7371b44b4b1e4f88f4f8b39493797",
+  "captures": [
+    {
+      "file": "playtest-2026-09-14/before-sewer-night-390-spawn.jpg",
+      "sha256": "6f284d6be22e57fb04876f900a64504033e1d9c1ad6a1d771236dead720b205f",
+      "phase": "before",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "Game: spawn",
+      "origin": "https://callofdoodie.wtf",
+      "observed": {
+        "health": 74,
+        "maxHealth": 100,
+        "player": {
+          "x": 195,
+          "y": 418
+        },
+        "arena": [
+          390,
+          836
+        ],
+        "overflow": false,
+        "hazardClearance": -27.765570873362734
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/before-sewer-night-390-health.jpg",
+      "sha256": "d69bf95e32568666993e8b7e4c05e77c456858b0a9aa8a26182f52d2ff95fa65",
+      "phase": "before",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "Game: health",
+      "origin": "https://callofdoodie.wtf",
+      "observed": {
+        "health": 146,
+        "maxHealth": 150,
+        "player": {
+          "x": 195,
+          "y": 418
+        },
+        "arena": [
+          390,
+          836
+        ],
+        "overflow": false,
+        "hazardClearance": null
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/before-sewer-night-390-announcements.jpg",
+      "sha256": "589971a626d13f396e67cb50ad4dfab66354ce4aecb0878938ba6634dd5497fa",
+      "phase": "before",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "Game: announcements",
+      "origin": "https://callofdoodie.wtf",
+      "observed": {
+        "health": 146,
+        "maxHealth": 150,
+        "player": {
+          "x": 195,
+          "y": 418
+        },
+        "arena": [
+          390,
+          836
+        ],
+        "overflow": false,
+        "hazardClearance": null
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/before-sewer-night-390-paused-reward.jpg",
+      "sha256": "243b75dd4c33651124de65c07a33d2ca53369c188fc2b1d7f5f5d7144a5ddf1c",
+      "phase": "before",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "Game: paused-reward",
+      "origin": "https://callofdoodie.wtf",
+      "observed": {
+        "health": 146,
+        "maxHealth": 150,
+        "player": {
+          "x": 195,
+          "y": 418
+        },
+        "arena": [
+          390,
+          836
+        ],
+        "overflow": false,
+        "hazardClearance": null
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/before-sewer-night-1440-spawn.jpg",
+      "sha256": "8d4cbfb61e93e57a8718645d7a5708069b1e694a1cdf2c3c184b09cb3080b901",
+      "phase": "before",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Game: spawn",
+      "origin": "https://callofdoodie.wtf",
+      "observed": {
+        "health": 57,
+        "maxHealth": 100,
+        "player": {
+          "x": 720,
+          "y": 450
+        },
+        "arena": [
+          1440,
+          900
+        ],
+        "overflow": false,
+        "hazardClearance": -16.196742048799585
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/before-sewer-night-1440-health.jpg",
+      "sha256": "3fb62b1e836d0143deb4e78fcc8f4cf62d48729c62e67acccc0aebe504a02ad6",
+      "phase": "before",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Game: health",
+      "origin": "https://callofdoodie.wtf",
+      "observed": {
+        "health": 146,
+        "maxHealth": 150,
+        "player": {
+          "x": 720,
+          "y": 450
+        },
+        "arena": [
+          1440,
+          900
+        ],
+        "overflow": false,
+        "hazardClearance": null
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/before-sewer-night-1440-announcements.jpg",
+      "sha256": "e656307baecc14620d9b9ccbe8046305d1db1d25168d281735a591369b3efd3b",
+      "phase": "before",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Game: announcements",
+      "origin": "https://callofdoodie.wtf",
+      "observed": {
+        "health": 146,
+        "maxHealth": 150,
+        "player": {
+          "x": 720,
+          "y": 450
+        },
+        "arena": [
+          1440,
+          900
+        ],
+        "overflow": false,
+        "hazardClearance": null
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/before-sewer-night-1440-paused-reward.jpg",
+      "sha256": "b611c6d389b678a4da1926c8445b53547b05cfed7a393ea8d5e0ee17db9fc001",
+      "phase": "before",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Game: paused-reward",
+      "origin": "https://callofdoodie.wtf",
+      "observed": {
+        "health": 146,
+        "maxHealth": 150,
+        "player": {
+          "x": 720,
+          "y": 450
+        },
+        "arena": [
+          1440,
+          900
+        ],
+        "overflow": false,
+        "hazardClearance": null
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/before-porcelain-day-390-spawn.jpg",
+      "sha256": "2a67addeb87fa325254776509fe606993a16fbce78daee7be3bea862258a3542",
+      "phase": "before",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "Game: spawn",
+      "origin": "https://callofdoodie.wtf",
+      "observed": {
+        "health": 63,
+        "maxHealth": 100,
+        "player": {
+          "x": 195,
+          "y": 418
+        },
+        "arena": [
+          390,
+          836
+        ],
+        "overflow": false,
+        "hazardClearance": -27.765570873362734
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/before-porcelain-day-390-health.jpg",
+      "sha256": "2408e9460001bf73aead2463d0a47be662242da56bc367e44b854ae8ff5042cd",
+      "phase": "before",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "Game: health",
+      "origin": "https://callofdoodie.wtf",
+      "observed": {
+        "health": 147,
+        "maxHealth": 150,
+        "player": {
+          "x": 195,
+          "y": 418
+        },
+        "arena": [
+          390,
+          836
+        ],
+        "overflow": false,
+        "hazardClearance": null
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/before-porcelain-day-390-announcements.jpg",
+      "sha256": "aabaaf048207941cc1907426758d4ff55d88054bd2c31bf84108e3ffecc2db5d",
+      "phase": "before",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "Game: announcements",
+      "origin": "https://callofdoodie.wtf",
+      "observed": {
+        "health": 147,
+        "maxHealth": 150,
+        "player": {
+          "x": 195,
+          "y": 418
+        },
+        "arena": [
+          390,
+          836
+        ],
+        "overflow": false,
+        "hazardClearance": null
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/before-porcelain-day-390-paused-reward.jpg",
+      "sha256": "2c9410719e6c578d85e4e1a66ee401797805f2469a6e006b8daf94dde8f8fff3",
+      "phase": "before",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "Game: paused-reward",
+      "origin": "https://callofdoodie.wtf",
+      "observed": {
+        "health": 147,
+        "maxHealth": 150,
+        "player": {
+          "x": 195,
+          "y": 418
+        },
+        "arena": [
+          390,
+          836
+        ],
+        "overflow": false,
+        "hazardClearance": null
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/before-porcelain-day-1440-spawn.jpg",
+      "sha256": "f8f60afa7f98ed2feab55eca67946f71266b3a06860be4e3406b0203ef1e182a",
+      "phase": "before",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Game: spawn",
+      "origin": "https://callofdoodie.wtf",
+      "observed": {
+        "health": 59,
+        "maxHealth": 100,
+        "player": {
+          "x": 720,
+          "y": 450
+        },
+        "arena": [
+          1440,
+          900
+        ],
+        "overflow": false,
+        "hazardClearance": -16.196742048799585
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/before-porcelain-day-1440-health.jpg",
+      "sha256": "b29447330e8cdd240a129bb597b5c87d8eec863409440cc443a0addb2ac01dd9",
+      "phase": "before",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Game: health",
+      "origin": "https://callofdoodie.wtf",
+      "observed": {
+        "health": 146.5,
+        "maxHealth": 150,
+        "player": {
+          "x": 720,
+          "y": 450
+        },
+        "arena": [
+          1440,
+          900
+        ],
+        "overflow": false,
+        "hazardClearance": null
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/before-porcelain-day-1440-announcements.jpg",
+      "sha256": "c5f3f9ddd1fc718193962d8c14a844172573a6481007f00fa8b899cc69130fde",
+      "phase": "before",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Game: announcements",
+      "origin": "https://callofdoodie.wtf",
+      "observed": {
+        "health": 146.5,
+        "maxHealth": 150,
+        "player": {
+          "x": 720,
+          "y": 450
+        },
+        "arena": [
+          1440,
+          900
+        ],
+        "overflow": false,
+        "hazardClearance": null
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/before-porcelain-day-1440-paused-reward.jpg",
+      "sha256": "3c74f7d80ad4f77242862dc3e845ec811216ba6da8dba11e5b417b6b29d48dda",
+      "phase": "before",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Game: paused-reward",
+      "origin": "https://callofdoodie.wtf",
+      "observed": {
+        "health": 146.5,
+        "maxHealth": 150,
+        "player": {
+          "x": 720,
+          "y": 450
+        },
+        "arena": [
+          1440,
+          900
+        ],
+        "overflow": false,
+        "hazardClearance": null
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/after-sewer-night-390-spawn.jpg",
+      "sha256": "6356a4151141a5f2d37796f68662c9b89c6823a7502a7cf286fef6774aa43ce1",
+      "phase": "after",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "Game: spawn",
+      "origin": "https://1ac10bba.call-of-doodie.pages.dev",
+      "observed": {
+        "health": 100,
+        "maxHealth": 100,
+        "player": {
+          "x": 267,
+          "y": 418
+        },
+        "arena": [
+          390,
+          836
+        ],
+        "overflow": false,
+        "hazardClearance": 39.760914251796905
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/after-sewer-night-390-health.jpg",
+      "sha256": "eae35b205caa05d0b3060dad55009015783a5d124e6e4b131319d2bc4b9f35dd",
+      "phase": "after",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "Game: health",
+      "origin": "https://1ac10bba.call-of-doodie.pages.dev",
+      "observed": {
+        "health": 146.5,
+        "maxHealth": 150,
+        "player": {
+          "x": 267,
+          "y": 418
+        },
+        "arena": [
+          390,
+          836
+        ],
+        "overflow": false,
+        "hazardClearance": null
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/after-sewer-night-390-announcements.jpg",
+      "sha256": "9251a17c53adfd7c41484fb713d0c6e182636cebbc0f857ce633b410bda45eab",
+      "phase": "after",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "Game: announcements",
+      "origin": "https://1ac10bba.call-of-doodie.pages.dev",
+      "observed": {
+        "health": 146.5,
+        "maxHealth": 150,
+        "player": {
+          "x": 267,
+          "y": 418
+        },
+        "arena": [
+          390,
+          836
+        ],
+        "overflow": false,
+        "hazardClearance": null
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/after-sewer-night-390-paused-reward.jpg",
+      "sha256": "a2ae0ba42cf75c3e372fad73dc98a07c5af335de638a1ddbbb8bf5abd2ca82e1",
+      "phase": "after",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "Game: paused-reward",
+      "origin": "https://1ac10bba.call-of-doodie.pages.dev",
+      "observed": {
+        "health": 146.5,
+        "maxHealth": 150,
+        "player": {
+          "x": 267,
+          "y": 418
+        },
+        "arena": [
+          390,
+          836
+        ],
+        "overflow": false,
+        "hazardClearance": null
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/after-sewer-night-390-resumed-reward.jpg",
+      "sha256": "af5846b3756628f04e50184778b077c949c347e3c3406f27befd7414b08a09ca",
+      "phase": "after",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "Game: resumed-reward",
+      "origin": "https://1ac10bba.call-of-doodie.pages.dev",
+      "observed": {
+        "health": 146.5,
+        "maxHealth": 150,
+        "player": {
+          "x": 267,
+          "y": 418
+        },
+        "arena": [
+          390,
+          836
+        ],
+        "overflow": false,
+        "hazardClearance": null
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/after-sewer-night-1440-spawn.jpg",
+      "sha256": "a73feb378a55c004cc138f43f7512c6834281f40a057e193e2b2a1b1b6d196b4",
+      "phase": "after",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Game: spawn",
+      "origin": "https://1ac10bba.call-of-doodie.pages.dev",
+      "observed": {
+        "health": 100,
+        "maxHealth": 100,
+        "player": {
+          "x": 764.3462175605417,
+          "y": 468.36880475352433
+        },
+        "arena": [
+          1440,
+          900
+        ],
+        "overflow": false,
+        "hazardClearance": 25.87301600194685
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/after-sewer-night-1440-health.jpg",
+      "sha256": "147004f7752f05c7f0a6b089835d3e3afd5192963e383fe0bdf6fc7b4cabf13e",
+      "phase": "after",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Game: health",
+      "origin": "https://1ac10bba.call-of-doodie.pages.dev",
+      "observed": {
+        "health": 145.5,
+        "maxHealth": 150,
+        "player": {
+          "x": 764.3462175605417,
+          "y": 468.36880475352433
+        },
+        "arena": [
+          1440,
+          900
+        ],
+        "overflow": false,
+        "hazardClearance": null
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/after-sewer-night-1440-announcements.jpg",
+      "sha256": "95a477fe95f7db7da3a01b7d19542bea8d85ebc179875b337655f4cf51d23e32",
+      "phase": "after",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Game: announcements",
+      "origin": "https://1ac10bba.call-of-doodie.pages.dev",
+      "observed": {
+        "health": 145.5,
+        "maxHealth": 150,
+        "player": {
+          "x": 764.3462175605417,
+          "y": 468.36880475352433
+        },
+        "arena": [
+          1440,
+          900
+        ],
+        "overflow": false,
+        "hazardClearance": null
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/after-sewer-night-1440-paused-reward.jpg",
+      "sha256": "5a89b718a00391bc4904e82f0166b483e6eb08b02fdfa04d99ade184a262d974",
+      "phase": "after",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Game: paused-reward",
+      "origin": "https://1ac10bba.call-of-doodie.pages.dev",
+      "observed": {
+        "health": 145.5,
+        "maxHealth": 150,
+        "player": {
+          "x": 764.3462175605417,
+          "y": 468.36880475352433
+        },
+        "arena": [
+          1440,
+          900
+        ],
+        "overflow": false,
+        "hazardClearance": null
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/after-sewer-night-1440-resumed-reward.jpg",
+      "sha256": "9a29a7dfcb779ccde88bb4f3592707da1bb913106b209a0d970186218dfae155",
+      "phase": "after",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Game: resumed-reward",
+      "origin": "https://1ac10bba.call-of-doodie.pages.dev",
+      "observed": {
+        "health": 145.5,
+        "maxHealth": 150,
+        "player": {
+          "x": 764.3462175605417,
+          "y": 468.36880475352433
+        },
+        "arena": [
+          1440,
+          900
+        ],
+        "overflow": false,
+        "hazardClearance": null
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/after-porcelain-day-390-spawn.jpg",
+      "sha256": "af9a31bbdf4553bae2ae20c8f966929425da3b6003e99fa964368ab302c5c8bf",
+      "phase": "after",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "Game: spawn",
+      "origin": "https://1ac10bba.call-of-doodie.pages.dev",
+      "observed": {
+        "health": 100,
+        "maxHealth": 100,
+        "player": {
+          "x": 267,
+          "y": 418
+        },
+        "arena": [
+          390,
+          836
+        ],
+        "overflow": false,
+        "hazardClearance": 39.760914251796905
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/after-porcelain-day-390-health.jpg",
+      "sha256": "c88fa632f4d9c2e67e102811fd58921282f129e4d2568fab2067b202aec3d732",
+      "phase": "after",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "Game: health",
+      "origin": "https://1ac10bba.call-of-doodie.pages.dev",
+      "observed": {
+        "health": 146.5,
+        "maxHealth": 150,
+        "player": {
+          "x": 267,
+          "y": 418
+        },
+        "arena": [
+          390,
+          836
+        ],
+        "overflow": false,
+        "hazardClearance": null
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/after-porcelain-day-390-announcements.jpg",
+      "sha256": "6d94adeb63f289cd47186651062098000039b84ff6fecd41fea11d62d2c9173d",
+      "phase": "after",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "Game: announcements",
+      "origin": "https://1ac10bba.call-of-doodie.pages.dev",
+      "observed": {
+        "health": 146.5,
+        "maxHealth": 150,
+        "player": {
+          "x": 267,
+          "y": 418
+        },
+        "arena": [
+          390,
+          836
+        ],
+        "overflow": false,
+        "hazardClearance": null
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/after-porcelain-day-390-paused-reward.jpg",
+      "sha256": "f01e83f5e3ec0f93a62dba744de1a44055c61b0ca257683e453fb5a8c5fa7d96",
+      "phase": "after",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "Game: paused-reward",
+      "origin": "https://1ac10bba.call-of-doodie.pages.dev",
+      "observed": {
+        "health": 146.5,
+        "maxHealth": 150,
+        "player": {
+          "x": 267,
+          "y": 418
+        },
+        "arena": [
+          390,
+          836
+        ],
+        "overflow": false,
+        "hazardClearance": null
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/after-porcelain-day-390-resumed-reward.jpg",
+      "sha256": "ff661cdfa9b507eb53d8efb3f56fff536553da2ab82132dc38cf381200e63845",
+      "phase": "after",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "Game: resumed-reward",
+      "origin": "https://1ac10bba.call-of-doodie.pages.dev",
+      "observed": {
+        "health": 146.5,
+        "maxHealth": 150,
+        "player": {
+          "x": 267,
+          "y": 418
+        },
+        "arena": [
+          390,
+          836
+        ],
+        "overflow": false,
+        "hazardClearance": null
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/after-porcelain-day-1440-spawn.jpg",
+      "sha256": "75bd5b5a9a262b6332208439f08ac59655ee09696a87923f53f1438a217118f2",
+      "phase": "after",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Game: spawn",
+      "origin": "https://1ac10bba.call-of-doodie.pages.dev",
+      "observed": {
+        "health": 100,
+        "maxHealth": 100,
+        "player": {
+          "x": 764.3462175605417,
+          "y": 468.36880475352433
+        },
+        "arena": [
+          1440,
+          900
+        ],
+        "overflow": false,
+        "hazardClearance": 25.87301600194685
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/after-porcelain-day-1440-health.jpg",
+      "sha256": "da12efa6a4b1a41e32024c8c6c6889f31389c41c7ed497b291018248e7bea932",
+      "phase": "after",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Game: health",
+      "origin": "https://1ac10bba.call-of-doodie.pages.dev",
+      "observed": {
+        "health": 147,
+        "maxHealth": 150,
+        "player": {
+          "x": 764.3462175605417,
+          "y": 468.36880475352433
+        },
+        "arena": [
+          1440,
+          900
+        ],
+        "overflow": false,
+        "hazardClearance": null
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/after-porcelain-day-1440-announcements.jpg",
+      "sha256": "2d56161f70c5871dbaf9ece9f4a91043ffa3e4ee4911e00b7593aba4cfb5acea",
+      "phase": "after",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Game: announcements",
+      "origin": "https://1ac10bba.call-of-doodie.pages.dev",
+      "observed": {
+        "health": 147,
+        "maxHealth": 150,
+        "player": {
+          "x": 764.3462175605417,
+          "y": 468.36880475352433
+        },
+        "arena": [
+          1440,
+          900
+        ],
+        "overflow": false,
+        "hazardClearance": null
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/after-porcelain-day-1440-paused-reward.jpg",
+      "sha256": "87f3f4b22c1adad817f5f14617b11b924f70180a81b2e1869c0ff9e86151f325",
+      "phase": "after",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Game: paused-reward",
+      "origin": "https://1ac10bba.call-of-doodie.pages.dev",
+      "observed": {
+        "health": 147,
+        "maxHealth": 150,
+        "player": {
+          "x": 764.3462175605417,
+          "y": 468.36880475352433
+        },
+        "arena": [
+          1440,
+          900
+        ],
+        "overflow": false,
+        "hazardClearance": null
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/after-porcelain-day-1440-resumed-reward.jpg",
+      "sha256": "566f5842e8f324ef8caecb3bd2a1fb28fa684634044d201874714bfe9f125b82",
+      "phase": "after",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Game: resumed-reward",
+      "origin": "https://1ac10bba.call-of-doodie.pages.dev",
+      "observed": {
+        "health": 147,
+        "maxHealth": 150,
+        "player": {
+          "x": 764.3462175605417,
+          "y": 468.36880475352433
+        },
+        "arena": [
+          1440,
+          900
+        ],
+        "overflow": false,
+        "hazardClearance": null
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/landscape-before-sewer-night-844-spawn.jpg",
+      "sha256": "86c353b7b462d5d9bbe4a15e612b79e285500faf3f645ac6d8dbff7d5101bcb9",
+      "phase": "before",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "page": "Game: spawn",
+      "origin": "https://callofdoodie.wtf",
+      "observed": {
+        "health": 70,
+        "maxHealth": 100,
+        "player": {
+          "x": 422,
+          "y": 163
+        },
+        "arena": [
+          844,
+          326
+        ],
+        "overflow": false,
+        "hazardClearance": -5.1097477326425675
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/landscape-before-sewer-night-844-health.jpg",
+      "sha256": "5c5c61f75aa94e59e51915410d6810123aa31dca7940f5e60ec19c3fdc81170b",
+      "phase": "before",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "page": "Game: health",
+      "origin": "https://callofdoodie.wtf",
+      "observed": {
+        "health": 145,
+        "maxHealth": 150,
+        "player": {
+          "x": 422,
+          "y": 163
+        },
+        "arena": [
+          844,
+          326
+        ],
+        "overflow": false,
+        "hazardClearance": null
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/landscape-before-sewer-night-844-announcements.jpg",
+      "sha256": "30f4f1566c44d26b1b0f5cda8ee1d509babdf04ea6360002e3f0d9373590fd9a",
+      "phase": "before",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "page": "Game: announcements",
+      "origin": "https://callofdoodie.wtf",
+      "observed": {
+        "health": 145,
+        "maxHealth": 150,
+        "player": {
+          "x": 422,
+          "y": 163
+        },
+        "arena": [
+          844,
+          326
+        ],
+        "overflow": false,
+        "hazardClearance": null
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/landscape-before-sewer-night-844-paused-reward.jpg",
+      "sha256": "3ec9d945ff25cca5075ae5de7259a8b9ccf528068ae003a301e0f7304545f932",
+      "phase": "before",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "page": "Game: paused-reward",
+      "origin": "https://callofdoodie.wtf",
+      "observed": {
+        "health": 145,
+        "maxHealth": 150,
+        "player": {
+          "x": 422,
+          "y": 163
+        },
+        "arena": [
+          844,
+          326
+        ],
+        "overflow": false,
+        "hazardClearance": null
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/landscape-before-porcelain-day-844-spawn.jpg",
+      "sha256": "5c2b84dd4117b33ba1dcf5880d199935c3852963ab16c8a484981a169fbda5c0",
+      "phase": "before",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "page": "Game: spawn",
+      "origin": "https://callofdoodie.wtf",
+      "observed": {
+        "health": 68,
+        "maxHealth": 100,
+        "player": {
+          "x": 422,
+          "y": 163
+        },
+        "arena": [
+          844,
+          326
+        ],
+        "overflow": false,
+        "hazardClearance": -5.1097477326425675
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/landscape-before-porcelain-day-844-health.jpg",
+      "sha256": "1212c6740c1c072d77d8b3286210d2710cd968f32e702dc94e30031c301acb0a",
+      "phase": "before",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "page": "Game: health",
+      "origin": "https://callofdoodie.wtf",
+      "observed": {
+        "health": 146.5,
+        "maxHealth": 150,
+        "player": {
+          "x": 422,
+          "y": 163
+        },
+        "arena": [
+          844,
+          326
+        ],
+        "overflow": false,
+        "hazardClearance": null
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/landscape-before-porcelain-day-844-announcements.jpg",
+      "sha256": "d1deb4acf7fb4d033ac1a1241f0bf5137e3265be0e42373c85faa04d7be54b61",
+      "phase": "before",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "page": "Game: announcements",
+      "origin": "https://callofdoodie.wtf",
+      "observed": {
+        "health": 146.5,
+        "maxHealth": 150,
+        "player": {
+          "x": 422,
+          "y": 163
+        },
+        "arena": [
+          844,
+          326
+        ],
+        "overflow": false,
+        "hazardClearance": null
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/landscape-before-porcelain-day-844-paused-reward.jpg",
+      "sha256": "833f2c09693f0415ee175d78012075b18186cc146b8db8ba33241bf863a07b41",
+      "phase": "before",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "page": "Game: paused-reward",
+      "origin": "https://callofdoodie.wtf",
+      "observed": {
+        "health": 146.5,
+        "maxHealth": 150,
+        "player": {
+          "x": 422,
+          "y": 163
+        },
+        "arena": [
+          844,
+          326
+        ],
+        "overflow": false,
+        "hazardClearance": null
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/landscape-after-sewer-night-844-spawn.jpg",
+      "sha256": "fa2ffb5035fd84c4451e868adfcfc22dc19de4948358542c8393316af0e4b895",
+      "phase": "after",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "page": "Game: spawn",
+      "origin": "https://1ac10bba.call-of-doodie.pages.dev",
+      "observed": {
+        "health": 100,
+        "maxHealth": 100,
+        "player": {
+          "x": 470,
+          "y": 163
+        },
+        "arena": [
+          844,
+          326
+        ],
+        "overflow": false,
+        "hazardClearance": 42.81875509066809
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/landscape-after-sewer-night-844-health.jpg",
+      "sha256": "579df44b66fec1f4e5717e92155a4268ecfe027816612de6f6ed184db8234a8a",
+      "phase": "after",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "page": "Game: health",
+      "origin": "https://1ac10bba.call-of-doodie.pages.dev",
+      "observed": {
+        "health": 146.5,
+        "maxHealth": 150,
+        "player": {
+          "x": 470,
+          "y": 163
+        },
+        "arena": [
+          844,
+          326
+        ],
+        "overflow": false,
+        "hazardClearance": null
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/landscape-after-sewer-night-844-announcements.jpg",
+      "sha256": "46a829161c8713bd8fe5e6dac60e4b66fbaea718cecfc5db27afbb3a4a663459",
+      "phase": "after",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "page": "Game: announcements",
+      "origin": "https://1ac10bba.call-of-doodie.pages.dev",
+      "observed": {
+        "health": 146.5,
+        "maxHealth": 150,
+        "player": {
+          "x": 470,
+          "y": 163
+        },
+        "arena": [
+          844,
+          326
+        ],
+        "overflow": false,
+        "hazardClearance": null
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/landscape-after-sewer-night-844-paused-reward.jpg",
+      "sha256": "e7b8c9acf3f7215a62c7471793fd26de6ad97cf7036cd002bc899871c6cd02a6",
+      "phase": "after",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "page": "Game: paused-reward",
+      "origin": "https://1ac10bba.call-of-doodie.pages.dev",
+      "observed": {
+        "health": 146.5,
+        "maxHealth": 150,
+        "player": {
+          "x": 470,
+          "y": 163
+        },
+        "arena": [
+          844,
+          326
+        ],
+        "overflow": false,
+        "hazardClearance": null
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/landscape-after-sewer-night-844-resumed-reward.jpg",
+      "sha256": "5a3f5f025c69763b972928e6c0f4cf2823a86205728baa059b4c1722aee594b6",
+      "phase": "after",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "page": "Game: resumed-reward",
+      "origin": "https://1ac10bba.call-of-doodie.pages.dev",
+      "observed": {
+        "health": 146.5,
+        "maxHealth": 150,
+        "player": {
+          "x": 470,
+          "y": 163
+        },
+        "arena": [
+          844,
+          326
+        ],
+        "overflow": false,
+        "hazardClearance": null
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/landscape-after-porcelain-day-844-spawn.jpg",
+      "sha256": "14d70699b867b5f61e45be8fb0c45952a7a39c5332a206d88be4985ad58503c3",
+      "phase": "after",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "page": "Game: spawn",
+      "origin": "https://1ac10bba.call-of-doodie.pages.dev",
+      "observed": {
+        "health": 100,
+        "maxHealth": 100,
+        "player": {
+          "x": 470,
+          "y": 163
+        },
+        "arena": [
+          844,
+          326
+        ],
+        "overflow": false,
+        "hazardClearance": 42.81875509066809
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/landscape-after-porcelain-day-844-health.jpg",
+      "sha256": "918bc7026f0461e052c3e84c8dc0c9bc7043a72e2032e8be298c0356c0a40600",
+      "phase": "after",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "page": "Game: health",
+      "origin": "https://1ac10bba.call-of-doodie.pages.dev",
+      "observed": {
+        "health": 146.5,
+        "maxHealth": 150,
+        "player": {
+          "x": 470,
+          "y": 163
+        },
+        "arena": [
+          844,
+          326
+        ],
+        "overflow": false,
+        "hazardClearance": null
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/landscape-after-porcelain-day-844-announcements.jpg",
+      "sha256": "244491654815fe0403a7daf983b7806a68e216615f2166211b44063bf23a4d08",
+      "phase": "after",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "page": "Game: announcements",
+      "origin": "https://1ac10bba.call-of-doodie.pages.dev",
+      "observed": {
+        "health": 146.5,
+        "maxHealth": 150,
+        "player": {
+          "x": 470,
+          "y": 163
+        },
+        "arena": [
+          844,
+          326
+        ],
+        "overflow": false,
+        "hazardClearance": null
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/landscape-after-porcelain-day-844-paused-reward.jpg",
+      "sha256": "1610fa0859a2a84d406345b39ec45639c083cc8710960a10cf6d63ee6b68be72",
+      "phase": "after",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "page": "Game: paused-reward",
+      "origin": "https://1ac10bba.call-of-doodie.pages.dev",
+      "observed": {
+        "health": 146.5,
+        "maxHealth": 150,
+        "player": {
+          "x": 470,
+          "y": 163
+        },
+        "arena": [
+          844,
+          326
+        ],
+        "overflow": false,
+        "hazardClearance": null
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/landscape-after-porcelain-day-844-resumed-reward.jpg",
+      "sha256": "b799590cf02a9ba0adf103f9c4fa09fba44895d36ed62efc2ff5fc1a018cf783",
+      "phase": "after",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "page": "Game: resumed-reward",
+      "origin": "https://1ac10bba.call-of-doodie.pages.dev",
+      "observed": {
+        "health": 146.5,
+        "maxHealth": 150,
+        "player": {
+          "x": 470,
+          "y": 163
+        },
+        "arena": [
+          844,
+          326
+        ],
+        "overflow": false,
+        "hazardClearance": null
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/squad-before-1024.jpg",
+      "sha256": "49469e023fdfb052814c328abb92cbdb0e767733fa6c88424a01d3c3eabda02d",
+      "phase": "before",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "page": "Isolated actual HUD components: squad, vitals and weapon dock",
+      "origin": "Local Vite component harness",
+      "observed": {
+        "overlap": true
+      },
+      "errors": []
+    },
+    {
+      "file": "playtest-2026-09-14/squad-after-1024.jpg",
+      "sha256": "3a0973af30780b6ca214cda8d809dd618e7c9f596b21322b1263b9fdf1acdd99",
+      "phase": "after",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "page": "Isolated actual HUD components: squad, vitals and weapon dock",
+      "origin": "Local Vite component harness",
+      "observed": {
+        "overlap": false
+      },
+      "errors": []
+    }
+  ],
+  "inspection": {
+    "renderedPixelsReviewed": true,
+    "reviewer": "Codex: direct image inspection of before/after captures",
+    "reviewedAt": "2026-09-14T20:23:00.325Z",
+    "scope": "Safe spawn, actual health capacity, pause/reward priority, master audio label, simultaneous announcements; desktop, portrait and landscape.",
+    "findings": [
+      "Seed 1 phone and seed 70 desktop previously started in acid; safe positions now preserve initial health.",
+      "Desktop weapon dock previously obscured the health panel; vitals now sit above it with at least an 8px measured gap.",
+      "HUD previously displayed 147/100 after a capacity bonus; it now uses the actual 150 maximum.",
+      "Wave reward previously covered pause controls; pause now takes priority and resuming restores the queued reward.",
+      "Simultaneous notices previously overlapped each other and the status chip; separated rows now clear the HUD. Short landscape views show the newest notices that fit.",
+      "At 1024px, an isolated browser rendering of the actual HUD components confirmed and then cleared a squad/vitals overlap.",
+      "Normal keyboard/mouse and multi-touch playthroughs reached Wave 3 with route, perk and shop selections and no page errors.",
+      "Controlled screenshot fixtures override health and wave progress; normal-input playtests do not change game state. No automated leaderboard scores were submitted."
+    ],
+    "fixesApplied": [
+      "Deterministic safe starting position shared by live game and simulation.",
+      "Actual player maxHealth used on compact and expanded HUD; desktop vitals moved above weapon dock, squad panel above vitals.",
+      "Hide pending reward overlays while paused without clearing their state.",
+      "Rename master mute control to AUDIO.",
+      "Place simultaneous screen announcements in non-overlapping rows below the top HUD."
+    ],
+    "blockingDefectsOpen": 0
+  },
+  "validation": {
+    "targetedFiles": 16,
+    "targetedTests": 144,
+    "seededArenas": 3000,
+    "strictLint": "pass",
+    "build": "pass, 525 modules",
+    "publicContract": "28 files pass",
+    "playtests": [
+      {
+        "width": 1440,
+        "theme": "sewer-night",
+        "origin": "https://cf5636c0.call-of-doodie.pages.dev",
+        "method": "Real keyboard/mouse or multi-touch inputs; read-only game observations; no health, map, perk or combat overrides",
+        "maxObservedWave": 3,
+        "maxObservedScore": 10386,
+        "actions": [
+          "weapon-swap",
+          "weapon-swap",
+          "weapon-swap",
+          "WAVE 1 CLEAR!",
+          "mute-cycle",
+          "weapon-swap",
+          "weapon-swap",
+          "weapon-swap",
+          "weapon-swap",
+          "weapon-swap",
+          "weapon-swap",
+          "route-standard",
+          "weapon-swap",
+          "LEVEL 4 — PERK SELECT",
+          "WAVE 2 CLEAR!",
+          "weapon-swap",
+          "weapon-swap",
+          "weapon-swap"
+        ],
+        "errors": []
+      },
+      {
+        "width": 390,
+        "theme": "porcelain-day",
+        "origin": "https://cf5636c0.call-of-doodie.pages.dev",
+        "method": "Real keyboard/mouse or multi-touch inputs; read-only game observations; no health, map, perk or combat overrides",
+        "maxObservedWave": 3,
+        "maxObservedScore": 3100,
+        "actions": [
+          "weapon-swap",
+          "weapon-swap",
+          "weapon-swap",
+          "WAVE 1 CLEAR!",
+          "mute-cycle",
+          "weapon-swap",
+          "weapon-swap",
+          "weapon-swap",
+          "weapon-swap",
+          "route-standard",
+          "weapon-swap",
+          "LEVEL 3 — PERK SELECT",
+          "WAVE 2 CLEAR!",
+          "weapon-swap"
+        ],
+        "errors": []
+      }
+    ],
+    "priorSessionReview": "Boss decoys, expiry, healing and volleys: 32 live captures; Supply Drop and Gauntlet Ready: 20 live captures; both themes, desktop/mobile; no page errors.",
+    "audio": {
+      "peak": 0.8334455490112305,
+      "rms": 0.01895775721706572,
+      "clipped": 0,
+      "samples": 705600,
+      "rate": 44100,
+      "mix": "All twelve weapons plus dense combat through actual Web Audio buses",
+      "lifecycle": "Real gesture mute/resume passed at 390 and 1440; context running -> suspended -> running; music 0.25, effects 0.40, UI 0.60 verified."
+    }
+  }
+}

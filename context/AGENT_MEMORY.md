@@ -10,3 +10,11 @@
 - Meta facts live in src/config/upgradeFacts.js; weekly runtime factors live in src/config/weeklyMutationRuntime.js.
 - Browser combat fixtures must complete the pre-deployment draft before waiting for the canvas. Both character styles are supported.
 - Startup Brief currency measures silSession, not the next-session headline.
+
+### S177 mode follow-through
+
+- ModePicker shares full descriptions; standard remains the replay ID for Classic Survival.
+- Boss Gauntlet has a singleBoss plan callback at startup and later waves. Boss effects must use combatRuntimeRef.current.retainLastMatchingInPlace.
+- initGame resets frameCountRef; repeated runs must be tested on the same page.
+- Throne retake notices use ctx.announce for viewport fitting.
+- Test IDs come from modeCatalog; glass_cannon is a random modifier, not a selectable mode. Capture console GAME LOOP errors as well as pageerror.

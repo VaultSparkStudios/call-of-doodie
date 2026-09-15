@@ -4,9 +4,15 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "S177 runtime promises restored and deployed; next investigate existing Gauntlet canvas sizing.",
-  "nextMilestone": "Resolve separately scoped Gauntlet rendering and remaining launch evidence.",
+  "currentFocus": "Classic Survival is easy to find; mode objectives, boss progression, throne recovery and per-run clocks are corrected.",
+  "nextMilestone": "Verify exact-source production deployment, then objective-aware debrief and participant balance evidence.",
   "testingSurfaces": [
+    {
+      "session": 177,
+      "status": "green",
+      "type": "mode-corrective-validation",
+      "command": "257 files / 1,608 tests passed; strict lint and deployable build passed; public contract 28 files and claims passed; dependency audit zero vulnerabilities. Seventeen short natural-input runs cover all twelve desktop modes and Classic plus four new mobile modes. Four controlled six-boss sequences reached victory. Sixteen browser clock/ending cases and four Classic/Operation launch transitions passed. Seven Throne recovery paths were simulated independently. Final visual receipt and production promotion are being sealed."
+    },
     {
       "session": 177,
       "status": "green",
@@ -88,7 +94,7 @@
     "Broad Cloudflare studio-access token should be rotated or narrowed after domain stabilization.",
     "CANON-045 remains an external Obelisk integration gap. CANON-054's checker emitted a malformed gap despite the live /stats surface and public contract; no ABSOLUTE canon gap is present."
   ],
-  "lastUpdated": "2026-09-14",
+  "lastUpdated": "2026-09-15",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
   "truthAuditStatus": "engineering-ready-sparked-no-go",
@@ -105,8 +111,8 @@
   "currentSession": 177,
   "sessionMode": "founder",
   "lastAgent": "codex",
-  "testsPassing": 250,
-  "testsTotal": 250,
+  "testsPassing": 257,
+  "testsTotal": 257,
   "entropyScore": 0.207,
   "entropyLastComputed": "2026-09-14",
   "silRubricVersion": "3.0",
@@ -136,7 +142,7 @@
   "freeTierCostStatus": "cost-neutral",
   "runtimeUrl": "https://callofdoodie.wtf/",
   "stagingType": "cloudflare-pages",
-  "stagingUrl": "https://session-177-staging.call-of-doodie.pages.dev/",
+  "stagingUrl": "https://138eef33.call-of-doodie.pages.dev",
   "testsLastRun": "2026-09-14T06:15:24.550Z",
   "sanitizationLastCleared": "2026-09-14",
   "sessionShellHygiene": {
@@ -158,7 +164,7 @@
     "score": 77,
     "note": "Portfolio-wide doctor, not a project-only health score; local schema/public/security gates independently pass."
   },
-  "lastSessionSummary": "S177 complete: production 9d6c3eafd501 verified; CI 250/250 files and 1583/1583 tests passed; shell, backend, replay, domain routing, leaderboard and launch-surface checks passed.",
+  "lastSessionSummary": "S177 (2026-09-11, from SIL ledger): Total: 950/1000 | Velocity: 5.",
   "testsAssertionsPassing": 1583,
   "testsAssertionsTotal": 1583,
   "testsAssertionsFiles": 250,
@@ -170,8 +176,8 @@
   "silAvg5": 987.6,
   "testsAssertionsDeferred": [],
   "testsAssertionsLastRun": "2026-09-14T06:15:24.550Z",
-  "lastShipped": "Meta upgrade facts, weekly runtime effects, boss decoy/lifesteal/timing and startup-brief currency.",
-  "truthStatus": "Runtime promises tested; isolated staging verified; launch-tier external evidence remains unmeasured.",
+  "lastShipped": "Classic Survival has its own original-game card and play button; alternate modes and survival challenges share a readable desktop/mobile picker. Descriptions explain Boss Rush warmups, endless Timed Survival, optional Boss Gauntlet par, Extraction exit thresholds and Throne retry; numeric copy stays derived from gameplay facts. Boss Gauntlet opens with a boss and advances through six distinct solo fights; the sixth defeat ends in victory without a seventh wave. Throne recovery reactivates the first lost point after the remaining captures; a second loss ends the run. The retake notice fits mobile screens. Score Attack shows time remaining; Timed Survival shows tenths; clocks reset each run. Classic and Operations clear previously selected alternate-mode flags. Boss defeat effects use the existing runtime helper; App now rejects undefined references during lint. Boss intro geometry is centered and honors reduced motion.",
+  "truthStatus": "Mode and prior visual/audio corrections verified; final production promotion pending.",
   "testsFocusedSupplement": {
     "date": "2026-09-14T04:19:19.071Z",
     "file": "src/utils/shopForecast.test.js",

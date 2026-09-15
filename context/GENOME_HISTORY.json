@@ -891,7 +891,7 @@
       "session": 177,
       "total": 22,
       "maxTotal": 25,
-      "overallStatus": "S177 runtime contracts restored and tested; staging verified, final production receipt pending. SPARKED evidence remains incomplete.",
+      "overallStatus": "S177 runtime, visual/audio and mode corrections tested; final corrective production promotion pending.",
       "lastReviewed": "2026-09-14",
       "dimensions": {
         "schema_alignment": 5,
@@ -901,7 +901,7 @@
         "contradiction_density": 4
       },
       "delta": 22,
-      "cause": "Restored paid upgrades, weekly effects and boss abilities to their advertised behavior."
+      "cause": "Classic Survival is easy to find; mode objectives, boss progression, throne recovery and per-run clocks are corrected."
     }
   ]
 }

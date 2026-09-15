@@ -1804,3 +1804,18 @@ S177 final staging follow-through: S177: runtime upgrades and boss abilities res
 S177: source committed bdf5e50. Date-dependent public files regenerated and staging c0e169c4 smoke verified. Final currency/shop focused run43/43 passes using thread workers after fork startup timed out without executing tests. Ark pattern-share01K2F6FUKH339505E569380E5F delivered; project-scoped IGNIS refresh requested through control plane.
 
 S177 production seal (2026-09-14T06:15:24.550Z): S177 complete: production 9d6c3eafd501 verified; CI 250/250 files and 1583/1583 tests passed; shell, backend, replay, domain routing, leaderboard and launch-surface checks passed. Immutable https://b5068126.call-of-doodie.pages.dev. Final record-only commit follows this verified code release.
+
+## 2026-09-14 — S177 continued live mode review
+
+- Classic Survival has its own original-game card and play button; alternate modes and survival challenges share a readable desktop/mobile picker.
+- Descriptions explain Boss Rush warmups, endless Timed Survival, optional Boss Gauntlet par, Extraction exit thresholds and Throne retry; numeric copy stays derived from gameplay facts.
+- Boss Gauntlet opens with a boss and advances through six distinct solo fights; the sixth defeat ends in victory without a seventh wave.
+- Throne recovery reactivates the first lost point after the remaining captures; a second loss ends the run. The retake notice fits mobile screens.
+- Score Attack shows time remaining; Timed Survival shows tenths; clocks reset each run. Classic and Operations clear previously selected alternate-mode flags.
+- Boss defeat effects use the existing runtime helper; App now rejects undefined references during lint. Boss intro geometry is centered and honors reduced motion.
+
+257 files / 1,608 tests passed; strict lint and deployable build passed; public contract 28 files and claims passed; dependency audit zero vulnerabilities. Seventeen short natural-input runs cover all twelve desktop modes and Classic plus four new mobile modes. Four controlled six-boss sequences reached victory. Sixteen browser clock/ending cases and four Classic/Operation launch transitions passed. Seven Throne recovery paths were simulated independently. Final visual receipt and production promotion are being sealed.
+
+Controlled boss lethal damage exposed a missing retainLastMatchingInPlace reference that ended boss kills as runtime_fault. Restored it through combatRuntime, enabled no-undef on App, and completed all six actual boss spawns including summons. Controlled fixtures boost health and damage or place state near an outcome; natural-input runs do not. Automation score submissions are prevented. Earlier driver stops from stale IDs/loading/reward timing were corrected and excluded from successful-run counts.
+
+Closeout renderer produced a second S177 snapshot after UTC date rollover. Reconciled only this newly created duplicate into the existing S177 row, preserving the original session date and delta. Historical debt entries were not changed or waived. Portfolio doctor exited0 with blockingFailing0 (153 green,53 warnings,1 advisory failure); this is not a perfect project health score.

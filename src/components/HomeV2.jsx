@@ -11,6 +11,7 @@ import {
 } from "../storage.js";
 import { clearHash, watchHash } from "../utils/hashRoute.js";
 import { duelHoursLeft, duelStatus, isDuelId, loadDuel } from "../utils/duels.js";
+import ModePicker from "./ModePicker.jsx";
 import { FULL_MODE_CATALOG as MODE_CATALOG, resolveSelectedModeId } from "../config/modeCatalog.js";
 import { QUICK_RULES } from "../config/quickRules.js";
 import { isOpsDebug } from "../utils/debugFlags.js";
@@ -69,7 +70,7 @@ const PANEL = { position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIn
 
 // Mode identity comes from the shared catalog (S155) — this view uses the
 // arcade-caps label variant.
-const MODE_DEFS = MODE_CATALOG.map(m => ({ id: m.id, label: m.arcadeLabel, emoji: m.emoji, color: m.color, blurb: m.blurb, kind: m.kind, isNew: !!m.isNew }));
+const MODE_DEFS = MODE_CATALOG.map(m => ({ ...m, label: m.arcadeLabel }));
 const currentModeId = resolveSelectedModeId;
 
 export default function HomeV2(props) {
@@ -97,7 +98,7 @@ export default function HomeV2(props) {
     onConsumeNextRunContract = () => {},
   } = props;
 
-  const modeId = currentModeId({ scoreAttackMode, dailyChallengeMode, cursedRunMode, bossRushMode, speedrunMode, gauntletMode, zombiesMode });
+  const modeId = MODE_DEFS.some(m => m.id === _gameModeId && m.isNew) ? _gameModeId : currentModeId({ scoreAttackMode, dailyChallengeMode, cursedRunMode, bossRushMode, speedrunMode, gauntletMode, zombiesMode });
   const selectedMode = MODE_DEFS.find(m => m.id === modeId) || MODE_DEFS[0];
   const selectedLoadout = STARTER_LOADOUTS.find(l => l.id === starterLoadout) || STARTER_LOADOUTS[0];
   const selectedDiff = DIFFICULTIES[difficulty] || DIFFICULTIES.normal;
@@ -582,13 +583,6 @@ export default function HomeV2(props) {
     borderRadius: 10, padding: 12, boxShadow: `0 12px 36px ${themePalette.shadow}`, zIndex: 40,
     contain: "layout paint style",
   };
-  const modeGrid = { display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(130px,1fr))", gap: 6 };
-  const modeCell = (active, color) => ({
-    padding: "8px 8px", borderRadius: 8, cursor: "pointer", textAlign: "left", fontFamily: "inherit",
-    background: active ? `${color}22` : themePalette.panel,
-    border: active ? `2px solid ${color}` : `1px solid ${themePalette.line}`,
-    color: themePalette.ink,
-  });
   const diffGrid = { display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 6, marginTop: 10 };
   const diffCell = (active, color) => ({
     padding: "8px 6px", borderRadius: 8, cursor: "pointer", textAlign: "center", fontFamily: "inherit",
@@ -683,7 +677,19 @@ export default function HomeV2(props) {
           )}
         </div>
 
-        <OperationCommandDeck onStart={onStart} palette={themePalette} />
+        <section aria-label="Original game" style={{margin:"16px auto",padding:18,borderRadius:12,border:"1px solid "+themePalette.accent,background:themePalette.panel,color:themePalette.ink}}>
+          <div style={{fontSize:11,fontWeight:900,letterSpacing:1.5,color:themePalette.accent}}>THE ORIGINAL GAME</div>
+          <h2 style={{margin:"8px 0",fontSize:24}}>Classic Survival</h2>
+          <p style={{fontSize:13,lineHeight:1.6,margin:"0 0 14px"}}>Fight endless waves, choose perks, and upgrade your weapons. Start here for the original Call of Doodie experience.</p>
+          <div style={{display:"flex",gap:10,flexWrap:"wrap"}}>
+            <button data-testid="classic-start" onClick={() => { selectMode("standard"); setChallengeMode(null); setCustomSeed(""); onConsumeNextRunContract(); onStart(); }} style={{...quickBtn,minHeight:48,padding:"12px 18px",fontSize:13,background:themePalette.accent,color:themePalette.colorScheme==="light"?"#FFF":"#111"}}>▶ PLAY CLASSIC</button>
+            <button onClick={() => { document.getElementById("deploy")?.scrollIntoView({block:"start"}); setDeployPanelOpen(true); }} style={{...quickBtn,minHeight:48,fontSize:12}}>EXPLORE MODES</button>
+          </div>
+        </section>
+        <details style={{margin:"12px auto",color:themePalette.ink,border:"1px solid "+themePalette.line,borderRadius:10,padding:12}}>
+          <summary style={{cursor:"pointer",fontSize:14,fontWeight:900}}>OPERATIONS · Three missions with objectives</summary>
+          <OperationCommandDeck onStart={onStart} palette={themePalette} />
+        </details>
 
         <div
           id="arcade-rivals-title"
@@ -691,10 +697,10 @@ export default function HomeV2(props) {
           aria-level="2"
           style={{ margin: "12px auto 4px", color: themePalette.ink, fontSize: 14, fontWeight: 900, letterSpacing: 2.4, textAlign: "center" }}
         >
-          ARCADE &amp; RIVALS
+          MODES &amp; CHALLENGES
         </div>
         <p style={{ margin: "0 auto 10px", color: themePalette.muted, fontSize: 10, textAlign: "center" }}>
-          Instant runs, daily seeds, weekly Gauntlet, and rivalry challenges
+          Choose a different objective or a twist on classic survival.
         </p>
 
         <CommandersOrders
@@ -713,7 +719,7 @@ export default function HomeV2(props) {
             className="arcade-home__deploy-button"
             style={deployBtn}
           >
-            ▶ DEPLOY
+            ▶ PLAY {selectedMode.label}
           </button>
           {!isMobile && <button
             ref={deployToggleRef}
@@ -777,15 +783,7 @@ export default function HomeV2(props) {
               />
             )}
             {!isMobile && <>
-            <div style={{ fontSize: 10, color: "#888", letterSpacing: 2, marginBottom: 6 }}>MODE</div>
-            <div style={modeGrid}>
-              {MODE_DEFS.map(m => (
-                <button key={m.id} onClick={() => selectMode(m.id)} style={modeCell(modeId === m.id, m.color)}>
-                  <div style={{ fontSize: 12, fontWeight: 900, color: m.color }}>{m.emoji} {m.label}{m.isNew && <span style={{ marginLeft: 6, fontSize: 8, padding: "1px 5px", borderRadius: 6, background: m.color, color: "#111", letterSpacing: 1 }}>NEW</span>}</div>
-                  <div style={{ fontSize: 9, color: "#AAA", marginTop: 2 }}>{m.blurb}</div>
-                </button>
-              ))}
-            </div>
+            <ModePicker modes={MODE_DEFS} modeId={modeId} onSelectMode={selectMode} palette={themePalette} />
             <div style={{ fontSize: 10, color: "#888", letterSpacing: 2, margin: "12px 0 6px" }}>DIFFICULTY</div>
             <div style={diffGrid}>
               {Object.entries(DIFFICULTIES).map(([k, d]) => (

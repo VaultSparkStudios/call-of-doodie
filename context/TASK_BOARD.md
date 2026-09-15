@@ -1,3 +1,15 @@
+## Session 177 — Mode clarity and live playtest follow-through
+
+- [x] **DONE S177** Classic Survival has its own original-game card and play button; alternate modes and survival challenges share a readable desktop/mobile picker.
+- [x] **DONE S177** Descriptions explain Boss Rush warmups, endless Timed Survival, optional Boss Gauntlet par, Extraction exit thresholds and Throne retry; numeric copy stays derived from gameplay facts.
+- [x] **DONE S177** Boss Gauntlet opens with a boss and advances through six distinct solo fights; the sixth defeat ends in victory without a seventh wave.
+- [x] **DONE S177** Throne recovery reactivates the first lost point after the remaining captures; a second loss ends the run. The retake notice fits mobile screens.
+- [x] **DONE S177** Score Attack shows time remaining; Timed Survival shows tenths; clocks reset each run. Classic and Operations clear previously selected alternate-mode flags.
+- [x] **DONE S177** Boss defeat effects use the existing runtime helper; App now rejects undefined references during lint. Boss intro geometry is centered and honors reduced motion.
+
+
+Validation: 257 files / 1,608 tests passed; strict lint and deployable build passed; public contract 28 files and claims passed; dependency audit zero vulnerabilities. Seventeen short natural-input runs cover all twelve desktop modes and Classic plus four new mobile modes. Four controlled six-boss sequences reached victory. Sixteen browser clock/ending cases and four Classic/Operation launch transitions passed. Seven Throne recovery paths were simulated independently. Final visual receipt and production promotion are being sealed.
+
 ## Session 177 — Runtime promises and upgrade composition
 
 - [x] **DONE S177** Shared meta facts now drive descriptions and runtime; Hair Trigger delivers exactly +10% shots and Scavenger II exactly +125% range. Loadout, score and Kill Frenzy modifiers compose.
@@ -586,6 +598,9 @@ First checkpoint the bounded post-S159 propagation/CI/deploy recovery. Then begi
 - [ ] [Human/Data] [SIL:1] HomeV2 analytics funnel — compare `home_v2_deploy` vs legacy `front_door_action` completion rates after 48h of traffic
 
 ## Next
+
+- [ ] Review end-of-run advice wording for objective victories and timed completion; accelerated fixtures expose survival-oriented recommendations after successful objectives.
+- [ ] Collect longer participant playtests for the four objective modes and all three Operations; short scripted input checks and controlled endings do not establish balance or physical-device feel.
 - [ ] [SIL:2] **S176 carry** Derive perk / meta-tree description numbers from the same values `apply` uses — the DUP class (~30 agreeing hand-typed numbers) produced every S176 drift. Start with the four perks `src/config/copyTruth.test.js` already pins behaviorally.
 - [ ] [SIL:1] **S176 carry** Boss bonus abilities Clone Decoy and Lifesteal (`BOSS_ABILITY_POOL`) set flags nothing reads, so a boss that rolls them gets fewer real abilities. Never shown to players. Deleting them changes the seeded pick distribution (`gameHelpers.seededSpawn.test.js` snapshots `_bonusAbilities`); wiring them is new boss behavior — decide which with a balance pass, not unattended.
 - [x] [SIL:2] **DONE S84** Dev-toolchain vulnerability remediation — package-trust false positive for exact `vitest` was fixed in Studio Ops, then Call-Of-Doodie upgraded to `vitest@4.1.8`, `@vitest/coverage-v8@4.1.8`, `vite@7.3.5`, `@vitejs/plugin-react@5.1.4`, and exact npm overrides for patched transitive packages. Validation: `npm audit --json` 0 vulnerabilities, tests/build/e2e green.
