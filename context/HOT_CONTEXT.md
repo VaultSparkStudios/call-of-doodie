@@ -4,7 +4,7 @@
 
 ## Current Session
 
-- Session 177 follow-through (2026-09-14) — Classic Survival is easy to find; mode objectives, boss progression, throne recovery and per-run clocks are corrected. 257 files / 1,608 tests passed; strict lint and deployable build passed; public contract 28 files and claims passed; dependency audit zero vulnerabilities. Seventeen short natural-input runs cover all twelve desktop modes and Classic plus four new mobile modes. Four controlled six-boss sequences reached victory. Sixteen browser clock/ending cases and four Classic/Operation launch transitions passed. Seven Throne recovery paths were simulated independently. Final visual receipt and production promotion are being sealed.
+- Session 177 follow-through (2026-09-14) — Classic Survival is easy to find; mode objectives, boss progression, throne recovery and per-run clocks are corrected. 257 files / 1,608 tests passed; strict lint and deployable build passed; public contract 28 files and claims passed; dependency audit zero vulnerabilities. Seventeen short natural-input runs cover all twelve desktop modes and Classic plus four new mobile modes. Four controlled six-boss sequences reached victory. Sixteen browser clock/ending cases and four Classic/Operation launch transitions passed. Seven Throne recovery paths were simulated independently. Production 4eab033d534f verified: CI successful, edge revision matched, public shell 7/7 passed. Desktop Classic reached wave 2; mobile Boss Gauntlet reached a normal death screen. Real keyboard/touch playtests and audio mute/resume passed without browser errors; six production captures were visually inspected.
 
 ## Open Work
 
@@ -116,7 +116,7 @@ Why: both existing public gates passed for the entire ten-session
 
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 237,499 bytes · SHA-256 `df861204b7de…`
+- `context/CURRENT_STATE.md` · 237,748 bytes · SHA-256 `685a8b1edb72…`
 - `context/TASK_BOARD.md` · 165,270 bytes · SHA-256 `00d5835cd670…`
 - `context/DECISIONS.md` · 160,733 bytes · SHA-256 `58d91fca69e4…`
 - `docs/AUDIT_2026-09-11_2.json` · 11,298 bytes · SHA-256 `c984bcd2d6b0…`

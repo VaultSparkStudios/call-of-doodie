@@ -1,9 +1,9 @@
 {
   "vectorVersion": "1.0",
   "generatedAt": "2026-09-15",
-  "generatedAtMs": 1789436044384,
+  "generatedAtMs": 1789436491721,
   "session": 177,
-  "vectorHash": "2c16a7bf66e79a02",
+  "vectorHash": "b77457064475e614",
   "silTotal": 950,
   "silAvg3": 982.3,
   "velocity": 5,
@@ -24,7 +24,7 @@
     "[SIL:2] **S176 carry** Derive perk / meta-tree description numbers from the same"
   ],
   "health": "green",
-  "truthStatus": "Mode fixes, visual/audio corrections and controlled outcomes verified; final production promotion pending.",
+  "truthStatus": "Mode fixes, visual/audio corrections and controlled outcomes verified; production deployed and verified.",
   "genome": null,
   "ignisScore": 43701,
   "ignisGrade": "FORGE",
@@ -33,7 +33,7 @@
   "slug": "call-of-doodie",
   "type": null,
   "lifecycle": "deployed",
-  "nextMilestone": "Verify exact-source production deployment, then objective-aware debrief and participant balance evidence.",
+  "nextMilestone": "Objective-aware debrief advice and participant balance evidence.",
   "currentFocus": "Classic Survival is easy to find; mode objectives, boss progression, throne recovery and per-run clocks are corrected.",
   "lastShipped": "see LATEST_HANDOFF.md",
   "blockers": [

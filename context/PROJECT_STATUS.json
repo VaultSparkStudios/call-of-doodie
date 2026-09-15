@@ -5,13 +5,13 @@
   "status": "active",
   "health": "green",
   "currentFocus": "Classic Survival is easy to find; mode objectives, boss progression, throne recovery and per-run clocks are corrected.",
-  "nextMilestone": "Verify exact-source production deployment, then objective-aware debrief and participant balance evidence.",
+  "nextMilestone": "Objective-aware debrief advice and participant balance evidence.",
   "testingSurfaces": [
     {
       "session": 177,
       "status": "green",
       "type": "mode-corrective-validation",
-      "command": "257 files / 1,608 tests passed; strict lint and deployable build passed; public contract 28 files and claims passed; dependency audit zero vulnerabilities. Seventeen short natural-input runs cover all twelve desktop modes and Classic plus four new mobile modes. Four controlled six-boss sequences reached victory. Sixteen browser clock/ending cases and four Classic/Operation launch transitions passed. Seven Throne recovery paths were simulated independently. Final visual receipt and production promotion are being sealed."
+      "command": "257 files / 1,608 tests passed; strict lint and deployable build passed; public contract 28 files and claims passed; dependency audit zero vulnerabilities. Seventeen short natural-input runs cover all twelve desktop modes and Classic plus four new mobile modes. Four controlled six-boss sequences reached victory. Sixteen browser clock/ending cases and four Classic/Operation launch transitions passed. Seven Throne recovery paths were simulated independently. Production 4eab033d534f verified: CI successful, edge revision matched, public shell 7/7 passed. Desktop Classic reached wave 2; mobile Boss Gauntlet reached a normal death screen. Real keyboard/touch playtests and audio mute/resume passed without browser errors; six production captures were visually inspected."
     },
     {
       "session": 177,
@@ -147,9 +147,32 @@
   "sanitizationLastCleared": "2026-09-14",
   "sessionShellHygiene": {
     "session": 177,
+    "enumeratedAt": "2026-09-15T01:41:30.290Z",
+    "started": 18,
+    "closed": 18,
     "running": 0,
-    "enumeratedAt": "2026-09-14T06:25:41.316Z",
-    "scope": "All tracked S177 exec handles and three in-process agents completed; browser contexts closed by finally handlers. No OS terminal windows launched."
+    "scope": "Identified mode-review background exec sessions; earlier unrelated session processes excluded.",
+    "sessions": [
+      59488,
+      48478,
+      45455,
+      22446,
+      85356,
+      38128,
+      91615,
+      46444,
+      85766,
+      53463,
+      8658,
+      62380,
+      43459,
+      77416,
+      31829,
+      88635,
+      84167,
+      61511
+    ],
+    "evidence": "Completion receipts retained; Vite session 88635 stopped with Ctrl-C and port 5188 no longer listening."
   },
   "doctorScore": {
     "date": "2026-09-12",
@@ -177,7 +200,7 @@
   "testsAssertionsDeferred": [],
   "testsAssertionsLastRun": "2026-09-14T06:15:24.550Z",
   "lastShipped": "Classic Survival has its own original-game card and play button; alternate modes and survival challenges share a readable desktop/mobile picker. Descriptions explain Boss Rush warmups, endless Timed Survival, optional Boss Gauntlet par, Extraction exit thresholds and Throne retry; numeric copy stays derived from gameplay facts. Boss Gauntlet opens with a boss and advances through six distinct solo fights; the sixth defeat ends in victory without a seventh wave. Throne recovery reactivates the first lost point after the remaining captures; a second loss ends the run. The retake notice fits mobile screens. Score Attack shows time remaining; Timed Survival shows tenths; clocks reset each run. Classic and Operations clear previously selected alternate-mode flags. Boss defeat effects use the existing runtime helper; App now rejects undefined references during lint. Boss intro geometry is centered and honors reduced motion.",
-  "truthStatus": "Mode and prior visual/audio corrections verified; final production promotion pending.",
+  "truthStatus": "Mode and prior visual/audio corrections verified; production deployed and verified.",
   "testsFocusedSupplement": {
     "date": "2026-09-14T04:19:19.071Z",
     "file": "src/utils/shopForecast.test.js",

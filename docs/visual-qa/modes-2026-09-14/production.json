@@ -1,0 +1,774 @@
+{
+  "verifiedAt": "2026-09-15T01:41:30.290Z",
+  "sha": "4eab033d534faebd91119bf34a45184012e9fa6d",
+  "origin": "https://callofdoodie.wtf",
+  "ci": {
+    "repository": "VaultSparkStudios/call-of-doodie",
+    "runId": 34917962884
+  },
+  "shellAssertions": 7,
+  "summary": "Production 4eab033d534f verified: CI successful, edge revision matched, public shell 7/7 passed. Desktop Classic reached wave 2; mobile Boss Gauntlet reached a normal death screen. Real keyboard/touch playtests and audio mute/resume passed without browser errors; six production captures were visually inspected.",
+  "limitations": [
+    "Short natural-input checks; not universal natural completion or balance evidence.",
+    "Audio playback and suspend/resume measured; subjective listening quality is not established by analyser measurements."
+  ],
+  "playtests": [
+    {
+      "key": "1440-sewer-night",
+      "mode": "standard",
+      "result": {
+        "origin": "https://callofdoodie.wtf",
+        "width": 1440,
+        "theme": "sewer-night",
+        "modeId": "standard",
+        "method": "Real keyboard/mouse or multi-touch inputs; read-only game observations; no health, map, perk or combat overrides",
+        "observations": [
+          {
+            "mode": "standard",
+            "modeState": {
+              "scoreAttackTimeLeft": 0,
+              "zombiesMode": false,
+              "gauntletMode": false,
+              "bossRushMode": false
+            },
+            "seed": 700939,
+            "wave": 1,
+            "health": 100,
+            "player": {
+              "x": 720,
+              "y": 450
+            },
+            "ammo": 30,
+            "score": 0,
+            "arenaW": 1440,
+            "arenaH": 900,
+            "cam": {
+              "x": 0,
+              "y": 0,
+              "arenaW": 1440,
+              "arenaH": 900
+            },
+            "view": {
+              "x": 0,
+              "y": 0,
+              "w": 1440,
+              "h": 900
+            },
+            "enemies": [],
+            "hazards": [
+              {
+                "x": 209.0618515315144,
+                "y": 391.87676886373123,
+                "radius": 41.75963512779205,
+                "type": "acid",
+                "pulseTimer": 51
+              },
+              {
+                "x": 365.5710194179721,
+                "y": 309.4271537357539,
+                "radius": 36.932705024241635,
+                "type": "acid",
+                "pulseTimer": 74
+              },
+              {
+                "x": 695.7060636523427,
+                "y": 335.8033720301006,
+                "radius": 46.253260842350606,
+                "type": "acid",
+                "pulseTimer": 50
+              },
+              {
+                "x": 633.2888518071941,
+                "y": 318.1834841422233,
+                "radius": 40.61647941256326,
+                "type": "acid",
+                "pulseTimer": 56
+              }
+            ],
+            "obstacles": [
+              {
+                "x": 244.2,
+                "y": 183,
+                "w": 30,
+                "h": 30
+              },
+              {
+                "x": 705,
+                "y": 93,
+                "w": 30,
+                "h": 30
+              },
+              {
+                "x": 1165.8,
+                "y": 183,
+                "w": 30,
+                "h": 30
+              },
+              {
+                "x": 157.79999999999998,
+                "y": 435,
+                "w": 30,
+                "h": 30
+              },
+              {
+                "x": 1252.2,
+                "y": 435,
+                "w": 30,
+                "h": 30
+              },
+              {
+                "x": 244.2,
+                "y": 687,
+                "w": 30,
+                "h": 30
+              },
+              {
+                "x": 705,
+                "y": 777,
+                "w": 30,
+                "h": 30
+              },
+              {
+                "x": 1165.8,
+                "y": 687,
+                "w": 30,
+                "h": 30
+              }
+            ],
+            "audio": {
+              "state": "running",
+              "rms": 0.00021703435777250488,
+              "peak": 0.0003974795981775969
+            },
+            "headings": []
+          },
+          {
+            "mode": "standard",
+            "modeState": {
+              "scoreAttackTimeLeft": 0,
+              "zombiesMode": false,
+              "gauntletMode": false,
+              "bossRushMode": false
+            },
+            "seed": 700939,
+            "wave": 1,
+            "health": 100,
+            "player": {
+              "x": 720,
+              "y": 450
+            },
+            "ammo": 30,
+            "score": 0,
+            "arenaW": 1440,
+            "arenaH": 900,
+            "cam": {
+              "x": 0,
+              "y": 0,
+              "arenaW": 1440,
+              "arenaH": 900
+            },
+            "view": {
+              "x": 0,
+              "y": 0,
+              "w": 1440,
+              "h": 900
+            },
+            "enemies": [],
+            "hazards": [
+              {
+                "x": 209.0618515315144,
+                "y": 391.87676886373123,
+                "radius": 41.75963512779205,
+                "type": "acid",
+                "pulseTimer": 52
+              },
+              {
+                "x": 365.5710194179721,
+                "y": 309.4271537357539,
+                "radius": 36.932705024241635,
+                "type": "acid",
+                "pulseTimer": 75
+              },
+              {
+                "x": 695.7060636523427,
+                "y": 335.8033720301006,
+                "radius": 46.253260842350606,
+                "type": "acid",
+                "pulseTimer": 51
+              },
+              {
+                "x": 633.2888518071941,
+                "y": 318.1834841422233,
+                "radius": 40.61647941256326,
+                "type": "acid",
+                "pulseTimer": 57
+              }
+            ],
+            "obstacles": [
+              {
+                "x": 244.2,
+                "y": 183,
+                "w": 30,
+                "h": 30
+              },
+              {
+                "x": 705,
+                "y": 93,
+                "w": 30,
+                "h": 30
+              },
+              {
+                "x": 1165.8,
+                "y": 183,
+                "w": 30,
+                "h": 30
+              },
+              {
+                "x": 157.79999999999998,
+                "y": 435,
+                "w": 30,
+                "h": 30
+              },
+              {
+                "x": 1252.2,
+                "y": 435,
+                "w": 30,
+                "h": 30
+              },
+              {
+                "x": 244.2,
+                "y": 687,
+                "w": 30,
+                "h": 30
+              },
+              {
+                "x": 705,
+                "y": 777,
+                "w": 30,
+                "h": 30
+              },
+              {
+                "x": 1165.8,
+                "y": 687,
+                "w": 30,
+                "h": 30
+              }
+            ],
+            "audio": {
+              "state": "running",
+              "rms": 0.00017465690475190464,
+              "peak": 0.0003339841205161065
+            },
+            "headings": []
+          },
+          {
+            "mode": "standard",
+            "modeState": {
+              "scoreAttackTimeLeft": 0,
+              "zombiesMode": false,
+              "gauntletMode": false,
+              "bossRushMode": false
+            },
+            "seed": 700939,
+            "wave": 2,
+            "health": 100,
+            "player": {
+              "x": 426.39768737087513,
+              "y": 627.5297647993415
+            },
+            "ammo": 2,
+            "score": 1280,
+            "arenaW": 1440,
+            "arenaH": 900,
+            "cam": {
+              "x": 0,
+              "y": 0,
+              "arenaW": 1440,
+              "arenaH": 900
+            },
+            "view": {
+              "x": 0,
+              "y": 0,
+              "w": 1440,
+              "h": 900
+            },
+            "enemies": [
+              {
+                "x": 1343.4522931409097,
+                "y": 642.9324458641929,
+                "health": 62,
+                "name": "Karen",
+                "boss": false
+              },
+              {
+                "x": 539.1050471183104,
+                "y": 876.6500782965298,
+                "health": 62,
+                "name": "Karen",
+                "boss": false
+              }
+            ],
+            "hazards": [
+              {
+                "x": 209.0618515315144,
+                "y": 391.87676886373123,
+                "radius": 41.75963512779205,
+                "type": "acid",
+                "pulseTimer": 86
+              },
+              {
+                "x": 365.5710194179721,
+                "y": 309.4271537357539,
+                "radius": 36.932705024241635,
+                "type": "acid",
+                "pulseTimer": 109
+              },
+              {
+                "x": 695.7060636523427,
+                "y": 335.8033720301006,
+                "radius": 46.253260842350606,
+                "type": "acid",
+                "pulseTimer": 85
+              },
+              {
+                "x": 633.2888518071941,
+                "y": 318.1834841422233,
+                "radius": 40.61647941256326,
+                "type": "acid",
+                "pulseTimer": 91
+              }
+            ],
+            "obstacles": [
+              {
+                "x": 244.2,
+                "y": 183,
+                "w": 30,
+                "h": 30
+              },
+              {
+                "x": 705,
+                "y": 93,
+                "w": 30,
+                "h": 30
+              },
+              {
+                "x": 1165.8,
+                "y": 183,
+                "w": 30,
+                "h": 30
+              },
+              {
+                "x": 157.79999999999998,
+                "y": 435,
+                "w": 30,
+                "h": 30
+              },
+              {
+                "x": 1252.2,
+                "y": 435,
+                "w": 30,
+                "h": 30
+              },
+              {
+                "x": 244.2,
+                "y": 687,
+                "w": 30,
+                "h": 30
+              },
+              {
+                "x": 705,
+                "y": 777,
+                "w": 30,
+                "h": 30
+              },
+              {
+                "x": 1165.8,
+                "y": 687,
+                "w": 30,
+                "h": 30
+              }
+            ],
+            "audio": {
+              "state": "running",
+              "rms": 0.0021999627110606585,
+              "peak": 0.0052575236186385155
+            },
+            "headings": []
+          }
+        ],
+        "actions": [
+          {
+            "step": 0,
+            "type": "weapon-swap"
+          },
+          {
+            "type": "mute-cycle",
+            "before": {
+              "state": "running",
+              "rms": 0.0030969524227489743,
+              "peak": 0.007166024297475815
+            },
+            "muted": {
+              "state": "suspended",
+              "rms": 0.0038040446271585832,
+              "peak": 0.005121554713696241
+            },
+            "resumed": {
+              "state": "running",
+              "rms": 0.005530009746066993,
+              "peak": 0.022215841338038445
+            }
+          },
+          {
+            "step": 12,
+            "type": "weapon-swap"
+          },
+          {
+            "step": 24,
+            "type": "weapon-swap"
+          },
+          {
+            "step": 25,
+            "modal": "WAVE 1 CLEAR!"
+          }
+        ],
+        "errors": [],
+        "scoreSubmissionsPrevented": 0
+      },
+      "captures": [
+        {
+          "file": "production-1440-sewer-night-start.png",
+          "sha256": "a7432b004035af108154178cc39baf0ae7fa33ffc7b626b0a27365d9f37fb596",
+          "reviewed": true
+        },
+        {
+          "file": "production-1440-sewer-night-pause.png",
+          "sha256": "a3af9323443d14a9027dd92467b723a7b63e7d87e94e3b335c8bf8f94f6538c5",
+          "reviewed": true
+        },
+        {
+          "file": "production-1440-sewer-night-final.png",
+          "sha256": "5c0265a23e3c9caf35a20104c3405349969dd9a67619ea41c2f1d32f96b4dd6c",
+          "reviewed": true
+        }
+      ]
+    },
+    {
+      "key": "390-porcelain-day",
+      "mode": "boss_gauntlet",
+      "result": {
+        "origin": "https://callofdoodie.wtf",
+        "width": 390,
+        "theme": "porcelain-day",
+        "modeId": "boss_gauntlet",
+        "method": "Real keyboard/mouse or multi-touch inputs; read-only game observations; no health, map, perk or combat overrides",
+        "observations": [
+          {
+            "modeId": "boss_gauntlet",
+            "mode": "boss_rush",
+            "modeWon": false,
+            "modeState": {
+              "bosses": 0,
+              "alarm": 0,
+              "allies": 0,
+              "zones": 0,
+              "scoreAttackTimeLeft": 0,
+              "zombiesMode": false,
+              "gauntletMode": false,
+              "bossRushMode": true
+            },
+            "seed": 198282,
+            "wave": 1,
+            "frame": 29,
+            "health": 100,
+            "player": {
+              "x": 243,
+              "y": 418
+            },
+            "ammo": 30,
+            "score": 0,
+            "arenaW": 390,
+            "arenaH": 836,
+            "cam": {
+              "x": 0,
+              "y": 0,
+              "arenaW": 390,
+              "arenaH": 836
+            },
+            "view": {
+              "x": 0,
+              "y": 0,
+              "w": 390,
+              "h": 836
+            },
+            "enemies": [
+              {
+                "x": 441.91324634022897,
+                "y": 427.21199545853045,
+                "health": 1120.0000000000002,
+                "name": "☠ Mega Karen",
+                "boss": true
+              }
+            ],
+            "hazards": [
+              {
+                "x": 172.68055676079368,
+                "y": 397.4318926421534,
+                "radius": 47.75625258282671,
+                "type": "acid",
+                "pulseTimer": 63
+              },
+              {
+                "x": 181.62377301641362,
+                "y": 153.58523082304401,
+                "radius": 42.80573190371639,
+                "type": "acid",
+                "pulseTimer": 58
+              },
+              {
+                "x": 91.46809665520398,
+                "y": 350.76388593734333,
+                "radius": 42.132405512298554,
+                "type": "electro",
+                "pulseTimer": 52
+              }
+            ],
+            "obstacles": [
+              {
+                "x": 55.2,
+                "y": 168.92,
+                "w": 30,
+                "h": 30
+              },
+              {
+                "x": 180,
+                "y": 85.32,
+                "w": 30,
+                "h": 30
+              },
+              {
+                "x": 304.79999999999995,
+                "y": 168.92,
+                "w": 30,
+                "h": 30
+              },
+              {
+                "x": 31.799999999999997,
+                "y": 403,
+                "w": 30,
+                "h": 30
+              },
+              {
+                "x": 328.2,
+                "y": 403,
+                "w": 30,
+                "h": 30
+              },
+              {
+                "x": 55.2,
+                "y": 637.08,
+                "w": 30,
+                "h": 30
+              },
+              {
+                "x": 180,
+                "y": 720.68,
+                "w": 30,
+                "h": 30
+              },
+              {
+                "x": 304.79999999999995,
+                "y": 637.08,
+                "w": 30,
+                "h": 30
+              }
+            ],
+            "audio": {
+              "state": "running",
+              "rms": 0.000010909258830942007,
+              "peak": 0.000047173853090498596
+            },
+            "headings": []
+          },
+          {
+            "modeId": "boss_gauntlet",
+            "mode": "boss_rush",
+            "modeWon": false,
+            "modeState": {
+              "bosses": 0,
+              "alarm": 0,
+              "allies": 0,
+              "zones": 0,
+              "scoreAttackTimeLeft": 0,
+              "zombiesMode": false,
+              "gauntletMode": false,
+              "bossRushMode": true
+            },
+            "seed": 198282,
+            "wave": 1,
+            "frame": 31,
+            "health": 100,
+            "player": {
+              "x": 243,
+              "y": 418
+            },
+            "ammo": 30,
+            "score": 0,
+            "arenaW": 390,
+            "arenaH": 836,
+            "cam": {
+              "x": 0,
+              "y": 0,
+              "arenaW": 390,
+              "arenaH": 836
+            },
+            "view": {
+              "x": 0,
+              "y": 0,
+              "w": 390,
+              "h": 836
+            },
+            "enemies": [
+              {
+                "x": 441.3505730388029,
+                "y": 426.79898362827214,
+                "health": 1120.0000000000002,
+                "name": "☠ Mega Karen",
+                "boss": true
+              }
+            ],
+            "hazards": [
+              {
+                "x": 172.68055676079368,
+                "y": 397.4318926421534,
+                "radius": 47.75625258282671,
+                "type": "acid",
+                "pulseTimer": 65
+              },
+              {
+                "x": 181.62377301641362,
+                "y": 153.58523082304401,
+                "radius": 42.80573190371639,
+                "type": "acid",
+                "pulseTimer": 60
+              },
+              {
+                "x": 91.46809665520398,
+                "y": 350.76388593734333,
+                "radius": 42.132405512298554,
+                "type": "electro",
+                "pulseTimer": 54
+              }
+            ],
+            "obstacles": [
+              {
+                "x": 55.2,
+                "y": 168.92,
+                "w": 30,
+                "h": 30
+              },
+              {
+                "x": 180,
+                "y": 85.32,
+                "w": 30,
+                "h": 30
+              },
+              {
+                "x": 304.79999999999995,
+                "y": 168.92,
+                "w": 30,
+                "h": 30
+              },
+              {
+                "x": 31.799999999999997,
+                "y": 403,
+                "w": 30,
+                "h": 30
+              },
+              {
+                "x": 328.2,
+                "y": 403,
+                "w": 30,
+                "h": 30
+              },
+              {
+                "x": 55.2,
+                "y": 637.08,
+                "w": 30,
+                "h": 30
+              },
+              {
+                "x": 180,
+                "y": 720.68,
+                "w": 30,
+                "h": 30
+              },
+              {
+                "x": 304.79999999999995,
+                "y": 637.08,
+                "w": 30,
+                "h": 30
+              }
+            ],
+            "audio": {
+              "state": "running",
+              "rms": 0.00001652198945069846,
+              "peak": 0.00005358186172088608
+            },
+            "headings": []
+          },
+          {
+            "screen": "💀\nYOU DIED\nBOSS GAUNTLET\n☠ 0/6 BOSSES DOWN\nstopped by Mega Karen · 6s of 360s par used\n\n\"Cause of death: hubris\"\n\n🟡 NORMAL MODE\nONE VERDICT\n96% · OBSERVED\n100 recorded damage across 4 hits ended as a burst finish; 70 landed in the final two seconds, led by Mega Karen.\nLesson: Replay seed #198282; route the first shop or perk choice toward one unfinished daily mission.\nReplay seed #198282; route the first shop or perk choice toward one unfinished daily mission.\nProof target: Win condition: complete one daily mission even if the score run collapses.\nINSPECT RANKED REASONING · NO CONFLICTS\nRUN THE FIX\nOPEN RUN ANALYSIS\nDAILY MISSIONS\n⬜\n💨 Dash 15 times\n⬜\n⏱️ Kill 60 enemies in Score Attack\n⬜\n🎰 Score 10,000 points\n🎖 DOODIE PASS UNLOCKED\n🟢 Classic Camo — Earthy classic camo skin\n── REPLAY PROOF ──\nReplay Proof Ready\n100%\n72 trace events across 390 frames\n22 movement · 23 aim · 27 interaction\nKeep trace capture active; this run carries strong movement, aim, and action evidence.\nPROOF TREND STRONG · 2/2 recent runs verified · 100% average proof\n── RUN ARC ──\nTHE OPENER\nThe run ended before the build found its identity.\nRank: Noob Potato\n● LIVE SEWER NETWORK\nVIEW ALL STATS →\nREFRESH\nVERIFIED PLAYER + RUN TOTALS · HEALTH CHECKS EXCLUDED\nYOU\nCOMMUNITY\nLIVE\nRUNS\n1\nHOURS\n0\nENEMIES TERMINATED\n0\nTOTAL SCORE\n0\nDAMAGE\n255\nACCURACY\n72.7%\nBOSSES\n0\nBEST WAVE\n1\nTHIS DEVICE\n1 RECENT RUNS RETAINED\nFIELD REPORT · HOW WAS THE THREAT?\nOne tap helps tune future modes. Your answer never changes difficulty without your approval.\n🥱 TOO EASY\n🎯 DIALED IN\n💀 BRUTAL\nSUBMIT TO HALL OF SHAME\n0/5 words\nSUBMIT SCORE\n📸 SHARE SCORE\nMORE RUN ACTIONS"
+          },
+          {
+            "screen": "💀\nYOU DIED\nBOSS GAUNTLET\n☠ 0/6 BOSSES DOWN\nstopped by Mega Karen · 6s of 360s par used\n\n\"Cause of death: hubris\"\n\n🟡 NORMAL MODE\nONE VERDICT\n96% · OBSERVED\n100 recorded damage across 4 hits ended as a burst finish; 70 landed in the final two seconds, led by Mega Karen.\nLesson: Replay seed #198282; route the first shop or perk choice toward one unfinished daily mission.\nReplay seed #198282; route the first shop or perk choice toward one unfinished daily mission.\nProof target: Win condition: complete one daily mission even if the score run collapses.\nINSPECT RANKED REASONING · NO CONFLICTS\nRUN THE FIX\nOPEN RUN ANALYSIS\nDAILY MISSIONS\n⬜\n💨 Dash 15 times\n⬜\n⏱️ Kill 60 enemies in Score Attack\n⬜\n🎰 Score 10,000 points\n🎖 DOODIE PASS UNLOCKED\n🟢 Classic Camo — Earthy classic camo skin\n── REPLAY PROOF ──\nReplay Proof Ready\n100%\n72 trace events across 390 frames\n22 movement · 23 aim · 27 interaction\nKeep trace capture active; this run carries strong movement, aim, and action evidence.\nPROOF TREND STRONG · 2/2 recent runs verified · 100% average proof\n── RUN ARC ──\nTHE OPENER\nThe run ended before the build found its identity.\nRank: Noob Potato\n● LIVE SEWER NETWORK\nVIEW ALL STATS →\nREFRESH\nVERIFIED PLAYER + RUN TOTALS · HEALTH CHECKS EXCLUDED\nYOU\nCOMMUNITY\nLIVE\nRUNS\n1\nHOURS\n0\nENEMIES TERMINATED\n0\nTOTAL SCORE\n0\nDAMAGE\n255\nACCURACY\n72.7%\nBOSSES\n0\nBEST WAVE\n1\nTHIS DEVICE\n1 RECENT RUNS RETAINED\nFIELD REPORT · HOW WAS THE THREAT?\nOne tap helps tune future modes. Your answer never changes difficulty without your approval.\n🥱 TOO EASY\n🎯 DIALED IN\n💀 BRUTAL\nSUBMIT TO HALL OF SHAME\n0/5 words\nSUBMIT SCORE\n📸 SHARE SCORE\nMORE RUN ACTIONS"
+          }
+        ],
+        "actions": [
+          {
+            "step": 0,
+            "type": "weapon-swap"
+          },
+          {
+            "type": "mute-cycle",
+            "before": {
+              "state": "running",
+              "rms": 0.0032801913104953707,
+              "peak": 0.011619632132351398
+            },
+            "muted": {
+              "state": "suspended",
+              "rms": 0.002244111466278397,
+              "peak": 0.004062142688781023
+            },
+            "resumed": {
+              "state": "running",
+              "rms": 0.01233790541883116,
+              "peak": 0.03267946094274521
+            }
+          }
+        ],
+        "errors": [],
+        "scoreSubmissionsPrevented": 0
+      },
+      "captures": [
+        {
+          "file": "production-390-porcelain-day-start.png",
+          "sha256": "cadedf0f34cd05d32579d0d78ee11c2799b255af33c0d4897dc7e835e9d5bc1d",
+          "reviewed": true
+        },
+        {
+          "file": "production-390-porcelain-day-pause.png",
+          "sha256": "74a1affcb1bec3d78e4b6e8984f85adfe5fa25cba0aa1f799b9fe98290acd146",
+          "reviewed": true
+        },
+        {
+          "file": "production-390-porcelain-day-final.png",
+          "sha256": "6734dede5818a22da3e84d62dbe5e9b36f9aa0327e53a8e1da7903fff118dedc",
+          "reviewed": true
+        }
+      ]
+    }
+  ],
+  "captureBase": "Relative to this receipt"
+}

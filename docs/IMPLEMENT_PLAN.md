@@ -18,4 +18,4 @@ The five original audit items remain implemented; fresh live review adds these r
 - [x] Complete focused runtime tests, full quality checks, real input playtests and rendered desktop/mobile/theme review; record exact limitations.
 - [x] Canonical closeout, commit/push main, staging-to-production verification.
 
-Validation complete for runtime/copy/clocks. Final release seal remains pending until remote/main and production match.
+Production 4eab033d534f verified: CI successful, edge revision matched, public shell 7/7 passed. Desktop Classic reached wave 2; mobile Boss Gauntlet reached a normal death screen. Real keyboard/touch playtests and audio mute/resume passed without browser errors; six production captures were visually inspected.

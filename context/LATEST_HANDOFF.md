@@ -11,11 +11,11 @@ Classic Survival is easy to find; mode objectives, boss progression, throne reco
 - Score Attack shows time remaining; Timed Survival shows tenths; clocks reset each run. Classic and Operations clear previously selected alternate-mode flags.
 - Boss defeat effects use the existing runtime helper; App now rejects undefined references during lint. Boss intro geometry is centered and honors reduced motion.
 
-Validation: 257 files / 1,608 tests passed; strict lint and deployable build passed; public contract 28 files and claims passed; dependency audit zero vulnerabilities. Seventeen short natural-input runs cover all twelve desktop modes and Classic plus four new mobile modes. Four controlled six-boss sequences reached victory. Sixteen browser clock/ending cases and four Classic/Operation launch transitions passed. Seven Throne recovery paths were simulated independently. Final visual receipt and production promotion are being sealed.
+Validation: 257 files / 1,608 tests passed; strict lint and deployable build passed; public contract 28 files and claims passed; dependency audit zero vulnerabilities. Seventeen short natural-input runs cover all twelve desktop modes and Classic plus four new mobile modes. Four controlled six-boss sequences reached victory. Sixteen browser clock/ending cases and four Classic/Operation launch transitions passed. Seven Throne recovery paths were simulated independently. Production 4eab033d534f verified: CI successful, edge revision matched, public shell 7/7 passed. Desktop Classic reached wave 2; mobile Boss Gauntlet reached a normal death screen. Real keyboard/touch playtests and audio mute/resume passed without browser errors; six production captures were visually inspected.
 
 Earlier session fixes to upgrade promises, boss abilities, arena sizing, safe spawning, health HUD and audio mixing remain in production history and retained visual/audio receipts.
 
 ## Next
 
-- Complete final commit, CI and production verification before declaring this goal achieved.
+- Release is verified; continue with the follow-ups below.
 - Review objective-aware result advice and collect participant balance evidence. Physical controllers were not tested; mapping tests use synthetic inputs. No claim that every mode or Operation was naturally completed.

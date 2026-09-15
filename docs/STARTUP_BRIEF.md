@@ -69,7 +69,7 @@
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
 ║  ⚠  ░░░░░░░░░░░░░░░░░░░░░░░░    1% used                          ║
-║     296,536 / 200,000 tok  ·  unknown  ·  heuristic-stale        ║
+║     296,714 / 200,000 tok  ·  unknown  ·  heuristic-stale        ║
 ║     Verdict: CONSIDER_CLOSEOUT  ← act now                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
