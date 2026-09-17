@@ -5,7 +5,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { PERKS, WEEKLY_THEMES, TIPS } from "../constants.js";
-import { applyMetaTree } from "./upgradeFacts.js";
+import { applyMetaTree, PERK_FACTS as PF, metaIncrease as pI, metaReduction as pR } from "./upgradeFacts.js";
 import { applyPerkSynergies } from "../systems/perkResolution.js";
 import { BUILD_ARCHETYPES } from "../utils/buildArchetypes.js";
 
@@ -53,6 +53,56 @@ describe("S176 copy truth — runtime wiring in App.jsx", () => {
 
   it("starter loadouts do not overwrite the purchased Speedster multiplier", () => {
     expect(app).not.toMatch(/player\.speed = (3\.2|5\.4);/);
+  });
+});
+
+describe("S178 copy truth — PERK_FACTS values match what apply actually computes", () => {
+  it("Deep Pockets ammoMult equals pI(PERK_FACTS.deep_pockets.ammo)", () => {
+    expect(pick(["deep_pockets"]).ammoMult).toBeCloseTo(pI(PF.deep_pockets.ammo), 6);
+  });
+
+  it("Combo Master comboTimerMult equals pI(PERK_FACTS.combo_master.window)", () => {
+    expect(pick(["combo_master"]).comboTimerMult).toBeCloseTo(pI(PF.combo_master.window), 6);
+  });
+
+  it("Scavenger drops and restore multipliers match their PERK_FACTS values", () => {
+    const m = pick(["scavenger"]);
+    expect(m.ammoDropMult).toBeCloseTo(pI(PF.scavenger.drops), 6);
+    expect(m.ammoRestoreMult).toBeCloseTo(pI(PF.scavenger.restore), 6);
+  });
+
+  it("Overdrive fire-rate uses gap-reduction: fireRateMult = pR(rate)", () => {
+    expect(pick(["overdrive"]).fireRateMult).toBeCloseTo(pR(PF.overdrive.rate), 6);
+    expect(pick(["overdrive"]).damageMult).toBeCloseTo(pI(PF.overdrive.dmg), 6);
+  });
+
+  it("Overclocked fire-rate uses gap-reduction and damage is a penalty", () => {
+    const m = pick(["overclocked"]);
+    expect(m.fireRateMult).toBeCloseTo(pR(PF.overclocked.rate), 6);
+    expect(m.damageMult).toBeCloseTo(pR(PF.overclocked.dmg), 6);
+  });
+
+  it("Glass Mind XP boost matches fact; hp penalty in apply clamps to max 15", () => {
+    expect(pick(["glass_mind"]).xpMult).toBeCloseTo(pI(PF.glass_mind.xp), 6);
+    const gs = { player: { health: 100, maxHealth: 100 } };
+    perk("glass_mind").apply({}, gs);
+    expect(gs.player.maxHealth).toBe(100 - PF.glass_mind.hp);
+  });
+
+  it("Crit Cascade base crit and pierce synergy match their PERK_FACTS values", () => {
+    const m = pick(["crit_cascade"]);
+    expect(m.critBonus).toBeCloseTo(PF.crit_cascade.crit / 100, 6);
+  });
+
+  it("Grenade Chain CD reduction and damage boost match PERK_FACTS values", () => {
+    const m = pick(["grenade_chain"]);
+    expect(m.grenadeCDMult).toBeCloseTo(pR(PF.grenade_chain.cd), 6);
+    expect(m.grenadeDamageMult).toBeCloseTo(pI(PF.grenade_chain.dmg), 6);
+  });
+
+  it("Bullet Hose + Deep Pockets synAmmoPair is the FULL ARMORY multiplier", () => {
+    const alone = pick(["bullet_hose"]).ammoMult * pick(["deep_pockets"]).ammoMult;
+    expect(pick(["bullet_hose", "deep_pockets"]).ammoMult).toBeCloseTo(alone * pI(PF.bullet_hose.synAmmoPair), 6);
   });
 });
 

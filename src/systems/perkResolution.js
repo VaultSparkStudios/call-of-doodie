@@ -1,3 +1,5 @@
+import { PERK_FACTS as PF, metaIncrease as pI } from "../config/upgradeFacts.js";
+
 const PERK_SYNERGIES = [
   {
     condition: (mods) => mods.hasVampire && mods.hasChainLightning && !mods._synergyStormVampire,
@@ -137,7 +139,7 @@ const PERK_SYNERGIES = [
     name: "📦 FULL ARMORY",
     desc: "+50% extra max ammo on top of existing boost",
     apply: (mods) => {
-      mods.ammoMult = (mods.ammoMult || 1) * 1.5;
+      mods.ammoMult = (mods.ammoMult || 1) * pI(PF.bullet_hose.synAmmoPair);
     },
   },
 ];

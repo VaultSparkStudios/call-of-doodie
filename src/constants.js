@@ -1,5 +1,5 @@
 import { WEEKLY_MAGNET_MULTIPLIER } from "./config/weeklyMutationRuntime.js";
-import { metaUpgradeDescription, META_TREE_FACTS as MTF } from "./config/upgradeFacts.js";
+import { metaUpgradeDescription, META_TREE_FACTS as MTF, PERK_FACTS as PF, metaIncrease as pI, metaReduction as pR } from "./config/upgradeFacts.js";
 // ===== WEAPONS =====
 export const WEAPONS = [
   { name: "Banana Blaster", upgradedName: "BLASTER PRIME", emoji: "🍌", damage: 15, fireRate: 200, ammo: 30, maxAmmo: 30, reloadTime: 1500, color: "#FFE135", sound: "PEEL!", spread: 0.03, desc: "Reliable sidearm. Peel & deal." },
@@ -105,49 +105,49 @@ export const ENEMY_TYPES = [
 // ===== PERKS =====
 export const PERKS = [
   {
-    id: "hollow_points", name: "Hollow Points", desc: "+25% bullet damage", emoji: "💥", tier: "common",
-    apply: (mods) => { mods.damageMult = (mods.damageMult || 1) * 1.25; },
+    id: "hollow_points", name: "Hollow Points", desc: `+${PF.hollow_points.dmg}% bullet damage`, emoji: "💥", tier: "common",
+    apply: (mods) => { mods.damageMult = (mods.damageMult || 1) * pI(PF.hollow_points.dmg); },
   },
   {
-    id: "eagle_eye", name: "Eagle Eye", desc: "+10% crit chance. Synergy: +10% crit with Penetrator", emoji: "🎯", tier: "common",
-    apply: (mods) => { mods.critBonus = (mods.critBonus || 0) + 0.10; mods.hasEagleEye = true; if (mods.pierce > 0) mods.critBonus += 0.10; },
+    id: "eagle_eye", name: "Eagle Eye", desc: `+${PF.eagle_eye.crit}% crit chance. Synergy: +${PF.eagle_eye.crit}% crit with Penetrator`, emoji: "🎯", tier: "common",
+    apply: (mods) => { mods.critBonus = (mods.critBonus || 0) + PF.eagle_eye.crit / 100; mods.hasEagleEye = true; if (mods.pierce > 0) mods.critBonus += PF.eagle_eye.crit / 100; },
   },
   {
-    id: "adrenaline", name: "Speed Surge", desc: "+15% move speed", emoji: "⚡", tier: "common",
-    apply: (mods, gs) => { if (gs?.player) gs.player.speed *= 1.15; mods.hasAdrenaline = true; },
+    id: "adrenaline", name: "Speed Surge", desc: `+${PF.adrenaline.speed}% move speed`, emoji: "⚡", tier: "common",
+    apply: (mods, gs) => { if (gs?.player) gs.player.speed *= pI(PF.adrenaline.speed); mods.hasAdrenaline = true; },
   },
   {
-    id: "iron_gut", name: "Iron Gut", desc: "+30 max HP & current HP", emoji: "🛡️", tier: "common",
-    apply: (mods, gs) => { if (gs?.player) { gs.player.maxHealth += 30; gs.player.health = Math.min(gs.player.health + 30, gs.player.maxHealth); } },
+    id: "iron_gut", name: "Iron Gut", desc: `+${PF.iron_gut.hp} max HP & current HP`, emoji: "🛡️", tier: "common",
+    apply: (mods, gs) => { if (gs?.player) { gs.player.maxHealth += PF.iron_gut.hp; gs.player.health = Math.min(gs.player.health + PF.iron_gut.hp, gs.player.maxHealth); } },
   },
   {
-    id: "fast_learner", name: "Fast Learner", desc: "+30% XP gain", emoji: "📚", tier: "common",
-    apply: (mods) => { mods.xpMult = (mods.xpMult || 1) * 1.30; },
+    id: "fast_learner", name: "Fast Learner", desc: `+${PF.fast_learner.xp}% XP gain`, emoji: "📚", tier: "common",
+    apply: (mods) => { mods.xpMult = (mods.xpMult || 1) * pI(PF.fast_learner.xp); },
   },
   {
-    id: "grenadier", name: "Grenadier", desc: "−35% grenade cooldown. Synergy: +50% grenade dmg with Pyromaniac", emoji: "💣", tier: "uncommon",
-    apply: (mods) => { mods.grenadeCDMult = (mods.grenadeCDMult || 1) * 0.65; mods.hasGrenadier = true; if (mods.hasPyromaniac) mods.grenadeDamageMult = (mods.grenadeDamageMult || 1) * 1.5; },
+    id: "grenadier", name: "Grenadier", desc: `−${PF.grenadier.cd}% grenade cooldown. Synergy: +50% grenade dmg with Pyromaniac`, emoji: "💣", tier: "uncommon",
+    apply: (mods) => { mods.grenadeCDMult = (mods.grenadeCDMult || 1) * pR(PF.grenadier.cd); mods.hasGrenadier = true; if (mods.hasPyromaniac) mods.grenadeDamageMult = (mods.grenadeDamageMult || 1) * 1.5; },
   },
   {
-    id: "parkour_pro", name: "Parkour Pro", desc: "−40% dash cooldown", emoji: "🏃", tier: "uncommon",
-    apply: (mods) => { mods.dashCDMult = (mods.dashCDMult || 1) * 0.60; mods.hasDash = true; },
+    id: "parkour_pro", name: "Parkour Pro", desc: `−${PF.parkour_pro.cd}% dash cooldown`, emoji: "🏃", tier: "uncommon",
+    apply: (mods) => { mods.dashCDMult = (mods.dashCDMult || 1) * pR(PF.parkour_pro.cd); mods.hasDash = true; },
   },
   {
-    id: "vampire", name: "Vampire", desc: "Heal 8% of damage dealt. Synergy: +6% more lifesteal with Chain Lightning", emoji: "🧛", tier: "uncommon",
-    apply: (mods) => { mods.lifesteal = (mods.lifesteal || 0) + 0.08; mods.hasVampire = true; mods.hasBloodRegen = true; if (mods.hasChainLightning) mods.lifesteal += 0.06; },
+    id: "vampire", name: "Vampire", desc: `Heal ${PF.vampire.ls}% of damage dealt. Synergy: +${PF.chain_lightning.synLs}% more lifesteal with Chain Lightning`, emoji: "🧛", tier: "uncommon",
+    apply: (mods) => { mods.lifesteal = (mods.lifesteal || 0) + PF.vampire.ls / 100; mods.hasVampire = true; mods.hasBloodRegen = true; if (mods.hasChainLightning) mods.lifesteal += PF.chain_lightning.synLs / 100; },
   },
   {
-    id: "deep_pockets", name: "Deep Pockets", desc: "+50% max ammo on all weapons", emoji: "📦", tier: "uncommon",
-    apply: (mods) => { mods.ammoMult = (mods.ammoMult || 1) * 1.50; mods.hasAmmoBoost = true; },
+    id: "deep_pockets", name: "Deep Pockets", desc: `+${PF.deep_pockets.ammo}% max ammo on all weapons`, emoji: "📦", tier: "uncommon",
+    apply: (mods) => { mods.ammoMult = (mods.ammoMult || 1) * pI(PF.deep_pockets.ammo); mods.hasAmmoBoost = true; },
   },
   {
-    id: "combo_master", name: "Combo Master", desc: "+50% combo window time. Synergy: lifesteal doubles during combo with Vampire", emoji: "🌪️", tier: "uncommon",
-    apply: (mods) => { mods.comboTimerMult = (mods.comboTimerMult || 1) * 1.50; mods.hasComboMaster = true; if (mods.hasVampire) mods.comboVampireMult = true; },
+    id: "combo_master", name: "Combo Master", desc: `+${PF.combo_master.window}% combo window time. Synergy: lifesteal doubles during combo with Vampire`, emoji: "🌪️", tier: "uncommon",
+    apply: (mods) => { mods.comboTimerMult = (mods.comboTimerMult || 1) * pI(PF.combo_master.window); mods.hasComboMaster = true; if (mods.hasVampire) mods.comboVampireMult = true; },
   },
   {
-    id: "magnetism", name: "Magnetism", desc: "2× pickup collection range. Synergy: 5× range with Hoarder", emoji: "🧲", tier: "rare",
-    // S176: the pair totals 5× in either pick order (was 9× Hoarder-first, 3.6× Magnetism-first).
-    apply: (mods) => { mods.pickupRange = (mods.pickupRange || 30) * (mods.hasHoarder ? 5 / 1.8 : 2); mods.hasMagnetism = true; },
+    id: "magnetism", name: "Magnetism", desc: `${PF.magnetism.mult}× pickup collection range. Synergy: ${PF.magnetism.synPickupTotal}× range with Hoarder`, emoji: "🧲", tier: "rare",
+    // S176: the pair totals synPickupTotal in either pick order (was 9× Hoarder-first, 3.6× Magnetism-first).
+    apply: (mods) => { mods.pickupRange = (mods.pickupRange || 30) * (mods.hasHoarder ? PF.magnetism.synPickupTotal / pI(PF.hoarder.range) : PF.magnetism.mult); mods.hasMagnetism = true; },
   },
   {
     id: "penetrator", name: "Penetrator", desc: "Bullets pierce through 1 extra enemy. Synergy: +10% crit with Eagle Eye; +12% lifesteal per pierce with Bloodlust", emoji: "🔫", tier: "rare",
@@ -155,18 +155,18 @@ export const PERKS = [
   },
   {
     id: "bloodlust", name: "Bloodlust", emoji: "🩸", tier: "uncommon",
-    desc: "+30% dmg. Synergy: +15% lifesteal with Vampire; +12% lifesteal per pierce with Penetrator",
-    apply: (mods) => { mods.damageMult = (mods.damageMult || 1) * 1.30; mods.hasBloodlust = true; if (mods.hasVampire) mods.lifesteal = (mods.lifesteal || 0) + 0.15; if (mods.pierce > 0) mods.piercedLifesteal = (mods.piercedLifesteal || 0) + 0.12; },
+    desc: `+${PF.bloodlust.dmg}% dmg. Synergy: +${PF.bloodlust.synLs}% lifesteal with Vampire; +${PF.bloodlust.synPiercedLs}% lifesteal per pierce with Penetrator`,
+    apply: (mods) => { mods.damageMult = (mods.damageMult || 1) * pI(PF.bloodlust.dmg); mods.hasBloodlust = true; if (mods.hasVampire) mods.lifesteal = (mods.lifesteal || 0) + PF.bloodlust.synLs / 100; if (mods.pierce > 0) mods.piercedLifesteal = (mods.piercedLifesteal || 0) + PF.bloodlust.synPiercedLs / 100; },
   },
   {
     id: "turbo_boots", name: "Turbo Boots", emoji: "🚀", tier: "uncommon",
-    desc: "−30% dash CD. Synergy: +20% speed & Adrenaline Rush lasts 4s with Speed Surge",
-    apply: (mods, gs) => { mods.dashCDMult = (mods.dashCDMult || 1) * 0.70; mods.hasTurboBoots = true; if (mods.hasAdrenaline && gs?.player) { gs.player.speed *= 1.20; mods.adrenalineRushDuration = 240; } },
+    desc: `−${PF.turbo_boots.cd}% dash CD. Synergy: +${PF.turbo_boots.synSpeed}% speed & Adrenaline Rush lasts 4s with Speed Surge`,
+    apply: (mods, gs) => { mods.dashCDMult = (mods.dashCDMult || 1) * pR(PF.turbo_boots.cd); mods.hasTurboBoots = true; if (mods.hasAdrenaline && gs?.player) { gs.player.speed *= pI(PF.turbo_boots.synSpeed); mods.adrenalineRushDuration = 240; } },
   },
   {
     id: "tungsten_rounds", name: "Tungsten Rounds", emoji: "🔩", tier: "uncommon",
-    desc: "+20% bullet damage, bullets pierce 1 extra enemy",
-    apply: (mods) => { mods.damageMult = (mods.damageMult || 1) * 1.20; mods.pierce = (mods.pierce || 0) + 1; },
+    desc: `+${PF.tungsten_rounds.dmg}% bullet damage, bullets pierce 1 extra enemy`,
+    apply: (mods) => { mods.damageMult = (mods.damageMult || 1) * pI(PF.tungsten_rounds.dmg); mods.pierce = (mods.pierce || 0) + 1; },
   },
   {
     id: "adrenaline_rush", name: "Adrenaline Rush", emoji: "💉", tier: "uncommon",
@@ -175,8 +175,8 @@ export const PERKS = [
   },
   {
     id: "chain_lightning", name: "Chain Lightning", emoji: "⚡", tier: "rare",
-    desc: "Hits have 20% chance to arc to 1 nearby enemy for 50% damage. Synergy: +6% lifesteal with Vampire",
-    apply: (mods, gs) => { if (gs) gs.chainLightning = true; mods.hasChainLightning = true; if (mods.hasVampire) mods.lifesteal = (mods.lifesteal || 0) + 0.06; },
+    desc: `Hits have 20% chance to arc to 1 nearby enemy for 50% damage. Synergy: +${PF.chain_lightning.synLs}% lifesteal with Vampire`,
+    apply: (mods, gs) => { if (gs) gs.chainLightning = true; mods.hasChainLightning = true; if (mods.hasVampire) mods.lifesteal = (mods.lifesteal || 0) + PF.chain_lightning.synLs / 100; },
   },
   {
     id: "dead_mans_hand", name: "Dead Man's Hand", emoji: "🃏", tier: "rare",
@@ -185,10 +185,10 @@ export const PERKS = [
   },
   {
     id: "overclocked", name: "Overclocked", emoji: "🔧", tier: "uncommon",
-    desc: "+35% fire rate, -15% damage. Every 20 shots forces a reload. Synergy: reload drops ammo with Scavenger; throws grenade with Grenade Chain",
+    desc: `+${PF.overclocked.rate}% fire rate, −${PF.overclocked.dmg}% damage. Every ${PF.overclocked.shots} shots forces a reload. Synergy: reload drops ammo with Scavenger; throws grenade with Grenade Chain`,
     apply: (mods, gs) => {
-      mods.damageMult = (mods.damageMult || 1) * 0.85;
-      mods.fireRateMult = (mods.fireRateMult || 1) * 0.65;
+      mods.damageMult = (mods.damageMult || 1) * pR(PF.overclocked.dmg);
+      mods.fireRateMult = (mods.fireRateMult || 1) * pR(PF.overclocked.rate);
       mods.hasOverclocked = true;
       if (mods.hasScavenger) mods.reloadDropsAmmo = true;
       if (mods.hasGrenadeChain) mods.reloadFreesGrenade = true;
@@ -197,43 +197,43 @@ export const PERKS = [
   },
   {
     id: "scavenger", name: "Scavenger", emoji: "🎒", tier: "common",
-    desc: "Enemies drop ammo 40% more often. Ammo pickups restore 30% more ammo. Synergy: forced reloads drop ammo with Overclocked",
-    apply: (mods) => { mods.ammoDropMult = (mods.ammoDropMult || 1) * 1.40; mods.ammoRestoreMult = (mods.ammoRestoreMult || 1) * 1.30; mods.hasScavenger = true; if (mods.hasOverclocked) mods.reloadDropsAmmo = true; },
+    desc: `Enemies drop ammo ${PF.scavenger.drops}% more often. Ammo pickups restore ${PF.scavenger.restore}% more ammo. Synergy: forced reloads drop ammo with Overclocked`,
+    apply: (mods) => { mods.ammoDropMult = (mods.ammoDropMult || 1) * pI(PF.scavenger.drops); mods.ammoRestoreMult = (mods.ammoRestoreMult || 1) * pI(PF.scavenger.restore); mods.hasScavenger = true; if (mods.hasOverclocked) mods.reloadDropsAmmo = true; },
   },
   {
     id: "combo_lifesteal", name: "Combo Lifesteal", emoji: "🩸", tier: "uncommon",
-    desc: "+6% lifesteal · +60% combo window",
-    apply: (mods) => { mods.lifesteal = (mods.lifesteal || 0) + 0.06; mods.comboTimerMult = (mods.comboTimerMult || 1) * 1.60; },
+    desc: `+${PF.combo_lifesteal.ls}% lifesteal · +${PF.combo_lifesteal.window}% combo window`,
+    apply: (mods) => { mods.lifesteal = (mods.lifesteal || 0) + PF.combo_lifesteal.ls / 100; mods.comboTimerMult = (mods.comboTimerMult || 1) * pI(PF.combo_lifesteal.window); },
   },
   {
     id: "overdrive", name: "Overdrive", emoji: "🚀", tier: "uncommon",
-    desc: "+40% fire rate · +10% damage",
-    apply: (mods) => { mods.fireRateMult = (mods.fireRateMult || 1) * 0.60; mods.damageMult = (mods.damageMult || 1) * 1.10; },
+    desc: `+${PF.overdrive.rate}% fire rate · +${PF.overdrive.dmg}% damage`,
+    apply: (mods) => { mods.fireRateMult = (mods.fireRateMult || 1) * pR(PF.overdrive.rate); mods.damageMult = (mods.damageMult || 1) * pI(PF.overdrive.dmg); },
   },
   {
     id: "hoarder", name: "Hoarder", emoji: "🧺", tier: "uncommon",
-    desc: "+80% pickup range · +50% ammo drops. Synergy: 5× total range with Magnetism",
-    apply: (mods) => { mods.pickupRange = (mods.pickupRange || 30) * (mods.hasMagnetism ? 5 / 2 : 1.80); mods.ammoDropMult = (mods.ammoDropMult || 1) * 1.50; mods.hasHoarder = true; },
+    desc: `+${PF.hoarder.range}% pickup range · +${PF.hoarder.drops}% ammo drops. Synergy: ${PF.magnetism.synPickupTotal}× total range with Magnetism`,
+    apply: (mods) => { mods.pickupRange = (mods.pickupRange || 30) * (mods.hasMagnetism ? PF.magnetism.synPickupTotal / PF.magnetism.mult : pI(PF.hoarder.range)); mods.ammoDropMult = (mods.ammoDropMult || 1) * pI(PF.hoarder.drops); mods.hasHoarder = true; },
   },
   {
     id: "glass_mind", name: "Glass Mind", emoji: "🧠", tier: "rare",
-    desc: "+80% XP gain · −25 max HP. Synergy: crits grant +10 bonus XP with Crit Cascade",
-    apply: (mods, gs) => { mods.xpMult = (mods.xpMult || 1) * 1.80; mods.hasGlassMind = true; if (gs?.player) { const m = Math.max(15, gs.player.maxHealth - 25); gs.player.maxHealth = m; gs.player.health = Math.min(gs.player.health, m); } },
+    desc: `+${PF.glass_mind.xp}% XP gain · −${PF.glass_mind.hp} max HP. Synergy: crits grant +10 bonus XP with Crit Cascade`,
+    apply: (mods, gs) => { mods.xpMult = (mods.xpMult || 1) * pI(PF.glass_mind.xp); mods.hasGlassMind = true; if (gs?.player) { const m = Math.max(15, gs.player.maxHealth - PF.glass_mind.hp); gs.player.maxHealth = m; gs.player.health = Math.min(gs.player.health, m); } },
   },
   {
     id: "bullet_hose", name: "Bullet Hose", emoji: "🔃", tier: "uncommon",
-    desc: "+100% max ammo · +40% ammo restore. Synergy: +50% more ammo stacks with Deep Pockets",
-    apply: (mods) => { mods.ammoMult = (mods.ammoMult || 1) * 2.0; mods.ammoRestoreMult = (mods.ammoRestoreMult || 1) * 1.40; mods.hasBulletHose = true; }, // S176: the Deep Pockets bonus is owned by the FULL ARMORY synergy alone (was applied twice when Deep Pockets came first)
+    desc: `+${PF.bullet_hose.ammo}% max ammo · +${PF.bullet_hose.restore}% ammo restore. Synergy: +${PF.bullet_hose.synAmmoPair}% more ammo stacks with Deep Pockets`,
+    apply: (mods) => { mods.ammoMult = (mods.ammoMult || 1) * pI(PF.bullet_hose.ammo); mods.ammoRestoreMult = (mods.ammoRestoreMult || 1) * pI(PF.bullet_hose.restore); mods.hasBulletHose = true; }, // S176: the Deep Pockets bonus is owned by the FULL ARMORY synergy alone (was applied twice when Deep Pockets came first)
   },
   {
     id: "crit_cascade", name: "Crit Cascade", emoji: "🌩️", tier: "rare",
-    desc: "+12% crit chance. Synergy: +10% crit with Eagle Eye; +8% crit with Penetrator; crits grant +10 XP with Glass Mind",
-    apply: (mods) => { mods.critBonus = (mods.critBonus || 0) + 0.12; mods.hasCritCascade = true; if (mods.hasEagleEye) mods.critBonus += 0.10; if (mods.pierce > 0) mods.critBonus += 0.08; if (mods.hasGlassMind) mods.critGrantsXp = true; },
+    desc: `+${PF.crit_cascade.crit}% crit chance. Synergy: +${PF.eagle_eye.crit}% crit with Eagle Eye; +${PF.crit_cascade.synPierceCrit}% crit with Penetrator; crits grant +10 XP with Glass Mind`,
+    apply: (mods) => { mods.critBonus = (mods.critBonus || 0) + PF.crit_cascade.crit / 100; mods.hasCritCascade = true; if (mods.hasEagleEye) mods.critBonus += PF.eagle_eye.crit / 100; if (mods.pierce > 0) mods.critBonus += PF.crit_cascade.synPierceCrit / 100; if (mods.hasGlassMind) mods.critGrantsXp = true; },
   },
   {
     id: "grenade_chain", name: "Grenade Chain", emoji: "💥", tier: "rare",
-    desc: "−50% grenade CD · +25% grenade damage. Synergy: +50% more dmg with Pyromaniac; forced reloads throw grenade with Overclocked",
-    apply: (mods) => { mods.grenadeCDMult = (mods.grenadeCDMult || 1) * 0.50; mods.grenadeDamageMult = (mods.grenadeDamageMult || 1) * 1.25; mods.hasGrenadeChain = true; if (mods.hasPyromaniac) mods.grenadeDamageMult = (mods.grenadeDamageMult || 1) * 1.50; if (mods.hasOverclocked) mods.reloadFreesGrenade = true; },
+    desc: `−${PF.grenade_chain.cd}% grenade CD · +${PF.grenade_chain.dmg}% grenade damage. Synergy: +50% more dmg with Pyromaniac; forced reloads throw grenade with Overclocked`,
+    apply: (mods) => { mods.grenadeCDMult = (mods.grenadeCDMult || 1) * pR(PF.grenade_chain.cd); mods.grenadeDamageMult = (mods.grenadeDamageMult || 1) * pI(PF.grenade_chain.dmg); mods.hasGrenadeChain = true; if (mods.hasPyromaniac) mods.grenadeDamageMult = (mods.grenadeDamageMult || 1) * 1.50; if (mods.hasOverclocked) mods.reloadFreesGrenade = true; },
   },
 ];
 
