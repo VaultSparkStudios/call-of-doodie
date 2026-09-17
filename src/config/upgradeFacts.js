@@ -24,6 +24,36 @@ export const META_TREE_FACTS = Object.freeze({
 export const META_BASE_PICKUP_RANGE = 30;
 export const metaIncrease = (percent) => 1 + percent / 100;
 export const metaReduction = (percent) => 1 - percent / 100;
+
+// Authoritative numbers for ordinary in-run perks. Percent values describe the
+// player-visible effect; runtime multipliers derive from these, never recopied.
+// Fire-rate entries use the gap-reduction convention: "N% fire rate" = gap * (1 - N/100).
+export const PERK_FACTS = Object.freeze({
+  hollow_points:   { dmg: 25 },
+  eagle_eye:       { crit: 10 },
+  adrenaline:      { speed: 15 },
+  iron_gut:        { hp: 30 },
+  fast_learner:    { xp: 30 },
+  scavenger:       { drops: 40, restore: 30 },
+  grenadier:       { cd: 35 },
+  parkour_pro:     { cd: 40 },
+  vampire:         { ls: 8 },
+  deep_pockets:    { ammo: 50 },
+  combo_master:    { window: 50 },
+  turbo_boots:     { cd: 30, synSpeed: 20 },
+  tungsten_rounds: { dmg: 20 },
+  combo_lifesteal: { ls: 6, window: 60 },
+  overdrive:       { rate: 40, dmg: 10 },
+  hoarder:         { range: 80, drops: 50 },
+  overclocked:     { rate: 35, dmg: 15, shots: 20 },
+  magnetism:       { mult: 2, synPickupTotal: 5 },
+  glass_mind:      { xp: 80, hp: 25 },
+  bullet_hose:     { ammo: 100, restore: 40, synAmmoPair: 50 },
+  crit_cascade:    { crit: 12, synPierceCrit: 8 },
+  bloodlust:       { dmg: 30, synLs: 15, synPiercedLs: 12 },
+  grenade_chain:   { cd: 50, dmg: 25 },
+  chain_lightning: { synLs: 6 },
+});
 export function metaUpgradeValue(id, tier = 0) {
   return META_UPGRADE_FACTS[id]?.[Math.min(3, Math.max(0, Math.floor(tier))) - 1] || 0;
 }
