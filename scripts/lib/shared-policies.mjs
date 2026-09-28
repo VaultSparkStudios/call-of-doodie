@@ -47,3 +47,21 @@ export const BRIEF_REQUIRED_TOP_FIELDS = ['session', 'date', 'agent', 'repo', 'h
 // meaning it would pass a payload sync-to-vorn would catch — the exact S153
 // divergent-observability bug. The superset is canonical; both import it now.
 export const AGENT_DNA_STRATEGY_KEYWORDS = ['guardrail', 'trust_tier', 'scope_statement', 'budget_ceiling', 'studio-internal', 'confidential', 'proprietary'];
+
+// extracted S309 from scripts/deploy-console-if-changed.mjs:127 <-> scripts/deploy-studio-console-release.mjs:30 (similarity 1).
+// Canonical `git status` argv asking one question: does the studio-console build
+// tree differ from HEAD? Both console deploy entry points must ask it identically
+// — the release gate REFUSES on a dirty tree while the if-changed deployer only
+// STAMPS `source.dirty` on the receipt, so a drift here would let one entry point
+// ship a tree the other would have blocked, and the receipt would still read clean.
+// That is the S153 divergent-observability class on the studio's only production
+// surface. Pass to the local `git()` helper: git(CONSOLE_TREE_DIRTY_GIT_ARGS).
+export const CONSOLE_TREE_DIRTY_GIT_ARGS = ['status', '--short', '--', 'studio-console'];
+
+// extracted S347 from scripts/check-writeback-currency.mjs <-> scripts/rollout-compliance.mjs (similarity 1).
+// Canonical `git rev-parse` argv resolving the current branch's upstream tracking
+// ref. Both callers decide "is this tree behind its remote" from it — rollout
+// compliance refuses a cross-repo write, write-back currency labels its verdict
+// pre-sync — so the two must resolve the SAME ref, or one could call a tree
+// synced that the other calls behind.
+export const GIT_UPSTREAM_REF_ARGS = ['rev-parse', '--abbrev-ref', '--symbolic-full-name', '@{u}'];

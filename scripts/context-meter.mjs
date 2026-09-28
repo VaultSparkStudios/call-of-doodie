@@ -34,6 +34,7 @@ import { captureLockTrigger } from './lib/boot-amortization.mjs';
 // meter is already propagated with its lib dependencies, so duplicating these
 // values here creates an observability-lie risk whenever providers change them.
 import { contextWindowForAgent, priceForModel as priceFor } from './lib/model-router.mjs';
+import { lockSubjectVerdict } from './lib/agent-identity.mjs';
 function tierOf(modelId) {
   if (!modelId) return 'unknown';
   if (modelId.includes('opus'))   return 'opus';
@@ -42,7 +43,7 @@ function tierOf(modelId) {
   return modelId;
 }
 function costOfEntry(e) {
-  const p = priceFor(e.model);
+  const p = priceFor(e.model, { inputTokens: (e.input || 0) + (e.cache_read || 0) + (e.cache_create || 0) });
   return ((e.input        || 0) * p.input      +
           (e.output       || 0) * p.output     +
           (e.cache_read   || 0) * p.cacheRead  +
@@ -98,17 +99,30 @@ let sessionStart = Date.now();
 let agent = 'unknown';
 let lockModel = null;
 let lockLimit = null;
+let lockSessionId = null;
+// The agent as the LOCK declares it — null when absent, never the 'unknown'
+// default, so a lock missing the field reads as uncorroborated rather than
+// as a mismatch against the caller.
+let lockAgentDeclared = null;
 if (fs.existsSync(lockPath)) {
   const lock = fs.readFileSync(lockPath, 'utf8');
   const m = lock.match(/session_start:\s*(\S+)/);
   const a = lock.match(/agent:\s*(\S+)/);
   const mid = lock.match(/^model:\s*(\S+)/m);
   const cl = lock.match(/^context_limit:\s*(\d+)/m);
+  const sid = lock.match(/^session_id:\s*(\d+)/m);
+  if (sid) lockSessionId = parseInt(sid[1], 10);
   if (m) sessionStart = new Date(m[1]).getTime();
-  if (a) agent = a[1];
+  if (a) { agent = a[1]; lockAgentDeclared = a[1]; }
   if (mid) lockModel = mid[1];
   if (cl) lockLimit = parseInt(cl[1], 10);
 }
+// S342 [SIL #2] — is this lock even OURS? Every field above (agent, model,
+// context_limit, session_start) is adopted from a file on disk that any prior
+// session may have left behind. A 52.6h-old Codex lock made this meter report
+// 203.8% used / CLOSEOUT at a true 33.3% / CONTINUE. Corroborate against the
+// process's own environment before any of it is allowed to become a verdict.
+const subject = lockSubjectVerdict({ lockAgent: lockAgentDeclared });
 const limit = lockLimit || contextWindowForAgent(agent);
 const model = lockModel
   || (agent === 'claude-code' ? (limit === 200_000 ? 'sonnet-200k' : 'opus-1m')
@@ -300,6 +314,59 @@ if (measuredContextTokens > 0 && (Date.now() - lastInteractiveTs) <= LEDGER_FRES
   usedTokens = heuristicTokens;
   measurementSource = 'heuristic';
 }
+// --- Session floor (S316 audit #2 · closes [SIL:2⛔][S307 #1]) ---------------
+//
+// The refusal above is right, and it had no memory. All three live sources can
+// go dark MID-SESSION on a session that was measuring perfectly: transcriptProxy()
+// self-invalidates after TRANSCRIPT_FRESH_MS (10 min) with no append, and the Stop
+// hook does not fire mid-turn — so one long tool call inside a single continuous
+// /arc turn (a full doctor run, a five-minute maintenance job) blinds the meter,
+// and it reports UNMEASURED for a window it measured correctly twelve minutes ago.
+// Meanwhile it has been writing .cache/context-meter.json on every single run and
+// never once reading it back.
+//
+// Context usage within one session is monotonically non-decreasing. A real
+// measurement this session already took is therefore a valid, honest LOWER BOUND
+// — strictly more informative than "unknown", and strictly safer than the byte
+// heuristic S262 banned, because a floor can only ever under-report headroom.
+//
+// The constraint is the important half. This must NOT invent a reading:
+//   · only a floor from THIS session counts (sessionStart must match exactly);
+//   · only a floor whose own source was a real measurement counts — never the
+//     heuristic, and never a previous floor, or a single stale reading would
+//     launder itself forward indefinitely;
+//   · a session that never took a measurement still reports UNMEASURED.
+const FLOOR_SOURCES = new Set(['interactive-ledger', 'transcript-proxy', 'interactive-ledger-stale']);
+function sessionFloor() {
+  try {
+    const cached = JSON.parse(fs.readFileSync(path.join(ROOT, '.cache', 'context-meter.json'), 'utf8'));
+    if (cached?.sessionStart !== sessionStart) return null;          // a different session's reading
+    if (!FLOOR_SOURCES.has(cached?.measurementSource)) return null;  // heuristic or a prior floor — no laundering
+    const tokens = Number(cached?.usedTokens);
+    if (!Number.isFinite(tokens) || tokens <= 0) return null;
+    return { tokens, at: cached.at, source: cached.measurementSource };
+  } catch { return null; }
+}
+
+const hasRealMeasurement =
+  ledger.length > 0 || interactive.length > 0 || Boolean(proxy && proxy.tokens > 0);
+
+// Adopt the session floor BEFORE anything derives from usedTokens — remaining,
+// pctUsed, the burn rate and the compaction predictor all read it, so a floor
+// applied after the fact would produce a reading whose parts disagreed.
+const floor = hasRealMeasurement ? null : sessionFloor();
+if (floor) {
+  usedTokens = Math.max(usedTokens, floor.tokens);
+  measurementSource = 'session-floor';
+}
+const hasReading = hasRealMeasurement || Boolean(floor);
+// S342 [SIL #2] — a measurement can be real and still not be ABOUT you. Under a
+// foreign lock every derived number (pctUsed, remainingTokens, overLimit) is
+// computed against another session's context_limit, so none of them may be
+// reported. Nulled for the same reason the unmeasured case is nulled: a consumer
+// doing `pctUsed ?? 0` must not be handed a confident wrong number to coerce.
+const reportable = hasReading && subject.state !== 'foreign-lock';
+
 // S262 [secondary, same report] — do NOT clamp usedTokens to the limit.
 //
 // The clamp turned a real 307,673 / 200,000 reading into a flat "100% used", so a
@@ -328,8 +395,20 @@ if (fs.existsSync(cachePath)) {
 }
 
 const continueCostPerTurn = Math.round(usedTokens * (1 - cacheHitRate));
-// Fresh-session bootstrap: read full context stack once (roughly ctxBytes).
-const freshBootstrap = Math.round(ctxBytes / BYTES_PER_TOKEN);
+// Fresh-session bootstrap: what a NEW session would have to read to start.
+//
+// S317 [audit #8] — this was `ctxBytes / BYTES_PER_TOKEN`, and ctxBytes is
+// STARTUP_BASELINE + hotFilesBytes(). hotFilesBytes() counts 15% of every studio
+// state file whose mtime is later than sessionStart — that is, every file THIS
+// SESSION WROTE. The boot-amortization sample is taken by the closeout autopilot
+// after write-back has touched dozens of them, so the harder a session worked, the
+// larger its "boot cost" became, and the ratio work/boot fell. The metric was
+// anti-correlated with the thing it names.
+//
+// Boot cost is what /start actually reads: the startup brief. hotFilesBytes stays
+// in ctxBytes, where it belongs — it is a real component of CURRENT occupancy, and
+// only the bootstrap denominator was wrong to include it.
+const freshBootstrap = Math.round(STARTUP_BASELINE / BYTES_PER_TOKEN);
 // Turns until fresh session pays itself off:
 const breakEvenTurns = continueCostPerTurn > 0 ? Math.ceil(freshBootstrap / continueCostPerTurn) : Infinity;
 
@@ -367,12 +446,24 @@ const sonnetBreachPct = isSonnetExecTier ? usedTokens / 200_000 : 0;
 // signal that exists to stop an overrun.
 //
 // So: refuse. No verdict, no percentage. The gauge says it cannot read.
-const hasRealMeasurement =
-  ledger.length > 0 || interactive.length > 0 || Boolean(proxy && proxy.tokens > 0);
 
 let recommendation;
 let reason;
-if (!hasRealMeasurement) {
+// S342 [SIL #2] — refuse BEFORE the unmeasured check. An unmeasured reading says
+// "I cannot see"; a foreign-lock reading says something confident and false about
+// a session that is not the caller's. The second is strictly worse, because it is
+// actionable: the S342 lock produced CLOSEOUT for a session with 67% of its budget
+// left. Do not "repair" it by swapping in the runtime agent — the limit and
+// session_start would still be the dead session's, leaving the number wrong and
+// the error invisible.
+if (subject.state === 'foreign-lock') {
+  recommendation = 'UNKNOWN_SUBJECT';
+  reason =
+    `session lock belongs to ${subject.lockAgent}, but this process is ${subject.runtimeAgent} ` +
+    `(${subject.runtimeSource}) — the lock's context_limit and session_start describe another ` +
+    `session, so no percentage here would be about you. Re-declare the lock first: ` +
+    `node scripts/write-session-lock.mjs --session <n> --agent ${subject.runtimeAgent}`;
+} else if (!hasReading) {
   recommendation = 'UNMEASURED';
   reason =
     'no ledger entry, interactive turn, or live transcript readable — context usage is UNKNOWN. ' +
@@ -477,32 +568,48 @@ const actions = buildActions();
 // S262 — "heuristic" with nothing measured is not a low-confidence READING, it is
 // the ABSENCE of a reading. Naming it `heuristic` invited callers to treat it as a
 // weak measurement and carry on; `unmeasured` cannot be misread that way.
-const confidence = !hasRealMeasurement
+const confidence = !hasReading
   ? 'unmeasured'
   : {
       'interactive-ledger': 'measured',
       'transcript-proxy': 'measured-proxy',
       'interactive-ledger-stale': 'measured-stale',
+      'session-floor': 'measured-floor',
       'heuristic': ledger.length > 0 ? 'measured+heuristic' : 'heuristic',
     }[measurementSource];
 
 const out = {
   agent,
   model,
+  // The session this reading belongs to. A consumer cannot judge whether a
+  // persisted reading is admissible as a floor without it, and a meter that
+  // reports a number without saying which session it measured is exactly the
+  // boundary-crossing S305 warns about.
+  sessionStart,
   limit,
+  // S305 [audit #1] — a cache consumed across a session boundary must carry the session it
+  // measured. The brief's COMPACTION WARNING block reads this file; without these two
+  // stamps S304's 907,100-token reading rendered under a "Session 305" header.
+  sessionId: lockSessionId,
+  // S342 [SIL #2] — provenance OF the subject. A consumer must be able to tell a
+  // reading about ITSELF from a reading about whoever last held the lock, and
+  // `uncorroborated` (no runtime witness available) must stay distinguishable
+  // from `foreign-lock` (a witness that actively disagrees).
+  subject,
+  measuredAt: new Date().toISOString(),
   // S262 — when nothing was measured, usedTokens/remainingTokens/pctUsed are
   // NULL, not zero and not a byte guess. A consumer that does `pctUsed ?? 0`
   // would otherwise convert "I cannot see" into "0% used", which reads as a
   // permanent CONTINUE — the precise way this defect propagated downstream.
   // The raw byte estimate stays visible under `measured.heuristicTokens` for
   // debugging; it is simply never promoted to a context reading.
-  usedTokens: hasRealMeasurement ? usedTokens : null,
-  remainingTokens: hasRealMeasurement ? remaining : null,
-  pctUsed: hasRealMeasurement ? +(pctUsed * 100).toFixed(1) : null,
-  measured_ok: hasRealMeasurement,
+  usedTokens: reportable ? usedTokens : null,
+  remainingTokens: reportable ? remaining : null,
+  pctUsed: reportable ? +(pctUsed * 100).toFixed(1) : null,
+  measured_ok: reportable,
   // True when the reading EXCEEDS the window — surfaced so consumers can render
   // the overage instead of clipping it to a reassuring 100%.
-  overLimit: hasRealMeasurement ? overLimit : null,
+  overLimit: reportable ? overLimit : null,
   turnCountObserved: turnCount,
   cacheHitRate: +cacheHitRate.toFixed(2),
   continueCostPerTurn,
@@ -549,7 +656,12 @@ const out = {
 // boot-amortization) read .cache/context-meter.json instead of re-running us.
 try {
   fs.mkdirSync(path.join(ROOT, '.cache'), { recursive: true });
-  fs.writeFileSync(path.join(ROOT, '.cache', 'context-meter.json'), JSON.stringify(out, null, 2) + '\n');
+  // Stamp the session and the source onto the cache: sessionFloor() above refuses
+  // any entry it cannot prove belongs to THIS session and came from a real
+  // measurement, and it can only do that if the writer says so (S305 — a cache
+  // crossing a session boundary must carry its session).
+  const persisted = { ...out, measurementSource };
+  fs.writeFileSync(path.join(ROOT, '.cache', 'context-meter.json'), JSON.stringify(persisted, null, 2) + '\n');
 } catch { /* cache write is best-effort */ }
 
 if (asJson) {

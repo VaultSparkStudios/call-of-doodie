@@ -33,6 +33,48 @@ try {
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const args = process.argv.slice(2);
 
+// This script is copied standalone by concurrency/bootstrap tests. Use the
+// shared resolver when its propagated dependency is present, and preserve the
+// old copyable behavior when it is not.
+let resolveSessionIdentity = () => null;
+try {
+  ({ resolveActiveSessionId: resolveSessionIdentity } = await import('./lib/session-identity.mjs'));
+} catch { /* standalone copy — session identity remains unavailable */ }
+
+// S328 audit #2 — the session-number allocator must not reissue a number already SPENT
+// in git history. session-identity.mjs stays spawn-free so it can keep travelling with
+// the standalone copies of this script, so the git read lives HERE, behind the same
+// guarded lazy import: where safe-spawn is absent (a copied fixture) this yields null and
+// the allocator degrades to the closed-surface answer, exactly as before.
+let gitLogText = null;
+try {
+  const { spawnSync } = await import('./lib/safe-spawn.mjs');
+  const log = spawnSync('git', ['log', '-n400', '--format=%s'], {
+    cwd: ROOT, encoding: 'utf8', timeout: 15_000, windowsHide: true,
+  });
+  if (log.status === 0 && typeof log.stdout === 'string') gitLogText = log.stdout;
+} catch { /* no git, or standalone copy without safe-spawn — degrade, never crash */ }
+
+// S291 — `--help` must never fire the action (S281). This writer had no help
+// branch at all, so `node scripts/write-session-lock.mjs --help` WROTE THE LOCK
+// and printed a success line, which is how it was found: asking a state-mutating
+// CLI what its flags were mutated the state. Found live this session.
+if (args.includes('--help') || args.includes('-h')) {
+  console.log(`write-session-lock — write context/.session-lock for this session.
+
+  --agent <id>     agent identity (default: detected)
+  --trigger <t>    bounded trigger (default: ad-hoc)
+  --model <id>     model identity
+  --note <text>    freeform note
+  --session <n>    declare the session number (recorded as session_source: declared;
+                   refused at or below the newest CLOSED session)
+  session_id       otherwise derived from closed SIL/status + numbers spent in git
+  --help           this text (writes nothing)
+
+Writes nothing when invoked with --help.`);
+  process.exit(0);
+}
+
 function valueArg(name) {
   const index = args.indexOf(name);
   if (index < 0) return null;
@@ -74,6 +116,9 @@ const modelArg = args.find((_, i) => args[i - 1] === '--model')
 // Context window in tokens. Precedence:
 //   --context-limit <n>  >  provider-specific env override  >  inferred model
 function inferCtxLimit(modelId) {
+  // Codex runtime metadata is provider-specific, independent of an API model name.
+  // Explicit --context-limit and CODEX_CONTEXT_LIMIT still take precedence.
+  if (agentArg === 'codex') return DEFAULT_CODEX_CONTEXT_LIMIT;
   if (/1m/i.test(modelId)) return 1_000_000;
   if (/272k/i.test(modelId)) return DEFAULT_CODEX_CONTEXT_LIMIT;
   if (/opus|sonnet/i.test(modelId)) return 200_000;
@@ -104,10 +149,51 @@ if (!FORCE && fs.existsSync(lockPath)) {
     if (Date.now() - priorTs < 12 * 3600 * 1000) sessionStart = m[1];
   }
 }
+// S341 [audit #2] — A DECLARED SESSION OUTRANKS INFERENCE, BUT NEVER REWINDS THE LEDGER.
+//
+// The allocator treats every S<n> already in git as spent, which is right — and it has
+// no way to know a commit belongs to the session being opened. /start's residue STOP
+// happens BEFORE this lock is written, so a residue commit scoped `chore(S341)` spent
+// 341 and this writer locked the S341 session as 342, while the brief and SIL both said
+// 341. The only correction path was hand-editing the lock: an identity change with no
+// record. `--session <n>` is the recorded path (the S338 autopilot precedent), and it is
+// bounded from below: a number at or under the newest CLOSED session is refused, because
+// reusing a closed number is the corruption the allocator exists to prevent.
+let sessionId;
+let sessionSource = 'derived';
+if (args.includes('--session')) {
+  const declared = Number(valueArg('--session'));
+  if (!Number.isInteger(declared) || declared <= 0) {
+    console.error('⛔ --session requires a positive integer');
+    process.exit(2);
+  }
+  let closedMax = null;
+  const identity = await import('./lib/session-identity.mjs').catch(() => null);
+  if (identity) {
+    let status = {};
+    let sil = '';
+    try { status = JSON.parse(fs.readFileSync(path.join(ROOT, 'context', 'PROJECT_STATUS.json'), 'utf8')); } catch {}
+    try { sil = fs.readFileSync(path.join(ROOT, 'context', 'SELF_IMPROVEMENT_LOOP.md'), 'utf8'); } catch {}
+    const closed = [identity.closedSessionFromStatus(status), identity.closedSessionFromSil(sil)].filter(Number.isFinite);
+    closedMax = closed.length ? Math.max(...closed) : null;
+  }
+  if (Number.isFinite(closedMax) && declared <= closedMax) {
+    console.error(`⛔ --session ${declared} refused: S${closedMax} is already CLOSED — a closed number is never reissued`);
+    process.exit(2);
+  }
+  sessionId = declared;
+  sessionSource = 'declared';
+} else {
+  sessionId = resolveSessionIdentity(ROOT, {
+    lockText: fs.existsSync(lockPath) ? fs.readFileSync(lockPath, 'utf8') : '',
+    gitLogText,
+  });
+}
 
 const content = [
   `locked_by: agent-session`,
   `session_start: ${sessionStart}`,
+  ...(Number.isFinite(sessionId) ? [`session_id: ${sessionId}`, `session_source: ${sessionSource}`] : []),
   `agent: ${agentArg}`,
   `trigger: ${triggerArg}`,
   `model: ${modelArg}`,

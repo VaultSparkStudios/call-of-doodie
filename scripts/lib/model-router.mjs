@@ -6,13 +6,16 @@
  * studio-wide model upgrades in one place.
  *
  * Rules:
- *   COMPLEX  → claude-opus-4-8    (strategy, deep analysis, extended thinking)
+ *   COMPLEX  → claude-opus-5     (strategy, deep analysis, extended thinking)
  *   MODERATE → claude-sonnet-5    (implementation, code, Q&A, most work — 1M ctx,
- *                                  $2/$10 intro through 2026-08-31, then $3/$15)
- *   SIMPLE   → claude-haiku-4-5-20251001  (validations, lookups, quick checks)
+ *                                  current published list price $2/$10)
+ *   SIMPLE   → claude-haiku-4-5  (validations, lookups, quick checks)
  *
- * Model currency (verified 2026-07-01, S219 — docs/FRONTIER_CAPABILITIES_2026-07.md):
+ * Model currency (verified 2026-09-15, S342 — official Anthropic model pages):
+ *   Opus 5 is current; Opus 4.8 is superseded (same $5/$25 list price).
  *   Sonnet 5 launched 2026-06-30 (1M ctx native, default in Claude Code).
+ *   Dateless API IDs remain pinned versions; only Studio family selectors float.
+ *   Fable 5.1 is available by explicit family selection; ordinary tiers do not escalate.
  *   Retired/retiring: Sonnet 4 + Opus 4 (retired 2026-06-15) · Opus 4.1 (2026-08-05).
  *
  * Usage:
@@ -26,6 +29,7 @@
  */
 
 import fs from 'fs';
+import { priceForOpenAIModel, shortOpenAIModelName } from './openai-model-catalog.mjs';
 import path from 'path';
 import crypto from 'crypto';
 import { fileURLToPath } from 'url';
@@ -45,11 +49,54 @@ function readActiveSkillFile() {
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const LEDGER_DEFAULT = path.resolve(__dirname, '..', '..', 'docs', 'cache-ledger.ndjson');
 
-export const MODELS = {
-  opus:   'claude-opus-4-8',
+export const MODELS = Object.freeze({
+  fable:  'claude-fable-5-1',
+  opus:   'claude-opus-5',
   sonnet: 'claude-sonnet-5',
-  haiku:  'claude-haiku-4-5-20251001',
-};
+  haiku:  'claude-haiku-4-5',
+});
+
+/** Family names are Studio selectors, never unverified provider API aliases.
+ * Explicit version/provider IDs remain pinned; upgrades must preserve caller intent.
+ */
+export function resolveModel(model = MODELS.sonnet) {
+  return Object.hasOwn(MODELS, model) ? MODELS[model] : model;
+}
+
+export function normalizeThinking(model, thinking) {
+  const id = resolveModel(model);
+  const alwaysAdaptive = /^claude-(?:fable|mythos)-/.test(id || '');
+  if (alwaysAdaptive && thinking?.type === 'disabled') throw new Error('Selected family requires adaptive thinking; choose an eligible lower tier for no-thinking work');
+  if (thinking?.type === 'enabled' && (alwaysAdaptive || adaptiveThinkingByDefault(id))) return { type: 'adaptive' };
+  return thinking;
+}
+
+export const MODEL_CURRENCY = Object.freeze({
+  verifiedAt: '2026-09-15T00:00:00Z',
+  maxAgeDays: 7,
+  radarSourceId: 'anthropic-models-overview',
+  radarContentSha256: '5973778a6ba23c571b5758e304177cb7ec59ad2db0483a054f1830b269f305d4',
+  sources: [
+    'https://platform.claude.com/docs/en/models/fable-5-1/overview',
+    'https://platform.claude.com/docs/en/models/opus-5/overview',
+    'https://platform.claude.com/docs/en/models/sonnet-5/overview',
+    'https://platform.claude.com/docs/en/about-claude/models/model-ids-and-versions',
+  ],
+});
+
+// The existing scheduled/startup radar supplies vendor evidence. A changed catalog
+// requires a compatibility/price review before its IDs become current; unknown
+// behavior must never silently spend more or route to a restricted model family.
+export function assessModelCurrency(radar, now = Date.now()) {
+  const source = radar?.sources?.find(s => s.id === MODEL_CURRENCY.radarSourceId);
+  if (!source || source.status !== 'ok' || !source.contentSha256) return { ok: false, reason: 'vendor-evidence-unavailable' };
+  if (source.contentSha256 !== MODEL_CURRENCY.radarContentSha256) return { ok: false, reason: 'vendor-catalog-changed' };
+  const maxAge = MODEL_CURRENCY.maxAgeDays * 86400000;
+  const observed = Date.parse(source.observedAt);
+  if (!Number.isFinite(observed) || now - observed > maxAge || observed > now) return { ok: false, reason: 'vendor-evidence-stale' };
+  if (now - Date.parse(MODEL_CURRENCY.verifiedAt) > maxAge) return { ok: false, reason: 'model-review-stale' };
+  return { ok: true, reason: 'current-reviewed-catalog' };
+}
 
 /**
  * S244 (D-S244.3) — models that run ADAPTIVE thinking when the `thinking`
@@ -62,7 +109,14 @@ export const MODELS = {
  * Model-behavior knowledge lives HERE (the chokepoint), never in callers.
  */
 export function adaptiveThinkingByDefault(model) {
-  return String(model || '').startsWith('claude-sonnet-5');
+  // S310: Opus 5 runs ADAPTIVE thinking when `thinking` is omitted — unlike
+  // Opus 4.8/4.7, which run without it. Bumping MODELS.opus to claude-opus-5
+  // without adding it here would silently reintroduce the S244 outage on every
+  // small-output request: adaptive thinking burns the whole max_tokens budget
+  // and the call returns ZERO text. The model bump and this predicate are one
+  // change, never two.
+  const id = String(model || '');
+  return id.startsWith('claude-sonnet-5') || id.startsWith('claude-opus-5');
 }
 
 /**
@@ -72,7 +126,8 @@ export function adaptiveThinkingByDefault(model) {
  * import this instead of hardcoding their own map.
  */
 export const CONTEXT_WINDOWS = {
-  [MODELS.opus]:   1_000_000, // Opus 4.8: 1M ctx (verified 2026-07-01)
+  [MODELS.fable]:  1_000_000,
+  [MODELS.opus]:   1_000_000, // Opus 5: 1M ctx (verified 2026-08-31)
   [MODELS.sonnet]: 1_000_000, // Sonnet 5: 1M ctx native (verified 2026-07-01)
   [MODELS.haiku]:  200_000,
   'opus-1m':       1_000_000,
@@ -84,7 +139,7 @@ export const CONTEXT_WINDOWS = {
 };
 
 export function contextWindowForAgent(agent) {
-  // Studio Ops founder runs Opus 4.8 (1M context) exclusively across Claude Code sessions.
+  // Studio Ops founder runs the newest Opus at 1M context across Claude Code sessions.
   // Set CLAUDE_CONTEXT_LIMIT=200000 to pin to the legacy 200K window.
   if (agent === 'claude-code') {
     if (process.env.CLAUDE_CONTEXT_LIMIT) return parseInt(process.env.CLAUDE_CONTEXT_LIMIT, 10);
@@ -102,15 +157,145 @@ export function contextWindowForAgent(agent) {
  * Kept here — alongside MODELS — so the chokepoint remains the single place
  * in scripts/ that references claude-* model IDs verbatim.
  */
-// Sonnet 5 intro pricing ($2/$10) runs through 2026-08-31; list price after is $3/$15.
-// Date-aware so the ledger never silently overstates or understates (CANON-031).
-const SONNET5_INTRO_ENDS = Date.UTC(2026, 7, 31, 23, 59, 59); // 2026-08-31 UTC
-const SONNET5_PRICE = Date.now() <= SONNET5_INTRO_ENDS
-  ? { input: 2.00, cacheWrite: 2.50, cacheRead: 0.20, output: 10.00 }
-  : { input: 3.00, cacheWrite: 3.75, cacheRead: 0.30, output: 15.00 };
+// Official current Sonnet 5 list pricing, verified 2026-09-15.
+const SONNET5_PRICE = { input: 2.00, cacheWrite: 2.50, cacheRead: 0.20, output: 10.00 };
+
+/**
+ * Superseded model IDs → the current model of the same family (S343).
+ *
+ * Lives HERE because this file is the studio's model chokepoint and
+ * tier1-model-router-chokepoint enforces that every model ID does — which is how
+ * this map arrived: it was first written inside check-routine-model-currency.mjs
+ * and the gate correctly refused it.
+ *
+ * An entry here is not "an old model that still works". Each of these is priced
+ * ABOVE its replacement (see PRICING_PER_MTOK: sonnet-4-6 is $3.00/$15.00 against
+ * sonnet-5's $2.00/$10.00) while being the weaker model, so it costs more per
+ * token AND needs more tokens for the same work. Add a family's predecessor here
+ * the moment MODELS moves, or the next 94-day drift has nowhere to be detected.
+ */
+/**
+ * Does this string name a Claude model at all? (S344)
+ *
+ * Matches `claude-` + family segments + a version digit — the same shape
+ * check-model-router-adherence.mjs hunts for, kept here because the chokepoint owns
+ * model-ID knowledge. `claude-code`, `claude-agent-sdk` and `claude.ai` carry no
+ * version digit and are correctly not models.
+ *
+ * Exists so a consumer can distinguish "a Claude model I do not recognise" (which is
+ * by definition NOT current, and therefore a finding) from "an id belonging to some
+ * other provider" (which this studio's MODELS map cannot judge at all). Collapsing
+ * those two is how a currency guard passes on the very drift it was built to catch.
+ */
+export function isClaudeModelId(value) {
+  return typeof value === 'string' && /^claude-(?:[a-z]+-)*\d[A-Za-z0-9._[\]-]*$/.test(value);
+}
+
+/**
+ * Is this the current model for its family? (S344)
+ *
+ * The ONLY authority is membership in MODELS. SUPERSEDED_MODELS below improves the
+ * MESSAGE by naming the replacement; it must never be what decides current-vs-stale,
+ * because a hand-maintained list is exactly the thing that goes unmaintained.
+ */
+export function isCurrentModelId(value) {
+  return Object.values(MODELS).includes(value);
+}
+
+/**
+ * Strip a trailing -YYYYMMDD snapshot suffix from a model id. (S345)
+ *
+ * Provider APIs return the canonical DATED id (claude-haiku-4-5-20251001) while MODELS
+ * holds the undated alias (claude-haiku-4-5). They name the same model, so any consumer
+ * comparing an API response to MODELS reports false drift without this. Two such
+ * consumers were written in one session before the second one noticed.
+ *
+ * This drops the DATE, never the VERSION: claude-sonnet-4-6-20250101 normalises to
+ * claude-sonnet-4-6, which is still absent from MODELS and still reads as stale. It is
+ * therefore safe to compose with isCurrentModelId() and cannot launder a superseded model
+ * into a current one.
+ */
+export function undatedModelId(value) {
+  return typeof value === 'string' ? value.replace(/-\d{8}$/, '') : value;
+}
+
+/** Do two model ids name the same model, ignoring snapshot-date suffixes? (S345) */
+export function sameModelId(a, b) {
+  return undatedModelId(a) === undatedModelId(b);
+}
+
+export const SUPERSEDED_MODELS = Object.freeze({
+  'claude-sonnet-4-6': MODELS.sonnet,
+  'claude-sonnet-4-5': MODELS.sonnet,
+  'claude-opus-4-8':   MODELS.opus,
+  'claude-opus-4-1':   MODELS.opus,
+  'claude-haiku-3-5':  MODELS.haiku,
+});
+
+/**
+ * Provider lifecycle, as a FIELD rather than a comment. (S346 — corrects S345 #9)
+ *
+ * S345 read "claude-haiku-4-5 · not sooner than October 15, 2026" as "retires in four
+ * weeks". It does not: that column is a FLOOR on an ACTIVE model, and Anthropic promises
+ * at least 60 days' notice before any retirement. The real defect was that retirement
+ * dates lived only in comments (see the Opus 4.1 note in PRICING_BY_ID), so nothing
+ * could warn when a notice actually landed. Keys are undated ids; look up through
+ * modelLifecycle(), which strips snapshot dates.
+ *
+ * Refresh by re-reading LIFECYCLE_SOURCE; bump LIFECYCLE_CHECKED_AT. A table older than
+ * LIFECYCLE_MAX_AGE_DAYS answers `unknown` — stale evidence may not certify `active`.
+ */
+export const LIFECYCLE_SOURCE = 'https://platform.claude.com/docs/en/about-claude/model-deprecations';
+export const LIFECYCLE_CHECKED_AT = '2026-09-18';
+export const LIFECYCLE_MAX_AGE_DAYS = 30;
+export const LIFECYCLE_NOTICE_DAYS = 60;
+export const MODEL_LIFECYCLE = Object.freeze({
+  'claude-fable-5-1':  { status: 'active',  notBefore: '2027-09-01' },
+  'claude-fable-5':    { status: 'active',  notBefore: '2027-06-09' },
+  'claude-opus-5':     { status: 'active',  notBefore: '2027-07-24' },
+  'claude-opus-4-8':   { status: 'active',  notBefore: '2027-05-28' },
+  'claude-opus-4-7':   { status: 'active',  notBefore: '2027-04-16' },
+  'claude-opus-4-6':   { status: 'active',  notBefore: '2027-02-05' },
+  'claude-opus-4-5':   { status: 'active',  notBefore: '2026-11-24' },
+  'claude-opus-4-1':   { status: 'retired', retiresOn: '2026-08-05', replacement: 'claude-opus-4-8' },
+  'claude-sonnet-5':   { status: 'active',  notBefore: '2027-06-30' },
+  'claude-sonnet-4-6': { status: 'active',  notBefore: '2027-02-17' },
+  'claude-sonnet-4-5': { status: 'active',  notBefore: '2026-09-29' },
+  'claude-haiku-4-5':  { status: 'active',  notBefore: '2026-10-15' },
+});
+
+const DAY_MS = 86_400_000;
+
+/**
+ * Where does a model stand in its provider lifecycle?
+ * → { id, state: 'active'|'deprecated'|'retiring-soon'|'retired'|'unknown', reason, ...entry }
+ * `floorPassed` on an active model means a notice may now arrive — still >= 60 days of runway.
+ */
+export function modelLifecycle(modelId, { now = Date.now(), checkedAt = LIFECYCLE_CHECKED_AT, table = MODEL_LIFECYCLE } = {}) {
+  const id = undatedModelId(resolveModel(modelId));
+  const nowMs = new Date(now).getTime();
+  const entry = table[id];
+  if (!entry) return { id, state: 'unknown', reason: 'not in the lifecycle table — unjudgeable, not current' };
+  const ageDays = (nowMs - new Date(checkedAt).getTime()) / DAY_MS;
+  if (!(ageDays <= LIFECYCLE_MAX_AGE_DAYS)) {
+    return { id, state: 'unknown', lastKnown: entry.status, reason: `lifecycle table checked ${checkedAt} (${Math.floor(ageDays)}d > ${LIFECYCLE_MAX_AGE_DAYS}d) — re-read ${LIFECYCLE_SOURCE}` };
+  }
+  const retiresMs = entry.retiresOn ? new Date(entry.retiresOn).getTime() : NaN;
+  if (entry.status === 'retired' || (Number.isFinite(retiresMs) && nowMs >= retiresMs)) {
+    return { id, ...entry, state: 'retired', reason: `retired ${entry.retiresOn}${entry.replacement ? ` → ${entry.replacement}` : ''}` };
+  }
+  if (entry.status === 'deprecated') {
+    const daysLeft = Number.isFinite(retiresMs) ? Math.ceil((retiresMs - nowMs) / DAY_MS) : null;
+    const soon = daysLeft != null && daysLeft <= LIFECYCLE_NOTICE_DAYS;
+    return { id, ...entry, daysLeft, state: soon ? 'retiring-soon' : 'deprecated', reason: `deprecated; retires ${entry.retiresOn ?? 'date unannounced'}${entry.replacement ? ` → ${entry.replacement}` : ''}` };
+  }
+  const floorPassed = entry.notBefore ? nowMs >= new Date(entry.notBefore).getTime() : false;
+  return { id, ...entry, floorPassed, state: 'active', reason: floorPassed ? `active; past its ${entry.notBefore} floor — a notice may arrive (≥${LIFECYCLE_NOTICE_DAYS}d runway)` : `active; not retired before ${entry.notBefore}` };
+}
 
 export const PRICING_PER_MTOK = {
-  [MODELS.opus]:   { input:  5.00, cacheWrite:  6.25, cacheRead: 0.50, output: 25.00 }, // Opus 4.8 (verified 2026-07-01)
+  [MODELS.fable]:  { input: 10.00, cacheWrite: 12.50, cacheRead: 0.25, output: 50.00 },
+  [MODELS.opus]:   { input:  5.00, cacheWrite:  6.25, cacheRead: 0.50, output: 25.00 }, // Opus 5 (verified 2026-08-31)
   [MODELS.sonnet]: SONNET5_PRICE,
   [MODELS.haiku]:  { input:  1.00, cacheWrite:  1.25, cacheRead: 0.10, output:  5.00 },
 };
@@ -118,8 +303,10 @@ export const PRICING_PER_MTOK = {
 // Exact-prefix per-generation overrides (single source of truth — consumers use
 // priceForModel(), never their own tables). Legacy generations keep their own price.
 export const PRICING_BY_ID = {
+  [MODELS.fable]: PRICING_PER_MTOK[MODELS.fable],
   'claude-fable-5':    { input: 10.00, cacheWrite: 12.50, cacheRead: 1.00, output: 50.00 },
-  'claude-opus-4-8':   PRICING_PER_MTOK[MODELS.opus],
+  'claude-opus-5':     PRICING_PER_MTOK[MODELS.opus],
+  'claude-opus-4-8':   { input:  5.00, cacheWrite:  6.25, cacheRead: 0.50, output: 25.00 },
   'claude-opus-4-1':   { input: 15.00, cacheWrite: 18.75, cacheRead: 1.50, output: 75.00 }, // retires 2026-08-05
   'claude-sonnet-5':   PRICING_PER_MTOK[MODELS.sonnet],
   'claude-sonnet-4-6': { input:  3.00, cacheWrite:  3.75, cacheRead: 0.30, output: 15.00 },
@@ -127,12 +314,18 @@ export const PRICING_BY_ID = {
 };
 
 /** Resolve price for any model ID: exact-prefix override first, tier substring fallback. */
-export function priceForModel(modelId) {
-  if (!modelId) return PRICING_PER_MTOK[MODELS.sonnet];
-  for (const [prefix, p] of Object.entries(PRICING_BY_ID)) {
-    if (modelId.startsWith(prefix)) return p;
+export function priceForModel(modelId, options = {}) {
+  if (/^(?:openai\/)?(?:gpt-|chatgpt-|o[134](?:-|$))/.test(modelId || '')) {
+    const price = priceForOpenAIModel(modelId, options);
+    if (!price) throw new Error('OpenAI price is unverified for model ' + modelId);
+    return price;
   }
-  if (modelId.includes('fable'))  return PRICING_BY_ID['claude-fable-5'];
+  if (!modelId) return PRICING_PER_MTOK[MODELS.sonnet];
+  modelId = resolveModel(modelId);
+  for (const prefix of Object.keys(PRICING_BY_ID).sort((a, b) => b.length - a.length)) {
+    if (modelId === prefix || modelId.startsWith(prefix + '-') || modelId.startsWith(prefix + '[')) return PRICING_BY_ID[prefix];
+  }
+  if (modelId.includes('fable'))  return PRICING_PER_MTOK[MODELS.fable];
   if (modelId.includes('opus'))   return PRICING_PER_MTOK[MODELS.opus];
   if (modelId.includes('haiku'))  return PRICING_PER_MTOK[MODELS.haiku];
   return PRICING_PER_MTOK[MODELS.sonnet];
@@ -151,6 +344,9 @@ export const FALLBACK_PRICE = PRICING_PER_MTOK[MODELS.sonnet];
  * Short human-friendly name for a model ID ("opus" / "sonnet" / "haiku").
  */
 export function shortModelName(id) {
+  id = id ? resolveModel(id) : id;
+  if (/^(?:openai\/)?(?:gpt-|chatgpt-|o[134](?:-|$))/.test(id || '')) return shortOpenAIModelName(id);
+  if (id?.startsWith('claude-fable'))  return 'fable';
   if (id?.startsWith('claude-opus'))   return 'opus';
   if (id?.startsWith('claude-sonnet')) return 'sonnet';
   if (id?.startsWith('claude-haiku'))  return 'haiku';
@@ -164,6 +360,7 @@ export function shortModelName(id) {
  */
 export function selectModel(complexity = 'moderate') {
   switch (complexity) {
+    case 'fable':    return MODELS.fable; // explicit frontier opt-in, never inferred
     case 'complex':  return MODELS.opus;
     case 'moderate': return MODELS.sonnet;
     case 'simple':   return MODELS.haiku;
@@ -351,7 +548,7 @@ export function buildOutcome({ title, intent, successCriteria = [], disallow = [
       name: title,
       max_attempts: maxAttempts,
       evaluator: {
-        model: graderModel || MODELS.sonnet,
+        model: resolveModel(graderModel || MODELS.sonnet),
         rubric: rubricLines.join('\n'),
       },
     },
@@ -472,35 +669,6 @@ export function buildMcpServers(servers) {
   };
 }
 
-function sanitizeUnicodeString(value) {
-  let out = '';
-  for (let i = 0; i < value.length; i++) {
-    const code = value.charCodeAt(i);
-    if (code >= 0xD800 && code <= 0xDBFF) {
-      const next = value.charCodeAt(i + 1);
-      if (next >= 0xDC00 && next <= 0xDFFF) {
-        out += value[i] + value[i + 1];
-        i++;
-      } else out += '\uFFFD';
-    } else if (code >= 0xDC00 && code <= 0xDFFF) out += '\uFFFD';
-    else out += value[i];
-  }
-  return out;
-}
-
-export function sanitizeUnicodeScalars(value) {
-  if (typeof value === 'string') return sanitizeUnicodeString(value);
-  if (Array.isArray(value)) return value.map((item) => sanitizeUnicodeScalars(item));
-  if (value && typeof value === 'object') {
-    return Object.fromEntries(Object.entries(value).map(([key, entry]) => [key, sanitizeUnicodeScalars(entry)]));
-  }
-  return value;
-}
-
-export function safeJsonStringify(value) {
-  return JSON.stringify(sanitizeUnicodeScalars(value));
-}
-
 /**
  * Make a Claude API messages call via raw https (no SDK dependency).
  * Returns the parsed response or throws on error.
@@ -530,7 +698,7 @@ export function callClaude({ apiKey, model, maxTokens, system, messages, thinkin
   // S120 #3 — turn-classifier wire (SIL #612). Auto-route haiku-able turns
   // to haiku when classifier confidently identifies pure transform/short
   // transactional work. Caller can disable with turnClassify:false.
-  let routedModel = model;
+  let routedModel = resolveModel(model);
   let classifyTag = null;
   if (turnClassify && process.env.TURN_CLASSIFY_DISABLED !== '1') {
     try {
@@ -538,7 +706,7 @@ export function callClaude({ apiKey, model, maxTokens, system, messages, thinkin
       const prompt = lastUserMsg ? (typeof lastUserMsg.content === 'string' ? lastUserMsg.content : JSON.stringify(lastUserMsg.content)) : (system || '');
       const verdict = _classifyTurn({ prompt });
       if (verdict.model === 'haiku' && /opus|sonnet/i.test(model)) {
-        routedModel = 'claude-haiku-4-5-20251001';
+        routedModel = MODELS.haiku;
         classifyTag = `routing:turn-classifier-v1:${verdict.reason}`;
       } else if (verdict.model === 'opus' && /haiku|sonnet/i.test(model)) {
         routedModel = MODELS.opus;
@@ -561,7 +729,7 @@ export function callClaude({ apiKey, model, maxTokens, system, messages, thinkin
   } else if (system) {
     body.system = system;
   }
-  if (thinking) body.thinking = thinking;
+  if (thinking) body.thinking = normalizeThinking(routedModel, thinking);
 
   // G5/G9 — merge context_management edits (compaction + clear_tool_uses + clear_thinking)
   const cm = { edits: [] };
@@ -610,7 +778,7 @@ export function callClaude({ apiKey, model, maxTokens, system, messages, thinkin
     codeExecution:  !!codeExecution,
     outputConfig:   !!outputConfig,
   });
-  const payload = safeJsonStringify(body);
+  const payload = JSON.stringify(body);
 
   return new Promise((resolve, reject) => {
     const https = httpsModule;
@@ -785,7 +953,7 @@ export function uploadFile({ apiKey, filename, content, mimeType = 'text/plain' 
  * Returns `{ spent, remaining, overBudget }`.
  */
 export function trackSessionBudget({ usage, model, cap = 5.0 }) {
-  const price = PRICING_PER_MTOK[model] || FALLBACK_PRICE;
+  const price = priceForModel(model, { inputTokens: (usage.input_tokens || 0) + (usage.cache_read_input_tokens || 0) + (usage.cache_creation_input_tokens || 0) });
   const cost =
     (usage.input_tokens || 0)                 * price.input       / 1_000_000 +
     (usage.output_tokens || 0)                * price.output      / 1_000_000 +

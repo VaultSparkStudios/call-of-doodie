@@ -21,13 +21,14 @@ import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from './safe-spawn.mjs';
 import { getSecret, resolveCapability } from './secrets.mjs';
+import { brokeredAction } from './obelisk-broker.mjs';
 
 const ROOT = path.resolve(import.meta.dirname, '..', '..');
 const CACHE_PATH = path.join(ROOT, '.cache', 'capability-action-probes.json');
 export const PROBE_CACHE_MAX_AGE_HOURS = 6;
 
-function httpProbe(url, headers, expect) {
-  const res = spawnSync('curl', ['-sS', '--max-time', '15', '-o', '-', '-w', '\n%{http_code}', url,
+function httpProbe(url, headers, expect, spawn = spawnSync) {
+  const res = spawn('curl', ['-sS', '--max-time', '15', '-o', '-', '-w', '\n%{http_code}', url,
     ...Object.entries(headers).flatMap(([k, v]) => ['-H', `${k}: ${v}`])],
   { encoding: 'utf8', windowsHide: true, timeout: 20_000 });
   if (res.status !== 0) return { ok: false, detail: `probe unreachable: ${String(res.stderr || '').slice(0, 80)}` };
@@ -59,25 +60,26 @@ export const ACTION_PROBES = {
   },
   'github.org': {
     action: 'org PAT authenticates AND carries workflow scope',
-    probe: () => {
-      const pat = getSecret('ORG_PAT', 'github.org');
-      if (!pat) return { ok: false, detail: 'ORG_PAT absent' };
-      // os.devNull, not '/dev/null': Windows-native curl fails exit 23 writing
-      // to a literal /dev/null (observed live S266).
-      const res = spawnSync('curl', ['-sS', '--max-time', '15', '-o', os.devNull, '-D', '-',
-        'https://api.github.com/user', '-H', `Authorization: token ${pat}`],
-      { encoding: 'utf8', windowsHide: true, timeout: 20_000 });
-      if (res.status !== 0) return { ok: false, detail: 'probe unreachable' };
-      const scopesLine = res.stdout.split(/\r?\n/).find((l) => /^x-oauth-scopes:/i.test(l)) || '';
-      const scopes = scopesLine.replace(/^x-oauth-scopes:\s*/i, '').split(',').map((s) => s.trim()).filter(Boolean);
-      if (!/^HTTP\/\S+ 200/m.test(res.stdout)) return { ok: false, detail: 'PAT rejected (non-200)' };
-      // Fine-grained PATs expose no x-oauth-scopes header — authenticated but
-      // scope UNPROVEN is exactly the DEGRADED grade, never a fabricated pass.
-      if (!scopesLine) return { ok: false, detail: 'authenticates; scope header absent (fine-grained PAT) — workflow scope unproven' };
-      return scopes.includes('workflow') || scopes.includes('repo')
-        ? { ok: true, detail: `scopes: ${scopes.join(', ')}` }
-        : { ok: false, detail: `authenticates; scopes lack workflow/repo: ${scopes.join(', ') || 'none'}` };
-    },
+    probe: async ({ broker = brokeredAction, spawn = spawnSync } = {}) =>
+      broker('github.org', 'readiness-probe', async (resolve) => {
+        const pat = resolve('ORG_PAT');
+        if (!pat) return { ok: false, detail: 'ORG_PAT absent' };
+        // os.devNull, not '/dev/null': Windows-native curl fails exit 23 writing
+        // to a literal /dev/null (observed live S266).
+        const res = spawn('curl', ['-sS', '--max-time', '15', '-o', os.devNull, '-D', '-',
+          'https://api.github.com/user', '-H', `Authorization: token ${pat}`],
+        { encoding: 'utf8', windowsHide: true, timeout: 20_000 });
+        if (res.status !== 0) return { ok: false, detail: 'probe unreachable' };
+        const scopesLine = res.stdout.split(/\r?\n/).find((l) => /^x-oauth-scopes:/i.test(l)) || '';
+        const scopes = scopesLine.replace(/^x-oauth-scopes:\s*/i, '').split(',').map((s) => s.trim()).filter(Boolean);
+        if (!/^HTTP\/\S+ 200/m.test(res.stdout)) return { ok: false, detail: 'PAT rejected (non-200)' };
+        // Fine-grained PATs expose no x-oauth-scopes header — authenticated but
+        // scope UNPROVEN is exactly the DEGRADED grade, never a fabricated pass.
+        if (!scopesLine) return { ok: false, detail: 'authenticates; scope header absent (fine-grained PAT) — workflow scope unproven' };
+        return scopes.includes('workflow') || scopes.includes('repo')
+          ? { ok: true, detail: `scopes: ${scopes.join(', ')}` }
+          : { ok: false, detail: `authenticates; scopes lack workflow/repo: ${scopes.join(', ') || 'none'}` };
+      }),
   },
   'hetzner.ssh': {
     action: 'batch-mode ssh no-op as the configured identity',
@@ -95,14 +97,15 @@ export const ACTION_PROBES = {
   },
   'stripe.checkout': {
     action: 'secret key reads its own account (GET /v1/account)',
-    probe: () => {
-      const sk = getSecret('STRIPE_SECRET_KEY', 'stripe.checkout');
-      if (!sk) return { ok: false, detail: 'secret key absent' };
-      return httpProbe('https://api.stripe.com/v1/account', { Authorization: `Bearer ${sk}` },
-        (code) => code === '200'
-          ? { ok: true, detail: 'account readable (live key valid)' }
-          : { ok: false, detail: `account read HTTP ${code}` });
-    },
+    probe: async ({ broker = brokeredAction, probeHttp = httpProbe } = {}) =>
+      broker('stripe.checkout', 'readiness-probe', async (resolve) => {
+        const sk = resolve('STRIPE_SECRET_KEY');
+        if (!sk) return { ok: false, detail: 'secret key absent' };
+        return probeHttp('https://api.stripe.com/v1/account', { Authorization: `Bearer ${sk}` },
+          (code) => code === '200'
+            ? { ok: true, detail: 'account readable (live key valid)' }
+            : { ok: false, detail: `account read HTTP ${code}` });
+      }),
   },
   'claude.api': {
     action: 'API key authenticates (delegated to the CANON-015-approved probe-capability.mjs — no direct Anthropic caller here)',
@@ -130,16 +133,17 @@ export const ACTION_PROBES = {
   },
   'supabase.admin': {
     action: 'service-role key reads auth admin surface',
-    probe: () => {
-      const url = getSecret('SUPABASE_URL', 'supabase.admin');
-      const key = getSecret('SUPABASE_SERVICE_ROLE_KEY', 'supabase.admin');
-      if (!url || !key) return { ok: false, detail: 'url/key absent' };
-      return httpProbe(`${url.replace(/\/$/, '')}/auth/v1/admin/users?per_page=1`,
-        { apikey: key, Authorization: `Bearer ${key}` },
-        (code) => code === '200'
-          ? { ok: true, detail: 'admin users readable (service-role proven)' }
-          : { ok: false, detail: `admin read HTTP ${code} — anon key or revoked role?` });
-    },
+    probe: async ({ broker = brokeredAction, probeHttp = httpProbe } = {}) =>
+      broker('supabase.admin', 'readiness-probe', async (resolve) => {
+        const url = resolve('SUPABASE_URL');
+        const key = resolve('SUPABASE_SERVICE_ROLE_KEY');
+        if (!url || !key) return { ok: false, detail: 'url/key absent' };
+        return probeHttp(`${url.replace(/\/$/, '')}/auth/v1/admin/users?per_page=1`,
+          { apikey: key, Authorization: `Bearer ${key}` },
+          (code) => code === '200'
+            ? { ok: true, detail: 'admin users readable (service-role proven)' }
+            : { ok: false, detail: `admin read HTTP ${code} — anon key or revoked role?` });
+      }),
   },
 };
 
@@ -159,8 +163,15 @@ export function cacheEntryFresh(entry, nowMs = Date.now(), maxAgeHours = PROBE_C
  * @returns {{capability, presence, grade, action?, detail?, probedAt?, cached?}}
  *   grade ∈ 'ACTION-VERIFIED' | 'DEGRADED' | 'READY' (presence-only) | 'PARTIAL' | 'MISSING'
  */
-export function gradeCapability(capability, { refresh = false, nowMs = Date.now(), cachePath = CACHE_PATH, probes = ACTION_PROBES } = {}) {
-  const presence = resolveCapability(capability);
+export async function gradeCapability(capability, {
+  refresh = false,
+  nowMs = Date.now(),
+  cachePath = CACHE_PATH,
+  probes = ACTION_PROBES,
+  resolvePresence = resolveCapability,
+  probeDependencies = {},
+} = {}) {
+  const presence = resolvePresence(capability);
   const base = { capability, presence };
   if (!presence.ok) return { ...base, grade: presence.found?.length ? 'PARTIAL' : 'MISSING' };
   const spec = probes[capability];
@@ -171,7 +182,7 @@ export function gradeCapability(capability, { refresh = false, nowMs = Date.now(
     return { ...base, grade: cachedEntry.ok ? 'ACTION-VERIFIED' : 'DEGRADED', action: spec.action, detail: cachedEntry.detail, probedAt: cachedEntry.probedAt, cached: true };
   }
   let result;
-  try { result = spec.probe(); } catch (e) { result = { ok: false, detail: `probe threw: ${String(e.message).slice(0, 80)}` }; }
+  try { result = await spec.probe(probeDependencies); } catch (e) { result = { ok: false, detail: `probe threw: ${String(e.message).slice(0, 80)}` }; }
   const entry = { ok: Boolean(result.ok), detail: result.detail, probedAt: new Date(nowMs).toISOString() };
   try {
     const next = loadProbeCache(cachePath);

@@ -29,7 +29,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
-import { resolveSecretsRoot } from './lib/secrets.mjs';
+import { resolveSecretsRoot, describeCapability } from './lib/secrets.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -70,7 +70,8 @@ if (LIST) {
   console.log(`Capabilities not yet READY (${rows.length}):`);
   for (const r of rows) {
     const tag = r.signupUiOnly ? ' [signupUiOnly]' : '';
-    console.log(`  · ${r.cap.padEnd(28)} missing: ${r.missing.join(', ')}${tag}`);
+    // S313 [audit #1] — render the gateway's reason, never the raw missing array.
+    console.log(`  · ${r.cap.padEnd(28)} ${describeCapability(r)}${tag}`);
   }
   console.log(`\nTo intake one: 1) paste raw text into secrets/<cap>-paste.txt  2) node scripts/paste-credential.mjs <cap>`);
   process.exit(0);

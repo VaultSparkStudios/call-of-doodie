@@ -15,6 +15,7 @@
 //   node scripts/run-tests.mjs --shard=1/4    # run deterministic shard 1 of 4
 //   node scripts/run-tests.mjs --shards=4     # run all shards sequentially and aggregate JSON proof
 //   node scripts/run-tests.mjs --shards=64 --resume-shards --max-shards-per-run=8
+//   node scripts/run-tests.mjs --shard=1/4 --failure-sidecar=.cache/custom.ndjson
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -22,13 +23,36 @@ import { fileURLToPath } from 'node:url';
 import { execSync, spawnSync } from './lib/safe-spawn.mjs';
 import { isSpawnExhaustion, spawnBackoffMs, spawnResilient } from './lib/spawn-resilience.mjs';
 import { getHostLoad } from './lib/host-load.mjs';
+import { discoverSuiteFiles, tierOf } from './lib/test-discovery.mjs';
 import { readDurationCache, recordDuration, sortByHistoricalDuration, writeDurationCache } from './lib/test-duration-ordering.mjs';
 import { buildProofSourceManifest } from './lib/proof-source-manifest.mjs';
+import { buildShardSourcePlan, shardDependencyGraph } from './lib/shard-proof-sources.mjs';
 import { liveStateBlockedMessage, missingLiveState } from './lib/test-live-state.mjs';
-import { updateProjectStatusFile } from './lib/write-project-status.mjs';
+import { envBlockedEntry, PRECONDITION_ABSENT, HOST_SPAWN_EXHAUSTED } from './lib/env-blocked.mjs';
+import { writeProjectStatus } from './lib/write-project-status.mjs';
 // Re-export the pure helpers so existing importers of run-tests keep working and the
 // single source of truth stays scripts/lib/spawn-resilience.mjs.
 export { isSpawnExhaustion, spawnBackoffMs };
+
+/**
+ * Was this test file modified after the suite started?
+ *
+ * S334. `flaky` means "same input, different result". The isolation-retry runs minutes
+ * after the first attempt, so on a long suite an author can edit the file in between —
+ * which happened this session: three files failed early in a 608-file run, were FIXED
+ * while it was still going, passed on retry, and were written into
+ * portfolio/FLAKY_HISTORY.json, where a chronic-flake probe escalates any file seen in
+ * ≥3 consecutive sessions. A false flake is a durable poisoning of a trend signal.
+ *
+ * Exported so the claim is testable rather than asserted. Absent or unreadable timing is
+ * `false` — NOT proof the file changed — because the fail-safe direction here is to leave
+ * the file eligible for the flaky classification it would have received anyway.
+ */
+export function wasEditedDuringRun(mtimeMs, suiteStartedMs) {
+  if (!Number.isFinite(mtimeMs) || !Number.isFinite(suiteStartedMs)) return false;
+  return mtimeMs > suiteStartedMs;
+}
+
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DURATION_CACHE = path.join(ROOT, '.cache', 'test-durations.json');
@@ -45,6 +69,7 @@ const SHARD_COUNT = parsePositiveInt((argv.find(a => a.startsWith('--shards=')) 
 const RESUME_SHARDS = argv.includes('--resume-shards');
 const MAX_SHARDS_PER_RUN = parsePositiveInt((argv.find(a => a.startsWith('--max-shards-per-run=')) || '').split('=')[1]);
 const PROOF_DIR_ARG = (argv.find(a => a.startsWith('--proof-dir=')) || '').split('=')[1] || '';
+const FAILURE_SIDECAR_ARG = (argv.find(a => a.startsWith('--failure-sidecar=')) || '').split('=')[1] || '';
 // --changed runs a SUBSET, so it must never overwrite the canonical PROJECT_STATUS
 // test counts (that would report a partial run as the whole suite). Always no-write.
 // Shards also run a subset. Only the aggregate --shards=N command may write the
@@ -74,10 +99,12 @@ function discover() {
   const files = [];
   const testDir = path.join(ROOT, 'scripts', 'test');
   if (fs.existsSync(testDir)) {
-    for (const f of fs.readdirSync(testDir)) {
-      if (f.startsWith('_') || !/\.mjs$/.test(f)) continue;
+    // S313 [audit #2] — one shared definition of "the suite", imported by this runner and
+    // by refresh-test-count. They previously disagreed by 59 files and the narrower one
+    // was the founder-facing surface.
+    for (const f of discoverSuiteFiles(testDir)) {
       if (TIER && !f.startsWith(`tier${TIER}-`)) continue;
-      files.push({ tier: f.match(/^tier(\d)/)?.[1] || '?', path: path.join(testDir, f), kind: 'node' });
+      files.push({ tier: tierOf(f), path: path.join(testDir, f), kind: 'node' });
     }
   }
   // Legacy scripts/test-*.mjs (keep running for backward compat)
@@ -140,17 +167,18 @@ export function stableProofHash(value) {
   return (hash >>> 0).toString(16).padStart(8, '0');
 }
 
-export function shardProofShape({ files = [], shardCount = null, passthrough = [] } = {}) {
+export function shardProofShape({ files = [], shardCount = null, shardIndex = null, passthrough = [], root = ROOT, proofSources = null } = {}) {
   const filePaths = files
-    .map(f => path.relative(ROOT, f.path || String(f)).replace(/\\/g, '/'))
+    .map(f => path.relative(root, f.path || String(f)).replace(/\\/g, '/'))
     .sort();
   const normalizedArgs = [...passthrough].sort();
   return {
     totalFiles: filePaths.length,
     filesHash: stableProofHash(filePaths),
     shardCount,
+    shardIndex,
     argsHash: stableProofHash(normalizedArgs),
-    proofSources: buildProofSourceManifest(ROOT),
+    proofSources: proofSources || buildProofSourceManifest(root),
   };
 }
 
@@ -159,6 +187,7 @@ export function proofShapeMatches(actual, expected) {
   return actual.totalFiles === expected.totalFiles
     && actual.filesHash === expected.filesHash
     && actual.shardCount === expected.shardCount
+    && (actual.shardIndex ?? null) === (expected.shardIndex ?? null)
     && actual.argsHash === expected.argsHash
     && actual.proofSources?.schemaVersion === expected.proofSources?.schemaVersion
     && actual.proofSources?.rootHash === expected.proofSources?.rootHash;
@@ -174,6 +203,7 @@ export function reusableShardProof(proof, { shardCount, shardIndex, proofShape =
     && !proof.signal
     && parsed.failures === 0
     && !(parsed.envBlocked || []).length
+    && !(parsed.inconclusive || []).length
     && !(parsed.deferred || []).length
     && !parsed.budgetExhausted;
 }
@@ -195,6 +225,22 @@ export function classifyAfterRetry(retry) {
   return 'fail';
 }
 
+// S286 full-suite-timeout-truth — a process timeout produces no assertion
+// verdict. Changed mode keeps its existing deferred classification; full mode
+// uses a distinct inconclusive status so it is neither a phantom red nor green.
+export function timeoutResult({ file, tier, changed = false, timeoutMs }) {
+  return {
+    file,
+    tier,
+    pass: 0,
+    total: 0,
+    status: changed ? 'deferred-changed-timeout' : 'inconclusive-timeout',
+    output: changed
+      ? `deferred in --changed mode after ${timeoutMs}ms timeout; run full suite or this file directly for full coverage; NOT counted green`
+      : `inconclusive after ${timeoutMs}ms full-mode timeout; no assertion verdict was produced — run this file directly on a quiet host; NOT counted green, NOT a regression`,
+  };
+}
+
 // S190 [SIL S189 #2] test-runner failures-only streaming sidecar.
 // A long buffered run (`run-tests | tail`) shows NOTHING until it finishes AND
 // `| tail` truncates the per-file failure detail you actually need — this cost
@@ -203,7 +249,41 @@ export function classifyAfterRetry(retry) {
 // `| tail`) and append every FAILURE to a live ndjson sidecar the instant it
 // resolves, so `tail -f .cache/test-failures.ndjson` makes any run observable in
 // real time. Both helpers below are pure + unit-tested (tier1-test-failure-sidecar).
-export const SIDECAR_PATH = path.join(ROOT, '.cache', 'test-failures.ndjson');
+export function defaultFailureSidecarPath(root, shardSpec = '') {
+  const shard = parseShardSpec(shardSpec);
+  return shard
+    ? path.join(root, '.cache', 'test-shards', 'manual', `shard-${shard.index}-of-${shard.total}.failures.ndjson`)
+    : path.join(root, '.cache', 'test-failures.ndjson');
+}
+
+export const SIDECAR_PATH = path.resolve(FAILURE_SIDECAR_ARG || defaultFailureSidecarPath(ROOT, SHARD_SPEC));
+
+export function shardFailureSidecarPath(proofDir, shardCount, shardIndex) {
+  return path.join(proofDir, `shard-${shardIndex}-of-${shardCount}.failures.ndjson`);
+}
+
+export function mergeShardFailureLedgers(shards = []) {
+  const merged = [];
+  const seen = new Set();
+  for (const shard of shards) {
+    let lines = [];
+    try { lines = fs.readFileSync(shard.path, 'utf8').split(/\r?\n/).filter(Boolean); } catch { continue; }
+    for (const line of lines) {
+      try {
+        const record = JSON.parse(line);
+        const enriched = { ...record, shard: shard.shard, sourceSidecar: String(shard.sourceSidecar || '').replace(/\\/g, '/') };
+        const key = JSON.stringify(enriched);
+        if (!seen.has(key)) { seen.add(key); merged.push(enriched); }
+      } catch { /* malformed shard telemetry is excluded from the merged ledger */ }
+    }
+  }
+  return merged;
+}
+
+export function writeFailureLedger(target, records = []) {
+  fs.mkdirSync(path.dirname(target), { recursive: true });
+  fs.writeFileSync(target, records.map((record) => JSON.stringify(record)).join('\n') + (records.length ? '\n' : ''), 'utf8');
+}
 
 // Extract the single most diagnostic line from a captured test output blob.
 // Prefers a line that looks like an assertion/failure/error; falls back to the
@@ -242,7 +322,7 @@ export function lastFailureCause(output) {
 
 // One fixed-width progress line per resolved file (streamed to stderr).
 export function formatProgressLine(i, n, r) {
-  const mark = r.status === 'pass' || r.status === 'covered-directly' ? '✓' : r.status === 'flaky' ? '⚠' : r.status === 'inconclusive' ? '◐' : r.status === 'env-blocked' ? '⊘' : '⛔';
+  const mark = r.status === 'pass' || r.status === 'covered-directly' ? '✓' : r.status === 'flaky' ? '⚠' : String(r.status || '').startsWith('inconclusive') ? '◐' : r.status === 'env-blocked' ? '⊘' : '⛔';
   const idx = `${String(i).padStart(String(n).length)}/${n}`;
   return `[${idx}] ${mark} T${String(r.tier).padEnd(6)} ${String(r.file).padEnd(46)} ${r.pass}/${r.total}`;
 }
@@ -256,7 +336,11 @@ export function formatProgressLine(i, n, r) {
 // in scripts/lib/spawn-resilience.mjs, shared with refresh-test-count.mjs so the two
 // test-spawning surfaces can never drift apart again (S153/S159 divergence lesson).
 const SPAWN_RETRIES = parseInt(process.env.TEST_SPAWN_RETRIES || '5', 10);
-const CHANGED_FILE_TIMEOUT_MS = parseInt(process.env.TEST_CHANGED_FILE_TIMEOUT_MS || '60000', 10);
+// S338 — moved to lib/test-file-timeout.mjs so refresh-test-count.mjs uses the SAME
+// budget (it had hardcoded 60s/150s and dropped files this runner passed). Re-exported
+// here because existing tests import testFileTimeoutMs from run-tests.mjs.
+import { testFileTimeoutMs, CHANGED_FILE_TIMEOUT_MS } from './lib/test-file-timeout.mjs';
+export { testFileTimeoutMs };
 const CHANGED_HEAVY_DEFER = new Set([
   'scripts/test/tier1-doctor-probes.mjs',
 ]);
@@ -292,7 +376,22 @@ export function coveredDirectlyResult(file, proof) {
   };
 }
 
-export function cleanupLeakedTestNodeChildren(root = ROOT, { spawnSyncFn = spawnSync } = {}) {
+// S341 [audit #1] = [S338 #14] — ownership is PARENTAGE, never command text.
+import { ownedKillPlan } from './lib/process-tree.mjs';
+
+/**
+ * Stop node children leaked by a timed-out test file — and ONLY those.
+ *
+ * This used to stop every node.exe whose command line matched this repo's
+ * `scripts/test` or `run-doctor.mjs`. Several agent sessions share this checkout, so
+ * that selector matches another session's live doctor as readily as our own orphan;
+ * S338 killed a Codex session's doctor with exactly this shape. Command text is now a
+ * NARROWING filter only: a candidate is stopped when its ancestry reaches this runner
+ * or the timed-out child it spawned. The child is normally already dead, so adoption
+ * through it requires a creation time at or after the spawn (a recycled PID cannot
+ * adopt a stranger). Refusals are counted, not hidden.
+ */
+export function cleanupLeakedTestNodeChildren(root = ROOT, { spawnSyncFn = spawnSync, rootPids = [process.pid], notBeforeMs = null } = {}) {
   if (process.platform !== 'win32') return { attempted: false, killed: 0, reason: 'non-windows' };
   const escapedRoot = root.replace(/'/g, "''");
   const ps = [
@@ -300,9 +399,9 @@ export function cleanupLeakedTestNodeChildren(root = ROOT, { spawnSyncFn = spawn
     `$root = '${escapedRoot}'`,
     '$self = $PID',
     "$procs = Get-CimInstance Win32_Process -Filter \"name = 'node.exe'\" | Where-Object { $_.ProcessId -ne $self -and $_.CommandLine -like \"*$root*\" -and $_.CommandLine -match 'scripts[\\\\/]+(test|run-doctor\\.mjs)' }",
-    '$ids = @($procs | Select-Object -ExpandProperty ProcessId)',
-    'foreach ($id in $ids) { Stop-Process -Id $id -Force -ErrorAction SilentlyContinue }',
-    '$ids.Count',
+    '$cand = @($procs | Select-Object -ExpandProperty ProcessId)',
+    '$all = @(Get-CimInstance Win32_Process | ForEach-Object { [pscustomobject]@{ pid = [int]$_.ProcessId; ppid = [int]$_.ParentProcessId; createdMs = $(if ($_.CreationDate) { [DateTimeOffset]::new($_.CreationDate).ToUnixTimeMilliseconds() } else { $null }) } })',
+    '@{ cand = $cand; all = $all } | ConvertTo-Json -Compress -Depth 4',
   ].join('; ');
   const res = spawnSyncFn('powershell', ['-NoProfile', '-Command', ps], {
     cwd: root,
@@ -310,8 +409,18 @@ export function cleanupLeakedTestNodeChildren(root = ROOT, { spawnSyncFn = spawn
     timeout: 15_000,
     windowsHide: true,
   });
-  const killed = Number(String(res.stdout || '').trim()) || 0;
-  return { attempted: true, killed, code: res.status ?? -1 };
+  let table;
+  try { table = JSON.parse(String(res.stdout || '').trim()); } catch {
+    // No table, no ownership proof — kill nothing rather than guess.
+    return { attempted: true, killed: 0, refused: 0, code: res.status ?? -1, reason: 'process table unreadable — nothing stopped' };
+  }
+  const plan = ownedKillPlan({ rootPids, rows: [].concat(table?.all ?? []), candidates: [].concat(table?.cand ?? []), notBeforeMs });
+  if (plan.kill.length) {
+    spawnSyncFn('powershell', ['-NoProfile', '-Command', `Stop-Process -Id ${plan.kill.join(',')} -Force -ErrorAction SilentlyContinue`], {
+      cwd: root, encoding: 'utf8', timeout: 15_000, windowsHide: true,
+    });
+  }
+  return { attempted: true, killed: plan.kill.length, refused: plan.refused.length, code: res.status ?? -1 };
 }
 function runOne(file, { spawnRetries = SPAWN_RETRIES } = {}) {
   const relFile = path.relative(ROOT, file.path).replace(/\\/g, '/');
@@ -328,6 +437,10 @@ function runOne(file, { spawnRetries = SPAWN_RETRIES } = {}) {
     return {
       file: relFile, tier: file.tier, pass: 0, total: 0,
       status: 'env-blocked',
+      // S336 [audit #2] — 'env-blocked' carries two structurally different causes.
+      // This one is decided BEFORE any spawn and is unaffected by host load, so it
+      // must not inherit the "re-run on a quieter host" advice.
+      envBlockedCause: PRECONDITION_ABSENT,
       output: liveStateBlockedMessage(liveState.missing),
     };
   }
@@ -360,12 +473,15 @@ function runOne(file, { spawnRetries = SPAWN_RETRIES } = {}) {
   const args = isTsx ? ['tsx', path.basename(file.path)] : [file.path];
   // IGNIS tests must run from ignis/src (relative imports + tsconfig). Other tests run from repo root.
   const cwd = isTsx ? path.dirname(file.path) : ROOT;
-  // 300s budget — tier2-propagate-dry-run walks 26 sibling repos via bash on
-  // Windows (~2.5min cold). CI on Linux is well under this; the buffer is
-  // harmless. If a test legitimately needs more, it must self-skip via env.
+  // Default full-file budget is 300s. The named fleet propagation walker gets
+  // 720s on full runs because the current sequential Windows walk is measured
+  // beyond six minutes; changed mode remains strictly bounded.
   // windowsHide stays belt-and-suspenders for the tsx (shell:true) path; for node
   // files no shell spawns so it is moot but harmless.
-  const opts = { cwd, encoding: 'utf8', timeout: CHANGED ? CHANGED_FILE_TIMEOUT_MS : 300000, shell: isTsx, windowsHide: true };
+  const timeoutMs = testFileTimeoutMs(file, { changed: CHANGED });
+  const opts = { cwd, encoding: 'utf8', timeout: timeoutMs, shell: isTsx, windowsHide: true };
+  // S341 [audit #1] — the spawn instant bounds which orphans of this child we may claim.
+  const spawnedAtMs = Date.now();
   const { res, spawnRetries: attempt, envBlocked } = spawnResilient(spawnSync, cmd, args, opts, { retries: spawnRetries });
   // Still unspawnable after backoff → host genuinely saturated. Honest 'env-blocked':
   // not a test result at all (pass/total 0), surfaced distinctly, never red, never green.
@@ -373,20 +489,20 @@ function runOne(file, { spawnRetries = SPAWN_RETRIES } = {}) {
     return {
       file: path.relative(ROOT, file.path), tier: file.tier, pass: 0, total: 0,
       status: 'env-blocked', spawnRetries: attempt,
+      envBlockedCause: HOST_SPAWN_EXHAUSTED,
       output: `spawn ${res.error?.code || 'error'} after ${attempt} backoff retries — host process/handle table saturated (concurrent sessions); NOT a test regression`,
     };
   }
   const out = (res.stdout || '') + (res.stderr || '');
   const timedOut = res.status === null || res.signal === 'SIGTERM' || /timed out/i.test(String(res.error?.message || ''));
   if (timedOut) {
-    cleanupLeakedTestNodeChildren(ROOT);
-    if (CHANGED) {
-      return {
-        file: relFile, tier: file.tier, pass: 0, total: 0,
-        status: 'deferred-changed-timeout',
-        output: `deferred in --changed mode after ${CHANGED_FILE_TIMEOUT_MS}ms timeout; run full suite or this file directly for full coverage; NOT counted green`,
-      };
-    }
+    cleanupLeakedTestNodeChildren(ROOT, { rootPids: [process.pid, res.pid].filter(Number.isInteger), notBeforeMs: spawnedAtMs });
+    return timeoutResult({
+      file: relFile,
+      tier: file.tier,
+      changed: CHANGED,
+      timeoutMs,
+    });
   }
   // harness format: "<label>  <pass>/<total>  [✓|⛔ N FAIL]"
   const m = out.match(/(\S+)\s+(\d+)\/(\d+)\s+(.+)$/m);
@@ -469,6 +585,14 @@ function filterToChanged(allFiles) {
 // env-blocked signal is a pre-emptive heads-up, not a post-hoc surprise. Pure +
 // testable: returns the advisory string ('' when host looks idle — no noise).
 export function hostPreflightAdvisory(load, fileCount) {
+  // S290 [audit #1] — an unread census used to return '' here, i.e. exactly what a
+  // measured-quiet host returns. The suite still runs in full (deferring tests on a
+  // guess would be worse), but the operator is told the host was never measured
+  // rather than being shown the silence that means "quiet".
+  if (load && load.measured !== true) {
+    return `⚠ host-load preflight: host load UNMEASURED${load.reason ? ` (${load.reason})` : ''} — `
+      + `running all ${fileCount} test file(s) in full; env-blocked results, if any, are not evidence of a code regression.`;
+  }
   if (!load || load.error || load.nodeCount < 0 || !load.saturated) return '';
   return `⚠ host-load preflight: ${load.nodeCount} node procs running (host saturated) — `
     + `env-blocked likely on some of the ${fileCount} test file(s) under concurrent-session load. `
@@ -503,25 +627,38 @@ export function isDeferrableUnderLoad(file) {
 // in CI they are reported as deferred-ci-env (not green, not red) so portable
 // regressions keep failing while machine-local contracts do not pretend to apply.
 export const CI_LOCAL_STATE_TESTS = new Set([
+  'credential-governance.test.mjs',
   'lifecycle.test.mjs',
   'protocol-invariants.mjs',
+  'test-email-delivery-plane.mjs',
   'tier1-doctor-probes.mjs',
   'tier1-gateway-credential-test-honesty.mjs',
   'tier1-host-aware-scheduler.mjs',
+  'tier1-release-gate-scope-no-write.mjs',
   'tier1-session-lock.mjs',
   'tier1-sil-migration.mjs',
   'tier1-skill-profile.mjs',
   'tier1-v40-ships.mjs',
   'tier2-canon-019-propagation.mjs',
   'tier2-canon-038-shared-selfhost.mjs',
+  'tier2-canon-artifact-claims.mjs',
+  'tier2-capability-action-probes.mjs',
+  'tier2-context-wipe-guard.mjs',
+  'tier2-email-delivery-ledger.mjs',
+  'tier2-internal-tools-coverage.mjs',
+  'tier2-loop-b-recurrence.mjs',
   'tier2-migrate-sil-idempotent.mjs',
   'tier2-medium-overlays-parity.mjs',
   'tier2-mirror-gh-secrets.mjs',
   'tier2-model-routing.mjs',
   'tier2-package-trust-sweep.mjs',
   'tier2-portfolio-debt.mjs',
+  'tier2-protocol-skill-parity.mjs',
   'tier2-s142-utility-scripts.mjs',
   'tier2-skill-body-overlay-wired.mjs',
+  'tier2-session-trace-identity.mjs',
+  'tier2-stalled-onboarding-followup.mjs',
+  'tier2-studio-oracle.mjs',
   'tier2-unmapped-warnings-gate.mjs',
   'tier2-unregistered-maps.mjs',
   'tier3-ark-end-to-end-loop.mjs',
@@ -623,6 +760,7 @@ for (let idx = 0; idx < files.length; idx++) {
   results.push(r);
   if (STREAM) process.stderr.write(formatProgressLine(idx + 1, files.length, r) + '\n');
   if (r.status === 'fail') sidecar({ phase: 'run', i: idx + 1, file: r.file, tier: r.tier, pass: r.pass, total: r.total, cause: lastFailureCause(r.output) });
+  else if (r.status === 'inconclusive-timeout') sidecar({ phase: 'run', i: idx + 1, file: r.file, tier: r.tier, pass: 0, total: 0, status: r.status, cause: r.output });
   // S203: env-blocked (could not spawn after backoff) is logged distinctly so a
   // saturated-host run is observable and never silently absorbed (CANON-031).
   else if (r.status === 'env-blocked') sidecar({ phase: 'run', i: idx + 1, file: r.file, tier: r.tier, status: 'env-blocked', spawnRetries: r.spawnRetries, cause: r.output });
@@ -644,16 +782,44 @@ if (CHANGED && durationCache) writeDurationCache(DURATION_CACHE, durationCache);
 // honesty). A genuine failure fails both in-suite and solo and stays red.
 const RETRY = !argv.includes('--no-retry');
 const flaky = [];
+// S334 — files edited while the suite was running. Green, but explicitly NOT flaky.
+const changedDuringRun = [];
 const inconclusive = [];
 if (RETRY) {
   for (const r of results) {
     if (r.status !== 'fail') continue;
     const file = files.find(f => path.relative(ROOT, f.path) === r.file);
     if (!file) continue;
+    // S334 — A FILE THAT CHANGED BETWEEN ATTEMPTS IS NOT A FLAKY FILE.
+    //
+    // `flaky` means "same input, different result". The retry runs minutes after the
+    // first attempt, and on a long suite an author can edit the file in between — which
+    // is exactly what happened this session: three files failed early in the run, were
+    // FIXED while it was still going, and passed on retry. They were recorded flaky, and
+    // `recordFlaky` wrote them into portfolio/FLAKY_HISTORY.json, where a chronic-flake
+    // probe escalates a file seen ≥3 consecutive sessions. A false flake is a durable
+    // poisoning of a trend signal, and it is cheap to rule out.
+    // The discriminator is mtime against the suite's own start: a test file modified
+    // after this run began was not the same input on both attempts, so a pass on retry
+    // says nothing about stability. Compared against suiteStartedAt rather than
+    // bracketing the retry itself, because the edit lands between the FIRST attempt and
+    // the retry — bracketing the retry would miss every real instance.
+    let editedMidRun = false;
+    try { editedMidRun = wasEditedDuringRun(fs.statSync(file.path).mtimeMs, suiteStartedAt); }
+    catch { /* unreadable → cannot claim it changed, so it stays eligible for 'flaky' */ }
     const retry = runOne(file);
     // Always adopt the retry's detail (more informative, post-suite-noise).
     r.pass = retry.pass; r.total = retry.total; r.output = retry.output;
-    if (retry.status === 'pass') { r.status = 'flaky'; flaky.push(r.file); }
+    if (retry.status === 'pass') {
+      if (editedMidRun) {
+        r.status = 'pass';
+        r.changedDuringRun = true;
+        changedDuringRun.push(r.file);
+      } else {
+        r.status = 'flaky';
+        flaky.push(r.file);
+      }
+    }
     // S167 [audit #2] test-runner-inconclusive-honesty. After the solo retry a
     // file can STILL exit non-zero while EVERY assertion it reported passed
     // (harness printed "N/N ✓" but the process exit code is non-zero). On
@@ -701,7 +867,10 @@ const failedFiles = results.filter(r => r.status === 'fail');
 // S203 [SIL][S202 #1]: files the OS could not spawn even after backoff retries.
 // Reported distinctly — never counted green (no fabrication), never red (not a
 // regression). On a clean host the backoff drives this to 0 and the suite is fully green.
-const envBlocked = results.filter(r => r.status === 'env-blocked').map(r => r.file);
+// S336 [audit #2] — {file, cause, detail} entries, the one shape both test-spawn
+// surfaces write, so the doctor can give cause-correct remediation advice.
+const envBlocked = results.filter(r => r.status === 'env-blocked')
+  .map(r => envBlockedEntry(r.file, r.envBlockedCause, r.output));
 // S205 [SIL][S204 #2]: deliberately-deferred slow sibling-walkers (host saturated)
 // plus suite-budget-deferred files. Both are honest smaller-green buckets.
 const hostDeferred = results.filter(r => r.status === 'deferred-host-saturated').map(r => r.file);
@@ -709,21 +878,24 @@ const budgetDeferred = results.filter(r => r.status === 'deferred-budget-exhaust
 const ciDeferred = results.filter(r => r.status === 'deferred-ci-env').map(r => r.file);
 const changedDeferred = results.filter(r => r.status === 'deferred-changed-heavy' || r.status === 'deferred-changed-timeout').map(r => r.file);
 const deferred = [...hostDeferred, ...budgetDeferred, ...ciDeferred, ...changedDeferred];
+const timeoutInconclusive = results.filter(r => r.status === 'inconclusive-timeout').map(r => r.file);
+const reportedInconclusive = [...new Set([...inconclusive, ...timeoutInconclusive])];
 
 // Final sidecar line so a `tail -f` watcher sees the run resolve (and a consumer
 // can read one summary record without parsing the human/JSON output).
-sidecar({ phase: 'summary', totalPass, totalAll, files: results.length, failures: failedFiles.length, flaky: flaky.length, inconclusive: inconclusive.length, envBlocked: envBlocked.length, deferred: deferred.length, budgetExhausted, ok: failedFiles.length === 0 });
+sidecar({ phase: 'summary', totalPass, totalAll, files: results.length, failures: failedFiles.length, flaky: flaky.length, inconclusive: reportedInconclusive.length, envBlocked: envBlocked.length, deferred: deferred.length, budgetExhausted, ok: failedFiles.length === 0 && timeoutInconclusive.length === 0 });
 
 if (JSON_OUT) {
-  console.log(JSON.stringify({ totalPass, totalAll, files: results.length, failures: failedFiles.length, flaky, inconclusive, envBlocked, deferred, budgetExhausted, budgetSeconds: BUDGET_SECONDS, results }, null, 2));
+  console.log(JSON.stringify({ totalPass, totalAll, files: results.length, failures: failedFiles.length, flaky, changedDuringRun, inconclusive: reportedInconclusive, envBlocked, deferred, budgetExhausted, budgetSeconds: BUDGET_SECONDS, results }, null, 2));
 } else {
   console.log('\nStudio Ops test suite');
   console.log('─'.repeat(70));
   for (const r of results) {
-    const mark = r.status === 'pass' || r.status === 'covered-directly' ? '✓' : r.status === 'flaky' ? '⚠' : r.status === 'inconclusive' ? '◐' : r.status === 'env-blocked' ? '⊘' : r.status === 'deferred-host-saturated' || r.status === 'deferred-ci-env' || r.status === 'deferred-changed-heavy' || r.status === 'deferred-changed-timeout' ? '⏸' : '⛔';
+    const mark = r.status === 'pass' || r.status === 'covered-directly' ? '✓' : r.status === 'flaky' ? '⚠' : String(r.status || '').startsWith('inconclusive') ? '◐' : r.status === 'env-blocked' ? '⊘' : r.status === 'deferred-host-saturated' || r.status === 'deferred-ci-env' || r.status === 'deferred-changed-heavy' || r.status === 'deferred-changed-timeout' ? '⏸' : '⛔';
     const tag = r.status === 'covered-directly' ? '  (COVERED - same-session direct focused proof)'
       : r.status === 'flaky' ? '  (FLAKY — passed on isolated retry)'
       : r.status === 'inconclusive' ? '  (INCONCLUSIVE — all assertions passed; non-zero exit, likely load/teardown race)'
+      : r.status === 'inconclusive-timeout' ? '  (INCONCLUSIVE — full-mode timeout produced no assertion verdict; NOT counted green, NOT a regression)'
       : r.status === 'env-blocked' ? `  (ENV-BLOCKED — host could not spawn after ${r.spawnRetries} backoff retries; NOT a regression)`
       : r.status === 'deferred-host-saturated' ? '  (DEFERRED — slow sibling-walker, host saturated; run on a quiet host or --force-slow; NOT counted green)'
       : r.status === 'deferred-ci-env' ? '  (DEFERRED — CI lacks local Studio machine state; run locally or --force-ci-env; NOT counted green)'
@@ -732,7 +904,7 @@ if (JSON_OUT) {
       : r.status === 'deferred-budget-exhausted' ? `  (DEFERRED — suite budget exhausted after ${BUDGET_SECONDS}s; NOT counted green)`
       : '';
     console.log(`  ${mark}  [T${r.tier.padEnd(6)}] ${r.file.padEnd(44)} ${r.pass}/${r.total}${tag}`);
-    if (r.status === 'fail') {
+    if (r.status === 'fail' || r.status === 'inconclusive-timeout') {
       for (const line of r.output.split('\n').slice(-5)) console.log(`       ${line}`);
     }
   }
@@ -741,7 +913,13 @@ if (JSON_OUT) {
   // regress) but is named distinctly so the suite signal never silently masks it.
   const passFiles = results.filter(r => r.status === 'pass' || r.status === 'covered-directly' || r.status === 'flaky' || r.status === 'inconclusive').length;
   const flakyNote = flaky.length ? ` · ${flaky.length} flaky (passed on isolated retry)` : '';
-  const incNote = inconclusive.length ? ` · ${inconclusive.length} inconclusive (assertions green, non-zero exit)` : '';
+  // S334 — surfaced separately so a mid-run edit is never counted as instability.
+  const changedNote = changedDuringRun.length ? ` · ${changedDuringRun.length} edited mid-run (green on retry; NOT flaky — different input)` : '';
+  const incParts = [
+    ...(inconclusive.length ? [`${inconclusive.length} assertions-green/non-zero-exit`] : []),
+    ...(timeoutInconclusive.length ? [`${timeoutInconclusive.length} full-mode timeout (no verdict)`] : []),
+  ].join(', ');
+  const incNote = reportedInconclusive.length ? ` · ${reportedInconclusive.length} inconclusive (${incParts}; not counted green)` : '';
   // env-blocked surfaced distinctly — neither green nor red (CANON-031 honesty).
   const envNote = envBlocked.length ? ` · ${envBlocked.length} env-blocked (host could not spawn; backoff exhausted)` : '';
   // S205 [SIL][S204 #2] deferred surfaced distinctly — a deliberate smaller-green, not a full pass.
@@ -752,31 +930,40 @@ if (JSON_OUT) {
     ...(changedDeferred.length ? [`${changedDeferred.length} changed-mode`] : []),
   ].join(', ');
   const defNote = deferred.length ? ` · ${deferred.length} deferred (${defKinds}; not counted green)` : '';
-  console.log(`  ${totalPass}/${totalAll} assertions · ${passFiles}/${results.length} files${flakyNote}${incNote}${envNote}${defNote} · ${failedFiles.length ? '⛔' : deferred.length ? '✓ (smaller-green)' : '✓'}`);
-  if (failedFiles.length || envBlocked.length) console.log(`  live failures sidecar: ${path.relative(ROOT, SIDECAR_PATH)}  (tail -f during a long run)`);
+  console.log(`  ${totalPass}/${totalAll} assertions · ${passFiles}/${results.length} files${flakyNote}${changedNote}${incNote}${envNote}${defNote} · ${failedFiles.length ? '⛔' : timeoutInconclusive.length ? '◐ (inconclusive)' : deferred.length ? '✓ (smaller-green)' : '✓'}`);
+  if (failedFiles.length || timeoutInconclusive.length || envBlocked.length) console.log(`  live failures sidecar: ${path.relative(ROOT, SIDECAR_PATH)}  (tail -f during a long run)`);
 }
 
 if (!NO_WRITE) {
   const sp = path.join(ROOT, 'context', 'PROJECT_STATUS.json');
   try {
-    let writtenStatus = null;
+    const j = JSON.parse(fs.readFileSync(sp, 'utf8'));
     // S160 audit #4: refresh-test-count.mjs is the SOLE owner of the canonical file-level
     // testsPassing/testsTotal (the .cache/test-count.json source the brief + doctor read).
     // run-tests.mjs scans a different, fuller set (153 files / assertion granularity) than
     // refresh-test-count (113 files), so writing those same fields here made last-writer-wins
     // flip the numbers (855/858 assertions vs 113/113 files) and the doctor Test-suite probe
     // contradict the Test-signal-fresh probe + brief. Keep ONLY assertion-level detail here.
-    const assertionsLastRun = new Date().toISOString().slice(0, 10);
-    const update = updateProjectStatusFile(sp, (j) => {
-      j.testsAssertionsTotal = totalAll;
-      j.testsAssertionsPassing = totalPass;
-      j.testsAssertionsFiles = results.length;
+    j.testsAssertionsTotal = totalAll;
+    j.testsAssertionsPassing = totalPass;
+    j.testsAssertionsFiles = results.length;
+    // S334 [audit #6] — the counterpart to status.testsScope. The comment above says this
+    // set is "different, fuller" than refresh-test-count's; that was true and unpublished,
+    // so three suite sizes coexisted with nothing to explain the gaps. Name the roots.
+    j.testsAssertionsScope = {
+      roots: ['scripts/test', 'ignis/src', 'scripts/test-*.mjs'],
+      files: results.length,
+      note: 'assertion-level run over the FULL universe — a superset of status.testsScope',
+    };
     // Honest flake accounting (S165): record which files only passed on isolated
     // retry so the green count never silently masks instability (CANON-031).
     j.testsFlaky = flaky;
+    // S334 — recorded so PROJECT_STATUS shows why a file went red-then-green without
+    // charging it to the flake trend, which escalates a file seen ≥3 sessions.
+    j.testsChangedDuringRun = changedDuringRun;
     // S167 [audit #2]: surface inconclusive (assertions-green/non-zero-exit) files
     // so the honest carry-forward is auditable and never silently absorbed.
-    j.testsInconclusive = inconclusive;
+    j.testsInconclusive = reportedInconclusive;
     // S203 [SIL][S202 #1]: surface env-blocked (host could not spawn after backoff)
     // so a saturated-host run is auditable — never green, never a phantom red.
     j.testsEnvBlocked = envBlocked;
@@ -792,22 +979,20 @@ if (!NO_WRITE) {
     // the numbers it dates. Keep assertion-scoped metadata under assertion-scoped
     // names; leave the file-level surface to refresh-test-count.mjs and
     // test-proof-reconciliation.mjs.
-      j.testsAssertionsDeferred = deferred;
-      j.testsBudgetExhausted = budgetExhausted;
-      j.testsAssertionsLastRun = assertionsLastRun;
-      return j;
-    }, { touchLastUpdated: false });
-    writtenStatus = update.status;
+    j.testsAssertionsDeferred = deferred;
+    j.testsBudgetExhausted = budgetExhausted;
+    j.testsAssertionsLastRun = new Date().toISOString().slice(0, 10);
+    writeProjectStatus(ROOT, j, { touchLastUpdated: false });
     // S166 [SIL][S165 #1]: record this session's flaky set so the flaky-trend
     // probe can escalate a chronically-flaky test (≥3 consecutive sessions).
     try {
       const { recordFlaky } = await import('./lib/flaky-trend.mjs');
-      recordFlaky({ session: writtenStatus.currentSession, date: writtenStatus.testsAssertionsLastRun, flaky });
+      recordFlaky({ session: j.currentSession, date: j.testsAssertionsLastRun, flaky });
     } catch { /* trend recording is best-effort; never fail the test run */ }
   } catch (e) { /* ignore write failure in CI */ }
 }
 
-process.exit(failedFiles.length ? 1 : 0);
+process.exit(failedFiles.length ? 1 : timeoutInconclusive.length ? 2 : 0);
 } // end main()
 
 async function runShardAggregate(shardCount) {
@@ -823,11 +1008,13 @@ async function runShardAggregate(shardCount) {
   const resumedShards = [];
   const executedShards = [];
   const pendingShards = [];
+  const acceptedFailureSidecars = [];
   const passthrough = [];
   for (const a of argv) {
     if (a.startsWith('--shards=')) continue;
     if (a.startsWith('--shard=')) continue;
     if (a.startsWith('--proof-dir=')) continue;
+    if (a.startsWith('--failure-sidecar=')) continue;
     if (a === '--resume-shards') continue;
     if (a.startsWith('--max-shards-per-run=')) continue;
     if (a === '--json') continue;
@@ -836,16 +1023,26 @@ async function runShardAggregate(shardCount) {
   }
   const discoveredFiles = discover();
   const proofShape = shardProofShape({ files: discoveredFiles, shardCount, passthrough });
+  const sourcePlan = buildShardSourcePlan(ROOT, discoveredFiles, shardCount, (file, total) => fileShardIndex(file, total));
+  const shardShapes = sourcePlan.map((row, index) => shardProofShape({
+    files: partitionFilesIntoShard(discoveredFiles, { index: index + 1, total: shardCount }),
+    shardCount,
+    shardIndex: index + 1,
+    passthrough,
+    proofSources: row.manifest,
+  }));
   const aggregateProofPath = path.join(proofDir, 'aggregate.json');
+  // Aggregate owns the canonical live ledger. Child shards write only their own
+  // sidecars, so concurrently running shards can never truncate each other.
+  writeFailureLedger(SIDECAR_PATH, []);
   if (RESUME_SHARDS && fs.existsSync(aggregateProofPath)) {
     try {
       const prior = JSON.parse(fs.readFileSync(aggregateProofPath, 'utf8'));
       if (prior.proofShape && !proofShapeMatches(prior.proofShape, proofShape)) {
-        console.error(
-          '⛔ stored shard aggregate proof does not match this invocation '
-          + `(totalFiles/filesHash/shardCount/argsHash changed; proof=${path.relative(ROOT, aggregateProofPath).replace(/\\/g, '/')}).`
-        );
-        process.exit(1);
+        // Expected during a repair: shard-scoped manifests below decide exactly
+        // which proofs remain reusable. The aggregate is regenerated only after
+        // every invalidated shard has executed.
+        process.stderr.write('↻ aggregate source shape changed; evaluating source-bound shard proofs.\n');
       }
     } catch (e) {
       console.error(`⛔ stored shard aggregate proof is unreadable: ${e.message}`);
@@ -854,15 +1051,22 @@ async function runShardAggregate(shardCount) {
   }
   for (let i = 1; i <= shardCount; i++) {
     const proofPath = shardProofPath(proofDir, shardCount, i);
+    const failureSidecarPath = shardFailureSidecarPath(proofDir, shardCount, i);
+    const expectedShape = shardShapes[i - 1];
     let reused = false;
     if (RESUME_SHARDS && fs.existsSync(proofPath)) {
       try {
         const proof = JSON.parse(fs.readFileSync(proofPath, 'utf8'));
-        if (reusableShardProof(proof, { shardCount, shardIndex: i, proofShape })) {
+        if (reusableShardProof(proof, { shardCount, shardIndex: i, proofShape: expectedShape })) {
           const parsed = proof.parsed || {};
           for (const r of parsed.results || []) mergedResults.push(r);
           shardResults.push({ ...(proof.summary || {}), reused: true, proofPath: path.relative(ROOT, proofPath).replace(/\\/g, '/') });
           resumedShards.push(`${i}/${shardCount}`);
+          acceptedFailureSidecars.push({
+            path: failureSidecarPath,
+            shard: `${i}/${shardCount}`,
+            sourceSidecar: path.relative(ROOT, failureSidecarPath),
+          });
           reused = true;
         }
       } catch { /* bad proof is ignored and regenerated */ }
@@ -879,6 +1083,7 @@ async function runShardAggregate(shardCount) {
       '--json',
       '--no-write',
       '--no-stream',
+      `--failure-sidecar=${failureSidecarPath}`,
     ];
     const startedAt = Date.now();
     const res = spawnSync(process.execPath, childArgs, {
@@ -932,7 +1137,7 @@ async function runShardAggregate(shardCount) {
       generatedAt: new Date().toISOString(),
       shardCount,
       shardIndex: i,
-      proofShape,
+      proofShape: expectedShape,
       exitCode: summary.exitCode,
       signal: summary.signal,
       summary,
@@ -941,13 +1146,21 @@ async function runShardAggregate(shardCount) {
     fs.writeFileSync(proofPath, JSON.stringify(proof, null, 2) + '\n', 'utf8');
     shardResults.push(summary);
     executedShards.push(`${i}/${shardCount}`);
+    acceptedFailureSidecars.push({
+      path: failureSidecarPath,
+      shard: `${i}/${shardCount}`,
+      sourceSidecar: path.relative(ROOT, failureSidecarPath),
+    });
   }
+  const mergedFailureRecords = mergeShardFailureLedgers(acceptedFailureSidecars);
+  writeFailureLedger(SIDECAR_PATH, mergedFailureRecords);
   const totalPass = mergedResults.reduce((a, r) => a + (r.pass || 0), 0);
   const totalAll = mergedResults.reduce((a, r) => a + (r.total || 0), 0);
   const failedFiles = mergedResults.filter(r => r.status === 'fail');
   const flaky = mergedResults.filter(r => r.status === 'flaky').map(r => r.file);
-  const inconclusive = mergedResults.filter(r => r.status === 'inconclusive').map(r => r.file);
-  const envBlocked = mergedResults.filter(r => r.status === 'env-blocked').map(r => r.file);
+  const inconclusive = mergedResults.filter(r => String(r.status || '').startsWith('inconclusive')).map(r => r.file);
+  const envBlocked = mergedResults.filter(r => r.status === 'env-blocked')
+    .map(r => envBlockedEntry(r.file, r.envBlockedCause, r.output));
   const deferred = mergedResults.filter(r => String(r.status || '').startsWith('deferred-')).map(r => r.file);
   const budgetExhausted = shardResults.some(s => s.budgetExhausted);
   const aggregate = {
@@ -957,6 +1170,13 @@ async function runShardAggregate(shardCount) {
     shardCount,
     proofShape,
     proofDir: path.relative(ROOT, proofDir).replace(/\\/g, '/'),
+    repairMode: 'source-selective',
+    dependencyGraph: shardDependencyGraph(sourcePlan),
+    failureLedger: {
+      aggregate: path.relative(ROOT, SIDECAR_PATH).replace(/\\/g, '/'),
+      shardSidecars: acceptedFailureSidecars.map((row) => row.sourceSidecar.replace(/\\/g, '/')),
+      records: mergedFailureRecords.length,
+    },
     resumedShards,
     executedShards,
     pendingShards,
@@ -981,7 +1201,7 @@ async function runShardAggregate(shardCount) {
     console.log('\nStudio Ops sharded test suite');
     console.log('─'.repeat(70));
     for (const s of shardResults) {
-      const mark = s.failures ? '⛔' : (s.deferred.length || s.envBlocked.length ? '✓ (smaller-green)' : '✓');
+      const mark = s.failures ? '⛔' : s.inconclusive?.length ? '◐' : (s.deferred.length || s.envBlocked.length ? '✓ (smaller-green)' : '✓');
       const reuse = s.reused ? ' · reused proof' : '';
       console.log(`  ${mark} shard ${s.shard} · ${s.totalPass}/${s.totalAll} assertions · ${s.files} files · exit ${s.exitCode}${reuse}`);
     }
@@ -991,33 +1211,42 @@ async function runShardAggregate(shardCount) {
     const envNote = envBlocked.length ? ` · ${envBlocked.length} env-blocked` : '';
     const resumeNote = resumedShards.length ? ` · ${resumedShards.length} shard proof(s) resumed` : '';
     const checkpointNote = pendingShards.length ? ` · checkpoint (${pendingShards.length} shard(s) pending)` : '';
-    console.log(`  ${totalPass}/${totalAll} assertions · ${passFiles}/${mergedResults.length} files${envNote}${defNote}${resumeNote}${checkpointNote} · ${failedFiles.length ? '⛔' : pendingShards.length ? '◐' : deferred.length ? '✓ (smaller-green)' : '✓'}`);
+    const incNote = inconclusive.length ? ` · ${inconclusive.length} inconclusive (not counted green)` : '';
+    console.log(`  ${totalPass}/${totalAll} assertions · ${passFiles}/${mergedResults.length} files${incNote}${envNote}${defNote}${resumeNote}${checkpointNote} · ${failedFiles.length ? '⛔' : inconclusive.length || pendingShards.length ? '◐' : deferred.length ? '✓ (smaller-green)' : '✓'}`);
     console.log(`  proof: ${path.relative(ROOT, aggregateProofPath).replace(/\\/g, '/')}`);
   }
   if (!NO_WRITE && aggregate.complete) {
     const sp = path.join(ROOT, 'context', 'PROJECT_STATUS.json');
     try {
-      updateProjectStatusFile(sp, (j) => {
-        j.testsAssertionsTotal = totalAll;
-        j.testsAssertionsPassing = totalPass;
-        j.testsAssertionsFiles = mergedResults.length;
-        j.testsFlaky = flaky;
-        j.testsInconclusive = inconclusive;
-        j.testsEnvBlocked = envBlocked;
+      const j = JSON.parse(fs.readFileSync(sp, 'utf8'));
+      j.testsAssertionsTotal = totalAll;
+      j.testsAssertionsPassing = totalPass;
+      j.testsAssertionsFiles = mergedResults.length;
+      // S334 [audit #6] — the SHARDED publish path needs the scope too. Caught in
+      // self-review: the first edit landed only on the single-run path, so a sharded
+      // aggregate would have published a file count with no population attached — the
+      // exact defect this field exists to prevent, reintroduced by the fix for it.
+      j.testsAssertionsScope = {
+        roots: ['scripts/test', 'ignis/src', 'scripts/test-*.mjs'],
+        files: mergedResults.length,
+        note: 'assertion-level run over the FULL universe (sharded aggregate) — a superset of status.testsScope',
+      };
+      j.testsFlaky = flaky;
+      j.testsInconclusive = inconclusive;
+      j.testsEnvBlocked = envBlocked;
       // S263 — assertion-scoped stamps only (see the note in the non-sharded
       // writer). A sharded run that is GREEN is promoted to the file-level
       // surface by test-proof-reconciliation.mjs, which stamps testsLastRun from
       // the proof's own generatedAt. A sharded run that is RED must not re-date
       // the file-level counts it did not produce.
-        j.testsAssertionsDeferred = deferred;
-        j.testsBudgetExhausted = budgetExhausted;
-        j.testsAssertionsLastRun = new Date().toISOString().slice(0, 10);
-        j.testsLastRunMode = `sharded:${shardCount}`;
-        j.testsShardProofDir = path.relative(ROOT, proofDir).replace(/\\/g, '/');
-        j.testsShardProofResumed = resumedShards;
-        return j;
-      }, { touchLastUpdated: false });
+      j.testsAssertionsDeferred = deferred;
+      j.testsBudgetExhausted = budgetExhausted;
+      j.testsAssertionsLastRun = new Date().toISOString().slice(0, 10);
+      j.testsLastRunMode = `sharded:${shardCount}`;
+      j.testsShardProofDir = path.relative(ROOT, proofDir).replace(/\\/g, '/');
+      j.testsShardProofResumed = resumedShards;
+      writeProjectStatus(ROOT, j, { touchLastUpdated: false });
     } catch { /* ignore write failure in CI */ }
   }
-  process.exit(failedFiles.length || childParseFailed ? 1 : pendingShards.length ? 2 : 0);
+  process.exit(failedFiles.length || childParseFailed ? 1 : inconclusive.length || pendingShards.length ? 2 : 0);
 }

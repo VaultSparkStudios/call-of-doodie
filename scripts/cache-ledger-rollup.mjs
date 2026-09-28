@@ -28,7 +28,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { PRICING_PER_MTOK, FALLBACK_PRICE, shortModelName } from './lib/model-router.mjs';
+import { shortModelName, priceForModel } from './lib/model-router.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -53,7 +53,7 @@ function readEntries(ledgerPath = LEDGER) {
 }
 
 function entryCost(e) {
-  const price = PRICING_PER_MTOK[e.model] || FALLBACK_PRICE;
+  const price = priceForModel(e.model, { inputTokens: (e.input || 0) + (e.cache_read || 0) + (e.cache_create || 0) });
   return (
     ((e.input || 0)        / 1e6) * price.input +
     ((e.cache_create || 0) / 1e6) * price.cacheWrite +
@@ -97,7 +97,15 @@ function entryRealCost(e) {
 // divergent-observability-policies class). They diverged: fixing one left the
 // other lying. This single evaluator is the one source of truth — it runs on REAL
 // metered cost for the alarm and reports notional separately, always.
-export const COST_THRESHOLDS = { warnRatio: 1.5, failRatio: 3.0, minTotalUsd: 1.0, dayOutlierFloorUsd: 5.0 };
+// S284 [audit #3] — `windowFloorUsd` closes an ASYMMETRY, it is not a new dial.
+// The day-outlier branch already refused to fire below `dayOutlierFloorUsd`; the
+// ratio branch had no floor at all, and the guard that looks like it covers this
+// (`minTotalUsd`) is applied to the LIFETIME total, not to the window being
+// compared. So once cumulative spend crossed $1 the suppression was permanently
+// off and any pennies-vs-pennies pair fired: live, "7d $0.0625 vs prior-7d $0.0066
+// — 9.4x spike". Cost is notional on a flat-rate Max Plan (CANON-015); an alarm
+// that can never stop ringing trains the founder to ignore the cost surface.
+export const COST_THRESHOLDS = { warnRatio: 1.5, failRatio: 3.0, minTotalUsd: 1.0, dayOutlierFloorUsd: 5.0, windowFloorUsd: 5.0 };
 
 export function evaluateCostAnomaly(entries, { now = new Date(), thresholds = COST_THRESHOLDS } = {}) {
   const iso = (d) => d.toISOString().slice(0, 10);
@@ -136,7 +144,14 @@ export function evaluateCostAnomaly(entries, { now = new Date(), thresholds = CO
     const base = `real metered total $${realTotal.toFixed(4)} < $${thresholds.minTotalUsd} threshold — no anomaly detection yet`;
     reasons.push(notionalNote ? `${base} · ${notionalNote}` : base);
   } else {
-    if (ratio !== null && ratio >= thresholds.failRatio) { level = 'warn'; reasons.push(`⚠ 7d metered $${realMetered7d.toFixed(4)} vs prior-7d $${priorMetered7d.toFixed(4)} — ${ratio.toFixed(1)}× spike (>3×)`); }
+    // S284 [audit #3] — a ratio only means something once the window carries real
+    // money. Mirrors the day-outlier branch's floor below.
+    const windowIsMaterial = realMetered7d >= thresholds.windowFloorUsd;
+    if (ratio !== null && ratio >= thresholds.warnRatio && !windowIsMaterial) {
+      // Suppressed, but SAID OUT LOUD — never silently drop a computed signal.
+      reasons.push(`${ratio.toFixed(1)}× 7d-vs-prior movement suppressed: window $${realMetered7d.toFixed(4)} < $${thresholds.windowFloorUsd} floor (a ratio on trivial absolute spend is not an anomaly)`);
+    }
+    else if (ratio !== null && ratio >= thresholds.failRatio) { level = 'warn'; reasons.push(`⚠ 7d metered $${realMetered7d.toFixed(4)} vs prior-7d $${priorMetered7d.toFixed(4)} — ${ratio.toFixed(1)}× spike (>3×)`); }
     else if (ratio !== null && ratio >= thresholds.warnRatio) { level = 'warn'; reasons.push(`7d metered $${realMetered7d.toFixed(4)} vs prior-7d $${priorMetered7d.toFixed(4)} — ${ratio.toFixed(1)}× (>1.5×)`); }
     if (dayRatio !== null && dayRatio >= thresholds.failRatio && maxDayCost >= thresholds.dayOutlierFloorUsd) {
       level = 'warn'; reasons.push(`⚠ max single-day $${maxDayCost.toFixed(4)} vs avg $${avgDayCost.toFixed(4)} — ${dayRatio.toFixed(1)}× (outlier day)`);
