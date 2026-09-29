@@ -68,10 +68,9 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ✓  ██████░░░░░░░░░░░░░░░░░░   26% used                          ║
-║     69,558 / 272,000 tok  ·  codex/codex-272k  · …               ║
-║     ~34,779 tok/turn  ·  cache 50%  ·  5 turns to compact        ║
-║     Verdict: CONTINUE                                            ║
+║  ⚠  ░░░░░░░░░░░░░░░░░░░░░░░░    2% used                          ║
+║     304,828 / 200,000 tok  ·  unknown  ·  heuristic-stale        ║
+║     Verdict: CONSIDER_CLOSEOUT  ← act now                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
@@ -89,7 +88,7 @@
 ║  ✓  Templates     v3.3 aligned                                   ║
 ║  ⛔  Revenue sig.  not found  ⚠ stale                             ║
 ║  ✓  Deploy gaps   no gaps (run: ops deploy-gaps)                 ║
-║  ⛔  Doctor        159/229 (70%)  ·  3 failing                    ║
+║  ⛔  Doctor        160/229 (71%)  ·  3 failing                    ║
 ║  ✓  Codex trust   trusted project active                         ║
 ║  ✓  Canon adopt.  0/54 pending review                            ║
 ║  ✓  Cost          flat-rate Max Plan · usage ledger…             ║

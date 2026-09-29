@@ -23,4 +23,4 @@ Headline: Verified community activity finally has its own readable, honest publi
 
 ## Blockers
 
-- Studio-wide doctor currently reports three blocking findings outside this repository; the local release gates passed.
+- The latest studio-wide doctor reports two blocking findings outside this repository; the local release gates passed.

@@ -9,7 +9,7 @@
     "Bound the generated route, descriptor, sitemap and redirect absence in the public contract."
   ],
   "validation": "262 files / 1,671 tests passed locally and in workflow 36618034795; strict lint, deployable build, 29-file public contract, schema, security and supply-chain checks passed. Staging e01aa752 passed shell 7/7 and hosted browser checks; 21 hash-bound desktop/mobile, dark/light and offline captures, including four production status recaptures were directly inspected. Source 2b4e18e92fbb4af3d58bb32eac4ec95c14763745 passed CI and deployed as immutable 1104bdc2; immutable and canonical origins passed shell 7/7 each. Canonical /stats/ returned 200, edge health matched 2b4e18e92fbb, and the live feed returned 53 verified runs/39 privacy-safe runner identifiers.",
-  "limits": "An initial CI run on 99bc641 failed due to generated content-date drift and was repaired with a focused follow-up. The current studio-wide doctor reports three blocking findings outside this repository. Participant, physical-device, current Core Web Vitals, Zoho reply-as, scoped telemetry, Obelisk, retention and balance outcomes are unverified; lifecycle remains FORGE/public-unlaunched.",
+  "limits": "An initial CI run on 99bc641 failed due to generated content-date drift and was repaired with a focused follow-up. The initial studio-wide doctor reported three blocking findings; the closeout autopilot rerun reported two, outside this repository. Participant, physical-device, current Core Web Vitals, Zoho reply-as, scoped telemetry, Obelisk, retention and balance outcomes are unverified; lifecycle remains FORGE/public-unlaunched.",
   "production": {
     "verifiedAt": "2026-09-29T19:19:15.000Z",
     "commit": "2b4e18e92fbb4af3d58bb32eac4ec95c14763745",

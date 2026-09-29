@@ -6,7 +6,7 @@
 
 - Session 179 (2026-09-29) — `/stats/` is a real public page again, linked from the game, navigation and board. It shows the live verified aggregate with a dated fallback, recent 24-hour activity, mode mix, coverage and definitions. Poll time and last completed run are distinct; browser-local observations are labeled as such. The generated route, descriptor, sitemap and redirect policy are bound by the public contract. The three-item S179 audit, including the second-order analysis item, is implemented.
 
-Validation: 262/262 test files and 1,671/1,671 tests passed locally and in GitHub Actions workflow `36618034795`; strict lint, deployable build, 29-file public contract, schema, security and supply-chain checks passed. Twenty-one hash-bound desktop/mobile, dark/light and offline captures were directly inspected, including four production status recaptures after generated-date refresh; CANON-053 passes. Staging `e01aa752` passed 7/7 shell and hosted browser checks. Initial CI on `99bc641` caught a generated content-date mismatch; the focused follow-up `2b4e18e` regenerated the five affected public files, then passed CI and deployed to immutable `1104bdc2`. The canonical `/stats/` returns 200 without a redirect, the descriptor points to it, the live feed returns 53 verified runs/39 privacy-safe runner identifiers, and immutable/canonical shell checks pass 7/7 each. Canonical edge health reports deploy `2b4e18e92fbb`. The studio-wide doctor has three blocking findings outside this repository; no zero-blocker claim is made. Participant, physical-device, current Core Web Vitals, Zoho reply-as, scoped telemetry and Obelisk proof remain unmeasured; lifecycle stays FORGE/public-unlaunched.
+Validation: 262/262 test files and 1,671/1,671 tests passed locally and in GitHub Actions workflow `36618034795`; strict lint, deployable build, 29-file public contract, schema, security and supply-chain checks passed. Twenty-one hash-bound desktop/mobile, dark/light and offline captures were directly inspected, including four production status recaptures after generated-date refresh; CANON-053 passes. Staging `e01aa752` passed 7/7 shell and hosted browser checks. Initial CI on `99bc641` caught a generated content-date mismatch; the focused follow-up `2b4e18e` regenerated the five affected public files, then passed CI and deployed to immutable `1104bdc2`. The canonical `/stats/` returns 200 without a redirect, the descriptor points to it, the live feed returns 53 verified runs/39 privacy-safe runner identifiers, and immutable/canonical shell checks pass 7/7 each. Canonical edge health reported deploy `2b4e18e92fbb` at source-release verification; the later closeout revision `3d640a3` passed CI `36627435603`, deployed and reported `3d640a398114`. The latest studio-wide doctor has two blocking findings outside this repository; no zero-blocker claim is made. Participant, physical-device, current Core Web Vitals, Zoho reply-as, scoped telemetry and Obelisk proof remain unmeasured; lifecycle stays FORGE/public-unlaunched.
 
 ## Open Work
 
@@ -115,7 +115,7 @@ Decision (S175): excluded dated changelog entries from the mode-fact gate, and d
 
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 243,070 bytes · SHA-256 `108f4fd4e98c…`
+- `context/CURRENT_STATE.md` · 243,208 bytes · SHA-256 `18fb85dd6c2e…`
 - `context/TASK_BOARD.md` · 168,849 bytes · SHA-256 `86d48a2fe754…`
 - `context/DECISIONS.md` · 164,181 bytes · SHA-256 `dc21ab1d61c2…`
 - `docs/AUDIT_2026-09-29.json` · 9,002 bytes · SHA-256 `85c3f3bc5a11…`

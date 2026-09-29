@@ -3384,3 +3384,7 @@ The S178 recovery was checked and sealed separately before a fresh arc. Three ve
 | Automation Coverage | 96 | Route/redirect/descriptor court and 21 inspected hash-bound desktop/mobile, dark/light/offline captures cover the new surface; device and participant checks remain open. |
 
 Score: 957/1000. Velocity counts three audit items moving to Done; release follow-through is the fourth scaffold task, now done, but is not a separate audit item. The studio-wide doctor reported three blocking findings outside this repo at final check, so its historical zero-blocker claim is not repeated. The first CI run on `99bc641` failed a public date fingerprint and sitemap check; focused follow-up `2b4e18e` passed workflow `36618034795` and deployed as immutable `1104bdc2`. Production `/stats/` returns 200, canonical health reports `2b4e18e92fbb`, and both origins pass shell 7/7. Twenty-one visual captures were directly reviewed. FORGE/public-unlaunched remains unchanged.
+
+### S179 closeout doctor addendum — 2026-09-29
+
+The closeout autopilot reran the portfolio doctor after the three-blocker check above. Its later result was two blocking findings and one advisory failure (160 passing, 63 warnings, 229 total), still outside the local project test and release gates. The latest count supersedes the earlier three-finding observation; the S179 score and lifecycle decision are unchanged.
