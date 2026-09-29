@@ -7,6 +7,7 @@
 - Closed superseded PRs #163, #153 and #156 with evidence. Wrote `docs/AUDIT_2026-09-29_2`. The premise checker script is not present in this repo, so premises were verified by hand.
 - Verified after each change: strict lint, build, 262 files / 1,671 tests, `npm audit`. Deployed immutable staging `e02ebb39` (shell 7/7, `/`, `/stats/`, `/board/`, `/_health` all 200) and passed the hosted browser audit 1020/1020 after installing the Playwright Chromium binary. That audit covers public pages, not a played run.
 - Doctor still reports two blocking findings outside this repo (wallet readiness, CPX51 disk healer / remedy drift); no zero-blocker claim is made. Lifecycle stays FORGE/public-unlaunched.
+- Pushed `7a88ad4` (source) and `1e27bd9` (closeout) directly to main with the pre-push hook running and no bypass. Workflow `36637486387` passed quality and build-and-deploy; production shell 7/7, `/`, `/stats/`, `/board/` 200, canonical health `1e27bd9c88c5`. Records-only seal follows.
 
 ## 2026-09-29 (Session 179 — public stats truth)
 

@@ -4,7 +4,7 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Toolchain moved off end-of-support ESLint 9 to ESLint 10 and cooled-down React/Vite updates; staging e02ebb39 verified, production verification recorded after CI.",
+  "currentFocus": "Toolchain moved off end-of-support ESLint 9 to ESLint 10 plus cooled-down React/Vite updates; exact source 1e27bd9 passed CI and production shell 7/7.",
   "nextMilestone": "Collect participant/device, Core Web Vitals, Zoho, scoped telemetry and Obelisk evidence before lifecycle promotion.",
   "testingSurfaces": [
     {
@@ -207,8 +207,8 @@
   "testsAssertionsDeferred": [],
   "testsAssertionsLastRun": "2026-09-29T21:55:00Z",
   "lastShipped": "Build and lint toolchain currency: ESLint 10, React 19.3.0, Vite 7.3.6; no player-facing behavior change.",
-  "truthStatus": "S180 toolchain move verified on staging e02ebb39. FORGE/public-unlaunched unchanged; production verification recorded after CI.",
+  "truthStatus": "S180 toolchain move passed CI 36637486387 and production checks at 1e27bd9. FORGE/public-unlaunched unchanged.",
   "testsFocusedSupplement": null,
-  "lastDeployCommit": "2b4e18e92fbb4af3d58bb32eac4ec95c14763745",
-  "lastDeployAt": "2026-09-29T19:18:28.000Z"
+  "lastDeployCommit": "1e27bd9c88c579c7ee5d68632f5cac3bd9f3c4df",
+  "lastDeployAt": "2026-09-29T22:11:00Z"
 }

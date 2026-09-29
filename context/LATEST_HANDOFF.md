@@ -3,7 +3,7 @@
 ## Where We Left Off (Session 180)
 
 Session Intent: Run the complete /arc, then push directly to main and fully deploy.
-Intent outcome: Achieved for repository-owned work; production verification is recorded in a records-only seal after CI.
+Intent outcome: Achieved. Source `7a88ad4` and closeout `1e27bd9` were pushed directly to main; GitHub Actions run `36637486387` passed quality and build-and-deploy for `1e27bd9`. `https://callofdoodie.wtf/` passed shell 7/7, `/`, `/stats/` and `/board/` returned 200, and canonical `/_health` reported `1e27bd9c88c5`. A later records-only seal follows this line, so health will report that later revision.
 
 S179 was current at start (clean tree, synced remote, write-back probe clean), so no recovery was needed. The executable list held no gameplay work: every open board line needs devices, participants, provider dashboards or a founder decision. The session went to the one hazard npm reported: `eslint@9.39.5` is end-of-support. The lint stack is now ESLint 10.11.0 with `@eslint/js` 10.0.1, hooks plugin 7.1.1 and `globals` 17.12.0. `eslint-plugin-react` is gone (peer range stops at ESLint 9; ESLint 10 tracks JSX use natively). The enforced hook rules are the same two as before, pinned by name, because the hooks 7 preset would add 177 React Compiler findings. Runtime packages moved too: React/React DOM 19.3.0, Vite 7.3.6, Sentry 8.55.2, Vite React plugin 5.2.0.
 
