@@ -25,9 +25,10 @@ import https from 'https';
 import path from 'path';
 import crypto from 'crypto';
 import { fileURLToPath } from 'url';
-import { MODELS, callClaude, withLongCache, logMetrics } from './lib/model-router.mjs';
+import { MODELS, callClaude, withLongCache, logMetrics, safeJsonStringify } from './lib/model-router.mjs';
 import { getSecret } from './lib/secrets.mjs';
 import { archiveBeforeMutate } from './lib/archive-then-compact.mjs';
+import { splitHandoffSessions } from './lib/handoff-trim.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -38,8 +39,22 @@ const OUT     = path.join(ROOT, 'context', 'LATEST_HANDOFF.compact.md');
 const force   = process.argv.includes('--force');
 const trim    = process.argv.includes('--trim');
 const dryRun  = process.argv.includes('--dry-run');
+const smokeUnicode = process.argv.includes('--smoke-unicode');
 
 function readText(p) { try { return fs.readFileSync(p, 'utf8'); } catch { return ''; } }
+
+if (smokeUnicode) {
+  const payload = safeJsonStringify({
+    system: 'bad high \uD800 prefix',
+    messages: [{ role: 'user', content: 'bad low \uDC00 suffix and valid 💩 pair' }],
+  });
+  if (payload.includes('\\ud800') || payload.includes('\\udc00')) {
+    console.error('compact-handoff unicode smoke failed');
+    process.exit(1);
+  }
+  console.log('compact-handoff unicode smoke passed');
+  process.exit(0);
+}
 
 // ── TRIM MODE ────────────────────────────────────────────────────────────────
 if (trim) {
@@ -47,11 +62,7 @@ if (trim) {
   const raw = readText(HANDOFF);
   if (!raw) { console.error('No LATEST_HANDOFF.md found.'); process.exit(1); }
 
-  // Split on "## Where We Left Off" session boundaries (robust to \r\n + \n)
-  const normalized = raw.replace(/\r\n/g, '\n');
-  const sections = normalized.split(/\n(?=## Where We Left Off)/);
-  const header   = sections[0].trimStart().startsWith('## Where We Left Off') ? '' : sections.shift();
-  const sessions = sections; // each starts with "## Where We Left Off ..."
+  const { header, sessions } = splitHandoffSessions(raw);
 
   const KEEP = 2;
   if (sessions.length <= KEEP) {
@@ -64,7 +75,7 @@ if (trim) {
 
   console.log(`✂ Trimming LATEST_HANDOFF.md: keeping ${KEEP} sessions, archiving ${toArchive.length}`);
   toArchive.forEach(s => {
-    const firstLine = s.split('\n')[0].replace('## Where We Left Off', '').trim();
+    const firstLine = s.split('\n')[0].replace(/^#+\s*/, '').trim();
     console.log(`  → archive: ${firstLine}`);
   });
 

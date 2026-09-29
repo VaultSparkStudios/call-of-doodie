@@ -1,4 +1,12 @@
 # Work Log
+## 2026-09-28 (Session 178 — honest walls and perks)
+
+- Ran `/arc` from synchronized main, wrote the S178 audit with two premise-verified game-loop findings, and implemented both. Developer wall hiding/restoration now follows 240 simulation frames and invalidates painted layers and pathfinding; all 27 ordinary perks share numeric facts with copy and runtime, with corrected fire cadence and Dead Man's Hand amplification.
+- Startup canon sync auto-committed a 70-file propagation that broke local script contracts and 58 tests. Restored the project-specific scripts to their prior compatible versions, kept the universal guide/security updates, and queued the incompatibility as Studio Ark cargo.
+- Clean validation: 261 test files, 1,668 tests; strict lint; deployable build; public contract, schema, security, npm audit and supply-chain gates. Staging `ce59619c` passes 7/7 shell checks and 28/28 hosted Chrome checks. Directly inspected 14 hash-bound captures over desktop/mobile and both themes; CANON-053 passes.
+- Known gap: the aggregate stats feed exists but `/stats` is absent. Logged a dedicated CANON-054 follow-up; lifecycle remains FORGE/public-unlaunched. No participant, physical controller, or balance claim was added. Production follow-through awaits exact-main CI and deployment verification.
+- Creative Direction Record reviewed: the founder gave operational authorization for `/arc`, direct-main push and full deploy, with no new creative direction. No hook bypass used.
+
 ## 2026-09-09 (Session 168 — recovered terminal order and exactly-once extraction)
 
 - Reconstructed the cut-off from its lock, S167 closeout, Git chronology, full dirty diff, and S168 audit. S167 was sealed; S168 was wholly uncommitted.

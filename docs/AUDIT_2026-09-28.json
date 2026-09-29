@@ -1,0 +1,80 @@
+{
+  "schemaVersion": "2.1",
+  "session": 178,
+  "project": { "slug": "call-of-doodie", "type": "game", "name": "Call-Of-Doodie" },
+  "totals": { "count": 2, "priority": 42.27, "top3": ["developer-obstacle-state", "ordinary-perk-facts"] },
+  "meta": {
+    "generatedAt": "2026-09-28",
+    "project": "call-of-doodie",
+    "type": "game",
+    "baseline": "3d99789; main aligned with origin/main; S177 closeout and writeback current",
+    "combinedPriority": 42.27,
+    "gameLoopReview": {
+      "loopTightness": "Strong: immediate guest play and fast rematch; obstacle collision/display mismatch can break input-to-danger readability in the Developer fight.",
+      "progression": "Meta facts are derived; ordinary perk choices still advertise numeric effects separately from their runtime values.",
+      "sessionEngagement": "Twelve modes and objective routes have automated input coverage; participant engagement remains unmeasured.",
+      "retention": "Replay and debrief are functional; no live retention inference without scoped analytics or participant runs.",
+      "soulFidelity": "Readable chaos and proof-over-posture favor simulation-timed, visually honest obstacles and exact perk promises.",
+      "nextMoves": ["Tie the Developer obstacle state to simulation frames and visible geometry.", "Derive ordinary perk numbers from their applied values and verify shot cadence.", "Collect representative participant and physical-device runs before balancing progression."]
+    }
+  },
+  "items": [
+    {
+      "id": 1,
+      "slug": "developer-obstacle-state",
+      "axis": "gamification",
+      "tier": "🔥",
+      "title": "Make Developer obstacle removal visible and simulation-timed",
+      "impact": 8,
+      "innovation": 5,
+      "effortHours": 1.2,
+      "priority": 23.83,
+      "status": "implemented",
+      "executionLog": ["S178: Developer wall removal now advances for 240 simulation frames, restores on gameplay steps, and invalidates painted arena layers and flow fields at both transitions. Focused pause/recast tests and eight visual-harness captures passed."],
+      "why": "The Developer boss removes collision with setTimeout, so pause does not pause its four-second effect. Arena obstacles are painted into a cache keyed by count and epoch, neither of which changes when width and height are set to zero. Core-loop step: input and danger readability.",
+      "recipe": "Track an obstacle's saved geometry and remaining duration in simulation frames; restore during enemy frames; invalidate arena layers and flow fields at both transitions; prove pause immunity, visible cache invalidation, and repeated casts in a focused boss test.",
+      "premise": { "claim": "The Developer obstacle restore uses wall-clock setTimeout", "adapter": "file-content", "target": "src/systems/enemyFrame.js", "operator": "contains", "expected": "setTimeout(() =>" },
+      "premises": [{ "claim": "The Developer obstacle restore uses wall-clock setTimeout", "adapter": "file-content", "target": "../Call-Of-Doodie/src/systems/enemyFrame.js", "pattern": "setTimeout(() =>", "operator": "eq", "expected": true }],
+      "ladder": {
+        "L1": { "effortHours": 0.6, "recipe": "Move restoration to simulation frames and cover pause immunity." },
+        "L2": { "effortHours": 1.2, "recipe": "Move restoration to simulation frames, invalidate visual and flow-field caches, and cover pause/recast behavior." },
+        "L3": { "effortHours": 2, "recipe": "Add deterministic hosted browser captures for dark/light at desktop/mobile, inspect collision and rendered geometry, and retain a hash-bound QA receipt." }
+      }
+    },
+    {
+      "id": 2,
+      "slug": "ordinary-perk-facts",
+      "axis": "feature-depth",
+      "tier": "🔥",
+      "title": "Make ordinary perk numbers and shot cadence agree",
+      "impact": 8,
+      "innovation": 5,
+      "effortHours": 2.5,
+      "priority": 18.44,
+      "status": "implemented",
+      "executionLog": ["S178: All 27 ordinary perks share numeric facts with runtime behavior and copy. Overclocked and Overdrive now deliver the stated +35% and +40% shot cadence; Dead Man's Hand/Last Resort triples actual blast damage. Perk and death-flow behavior tests plus desktop/mobile visual captures passed."],
+      "why": "Ordinary perk descriptions and apply functions duplicate numeric values. Overclocked claims +35% fire rate while a 0.65 interval gives about +54% shot cadence; Overdrive claims +40% while 0.60 gives about +67%. Core-loop step: perk reward and build progression.",
+      "recipe": "Create dependency-free ordinary perk facts, derive descriptions and apply behavior from those facts, correct shot intervals to deliver the stated cadence, and verify numeric claims against real perk application across the catalog.",
+      "premise": { "claim": "Overclocked's numeric copy and applied shot interval are separate literals", "adapter": "file-content", "target": "src/constants.js", "operator": "contains", "expected": "mods.fireRateMult = (mods.fireRateMult || 1) * 0.65" },
+      "premises": [{ "claim": "Overclocked's numeric copy and applied shot interval are separate literals", "adapter": "file-content", "target": "../Call-Of-Doodie/src/constants.js", "pattern": "mods.fireRateMult = (mods.fireRateMult || 1) * 0.65", "operator": "eq", "expected": true }],
+      "ladder": {
+        "L1": { "effortHours": 1, "recipe": "Correct the two demonstrated fire-rate promises and add behavior tests." },
+        "L2": { "effortHours": 2.5, "recipe": "Derive ordinary perk numeric descriptions and application values from one facts module; test representative categories and all fire-rate promises." },
+        "L3": { "effortHours": 4, "recipe": "Cover every ordinary perk numeric claim with table-driven behavior checks and visually inspect picker/debrief states in dark/light desktop/mobile." }
+      }
+    }
+  ],
+  "skipped": [
+    { "slug": "balance-retune", "reason": "No participant outcomes support changing difficulty or progression targets; progression audit scenarios are descriptive only." },
+    { "slug": "hosted-ai-coach", "reason": "Local evidence-ranked coaching already exists; hosted variable-cost inference has no verified player need or cost-neutral path." },
+    { "slug": "new-content-breadth", "reason": "All twelve modes and six Operation routes already run; no player evidence identifies a missing mode." },
+    { "slug": "provider-and-identity", "reason": "Security/analytics/account gaps depend on scoped provider configuration and Obelisk contract; they are tracked separately without inventing a local substitute." },
+    { "slug": "mobile-density-and-atlas", "reason": "Both UX items are explicitly data-gated on physical or participant feedback." },
+    { "slug": "token-and-package-cost", "reason": "No measured variable API cost or dependency need in these two runtime fixes; adding a tool would increase surface area." }
+  ],
+  "executionLog": [
+    "261 test files and 1,668 tests passed after restoring project-compatible local scripts displaced by startup propagation; strict lint and deployable build passed.",
+    "Cloudflare staging preview ce59619c passed seven live shell checks and 28/28 hosted browser checks; 14 hash-bound captures were directly inspected across desktop/mobile and dark/light.",
+    "Startup propagation incompatibility was shipped as Ark cargo to vaultspark-studio-ops; S178 commit restores the prior project scripts while keeping current universal AGENTS and SECURITY guidance."
+  ]
+}

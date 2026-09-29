@@ -2,6 +2,14 @@ import { getOperation } from "./operationCampaign.js";
 import { buildStudioGameEvent } from "../utils/runIntelligence.js";
 import { buildRunRngFairnessReceipt } from "./runRng.js";
 import { buildWavePlanReceipt } from "./wavePlanReceipt.js";
+import { PERK_FACTS } from "../config/perkFacts.js";
+
+export function deadMansHandDamage(distance, amplified = false) {
+  const { radius, baseDamage, lastResortDamage } = PERK_FACTS.dead_mans_hand;
+  if (!Number.isFinite(distance) || distance >= radius) return 0;
+  const multiplier = amplified ? lastResortDamage : 1;
+  return Math.floor(baseDamage * (1 - Math.max(0, distance) / radius) * multiplier);
+}
 
 export function buildRunTheFixContract({
   debrief = {},

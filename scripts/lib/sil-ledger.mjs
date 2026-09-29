@@ -60,46 +60,13 @@ function totalMatch(text) {
   return match ? { total: Number(match[1]), max: Number(match[2]) } : { total: null, max: null };
 }
 
-/**
- * S323 — READ THE CURRENT COLUMN, NOT THE FIRST ONE.
- *
- * THE DEFECT. The row regex captured the FIRST numeric cell after the label. The
- * live table is `| Category | Prev | Now | Trend | Note |`, so every consumer of
- * `entry.categories` was reading the PREVIOUS session's scores under the current
- * session's heading — plausible at a glance, because they are real numbers in the
- * right range and they move.
- *
- * Measured live before the fix: `decompose-sil-gap` published `Process Quality
- * 93/100 gap=7` for S322, whose actual Process Quality is **82** (gap 18). The
- * founder-facing gap decomposition was showing S321's numbers as current, and the
- * single largest gap in the ledger was invisible. The same shifted series fed
- * `generate-innovation-pack`'s "SIL category drop" detector (comparing two Prev
- * columns, so it notices a drop one session late), `sil-forecaster`, and
- * `render-sil-trends` → portfolio/SIL_TRENDS.json.
- *
- * The fix takes the LAST cell of the leading contiguous run of purely-numeric
- * cells, which is `Now` in the five-column shape and the only score in older
- * two-column entries — so historical rows keep parsing as they did. A `Note`
- * column containing digits cannot be captured, because the run stops at the first
- * non-numeric cell.
- */
 function parseCategories(block) {
   const categories = {};
-  const rowRe = /^\|\s*(?:\d+\s*\|\s*)?([A-Za-z][^|]+?)\s*\|([^\n]*)$/gm;
+  const rowRe = /^\|\s*(?:\d+\s*\|\s*)?([A-Za-z][^|]+?)\s*\|\s*(\d+)\s*\|/gm;
   for (const match of String(block).matchAll(rowRe)) {
     let label = match[1].trim().replace(/\s+/g, ' ');
     label = CATEGORY_ALIASES.get(label.toLowerCase()) ?? label.replace(/\s*\([^)]*\)\s*$/, '');
-    // A score is frequently emphasised when it MOVED (`**82**`), which is exactly the
-    // row that matters most — so emphasis must be stripped before the numeric test,
-    // or the contiguous run stops at `Prev` and the fix silently changes nothing.
-    const cells = match[2].split('|').map((c) => c.trim().replace(/[*`_]/g, '').trim());
-    const run = [];
-    for (const c of cells) {
-      if (/^\d+$/.test(c)) run.push(Number(c));
-      else if (run.length) break;            // contiguous run ended
-      else if (c !== '') break;              // a non-numeric first cell: not a score row
-    }
-    if (run.length) categories[label] = run[run.length - 1];
+    categories[label] = Number(match[2]);
   }
   return categories;
 }
@@ -155,6 +122,18 @@ export function latestSilSession(markdown = '') {
   return latestSilEntry(markdown)?.session ?? null;
 }
 
+/**
+ * Resolve the newest closeout date from session-number-sorted ledger entries.
+ * The rolling-status header is a compatibility fallback only because it can
+ * remain stale even while newer append-only session blocks are present.
+ */
+export function resolveLatestSilDate(entries = [], fallbackText = '') {
+  const parsedDate = Array.isArray(entries)
+    ? entries.find((entry) => /^\d{4}-\d{2}-\d{2}$/.test(String(entry?.date || '')))?.date
+    : null;
+  return parsedDate ?? String(fallbackText).match(/(\d{4}-\d{2}-\d{2})/)?.[1] ?? null;
+}
+
 export function selectSilPair(markdown = '', { requireScore = false } = {}) {
   const entries = parseSilSessions(markdown);
   const current = (requireScore ? entries.find((entry) => entry.total != null) : entries[0]) ?? null;
@@ -164,4 +143,4 @@ export function selectSilPair(markdown = '', { requireScore = false } = {}) {
   return { current, previous };
 }
 
-export default { parseSilSessions, latestSilEntry, latestSilSession, selectSilPair };
+export default { parseSilSessions, latestSilEntry, latestSilSession, resolveLatestSilDate, selectSilPair };

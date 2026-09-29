@@ -1,3 +1,5 @@
+import { PERK_FACTS, perkIncrease, perkSeconds } from "../config/perkFacts.js";
+
 const PERK_SYNERGIES = [
   {
     condition: (mods) => mods.hasVampire && mods.hasChainLightning && !mods._synergyStormVampire,
@@ -81,9 +83,9 @@ const PERK_SYNERGIES = [
     condition: (mods) => mods.hasTurboBoots && mods.hasAdrenaline && !mods._synTurboAdrenaline,
     flag: "_synTurboAdrenaline",
     name: "⚡ NITRO RUSH",
-    desc: "Adrenaline Rush lasts 4s instead of 2s",
+    desc: `Adrenaline Rush lasts ${perkSeconds(PERK_FACTS.adrenaline_rush.turboFrames)}s instead of ${perkSeconds(PERK_FACTS.adrenaline_rush.frames)}s`,
     apply: (mods) => {
-      mods.adrenalineRushDuration = 240;
+      mods.adrenalineRushDuration = PERK_FACTS.adrenaline_rush.turboFrames;
     },
   },
   {
@@ -99,7 +101,7 @@ const PERK_SYNERGIES = [
     condition: (mods) => mods.hasGlassMind && mods.hasCritCascade && !mods._synGlassCrit,
     flag: "_synGlassCrit",
     name: "🧠 FOCUSED FURY",
-    desc: "Every crit grants +10 bonus XP",
+    desc: `Every crit grants +${PERK_FACTS.crit_cascade.glassMindXp} bonus XP`,
     apply: (mods) => {
       mods.critGrantsXp = true;
     },
@@ -135,9 +137,9 @@ const PERK_SYNERGIES = [
     condition: (mods) => mods.hasBulletHose && mods.hasAmmoBoost && !mods._synFullArmory,
     flag: "_synFullArmory",
     name: "📦 FULL ARMORY",
-    desc: "+50% extra max ammo on top of existing boost",
+    desc: `+${perkIncrease(PERK_FACTS.bullet_hose.deepPocketsAmmo)}% extra max ammo on top of existing boost`,
     apply: (mods) => {
-      mods.ammoMult = (mods.ammoMult || 1) * 1.5;
+      mods.ammoMult = (mods.ammoMult || 1) * PERK_FACTS.bullet_hose.deepPocketsAmmo;
     },
   },
 ];

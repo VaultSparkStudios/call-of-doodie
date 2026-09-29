@@ -2,6 +2,15 @@
 
 Public-safe decisions only. Detailed internal decision history is maintained privately.
 
+## 2026-09-28 — Session 178 — Keep project scripts compatible while upstream propagation is repaired
+
+**Decision:** Retain the updated universal `AGENTS.md` and `SECURITY.md`, but restore project-specific `scripts/` to the pre-propagation source after startup's auto-commit replaced their exported contracts. A local Ark cargo reports the incompatibility to Studio Ops for a compatible propagation fix.
+
+**Evidence:** The propagated scripts produced 58 failures, including removed task-board and project-status exports. Restoring the prior script versions yielded 261/261 test files and 1,668/1,668 tests passing. This is a local compatibility correction, not an exemption from future canon guidance.
+
+**STRONG canon gaps:** CANON-054 remains open because `/stats` is absent even though the aggregate feed and descriptor exist; restoring a real, analyzed page is a named TASK_BOARD follow-up rather than fabricating metrics during this gameplay arc. CANON-055's pre-commit checker sees only the startup propagation commit; the S178 code commit carries visible gameplay and perk-copy changes, with 14 reviewed browser captures as evidence of surface follow-through.
+
+
 ## 2026-09-09 — Session 167 — The killer is whatever the damage record says, and the record says how sure it is
 
 **Decision:** `resolveDeathAttribution` is the sole authority for "what killed you". It reads the last observed damage-sequence event first (exact source type, name, and kind, including non-enemy hazards) and only then the nearest live enemy by `typeIndex`, and it labels the result `observed` or `hypothesis`. Every consumer — MOST WANTED, adaptive telegraphing, Run Coach, nemesis tracking, ghosts, run history — takes its killer from this one place, and run history stores the bounded receipt including the evidence level.

@@ -1263,10 +1263,10 @@ SIL +10: Closed five founder-visible defects and all four fresh audit items: Ene
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
 Sparkline (last 5 totals): █████
-Avgs — 3: 982.3 | 5: 987.6 | 10: 992.1
+Avgs — 3: 966.3 | 5: 978.6 | 10: 987.4
 Velocity trend: ↑ | Debt: ↓
-Momentum runway: selected S177 audit complete; production verification complete | Intent rate: not recomputed
-Last session: 2026-09-11 | Session 177 | Total: 950/1000 | Velocity: 5 | protocolVelocity: 5
+Momentum runway: S178 audit and staging complete; production verification pending | Intent rate: not recomputed
+Last session: 2026-09-28 | Session 178 | Total: 950/1000 | Velocity: 2 | protocolVelocity: 2
 <!-- rolling-status-end -->
 
 ## 2026-06-05 — Session 81 | Total: 1000/1000 | Velocity: 1 | Debt: ↓
@@ -3347,3 +3347,22 @@ Assisted Operation runs used boosted health, position setup and lethal damage th
 [SIL:1] Test replay from the actual death screen through draft and redeployment (completed, App.launch regression). [SIL:1] Cover authored objective transitions and real-arena navigation, not just isolated handler calls (completed, six routes plus escort simulations).
 
 Intent outcome: Achieved. Record correction: prior addendum wording about pending production is superseded by the exact verified release above.
+
+## 2026-09-28 — Session 178 | Total: 950/1000 | Velocity: 2 | Debt: ↓
+
+The two premise-verified audit items reached the actual game surface: the Developer's disappearing wall now follows simulation time and repaints honestly, and ordinary perk choices state numbers drawn from their runtime facts. Overclocked/Overdrive cadence and Dead Man's Hand amplification were corrected in gameplay, not only in copy.
+
+| Category | Score | Rationale |
+|---|---:|---|
+| Dev Health | 98 | 261/261 test files and 1,668/1,668 assertions, strict lint, build and release gates pass. |
+| Creative Alignment | 98 | Readable danger and honest build rewards advance the project's proof-over-posture soul. |
+| Momentum | 96 | Both audit items implemented and staged; protocol propagation repair was scoped and reported upstream. |
+| Engagement | 90 | Gameplay coherence improved, but participant engagement remains unmeasured. |
+| Process Quality | 92 | Initial propagation and generated-contract failures were retained as evidence, diagnosed and corrected before the clean full run. |
+| Cross-Repo Coherence | 96 | Upstream incompatibility shipped through Studio Ark; no sibling repo was edited. |
+| Security Posture | 96 | No dependency added; security release gate and npm audit pass. |
+| Ecosystem Integration | 90 | Existing stats-page, identity and provider gaps remain visible; no invented launch claim. |
+| Capital Efficiency | 100 | No new package, paid service, or hosted AI call. |
+| Automation Coverage | 94 | Focused simulation and perk facts tests plus 14 directly inspected, hash-bound browser captures cover the changes; physical-device evidence remains open. |
+
+Score remains 950/1000 by evidence, not by inheriting a perfect rating. The three in-session waves were Developer wall truth, ordinary perk fact truth, and hosted verification/deployment; the first two are complete, and the third is complete through staging with exact-main production follow-through pending at this record point. New `[SIL:2]` task: restore a navigable, analytically deeper `/stats` from the existing aggregate feed. `[SIL:1]` task: confirm Studio Ops fixes incompatible protocol propagation before reapplying the script bundle. No balance retune without participants.

@@ -1,37 +1,12 @@
-<!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: fde28a4d551f -->
-<!-- generated-at: 2026-09-10T18:36:10.579Z -->
+<!-- condensed-by: Codex, local summary without API call -->
+<!-- source: context/LATEST_HANDOFF.md · Session 178 -->
 
 # LATEST_HANDOFF (compact)
 
-Session 174 Handoff Summary
+Session 178: the two-item audit is implemented. Developer boss walls hide and restore after 240 simulation frames with collision, painted layers and flow-field routing aligned. All 27 ordinary perks use shared numeric facts; Overclocked and Overdrive shot cadence matches the advertised rates, and Last Resort triples Dead Man's Hand damage.
 
-Session
-- S174 closed. Ran one complete /arc from synchronized main under standing founder authorization.
+Clean verification: 261 test files/1,668 tests, strict lint, deployable build, public/schema/security and supply-chain gates. Immutable staging ce59619c passes shell 7/7 and hosted Chrome 28/28. Fourteen desktop/mobile, dark/light screenshots were directly inspected; CANON-053 passes.
 
-What Shipped
-- Fixed lint:strict (exit 1 since S172 Dependabot bump on src/main.jsx) with scoped entry override + entryFiles.test.js; wired lint:strict into both deploy CI workflows.
-- Added check-closeout-artifact-currency.mjs (+lib, 13 cases); wired into schema:lint, exposed as closeout:currency, registered in protocol-drift-check. Fixes STATE_VECTOR.json and GENOME_HISTORY.json stale since S170.
-- silAvg3/silAvg5 now derive from SIL ledger in write-project-status.mjs (recomputed-never-trusted); ends float-churn and 995-vs-997.7 disagreement.
-- coverage:check now reports NOT MEASURED instead of FAIL/ENOENT.
-- Verified: Vitest 243/243 files, 1,466/1,466 assertions; 14/14 static gates (up from 12/14); build + deployable build + security release gate green. App chunk 469.06 KB under 560 KB. No src/ runtime change. Committed and pushed direct to main; Actions deploys to Cloudflare Pages.
+Startup propagation 8bcd1bc replaced incompatible project scripts, producing 58 failures. Local scripts were restored, universal AGENTS and SECURITY updates retained, and an Ark cargo reported the defect upstream. CANON-054 remains open because the existing aggregate feed lacks a navigable /stats page; TASK_BOARD carries the follow-up. Project remains FORGE/public-unlaunched.
 
-Current Intent
-- Audit the measurement/observability layer (gates lying green while subject red/stale) and close findings with executable regression protection.
-
-Now Bucket (top 3)
-- Backlog measurement layer audited once; next unexamined surface is generated public content and genome ledger duplicate/out-of-order session labels (SIL brainstorm item 2).
-- objectiveHandlers.js gameplay-completion cutover — still deliberately unshipped (third session, launch-risk).
-- If future session finds backlog clean again, proceed to public-content/genome-ledger audit.
-
-Blockers (top 3)
-- Backlog remains founder-, credential-, hardware-, and data-blocked.
-- SPARKED release: NO-GO (engineering FORGE GO). Unchanged.
-- Genome ledger duplicate/out-of-order session labels — found, deliberately left unfixed.
-
-Human-Blocked
-- Founder creative direction: none this session; CDR not appended.
-- SPARKED NO-GO: founder-owned, unchanged this session.
-
-Next Session
-- Confirm backlog still clean, then audit generated public content and genome ledger session-label integrity.
+Next: exact-main CI, production deploy and revision verification; then closeout receipt. Participant and physical-device evidence remains unmeasured.

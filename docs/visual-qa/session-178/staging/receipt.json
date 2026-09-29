@@ -1,0 +1,196 @@
+{
+  "baseUrl": "https://ce59619c.call-of-doodie.pages.dev",
+  "capturedAt": "2026-09-28T23:22:39.407Z",
+  "captures": [
+    {
+      "surface": "home",
+      "theme": "sewer-night",
+      "width": 390,
+      "height": 900,
+      "screenshot": {
+        "file": "home--sewer-night--390.png",
+        "sha256": "b1b1284777dffd9e5ae3df4757246f9a5f953926c7ab331c5159f2cbe885f89e"
+      },
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true
+        },
+        {
+          "id": "no-browser-errors",
+          "ok": true
+        },
+        {
+          "id": "no-horizontal-overflow",
+          "ok": true
+        },
+        {
+          "id": "correct-content",
+          "ok": true
+        },
+        {
+          "id": "theme-applied",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "surface": "status",
+      "theme": "sewer-night",
+      "width": 390,
+      "height": 900,
+      "screenshot": {
+        "file": "status--sewer-night--390.png",
+        "sha256": "3a35389ddcd47b3c307be24262b45110895833784b83447128cd45c6d93b984d"
+      },
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true
+        },
+        {
+          "id": "no-browser-errors",
+          "ok": true
+        },
+        {
+          "id": "no-horizontal-overflow",
+          "ok": true
+        },
+        {
+          "id": "correct-content",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "surface": "home",
+      "theme": "porcelain-day",
+      "width": 390,
+      "height": 900,
+      "screenshot": {
+        "file": "home--porcelain-day--390.png",
+        "sha256": "7bb3d6e834ab07070430a50c5d82b142f4a47d923525ccdd1218e9c2752c8e33"
+      },
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true
+        },
+        {
+          "id": "no-browser-errors",
+          "ok": true
+        },
+        {
+          "id": "no-horizontal-overflow",
+          "ok": true
+        },
+        {
+          "id": "correct-content",
+          "ok": true
+        },
+        {
+          "id": "theme-applied",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "surface": "home",
+      "theme": "sewer-night",
+      "width": 1440,
+      "height": 900,
+      "screenshot": {
+        "file": "home--sewer-night--1440.png",
+        "sha256": "0aa10b0137f1bf5387b2fa60f0eceecbf5103ec823ad0af701097d3536bc251f"
+      },
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true
+        },
+        {
+          "id": "no-browser-errors",
+          "ok": true
+        },
+        {
+          "id": "no-horizontal-overflow",
+          "ok": true
+        },
+        {
+          "id": "correct-content",
+          "ok": true
+        },
+        {
+          "id": "theme-applied",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "surface": "status",
+      "theme": "sewer-night",
+      "width": 1440,
+      "height": 900,
+      "screenshot": {
+        "file": "status--sewer-night--1440.png",
+        "sha256": "a77f33dea6640e481ab8bb5d8c6445c6a66b4abefcb8f22cfe18e2602c30ddc0"
+      },
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true
+        },
+        {
+          "id": "no-browser-errors",
+          "ok": true
+        },
+        {
+          "id": "no-horizontal-overflow",
+          "ok": true
+        },
+        {
+          "id": "correct-content",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "surface": "home",
+      "theme": "porcelain-day",
+      "width": 1440,
+      "height": 900,
+      "screenshot": {
+        "file": "home--porcelain-day--1440.png",
+        "sha256": "cc11a33d9a528b70aecb04d844649fc26d583f29a4140abcf7be706f953e9b62"
+      },
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true
+        },
+        {
+          "id": "no-browser-errors",
+          "ok": true
+        },
+        {
+          "id": "no-horizontal-overflow",
+          "ok": true
+        },
+        {
+          "id": "correct-content",
+          "ok": true
+        },
+        {
+          "id": "theme-applied",
+          "ok": true
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "pass": true,
+    "checks": 28,
+    "passed": 28,
+    "failures": []
+  }
+}

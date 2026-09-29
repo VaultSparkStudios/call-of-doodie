@@ -6,6 +6,9 @@ import HUD from "../src/components/HUD.jsx";
 import { RunHistoryPanel } from "../src/components/MenuPanels.jsx";
 import { drawOffscreenThreatArrows, getOffscreenThreatArrows } from "../src/utils/offscreenIndicators.js";
 import { applyTheme, readTheme } from "../src/utils/theme.js";
+import { PERKS } from "../src/constants.js";
+import { stepEnemyFrame } from "../src/systems/enemyFrame.js";
+import { getArenaLayers } from "../src/systems/backgroundLayer.js";
 
 applyTheme(readTheme(), { persist: false });
 
@@ -35,6 +38,60 @@ const perkOptions = Object.freeze([
   { id: "parkour_pro", name: "Parkour Pro", emoji: "🏃", tier: "uncommon", desc: "Move faster and keep the flank readable." },
   { id: "eagle_eye", name: "Eagle Eye", emoji: "🎯", tier: "common", desc: "Raise critical-hit chance." },
 ]);
+
+const factPerkOptions = Object.freeze(["overclocked", "overdrive", "chain_lightning"].map(id => PERKS.find(perk => perk.id === id)));
+
+function DeveloperObstacleStage() {
+  const canvases = useRef([]);
+  const stage = useRef(null);
+  useEffect(() => {
+    const W = 600, H = 320;
+    const wall = { x: 255, y: 120, w: 90, h: 65 };
+    const player = { x: 530, y: 240, health: 100, maxHealth: 100, invincible: 0 };
+    const enemy = {
+      id: "developer", x: 70, y: 80, typeIndex: 21, isBossEnemy: true,
+      health: 100, maxHealth: 100, speed: 0, size: 50, wobble: 0,
+      hitFlash: 0, ranged: false, shootTimer: 0, projRate: 100,
+      projSpeed: 4, color: "#00FF88", hasDebugMode: true,
+      debugModeTimer: 479, debugModeCooldown: 480,
+    };
+    const gs = {
+      player, enemies: [enemy], enemyBullets: [], bullets: [], particles: [],
+      floatingTexts: [], pickups: [], obstacles: [wall], hazards: [], currentWave: 50,
+      screenShake: 0, bossWave: true, _ffTimer: -10000, _ffPx: player.x, _ffPy: player.y,
+    };
+    const theme = { name: document.documentElement.dataset.codTheme || "sewer-night" };
+    const samples = [];
+    const drawState = index => {
+      const canvas = canvases.current[index];
+      const ctx = canvas.getContext("2d");
+      const layers = getArenaLayers(gs, W, H, 1, { theme });
+      ctx.drawImage(layers.underlay.canvas, 0, 0);
+      ctx.drawImage(layers.obstacles.canvas, 0, 0);
+      samples.push({ rgba: [...ctx.getImageData(275, 140, 1, 1).data], width: wall.w, epoch: gs._arenaLayerEpoch || 0 });
+    };
+    drawState(0);
+    stepEnemyFrame({ gs, player, world: { W, H }, frame: 1 });
+    drawState(1);
+    wall._devSaved.frames = 1;
+    stepEnemyFrame({ gs, player, world: { W, H }, frame: 2 });
+    drawState(2);
+    stage.current.dataset.visualChecks = JSON.stringify(samples);
+  }, []);
+  return (
+    <main ref={stage} data-testid="developer-obstacle-stage" style={{ minHeight: "100dvh", padding: 20, background: "var(--surface-0, #06110d)", color: "var(--text-0, #fff)" }}>
+      <h1 style={{ textAlign: "center" }}>Developer arena: visible wall states</h1>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 340px), 1fr))", gap: 14, maxWidth: 1300, margin: "auto" }}>
+        {["Solid wall", "Debug mode: passable", "Restored wall"].map((label, index) => (
+          <section key={label} style={{ border: "1px solid #438b70", padding: 10, borderRadius: 12 }}>
+            <h2 style={{ fontSize: 16, margin: "0 0 10px" }}>{label}</h2>
+            <canvas ref={node => { canvases.current[index] = node; }} width={600} height={320} style={{ width: "100%", height: "auto" }} />
+          </section>
+        ))}
+      </div>
+    </main>
+  );
+}
 
 const drillEvents = Object.freeze([
   { type: "run_drill_outcome", payload: { receiptId: "visual-2", drillId: "hold-lane", title: "Keep one exit lane open", status: "improved", endedAt: 200, baseline: { wave: 5, score: 1400 }, observed: { wave: 7, score: 2200 }, scoreDelta: 800 } },
@@ -140,6 +197,10 @@ const visualSurface = surface === "perk-before"
   ? <PerkModal options={perkOptions} level={7} activePerks={activePerks} previewDoctrineDeltas={false} onSelect={() => {}} />
   : surface === "perk-after"
     ? <PerkModal options={perkOptions} level={7} activePerks={activePerks} onSelect={() => {}} />
+    : surface === "perk-facts"
+      ? <PerkModal options={factPerkOptions} level={7} activePerks={activePerks} onSelect={() => {}} />
+    : surface === "developer-obstacle"
+      ? <DeveloperObstacleStage />
     : surface === "threat-before"
       ? <ThreatStage baseline />
     : surface === "threat-after"

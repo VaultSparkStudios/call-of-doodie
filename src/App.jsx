@@ -1,5 +1,6 @@
 import { getRunXpGain, getPlayerProjectileSpeed, getPickupCollectionRange, shouldDropStandardPickup } from "./config/weeklyMutationRuntime.js";
 import { applyMetaUpgrades, applyMetaTree, finalizeMetaStart, multiplyKillScore, applyWeeklyMutationWithAffinity, consumeGauntletMetaChoice, metaUpgradeValue, metaIncrease, META_TREE_FACTS } from "./config/upgradeFacts.js";
+import { PERK_FACTS } from "./config/perkFacts.js";
 import { useState, useEffect, useRef, useCallback, useMemo, lazy } from "react";
 import AsyncPanelBoundary from "./components/AsyncPanelBoundary.jsx";
 import { drawGame } from "./drawGame.js";
@@ -124,7 +125,7 @@ import {
   resolveRunModeFromFlags,
   readRunModeFlags,
 } from "./systems/runSession.js";
-import { buildDeathScreenProps } from "./systems/deathFlow.js";
+import { buildDeathScreenProps, deadMansHandDamage } from "./systems/deathFlow.js";
 import { reconcileOwnership } from "./utils/cosmeticTrack.js";
 import { matchesExperiment } from "./utils/runBrain.js";
 import { applyThreatRecommendationChoice, queueCompletedRunFact, recordPostRunFieldReport } from "./systems/runFactFlow.js";
@@ -1369,7 +1370,7 @@ export default function CallOfDoodie() {
     if (gs.overclocked) {
       gs.overclockedShots = (gs.overclockedShots || 0) + 1;
       setOverclockedShots(gs.overclockedShots);
-      if (gs.overclockedShots >= 20) {
+      if (gs.overclockedShots >= PERK_FACTS.overclocked.forcedReloadShots) {
         gs.overclockedShots = 0;
         setOverclockedShots(0);
         addText(gs, gs.player.x, gs.player.y - 40, "🔧 OVERHEATED!", "#FF8800", true);
@@ -1517,11 +1518,11 @@ export default function CallOfDoodie() {
     // Dead Man's Hand: massive AOE + grant a free guardian angel (once per run)
     if (allowRecovery && gs.deadMansHand && !gs.deadMansHandUsed) {
       gs.deadMansHandUsed = true;
-      const dmhRadius = 250;
+      const dmhRadius = PERK_FACTS.dead_mans_hand.radius;
       (gs.enemies || []).forEach(e => {
         const d = Math.hypot(e.x - gs.player.x, e.y - gs.player.y);
         if (d < dmhRadius) {
-          const result = combatRuntimeRef.current.applyEnemyDamage(e, Math.floor(200 * (1 - d / dmhRadius)), { source: "dead-mans-hand", weaponName: "DEAD MAN'S HAND" });
+          const result = combatRuntimeRef.current.applyEnemyDamage(e, deadMansHandDamage(d, perkModsRef.current.deadManTripleExplosion), { source: "dead-mans-hand", weaponName: "DEAD MAN'S HAND" });
           if (result.applied > 0) { e.hitFlash = 15; gs.totalDamage += result.applied; }
         }
       });
@@ -1979,8 +1980,8 @@ export default function CallOfDoodie() {
     addXp(defeat.xpPoints);
     gs.killFlash = 6;
     if (gs.vampireMode) { p.health = Math.min(p.maxHealth, p.health + 3); setHealth(Math.floor(p.health)); }
-    if (perkModsRef.current.adrenalineRush && p.health > 0 && p.health < p.maxHealth * 0.30) {
-      gs.adrenalineRushTimer = perkModsRef.current.adrenalineRushDuration || 120;
+    if (perkModsRef.current.adrenalineRush && p.health > 0 && p.health < p.maxHealth * PERK_FACTS.adrenaline_rush.healthThreshold) {
+      gs.adrenalineRushTimer = perkModsRef.current.adrenalineRushDuration || PERK_FACTS.adrenaline_rush.frames;
       addText(gs, p.x, p.y - 50, "⚡ ADRENALINE!", "#FF6600", true);
       addParticles(gs, p.x, p.y, "#FF6600", 12);
     }

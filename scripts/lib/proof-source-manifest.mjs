@@ -42,11 +42,11 @@ function manifestRoot(files) {
   return hashBytes(Buffer.from(canonical, 'utf8'));
 }
 
-export function buildProofSourceManifestFromEntries(entries = []) {
-  const files = [...new Map(entries.map((row) => [normalize(row.path), {
-    path: normalize(row.path),
-    sha256: row.sha256,
-  }])).values()].sort((a, b) => a.path.localeCompare(b.path));
+export function buildProofSourceManifest(root) {
+  const files = proofSourceInventory(root).map(({ absolute, path: rel }) => ({
+    path: rel,
+    sha256: hashBytes(fs.readFileSync(absolute)),
+  }));
   return {
     schemaVersion: 1,
     algorithm: 'sha256',
@@ -54,27 +54,6 @@ export function buildProofSourceManifestFromEntries(entries = []) {
     rootHash: manifestRoot(files),
     files,
   };
-}
-
-export function buildProofSourceManifestForPaths(root, relativePaths = []) {
-  const files = [...new Set(relativePaths.map(normalize))]
-    .sort((a, b) => a.localeCompare(b))
-    .map((rel) => {
-      const absolute = path.resolve(root, rel);
-      const rootPrefix = path.resolve(root) + path.sep;
-      if (absolute !== path.resolve(root) && !absolute.startsWith(rootPrefix)) {
-        throw new Error(`proof source escapes root: ${rel}`);
-      }
-      if (!fs.existsSync(absolute) || !fs.statSync(absolute).isFile()) {
-        throw new Error(`proof source missing: ${rel}`);
-      }
-      return { path: rel, sha256: hashBytes(fs.readFileSync(absolute)) };
-    });
-  return buildProofSourceManifestFromEntries(files);
-}
-
-export function buildProofSourceManifest(root) {
-  return buildProofSourceManifestForPaths(root, proofSourceInventory(root).map((row) => row.path));
 }
 
 export function validateProofSourceManifest(manifest) {
@@ -123,4 +102,4 @@ export function formatProofSourceDiff(diff) {
   return parts.join(' · ') || 'manifest root differs without a file-level delta';
 }
 
-export default { proofSourceInventory, buildProofSourceManifest, buildProofSourceManifestForPaths, buildProofSourceManifestFromEntries, validateProofSourceManifest, diffProofSourceManifests, formatProofSourceDiff };
+export default { proofSourceInventory, buildProofSourceManifest, validateProofSourceManifest, diffProofSourceManifests, formatProofSourceDiff };

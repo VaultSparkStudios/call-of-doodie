@@ -30,6 +30,36 @@ function arena(overrides = {}) {
 afterEach(() => vi.useRealTimers());
 
 describe("boss frame behavior", () => {
+  it("restores Developer walls after 240 simulated frames and repaints both transitions", () => {
+    vi.useFakeTimers();
+    const { gs, enemy, step } = arena({
+      typeIndex: 21, hasDebugMode: true, debugModeTimer: 479, debugModeCooldown: 480,
+    });
+    const wall = { x: 300, y: 300, w: 40, h: 20 };
+    gs.obstacles = [wall];
+
+    step();
+    expect([wall.w, wall.h]).toEqual([0, 0]);
+    expect(wall._devSaved).toEqual({ w: 40, h: 20, frames: 240 });
+    expect(gs._arenaLayerEpoch).toBe(1);
+    expect(gs._ffTimer).toBe(30);
+
+    vi.advanceTimersByTime(10000);
+    expect([wall.w, wall.h]).toEqual([0, 0]);
+    for (let i = 0; i < 239; i++) step();
+    expect([wall.w, wall.h]).toEqual([0, 0]);
+    step();
+    expect([wall.w, wall.h]).toEqual([40, 20]);
+    expect(wall._devSaved).toBeUndefined();
+    expect(gs._arenaLayerEpoch).toBe(2);
+    expect(vi.getTimerCount()).toBe(0);
+
+    for (let i = 0; i < 240; i++) step();
+    expect([wall.w, wall.h]).toEqual([0, 0]);
+    expect(gs._arenaLayerEpoch).toBe(3);
+    expect(enemy.debugModeTimer).toBe(0);
+  });
+
   it("runs Speed Surge for 120 simulation frames and does not expire while paused", () => {
     vi.useFakeTimers();
     const { enemy, step } = arena({ hasSpeedSurge: true, speedSurgeTimer: 298, speedSurgeCooldown: 300 });

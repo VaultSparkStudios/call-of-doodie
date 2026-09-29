@@ -1,27 +1,20 @@
-# Latest Handoff — Session 177
+# Latest Handoff — Session 178
 
-## Where We Left Off (Session 177)
+## Where We Left Off (Session 178)
 
-Session Intent: Repair visuals/audio, make the original mode and alternatives clear, test every mode and all Operations, then finish closeout and deployment.
-Intent outcome: Achieved for the requested engineering work.
+Session Intent: Run the complete /arc, push the result directly to main, and fully deploy it.
+Intent outcome: Engineering and staging achieved; exact-main CI and production verification are the remaining authorized follow-through at this record point.
 
-Operation objectives, navigation, transitions and retries work through all six routes; objective debriefs match actual outcomes.
+The Developer boss now hides walls for 240 simulation frames. Collision, painted layers and flow-field routing switch together and pause with the game. All 27 ordinary perks take numeric claims and behavior from shared facts; Overclocked and Overdrive fire at the advertised cadence, and Last Resort triples Dead Man's Hand damage.
 
-- Objective debrief advice and every replay action use the actual mode outcome; survival drills and wave-skip practice are suppressed for objective modes.
-- Operation retry opens the draft from the death screen, preserves mission and route, and restarts at encounter one.
-- Operation controls and targets occupy safe arena ground; escort carts navigate real walls; HUNT and authored finales wait for and resolve their intended enemies.
-- Sabotage reinforcement starts outside respite; boss-first completion cannot softlock the final interaction; pause excludes simulation time and keyboard/touch/controller held inputs combine correctly.
+The S178 audit's two premise-verified items are implemented. The clean suite passed 261/261 files and 1,668/1,668 tests; strict lint, deployable build, public contract, schema, security, npm audit and supply-chain gates passed. Immutable staging https://ce59619c.call-of-doodie.pages.dev/ passed 7/7 shell checks and 28/28 hosted browser checks. Fourteen hash-bound screenshots were directly inspected across desktop/mobile and dark/light. CANON-053 passes.
 
-Exact source 65f983937142 passed GitHub Actions 34926899773: 260 files / 1,639 tests. Strict lint, deployable build, public contract (28 files), claims, schema, security and supply-chain gates passed. All 12 modes received natural-input browser runs; Extraction and Bot Royale reached victory. Six assisted Operation routes completed 42 encounters with zero objective failures or browser errors; all six pause checks passed. Sixty-four hash-bound before/after captures cover dark/light and desktop/mobile. Production 7cb07a99 and callofdoodie.wtf report 65f983937142; shell 7/7 and desktop/mobile play, audio suspend/resume and six directly inspected production states passed.
+Startup canon sync auto-committed an incompatible protocol script bundle (8bcd1bc), producing 58 test failures. Project-specific scripts were restored to the prior compatible versions while universal AGENTS.md and SECURITY.md guidance was retained; an Ark cargo informed Studio Ops. This is not a gameplay failure. CANON-054 remains a STRONG gap because the existing aggregate stats feed has no navigable /stats page; a named follow-up is on TASK_BOARD.
 
-Deploy: closeout 47182750c90f deployed to production 4f370a9d; workflow 34928998935 passed 260 files / 1,639 tests. Live revision matched and shell 7/7 passed. Gameplay remains source-equivalent to verified 65f983937142. A final documentation receipt commit seals these results. Final receipt: audits/2026-09-15.json.
+Deploy: staging verified; production pending exact-main CI, direct deployment and revision checks. The project remains FORGE/public-unlaunched. No participant, physical-device, subjective audio, or balance claim is made.
 
 ## Next
 
-- Collect representative participant runs and physical controller/mobile evidence before balancing difficulty.
-- Continue ordinary-perk fact derivation; meta upgrade/tree facts already share runtime constants.
-- Review the Developer ability timer/telegraph contract against runtime before changing its promises.
-
-Assisted Operation runs used boosted health, position setup and lethal damage through the real enemy lifecycle; they did not force encounter indices or completion counters. Natural runs used normal controls. Physical gamepads/devices, participant balance and subjective audio listening remain unmeasured. FORGE/public-unlaunched status is unchanged.
-
-The append-only S177 SIL assessment stays 950/1000; these are follow-through fixes, not a new numbered session.
+- Complete the authorized exact-main push, CI gate, production deploy, canonical-domain smoke and closeout receipt.
+- Restore the public /stats page from the existing aggregate feed with genuine history, definitions and analysis.
+- Gather representative participant and physical controller/mobile evidence before changing balance.

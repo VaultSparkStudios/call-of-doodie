@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-09-15T03:51:07.939Z",
-  "uiBaseRef": "fb6f3ec19767b3ec7f2466ffbf2b2c208e96b40b",
-  "uiHeadRef": "Corrective working tree; exact source hashes recorded",
-  "stagingUrl": "http://127.0.0.1:5188",
+  "capturedAt": "2026-09-28T23:31:00.695Z",
+  "uiBaseRef": "3d99789",
+  "uiHeadRef": "S178 working tree; exact source hashes recorded",
+  "stagingUrl": "https://ce59619c.call-of-doodie.pages.dev",
   "themes": [
     "dark",
     "light"
@@ -11,890 +11,231 @@
   "sourceFiles": [
     {
       "file": "src/App.jsx",
-      "sha256": "fd807efb871324b12ae84d6cfa09a47360e7b400be564431faa4e291dce580e8"
+      "sha256": "1a6f79e3486c267ab815178ea02b4cd3d252b6bf0ac05d39ff908ae1195a281e"
     },
     {
-      "file": "src/App.launch.test.jsx",
-      "sha256": "d82b27eaf42eb9400aa0418ffef1f67ceacb2bd7103fd98abbeb0d923a1a2517"
+      "file": "src/config/perkFacts.js",
+      "sha256": "efd232806793d2225ba2b70c5f856e4fe3772b35cb764776af6c0dd341fb1312"
     },
     {
-      "file": "src/components/DeathScreen.jsx",
-      "sha256": "80546f647bfb85f9ee0473cab4b3a92509b549b805acb60e92d9a70a2d8244a4"
-    },
-    {
-      "file": "src/components/OperationArenaOverlay.jsx",
-      "sha256": "dbd6df7c7e4ebf96252bdab938fd8496d76373f0d2abb812629b6770bb5d5696"
-    },
-    {
-      "file": "src/components/OperationArenaOverlay.test.jsx",
-      "sha256": "55c8ace18264698f4779fed61bbb397a97b089b67f8b0b55bd9079e8c1b51520"
-    },
-    {
-      "file": "src/components/OperationRuntimeLayer.jsx",
-      "sha256": "54ddfc67b49e97e203aa3ff5f194815eb2f271fb6d68927fee16295ed333fe04"
-    },
-    {
-      "file": "src/hooks/useOperationMode.js",
-      "sha256": "e925725a3803a5b9ef881c2c83fb06a7e4060d38c70f205e788a6ea4701c2a60"
-    },
-    {
-      "file": "src/systems/allyUnit.js",
-      "sha256": "c321f2034f333c448ce64b32ed11c9cb634039529ec8923cc91cc8c6ecd41e2e"
-    },
-    {
-      "file": "src/systems/arenaEnvironment.js",
-      "sha256": "99b85774d5d8499960ff8cb475d18989dfd37d04995818aa38180c236e7f1982"
+      "file": "src/constants.js",
+      "sha256": "c8a1d6576af3bbd05b6d5a8013aa541e87528fb0f0ad62b4192d741f1e0bddca"
     },
     {
       "file": "src/systems/deathFlow.js",
-      "sha256": "9893ed1030969423253652712e59dbc3e23ea121b32269542b7c2f835d8ee769"
+      "sha256": "e41054ed4cb4a6aa846ee485c13337f6e98e42b14bc084ac25f292317bb05965"
     },
     {
-      "file": "src/systems/deathFlow.test.js",
-      "sha256": "8ee211f5968ccd4e57b0b953d85ce12fae78ffc0ce4c13c447a10b4b71d7d6be"
+      "file": "src/systems/enemyFrame.js",
+      "sha256": "3cd1f19e1907abb7989464e5d035aa5deb5036be58b176a45cdf0b3969b86a57"
     },
     {
-      "file": "src/systems/flowField.js",
-      "sha256": "8f62efffb7c2aa257cfc5b48b7da94ac577e1fd294613261102764acf1e774b0"
+      "file": "src/systems/perkResolution.js",
+      "sha256": "8e476a7b460a6a44f29dcd53a50d0e52a2e94ee6544d63fc0515f790c0ac2231"
     },
     {
-      "file": "src/systems/objectiveHandlers.js",
-      "sha256": "99252026e51eda716be69318d4556e1cc780a825a31179c6a3c36de7f85ea5a0"
+      "file": "src/systems/projectileFrame.js",
+      "sha256": "597c1cb251de6ddf1cd806c073a77b491492d8668102d7c34dc62a232dfdb3e0"
     },
     {
-      "file": "src/systems/objectiveHandlers.test.js",
-      "sha256": "868719430618f49944e3729246cf59f026b7459a264ec6d1f3d7d97d8138ac48"
+      "file": "public/status/index.html",
+      "sha256": "7e5c1b6b182424578d32cc901b963f111ccf86653a48828199630a6ba36b3457"
     },
     {
-      "file": "src/systems/operationArenaState.js",
-      "sha256": "54cb1ac7e9eeace8e8de06dfb9e0b3611974470ad748063deae86acd4e4fc776"
-    },
-    {
-      "file": "src/utils/drillDirector.js",
-      "sha256": "78709e9643501ab92203802a52ac82c5e87e0424bb7ed52a511b14f4a78040bd"
-    },
-    {
-      "file": "src/utils/insightGraph.js",
-      "sha256": "2767611427cefdb9c2a1610325585a1b4be87932fcdd15f3ade5ad5f4aef86e1"
-    },
-    {
-      "file": "src/utils/runDebrief.js",
-      "sha256": "796264f42d023a7ce666e3dffa24b5b7154a09f13aa74f5007d551ae1f959240"
-    },
-    {
-      "file": "src/systems/escortNavigation.test.js",
-      "sha256": "fc16dbe726b8dd860e286c21170f6fbf9bb52b53e5d1b8f0b6e78b44ba61e3dc"
-    },
-    {
-      "file": "src/systems/operationRuntimeRules.js",
-      "sha256": "5dbd97d489d054bb96805adc72daa6ee1f3c8d04242dce14d930f8066faa3bd5"
-    },
-    {
-      "file": "src/systems/operationRuntimeRules.test.js",
-      "sha256": "680519dc344a26d5500899039c461e0887916c2e13051e6f4e36e7228c3bb41e"
-    },
-    {
-      "file": "src/utils/objectiveDebrief.js",
-      "sha256": "0c988db94e67c1495f690e5faaaeaa942f0643a3609a585078dc2807901fa686"
-    },
-    {
-      "file": "src/utils/objectiveDebrief.test.js",
-      "sha256": "e5d18fe7b764fd2e763c5eb635eb95a5ad554ec0753d3e566176079de594b52e"
+      "file": "visual-harness/operation.jsx",
+      "sha256": "6e3a2cdf642646ceffafa474eec2eb9aa6eb147652a5e78a728e6158dbd8208d"
     }
   ],
-  "workingTreeUiSha256": "6d82e4f5d6a83cb24e2286c612e144dbbb29b550b004ace24746cbdb5ddc1751",
   "captures": [
     {
-      "file": "operation-followup-2026-09-14/before-1440-sewer-night-boss_gauntlet-loss.jpg",
-      "sha256": "420e12f0cc0c5be3f6699987702f8e5e5c9703f30497d8af61158083c6614310",
+      "file": "session-178/perk-facts--sewer-night--390.png",
+      "sha256": "7043f11daf832245dd62087692abd58b271054862cb298376ded1718735df66e",
       "viewport": {
-        "width": 1440,
-        "height": 900
+        "width": 390,
+        "height": 844
       },
       "theme": "dark",
       "projectTheme": "sewer-night",
-      "page": "boss_gauntlet failure debrief",
-      "phase": "before"
+      "page": "Ordinary perk card claims after exact fire-rate correction",
+      "phase": "after"
     },
     {
-      "file": "operation-followup-2026-09-14/before-1440-sewer-night-boss_gauntlet-win.jpg",
-      "sha256": "7805935727d86fdb7b9acd7d93902f88c141021cf53db5aee85c6090cb4449a4",
+      "file": "session-178/developer-obstacle--sewer-night--390.png",
+      "sha256": "e94617003d253e35b7accf9ad9587fc767944879b8db8d4183b64301b4a1ab73",
       "viewport": {
-        "width": 1440,
-        "height": 900
+        "width": 390,
+        "height": 844
       },
       "theme": "dark",
       "projectTheme": "sewer-night",
-      "page": "boss_gauntlet victory debrief",
-      "phase": "before"
+      "page": "Developer wall visible, debugged and restored in the rendered arena",
+      "phase": "after"
     },
     {
-      "file": "operation-followup-2026-09-14/before-1440-sewer-night-hold_the_throne-loss.jpg",
-      "sha256": "1034d8c87ccd648014be3a79257167d5ffd826f76470377e6fb2e7974d7fc202",
+      "file": "session-178/perk-facts--sewer-night--1440.png",
+      "sha256": "2eee358472a1a29e82029e84a23e9dacb9a69715d6e9aca88dac2b391a7a01a4",
       "viewport": {
         "width": 1440,
-        "height": 900
+        "height": 1000
       },
       "theme": "dark",
       "projectTheme": "sewer-night",
-      "page": "hold_the_throne failure debrief",
-      "phase": "before"
+      "page": "Ordinary perk card claims after exact fire-rate correction",
+      "phase": "after"
     },
     {
-      "file": "operation-followup-2026-09-14/before-1440-sewer-night-hold_the_throne-win.jpg",
-      "sha256": "6a07666d6c26d156e30c6c4a724b66a61cdeb717b6e463bfbb2bf4af03fae493",
+      "file": "session-178/developer-obstacle--sewer-night--1440.png",
+      "sha256": "759b74bfa65ce8a01c8eacd665d7f6ef474cd2b1698ca9cc125b657c70a4c671",
       "viewport": {
         "width": 1440,
-        "height": 900
+        "height": 1000
       },
       "theme": "dark",
       "projectTheme": "sewer-night",
-      "page": "hold_the_throne victory debrief",
-      "phase": "before"
+      "page": "Developer wall visible, debugged and restored in the rendered arena",
+      "phase": "after"
     },
     {
-      "file": "operation-followup-2026-09-14/before-1440-porcelain-day-boss_gauntlet-loss.jpg",
-      "sha256": "0e59f3754fd2dd28712c699c145dc4c4ebb3cf2226215eeda852cb4231e6d8a8",
+      "file": "session-178/perk-facts--porcelain-day--390.png",
+      "sha256": "7043f11daf832245dd62087692abd58b271054862cb298376ded1718735df66e",
       "viewport": {
-        "width": 1440,
-        "height": 900
+        "width": 390,
+        "height": 844
       },
       "theme": "light",
       "projectTheme": "porcelain-day",
-      "page": "boss_gauntlet failure debrief",
-      "phase": "before"
+      "page": "Ordinary perk card claims after exact fire-rate correction",
+      "phase": "after"
     },
     {
-      "file": "operation-followup-2026-09-14/before-1440-porcelain-day-boss_gauntlet-win.jpg",
-      "sha256": "a888e00962ce6b48a793154eda10035cabb09e29f5c37de6e8d3db41b6b2230a",
+      "file": "session-178/developer-obstacle--porcelain-day--390.png",
+      "sha256": "e94617003d253e35b7accf9ad9587fc767944879b8db8d4183b64301b4a1ab73",
       "viewport": {
-        "width": 1440,
-        "height": 900
+        "width": 390,
+        "height": 844
       },
       "theme": "light",
       "projectTheme": "porcelain-day",
-      "page": "boss_gauntlet victory debrief",
-      "phase": "before"
+      "page": "Developer wall visible, debugged and restored in the rendered arena",
+      "phase": "after"
     },
     {
-      "file": "operation-followup-2026-09-14/before-1440-porcelain-day-hold_the_throne-loss.jpg",
-      "sha256": "6548655a89f2adf67f61bd2e7a91da69842b17f3b12a4efc5ff26c082867f5ee",
+      "file": "session-178/perk-facts--porcelain-day--1440.png",
+      "sha256": "2eee358472a1a29e82029e84a23e9dacb9a69715d6e9aca88dac2b391a7a01a4",
       "viewport": {
         "width": 1440,
-        "height": 900
+        "height": 1000
       },
       "theme": "light",
       "projectTheme": "porcelain-day",
-      "page": "hold_the_throne failure debrief",
-      "phase": "before"
+      "page": "Ordinary perk card claims after exact fire-rate correction",
+      "phase": "after"
     },
     {
-      "file": "operation-followup-2026-09-14/before-1440-porcelain-day-hold_the_throne-win.jpg",
-      "sha256": "22fe42ca1839930e4f79761b894b8d0ee11848360181d7c07765fcffbd264f6a",
+      "file": "session-178/developer-obstacle--porcelain-day--1440.png",
+      "sha256": "759b74bfa65ce8a01c8eacd665d7f6ef474cd2b1698ca9cc125b657c70a4c671",
       "viewport": {
         "width": 1440,
-        "height": 900
+        "height": 1000
       },
       "theme": "light",
       "projectTheme": "porcelain-day",
-      "page": "hold_the_throne victory debrief",
-      "phase": "before"
+      "page": "Developer wall visible, debugged and restored in the rendered arena",
+      "phase": "after"
     },
     {
-      "file": "operation-followup-2026-09-14/before-390-sewer-night-boss_gauntlet-loss.jpg",
-      "sha256": "6034ca74fb16588be2014ea860cc4a9173fb0013be4f286ad1a7efb0cfb3a010",
+      "file": "session-178/staging/home--sewer-night--390.png",
+      "sha256": "b1b1284777dffd9e5ae3df4757246f9a5f953926c7ab331c5159f2cbe885f89e",
       "viewport": {
         "width": 390,
         "height": 900
       },
       "theme": "dark",
       "projectTheme": "sewer-night",
-      "page": "boss_gauntlet failure debrief",
-      "phase": "before"
+      "page": "Hosted staging game home after runtime activation",
+      "phase": "after"
     },
     {
-      "file": "operation-followup-2026-09-14/before-390-sewer-night-boss_gauntlet-win.jpg",
-      "sha256": "309c0388c76eb0a4ed58d36624af50806a7431abfc94357bacb9c9deabd3a4fa",
+      "file": "session-178/staging/status--sewer-night--390.png",
+      "sha256": "3a35389ddcd47b3c307be24262b45110895833784b83447128cd45c6d93b984d",
       "viewport": {
         "width": 390,
         "height": 900
       },
       "theme": "dark",
       "projectTheme": "sewer-night",
-      "page": "boss_gauntlet victory debrief",
-      "phase": "before"
+      "page": "Hosted staging public service status",
+      "phase": "after"
     },
     {
-      "file": "operation-followup-2026-09-14/before-390-sewer-night-hold_the_throne-loss.jpg",
-      "sha256": "90f9f035527fb533602466718dd3a0a042c9b1759af636e5962ae832fee195e9",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "page": "hold_the_throne failure debrief",
-      "phase": "before"
-    },
-    {
-      "file": "operation-followup-2026-09-14/before-390-sewer-night-hold_the_throne-win.jpg",
-      "sha256": "b7bb4f0df55e6b58fa28abc24819eeb4c17b6bdcf1cc4fb59b4726ee3bf456a0",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "page": "hold_the_throne victory debrief",
-      "phase": "before"
-    },
-    {
-      "file": "operation-followup-2026-09-14/before-390-porcelain-day-boss_gauntlet-loss.jpg",
-      "sha256": "21f4e288b6419f171b449f9d1f6df282b804efc311e128886dc82c12e0f70b36",
+      "file": "session-178/staging/home--porcelain-day--390.png",
+      "sha256": "7bb3d6e834ab07070430a50c5d82b142f4a47d923525ccdd1218e9c2752c8e33",
       "viewport": {
         "width": 390,
         "height": 900
       },
       "theme": "light",
       "projectTheme": "porcelain-day",
-      "page": "boss_gauntlet failure debrief",
-      "phase": "before"
+      "page": "Hosted staging game home after runtime activation",
+      "phase": "after"
     },
     {
-      "file": "operation-followup-2026-09-14/before-390-porcelain-day-boss_gauntlet-win.jpg",
-      "sha256": "4764f939ae73022806d9527576abd1beb574981f96eb16447839a89462776d4f",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "page": "boss_gauntlet victory debrief",
-      "phase": "before"
-    },
-    {
-      "file": "operation-followup-2026-09-14/before-390-porcelain-day-hold_the_throne-loss.jpg",
-      "sha256": "c5b7986062d5bc102f7b1226156f8a5efb4900c8e451d9b4dc343f7d7688407c",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "page": "hold_the_throne failure debrief",
-      "phase": "before"
-    },
-    {
-      "file": "operation-followup-2026-09-14/before-390-porcelain-day-hold_the_throne-win.jpg",
-      "sha256": "0729671dcfe6978519edc09efb3089584fd037fa8bae4adccd9b17dc24b2b029",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "page": "hold_the_throne victory debrief",
-      "phase": "before"
-    },
-    {
-      "file": "operation-followup-2026-09-14/after-final-1440-sewer-night-boss_gauntlet-loss.jpg",
-      "sha256": "26998835eb5ecc7e596fc189ee48771e65c803bc92b04dc60efb80d4595a3ab2",
+      "file": "session-178/staging/home--sewer-night--1440.png",
+      "sha256": "0aa10b0137f1bf5387b2fa60f0eceecbf5103ec823ad0af701097d3536bc251f",
       "viewport": {
         "width": 1440,
         "height": 900
       },
       "theme": "dark",
       "projectTheme": "sewer-night",
-      "page": "boss_gauntlet failure debrief",
+      "page": "Hosted staging game home after runtime activation",
       "phase": "after"
     },
     {
-      "file": "operation-followup-2026-09-14/after-final-1440-sewer-night-boss_gauntlet-win.jpg",
-      "sha256": "1f17e7b6c55c3c1665577e74054494c14c1ca1b61942bc93f44cfeda2caa2017",
+      "file": "session-178/staging/status--sewer-night--1440.png",
+      "sha256": "a77f33dea6640e481ab8bb5d8c6445c6a66b4abefcb8f22cfe18e2602c30ddc0",
       "viewport": {
         "width": 1440,
         "height": 900
       },
       "theme": "dark",
       "projectTheme": "sewer-night",
-      "page": "boss_gauntlet victory debrief",
+      "page": "Hosted staging public service status",
       "phase": "after"
     },
     {
-      "file": "operation-followup-2026-09-14/after-final-1440-sewer-night-sewer_extraction-loss.jpg",
-      "sha256": "404a574530aa88aba7ac150bef95ec3d374175b9d7ee742dc5d026a7cf2a591b",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "page": "sewer_extraction failure debrief",
-      "phase": "after"
-    },
-    {
-      "file": "operation-followup-2026-09-14/after-final-1440-sewer-night-sewer_extraction-win.jpg",
-      "sha256": "a359e4adb612a0d0c1565e44a3e093c4eb9bbee55ca60e78d7f881532160505f",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "page": "sewer_extraction victory debrief",
-      "phase": "after"
-    },
-    {
-      "file": "operation-followup-2026-09-14/after-final-1440-sewer-night-bot_royale-loss.jpg",
-      "sha256": "03c5a940fb3144c44f4c34c5e088d814137ee43a9ee7a6a0d970e4e7d86209a0",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "page": "bot_royale failure debrief",
-      "phase": "after"
-    },
-    {
-      "file": "operation-followup-2026-09-14/after-final-1440-sewer-night-bot_royale-win.jpg",
-      "sha256": "f1b0bf4c94980004e435ae79cf433f0009e2aedfb16ba361bcd42bd25b5faf7d",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "page": "bot_royale victory debrief",
-      "phase": "after"
-    },
-    {
-      "file": "operation-followup-2026-09-14/after-final-1440-sewer-night-hold_the_throne-loss.jpg",
-      "sha256": "3742bc29c240a00c6f434fbfbe1e6901e256b65a3562e990e48cf5dc1eebc8db",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "page": "hold_the_throne failure debrief",
-      "phase": "after"
-    },
-    {
-      "file": "operation-followup-2026-09-14/after-final-1440-sewer-night-hold_the_throne-win.jpg",
-      "sha256": "dae8410bfa095269373b6402dab61df0fd67514eac460a4f2f89283aff46a12f",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "page": "hold_the_throne victory debrief",
-      "phase": "after"
-    },
-    {
-      "file": "operation-followup-2026-09-14/after-final-1440-porcelain-day-boss_gauntlet-loss.jpg",
-      "sha256": "aeece4a254a311f22efabc62e8840ee264c0df4fa020d84f8670a2bb7759f82c",
+      "file": "session-178/staging/home--porcelain-day--1440.png",
+      "sha256": "cc11a33d9a528b70aecb04d844649fc26d583f29a4140abcf7be706f953e9b62",
       "viewport": {
         "width": 1440,
         "height": 900
       },
       "theme": "light",
       "projectTheme": "porcelain-day",
-      "page": "boss_gauntlet failure debrief",
-      "phase": "after"
-    },
-    {
-      "file": "operation-followup-2026-09-14/after-final-1440-porcelain-day-boss_gauntlet-win.jpg",
-      "sha256": "1f17e7b6c55c3c1665577e74054494c14c1ca1b61942bc93f44cfeda2caa2017",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "page": "boss_gauntlet victory debrief",
-      "phase": "after"
-    },
-    {
-      "file": "operation-followup-2026-09-14/after-final-1440-porcelain-day-sewer_extraction-loss.jpg",
-      "sha256": "eccde606565b646f678c9ea4faa01c97380e8b7c3a853859253cc2ba136f511e",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "page": "sewer_extraction failure debrief",
-      "phase": "after"
-    },
-    {
-      "file": "operation-followup-2026-09-14/after-final-1440-porcelain-day-sewer_extraction-win.jpg",
-      "sha256": "a359e4adb612a0d0c1565e44a3e093c4eb9bbee55ca60e78d7f881532160505f",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "page": "sewer_extraction victory debrief",
-      "phase": "after"
-    },
-    {
-      "file": "operation-followup-2026-09-14/after-final-1440-porcelain-day-bot_royale-loss.jpg",
-      "sha256": "1d85c5d558293a3e9f6d588fcda61d322a7a9305e5d39a237d105d77f457065e",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "page": "bot_royale failure debrief",
-      "phase": "after"
-    },
-    {
-      "file": "operation-followup-2026-09-14/after-final-1440-porcelain-day-bot_royale-win.jpg",
-      "sha256": "f1b0bf4c94980004e435ae79cf433f0009e2aedfb16ba361bcd42bd25b5faf7d",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "page": "bot_royale victory debrief",
-      "phase": "after"
-    },
-    {
-      "file": "operation-followup-2026-09-14/after-final-1440-porcelain-day-hold_the_throne-loss.jpg",
-      "sha256": "7c4ba0efcb1e102b2ecebff78e69be3c9823a95428c4aa18c9b6ba9a91ca56b2",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "page": "hold_the_throne failure debrief",
-      "phase": "after"
-    },
-    {
-      "file": "operation-followup-2026-09-14/after-final-1440-porcelain-day-hold_the_throne-win.jpg",
-      "sha256": "dae8410bfa095269373b6402dab61df0fd67514eac460a4f2f89283aff46a12f",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "page": "hold_the_throne victory debrief",
-      "phase": "after"
-    },
-    {
-      "file": "operation-followup-2026-09-14/after-final-390-sewer-night-boss_gauntlet-loss.jpg",
-      "sha256": "50c2253f4b8187b197a33a20d5e9a3f9d6a998de58da79df9bf4280862c41ae9",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "page": "boss_gauntlet failure debrief",
-      "phase": "after"
-    },
-    {
-      "file": "operation-followup-2026-09-14/after-final-390-sewer-night-boss_gauntlet-win.jpg",
-      "sha256": "6e81a007c577244f4fa2ca69fb31eb152844c098bb2c88cb3b0050638c46cb0e",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "page": "boss_gauntlet victory debrief",
-      "phase": "after"
-    },
-    {
-      "file": "operation-followup-2026-09-14/after-final-390-sewer-night-sewer_extraction-loss.jpg",
-      "sha256": "e3675088231476dda6e499c7bd34c5de766ee5f492cb8d20485fcf0d04d48a98",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "page": "sewer_extraction failure debrief",
-      "phase": "after"
-    },
-    {
-      "file": "operation-followup-2026-09-14/after-final-390-sewer-night-sewer_extraction-win.jpg",
-      "sha256": "b256b9ef9a4f87b59e15b9f08570d90d7d0151fcf3500b111dc40048b2e58f27",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "page": "sewer_extraction victory debrief",
-      "phase": "after"
-    },
-    {
-      "file": "operation-followup-2026-09-14/after-final-390-sewer-night-bot_royale-loss.jpg",
-      "sha256": "c7cddf2c8eb201a5b35891648205053bc9cda392fdeef68dbbbfb8aec6e31aec",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "page": "bot_royale failure debrief",
-      "phase": "after"
-    },
-    {
-      "file": "operation-followup-2026-09-14/after-final-390-sewer-night-bot_royale-win.jpg",
-      "sha256": "e6b1ae0466d0fffe26e7e67ff88d5eaaaf7aef81c178afe7824911ce92da1133",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "page": "bot_royale victory debrief",
-      "phase": "after"
-    },
-    {
-      "file": "operation-followup-2026-09-14/after-final-390-sewer-night-hold_the_throne-loss.jpg",
-      "sha256": "442c1024cc23c59f1716cb281461d864919c151426e947201fb7cd66cb703aec",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "page": "hold_the_throne failure debrief",
-      "phase": "after"
-    },
-    {
-      "file": "operation-followup-2026-09-14/after-final-390-sewer-night-hold_the_throne-win.jpg",
-      "sha256": "b3a175125d62be0621134cbd7feb01cb79719b8aff043cf6a49ec59e7285b716",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "page": "hold_the_throne victory debrief",
-      "phase": "after"
-    },
-    {
-      "file": "operation-followup-2026-09-14/after-final-390-porcelain-day-boss_gauntlet-loss.jpg",
-      "sha256": "fb4adabf9f64be00dee2bcdae5a102e0022b85ee1c316adcf8699a3fc7d1655b",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "page": "boss_gauntlet failure debrief",
-      "phase": "after"
-    },
-    {
-      "file": "operation-followup-2026-09-14/after-final-390-porcelain-day-boss_gauntlet-win.jpg",
-      "sha256": "6e81a007c577244f4fa2ca69fb31eb152844c098bb2c88cb3b0050638c46cb0e",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "page": "boss_gauntlet victory debrief",
-      "phase": "after"
-    },
-    {
-      "file": "operation-followup-2026-09-14/after-final-390-porcelain-day-sewer_extraction-loss.jpg",
-      "sha256": "9a56752de224a5bb6ebbfa4da5dee25b7875f7db4e76d5ee684bcdab3941ee15",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "page": "sewer_extraction failure debrief",
-      "phase": "after"
-    },
-    {
-      "file": "operation-followup-2026-09-14/after-final-390-porcelain-day-sewer_extraction-win.jpg",
-      "sha256": "b256b9ef9a4f87b59e15b9f08570d90d7d0151fcf3500b111dc40048b2e58f27",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "page": "sewer_extraction victory debrief",
-      "phase": "after"
-    },
-    {
-      "file": "operation-followup-2026-09-14/after-final-390-porcelain-day-bot_royale-loss.jpg",
-      "sha256": "4fa97ff5a9f712923397638402f0adba7380944b6128ca913fe64d46a8e1a373",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "page": "bot_royale failure debrief",
-      "phase": "after"
-    },
-    {
-      "file": "operation-followup-2026-09-14/after-final-390-porcelain-day-bot_royale-win.jpg",
-      "sha256": "e6b1ae0466d0fffe26e7e67ff88d5eaaaf7aef81c178afe7824911ce92da1133",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "page": "bot_royale victory debrief",
-      "phase": "after"
-    },
-    {
-      "file": "operation-followup-2026-09-14/after-final-390-porcelain-day-hold_the_throne-loss.jpg",
-      "sha256": "5000d73c7743355ecf320cf0548efd94eada085c3dfeed8ea47a60e39972a86f",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "page": "hold_the_throne failure debrief",
-      "phase": "after"
-    },
-    {
-      "file": "operation-followup-2026-09-14/after-final-390-porcelain-day-hold_the_throne-win.jpg",
-      "sha256": "b3a175125d62be0621134cbd7feb01cb79719b8aff043cf6a49ec59e7285b716",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "page": "hold_the_throne victory debrief",
-      "phase": "after"
-    },
-    {
-      "file": "operation-followup-2026-09-14/1440-sewer-night-boss_gauntlet-loss-actions.jpg",
-      "sha256": "669c2ade757983321c2bb1386692e552d3963605253fda3425f9b1a980ad6a58",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "page": "Expanded objective replay actions",
-      "phase": "after"
-    },
-    {
-      "file": "operation-followup-2026-09-14/1440-porcelain-day-boss_gauntlet-loss-actions.jpg",
-      "sha256": "fb721bb13d98fc8e24b5557cb23b26299160b0dde7294b062a3f38abad00c4d8",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "page": "Expanded objective replay actions",
-      "phase": "after"
-    },
-    {
-      "file": "operation-followup-2026-09-14/390-sewer-night-boss_gauntlet-loss-actions.jpg",
-      "sha256": "06d07bf07e486a1429d07352f238bc24c5ab671edb5123c9177bf04c563374b6",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "page": "Expanded objective replay actions",
-      "phase": "after"
-    },
-    {
-      "file": "operation-followup-2026-09-14/390-porcelain-day-boss_gauntlet-loss-actions.jpg",
-      "sha256": "04228e24e9b0ff9e2f11a7c1a25d0ad0a3b5b9c5813ca73ffee903d7d926a971",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "page": "Expanded objective replay actions",
-      "phase": "after"
-    },
-    {
-      "file": "operation-followup-2026-09-14/blacksite-flush-1440-complete.jpg",
-      "sha256": "4ef284c6e398294d9f89fa551f1899a433fb371c5a4382cb55c13a809d0d20c5",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "page": "Seven-encounter Operation completion",
-      "phase": "after"
-    },
-    {
-      "file": "operation-followup-2026-09-14/blacksite-flush-390-complete.jpg",
-      "sha256": "29d737c011dcb54e1f726a6e50fc30f91c388b08f5371c4b55ab7cd013c1d4dd",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "page": "Seven-encounter Operation completion",
-      "phase": "after"
-    },
-    {
-      "file": "operation-followup-2026-09-14/porcelain-siege-1440-complete.jpg",
-      "sha256": "7a24ea0b8b4e825c8ab0f5cef28690b1f08107cdd89f26c80e9875c902ecd801",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "page": "Seven-encounter Operation completion",
-      "phase": "after"
-    },
-    {
-      "file": "operation-followup-2026-09-14/porcelain-siege-390-complete.jpg",
-      "sha256": "c2b71cb1f502db95ba5e748ca7fb48f74484d5004822fc7f71dc991f8e7f73f8",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "page": "Seven-encounter Operation completion",
-      "phase": "after"
-    },
-    {
-      "file": "operation-followup-2026-09-14/final-notice-1440-complete.jpg",
-      "sha256": "e4b51375c0018070dba33876451f9bdcae039942fe59adc35baaaed95b69af05",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "page": "Seven-encounter Operation completion",
-      "phase": "after"
-    },
-    {
-      "file": "operation-followup-2026-09-14/final-notice-390-complete.jpg",
-      "sha256": "3bb10b43fcd2ac206c74df1a0404e9a29df670f376dec035d8852e555ff3ee66",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "page": "Seven-encounter Operation completion",
-      "phase": "after"
-    },
-    {
-      "file": "operation-followup-2026-09-14/operation-1440-live.jpg",
-      "sha256": "574189728f54cc8006c12421967f3ec9bd7f5a256ae3b34bd148e5462a9d5e72",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "page": "Operation live",
-      "phase": "after"
-    },
-    {
-      "file": "operation-followup-2026-09-14/operation-1440-death.jpg",
-      "sha256": "cc2c8095c79fba79dab67714000672dbfed3197a731cdba9dcbbb038de342ef4",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "page": "Operation death",
-      "phase": "after"
-    },
-    {
-      "file": "operation-followup-2026-09-14/operation-1440-retry.jpg",
-      "sha256": "36ed184f55f41169d74e9b1958de3bc19aad9a725739856de28077aa5b97c6d3",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "page": "Operation retry",
-      "phase": "after"
-    },
-    {
-      "file": "operation-followup-2026-09-14/operation-390-live.jpg",
-      "sha256": "3010b3b4803c46c165e75313019e4187c2fb62b4d30648786681c26adddc0f2e",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "page": "Operation live",
-      "phase": "after"
-    },
-    {
-      "file": "operation-followup-2026-09-14/operation-390-death.jpg",
-      "sha256": "dd7a039bb6c50d46eca0250a208b918247b1f12b979d9cc3631842d3ca9e3812",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "page": "Operation death",
-      "phase": "after"
-    },
-    {
-      "file": "operation-followup-2026-09-14/operation-390-retry.jpg",
-      "sha256": "5bfdace2681cecb176754219ec453ef022c35e1f9d791787c7d9ce0997bf2244",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "page": "Operation retry",
+      "page": "Hosted staging game home after runtime activation",
       "phase": "after"
     }
   ],
   "inspection": {
     "renderedPixelsReviewed": true,
     "reviewer": "Codex direct image inspection",
-    "reviewedAt": "2026-09-15T03:51:07.941Z",
-    "scope": "Objective debriefs, expanded replay controls, Operation commands, completion and death/retry on desktop/mobile and both themes",
+    "reviewedAt": "2026-09-28T23:31:00.699Z",
+    "scope": "Eight perk and Developer boss captures plus six hosted staging game/status captures across desktop/mobile and dark/light, with prior-session baselines",
     "findings": [
-      "Baseline victories received inappropriate survival-collapse advice. Final debriefs reflect the mode outcome.",
-      "All four objective modes render readable win/loss advice with clear replay buttons; expanded actions fit and exclude wave skips.",
-      "All six Operation completion receipts show 7/7 encounters. Mobile completion panel scrolls; desktop/mobile retry restores the same mission.",
-      "Operation interaction points inside walls and escort path stalls were reproduced and repaired during actual browser sequences."
+      "Perk copy fits the 390px and 1440px cards and displays the corrected shot cadence claims.",
+      "The Developer wall disappears and returns in the rendered arena as collision geometry changes; cached paint follows each transition.",
+      "No clipping, overlap or unreadable text appeared in the eight inspected captures.",
+      "Hosted game home reached the playable runtime in both themes and widths; the generated status page remained readable at 390px and 1440px."
     ],
     "fixesApplied": [
-      "Objective-aware debrief and full-run retry; suppress generic survival drill attachment in every replay path.",
-      "Render pre-run draft from death screens as well as home.",
-      "Place mission targets on safe ground; route escort carts around obstacles.",
-      "Defer sabotage surge until wave transition ends; independent input holds, delayed hunt acquisition, authored bosses, and pause-safe timing."
+      "Simulation-frame wall duration and arena-layer invalidation at both transitions.",
+      "Ordinary perk fact source and corrected shot interval multipliers."
     ],
     "blockingDefectsOpen": 0
   },
   "methodLimits": [
-    "Objective win/loss screenshots use controlled terminal state.",
-    "Operation completion tests boost health, position the player, and apply lethal damage through the real enemy lifecycle; encounter counters and timers are not forced.",
-    "Natural-input runs are recorded separately. No physical-controller or participant balance claim."
+    "The S178 matrix uses the visual harness and deterministic boss stepper; it is not a participant playtest.",
+    "The harness palette for the perk and boss states is dark in both project theme modes; theme attribution comes from the browser state.",
+    "Hosted smoke verified shell and loaded home/status surfaces, not a full participant combat run."
   ]
 }

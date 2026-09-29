@@ -32,7 +32,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { resolveCapability, getSecret, redact, describeCapability } from './lib/secrets.mjs';
+import { resolveCapability, getSecret, redact } from './lib/secrets.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -175,9 +175,7 @@ const results = [];
 for (const cap of caps) {
   const resolved = resolveCapability(cap);
   if (!resolved.ok) {
-    // S313 [audit #1] — a skipped probe's detail must name a cause; the raw missing array
-    // is empty for unknown-capability, map-absent, map-unreadable and credential-free caps.
-    results.push({ cap, status: 'skipped', reason: resolved.reason, detail: describeCapability(resolved), checkedAt: new Date().toISOString() });
+    results.push({ cap, status: 'skipped', detail: `missing env: ${resolved.missing.join(', ')}`, checkedAt: new Date().toISOString() });
     continue;
   }
   const probe = PROBES[cap];

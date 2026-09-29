@@ -1,4 +1,5 @@
 import { CRIT_CHANCE, CRIT_MULT, HITMARKERS, WEAPONS } from "../constants.js";
+import { PERK_FACTS } from "../config/perkFacts.js";
 import {
   bulletEnemyCollision,
   computeBulletDamage,
@@ -221,7 +222,7 @@ export function stepProjectileFrame({
       }
       if (isCrit) {
         stats.crits++;
-        if (perkMods.critGrantsXp) addXp(10);
+        if (perkMods.critGrantsXp) addXp(PERK_FACTS.crit_cascade.glassMindXp);
       }
       addParticles(gs, enemy.x, enemy.y, isCrit ? "#FFD700" : enemy.color, isCrit ? 10 : 5);
       addText(gs, enemy.x, enemy.y - enemy.size / 2 - 8,
@@ -292,10 +293,10 @@ export function stepProjectileFrame({
       });
       enemy.hitFlash = isCrit ? 15 : 8;
       gs.totalDamage += result.applied;
-      if (gs.chainLightning && getRunRng(gs, "combat")() < 0.2) {
+      if (gs.chainLightning && getRunRng(gs, "combat")() < PERK_FACTS.chain_lightning.chance) {
         const target = findLightningChainTarget(gs.enemies, enemy, { range: 200 });
         if (target) {
-          const arcDamage = applyEnemyDamage(target, damage * 0.5, {
+          const arcDamage = applyEnemyDamage(target, damage * PERK_FACTS.chain_lightning.damage, {
             source: "chain-lightning",
             weaponIdx: bullet.wpnIdx ?? weaponIndex,
             weaponName: "CHAIN LIGHTNING",
@@ -318,7 +319,7 @@ export function stepProjectileFrame({
       }
       if (isCrit) {
         stats.crits++;
-        if (perkMods.critGrantsXp) addXp(10);
+        if (perkMods.critGrantsXp) addXp(PERK_FACTS.crit_cascade.glassMindXp);
       }
       const now = performance.now();
       if (!lastHitSoundRef || now - lastHitSoundRef.current > 50) {

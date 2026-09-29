@@ -1,3 +1,11 @@
+## Session 178 — Developer arena and ordinary perk truth
+
+- [x] [SIL:2] **DONE S178** Developer wall removal and restoration follow simulation frames; collision, painted geometry, and flow fields agree through pause and recast.
+- [x] [SIL:2] **DONE S178** Derive all 27 ordinary perk numeric claims and runtime effects from one facts module; correct Overclocked and Overdrive cadence and Dead Man's Hand amplification.
+- [x] [SIL:2] **DONE S178** Verify 261 test files/1,668 assertions, strict lint, deployable build, public/schema/security gates, 7/7 staging shell checks, 28/28 hosted browser checks, and 14 directly reviewed hash-bound captures.
+
+Scaffold: 3 S178 audit/release workstreams done; 0 in progress; 0 open. Production promotion and exact-source verification remain in this session's deploy follow-through.
+
 ## Session 177 — Final Operation and replay follow-through
 
 - [x] **DONE S177** Objective debrief advice and every replay action use the actual mode outcome; survival drills and wave-skip practice are suppressed for objective modes.
@@ -611,9 +619,11 @@ First checkpoint the bounded post-S159 propagation/CI/deploy recovery. Then begi
 
 ## Next
 
+- [ ] [SIL:2] **S178 follow-up** Restore a real, navigable `/stats` page from the existing aggregate feed and descriptor; deepen breakdowns/history and verify CANON-054 without inventing counts.
+- [ ] [SIL:1] [ARK] **S178 follow-up** Confirm Studio Ops repaired protocol propagation compatibility before allowing its script bundle to overwrite this repo's project-specific contracts again.
 - [x] **DONE S177** Objective victory/loss advice and all retry actions now follow the actual objective receipt; timed-mode checks and objective replay guards pass.
 - [ ] Collect longer participant playtests for the four objective modes and all three Operations; short scripted input checks and controlled endings do not establish balance or physical-device feel.
-- [ ] [SIL:2] **S177 remainder** Derive ordinary-perk description numbers from the same values apply uses; meta upgrade/tree facts are already shared. Start with court-pinned ordinary perks.
+- [x] [SIL:2] **DONE S178** Derive ordinary-perk description numbers from the same values apply uses; all 27 ordinary perks now share runtime facts and court-pinned behavior.
 - [x] [SIL:1] **DONE S177** Clone Decoy and Lifesteal have tested runtime consumers: finite visual ghosts and healing only after real bullet damage.
 - [x] [SIL:2] **DONE S84** Dev-toolchain vulnerability remediation — package-trust false positive for exact `vitest` was fixed in Studio Ops, then Call-Of-Doodie upgraded to `vitest@4.1.8`, `@vitest/coverage-v8@4.1.8`, `vite@7.3.5`, `@vitejs/plugin-react@5.1.4`, and exact npm overrides for patched transitive packages. Validation: `npm audit --json` 0 vulnerabilities, tests/build/e2e green.
 - [x] [SIL:3] **DONE S84** Playwright pointer 360 harness — `@playwright/test@1.60.0`, `playwright.config.ts`, and `tests/pointer-360.spec.ts` now drive the real canvas through `?debug=input` and assert the debug HUD reaches `pointer:4/4`.

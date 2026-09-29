@@ -902,6 +902,23 @@
       },
       "delta": 1,
       "cause": "Operation objectives, navigation, transitions and retries work through all six routes; objective debriefs match actual o"
+    },
+    {
+      "date": "2026-09-29",
+      "session": 178,
+      "total": 23,
+      "maxTotal": 25,
+      "overallStatus": "S178 gameplay and staging are verified; exact-main production follow-through is pending. SPARKED evidence remains incomplete.",
+      "lastReviewed": "2026-09-28",
+      "dimensions": {
+        "schema_alignment": 5,
+        "prompt_template_alignment": 4,
+        "derived_view_freshness": 5,
+        "handoff_continuity": 5,
+        "contradiction_density": 4
+      },
+      "delta": 0,
+      "cause": "Developer walls follow simulation time and ordinary perk numbers match their runtime effects; staging is verified."
     }
   ]
 }

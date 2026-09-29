@@ -9,8 +9,28 @@ import { retireEnemyWithoutDefeat } from "./enemyDefeatLifecycle.js";
 import { applySergeantAura, buildEnemyFrameIndex, countSummonsFor, createEnemyFrameIndex } from "./frameIndex.js";
 import { buildFlowField, sampleFlowField } from "./flowField.js";
 import { stepBossDecoys } from "./bossAbilities.js";
+import { invalidateArenaLayers } from "./backgroundLayer.js";
 
 const MAX_DYING_ANIM = 20;
+const DEVELOPER_DEBUG_FRAMES = 240;
+
+function advanceDeveloperObstacles(gs) {
+  let restored = false;
+  for (const obstacle of gs.obstacles || []) {
+    const saved = obstacle._devSaved;
+    if (!saved) continue;
+    saved.frames -= 1;
+    if (saved.frames > 0) continue;
+    obstacle.w = saved.w;
+    obstacle.h = saved.h;
+    delete obstacle._devSaved;
+    restored = true;
+  }
+  if (restored) {
+    invalidateArenaLayers(gs);
+    gs._ffTimer = 30;
+  }
+}
 
 /**
  * Pick the unit an enemy steers toward and fires at.
@@ -66,6 +86,7 @@ export function stepEnemyFrame({
   const p = player;
   const W = Number.isFinite(world.W) ? world.W : 1280;
   const H = Number.isFinite(world.H) ? world.H : 720;
+  advanceDeveloperObstacles(gs);
   stepBossDecoys(gs, world);
   // ── Flow field rebuild (every 30 frames or on significant player movement) ──
   gs._ffTimer = (gs._ffTimer || 0) + 1;
@@ -492,18 +513,19 @@ export function stepEnemyFrame({
     }
     // ── The Developer (21): debug mode, hotfix, merge conflict ──
     if (e.typeIndex === 21 && e.isBossEnemy) {
-      // Debug Mode: temporarily removes a random obstacle
+      // Debug Mode: removes a wall for four seconds of simulation time.
       if (e.hasDebugMode) {
-        e.debugModeTimer = (e.debugModeTimer || 0) + 1;
-        if (e.debugModeTimer >= e.debugModeCooldown && gs.obstacles && gs.obstacles.length > 0) {
-          e.debugModeTimer = 0;
-          const _ob = gs.obstacles[Math.floor(getRunRng(gs, "hazards")() * gs.obstacles.length)];
-          if (_ob && (_ob._devSaved === undefined)) {
-            const _savedW = _ob.w; const _savedH = _ob.h;
-            _ob._devSaved = true;
+        e.debugModeTimer = Math.min(e.debugModeCooldown, (e.debugModeTimer || 0) + 1);
+        if (e.debugModeTimer >= e.debugModeCooldown) {
+          const available = (gs.obstacles || []).filter(obstacle => !obstacle._devSaved && obstacle.w > 0 && obstacle.h > 0);
+          if (available.length > 0) {
+            const obstacle = available[Math.floor(getRunRng(gs, "hazards")() * available.length)];
+            e.debugModeTimer = 0;
+            obstacle._devSaved = { w: obstacle.w, h: obstacle.h, frames: DEVELOPER_DEBUG_FRAMES };
             addText(gs, e.x, e.y - 60, "🐛 DEBUGGING ARENA...", "#00FF88");
-            _ob.w = 0; _ob.h = 0;
-            setTimeout(() => { if (_ob) { _ob.w = _savedW; _ob.h = _savedH; _ob._devSaved = undefined; } }, 4000);
+            obstacle.w = 0; obstacle.h = 0;
+            invalidateArenaLayers(gs);
+            gs._ffTimer = 30;
           }
         }
       }

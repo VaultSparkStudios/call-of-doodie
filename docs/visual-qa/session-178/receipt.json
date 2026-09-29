@@ -1,0 +1,317 @@
+{
+  "schemaVersion": "s178-rendered-pixel-v1",
+  "generatedAt": "2026-09-28T22:03:14.653Z",
+  "baseUrl": "http://127.0.0.1:4174/operation.html",
+  "sourceHash": "c3f077a1ff4309a81e2e6d4adfad98fa6e96a6034f2053a0645946a7da573705",
+  "sourceFiles": [
+    "src/config/perkFacts.js",
+    "src/constants.js",
+    "src/systems/enemyFrame.js",
+    "src/systems/backgroundLayer.js",
+    "visual-harness/operation.jsx"
+  ],
+  "captures": [
+    {
+      "surface": "perk-facts",
+      "theme": "sewer-night",
+      "width": 390,
+      "height": 844,
+      "colorScheme": "dark",
+      "screenshot": {
+        "file": "perk-facts--sewer-night--390.png",
+        "sha256": "7043f11daf832245dd62087692abd58b271054862cb298376ded1718735df66e"
+      },
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true
+        },
+        {
+          "id": "theme-applied",
+          "ok": true
+        },
+        {
+          "id": "no-horizontal-overflow",
+          "ok": true
+        },
+        {
+          "id": "no-page-errors",
+          "ok": true
+        },
+        {
+          "id": "exact-shot-claims",
+          "ok": true
+        },
+        {
+          "id": "chain-lightning-claim",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "surface": "developer-obstacle",
+      "theme": "sewer-night",
+      "width": 390,
+      "height": 844,
+      "colorScheme": "dark",
+      "screenshot": {
+        "file": "developer-obstacle--sewer-night--390.png",
+        "sha256": "e94617003d253e35b7accf9ad9587fc767944879b8db8d4183b64301b4a1ab73"
+      },
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true
+        },
+        {
+          "id": "theme-applied",
+          "ok": true
+        },
+        {
+          "id": "no-horizontal-overflow",
+          "ok": true
+        },
+        {
+          "id": "no-page-errors",
+          "ok": true
+        },
+        {
+          "id": "simulated-geometry",
+          "ok": true
+        },
+        {
+          "id": "cache-repaint",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "surface": "perk-facts",
+      "theme": "sewer-night",
+      "width": 1440,
+      "height": 1000,
+      "colorScheme": "dark",
+      "screenshot": {
+        "file": "perk-facts--sewer-night--1440.png",
+        "sha256": "2eee358472a1a29e82029e84a23e9dacb9a69715d6e9aca88dac2b391a7a01a4"
+      },
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true
+        },
+        {
+          "id": "theme-applied",
+          "ok": true
+        },
+        {
+          "id": "no-horizontal-overflow",
+          "ok": true
+        },
+        {
+          "id": "no-page-errors",
+          "ok": true
+        },
+        {
+          "id": "exact-shot-claims",
+          "ok": true
+        },
+        {
+          "id": "chain-lightning-claim",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "surface": "developer-obstacle",
+      "theme": "sewer-night",
+      "width": 1440,
+      "height": 1000,
+      "colorScheme": "dark",
+      "screenshot": {
+        "file": "developer-obstacle--sewer-night--1440.png",
+        "sha256": "759b74bfa65ce8a01c8eacd665d7f6ef474cd2b1698ca9cc125b657c70a4c671"
+      },
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true
+        },
+        {
+          "id": "theme-applied",
+          "ok": true
+        },
+        {
+          "id": "no-horizontal-overflow",
+          "ok": true
+        },
+        {
+          "id": "no-page-errors",
+          "ok": true
+        },
+        {
+          "id": "simulated-geometry",
+          "ok": true
+        },
+        {
+          "id": "cache-repaint",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "surface": "perk-facts",
+      "theme": "porcelain-day",
+      "width": 390,
+      "height": 844,
+      "colorScheme": "light",
+      "screenshot": {
+        "file": "perk-facts--porcelain-day--390.png",
+        "sha256": "7043f11daf832245dd62087692abd58b271054862cb298376ded1718735df66e"
+      },
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true
+        },
+        {
+          "id": "theme-applied",
+          "ok": true
+        },
+        {
+          "id": "no-horizontal-overflow",
+          "ok": true
+        },
+        {
+          "id": "no-page-errors",
+          "ok": true
+        },
+        {
+          "id": "exact-shot-claims",
+          "ok": true
+        },
+        {
+          "id": "chain-lightning-claim",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "surface": "developer-obstacle",
+      "theme": "porcelain-day",
+      "width": 390,
+      "height": 844,
+      "colorScheme": "light",
+      "screenshot": {
+        "file": "developer-obstacle--porcelain-day--390.png",
+        "sha256": "e94617003d253e35b7accf9ad9587fc767944879b8db8d4183b64301b4a1ab73"
+      },
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true
+        },
+        {
+          "id": "theme-applied",
+          "ok": true
+        },
+        {
+          "id": "no-horizontal-overflow",
+          "ok": true
+        },
+        {
+          "id": "no-page-errors",
+          "ok": true
+        },
+        {
+          "id": "simulated-geometry",
+          "ok": true
+        },
+        {
+          "id": "cache-repaint",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "surface": "perk-facts",
+      "theme": "porcelain-day",
+      "width": 1440,
+      "height": 1000,
+      "colorScheme": "light",
+      "screenshot": {
+        "file": "perk-facts--porcelain-day--1440.png",
+        "sha256": "2eee358472a1a29e82029e84a23e9dacb9a69715d6e9aca88dac2b391a7a01a4"
+      },
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true
+        },
+        {
+          "id": "theme-applied",
+          "ok": true
+        },
+        {
+          "id": "no-horizontal-overflow",
+          "ok": true
+        },
+        {
+          "id": "no-page-errors",
+          "ok": true
+        },
+        {
+          "id": "exact-shot-claims",
+          "ok": true
+        },
+        {
+          "id": "chain-lightning-claim",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "surface": "developer-obstacle",
+      "theme": "porcelain-day",
+      "width": 1440,
+      "height": 1000,
+      "colorScheme": "light",
+      "screenshot": {
+        "file": "developer-obstacle--porcelain-day--1440.png",
+        "sha256": "759b74bfa65ce8a01c8eacd665d7f6ef474cd2b1698ca9cc125b657c70a4c671"
+      },
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true
+        },
+        {
+          "id": "theme-applied",
+          "ok": true
+        },
+        {
+          "id": "no-horizontal-overflow",
+          "ok": true
+        },
+        {
+          "id": "no-page-errors",
+          "ok": true
+        },
+        {
+          "id": "simulated-geometry",
+          "ok": true
+        },
+        {
+          "id": "cache-repaint",
+          "ok": true
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "pass": true,
+    "checks": 48,
+    "passed": 48,
+    "failures": []
+  }
+}

@@ -1,7 +1,17 @@
 import { describe, expect, it, vi } from "vitest";
 import fs from "node:fs";
 import path from "node:path";
-import { buildDeathCoachTelemetry, buildDeathScreenProps, buildDebriefStudioEventPlan, buildRunTheFixContract, buildScoreSubmitFallbackStudioEvent } from "./deathFlow.js";
+import { buildDeathCoachTelemetry, buildDeathScreenProps, buildDebriefStudioEventPlan, buildRunTheFixContract, buildScoreSubmitFallbackStudioEvent, deadMansHandDamage } from "./deathFlow.js";
+
+describe("Dead Man's Hand blast", () => {
+  it("triples actual blast damage with Last Resort without expanding its radius", () => {
+    expect(deadMansHandDamage(0)).toBe(200);
+    expect(deadMansHandDamage(0, true)).toBe(600);
+    expect(deadMansHandDamage(125)).toBe(100);
+    expect(deadMansHandDamage(125, true)).toBe(300);
+    expect(deadMansHandDamage(250, true)).toBe(0);
+  });
+});
 
 describe("buildDeathScreenProps", () => {
   it("carries an inspectable live fairness receipt without claiming full replay proof", () => {
