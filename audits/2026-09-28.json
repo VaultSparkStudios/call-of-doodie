@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "1.3",
+  "session": 178,
+  "date": "2026-09-28",
+  "headline": "Developer wall timing and ordinary perk promises now match the game players see.",
+  "shipped": [
+    "Developer boss wall removal lasts 240 simulation frames and restores collision, paint and pathfinding together.",
+    "All 27 ordinary perks derive numeric copy and behavior from shared facts; Overclocked, Overdrive and Last Resort now deliver their stated effects."
+  ],
+  "validation": "261 files / 1,668 tests passed with strict lint, deployable build, public contract, schema and security gates. Staging ce59619c passed shell 7/7 and hosted browser 28/28; 14 desktop/mobile, dark/light captures were inspected. Exact gameplay source 237003e8884148b44ecee10c30dd0da7066f3f57 passed CI workflow 36509845993 and deployed as immutable 773a1f58; immutable and canonical origins reported that revision and passed shell 7/7 each, cutover 5/5, backend 5/5, replay 3/3 and leaderboard isolation.",
+  "limits": "Participant outcomes, physical devices, current Core Web Vitals, Zoho reply-as, scoped telemetry, Obelisk identity and the absent /stats page are not claimed. Lifecycle remains FORGE/public-unlaunched.",
+  "production": {
+    "verifiedAt": "2026-09-29T01:55:44.025Z",
+    "commit": "237003e8884148b44ecee10c30dd0da7066f3f57",
+    "production": "https://callofdoodie.wtf/",
+    "immutableProduction": "https://773a1f58.call-of-doodie.pages.dev/",
+    "staging": "https://ce59619c.call-of-doodie.pages.dev/",
+    "workflow": 36509845993,
+    "ci": "success",
+    "files": 261,
+    "tests": 1668,
+    "shellAssertions": 7,
+    "productionRevision": "237003e88841",
+    "browser": "Staging hosted Chrome 28/28; 14 hash-bound desktop/mobile dark/light captures directly inspected.",
+    "visual": "CANON-053 passed with 14 source-bound captures.",
+    "workingTree": "Closeout-only documentation revision follows this gameplay-source production verification.",
+    "localServer": "stopped"
+  },
+  "closeout": {
+    "intent": "explicit-founder",
+    "writeback": "S178 current state, task board, handoff, status, truth audit, SIL, work log, audit receipt, brief and derived views reconciled.",
+    "silScore": 950,
+    "scaffold": { "tasks": 4, "done": 4, "inProgress": 0, "open": 0 },
+    "state": "gameplay-source-published-and-production-verified",
+    "cdr": "Reviewed; no new creative direction in the operational authorization.",
+    "arkCargo": "Startup script propagation incompatibility shipped to Studio Ops through Ark.",
+    "releaseReview": "Engineering FORGE deployment verified; SPARKED promotion remains gated.",
+    "commit": "237003e8884148b44ecee10c30dd0da7066f3f57",
+    "workflow": 36509845993,
+    "immutableProduction": "https://773a1f58.call-of-doodie.pages.dev/",
+    "verifiedAt": "2026-09-29T01:55:44.025Z",
+    "tests": { "files": 261, "assertions": 1668 },
+    "liveShell": { "passed": 7, "total": 7 },
+    "ownedProcessesRunning": 0,
+    "receiptSeal": "A final documentation-only revision follows and receives separate CI and deployment verification."
+  }
+}

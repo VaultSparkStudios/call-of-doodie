@@ -1,6 +1,6 @@
 ## 2026-09-28 — S178 gameplay and release truth
 
-Overall status: S178 gameplay and staging are verified; exact-main production follow-through is pending. SPARKED evidence remains incomplete.
+Overall status: S178 gameplay, staging, exact-source CI and production are verified. SPARKED evidence remains incomplete.
 Last reviewed: 2026-09-28
 
 | Dimension | Score | Evidence |
@@ -13,7 +13,7 @@ Last reviewed: 2026-09-28
 
 The Developer wall and ordinary perk promises now agree with simulation behavior. The full test suite passed 261/261 files and 1,668/1,668 tests after a separately identified startup propagation incompatibility was corrected locally; strict lint, deployable build, public/schema/security gates and hosted staging shell checks passed. The 14 hash-bound browser captures cover deterministic perk/boss states and loaded staging home/status states, not participant play or physical hardware.
 
-The canon scan reports zero ABSOLUTE gaps. CANON-054 remains a STRONG gap: `/stats` is missing despite an existing aggregate feed and earlier writeback describing a stats page. CANON-055 requires a commit-range recheck after the gameplay changes are committed. Production and exact-SHA CI are still pending at this record point; no source-to-live equality is claimed yet. FORGE/public-unlaunched status remains unchanged.
+The canon scan reports zero ABSOLUTE gaps. CANON-054 remains a STRONG gap: `/stats` is missing despite an existing aggregate feed and earlier writeback describing a stats page. CANON-055 passed the `3d99789..237003e` source-range recheck with 13 touched surface files. Exact source `237003e8884148b44ecee10c30dd0da7066f3f57` passed CI `36509845993`; immutable `773a1f58` and canonical production both report `237003e88841`, pass shell 7/7 each, and pass cutover, backend, replay and leaderboard checks. FORGE/public-unlaunched status remains unchanged.
 
 ## 2026-09-15 — S177 final closeout
 

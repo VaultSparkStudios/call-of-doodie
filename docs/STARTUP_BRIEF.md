@@ -26,7 +26,7 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ WHERE TO TEST · Call-Of-Doodie ══════════════════════════════╗
-║  Unit tests    → npm test — 260/260 passing ✓                    ║
+║  Unit tests    → npm test — 261/261 passing ✓                    ║
 ║  hosted-visual-proof → session-169-staging · route/theme/wid ✓   ║
 ║  production-verification → source ca1324136f8c · workflow 34 ✓   ║
 ║  hosted-staging → session-170-staging · immutable 520a56d6 · ✓   ║
@@ -43,8 +43,8 @@
 ╔══ SCORE ═══════════════════════════════════════════════════════╗
 ║                                                                  ║
 ║    950/1000   ██████████████████████░░   95%                     ║
-║    SIL v3.0  ·  Avg3: 982.3  ·  Velocity 2↑                      ║
-║    Last active: 1d  ·  Last closeout: 1d  ·  (active = newest…   ║
+║    SIL v3.0  ·  Avg3: 966.3  ·  Velocity 2↑                      ║
+║    Last active: 0d  ·  Last closeout: 1d  ·  (active = newest…   ║
 ║    Trend  ▂▂▂▄▄  ↑  (last 5 sessions)                            ║
 ║                                                                  ║
 ║    Category         Score  Bar        Spark   Δ                  ║
@@ -64,22 +64,22 @@
 
 ╔══ WHERE WE LEFT OFF  ·  Session 178 ═══════════════════════════╗
 ║  Shipped:  see LATEST_HANDOFF.md                                 ║
-║  Tests:    260/260 passing  ·  Deploy: N/A                       ║
+║  Tests:    261/261 passing  ·  Deploy: N/A                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
 ║  ⚠  ░░░░░░░░░░░░░░░░░░░░░░░░    1% used                          ║
-║     301,406 / 272,000 tok  ·  codex  ·  heuristic-stale          ║
+║     301,840 / 272,000 tok  ·  codex  ·  heuristic-stale          ║
 ║     Verdict: CONSIDER_CLOSEOUT  ← act now                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         260/260 passing (2026-09-15T04:32:39.879Z)     ║
+║  ✓  Tests         261/261 passing (2026-09-29T05:13:00.000Z)     ║
 ║  ✓  Velocity      2 ↑  ·  Debt: ↓                                ║
-║  ✓  Runway        selected S177 audit complete; production…      ║
+║  ✓  Runway        S178 audit and staging complete; production…   ║
 ║  ⛔  Context age   ?d                                             ║
 ║  ⛔  IGNIS         44466 FORGE  ·  14d old                        ║
-║  ⛔  Truth         Operation and objective replay fixes are…      ║
+║  ⛔  Truth         S178 gameplay, staging, exact-source CI and…   ║
 ║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs…        ║
 ║  ✓  Genome dims   all stable  (23/25)                            ║
 ║  ✓  Entropy       0.207  (healthy)                               ║
@@ -88,7 +88,7 @@
 ║  ✓  Templates     v3.3 aligned                                   ║
 ║  ⛔  Revenue sig.  not found  ⚠ stale                             ║
 ║  ✓  Deploy gaps   no gaps (run: ops deploy-gaps)                 ║
-║  ⛔  Doctor        169/221 (78%)  ·  1 failing                    ║
+║  ⛔  Doctor        157/227 (70%)  ·  4 failing                    ║
 ║  ✓  Codex trust   trusted project active                         ║
 ║  ✓  Canon adopt.  0/54 pending review                            ║
 ║  ✓  Cost          flat-rate Max Plan · usage ledger…             ║

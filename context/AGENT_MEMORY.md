@@ -1,4 +1,12 @@
-# Runtime Maintenance Notes — S177
+# Runtime Maintenance Notes — S178
+
+## S178 gameplay and release recovery
+
+- The Developer boss obstacle transition is simulation-frame based: wall collision, painted arena layers, and flow-field routing change together and restore after 240 frames. A pause must freeze the duration.
+- `src/config/perkFacts.js` is the shared authority for all 27 ordinary perk numeric claims and application. Overclocked and Overdrive shot intervals must deliver the advertised cadence; Last Resort triples Dead Man's Hand damage.
+- Gameplay source `237003e88841` passed CI and deployed to immutable `773a1f58` and the canonical domain. The S178 closeout records were recovered separately; do not treat a source deploy as proof that writeback was committed.
+- The aggregate stats feed exists but `/stats` is absent. Restore an honest, analyzed public page before claiming CANON-054 conformance. Studio Ops startup protocol script propagation broke project-specific exports; retain the compatible local scripts until upstream repair is verified.
+- A stale generated Hot Context hash makes `tests/hot-context.test.js` fail after closeout edits. Regenerate with `npm run context:hot`, then rerun the suite. S178 recovery passed 261 files and 1,668 tests.
 
 - Shared meta facts now drive descriptions and runtime; Hair Trigger delivers exactly +10% shots and Scavenger II exactly +125% range. Loadout, score and Kill Frenzy modifiers compose.
 - Supply Drop grants one free coin-shop offer per wave, Gauntlet Ready supplies its opening extra perk, and Mutation Affinity scales favorable weekly bonuses.

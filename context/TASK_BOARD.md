@@ -3,8 +3,9 @@
 - [x] [SIL:2] **DONE S178** Developer wall removal and restoration follow simulation frames; collision, painted geometry, and flow fields agree through pause and recast.
 - [x] [SIL:2] **DONE S178** Derive all 27 ordinary perk numeric claims and runtime effects from one facts module; correct Overclocked and Overdrive cadence and Dead Man's Hand amplification.
 - [x] [SIL:2] **DONE S178** Verify 261 test files/1,668 assertions, strict lint, deployable build, public/schema/security gates, 7/7 staging shell checks, 28/28 hosted browser checks, and 14 directly reviewed hash-bound captures.
+- [x] [SIL:2] **DONE S178 production** Exact source `237003e88841` passed CI `36509845993` and deployed as `773a1f58`; immutable and canonical origins report that revision and pass shell 7/7 each, cutover 5/5, backend 5/5, replay 3/3, and leaderboard isolation.
 
-Scaffold: 3 S178 audit/release workstreams done; 0 in progress; 0 open. Production promotion and exact-source verification remain in this session's deploy follow-through.
+Scaffold: 4 S178 audit/release workstreams done; 0 in progress; 0 open. Closeout documentation follows in a later revision with its own CI/deploy verification.
 
 ## Session 177 — Final Operation and replay follow-through
 

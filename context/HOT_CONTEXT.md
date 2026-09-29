@@ -6,7 +6,7 @@
 
 - Session 178 (2026-09-28) — Developer boss walls now disappear and return on simulation frames, with collision, arena paint, and flow-field caches aligned. All 27 ordinary perk numeric claims derive from shared facts; Overclocked and Overdrive deliver their stated shot cadence, and Last Resort triples Dead Man's Hand damage. The two-item S178 audit is implemented.
 
-Validation: 261/261 test files and 1,668/1,668 tests passed, strict lint and deployable build passed, public contract 28/28, schema and security release gates passed, npm audit found zero vulnerabilities. Cloudflare staging `https://ce59619c.call-of-doodie.pages.dev` passed 7/7 live shell checks and 28/28 hosted browser checks. Fourteen hash-bound captures of perk, boss, loaded home, and status states were directly inspected at 390px/1440px in dark/light; CANON-053 passes. Production follow-through is pending exact-main CI and deploy verification at this point in the record.
+Validation: 261/261 test files and 1,668/1,668 tests passed, strict lint and deployable build passed, public contract 28/28, schema and security release gates passed, npm audit found zero vulnerabilities. Cloudflare staging `https://ce59619c.call-of-doodie.pages.dev` passed 7/7 live shell checks and 28/28 hosted browser checks. Fourteen hash-bound captures of perk, boss, loaded home, and status states were directly inspected at 390px/1440px in dark/light; CANON-053 passes. Exact gameplay source `237003e8884148b44ecee10c30dd0da7066f3f57` passed GitHub Actions `36509845993` and deployed to immutable `https://773a1f58.call-of-doodie.pages.dev/`; it and `https://callofdoodie.wtf/` reported revision `237003e88841` and passed live shell checks 7/7 each, cutover 5/5, backend 5/5, replay 3/3, and leaderboard isolation. A later documentation-only closeout revision has its own CI/deploy verification.
 
 Startup canon propagation auto-committed `8bcd1bc` and displaced local script contracts, causing 58 test failures. This session restored the project-compatible script versions; the defect was shipped to Studio Ops through Ark. CANON-054's `/stats` page is absent despite the existing stats feed and prior recorded shipment; a dedicated follow-up is open. No participant, physical-device, or balance claim follows from this session. FORGE/public-unlaunched status remains unchanged.
 
@@ -117,7 +117,7 @@ Decision (S175): excluded dated changelog entries from the mode-fact gate, and d
 
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 241,035 bytes · SHA-256 `2c21b0415e8a…`
-- `context/TASK_BOARD.md` · 167,814 bytes · SHA-256 `1752418a8f4e…`
-- `context/DECISIONS.md` · 163,076 bytes · SHA-256 `6e9fc3651095…`
+- `context/CURRENT_STATE.md` · 241,357 bytes · SHA-256 `465474128ebb…`
+- `context/TASK_BOARD.md` · 168,065 bytes · SHA-256 `7fb67d2b49f0…`
+- `context/DECISIONS.md` · 162,992 bytes · SHA-256 `da62ecf9c5d8…`
 - `docs/AUDIT_2026-09-28.json` · 7,516 bytes · SHA-256 `9ab8a34e572a…`

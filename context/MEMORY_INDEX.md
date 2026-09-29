@@ -39,7 +39,7 @@
 - Preserve comedy-first tone while respecting the live deployed build
 - Use `docs/IMPROVEMENT_PLAN.md` when deciding whether a feature is polish, depth, trust, pacing, or architecture work
 
-- [Runtime maintenance notes](AGENT_MEMORY.md) — S177 upgrade, mutation and boss contracts.
+- [Runtime maintenance notes](AGENT_MEMORY.md) — S178 Developer obstacle timing, ordinary perk facts, release recovery, plus S177 upgrade, mutation and boss contracts.
 
 
 - S177 final Operation/replay knowledge: context/AGENT_MEMORY.md; complete test scope and limits: docs/PLAYTEST_FOLLOWUP_2026-09-14.md; final release/closeout receipt: audits/2026-09-15.json.

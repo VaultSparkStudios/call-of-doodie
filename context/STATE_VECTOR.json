@@ -1,9 +1,9 @@
 {
   "vectorVersion": "1.0",
   "generatedAt": "2026-09-29",
-  "generatedAtMs": 1790646633265,
+  "generatedAtMs": 1790692793910,
   "session": 178,
-  "vectorHash": "b1d5b9164f019457",
+  "vectorHash": "400fa847cb98cc07",
   "silTotal": 950,
   "silAvg3": 966.3,
   "velocity": 2,
@@ -24,7 +24,7 @@
     "Collect longer participant playtests for the four objective modes and all three "
   ],
   "health": "green",
-  "truthStatus": "S178 gameplay and staging are verified; exact-main production follow-through is pending. SPARKED evidence remains incomplete.",
+  "truthStatus": "S178 gameplay, staging, exact-source CI and production are verified. SPARKED evidence remains incomplete.",
   "genome": null,
   "ignisScore": 44466,
   "ignisGrade": "FORGE",
@@ -33,8 +33,8 @@
   "slug": "call-of-doodie",
   "type": null,
   "lifecycle": "deployed",
-  "nextMilestone": "Exact-main production verification, then restore the public stats page and collect participant/device evidence.",
-  "currentFocus": "Developer walls follow simulation time and ordinary perk numbers match their runtime effects; staging is verified.",
+  "nextMilestone": "Restore the public stats page and collect participant/device evidence before lifecycle promotion.",
+  "currentFocus": "Developer walls and ordinary perk facts are production-verified at exact gameplay revision 237003e88841.",
   "lastShipped": "see LATEST_HANDOFF.md",
   "blockers": [
     "PostHog and project-scoped Sentry evidence remain unavailable; provider readiness is not represented as verified telemetry.",

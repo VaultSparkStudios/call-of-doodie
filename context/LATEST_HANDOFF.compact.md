@@ -9,4 +9,4 @@ Clean verification: 261 test files/1,668 tests, strict lint, deployable build, p
 
 Startup propagation 8bcd1bc replaced incompatible project scripts, producing 58 failures. Local scripts were restored, universal AGENTS and SECURITY updates retained, and an Ark cargo reported the defect upstream. CANON-054 remains open because the existing aggregate feed lacks a navigable /stats page; TASK_BOARD carries the follow-up. Project remains FORGE/public-unlaunched.
 
-Next: exact-main CI, production deploy and revision verification; then closeout receipt. Participant and physical-device evidence remains unmeasured.
+Exact gameplay source 237003e88841 passed CI 36509845993 and deployed at immutable 773a1f58; immutable and canonical origins reported that revision and passed 7/7 shell checks each, plus cutover/backend/replay/leaderboard courts. Closeout documentation follows in a later revision with its own CI/deploy verification. Participant and physical-device evidence remains unmeasured.

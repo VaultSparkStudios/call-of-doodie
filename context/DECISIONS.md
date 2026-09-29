@@ -8,7 +8,7 @@ Public-safe decisions only. Detailed internal decision history is maintained pri
 
 **Evidence:** The propagated scripts produced 58 failures, including removed task-board and project-status exports. Restoring the prior script versions yielded 261/261 test files and 1,668/1,668 tests passing. This is a local compatibility correction, not an exemption from future canon guidance.
 
-**STRONG canon gaps:** CANON-054 remains open because `/stats` is absent even though the aggregate feed and descriptor exist; restoring a real, analyzed page is a named TASK_BOARD follow-up rather than fabricating metrics during this gameplay arc. CANON-055's pre-commit checker sees only the startup propagation commit; the S178 code commit carries visible gameplay and perk-copy changes, with 14 reviewed browser captures as evidence of surface follow-through.
+**STRONG canon gaps:** CANON-054 remains open because `/stats` is absent even though the aggregate feed and descriptor exist; restoring a real, analyzed page is a named TASK_BOARD follow-up rather than fabricating metrics during this gameplay arc. CANON-055 passed the S178 source-range recheck (`--since 3d99789`) with 13 touched surface files and 14 reviewed browser captures.
 
 
 ## 2026-09-09 — Session 167 — The killer is whatever the damage record says, and the record says how sure it is
