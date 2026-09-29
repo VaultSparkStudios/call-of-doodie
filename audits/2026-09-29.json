@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "1.3",
+  "session": 179,
+  "date": "2026-09-29",
+  "headline": "A real public stats page now explains the verified community aggregate without overstating what it measures.",
+  "shipped": [
+    "Restored a dedicated /stats/ route linked from the game, public navigation and board, with live totals and a dated fallback.",
+    "Added recent activity, mode composition, coverage and definitions; distinguished last run from poll time and browser-local observations from server history.",
+    "Bound the generated route, descriptor, sitemap and redirect absence in the public contract."
+  ],
+  "validation": "262 files / 1,671 tests passed locally and in workflow 36618034795; strict lint, deployable build, 29-file public contract, schema, security and supply-chain checks passed. Staging e01aa752 passed shell 7/7 and hosted browser checks; 21 hash-bound desktop/mobile, dark/light and offline captures, including four production status recaptures were directly inspected. Source 2b4e18e92fbb4af3d58bb32eac4ec95c14763745 passed CI and deployed as immutable 1104bdc2; immutable and canonical origins passed shell 7/7 each. Canonical /stats/ returned 200, edge health matched 2b4e18e92fbb, and the live feed returned 53 verified runs/39 privacy-safe runner identifiers.",
+  "limits": "An initial CI run on 99bc641 failed due to generated content-date drift and was repaired with a focused follow-up. The current studio-wide doctor reports three blocking findings outside this repository. Participant, physical-device, current Core Web Vitals, Zoho reply-as, scoped telemetry, Obelisk, retention and balance outcomes are unverified; lifecycle remains FORGE/public-unlaunched.",
+  "production": {
+    "verifiedAt": "2026-09-29T19:19:15.000Z",
+    "commit": "2b4e18e92fbb4af3d58bb32eac4ec95c14763745",
+    "production": "https://callofdoodie.wtf/",
+    "immutableProduction": "https://1104bdc2.call-of-doodie.pages.dev/",
+    "staging": "https://e01aa752.call-of-doodie.pages.dev/",
+    "workflow": 36618034795,
+    "ci": "success",
+    "files": 262,
+    "tests": 1671,
+    "shellAssertions": 7,
+    "productionRevision": "2b4e18e92fbb",
+    "browser": "Staging hosted Chrome verified live feed and route/theme/viewport states; 21 hash-bound captures directly inspected.",
+    "visual": "CANON-053 passed with 21 source-bound captures."
+  },
+  "closeout": {
+    "intent": "explicit-founder-arc",
+    "writeback": "S179 current state, task board, handoff, status, truth audit, SIL, work log, memory, audit receipt, brief and derived views reconciled.",
+    "silScore": 957,
+    "scaffold": { "tasks": 4, "done": 4, "inProgress": 0, "open": 0 },
+    "state": "stats-source-published-and-production-verified",
+    "cdr": "Founder recovery, continuity and quality direction recorded additively.",
+    "releaseReview": "Engineering FORGE deployment verified; SPARKED promotion remains evidence-gated.",
+    "commit": "2b4e18e92fbb4af3d58bb32eac4ec95c14763745",
+    "workflow": 36618034795,
+    "immutableProduction": "https://1104bdc2.call-of-doodie.pages.dev/",
+    "verifiedAt": "2026-09-29T19:19:15.000Z",
+    "tests": { "files": 262, "assertions": 1671 },
+    "liveShell": { "passed": 7, "total": 7 },
+    "ownedProcessesRunning": 0,
+    "receiptSeal": "A final documentation-only closeout revision follows and receives separate CI/deploy verification."
+  }
+}

@@ -4,11 +4,9 @@
 
 ## Current Session
 
-- Session 178 (2026-09-28) — Developer boss walls now disappear and return on simulation frames, with collision, arena paint, and flow-field caches aligned. All 27 ordinary perk numeric claims derive from shared facts; Overclocked and Overdrive deliver their stated shot cadence, and Last Resort triples Dead Man's Hand damage. The two-item S178 audit is implemented.
+- Session 179 (2026-09-29) — `/stats/` is a real public page again, linked from the game, navigation and board. It shows the live verified aggregate with a dated fallback, recent 24-hour activity, mode mix, coverage and definitions. Poll time and last completed run are distinct; browser-local observations are labeled as such. The generated route, descriptor, sitemap and redirect policy are bound by the public contract. The three-item S179 audit, including the second-order analysis item, is implemented.
 
-Validation: 261/261 test files and 1,668/1,668 tests passed, strict lint and deployable build passed, public contract 28/28, schema and security release gates passed, npm audit found zero vulnerabilities. Cloudflare staging `https://ce59619c.call-of-doodie.pages.dev` passed 7/7 live shell checks and 28/28 hosted browser checks. Fourteen hash-bound captures of perk, boss, loaded home, and status states were directly inspected at 390px/1440px in dark/light; CANON-053 passes. Exact gameplay source `237003e8884148b44ecee10c30dd0da7066f3f57` passed GitHub Actions `36509845993` and deployed to immutable `https://773a1f58.call-of-doodie.pages.dev/`; it and `https://callofdoodie.wtf/` reported revision `237003e88841` and passed live shell checks 7/7 each, cutover 5/5, backend 5/5, replay 3/3, and leaderboard isolation. A later documentation-only closeout revision has its own CI/deploy verification.
-
-Startup canon propagation auto-committed `8bcd1bc` and displaced local script contracts, causing 58 test failures. This session restored the project-compatible script versions; the defect was shipped to Studio Ops through Ark. CANON-054's `/stats` page is absent despite the existing stats feed and prior recorded shipment; a dedicated follow-up is open. No participant, physical-device, or balance claim follows from this session. FORGE/public-unlaunched status remains unchanged.
+Validation: 262/262 test files and 1,671/1,671 tests passed locally and in GitHub Actions workflow `36618034795`; strict lint, deployable build, 29-file public contract, schema, security and supply-chain checks passed. Twenty-one hash-bound desktop/mobile, dark/light and offline captures were directly inspected, including four production status recaptures after generated-date refresh; CANON-053 passes. Staging `e01aa752` passed 7/7 shell and hosted browser checks. Initial CI on `99bc641` caught a generated content-date mismatch; the focused follow-up `2b4e18e` regenerated the five affected public files, then passed CI and deployed to immutable `1104bdc2`. The canonical `/stats/` returns 200 without a redirect, the descriptor points to it, the live feed returns 53 verified runs/39 privacy-safe runner identifiers, and immutable/canonical shell checks pass 7/7 each. Canonical edge health reports deploy `2b4e18e92fbb`. The studio-wide doctor has three blocking findings outside this repository; no zero-blocker claim is made. Participant, physical-device, current Core Web Vitals, Zoho reply-as, scoped telemetry and Obelisk proof remain unmeasured; lifecycle stays FORGE/public-unlaunched.
 
 ## Open Work
 
@@ -117,7 +115,7 @@ Decision (S175): excluded dated changelog entries from the mode-fact gate, and d
 
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 241,357 bytes · SHA-256 `465474128ebb…`
-- `context/TASK_BOARD.md` · 168,774 bytes · SHA-256 `df9f891ae328…`
-- `context/DECISIONS.md` · 162,992 bytes · SHA-256 `da62ecf9c5d8…`
+- `context/CURRENT_STATE.md` · 243,070 bytes · SHA-256 `108f4fd4e98c…`
+- `context/TASK_BOARD.md` · 168,849 bytes · SHA-256 `86d48a2fe754…`
+- `context/DECISIONS.md` · 164,181 bytes · SHA-256 `dc21ab1d61c2…`
 - `docs/AUDIT_2026-09-29.json` · 9,002 bytes · SHA-256 `85c3f3bc5a11…`

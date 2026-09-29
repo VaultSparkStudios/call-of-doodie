@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-09-29T18:54:34.350Z",
+  "capturedAt": "2026-09-29T20:03:05.910Z",
   "uiBaseRef": "2dcb47b",
-  "uiHeadRef": "S179 working tree; source hashes recorded",
+  "uiHeadRef": "2b4e18e exact production; source hashes recorded",
   "stagingUrl": "https://e01aa752.call-of-doodie.pages.dev",
   "themes": [
     "dark",
@@ -36,6 +36,10 @@
     {
       "file": "scripts/generate-public-pages.mjs",
       "sha256": "72c346f3220c755d45af5b2aba4141bfa0eb8ea75f1106d75b601614bb8f2421"
+    },
+    {
+      "file": "public/status/index.html",
+      "sha256": "be293a9ee9ff5eaee0a167c72c357a8764077c524f4886ed7d15cffe2fc98359"
     }
   ],
   "captures": [
@@ -242,17 +246,66 @@
       "projectTheme": "sewer-night",
       "page": "Local preview with API failure and dated verified snapshot",
       "phase": "after"
+    },
+    {
+      "file": "session-179/status--sewer-night--1440.png",
+      "sha256": "00c44c5fd2195181db649bcd9022a46befffaeba4c0b1f266db02d00309cebae",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "page": "Exact production status page after generated content-date refresh",
+      "phase": "after"
+    },
+    {
+      "file": "session-179/status--porcelain-day--1440.png",
+      "sha256": "facd5ec63582ef052f839b7768031ceafe4c61a6bae0f98663dd52e24497aa53",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "page": "Exact production status page after generated content-date refresh",
+      "phase": "after"
+    },
+    {
+      "file": "session-179/status--sewer-night--390.png",
+      "sha256": "8c591fd88eb06a2190c6c2f5fa163110b3dc53bb350450b7d735fc249b46d9d8",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "page": "Exact production status page after generated content-date refresh",
+      "phase": "after"
+    },
+    {
+      "file": "session-179/status--porcelain-day--390.png",
+      "sha256": "ce89ece8555c182c0046d85b21a0e4b1576092dd63d48515bf79074c94afa30e",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "page": "Exact production status page after generated content-date refresh",
+      "phase": "after"
     }
   ],
   "inspection": {
     "renderedPixelsReviewed": true,
     "reviewer": "Codex direct image inspection",
-    "reviewedAt": "2026-09-29T18:54:34.351Z",
-    "scope": "Dedicated stats, board, in-game panel, More menu and offline fallback across desktop/mobile dark/light states",
+    "reviewedAt": "2026-09-29T20:04:44.077Z",
+    "scope": "Dedicated stats, board, in-game panel, More menu and offline fallback across desktop/mobile dark/light states; exact production status page at 390px/1440px in both themes",
     "findings": [
       "The dedicated page, board, panel and More menu render without clipping or horizontal overflow at 390px and 1440px.",
       "Both themes show readable aggregate values, coverage denominators, mode mix, source dates and Stats navigation.",
-      "The hosted live panel and scoreboard resolve real feed values; the offline page labels its dated snapshot."
+      "The hosted live panel and scoreboard resolve real feed values; the offline page labels its dated snapshot.",
+      "The regenerated status date and page remain readable on exact production in both themes and widths without browser errors or horizontal overflow."
     ],
     "fixesApplied": [
       "The final explanation card spans the desktop row.",
@@ -264,6 +317,7 @@
   "methodLimits": [
     "The offline capture uses a local preview with the API deliberately disconnected.",
     "A transient 502 from the staging and production aggregate recovered before final hosted capture; this receipt does not establish uptime.",
-    "The browser review does not constitute a participant or physical-device playtest."
+    "The browser review does not constitute a participant or physical-device playtest.",
+    "The four status recaptures use exact production 2b4e18e; the prior 17 captures use final S179 staging e01aa752."
   ]
 }

@@ -1,4 +1,12 @@
 # Work Log
+## 2026-09-29 (Session 179 — public stats truth)
+
+- Recovered S178's interrupted closeout, checked changed JSON/ndjson and `~/.claude.json`, reran the full suite, separated real portfolio doctor reds from project gates, cleared the stale lock and pushed recovery checkpoint `2dcb47b`.
+- Ran `/start → /audit → /implement`: a three-item, premise-verified audit restored `/stats/`, added truthful aggregate analysis and bound its route/descriptor/redirect contract. Exhausted the executable Genius List; five evidence/decision-gated items remain deferred.
+- Verified 262 files/1,671 tests, strict lint, deployable build, 29-file public contract, schema, security and supply-chain gates. Inspected 21 hash-bound desktop/mobile, dark/light and offline images, including four production status recaptures. Staging `e01aa752` passed live shell 7/7 and hosted browser checks.
+- Initial CI on `99bc641` failed on a generated content-date fingerprint and sitemap. Regenerated the five dependent public files after the source commit, then pushed `2b4e18e`. Workflow `36618034795` passed Linux lint/tests/build/deploy; immutable `1104bdc2` and canonical production pass shell 7/7. Canonical `/stats/` returns 200, edge health matches the source, and the live aggregate serves 53 verified runs/39 privacy-safe identifiers.
+- FORGE/public-unlaunched status remains. Current studio-wide doctor has three blocking findings outside this repo; no participant, physical-device, current Core Web Vitals, Zoho reply-as, scoped telemetry or Obelisk proof is claimed. No hook bypass used.
+
 ## 2026-09-28 (Session 178 — honest walls and perks)
 
 - Ran `/arc` from synchronized main, wrote the S178 audit with two premise-verified game-loop findings, and implemented both. Developer wall hiding/restoration now follows 240 simulation frames and invalidates painted layers and pathfinding; all 27 ordinary perks share numeric facts with copy and runtime, with corrected fire cadence and Dead Man's Hand amplification.

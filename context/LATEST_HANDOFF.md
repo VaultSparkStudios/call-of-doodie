@@ -1,6 +1,20 @@
-# Latest Handoff — Session 178
+# Latest Handoff — Session 179
 
-S179 active intent: Complete a new `/arc` after the S178 recovery checkpoint. Audit the live game and public surfaces, implement every premise-verified repository-owned finding plus an evidence-backed second-order improvement, verify staging, then close out and publish directly to main.
+## Where We Left Off (Session 179)
+
+Session Intent: Recover the interrupted S178 closeout as a separate checkpoint, then run a continuous `/start → /audit → /implement → /closeout` arc and publish the verified engineering release directly to main.
+Intent outcome: Achieved for repository-owned work. S178 recovery is commit `2dcb47b`. S179's three premise-verified audit items are implemented, including the second-order stats-analysis item; the executable Genius List is empty and five evidence/decision-gated items remain deferred. Engineering release is production-verified. Final S179 closeout records follow in a separate commit.
+
+The public `/stats/` route is navigable from the game, More menu, footer and board. It shows live totals, a dated fallback, recent 24-hour activity, mode composition and coverage. Last completed run and last poll time remain distinct; browser-local observations cannot masquerade as server history. The route, redirect absence and machine descriptor are contract-checked. No retention, balance or count-of-people conclusion is inferred from the aggregate.
+
+Validation: 262/262 test files and 1,671/1,671 tests passed locally and in Linux CI; strict lint, deployable build, 29-file public contract, schema, security and supply-chain checks passed. Staging `https://e01aa752.call-of-doodie.pages.dev/` passed shell 7/7 and hosted Chrome checks. Twenty-one hash-bound captures across 390px/1440px, dark/light and offline states received direct image review, including four exact-production status recaptures after generated-date refresh. An initial CI failure exposed generated content-date drift after the source commit; the five files were regenerated in focused commit `2b4e18e` and CI then passed without bypass.
+
+Deploy: source `2b4e18e92fbb4af3d58bb32eac4ec95c14763745` passed GitHub Actions `36618034795` and deployed to `https://1104bdc2.call-of-doodie.pages.dev/`. It and `https://callofdoodie.wtf/` passed shell 7/7 each; canonical `/_health` reported `2b4e18e92fbb`, `/stats/` returned 200 without a redirect, the descriptor named that exact route, and the live API returned 53 verified runs and 39 privacy-safe runner identifiers. The public site remains FORGE/public-unlaunched. The current studio-wide doctor reports three blocking findings outside this repo; participant/physical-device, Core Web Vitals, Zoho reply-as, scoped telemetry and Obelisk launch evidence remain open.
+
+## Next
+
+- Obtain representative participant and physical controller/mobile evidence before any balance or SPARKED claim.
+- Complete the provider, identity, mail and performance evidence named on the task board before lifecycle promotion.
 
 ## Where We Left Off (Session 178)
 

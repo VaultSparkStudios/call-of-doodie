@@ -3,9 +3,9 @@
 - [x] [SIL:2] Restore a navigable `/stats/` page with live community totals, all supported history, recent activity, definitions and a dated fallback.
 - [x] [SIL:2] Derive truthful analysis from the aggregate feed, distinguish last run from poll time, and label browser-local observations.
 - [x] [SIL:2] Bind the stats descriptor, generated route and redirect policy through the public contract.
-- Release follow-through in progress: desktop/mobile and dark/light rendered states, full repo gates and staging are verified; exact revision deployment remains before closeout.
+- [x] [SIL:2] Release follow-through: 21 hash-bound rendered states, all local gates, staging and exact-main CI `36618034795` passed; `2b4e18e` deployed as immutable `1104bdc2`, and canonical `/stats/` plus live feed and 7/7 shell checks were verified.
 
-Scaffold: 4 S179 audit/release workstreams; 3 done; 1 in progress; 0 open.
+Scaffold: 4 S179 audit/release workstreams; 4 done; 0 in progress; 0 open.
 
 ## Session 178 — Developer arena and ordinary perk truth
 

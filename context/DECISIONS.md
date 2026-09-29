@@ -2,6 +2,14 @@
 
 Public-safe decisions only. Detailed internal decision history is maintained privately.
 
+## 2026-09-29 — Session 179 — Publish measured stats with explicit coverage
+
+**Decision:** `/stats/` is a dedicated public route for the existing verified aggregate feed. It shows the recent 24-hour window and available mode mix, distinguishes the last completed run from the time the endpoint was checked, and calls a browser-local observation browser-local. Legacy runs without shot fields stay outside the accuracy denominator; zero feedback observations cannot be presented as sentiment.
+
+**Evidence:** Production returns 53 verified runs, 40 rich and 13 legacy, with accuracy supported by 19 runs. The route contract, generated sitemap and descriptor are checked together. Twenty-one reviewed rendered states cover desktop/mobile, both themes, the offline fallback and the regenerated production status page; exact main revision `2b4e18e` passed CI and production verification.
+
+**Boundary:** The aggregate is activity evidence, not retention, balance or a count of individual people. It does not promote this FORGE project to SPARKED. An initial CI failure on generated content dates was repaired by regenerating five public files after the source commit; no gate was bypassed.
+
 ## 2026-09-28 — Session 178 — Keep project scripts compatible while upstream propagation is repaired
 
 **Decision:** Retain the updated universal `AGENTS.md` and `SECURITY.md`, but restore project-specific `scripts/` to the pre-propagation source after startup's auto-commit replaced their exported contracts. A local Ark cargo reports the incompatibility to Studio Ops for a compatible propagation fix.

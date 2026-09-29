@@ -1263,10 +1263,10 @@ SIL +10: Closed five founder-visible defects and all four fresh audit items: Ene
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
 Sparkline (last 5 totals): █████
-Avgs — 3: 966.3 | 5: 978.6 | 10: 987.4
+Avgs — 3: 952.3 | 5: 970.8 | 10: 983.2
 Velocity trend: ↑ | Debt: ↓
-Momentum runway: S178 audit and staging complete; production verification pending | Intent rate: not recomputed
-Last session: 2026-09-28 | Session 178 | Total: 950/1000 | Velocity: 2 | protocolVelocity: 2
+Momentum runway: S179 stats arc and production complete; external launch evidence next | Intent rate: not recomputed
+Last session: 2026-09-29 | Session 179 | Total: 957/1000 | Velocity: 3 | protocolVelocity: 3
 <!-- rolling-status-end -->
 
 ## 2026-06-05 — Session 81 | Total: 1000/1000 | Velocity: 1 | Debt: ↓
@@ -3366,3 +3366,21 @@ The two premise-verified audit items reached the actual game surface: the Develo
 | Automation Coverage | 94 | Focused simulation and perk facts tests plus 14 directly inspected, hash-bound browser captures cover the changes; physical-device evidence remains open. |
 
 Score remains 950/1000 by evidence, not by inheriting a perfect rating. The three in-session waves were Developer wall truth, ordinary perk fact truth, and hosted verification/deployment; all three completed. Exact gameplay source `237003e88841` passed workflow `36509845993` and immutable/canonical production checks 7/7 each, cutover 5/5, backend 5/5, replay 3/3 and leaderboard isolation. A first CI run caught a stale generated Hot Context hash; regeneration fixed it without a gate bypass. New `[SIL:2]` task: restore a navigable, analytically deeper `/stats` from the existing aggregate feed. `[SIL:1]` task: confirm Studio Ops fixes incompatible protocol propagation before reapplying the script bundle. No balance retune without participants.
+## 2026-09-29 — Session 179 | Total: 957/1000 | Velocity: 3 | Debt: ↓
+
+The S178 recovery was checked and sealed separately before a fresh arc. Three verified S179 audit items reached the public product: a real stats route, analysis whose scope matches the feed, and a contract that keeps navigation and machine descriptions aligned. The executable Genius List is empty; five other items require evidence or a product/provider decision.
+
+| Category | Score | Rationale |
+|---|---:|---|
+| Dev Health | 98 | 262/262 test files and 1,671/1,671 assertions pass locally and in CI; strict lint, build, public/schema/security/supply-chain gates pass. |
+| Creative Alignment | 98 | The public analysis follows the project's proof-over-posture identity: clear activity and coverage without invented retention or balance conclusions. |
+| Momentum | 97 | Recovered S178, completed all three audit items and the second-order analysis, verified staging, then deployed exact main. |
+| Engagement | 90 | The stats experience gives players context, but participant use and retention remain unmeasured. |
+| Process Quality | 94 | An initial CI failure exposed a post-commit generated-date drift; it was fixed by regenerating five files and rerunning CI without bypass. |
+| Cross-Repo Coherence | 96 | The project followed Ark boundaries and recorded the studio-wide doctor findings separately from local green gates. |
+| Security Posture | 96 | No dependency, credential or payment change; release security and supply-chain checks pass. |
+| Ecosystem Integration | 92 | `/stats/` now serves humans and agents through a real route and descriptor; Obelisk and scoped telemetry remain launch gaps. |
+| Capital Efficiency | 100 | Existing aggregate feed and build tooling were reused; no paid service or package was added. |
+| Automation Coverage | 96 | Route/redirect/descriptor court and 21 inspected hash-bound desktop/mobile, dark/light/offline captures cover the new surface; device and participant checks remain open. |
+
+Score: 957/1000. Velocity counts three audit items moving to Done; release follow-through is the fourth scaffold task, now done, but is not a separate audit item. The studio-wide doctor reported three blocking findings outside this repo at final check, so its historical zero-blocker claim is not repeated. The first CI run on `99bc641` failed a public date fingerprint and sitemap check; focused follow-up `2b4e18e` passed workflow `36618034795` and deployed as immutable `1104bdc2`. Production `/stats/` returns 200, canonical health reports `2b4e18e92fbb`, and both origins pass shell 7/7. Twenty-one visual captures were directly reviewed. FORGE/public-unlaunched remains unchanged.

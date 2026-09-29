@@ -1,4 +1,11 @@
-# Runtime Maintenance Notes — S178
+# Runtime Maintenance Notes — S179
+
+## S179 public stats and generated-date lesson
+
+- `/stats/` is a dedicated public page and contract-bound route. `public/stats-surface.json` names it; `/stats/` must not redirect to `/board/`. The in-game Community Stats panel, More menu, footer and board all link it.
+- The production community feed is an aggregate over all recoverable server history. Last completed run and `checkedAt` are different clocks; 24-hour activity and browser-local observations must be labeled by their actual scopes. Legacy runs lacking shot fields are excluded from accuracy, not counted as misses.
+- `scripts/lib/build-date.mjs` derives public content dates from commits touching content paths. A pre-commit build can pass, then the source commit changes the date and causes CI fingerprint/sitemap drift. Regenerate public pages after the content commit and verify the contract before pushing the follow-up; S179's first CI caught exactly this and focused commit `2b4e18e` repaired it.
+- S179 verification: 262 test files/1,671 tests, strict lint, deployable build, public contract 29 files, schema/security/supply chain, staging `e01aa752`, 21 directly inspected hash-bound states, exact CI `36618034795`, immutable production `1104bdc2`, canonical edge revision `2b4e18e92fbb`, `/stats/` 200 and live feed 53 runs/39 identifiers. No participant, retention, balance or lifecycle-promotion claim follows.
 
 ## S178 gameplay and release recovery
 
