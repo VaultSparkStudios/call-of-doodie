@@ -1,9 +1,9 @@
 {
   "vectorVersion": "1.0",
   "generatedAt": "2026-09-29",
-  "generatedAtMs": 1790644464398,
+  "generatedAtMs": 1790646633265,
   "session": 178,
-  "vectorHash": "1d5a80497447b96a",
+  "vectorHash": "b1d5b9164f019457",
   "silTotal": 950,
   "silAvg3": 966.3,
   "velocity": 2,
@@ -11,7 +11,7 @@
   "runway": "S178 audit and staging complete; production verification pending",
   "intentRate": "not recomputed",
   "openNow": 3,
-  "openNext": 6,
+  "openNext": 7,
   "openBlocked": 0,
   "topNow": [
     "[SIL:2] [BLOCKER S61] [S60 follow-up · narrowed S112] Update PostHog/Sentry/Ko-f",
@@ -19,9 +19,9 @@
     "[Human/Data] [SIL:1] HomeV2 analytics funnel — compare `home_v2_deploy` vs legac"
   ],
   "topNext": [
-    "Collect longer participant playtests for the four objective modes and all three ",
-    "[SIL:2] **S177 remainder** Derive ordinary-perk description numbers from the sam",
-    "[SIL:2] Supabase Auth + Obelisk account bridge — implement magic-link/Google Aut"
+    "[SIL:2] **S178 follow-up** Restore a real, navigable `/stats` page from the exis",
+    "[SIL:1] [ARK] **S178 follow-up** Confirm Studio Ops repaired protocol propagatio",
+    "Collect longer participant playtests for the four objective modes and all three "
   ],
   "health": "green",
   "truthStatus": "S178 gameplay and staging are verified; exact-main production follow-through is pending. SPARKED evidence remains incomplete.",

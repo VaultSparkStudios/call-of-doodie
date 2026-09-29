@@ -13,8 +13,6 @@ Startup canon propagation auto-committed `8bcd1bc` and displaced local script co
 ## Open Work
 
 ## Session 178 — Developer arena and ordinary perk truth
-- [ ] [SIL:2] **NEXT** Restore a real, navigable `/stats` page from the existing aggregate feed and descriptor; deepen breakdowns/history and verify CANON-054 without inventing counts.
-- [ ] [SIL:1] [ARK] **NEXT** Confirm Studio Ops repaired protocol propagation compatibility before allowing its script bundle to overwrite this repo's project-specific contracts again.
 ## Session 177 — Final Operation and replay follow-through
 ## Session 177 — Mode clarity and live playtest follow-through
 ## Session 177 — Runtime promises and upgrade composition
@@ -67,6 +65,8 @@ Startup canon propagation auto-committed `8bcd1bc` and displaced local script co
 - [ ] [SIL:2] [BLOCKER S61] [S60 follow-up · narrowed S112] Update PostHog/Sentry/Ko-fi dashboard URL allowlists for `https://callofdoodie.wtf/` — the Supabase half is CLOSED with evidence (all five edge functions ship `Access-Control-Allow-Origin: *` in code; live OPTIONS on `sync-studio-events` with `Origin: https://callofdoodie.wtf` returns 200, verified S112). Remaining half stays credential-gated: `node scripts/check-secrets.mjs --for analytics` MISSING, and PostHog/Sentry aren't wired until `VITE_POSTHOG_KEY`/`VITE_SENTRY_DSN` exist.
 - [ ] [SIL:2] [S60] Supabase Auth / Studio membership implementation decision — if paid tier or membership integration is now desired, implement `docs/AUTH_INTEGRATION_PLAN.md` instead of leaving membership server-only
 - [ ] [Human/Data] [SIL:1] HomeV2 analytics funnel — compare `home_v2_deploy` vs legacy `front_door_action` completion rates after 48h of traffic
+## Next
+- [ ] [SIL:2] **S178 follow-up** Restore a real, navigable `/stats` page from the existing aggregate feed and descriptor; deepen breakdowns/history and verify CANON-054 without inventing counts.
 
 ## Recent Decisions
 
@@ -118,6 +118,6 @@ Decision (S175): excluded dated changelog entries from the mode-fact gate, and d
 ## Source Index
 
 - `context/CURRENT_STATE.md` · 241,035 bytes · SHA-256 `2c21b0415e8a…`
-- `context/TASK_BOARD.md` · 167,810 bytes · SHA-256 `1f363f0e6e00…`
+- `context/TASK_BOARD.md` · 167,814 bytes · SHA-256 `1752418a8f4e…`
 - `context/DECISIONS.md` · 163,076 bytes · SHA-256 `6e9fc3651095…`
 - `docs/AUDIT_2026-09-28.json` · 7,516 bytes · SHA-256 `9ab8a34e572a…`
