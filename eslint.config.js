@@ -2,7 +2,6 @@ import js from "@eslint/js";
 import globals from "globals";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
-import reactPlugin from "eslint-plugin-react";
 
 export default [
   { ignores: ["dist", "node_modules"] },
@@ -16,11 +15,12 @@ export default [
     plugins: {
       "react-hooks": reactHooks,
       "react-refresh": reactRefresh,
-      "react": reactPlugin,
     },
     rules: {
-      ...reactHooks.configs.recommended.rules,
-      "react/jsx-uses-vars": "warn",
+      // react-hooks 7 `recommended` adds React Compiler rules (177 findings at S180);
+      // the enforced ruleset stays the two classic rules until adopting them is decided.
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "warn",
       "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
       "no-unused-vars": ["warn", { argsIgnorePattern: "^_", varsIgnorePattern: "^_", caughtErrors: "none" }],
       "no-undef": "off", // game uses many canvas/browser globals; enable when TS is added
