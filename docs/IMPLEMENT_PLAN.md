@@ -1,4 +1,17 @@
-# Implementation Plan — S177
+# Implementation Plan — S179
+
+Source: `docs/AUDIT_2026-09-29.json` (three items, six strictly verified premises). The implementation order follows shared-code dependency rather than rank alone.
+
+1. **stats-public-history** — add the route and source-derived static fallback using the existing public route generator and live aggregate script. Preserve the board and its score purpose.
+2. **stats-analysis-truth** — refresh the verified snapshot, show coverage and recent/mode analysis with denominators, separate the last completed run from the poll time, and name browser-local trends.
+3. **stats-route-court** — assert the generated human route and machine descriptor agree and the old redirect is gone.
+4. **Visual/release proof** — focused contract checks, full suite and build, desktop/mobile dark/light pixels, immutable staging, direct-main deployment, then canonical closeout.
+
+No package or hosted inference is needed. Unknown legacy fields remain unknown; the 52-run live corpus does not license a balance or retention claim. The project stays FORGE/public-unlaunched.
+
+---
+
+# Historical Implementation Plan — S177
 
 Session Intent: Complete the authorized arc, direct-main push and verified deployment.
 

@@ -94,6 +94,64 @@
     if (legend) legend.textContent = `🥱 Too easy ${tooEasy} · 🎯 Dialed in ${dialedIn} · 💀 Brutal ${brutal}`;
   }
 
+  const dateLabel = (value) => {
+    const date = value ? new Date(value) : null;
+    return date && Number.isFinite(date.getTime())
+      ? date.toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" })
+      : "unknown";
+  };
+
+  function renderAnalysis(stats, payload) {
+    const source = document.querySelector("[data-stats-source]");
+    if (!source) return;
+    const runs = Math.max(0, Math.floor(number(stats.runs)));
+    const coverage = stats.coverage || {};
+    const richRuns = coverage.richRuns != null && Number.isFinite(Number(coverage.richRuns)) ? Math.max(0, Math.floor(number(coverage.richRuns))) : null;
+    const legacyRuns = coverage.legacyRuns != null && Number.isFinite(Number(coverage.legacyRuns)) ? Math.max(0, Math.floor(number(coverage.legacyRuns))) : null;
+    const recent = stats.runs24h ?? stats.runs_24h;
+    const checked = payload.checkedAt ? new Date(payload.checkedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : "unknown";
+    source.textContent = `Live feed checked ${checked}`;
+    document.querySelector("[data-stats-recent]").textContent = recent == null ? "Unknown" : `${Math.max(0, Math.floor(number(recent))).toLocaleString()} runs`;
+    document.querySelector("[data-stats-rich]").textContent = richRuns == null
+      ? "Coverage unknown"
+      : `${richRuns.toLocaleString()} of ${runs.toLocaleString()} · ${runs ? Math.round((richRuns / runs) * 100) : 0}%`;
+    document.querySelector("[data-stats-last-run]").textContent = dateLabel(stats.updatedAt);
+
+    const modes = document.querySelector("[data-stats-modes]");
+    const modeRows = Object.entries(stats.modes && typeof stats.modes === "object" ? stats.modes : {})
+      .filter(([, count]) => Number.isFinite(Number(count)) && Number(count) >= 0)
+      .sort((a, b) => Number(b[1]) - Number(a[1]));
+    modes.replaceChildren();
+    if (!modeRows.length) {
+      const row = document.createElement("li");
+      row.textContent = "Mode breakdown unavailable from this feed.";
+      modes.append(row);
+    } else {
+      for (const [mode, count] of modeRows) {
+        const row = document.createElement("li");
+        const label = document.createElement("span");
+        label.textContent = mode.replaceAll("_", " ");
+        const value = document.createElement("strong");
+        value.textContent = `${Math.floor(number(count)).toLocaleString()} of ${runs.toLocaleString()} runs`;
+        const bar = document.createElement("progress");
+        bar.max = Math.max(1, runs);
+        bar.value = Math.min(bar.max, Math.max(0, Math.floor(number(count))));
+        bar.setAttribute("aria-label", `${label.textContent} share of supported runs`);
+        row.append(label, value, bar);
+        modes.append(row);
+      }
+    }
+    const lead = modeRows[0];
+    const skew = lead && runs > 0 && Number(lead[1]) / runs >= 0.8
+      ? ` ${lead[0].replaceAll("_", " ")} accounts for ${Math.round((Number(lead[1]) / runs) * 100)}% of submitted runs, so these totals mostly describe that mode.`
+      : "";
+    document.querySelector("[data-stats-takeaway]").textContent = `${runs.toLocaleString()} supported runs are recorded.${skew} This is activity, not a retention or difficulty-balance result.`;
+    const oldest = dateLabel(coverage.oldestSupportedAt);
+    const accuracyRuns = coverage.accuracyRuns == null ? "unknown" : Math.max(0, Math.floor(number(coverage.accuracyRuns))).toLocaleString();
+    const feedbackRuns = coverage.feedbackRuns == null ? "unknown" : Math.max(0, Math.floor(number(coverage.feedbackRuns))).toLocaleString();
+    document.querySelector("[data-stats-coverage-note]").textContent = `Oldest supported record: ${oldest}. ${richRuns == null ? "Unknown" : richRuns.toLocaleString()} full-detail and ${legacyRuns == null ? "unknown" : legacyRuns.toLocaleString()} legacy records; shot accuracy covers ${accuracyRuns} runs and field reports cover ${feedbackRuns}. Missing legacy detail and unsubmitted pre-telemetry runs remain unknown.`;
+  }
+
   function render(payload) {
     const stats = payload.stats || {};
     document.querySelectorAll("[data-community-stat]").forEach((node) => {
@@ -108,7 +166,8 @@
     renderRecords(stats);
     renderFeedback(stats);
     renderSparklines(recordTrend(stats));
-    setStatus(`Live aggregate checked ${new Date(payload.checkedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })} · refreshes every 15 seconds`, "live");
+    renderAnalysis(stats, payload);
+    setStatus(`Feed checked ${new Date(payload.checkedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })} · refreshes every 15 seconds`, "live");
   }
 
   async function refresh() {

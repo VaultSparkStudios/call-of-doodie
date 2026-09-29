@@ -1,5 +1,7 @@
 # Latest Handoff — Session 178
 
+S179 active intent: Complete a new `/arc` after the S178 recovery checkpoint. Audit the live game and public surfaces, implement every premise-verified repository-owned finding plus an evidence-backed second-order improvement, verify staging, then close out and publish directly to main.
+
 ## Where We Left Off (Session 178)
 
 Session Intent: Run the complete /arc, push the result directly to main, and fully deploy it.

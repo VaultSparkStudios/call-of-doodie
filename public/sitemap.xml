@@ -43,6 +43,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://callofdoodie.wtf/stats/</loc>
+    <lastmod>2026-09-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://callofdoodie.wtf/accessibility/</loc>
     <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>

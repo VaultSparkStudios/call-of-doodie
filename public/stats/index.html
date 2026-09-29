@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#070b10">
+  <meta name="description" content="Live Call of Doodie community statistics, supported history, recent activity, mode mix, definitions and data coverage.">
+  <link rel="canonical" href="https://callofdoodie.wtf/stats/">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../tokens.css">
+  <link rel="stylesheet" href="../doc.css">
+  <script src="../theme.js" defer></script>
+  <script src="../community-stats-live.js" defer></script>
+  <title>Every counted run has a date and a limit. | Call of Doodie</title>
+</head>
+<body class="fx-vignette">
+  <div class="shell">
+    <header class="site-header"><a class="brand" href="../">CALL OF <span>DOODIE</span></a><nav aria-label="Primary navigation">
+  <a href="../#deploy">Play</a>
+  <a href="../">Home</a>
+  <a href="../arsenal/">Arsenal</a>
+  <a href="../modes/">Modes</a>
+  <a href="../board/">Board</a>
+  <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch color theme">Theme</button>
+    </nav></header>
+    <main>
+      <p class="eyebrow">Sewer census</p>
+      <h1>Every counted run has a date and a limit.</h1>
+      <p class="lede">A public ledger of completed runs we can actually recover. The totals update from the live server feed; the dated snapshot stays visible if the feed is unavailable.</p>
+      <a class="primary-cta" href="../board/">See verified scores <span aria-hidden="true">→</span></a>
+      <section class="live-stats" aria-labelledby="live-community-heading">
+        <div class="live-stats-head">
+          <div><p class="eyebrow">Live-checked aggregate</p><h2 id="live-community-heading">All supported history</h2></div>
+          <span class="status" data-community-status data-state="connecting" aria-live="polite">Connecting to live totals…</span>
+        </div>
+        <div class="live-stat-grid"><div class="live-stat"><span>Runs</span><strong data-community-stat="runs">53</strong><svg class="live-spark" data-community-spark="runs" viewBox="0 0 64 18" preserveAspectRatio="none" aria-hidden="true"></svg></div><div class="live-stat"><span>Runners</span><strong data-community-stat="runners">39</strong><svg class="live-spark" data-community-spark="runners" viewBox="0 0 64 18" preserveAspectRatio="none" aria-hidden="true"></svg></div><div class="live-stat"><span>Hours played</span><strong data-community-stat="hours">0.8 h</strong><svg class="live-spark" data-community-spark="hours" viewBox="0 0 64 18" preserveAspectRatio="none" aria-hidden="true"></svg></div><div class="live-stat"><span>Enemies terminated</span><strong data-community-stat="kills">959</strong><svg class="live-spark" data-community-spark="kills" viewBox="0 0 64 18" preserveAspectRatio="none" aria-hidden="true"></svg></div><div class="live-stat"><span>Total score</span><strong data-community-stat="score">1,282,093</strong><svg class="live-spark" data-community-spark="score" viewBox="0 0 64 18" preserveAspectRatio="none" aria-hidden="true"></svg></div><div class="live-stat"><span>Damage dealt</span><strong data-community-stat="damage">101,392</strong><svg class="live-spark" data-community-spark="damage" viewBox="0 0 64 18" preserveAspectRatio="none" aria-hidden="true"></svg></div><div class="live-stat"><span>Measured accuracy</span><strong data-community-stat="accuracy">24.1%</strong><svg class="live-spark" data-community-spark="accuracy" viewBox="0 0 64 18" preserveAspectRatio="none" aria-hidden="true"></svg></div><div class="live-stat"><span>Recorded boss defeats</span><strong data-community-stat="bosses">0</strong><svg class="live-spark" data-community-spark="bosses" viewBox="0 0 64 18" preserveAspectRatio="none" aria-hidden="true"></svg></div></div>
+        <div class="live-records" data-community-records hidden>
+          <strong>🏆 Community records</strong>
+          <span>Best wave <b data-community-record="bestWave">—</b></span>
+          <span>Best score <b data-community-record="bestScore">—</b></span>
+          <span>Best kills <b data-community-record="bestKills">—</b></span>
+          <span>Last 24h: <b data-community-record="runs24h">—</b> runs · <b data-community-record="kills24h">—</b> kills</span>
+        </div>
+        <div class="live-feedback" data-community-feedback hidden>
+          <strong>Field reports</strong>
+          <div class="live-feedback-bar" aria-hidden="true"><i data-feedback-seg="too_easy"></i><i data-feedback-seg="dialed_in"></i><i data-feedback-seg="brutal"></i></div>
+          <span data-feedback-legend></span>
+        </div>
+        <p class="live-coverage" data-community-coverage>As of 2026-09-29: all 53 supported runs · 40 full-detail · 13 legacy · oldest supported record March 12, 2026. Live totals replace this snapshot when connected.</p>
+        <p class="live-caveat">This includes every recoverable server record. Runs never submitted before telemetry existed cannot be reconstructed; unavailable legacy fields remain unknown instead of being estimated.</p>
+        <p class="live-caveat">Mini lines show changes this browser has observed while visiting; they are not a server-wide history chart.</p>
+        
+      </section>
+      <section class="stats-analysis" aria-labelledby="stats-analysis-heading">
+        <div class="stats-analysis-head"><div><p class="eyebrow">What the ledger can say</p><h2 id="stats-analysis-heading">Activity with its denominator</h2></div><p data-stats-source>Verified snapshot · 2026-09-29</p></div>
+        <div class="stats-analysis-grid">
+          <article><span>Last 24 hours</span><strong data-stats-recent>5 runs</strong><p data-stats-recent-note>Completed supported runs in the 24 hours before this snapshot. This is activity, not retention.</p></article>
+          <article><span>Full-detail coverage</span><strong data-stats-rich>40 of 53 · 75%</strong><p data-stats-rich-note>Remaining records are legacy; unavailable fields stay unknown.</p></article>
+          <article><span>Latest completed run</span><strong data-stats-last-run>September 29, 2026</strong><p>Server record time. Checking the feed again does not create a new run.</p></article>
+        </div>
+        <div class="stats-mode-panel"><div><h3>How the runs were played</h3><p>Mode counts use all supported completed runs; they are not session or player counts.</p></div><ul data-stats-modes><li><span>standard</span><strong>53 of 53 runs</strong><progress value="53" max="53"></progress></li></ul></div>
+        <p class="stats-takeaway" data-stats-takeaway>53 supported runs are available through 2026-09-29. This corpus describes recorded activity; it does not measure difficulty balance or return visits.</p>
+        <p class="live-caveat" data-stats-coverage-note>Oldest supported record: March 12, 2026. 40 full-detail and 13 legacy records. Unsubmitted pre-telemetry runs cannot be counted.</p>
+      </section>
+      <div class="card-grid stats-card-grid"><section class="card"><h2>What counts</h2><p>A supported run is a completed, non-synthetic server record. Practice and quarantined submissions do not enter public totals. Runs that never reached the server cannot be reconstructed.</p></section><section class="card"><h2>What a runner means</h2><p>Distinct runners are privacy-safe public runner identifiers in supported records, not a count of everyone who has opened the game.</p></section><section class="card"><h2>What accuracy means</h2><p>Measured accuracy divides recorded hits by recorded shots only where those fields exist. Older runs without those fields stay unknown; a dash is not zero accuracy.</p></section><section class="card"><h2>What these numbers cannot say</h2><p>Totals and the last 24 hours describe activity, not retention, difficulty balance or the effect of a game change. Field reports require actual responses; zero responses cannot support a balance claim.</p></section></div>
+      <aside class="next-links card" aria-label="Explore more"><strong>Keep exploring</strong><a href="../modes/">Modes</a><a href="../arsenal/">Arsenal</a><a href="../accessibility/">Accessibility</a><a href="../support/">Support</a></aside>
+    </main>
+    <footer><div class="footer-links"><nav aria-label="Play links"><strong>PLAY</strong><a href="../modes/">Modes</a><a href="../board/">Board</a><a href="../stats/">Stats</a></nav><nav aria-label="Learn links"><strong>LEARN</strong><a href="../field-manual/">Field Manual</a><a href="../bestiary/">Bestiary</a><a href="../arsenal/">Arsenal</a><a href="../changelog/">Changelog</a><a href="../roadmap/">Roadmap</a><a href="../accessibility/">Accessibility</a></nav><nav aria-label="Studio links"><strong>STUDIO</strong><a href="../about/">About</a><a href="../press-kit/">Press Kit</a><a href="../support/">Support</a><a href="../contact/">Contact</a><a href="../status/">Status</a><a href="../privacy/">Privacy</a><a href="../terms/">Terms</a><a href="../ip/">Rights &amp; IP</a><a href="../">Home</a></nav></div><p class="parody-note">Call of Doodie is a parody game and is not affiliated with, endorsed by, or associated with Activision, the Call of Duty franchise, or any related entity.</p><div>© 2026 <a href="https://vaultsparkstudios.com/">VaultSpark Studios LLC</a>. All rights reserved.</div></footer>
+  </div>
+</body>
+</html>

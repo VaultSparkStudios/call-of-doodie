@@ -77,7 +77,7 @@ const statsSnapshot = JSON.parse(fs.readFileSync(path.resolve("data", "community
 const fmtInt = (value) => Number(value || 0).toLocaleString("en-US");
 
 function renderLiveCommunityStats(page) {
-  if (page.id !== "board") return "";
+  if (page.id !== "board" && page.id !== "stats") return "";
   const snap = statsSnapshot.stats;
   const metrics = [
     ["runs", "Runs", fmtInt(snap.runs)],
@@ -86,13 +86,13 @@ function renderLiveCommunityStats(page) {
     ["kills", "Enemies terminated", fmtInt(snap.kills)],
     ["score", "Total score", fmtInt(snap.score)],
     ["damage", "Damage dealt", fmtInt(snap.damage)],
-    ["accuracy", "Measured accuracy", "—"],
-    ["bosses", "Bosses terminated", fmtInt(snap.bosses)],
+    ["accuracy", "Measured accuracy", snap.shots > 0 && snap.hits != null ? `${Math.round((snap.hits / snap.shots) * 1000) / 10}%` : "—"],
+    ["bosses", "Recorded boss defeats", fmtInt(snap.bosses)],
   ];
   return `
       <section class="live-stats" aria-labelledby="live-community-heading">
         <div class="live-stats-head">
-          <div><p class="eyebrow">Always-current aggregate</p><h2 id="live-community-heading">All supported history</h2></div>
+          <div><p class="eyebrow">Live-checked aggregate</p><h2 id="live-community-heading">All supported history</h2></div>
           <span class="status" data-community-status data-state="connecting" aria-live="polite">Connecting to live totals…</span>
         </div>
         <div class="live-stat-grid">${metrics.map(([id, label, fallback]) => `<div class="live-stat"><span>${escapeHtml(label)}</span><strong data-community-stat="${id}">${escapeHtml(fallback)}</strong><svg class="live-spark" data-community-spark="${id}" viewBox="0 0 64 18" preserveAspectRatio="none" aria-hidden="true"></svg></div>`).join("")}</div>
@@ -110,6 +110,32 @@ function renderLiveCommunityStats(page) {
         </div>
         <p class="live-coverage" data-community-coverage>As of ${escapeHtml(statsSnapshot.snapshotDate)}: all ${fmtInt(snap.runs)} supported runs · ${fmtInt(statsSnapshot.coverage.richRuns)} full-detail · ${fmtInt(statsSnapshot.coverage.legacyRuns)} legacy${statsSnapshot.coverage.oldestSupportedAt ? ` · oldest supported record ${new Date(statsSnapshot.coverage.oldestSupportedAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}` : ""}. Live totals replace this snapshot when connected.</p>
         <p class="live-caveat">This includes every recoverable server record. Runs never submitted before telemetry existed cannot be reconstructed; unavailable legacy fields remain unknown instead of being estimated.</p>
+        <p class="live-caveat">Mini lines show changes this browser has observed while visiting; they are not a server-wide history chart.</p>
+        ${page.id === "board" ? '<a class="stats-detail-link" href="../stats/">Read the full stats and definitions →</a>' : ""}
+      </section>`;
+}
+
+function renderStatsAnalysis(page) {
+  if (page.id !== "stats") return "";
+  const snap = statsSnapshot.stats;
+  const coverage = statsSnapshot.coverage;
+  const modeRows = Object.entries(snap.modes || {}).sort((a, b) => b[1] - a[1]);
+  const modes = modeRows.length
+    ? modeRows.map(([mode, count]) => `<li><span>${escapeHtml(mode.replaceAll("_", " "))}</span><strong>${fmtInt(count)} of ${fmtInt(snap.runs)} runs</strong><progress value="${Math.max(0, Number(count) || 0)}" max="${Math.max(1, Number(snap.runs) || 1)}"></progress></li>`).join("")
+    : '<li>Mode breakdown was not captured in this dated snapshot.</li>';
+  const richShare = snap.runs > 0 ? `${Math.round((coverage.richRuns / snap.runs) * 100)}%` : "—";
+  const lastRun = statsSnapshot.lastCompletedAt ? new Date(statsSnapshot.lastCompletedAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }) : "unknown";
+  return `
+      <section class="stats-analysis" aria-labelledby="stats-analysis-heading">
+        <div class="stats-analysis-head"><div><p class="eyebrow">What the ledger can say</p><h2 id="stats-analysis-heading">Activity with its denominator</h2></div><p data-stats-source>Verified snapshot · ${escapeHtml(statsSnapshot.snapshotDate)}</p></div>
+        <div class="stats-analysis-grid">
+          <article><span>Last 24 hours</span><strong data-stats-recent>${snap.runs24h == null ? "Unknown" : fmtInt(snap.runs24h)} runs</strong><p data-stats-recent-note>Completed supported runs in the 24 hours before this snapshot. This is activity, not retention.</p></article>
+          <article><span>Full-detail coverage</span><strong data-stats-rich>${fmtInt(coverage.richRuns)} of ${fmtInt(snap.runs)} · ${richShare}</strong><p data-stats-rich-note>Remaining records are legacy; unavailable fields stay unknown.</p></article>
+          <article><span>Latest completed run</span><strong data-stats-last-run>${escapeHtml(lastRun)}</strong><p>Server record time. Checking the feed again does not create a new run.</p></article>
+        </div>
+        <div class="stats-mode-panel"><div><h3>How the runs were played</h3><p>Mode counts use all supported completed runs; they are not session or player counts.</p></div><ul data-stats-modes>${modes}</ul></div>
+        <p class="stats-takeaway" data-stats-takeaway>${fmtInt(snap.runs)} supported runs are available through ${escapeHtml(statsSnapshot.snapshotDate)}. This corpus describes recorded activity; it does not measure difficulty balance or return visits.</p>
+        <p class="live-caveat" data-stats-coverage-note>Oldest supported record: ${coverage.oldestSupportedAt ? escapeHtml(new Date(coverage.oldestSupportedAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })) : "unknown"}. ${fmtInt(coverage.richRuns)} full-detail and ${fmtInt(coverage.legacyRuns)} legacy records. Unsubmitted pre-telemetry runs cannot be counted.</p>
       </section>`;
 }
 
@@ -139,7 +165,7 @@ function renderPage(page) {
   const liveStats = renderLiveCommunityStats(page) + renderLiveLeaderboard(page);
   const liveStatsScript = page.id === "board"
     ? '<script src="../leaderboard-live.js" defer></script>\n  <script src="../community-stats-live.js" defer></script>'
-    : "";
+    : page.id === "stats" ? '<script src="../community-stats-live.js" defer></script>' : "";
   const cta = page.cta
     ? `<a class="primary-cta" href="${escapeHtml(page.cta[1])}">${escapeHtml(page.cta[0])} <span aria-hidden="true">→</span></a>`
     : "";
@@ -166,8 +192,8 @@ ${renderHeaderNav("../")}
       <p class="eyebrow">${escapeHtml(page.eyebrow)}</p>
       <h1>${escapeHtml(page.title)}</h1>
       <p class="lede">${escapeHtml(page.lede)}</p>
-      ${cta}${liveStats}${art}
-      <div class="card-grid">${page.sections.map(card).join("")}</div>
+      ${cta}${liveStats}${renderStatsAnalysis(page)}${art}
+      <div class="card-grid${page.id === "stats" ? " stats-card-grid" : ""}">${page.sections.map(card).join("")}</div>
       <aside class="next-links card" aria-label="Explore more"><strong>Keep exploring</strong>${buildExploreLinks(page)}</aside>
     </main>
     <footer><div class="footer-links">${renderFooterLinks("../")}</div><p class="parody-note">${escapeHtml(PARODY_DISCLAIMER)}</p><div>© ${copyrightYear()} <a href="https://vaultsparkstudios.com/">VaultSpark Studios LLC</a>. All rights reserved.</div></footer>
@@ -223,11 +249,9 @@ queue("field-manual.json", JSON.stringify({
   const runsNote = snap.runs < 50
     ? `The production fact pipeline is live, but ${fmtInt(snap.runs)} runs are too few for broad retention or balance conclusions.`
     : snap.runs < 500
-      ? `${fmtInt(snap.runs)} verified runs form an early corpus — directional signals, not conclusions.`
-      : `${fmtInt(snap.runs)} verified runs form a substantial corpus for aggregate analysis.`;
-  const runnersNote = snap.runners < 20
-    ? `${fmtInt(snap.runners)} runners establish real multi-player coverage without supporting a mass-audience claim.`
-    : `${fmtInt(snap.runners)} distinct runners provide meaningful audience coverage.`;
+      ? `${fmtInt(snap.runs)} verified runs describe recorded activity; they do not measure retention or balance.`
+      : `${fmtInt(snap.runs)} verified runs describe aggregate activity, not the effect of a change or a retention rate.`;
+  const runnersNote = `${fmtInt(snap.runners)} privacy-safe runner identifiers appear in supported records; this does not prove a count of individual people.`;
   queue("stats-surface.json", JSON.stringify({
     schemaVersion: "1.1",
     title: "Call of Doodie verified game statistics",
@@ -241,12 +265,18 @@ queue("field-manual.json", JSON.stringify({
     precomputed: true,
     source: statsSnapshot.source,
     scope: "All recoverable server history; automated health checks, practice, and quarantined rows excluded",
-    freshness: `Verified fallback snapshot from ${statsSnapshot.snapshotDate}; the live endpoint and visible Community Stats surfaces refresh every 15 seconds`,
+    freshness: `Verified fallback snapshot from ${statsSnapshot.snapshotDate}; the live endpoint is checked every 15 seconds while visible, which does not imply a new completed run`,
+    snapshotCheckedAt: statsSnapshot.checkedAt,
+    lastCompletedAt: statsSnapshot.lastCompletedAt,
+    recentWindow: { hours: 24, runs: snap.runs24h, kills: snap.kills24h },
+    modes: snap.modes,
     coverage: {
       history: "all_available_server_history",
       oldestSupportedAt: statsSnapshot.coverage.oldestSupportedAt,
       richRuns: statsSnapshot.coverage.richRuns,
       legacyRuns: statsSnapshot.coverage.legacyRuns,
+      accuracyRuns: statsSnapshot.coverage.accuracyRuns,
+      feedbackRuns: statsSnapshot.coverage.feedbackRuns,
       unrecoverablePreTelemetryRuns: "not_measurable",
       unknownLegacyMetrics: ["shots", "hits", "criticals", "bosses", "feedback"],
     },
@@ -256,7 +286,8 @@ queue("field-manual.json", JSON.stringify({
       metric("enemies_terminated", "Enemies terminated", snap.kills, "kills across verified completed runs", "Combat activity is present across the verified corpus; this total is not a per-player average."),
       metric("total_score", "Total score", snap.score, "score points across verified completed runs", "The total proves score ingestion coverage, while mode and difficulty mix still limit direct comparisons."),
       metric("total_damage", "Total damage", snap.damage, "damage points across verified completed runs", "Damage is available for current rich run facts; unsupported legacy detail is not reconstructed."),
-      metric("excluded_health_checks", "Excluded health checks", snap.excludedHealthChecks, "server-identified synthetic rows", "Automation remains queryable for operations but cannot inflate public player, score, or combat totals."),
+      ...(snap.shots > 0 && snap.hits != null ? [metric("measured_accuracy", "Measured accuracy", Math.round((snap.hits / snap.shots) * 1000) / 10, `${fmtInt(snap.hits)} hits / ${fmtInt(snap.shots)} shots across ${fmtInt(statsSnapshot.coverage.accuracyRuns)} runs with shot fields`, "Legacy runs without shot fields are excluded from this ratio, not treated as misses.")] : []),
+      ...(snap.excludedHealthChecks == null ? [] : [metric("excluded_health_checks", "Excluded health checks", snap.excludedHealthChecks, "server-identified synthetic rows", "Automation remains queryable for operations but cannot inflate public player, score, or combat totals.")]),
     ],
   }, null, 2));
 }

@@ -1,5 +1,5 @@
 <!-- generated-by: node scripts/ops.mjs innovation-pack -->
-<!-- generated-at: 2026-09-10T03:34:27.529Z -->
+<!-- generated-at: 2026-09-29T19:07:36.366Z -->
 
 # Innovation Pack — Call-Of-Doodie
 
@@ -15,7 +15,6 @@
 - **product-decision** - [SIL:2] [S60] Supabase Auth / Studio membership implementation decision — if paid tier or membership integration is now desired, implement `docs/AUTH_INTEGRATION_PLAN.md` instead of leaving membership server-only (Requires an explicit product-scope decision before implementation.)
 - **data-blocked** - [Human/Data] [SIL:1] HomeV2 analytics funnel — compare `home_v2_deploy` vs legacy `front_door_action` completion rates after 48h of traffic (Requires production or participant evidence that source code cannot fabricate.)
 - **data-blocked** - [SIL:1] [DATA-BLOCKED S147] Theme-prop atlas L2 expansion — extend `theme-prop-atlas-v1.webp` from 16 to ~32 cells only after production feedback confirms the current highest-visibility coverage reads well; no participant evidence exists yet. (Requires production or participant evidence that source code cannot fabricate.)
-- **data-blocked** - [SIL:1] [S62 deferred] HomeV2 v1 fallback retirement — gate on ≥200ms Lighthouse LCP improvement confirmed on production (human measurement required) (Requires production or participant evidence that source code cannot fabricate.)
 - **community-blocked** - Discord invite/community link when the community entry point is ready (Requires a real community destination to exist first.)
 
 ## Guardrails

@@ -1,3 +1,12 @@
+## Session 179 — Public stats truth and follow-through
+
+- [x] [SIL:2] Restore a navigable `/stats/` page with live community totals, all supported history, recent activity, definitions and a dated fallback.
+- [x] [SIL:2] Derive truthful analysis from the aggregate feed, distinguish last run from poll time, and label browser-local observations.
+- [x] [SIL:2] Bind the stats descriptor, generated route and redirect policy through the public contract.
+- Release follow-through in progress: desktop/mobile and dark/light rendered states, full repo gates and staging are verified; exact revision deployment remains before closeout.
+
+Scaffold: 4 S179 audit/release workstreams; 3 done; 1 in progress; 0 open.
+
 ## Session 178 — Developer arena and ordinary perk truth
 
 - [x] [SIL:2] **DONE S178** Developer wall removal and restoration follow simulation frames; collision, painted geometry, and flow fields agree through pause and recast.

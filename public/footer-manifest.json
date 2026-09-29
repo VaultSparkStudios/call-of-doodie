@@ -48,6 +48,10 @@
       "label": "Board"
     },
     {
+      "href": "/stats/",
+      "label": "Stats"
+    },
+    {
       "href": "/accessibility/",
       "label": "Accessibility"
     },
@@ -92,6 +96,7 @@
     "/about/",
     "/field-manual/",
     "/bestiary/",
+    "/stats/",
     "/accessibility/",
     "/support/",
     "/press-kit/",

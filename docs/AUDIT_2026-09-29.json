@@ -1,0 +1,107 @@
+{
+  "schemaVersion": "2.1",
+  "session": 179,
+  "project": { "slug": "call-of-doodie", "type": "game", "name": "Call-Of-Doodie" },
+  "totals": { "count": 3, "priority": 91.37, "top3": ["stats-public-history", "stats-analysis-truth", "stats-route-court"] },
+  "meta": {
+    "generatedAt": "2026-09-29",
+    "project": "call-of-doodie",
+    "type": "game",
+    "baseline": "2dcb47b; S178 recovery checkpoint synced; 261/261 files and 1,668/1,668 tests green; Studio Ops portfolio doctor has two unrelated blocking reds",
+    "combinedPriority": 91.37,
+    "gameLoopReview": {
+      "loopTightness": "Strong: guest play, run debrief and immediate revenge routes are implemented and tested; no participant timing claim follows.",
+      "progression": "Perk facts and ordinary cadence are consistent; balance changes still require player evidence.",
+      "sessionEngagement": "The game has modes and authored Operations, but the public community history route named by the stats descriptor currently redirects to the scoreboard.",
+      "retention": "The live aggregate covers recoverable history and a 24-hour window; the stale fallback and browser-local sparkline need their scopes explained before they can support trustworthy return visits.",
+      "soulFidelity": "Proof over posture favors a dedicated, clearly dated public account of community play with unknown legacy fields left unknown.",
+      "nextMoves": ["Restore a navigable /stats page with live and dated historical evidence.", "Explain denominators and freshness from the actual payload, without inferring balance or retention.", "Gate the route and machine descriptor together so a redirect cannot silently satisfy a page claim."]
+    }
+  },
+  "items": [
+    {
+      "id": 1,
+      "slug": "stats-public-history",
+      "axis": "feature-depth",
+      "tier": "🔥",
+      "title": "Restore a real public history page for community play",
+      "impact": 10,
+      "innovation": 7,
+      "effortHours": 2.5,
+      "priority": 32.26,
+      "status": "implemented",
+      "executionLog": ["Dedicated /stats/ route, refreshed 53-run dated snapshot, live and offline analysis, 17 reviewed visual captures."],
+      "why": "The live /stats/ URL redirects to /board/, public/stats/index.html is absent, and the stats-surface descriptor still names /stats/ as its page. The leaderboard and aggregate totals are useful but answer different player questions.",
+      "recipe": "Add /stats/ to the shared public route registry, remove the redirect, reuse the live aggregate component, show all recoverable history, 24-hour activity, mode composition, coverage dates and definitions, and retain the scoreboard link. Refresh the dated fallback snapshot from the actual production feed and regenerate the route graph.",
+      "premises": [
+        { "claim": "A standalone public stats page is absent", "adapter": "file-exists", "target": "../Call-Of-Doodie/public/stats/index.html", "operator": "eq", "expected": false },
+        { "claim": "The stats path redirects to the board", "adapter": "file-content", "target": "../Call-Of-Doodie/public/_redirects", "pattern": "/stats/  /board/  301", "operator": "eq", "expected": true }
+      ],
+      "ladder": {
+        "L1": { "effortHours": 1, "recipe": "Generate a /stats/ page using the existing live aggregate and remove the redirect." },
+        "L2": { "effortHours": 2.5, "recipe": "Add source-derived history, recent activity, mode mix and definitions with dated offline fallback, desktop/mobile themes, and route contract coverage." },
+        "L3": { "effortHours": 4, "recipe": "Inspect hosted desktop/mobile dark/light pixels, verify live/offline states and hash-bind the visual receipt." }
+      }
+    },
+    {
+      "id": 2,
+      "slug": "stats-analysis-truth",
+      "axis": "feedback-loop",
+      "tier": "🔥",
+      "title": "Turn the aggregate into honest analysis instead of unlabeled motion",
+      "impact": 8,
+      "innovation": 8,
+      "effortHours": 2,
+      "priority": 32,
+      "status": "implemented",
+      "executionLog": ["Denominators, coverage, mode mix, recent window, last completed run and browser-local trend scope are explicit."],
+      "why": "The committed fallback snapshot is dated August 8 with 12 runs, while the live endpoint reports 52 supported runs on September 29. The existing sparkline stores at most 48 browser-local observations, so it is not a server-wide history series. A poll timestamp is distinct from the last completed run.",
+      "recipe": "Derive an accessible analysis summary from live runs, supported coverage, 24-hour counts and mode mix; label missing fields as unknown, bound any percentages by their denominator, distinguish server updatedAt from checkedAt, and label browser-local trends as local observations. Keep the dated fallback honest when offline.",
+      "premises": [
+        { "claim": "The fallback snapshot is dated 2026-08-08", "adapter": "file-content", "target": "../Call-Of-Doodie/data/community-stats-snapshot.json", "pattern": "2026-08-08", "operator": "eq", "expected": true },
+        { "claim": "Current sparkline history is browser-local", "adapter": "file-content", "target": "../Call-Of-Doodie/public/community-stats-live.js", "pattern": "localStorage.getItem(TREND_KEY)", "operator": "eq", "expected": true }
+      ],
+      "ladder": {
+        "L1": { "effortHours": 0.8, "recipe": "Distinguish live poll time from run-update time and label local trends." },
+        "L2": { "effortHours": 2, "recipe": "Add source-derived coverage and mode analysis with explicit denominators, a refreshed snapshot and robust offline labels." },
+        "L3": { "effortHours": 3.5, "recipe": "Verify analysis against live, sparse and legacy-only payloads plus visually inspect responsive fallback/live states." }
+      }
+    },
+    {
+      "id": 3,
+      "slug": "stats-route-court",
+      "axis": "security",
+      "tier": "⚡",
+      "title": "Bind public stats claims to an actual reachable page",
+      "impact": 7,
+      "innovation": 7,
+      "effortHours": 1.5,
+      "priority": 27.11,
+      "status": "implemented",
+      "executionLog": ["Public contract binds route, descriptor, generated HTML and redirect absence; focused regression passed."],
+      "why": "The machine-readable descriptor claims a /stats/ page while the route registry omits it and _redirects sends it to /board/. The public contract did not reject this mismatch.",
+      "recipe": "Extend the public contract with a targeted stats page/descriptor/redirect coherence assertion and a focused regression case, so generation or deployment cannot claim a page that resolves elsewhere.",
+      "premises": [
+        { "claim": "The stats descriptor names a dedicated /stats/ page", "adapter": "file-content", "target": "../Call-Of-Doodie/public/stats-surface.json", "pattern": "\"page\": \"https://callofdoodie.wtf/stats/\"", "operator": "eq", "expected": true },
+        { "claim": "The route registry has no stats route", "adapter": "file-content", "target": "../Call-Of-Doodie/scripts/lib/public-route-registry.mjs", "pattern": "id: \"stats\"", "operator": "eq", "expected": false }
+      ],
+      "ladder": {
+        "L1": { "effortHours": 0.7, "recipe": "Assert /stats/ is generated and not redirected." },
+        "L2": { "effortHours": 1.5, "recipe": "Bind descriptor URL, route ID, generated file and redirect absence through the public contract with a focused regression court." },
+        "L3": { "effortHours": 2.5, "recipe": "Exercise generated artifacts and a hosted /stats/ request after staging deploy; retain the exact revision proof." }
+      }
+    }
+  ],
+  "skipped": [
+    { "slug": "difficulty-retune", "reason": "No participant outcome supports a balance or progression target change." },
+    { "slug": "server-wide-trend-from-local-sparkline", "reason": "The existing sparkline is stored only in each browser; presenting it as production-wide history would fabricate evidence." },
+    { "slug": "hosted-coach", "reason": "Local evidence-ranked coaching exists; hosted inference lacks a cost-neutral need." },
+    { "slug": "new-auth", "reason": "Account integration is a separate Obelisk product decision and cannot be substituted with a project-local login." },
+    { "slug": "additional-content", "reason": "Twelve modes and six Operation routes already exist; no player evidence identifies missing breadth." }
+  ],
+  "executionLog": [
+    { "slug": "stats-public-history", "status": "implemented", "verification": "Hosted staging /stats/ and /board/ inspected at 390px and 1440px in both themes; live and offline states reviewed." },
+    { "slug": "stats-analysis-truth", "status": "implemented", "verification": "Actual hosted feed reconciles 53 runs = 40 full-detail + 13 legacy; dated snapshot remains visible on API failure." },
+    { "slug": "stats-route-court", "status": "implemented", "verification": "Public contract passes 29 files; focused route tests and full 262-file, 1,671-test suite pass." }
+  ]
+}

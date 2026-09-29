@@ -22,16 +22,29 @@ if (!response.ok) {
 }
 const body = await response.json();
 const stats = body?.stats;
-if (!stats || typeof stats.runs !== "number") {
+if (!stats || typeof stats.runs !== "number" || stats.scope !== "all_available_server_history" || !stats.coverage) {
   console.error("stats snapshot refresh failed: unexpected payload shape", JSON.stringify(body).slice(0, 300));
   process.exit(1);
 }
 
 const num = (value) => (Number.isFinite(Number(value)) ? Number(value) : 0);
+const optionalNum = (value) => value == null || !Number.isFinite(Number(value)) ? null : Number(value);
+const validDate = (value) => value && Number.isFinite(Date.parse(value)) ? new Date(value).toISOString() : null;
+const countMap = (value) => Object.fromEntries(Object.entries(value && typeof value === "object" ? value : {})
+  .filter(([key, count]) => /^[a-z0-9_]{1,40}$/.test(key) && count != null && Number.isFinite(Number(count)))
+  .map(([key, count]) => [key, Math.max(0, Math.floor(num(count)))]));
+const richRuns = num(stats.coverage.richRuns);
+const legacyRuns = num(stats.coverage.legacyRuns);
+if (richRuns + legacyRuns !== stats.runs) {
+  console.error("stats snapshot refresh failed: coverage does not partition supported runs");
+  process.exit(1);
+}
 const snapshot = {
   schemaVersion: "community-stats-snapshot-v1",
   snapshotDate: new Date().toISOString().slice(0, 10),
   source: "Production get_cod_community_stats verification receipt",
+  checkedAt: validDate(body.checkedAt),
+  lastCompletedAt: validDate(stats.updatedAt),
   stats: {
     runs: num(stats.runs),
     runners: num(stats.runners),
@@ -40,12 +53,23 @@ const snapshot = {
     score: num(stats.score),
     damage: num(stats.damage),
     bosses: num(stats.bosses),
-    excludedHealthChecks: num(stats.excludedHealthChecks ?? stats.excluded_health_checks),
+    excludedHealthChecks: optionalNum(stats.excludedHealthChecks ?? stats.excluded_health_checks),
+    runs24h: optionalNum(stats.runs24h ?? stats.runs_24h),
+    kills24h: optionalNum(stats.kills24h ?? stats.kills_24h),
+    shots: optionalNum(stats.shots),
+    hits: optionalNum(stats.hits),
+    modes: countMap(stats.modes),
+    feedback: countMap(stats.feedback),
   },
   coverage: {
-    richRuns: num(stats.coverage?.richRuns),
-    legacyRuns: num(stats.coverage?.legacyRuns),
-    oldestSupportedAt: stats.coverage?.oldestSupportedAt || null,
+    richRuns,
+    legacyRuns,
+    oldestSupportedAt: validDate(stats.coverage.oldestSupportedAt),
+    richCoverageStartsAt: validDate(stats.coverage.richCoverageStartsAt),
+    durationRuns: optionalNum(stats.coverage.durationRuns),
+    damageRuns: optionalNum(stats.coverage.damageRuns),
+    accuracyRuns: optionalNum(stats.coverage.accuracyRuns),
+    feedbackRuns: optionalNum(stats.coverage.feedbackRuns),
   },
 };
 

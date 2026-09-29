@@ -7,6 +7,7 @@ export const PRIMARY_PUBLIC_NAV = Object.freeze([
 ]);
 
 export const MORE_PUBLIC_NAV = Object.freeze([
+  { id: "stats", href: "/stats/", label: "Stats" },
   { id: "field-manual", href: "/field-manual/", label: "Field Manual" },
   { id: "bestiary", href: "/bestiary/", label: "Bestiary" },
   { id: "accessibility", href: "/accessibility/", label: "Accessibility" },
@@ -45,7 +46,7 @@ export const PARODY_DISCLAIMER =
 // S163: footer grouping shared by SiteFooter.jsx (React) and the generated
 // static footers (scripts/lib/public-route-registry.mjs). Ids reference nav ids.
 export const FOOTER_GROUPS = Object.freeze([
-  { id: "play", label: "Play", ids: ["play", "modes", "board"] },
+  { id: "play", label: "Play", ids: ["play", "modes", "board", "stats"] },
   { id: "learn", label: "Learn", ids: ["field-manual", "bestiary", "arsenal", "changelog", "roadmap", "accessibility"] },
   { id: "studio", label: "Studio", ids: ["about", "press-kit", "support", "contact", "status", "privacy", "terms", "ip"] },
 ]);

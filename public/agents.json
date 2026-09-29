@@ -47,6 +47,10 @@
       "href": "https://callofdoodie.wtf/board/"
     },
     {
+      "rel": "statistics",
+      "href": "https://callofdoodie.wtf/stats/"
+    },
+    {
       "rel": "accessibility",
       "href": "https://callofdoodie.wtf/accessibility/"
     },

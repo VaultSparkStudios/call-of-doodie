@@ -144,6 +144,19 @@ const ROUTE_DEFINITIONS = [
     cta: ["Play and post a score", "../"],
   },
   {
+    id: "stats", path: "/stats/", label: "Stats", rel: "statistics", priority: 0.7, generated: true,
+    eyebrow: "Sewer census", title: "Every counted run has a date and a limit.",
+    description: "Live Call of Doodie community statistics, supported history, recent activity, mode mix, definitions and data coverage.",
+    lede: "A public ledger of completed runs we can actually recover. The totals update from the live server feed; the dated snapshot stays visible if the feed is unavailable.",
+    sections: [
+      ["What counts", "A supported run is a completed, non-synthetic server record. Practice and quarantined submissions do not enter public totals. Runs that never reached the server cannot be reconstructed."],
+      ["What a runner means", "Distinct runners are privacy-safe public runner identifiers in supported records, not a count of everyone who has opened the game."],
+      ["What accuracy means", "Measured accuracy divides recorded hits by recorded shots only where those fields exist. Older runs without those fields stay unknown; a dash is not zero accuracy."],
+      ["What these numbers cannot say", "Totals and the last 24 hours describe activity, not retention, difficulty balance or the effect of a game change. Field reports require actual responses; zero responses cannot support a balance claim."],
+    ],
+    cta: ["See verified scores", "../board/"],
+  },
+  {
     id: "accessibility", path: "/accessibility/", label: "Accessibility", rel: "accessibility", priority: 0.6, generated: true,
     eyebrow: "Accessibility", title: "Readable pressure, flexible input, fewer surprises.",
     description: "Accessibility and input options available in Call of Doodie.",

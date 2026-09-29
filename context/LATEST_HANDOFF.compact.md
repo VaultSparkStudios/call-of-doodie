@@ -1,12 +1,42 @@
-<!-- condensed-by: Codex, local summary without API call -->
-<!-- source: context/LATEST_HANDOFF.md · Session 178 -->
+<!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
+<!-- source-hash: f915c20d4f4b -->
+<!-- generated-at: 2026-09-29T15:31:31.821Z -->
 
 # LATEST_HANDOFF (compact)
 
-Session 178: the two-item audit is implemented. Developer boss walls hide and restore after 240 simulation frames with collision, painted layers and flow-field routing aligned. All 27 ordinary perks use shared numeric facts; Overclocked and Overdrive shot cadence matches the advertised rates, and Last Resort triples Dead Man's Hand damage.
+SESSION 178 HANDOFF SUMMARY
 
-Clean verification: 261 test files/1,668 tests, strict lint, deployable build, public/schema/security and supply-chain gates. Immutable staging ce59619c passes shell 7/7 and hosted Chrome 28/28. Fourteen desktop/mobile, dark/light screenshots were directly inspected; CANON-053 passes.
+Session
+- S178: ran full /arc, pushed to main, deployed to production.
 
-Startup propagation 8bcd1bc replaced incompatible project scripts, producing 58 failures. Local scripts were restored, universal AGENTS and SECURITY updates retained, and an Ark cargo reported the defect upstream. CANON-054 remains open because the existing aggregate feed lacks a navigable /stats page; TASK_BOARD carries the follow-up. Project remains FORGE/public-unlaunched.
+Shipped
+- Developer boss hides walls for 240 sim frames; collision, painted layers, flow-field routing switch/pause together.
+- 27 ordinary perks now draw numeric claims/behavior from shared facts; Overclocked/Overdrive fire at advertised cadence; Last Resort triples Dead Man's Hand damage.
+- Both S178 audit premise-verified items implemented.
+- CANON-053 passes.
 
-Exact gameplay source 237003e88841 passed CI 36509845993 and deployed at immutable 773a1f58; immutable and canonical origins reported that revision and passed 7/7 shell checks each, plus cutover/backend/replay/leaderboard courts. Closeout documentation follows in a later revision with its own CI/deploy verification. Participant and physical-device evidence remains unmeasured.
+Verification
+- Clean suite: 261/261 files, 1,668/1,668 tests. Strict lint, build, public contract, schema, security, npm audit, supply-chain gates passed.
+- Staging ce59619c: 7/7 shell, 28/28 browser checks; 14 hash-bound screenshots inspected (desktop/mobile, dark/light).
+- Deploy: source 237003e88841 passed GitHub Actions 36509845993; live at 773a1f58 origin and callofdoodie.wtf, both report 237003e88841, shell 7/7 each. Cutover 5/5, backend 5/5, replay 3/3, leaderboard isolation pass.
+- Status: FORGE/public-unlaunched. No participant, physical-device, audio, or balance claim made.
+
+Current Intent
+- Closeout documentation pending in later revision with own CI/deploy verification.
+
+Now Bucket (top 3)
+- Restore public /stats page from existing aggregate feed with genuine history, definitions, analysis (CANON-054 STRONG gap; named follow-up on TASK_BOARD).
+- Complete closeout documentation with CI/deploy verification.
+- Gather participant and physical controller/mobile evidence before any balance changes.
+
+Blockers (top 3)
+- Startup canon sync auto-committed incompatible protocol script bundle (8bcd1bc) causing 58 test failures; project scripts restored to prior compatible versions, universal AGENTS.md/SECURITY.md retained. Not a gameplay failure.
+- CANON-054 STRONG gap: no navigable /stats page despite existing aggregate feed.
+- No representative participant or physical-device evidence available, blocking balance changes.
+
+Human-Blocked
+- Ark cargo sent to Studio Ops re: incompatible protocol script bundle (S178, awaiting resolution).
+- Participant/physical-controller evidence collection (requires external input, unaged this session).
+
+Next Session
+- Build the public /stats page from the aggregate feed, then finalize S178 closeout docs.

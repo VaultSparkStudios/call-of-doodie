@@ -1,20 +1,39 @@
 {
   "schemaVersion": "community-stats-snapshot-v1",
-  "snapshotDate": "2026-08-08",
+  "snapshotDate": "2026-09-29",
   "source": "Production get_cod_community_stats verification receipt",
+  "checkedAt": "2026-09-29T16:21:41.964Z",
+  "lastCompletedAt": "2026-09-29T16:19:40.989Z",
   "stats": {
-    "runs": 12,
-    "runners": 5,
-    "hours": 0.2,
-    "kills": 259,
-    "score": 119223,
-    "damage": 21628,
+    "runs": 53,
+    "runners": 39,
+    "hours": 0.8,
+    "kills": 959,
+    "score": 1282093,
+    "damage": 101392,
     "bosses": 0,
-    "excludedHealthChecks": 28
+    "excludedHealthChecks": null,
+    "runs24h": 5,
+    "kills24h": 70,
+    "shots": 4097,
+    "hits": 988,
+    "modes": {
+      "standard": 53
+    },
+    "feedback": {
+      "brutal": 0,
+      "too_easy": 0,
+      "dialed_in": 0
+    }
   },
   "coverage": {
-    "richRuns": 0,
-    "legacyRuns": 12,
-    "oldestSupportedAt": "2026-03-12T17:07:10.609742+00:00"
+    "richRuns": 40,
+    "legacyRuns": 13,
+    "oldestSupportedAt": "2026-03-12T17:07:10.609Z",
+    "richCoverageStartsAt": "2026-08-10T22:55:16.599Z",
+    "durationRuns": 53,
+    "damageRuns": 31,
+    "accuracyRuns": 19,
+    "feedbackRuns": 0
   }
 }

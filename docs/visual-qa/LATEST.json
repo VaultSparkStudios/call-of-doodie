@@ -1,241 +1,269 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-09-28T23:31:00.695Z",
-  "uiBaseRef": "3d99789",
-  "uiHeadRef": "S178 working tree; exact source hashes recorded",
-  "stagingUrl": "https://ce59619c.call-of-doodie.pages.dev",
+  "capturedAt": "2026-09-29T18:54:34.350Z",
+  "uiBaseRef": "2dcb47b",
+  "uiHeadRef": "S179 working tree; source hashes recorded",
+  "stagingUrl": "https://e01aa752.call-of-doodie.pages.dev",
   "themes": [
     "dark",
     "light"
   ],
   "sourceFiles": [
     {
-      "file": "src/App.jsx",
-      "sha256": "1a6f79e3486c267ab815178ea02b4cd3d252b6bf0ac05d39ff908ae1195a281e"
+      "file": "src/components/CommunityStatsPanel.jsx",
+      "sha256": "37866c7c1cb5bd89aa47d3a38689dea4d234e0128323309e5f38cf4c548532a7"
     },
     {
-      "file": "src/config/perkFacts.js",
-      "sha256": "efd232806793d2225ba2b70c5f856e4fe3772b35cb764776af6c0dd341fb1312"
+      "file": "src/config/publicNavigation.js",
+      "sha256": "b6afecd19324daf9dc0afd305f9f3c637ea96781e70e9150b8198926758f3fbe"
     },
     {
-      "file": "src/constants.js",
-      "sha256": "c8a1d6576af3bbd05b6d5a8013aa541e87528fb0f0ad62b4192d741f1e0bddca"
+      "file": "public/doc.css",
+      "sha256": "dc244c8e8e1b4ecc7911387d766e6a0c37852c8d666ebe94fea2af1a7bd4e4c7"
     },
     {
-      "file": "src/systems/deathFlow.js",
-      "sha256": "e41054ed4cb4a6aa846ee485c13337f6e98e42b14bc084ac25f292317bb05965"
+      "file": "public/community-stats-live.js",
+      "sha256": "06360b79f66a37143611a8067f888e601d1a361e152fabae55037931168a1f08"
     },
     {
-      "file": "src/systems/enemyFrame.js",
-      "sha256": "3cd1f19e1907abb7989464e5d035aa5deb5036be58b176a45cdf0b3969b86a57"
+      "file": "public/stats/index.html",
+      "sha256": "a47164bb79b136f6be288683651ca0e9f2522908eb8d14056eae4a80b8c3609d"
     },
     {
-      "file": "src/systems/perkResolution.js",
-      "sha256": "8e476a7b460a6a44f29dcd53a50d0e52a2e94ee6544d63fc0515f790c0ac2231"
+      "file": "public/board/index.html",
+      "sha256": "b0cc582a693017efca00d64a82c56c5ea5290218ecd459608ba1bdfe2ade7541"
     },
     {
-      "file": "src/systems/projectileFrame.js",
-      "sha256": "597c1cb251de6ddf1cd806c073a77b491492d8668102d7c34dc62a232dfdb3e0"
-    },
-    {
-      "file": "public/status/index.html",
-      "sha256": "7e5c1b6b182424578d32cc901b963f111ccf86653a48828199630a6ba36b3457"
-    },
-    {
-      "file": "visual-harness/operation.jsx",
-      "sha256": "6e3a2cdf642646ceffafa474eec2eb9aa6eb147652a5e78a728e6158dbd8208d"
+      "file": "scripts/generate-public-pages.mjs",
+      "sha256": "72c346f3220c755d45af5b2aba4141bfa0eb8ea75f1106d75b601614bb8f2421"
     }
   ],
   "captures": [
     {
-      "file": "session-178/perk-facts--sewer-night--390.png",
-      "sha256": "7043f11daf832245dd62087692abd58b271054862cb298376ded1718735df66e",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "page": "Ordinary perk card claims after exact fire-rate correction",
-      "phase": "after"
-    },
-    {
-      "file": "session-178/developer-obstacle--sewer-night--390.png",
-      "sha256": "e94617003d253e35b7accf9ad9587fc767944879b8db8d4183b64301b4a1ab73",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "page": "Developer wall visible, debugged and restored in the rendered arena",
-      "phase": "after"
-    },
-    {
-      "file": "session-178/perk-facts--sewer-night--1440.png",
-      "sha256": "2eee358472a1a29e82029e84a23e9dacb9a69715d6e9aca88dac2b391a7a01a4",
+      "file": "session-179/board--porcelain-day--1440.png",
+      "sha256": "bc5b7e388367cdb92292aabd50faf01ca234679c1333050335d6769c471be39f",
       "viewport": {
         "width": 1440,
-        "height": 1000
+        "height": 900
       },
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "page": "Ordinary perk card claims after exact fire-rate correction",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "page": "Hosted board aggregate and live top 10",
       "phase": "after"
     },
     {
-      "file": "session-178/developer-obstacle--sewer-night--1440.png",
-      "sha256": "759b74bfa65ce8a01c8eacd665d7f6ef474cd2b1698ca9cc125b657c70a4c671",
-      "viewport": {
-        "width": 1440,
-        "height": 1000
-      },
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "page": "Developer wall visible, debugged and restored in the rendered arena",
-      "phase": "after"
-    },
-    {
-      "file": "session-178/perk-facts--porcelain-day--390.png",
-      "sha256": "7043f11daf832245dd62087692abd58b271054862cb298376ded1718735df66e",
+      "file": "session-179/board--porcelain-day--390.png",
+      "sha256": "33e3d1dd864cffd390bcac5aac374e187760a66351a2bb0b4e4a2a0636100f74",
       "viewport": {
         "width": 390,
         "height": 844
       },
       "theme": "light",
       "projectTheme": "porcelain-day",
-      "page": "Ordinary perk card claims after exact fire-rate correction",
+      "page": "Hosted board aggregate and live top 10",
       "phase": "after"
     },
     {
-      "file": "session-178/developer-obstacle--porcelain-day--390.png",
-      "sha256": "e94617003d253e35b7accf9ad9587fc767944879b8db8d4183b64301b4a1ab73",
+      "file": "session-179/board--sewer-night--1440.png",
+      "sha256": "8fae7189a816fd229aa88d5437de05127ed030737db535a41160733833a23402",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "page": "Hosted board aggregate and live top 10",
+      "phase": "after"
+    },
+    {
+      "file": "session-179/board--sewer-night--390.png",
+      "sha256": "474202a4ae70213ea166a67d7fd0af24a6adbb0ee9a110ed22c862e4070030bf",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "page": "Hosted board aggregate and live top 10",
+      "phase": "after"
+    },
+    {
+      "file": "session-179/home-menu--porcelain-day--1440.png",
+      "sha256": "ad427ff3289ba8a58f2b3b77d556c0fc800e7ab6d462a1fa0ef62f018b0ac15f",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "page": "Game home More menu with Stats destination",
+      "phase": "after"
+    },
+    {
+      "file": "session-179/home-menu--porcelain-day--390.png",
+      "sha256": "bdb7b7c8cd346f98eab83229eaf81f99efc2720ae6f9efe11f8424f93322634c",
       "viewport": {
         "width": 390,
         "height": 844
       },
       "theme": "light",
       "projectTheme": "porcelain-day",
-      "page": "Developer wall visible, debugged and restored in the rendered arena",
+      "page": "Game home More menu with Stats destination",
       "phase": "after"
     },
     {
-      "file": "session-178/perk-facts--porcelain-day--1440.png",
-      "sha256": "2eee358472a1a29e82029e84a23e9dacb9a69715d6e9aca88dac2b391a7a01a4",
+      "file": "session-179/home-menu--sewer-night--1440.png",
+      "sha256": "14f209561f4a6c01b5d145afb0bac5be8086ecd325815d9d985ab5bfebe72334",
       "viewport": {
         "width": 1440,
-        "height": 1000
+        "height": 900
       },
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "page": "Ordinary perk card claims after exact fire-rate correction",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "page": "Game home More menu with Stats destination",
       "phase": "after"
     },
     {
-      "file": "session-178/developer-obstacle--porcelain-day--1440.png",
-      "sha256": "759b74bfa65ce8a01c8eacd665d7f6ef474cd2b1698ca9cc125b657c70a4c671",
-      "viewport": {
-        "width": 1440,
-        "height": 1000
-      },
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "page": "Developer wall visible, debugged and restored in the rendered arena",
-      "phase": "after"
-    },
-    {
-      "file": "session-178/staging/home--sewer-night--390.png",
-      "sha256": "b1b1284777dffd9e5ae3df4757246f9a5f953926c7ab331c5159f2cbe885f89e",
+      "file": "session-179/home-menu--sewer-night--390.png",
+      "sha256": "011436d589aa5240b891760fbb0d467298494fc5abb63a65538b40dbf46e6a8d",
       "viewport": {
         "width": 390,
-        "height": 900
+        "height": 844
       },
       "theme": "dark",
       "projectTheme": "sewer-night",
-      "page": "Hosted staging game home after runtime activation",
+      "page": "Game home More menu with Stats destination",
       "phase": "after"
     },
     {
-      "file": "session-178/staging/status--sewer-night--390.png",
-      "sha256": "3a35389ddcd47b3c307be24262b45110895833784b83447128cd45c6d93b984d",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "page": "Hosted staging public service status",
-      "phase": "after"
-    },
-    {
-      "file": "session-178/staging/home--porcelain-day--390.png",
-      "sha256": "7bb3d6e834ab07070430a50c5d82b142f4a47d923525ccdd1218e9c2752c8e33",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "page": "Hosted staging game home after runtime activation",
-      "phase": "after"
-    },
-    {
-      "file": "session-178/staging/home--sewer-night--1440.png",
-      "sha256": "0aa10b0137f1bf5387b2fa60f0eceecbf5103ec823ad0af701097d3536bc251f",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "page": "Hosted staging game home after runtime activation",
-      "phase": "after"
-    },
-    {
-      "file": "session-178/staging/status--sewer-night--1440.png",
-      "sha256": "a77f33dea6640e481ab8bb5d8c6445c6a66b4abefcb8f22cfe18e2602c30ddc0",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "page": "Hosted staging public service status",
-      "phase": "after"
-    },
-    {
-      "file": "session-178/staging/home--porcelain-day--1440.png",
-      "sha256": "cc11a33d9a528b70aecb04d844649fc26d583f29a4140abcf7be706f953e9b62",
+      "file": "session-179/home-stats--porcelain-day--1440.png",
+      "sha256": "a20860be1013fd3e839ee9bd2bd0620b2f3540525f931e4f7c559220d241c23a",
       "viewport": {
         "width": 1440,
         "height": 900
       },
       "theme": "light",
       "projectTheme": "porcelain-day",
-      "page": "Hosted staging game home after runtime activation",
+      "page": "Loaded in-game community panel and readable Stats link",
+      "phase": "after"
+    },
+    {
+      "file": "session-179/home-stats--porcelain-day--390.png",
+      "sha256": "e2882ebab18a50bacd334b59fec554f6e425860baefdea198080ef0ae96c2855",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "page": "Loaded in-game community panel and readable Stats link",
+      "phase": "after"
+    },
+    {
+      "file": "session-179/home-stats--sewer-night--1440.png",
+      "sha256": "f6ea2436e5aa0be4f48e75998184c8e4d539ba3a812c0f8782c929f9e158b44b",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "page": "Loaded in-game community panel and readable Stats link",
+      "phase": "after"
+    },
+    {
+      "file": "session-179/home-stats--sewer-night--390.png",
+      "sha256": "98edc218cff82b7608dd1dc10dc17b56e47611541d40127bd213d81264ed7550",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "page": "Loaded in-game community panel and readable Stats link",
+      "phase": "after"
+    },
+    {
+      "file": "session-179/stats--porcelain-day--1440.png",
+      "sha256": "b40866c13b9b784b41ae403bb302ed40dc685ef560c37e2975af24ac62226f72",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "page": "Hosted dedicated statistics page with live analysis",
+      "phase": "after"
+    },
+    {
+      "file": "session-179/stats--porcelain-day--390.png",
+      "sha256": "162edafe2b38eb90067669f27baaa6280f75ff84ae2911b99531885ddf430e13",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "page": "Hosted dedicated statistics page with live analysis",
+      "phase": "after"
+    },
+    {
+      "file": "session-179/stats--sewer-night--1440.png",
+      "sha256": "7d07473f0682687ef0392e852d495f0aa1e08ea86075f1b8b588f66d51a7e3ff",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "page": "Hosted dedicated statistics page with live analysis",
+      "phase": "after"
+    },
+    {
+      "file": "session-179/stats--sewer-night--390.png",
+      "sha256": "6d5c46e6e613902af92b0639c459174d97f6b0f386d18f533ceb8c353c437785",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "page": "Hosted dedicated statistics page with live analysis",
+      "phase": "after"
+    },
+    {
+      "file": "session-179/stats--fallback--390.png",
+      "sha256": "a6d641d7bda5b0bc580c5924fd8544dd13150ef6cfbda5b8762c66b3b3f658f7",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "page": "Local preview with API failure and dated verified snapshot",
       "phase": "after"
     }
   ],
   "inspection": {
     "renderedPixelsReviewed": true,
     "reviewer": "Codex direct image inspection",
-    "reviewedAt": "2026-09-28T23:31:00.699Z",
-    "scope": "Eight perk and Developer boss captures plus six hosted staging game/status captures across desktop/mobile and dark/light, with prior-session baselines",
+    "reviewedAt": "2026-09-29T18:54:34.351Z",
+    "scope": "Dedicated stats, board, in-game panel, More menu and offline fallback across desktop/mobile dark/light states",
     "findings": [
-      "Perk copy fits the 390px and 1440px cards and displays the corrected shot cadence claims.",
-      "The Developer wall disappears and returns in the rendered arena as collision geometry changes; cached paint follows each transition.",
-      "No clipping, overlap or unreadable text appeared in the eight inspected captures.",
-      "Hosted game home reached the playable runtime in both themes and widths; the generated status page remained readable at 390px and 1440px."
+      "The dedicated page, board, panel and More menu render without clipping or horizontal overflow at 390px and 1440px.",
+      "Both themes show readable aggregate values, coverage denominators, mode mix, source dates and Stats navigation.",
+      "The hosted live panel and scoreboard resolve real feed values; the offline page labels its dated snapshot."
     ],
     "fixesApplied": [
-      "Simulation-frame wall duration and arena-layer invalidation at both transitions.",
-      "Ordinary perk fact source and corrected shot interval multipliers."
+      "The final explanation card spans the desktop row.",
+      "The in-game Stats link uses 11px text and a 44px minimum touch height.",
+      "Hosted capture waits for loaded aggregate and scoreboard states."
     ],
     "blockingDefectsOpen": 0
   },
   "methodLimits": [
-    "The S178 matrix uses the visual harness and deterministic boss stepper; it is not a participant playtest.",
-    "The harness palette for the perk and boss states is dark in both project theme modes; theme attribution comes from the browser state.",
-    "Hosted smoke verified shell and loaded home/status surfaces, not a full participant combat run."
+    "The offline capture uses a local preview with the API deliberately disconnected.",
+    "A transient 502 from the staging and production aggregate recovered before final hosted capture; this receipt does not establish uptime.",
+    "The browser review does not constitute a participant or physical-device playtest."
   ]
 }

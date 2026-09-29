@@ -19,6 +19,7 @@ Players move, shoot, dash, grenade, switch weapon, interact, choose perk, choose
 - Arsenal: https://callofdoodie.wtf/arsenal/
 - Modes: https://callofdoodie.wtf/modes/
 - Board: https://callofdoodie.wtf/board/
+- Stats: https://callofdoodie.wtf/stats/
 - Accessibility: https://callofdoodie.wtf/accessibility/
 - Support: https://callofdoodie.wtf/support/
 - Press Kit: https://callofdoodie.wtf/press-kit/

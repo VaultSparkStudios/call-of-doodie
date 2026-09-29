@@ -2,13 +2,13 @@
   "schemaVersion": "1.0",
   "source": "scripts/lib/public-route-registry.mjs",
   "contentVersion": "2026-09-28",
-  "fingerprint": "7d282050f33265b756f7eb0421a6511b9c8a7b79aad10ad19bd2295bf027acd6",
+  "fingerprint": "6fca51eac920b40398d4d6e53cb89cad58dfae5371f061ded06e15eec3f000f4",
   "coverage": {
-    "routes": 17,
+    "routes": 18,
     "headerRoutes": 4,
-    "footerRoutes": 17,
-    "visualAuditRoutes": 19,
-    "generatedPages": 12
+    "footerRoutes": 18,
+    "visualAuditRoutes": 20,
+    "generatedPages": 13
   },
   "gameplay": {
     "enemies": 22,
@@ -24,6 +24,7 @@
     "arsenal",
     "modes",
     "board",
+    "stats",
     "accessibility",
     "support",
     "press-kit",

@@ -17,6 +17,7 @@ import {
   renderFooterLinks,
   renderHeaderNav,
 } from "./lib/public-route-registry.mjs";
+import { checkPublicStatsRoute } from "./lib/public-stats-route-contract.mjs";
 
 const root = process.cwd();
 const jsonMode = process.argv.includes("--json");
@@ -79,6 +80,7 @@ let agents = null;
 let footer = null;
 let gameplayContract = null;
 let routeContractProof = null;
+let statsDescriptor = null;
 try {
   agents = JSON.parse(contentByFile[relative("public", "agents.json")]);
 } catch (error) {
@@ -99,6 +101,17 @@ try {
 } catch (error) {
   errors.push("route-contract.json invalid JSON: " + error.message);
 }
+try {
+  statsDescriptor = JSON.parse(requireFile(relative("public", "stats-surface.json")));
+} catch (error) {
+  errors.push("stats-surface.json invalid JSON: " + error.message);
+}
+errors.push(...checkPublicStatsRoute({
+  routes: routeRegistry,
+  descriptor: statsDescriptor,
+  redirects: requireFile(relative("public", "_redirects")),
+  html: contentByFile[relative("public", "stats", "index.html")] || "",
+}));
 
 if (routeContractProof) {
   if (JSON.stringify(routeContractProof) !== JSON.stringify(buildRouteContractProof())) {
