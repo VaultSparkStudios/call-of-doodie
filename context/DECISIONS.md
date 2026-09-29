@@ -2,6 +2,14 @@
 
 Public-safe decisions only. Detailed internal decision history is maintained privately.
 
+## 2026-09-29 — Session 180 — Move off end-of-support lint without widening the ruleset
+
+**Decision:** The lint toolchain moves to ESLint 10 and `eslint-plugin-react` is removed. The two classic hook rules (`rules-of-hooks` as error, `exhaustive-deps` as warning) are pinned by name instead of spreading the hooks 7 `recommended` preset, which adds React Compiler rules. Dependencies that are under seven days old (`sharp` 0.35.5, Supabase 2.117.2) wait for the cooldown.
+
+**Evidence:** npm marks `eslint@9.39.5` as no longer supported. The Compiler preset reports 177 findings across existing hooks and tests, a product decision rather than a hygiene fix. `lint:strict` keeps `--max-warnings 0`. All 1,671 tests, the build and staging checks pass.
+
+**Boundary:** The ruler moved; the standard did not. Adopting the Compiler rules, and the major bumps for vitest, Vite and Sentry, are separate verified changes. Nothing here changes gameplay or lifecycle status.
+
 ## 2026-09-29 — Session 179 — Publish measured stats with explicit coverage
 
 **Decision:** `/stats/` is a dedicated public route for the existing verified aggregate feed. It shows the recent 24-hour window and available mode mix, distinguishes the last completed run from the time the endpoint was checked, and calls a browser-local observation browser-local. Legacy runs without shot fields stay outside the accuracy denominator; zero feedback observations cannot be presented as sentiment.

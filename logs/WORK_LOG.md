@@ -1,4 +1,13 @@
 # Work Log
+## 2026-09-29 (Session 180 — toolchain currency)
+
+- Ran `/arc` under standing direct-to-main and deploy authorization. Triage found the S179 record current (tree clean, remote synced, write-back probe clean), so no recovery was needed. Baseline was green (262 files / 1,671 tests, strict lint, `npm audit` 0). The executable Genius List held no gameplay work: all 17 open board lines need devices, participants, provider dashboards or a founder decision, and the three doctor reds are studio-wide.
+- Found the one live hazard npm itself reported: `eslint@9.39.5` is deprecated as no longer supported. Trust-gated and moved the stack to ESLint 10.11.0 with `@eslint/js` 10.0.1, hooks plugin 7.1.1 and `globals` 17.12.0. The first attempt failed on a peer conflict (`eslint-plugin-react` stops at ESLint 9) and the hooks 7 recommended preset added 177 Compiler-rule errors; the plugin was removed and the same two classic hook rules are pinned, so the enforced ruleset did not change and no budget was raised.
+- Applied cooled-down in-range updates (React/React DOM 19.3.0, Vite 7.3.6, Sentry 8.55.2, Vite React plugin 5.2.0, react-refresh plugin 0.5.7). Held back `sharp` 0.35.5 (2 days old) and Supabase 2.117.2 (4 days old).
+- Closed superseded PRs #163, #153 and #156 with evidence. Wrote `docs/AUDIT_2026-09-29_2`. The premise checker script is not present in this repo, so premises were verified by hand.
+- Verified after each change: strict lint, build, 262 files / 1,671 tests, `npm audit`. Deployed immutable staging `e02ebb39` (shell 7/7, `/`, `/stats/`, `/board/`, `/_health` all 200) and passed the hosted browser audit 1020/1020 after installing the Playwright Chromium binary. That audit covers public pages, not a played run.
+- Doctor still reports two blocking findings outside this repo (wallet readiness, CPX51 disk healer / remedy drift); no zero-blocker claim is made. Lifecycle stays FORGE/public-unlaunched.
+
 ## 2026-09-29 (Session 179 — public stats truth)
 
 - Recovered S178's interrupted closeout, checked changed JSON/ndjson and `~/.claude.json`, reran the full suite, separated real portfolio doctor reds from project gates, cleared the stale lock and pushed recovery checkpoint `2dcb47b`.

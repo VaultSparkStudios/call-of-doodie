@@ -1,0 +1,125 @@
+{
+  "schemaVersion": "2.1",
+  "session": 180,
+  "project": { "slug": "call-of-doodie", "type": "game", "name": "Call-Of-Doodie" },
+  "totals": { "count": 3, "priority": 27.1, "top3": ["toolchain-eol-eslint10", "cooled-dependency-refresh", "stale-superseded-prs"] },
+  "meta": {
+    "generatedAt": "2026-09-29",
+    "project": "call-of-doodie",
+    "type": "game",
+    "baseline": "9b18c46; tree clean, synced; 262/262 files and 1,671/1,671 tests, strict lint, build and npm audit green; the three doctor reds are studio-wide (wallet readiness, CPX51 disk healer, remedy drift) and not repo-owned",
+    "combinedPriority": 27.1,
+    "gameLoopReview": {
+      "loopTightness": "Unchanged: S179 left no repo-owned gameplay item, and every open TASK_BOARD line is human- or data-gated (physical devices, participants, provider allowlists).",
+      "progression": "No balance change is justified without participant evidence; none made.",
+      "sessionEngagement": "No new surface; the S179 /stats/ route stays as shipped.",
+      "retention": "No retention claim is made or implied.",
+      "soulFidelity": "Proof over posture: the executable list was found to be empty of gameplay work, so the session went to the one supply-chain hazard npm itself reported (eslint 9.x is end-of-support) instead of inventing scope.",
+      "nextMoves": ["Decide whether to adopt the React Compiler rule set in eslint-plugin-react-hooks 7 (177 findings).", "Major bumps still open: vitest/coverage 5, jsdom 29, vite 8, plugin-react 6, sentry 10+ (each its own verified change)."]
+    }
+  },
+  "items": [
+    {
+      "id": 1,
+      "slug": "toolchain-eol-eslint10",
+      "axis": "security-and-supply-chain",
+      "tier": "🔥",
+      "title": "Move the lint toolchain off the end-of-support ESLint 9 line",
+      "impact": 7,
+      "innovation": 3,
+      "effortHours": 1.5,
+      "priority": 12.9,
+      "status": "implemented",
+      "executionLog": [
+        "npm reported eslint@9.39.5 deprecated (no longer supported). Moved to eslint 10.11.0, @eslint/js 10.0.1, eslint-plugin-react-hooks 7.1.1, globals 17.12.0; dropped eslint-plugin-react (peer range stops at ESLint 9; its only rule, jsx-uses-vars, is native in ESLint 10). Enforced ruleset is unchanged: rules-of-hooks + exhaustive-deps. lint:strict 0 warnings; 1,671/1,671 tests; build green."
+      ],
+      "why": "The ruler the repo gates on had reached end of support. Dependabot's ESLint 10 PR could not merge cleanly because the react plugin peer range and the hooks plugin's new Compiler-rule preset both moved.",
+      "recipe": "Trust-gate the four packages, remove eslint-plugin-react, install the ESLint 10 stack, replace the recommended preset spread with the two classic rules so the enforced ruleset does not silently widen to 177 findings, and re-run lint:strict, build and the suite.",
+      "premises": [
+        {
+          "claim": "The lint stack is declared on the ESLint 10 line",
+          "adapter": "file-content",
+          "target": "../Call-Of-Doodie/package.json",
+          "pattern": "\"eslint\": \"^10",
+          "operator": "eq",
+          "expected": true
+        }
+      ],
+      "ladder": {
+        "L1": { "effortHours": 0.5, "recipe": "Bump eslint and @eslint/js only." },
+        "L2": { "effortHours": 1.5, "recipe": "Move the full stack, drop the incompatible react plugin, pin the classic hooks rules." },
+        "L3": { "effortHours": 4, "recipe": "Also fix the 177 React Compiler findings and adopt the recommended preset." }
+      }
+    },
+    {
+      "id": 2,
+      "slug": "cooled-dependency-refresh",
+      "axis": "speed-organization-efficiency",
+      "tier": "🔥",
+      "title": "Apply in-range dependency updates that have cleared the release-age cooldown",
+      "impact": 5,
+      "innovation": 2,
+      "effortHours": 0.75,
+      "priority": 8.1,
+      "status": "implemented",
+      "executionLog": [
+        "react/react-dom 19.3.0, vite 7.3.6, @sentry/react 8.55.2, @vitejs/plugin-react 5.2.0, eslint-plugin-react-refresh 0.5.7 applied after the package-trust gate returned APPROVE. sharp 0.35.5 (2 days old) and @supabase/supabase-js 2.117.2 (4 days old) deliberately held back for the cooldown. Bundle sizes unchanged."
+      ],
+      "why": "Five packages sat behind their in-range wanted version. Two others are too new to trust yet, so the change is partial by design and says so.",
+      "recipe": "npm update the cooled-down set only, then lint:strict, build, full suite and npm audit.",
+      "premises": [
+        {
+          "claim": "React is on 19.3.0",
+          "adapter": "grep",
+          "target": "../Call-Of-Doodie/package-lock.json",
+          "pattern": "node_modules/react\": {\\s*\"version\": \"19.3.0\"",
+          "operator": "eq",
+          "expected": true
+        }
+      ],
+      "ladder": {
+        "L1": { "effortHours": 0.25, "recipe": "npm update everything in range." },
+        "L2": { "effortHours": 0.75, "recipe": "Trust-gate and cooldown-filter, then update and verify." },
+        "L3": { "effortHours": 1.5, "recipe": "Add a scheduled cooldown-aware bump receipt." }
+      }
+    },
+    {
+      "id": 3,
+      "slug": "stale-superseded-prs",
+      "axis": "organization",
+      "tier": "◻",
+      "title": "Close pull requests whose work has already shipped on main",
+      "impact": 4,
+      "innovation": 1,
+      "effortHours": 0.25,
+      "priority": 6.1,
+      "status": "implemented",
+      "executionLog": [
+        "PR #163 (PERK_FACTS) superseded by S178's src/config/perkFacts.js covering all 27 ordinary perks. PRs #153 (eslint 10.10) and #156 (globals 17.12) superseded by this session's exact versions."
+      ],
+      "why": "An open PR that main has already outgrown reads as unfinished work and invites a stale merge over verified code.",
+      "recipe": "Verify each premise against main, close with an explanatory comment naming the superseding change.",
+      "premises": [
+        {
+          "claim": "The shared perk facts authority exists on main",
+          "adapter": "file-exists",
+          "target": "../Call-Of-Doodie/src/config/perkFacts.js",
+          "operator": "eq",
+          "expected": true
+        }
+      ],
+      "ladder": {
+        "L1": { "effortHours": 0.1, "recipe": "Close with a one-line comment." },
+        "L2": { "effortHours": 0.25, "recipe": "Verify supersession, then close with evidence." },
+        "L3": { "effortHours": 0.5, "recipe": "Automate supersession detection." }
+      }
+    }
+  ],
+  "skipped": [
+    { "slug": "vitest-5-and-coverage-5", "reason": "Test-runner major bump across 262 files while the suite is the launch gate; needs its own verified change, not a drive-by. Dependabot PRs #154/#157 remain open." },
+    { "slug": "vite-8-and-plugin-react-6", "reason": "Bundler major swap; deployable build and hosted visual proof would need a full re-run. Deferred." },
+    { "slug": "react-compiler-lint-rules", "reason": "177 findings that are a product/architecture decision (refs written during render in hooks), not a hygiene fix. Recorded, not silently enabled." },
+    { "slug": "human-and-data-gated-taskboard-items", "reason": "All 17 open TASK_BOARD lines need physical devices, participants, provider dashboards or founder decisions; none is executable from the repo." }
+  ],
+  "executionLog": ["All three items implemented and verified 2026-09-29 (S180)."]
+}

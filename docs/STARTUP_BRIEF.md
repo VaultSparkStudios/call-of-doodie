@@ -1,12 +1,12 @@
 <!-- generated-by: scripts/render-startup-brief.mjs v3.1 -->
-<!-- generated-at: 2026-09-29 (Session 179 closeout) -->
-<!-- semantic-freshness: hash=a1df42d4074d33cb next=180 silSession=179 silScore=957 handoff=179 tests=- -->
+<!-- generated-at: 2026-09-29 (Session 180 closeout) -->
+<!-- semantic-freshness: hash=08e5861310fdf6a0 next=181 silSession=180 silScore=954 handoff=180 tests=- -->
 <!-- fast-boot-valid-until: next session if within 24h -->
 <!-- brief-coherent: true -->
 
 # Startup Brief — Call-Of-Doodie
 
-> **Fast-boot brief** — generated at Session 179 closeout · 2026-09-29.
+> **Fast-boot brief** — generated at Session 180 closeout · 2026-09-29.
 > Valid for next session if started within 24h. For sessions >24h later, load context files fresh (start.md §3).
 
 ---
@@ -15,12 +15,12 @@
 ╔════════════════════════════════════════════════════════════════╗
 ║  🚀 CALL-OF-DOODIE                                               ║
 ║  project · deployed/public-unlaunched · FORGE                    ║
-║  Session 180 · 2026-09-29 · FOUNDER MODE                         ║
+║  Session 181 · 2026-09-29 · FOUNDER MODE                         ║
 ║  Owner: VaultSpark Studios                                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ LAST SESSION (S179) - WHAT SHIPPED ══════════════════════════╗
-║  S179: dedicated /stats/ and truthful aggregate analysis shippe  ║
+╔══ LAST SESSION (S180) - WHAT SHIPPED ══════════════════════════╗
+║  S180: lint moved off end-of-support ESLint 9 to ESLint 10 with  ║
 ║  Tests  -                                                        ║
 ║  Deploy -                                                        ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -42,44 +42,45 @@
 
 ╔══ SCORE ═══════════════════════════════════════════════════════╗
 ║                                                                  ║
-║    957/1000   ██████████████████████░░   96%                     ║
+║    954/1000   ██████████████████████░░   95%                     ║
 ║    SIL v3.0  ·  Avg3: 952.3  ·  Velocity 3↑                      ║
 ║    Last active: 0d  ·  Last closeout: 0d  ·  (active = newest…   ║
 ║    Trend  ▂▂▂▄▄  ↑  (last 5 sessions)                            ║
 ║                                                                  ║
 ║    Category         Score  Bar        Spark   Δ                  ║
 ║    ─────────────── ────── ────────── ──────── ─                  ║
-║    Dev Health        98    ██████████  █████▇▇▇ →                ║
-║    Alignment         98    ██████████  █████▇▇▇ →                ║
-║    Momentum          97    ██████████  ▇▇███▇▇▇ →                ║
-║    Engagement        90    █████████░  ▇▇▇▇█▇▇▇ →                ║
-║    Process Qual      94    █████████░  █████▇▇▇ →                ║
+║    Dev Health        98    ██████████  ████▇▇▇▇ →                ║
+║    Alignment         97    ██████████  ████▇▇▇▇ →                ║
+║    Momentum          95    ██████████  ▇███▇▇▇▇ →                ║
+║    Engagement        90    █████████░  ▇▇▇█▇▇▇▇ →                ║
+║    Process Qual      94    █████████░  ████▇▇▇▇ →                ║
 ║    Coherence         96    ██████████  ········ →                ║
-║    Security          96    ██████████  ········ →                ║
+║    Security          97    ██████████  ········ →                ║
 ║    Ecosystem         92    █████████░  ········ →                ║
 ║    Capital          100    ██████████  ········ →                ║
-║    Automation        96    ██████████  ········ →                ║
+║    Automation        95    ██████████  ········ →                ║
 ║                                                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ WHERE WE LEFT OFF  ·  Session 179 ═══════════════════════════╗
+╔══ WHERE WE LEFT OFF  ·  Session 180 ═══════════════════════════╗
 ║  Shipped:  see LATEST_HANDOFF.md                                 ║
 ║  Tests:    262/262 passing  ·  Deploy: N/A                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ⚠  ░░░░░░░░░░░░░░░░░░░░░░░░    2% used                          ║
-║     304,828 / 200,000 tok  ·  unknown  ·  heuristic-stale        ║
-║     Verdict: CONSIDER_CLOSEOUT  ← act now                        ║
+║  ✓  ███████░░░░░░░░░░░░░░░░░   27% used                          ║
+║     272,309 / 1,000,000 tok  ·  claude-code/opus-4-8-1m  · …     ║
+║     ~136,155 tok/turn  ·  cache 50%  ·  4 turns to compact       ║
+║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         262/262 passing (2026-09-29T19:17:49.000Z)     ║
+║  ✓  Tests         262/262 passing (2026-09-29T21:55:00Z)         ║
 ║  ✓  Velocity      3 ↑  ·  Debt: ↓                                ║
 ║  ✓  Runway        S179 stats arc and production complete;…       ║
 ║  ⛔  Context age   ?d                                             ║
 ║  ⛔  IGNIS         44466 FORGE  ·  14d old                        ║
-║  ⛔  Truth         The stats route, public descriptor,…           ║
+║  ⛔  Truth         The lint and build toolchain claims match…     ║
 ║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs…        ║
 ║  ✓  Genome dims   all stable  (24/25)                            ║
 ║  ✓  Entropy       0.221  (healthy)                               ║
@@ -88,7 +89,7 @@
 ║  ✓  Templates     v3.3 aligned                                   ║
 ║  ⛔  Revenue sig.  not found  ⚠ stale                             ║
 ║  ✓  Deploy gaps   no gaps (run: ops deploy-gaps)                 ║
-║  ⛔  Doctor        160/229 (71%)  ·  3 failing                    ║
+║  ⛔  Doctor        159/229 (70%)  ·  3 failing                    ║
 ║  ✓  Codex trust   trusted project active                         ║
 ║  ✓  Canon adopt.  0/54 pending review                            ║
 ║  ✓  Cost          flat-rate Max Plan · usage ledger…             ║
@@ -120,9 +121,9 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIL FORECAST (next session) ═════════════════════════════════╗
-║  Projected:  960/1000  (↑3 vs current 957)                       ║
+║  Projected:  950/1000  (↓4 vs current 954)                       ║
 ║  All categories forecast stable or rising.                       ║
-║  Calibration: MAE 11.4 over last 10 forecasts                    ║
+║  Calibration: MAE 12 over last 10 forecasts                      ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ GENIUS HIT LIST ═════════════════════════════════════════════╗
@@ -146,5 +147,5 @@
 
 ---
 
-*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 179 closeout · 2026-09-29*
+*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 180 closeout · 2026-09-29*
 *Run `node scripts/ops.mjs doctor` for live health check · `node scripts/ops.mjs genius-list` to refresh hit list*

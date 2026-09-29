@@ -1,3 +1,14 @@
+## Session 180 — Toolchain currency and stale-PR hygiene
+
+- [x] [SIL:2] Move lint off the end-of-support ESLint 9 line to ESLint 10 without widening the enforced ruleset (`eslint-plugin-react` dropped; hooks rules pinned to the two classic rules).
+- [x] [SIL:2] Apply cooled-down in-range updates (React/React DOM 19.3.0, Vite 7.3.6, Sentry 8.55.2, Vite React plugin 5.2.0) after the package-trust gate; staging `e02ebb39` verified.
+- [x] [SIL:1] Close superseded PRs #163 (perk facts, shipped S178), #153 (eslint) and #156 (globals) with evidence.
+- [ ] [SIL:1] Re-check `sharp` 0.35.5 and `@supabase/supabase-js` 2.117.2 once each is past the release-age cooldown (sharp from about 2026-10-04, Supabase from about 2026-10-02).
+- [ ] [SIL:1] Decide whether to adopt the React Compiler rules in `eslint-plugin-react-hooks` 7 (177 findings: refs written during render, setState in effects). Product/architecture decision, not hygiene.
+- [ ] [SIL:1] Major bumps each need their own verified change: vitest and coverage 5 (#154, #157), vite 8 with plugin-react 6 (#140), jsdom 29, Sentry 10+ (#155).
+
+Scaffold: 3 S180 audit workstreams; 3 done; 0 in progress; 3 open follow-ups.
+
 ## Session 179 — Public stats truth and follow-through
 
 - [x] [SIL:2] Restore a navigable `/stats/` page with live community totals, all supported history, recent activity, definitions and a dated fallback.

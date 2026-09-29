@@ -1,3 +1,18 @@
+## 2026-09-29 — S180 toolchain truth
+
+Overall status: The lint and build toolchain claims match the installed packages and the gates still enforce the same rules. SPARKED evidence remains incomplete.
+Last reviewed: 2026-09-29
+
+| Dimension | Score | Evidence |
+|---|---:|---|
+| Schema alignment | 5 | No schema or public contract change; the lockfile and manifest agree on ESLint 10.11.0 and React 19.3.0. |
+| Prompt/template alignment | 4 | Unchanged. |
+| Derived-view freshness | 5 | The startup brief was regenerated for S180; the S179 test and deploy receipts are kept as S179 history, not restated as S180 proof. |
+| Handoff continuity | 5 | S179 was current at start; S180 records the held-back packages and the deferred Compiler-rule decision by name. |
+| Contradiction density | 5 | The previous claim that lint was on a supported line was true only until npm deprecated the 9.x release; the S180 record replaces it. |
+
+The doctor's blocking findings are studio-wide and outside this repository, so no zero-blocker claim is made. The hosted browser audit passed 1020/1020 on staging but renders public pages; it is not a played-run or device claim.
+
 ## 2026-09-29 — S179 public stats and release truth
 
 Overall status: The stats route, public descriptor, generated route graph and live feed agree at the exact production revision. SPARKED evidence remains incomplete.
