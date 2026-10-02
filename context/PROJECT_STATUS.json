@@ -4,14 +4,14 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "S181 full-site and player-journey refinement staged; 22-route hosted browser pass and aggregate feedback API verified.",
-  "nextMilestone": "Verify uncontended suite, exact-main CI and production engineering deploy; then gather participant/device and lifecycle evidence before SPARKED.",
+  "currentFocus": "S181 full-site/player-journey engineering release deployed and verified on canonical production.",
+  "nextMilestone": "Gather participant, physical-device, current Core Web Vitals, Zoho reply-as and Obelisk evidence before any SPARKED decision; test Field Lab prototypes before live integration.",
   "testingSurfaces": [
     {
       "session": 181,
       "status": "green",
-      "type": "full-site-audit-staging-and-full-gates",
-      "command": "281/281 files and 1,741/1,741 tests pass cleanly; strict lint, deployable build, 35-file public contract, schema/runtime/entry boundaries, npm audit 0 and supply-chain scan pass. Staging 8442b7df: 22 routes × 2 themes × 390/1440 = 88/88, shell 7/7, feedback aggregate 200; game-project event sync Edge Function deployed and OPTIONS 200. Browser E2E: 19 passed / 1 intentional mobile Scenario Cartridge skip; desktop and mobile primary-weapon carry, visual-pack persistence, focus pause and four-direction pointer controls pass."
+      "type": "full-site-audit-staging-production-and-full-gates",
+      "command": "Exact-main CI 37062730744: 281/281 files, 1741/1741 tests, lint, build and Cloudflare deploy pass. Source d192f62a754e reports on canonical and immutable 2b00673d; each passes shell/API 7/7; canonical 22 routes x two themes x 390/1440 = 88/88 browser states. Staging a197f471 passes the same 88-state matrix. Public/schema/security gates pass; npm audit 0; browser E2E 19 passed / 1 intentional skip. Game-project function CI 37062310935 passed."
     },
     {
       "session": 180,
@@ -172,16 +172,16 @@
   "freeTierCostStatus": "cost-neutral",
   "runtimeUrl": "https://callofdoodie.wtf/",
   "stagingType": "cloudflare-pages",
-  "stagingUrl": "https://8442b7df.call-of-doodie.pages.dev/",
-  "testsLastRun": "2026-10-02T19:37:25.729Z",
+  "stagingUrl": "https://a197f471.call-of-doodie.pages.dev/",
+  "testsLastRun": "2026-10-02T20:48:18.103Z",
   "sanitizationLastCleared": "2026-09-15",
   "sessionShellHygiene": {
     "session": 181,
-    "enumeratedAt": "2026-10-02T19:51:58.796Z",
-    "started": 22,
-    "closed": 22,
+    "enumeratedAt": "2026-10-02T20:54:00.157Z",
+    "started": 37,
+    "closed": 37,
     "running": 0,
-    "scope": "All 22 identified long-running PTY sessions in this release follow-through are closed, including build, Vitest, Playwright, staging deploy, release gates, doctor and the preview server stopped with Ctrl-C. Short synchronous commands and independent host processes are not counted as background jobs."
+    "scope": "22 previously closed long-running PTY sessions plus 15 continuation sessions (build, unit/browser tests, staging and CI watches), all confirmed complete. Short synchronous commands and independent host processes are excluded."
   },
   "doctorScore": {
     "date": "2026-10-02",
@@ -200,7 +200,7 @@
     "parallel": true,
     "note": "Studio-wide doctor exit 1 on remedy-drift D-S351.3, a Studio Ops standing-authorization finding outside this project; this project passed its own schema/public/security/visual/test gates."
   },
-  "lastSessionSummary": "S181: 25-item full-site audit addressed at stated depth (21 local outcomes, 3 unranked Field Lab prototypes, 1 measured partial); 281/281 files and 1,741/1,741 tests pass, staging 8442b7df shell 7/7 and 88/88 hosted states, feedback aggregate 200. Production pending exact-main CI. Browser E2E 19 pass / 1 intentional skip. Studio doctor has one external remedy-drift blocker.",
+  "lastSessionSummary": "S181 full-site audit implementation deployed and exact-source verified; 21 local outcomes, three Field Lab prototypes, one token-cost proxy. Public launch gates remain open.",
   "testsAssertionsPassing": 1741,
   "testsAssertionsTotal": 1741,
   "testsAssertionsFiles": 281,
@@ -211,10 +211,10 @@
   "testsBudgetExhausted": false,
   "silAvg5": 953.2,
   "testsAssertionsDeferred": [],
-  "testsAssertionsLastRun": "2026-10-02T19:37:25.729Z",
-  "lastShipped": "Staged full-site player journey, feedback and agent surfaces plus disclosed Field Lab prototypes; production pending CI.",
-  "truthStatus": "S181 staging verified, production pending exact-main CI; FORGE/public-unlaunched unchanged.",
+  "testsAssertionsLastRun": "2026-10-02T20:48:18.103Z",
+  "lastShipped": "S181 full-site/player journey, feedback and agent surfaces deployed as d192f62a754e; three Field Lab prototypes remain unranked and local.",
+  "truthStatus": "S181 full-site and player-journey engineering release is deployed and verified at exact source d192f62a754e. Three Field Lab systems are disclosed unranked prototypes, not live competitive modes. Feedback aggregate has real database backing, currently zero reports; 38 run-fact identifiers are a separate sample, not feedback participants. Exact-main CI passes 281/281 files and 1741/1741 tests; production and staging each pass 88/88 browser states. SPARKED remains NO-GO.",
   "testsFocusedSupplement": "Earlier test timing/artifact-order failures were repaired and superseded by a clean 281-file, 1,741-test full-suite run.",
-  "lastDeployCommit": "1e27bd9c88c579c7ee5d68632f5cac3bd9f3c4df",
-  "lastDeployAt": "2026-09-29T22:11:00Z"
+  "lastDeployCommit": "d192f62a754e27b2038b516ef47b24432b34851a",
+  "lastDeployAt": "2026-10-02T20:48:57.993Z"
 }

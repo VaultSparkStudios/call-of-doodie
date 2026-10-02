@@ -4,7 +4,7 @@
 
 ## Current Session
 
-- Session 181 (2026-10-02) — The 25-item full-site audit produced a ranked, private implementation plan and a broad engineering increment. Player-facing work consolidates the play entry, Player Record, modal and heads-up display hierarchy, Operation discovery, rematch advice, field-report feedback, account outcomes, public docs, Board and Press Kit. Field Lab contains three clearly unranked local prototypes (Living Plumbing, Complaint Cascade and Forked Fate); live combat rollout and player-effect claims await formative tests. Security and efficiency work add credential-free save handling, bounded ingress/polling, an allowlisted run pack, aggregate-only feedback, and a patched development dependency. The 22-route staging browser matrix passes 88/88 states; 429 hash-bound local captures cover both themes; strict lint, deployable build, public/schema/runtime and zero-vulnerability security gates pass. The final uncontended Vitest run passes 281/281 files and 1,741/1,741 tests. Staging `8442b7df` passes shell 7/7 and the aggregate API returns a valid response; exact-main CI/production verification follows closeout. The project remains FORGE/public-unlaunched. Full narrative and evidence limits: `context/LATEST_HANDOFF.md`.
+- Session 181 production seal (2026-10-02) — Direct-main CI `37062730744` passes 281/281 files and 1,741/1,741 tests, then deploys exact source `d192f62a754e` as immutable `2b00673d`. Canonical and immutable health receipts match that source; both pass 7/7 shell/API probes, and canonical production passes 88/88 route/theme/width browser states. The game-project Supabase function workflow `37062310935` passed. This is an authorized FORGE engineering release; SPARKED/public launch remains NO-GO pending the separately named evidence gates.
 
 ## Open Work
 
@@ -110,7 +110,7 @@ Why: the September 3 changelog entry says "twelve bots" because twelve bots is w
 
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 245,695 bytes · SHA-256 `d494557a12dd…`
-- `context/TASK_BOARD.md` · 171,721 bytes · SHA-256 `1138e0da1932…`
+- `context/CURRENT_STATE.md` · 246,184 bytes · SHA-256 `154a42b0c5b5…`
+- `context/TASK_BOARD.md` · 171,773 bytes · SHA-256 `78266cf2af24…`
 - `context/DECISIONS.md` · 166,642 bytes · SHA-256 `6d9b8fbd432b…`
 - `docs/AUDIT_2026-09-29_2.json` · 7,385 bytes · SHA-256 `cc01a284e112…`

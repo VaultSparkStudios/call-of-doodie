@@ -1,13 +1,13 @@
 ## 2026-10-02 — S181 whole-site and feedback truth
 
-Overall status: Current route/content contracts and staged browser output agree; three novel game mechanics are disclosed prototypes, not live competitive systems. The new feedback aggregate has real database backing, currently zero reports, and separately labels 38 run-fact identifiers as a runner sample rather than feedback participants. The final uncontended suite passes 281/281 files and 1,741/1,741 tests; earlier artifact-order and host-contention failures are superseded. Staging is verified, production awaits exact-main CI/deploy. SPARKED remains NO-GO.
+Overall status: Current route/content contracts, staging and canonical production agree at verified source `d192f62a754e`; three novel game mechanics are disclosed prototypes, not live competitive systems. The feedback aggregate has real database backing, currently zero reports, and separately labels 38 run-fact identifiers as a runner sample rather than feedback participants. Exact-main CI passes 281/281 files and 1,741/1,741 tests. Both staging and production pass 88/88 browser states, and canonical and immutable production pass 7/7 shell/API probes. SPARKED remains NO-GO.
 Last reviewed: 2026-10-02
 
 | Dimension | Score | Evidence |
 |---|---:|---|
 | Schema alignment | 5 | 35-file public contract and database aggregate RPC passed against the correct game project. |
 | Prompt/template alignment | 5 | Public routes and agent descriptors make scoped capabilities and prototype status explicit. |
-| Derived-view freshness | 4 | Generated routes/pages and visual receipt are current at staging; production seal follows push. |
+| Derived-view freshness | 5 | Generated routes/pages and visual receipt are current; exact-source production `d192f62a754e` and staging browser matrices both pass. |
 | Handoff continuity | 5 | S180 follow-ups carried into Next and S181 release/evidence limits recorded. |
 | Contradiction density | 4 | Board duplication and public status drift were reduced; participant outcome remains unknown. |
 

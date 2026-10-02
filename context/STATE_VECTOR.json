@@ -1,9 +1,9 @@
 {
   "vectorVersion": "1.0",
   "generatedAt": "2026-10-02",
-  "generatedAtMs": 1790973122860,
+  "generatedAtMs": 1790974496920,
   "session": 181,
-  "vectorHash": "0ccd0c922610ac37",
+  "vectorHash": "defce4a4d7879ef7",
   "silTotal": 955,
   "silAvg3": 955.3,
   "velocity": 3,
@@ -24,7 +24,7 @@
     "[SIL:1] **S180 carryover** Re-check `@supabase/supabase-js` 2.117.2 after its re"
   ],
   "health": "green",
-  "truthStatus": "Current route/content contracts and staged browser output agree; three novel game mechanics are disclosed prototypes, not live competitive systems. The new feedback aggregate has real database backing, currently zero reports, and separately labels 38 run-fact identifiers as a runner sample rather than feedback participants. The final uncontended suite passes 281/281 files and 1,741/1,741 tests; earlier artifact-order and host-contention failures are superseded. Staging is verified, production awaits exact-main CI/deploy. SPARKED remains NO-GO.",
+  "truthStatus": "Current route/content contracts, staging and canonical production agree at verified source `d192f62a754e`; three novel game mechanics are disclosed prototypes, not live competitive systems. The feedback aggregate has real database backing, currently zero reports, and separately labels 38 run-fact identifiers as a runner sample rather than feedback participants. Exact-main CI passes 281/281 files and 1,741/1,741 tests. Both staging and production pass 88/88 browser states, and canonical and immutable production pass 7/7 shell/API probes. SPARKED remains NO-GO.",
   "genome": null,
   "ignisScore": 44206,
   "ignisGrade": "FORGE",
@@ -33,8 +33,8 @@
   "slug": "call-of-doodie",
   "type": null,
   "lifecycle": "deployed",
-  "nextMilestone": "Verify uncontended suite, exact-main CI and production engineering deploy; then gather participant/device and lifecycle evidence before SPARKED.",
-  "currentFocus": "S181 full-site and player-journey refinement staged; 22-route hosted browser pass and aggregate feedback API verified.",
+  "nextMilestone": "Gather participant, physical-device, current Core Web Vitals, Zoho reply-as and Obelisk evidence before any SPARKED decision; test Field Lab prototypes before live integration.",
+  "currentFocus": "S181 full-site/player-journey engineering release deployed and verified on canonical production.",
   "lastShipped": "see LATEST_HANDOFF.md",
   "blockers": [
     "PostHog and project-scoped Sentry evidence remain unavailable; provider readiness is not represented as verified telemetry.",

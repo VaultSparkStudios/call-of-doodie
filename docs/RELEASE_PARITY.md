@@ -1,14 +1,15 @@
 # Release Parity — Call of Doodie
 
-Last reviewed: 2026-10-02 (Session 181 engineering staging)
+Last reviewed: 2026-10-02 (Session 181 engineering production)
 
-## Session 181 staging and release boundary
+## Session 181 staging, production and release boundary
 
 - Merged-revision immutable staging: `https://a197f471.call-of-doodie.pages.dev/`; branch alias: `https://session-181-staging.call-of-doodie.pages.dev/`. Seven public shell/API probes return 200, including typed edge health and the aggregate feedback endpoint backed by the game project.
 - Hosted browser parity: 22 public routes, two themes, 390px/1440px = 88/88 states without missing heading/footer, horizontal overflow or page errors. Local hash-bound receipt covers 429 touched states; representative pixels were inspected. Desktop and mobile browser experiences are present; no native app is shipped.
-- Strict lint, merged deployable build, regenerated 35-file public contract, schema, runtime/entry boundaries, zero-vulnerability security audit and supply-chain scan pass. The full suite passed 281/281 files and 1,741/1,741 tests before the latest validator-only sync. Its two affected validator test files pass after adapting the fixture to the new coherence-marker contract; exact-main CI will rerun the complete suite. Browser E2E passes 19 cases with one intentional mobile-only Scenario Cartridge skip. Exact-main CI/production evidence follow this pre-push record.
+- Strict lint, merged deployable build, regenerated 35-file public contract, schema, runtime/entry boundaries, zero-vulnerability security audit and supply-chain scan pass. Exact-main GitHub Actions `37062730744` passes 281/281 files and 1,741/1,741 tests, then builds and deploys source `d192f62a754e`. Browser E2E passes 19 cases with one intentional mobile-only Scenario Cartridge skip.
+- Production: immutable `https://2b00673d.call-of-doodie.pages.dev/` and canonical `https://callofdoodie.wtf/` both report deploy `d192f62a754e`, pass 7/7 shell/API probes, and return the aggregate feedback endpoint successfully. Canonical browser parity passes 22 routes × two themes × 390px/1440px = 88/88 states. The game-project Supabase function workflow `37062310935` passed after the explicit game-project migration and manual function deployment.
 - Rollback: previous immutable production remains available; `docs/DEPLOY_ROLLBACK.md` gives the non-force-push revert path.
-- Verdict: engineering staging GO; SPARKED/public launch NO-GO pending participant/device/Core Web Vitals/identity/mail and other lifecycle evidence. Field Lab mechanics remain unranked prototypes.
+- Verdict: authorized FORGE engineering production release verified; SPARKED/public launch NO-GO pending participant/device/Core Web Vitals/identity/mail and other lifecycle evidence. Field Lab mechanics remain unranked prototypes.
 
 ## Session 161 verified release
 

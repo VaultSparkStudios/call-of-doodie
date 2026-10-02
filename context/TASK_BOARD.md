@@ -2,7 +2,7 @@
 
 - [x] [SIL:3] Address all 25 ranked audit outcomes in source, with the three new game systems identified as local prototypes and live rollout contingent on play evidence.
 - [x] [SIL:2] Review all public routes at desktop and mobile widths in both themes; refresh the hash-bound visual receipt and correct redundant Board and Press Kit content.
-- [x] [SIL:2] **IN PROGRESS S181 · TRACKED IN NOW** Release gates, staging, closeout, and exact hosted-revision verification are the remaining session work.
+- [x] [SIL:2] **DONE S181** Release gates, staging, closeout, direct-main CI and exact hosted-revision verification passed; production reports `d192f62a754e` with 88/88 browser states and 7/7 shell/API probes.
 
 ## Session 180 — Toolchain currency and stale-PR hygiene
 
