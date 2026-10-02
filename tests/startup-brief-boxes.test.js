@@ -4,6 +4,7 @@ import { validateStartupBrief } from '../scripts/validate-brief-format.mjs';
 
 function minimalBrief(extraBlocks) {
   return [
+    '<!-- brief-coherent: true -->',
     '╔════════════════════════════════════════════════════════════════╗',
     '║  CALL-OF-DOODIE · FORGE                                       ║',
     '╚════════════════════════════════════════════════════════════════╝',
