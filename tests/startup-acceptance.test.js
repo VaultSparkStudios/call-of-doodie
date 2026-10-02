@@ -5,6 +5,7 @@ import { normalizeGeniusBlock, renderHumanPressureBlock } from '../scripts/lib/s
 
 function brief() {
   return [
+    '<!-- brief-coherent: true -->',
     '╔════════════════════════════════════════════════════════════════╗',
     '║  CALL-OF-DOODIE · FORGE                                       ║',
     '╚════════════════════════════════════════════════════════════════╝',
