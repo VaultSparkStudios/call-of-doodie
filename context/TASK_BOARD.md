@@ -9,7 +9,7 @@
 - [x] [SIL:2] Move lint off the end-of-support ESLint 9 line to ESLint 10 without widening the enforced ruleset (`eslint-plugin-react` dropped; hooks rules pinned to the two classic rules).
 - [x] [SIL:2] Apply cooled-down in-range updates (React/React DOM 19.3.0, Vite 7.3.6, Sentry 8.55.2, Vite React plugin 5.2.0) after the package-trust gate; staging `e02ebb39` verified.
 - [x] [SIL:1] Close superseded PRs #163 (perk facts, shipped S178), #153 (eslint) and #156 (globals) with evidence.
-- [x] [SIL:1] **CARRIED S181** Re-check `sharp` 0.35.5 and `@supabase/supabase-js` 2.117.2 after release-age cooldown; retained under Next.
+- [x] [SIL:1] **CARRIED S181** Re-check `sharp` 0.35.5 and `@supabase/supabase-js` 2.117.2 after release-age cooldown; retained under Next. `sharp` arrived through upstream main during S181, passed package trust and the merged build; Supabase remains queued.
 - [x] [SIL:1] **CARRIED S181** React Compiler lint-rule adoption is an architecture decision; retained under Next.
 - [x] [SIL:1] **CARRIED S181** Major toolchain bumps each need isolated verification; retained under Next.
 
@@ -650,7 +650,7 @@ First checkpoint the bounded post-S159 propagation/CI/deploy recovery. Then begi
 
 - [ ] [SIL:2] **S181 evidence gate** Test Field Lab valve consequences, complaint cues and paired tactical attempts with representative players before considering live unranked Operation integration; retain competitive isolation until readability and fairness are observed.
 - [ ] [SIL:1] **S181 measurement gate** If paid project inference is introduced, measure real billed prompt/completion tokens and quality on representative tasks; current bounded-context byte counts are only a proxy.
-- [ ] [SIL:1] **S180 carryover** Re-check `sharp` 0.35.5 and `@supabase/supabase-js` 2.117.2 after their release-age cooldown and package-trust gate.
+- [ ] [SIL:1] **S180 carryover** Re-check `@supabase/supabase-js` 2.117.2 after its release-age cooldown and package-trust gate. `sharp` 0.35.5 is integrated from upstream main and locally verified in S181.
 - [ ] [SIL:1] **S180 carryover** Decide whether to adopt React Compiler rules in `eslint-plugin-react-hooks` 7; the 177 existing findings require an architecture decision.
 - [ ] [SIL:1] **S180 carryover** Verify each major toolchain bump separately: vitest/coverage 5, vite 8/plugin-react 6, jsdom 29, and Sentry 10+.
 

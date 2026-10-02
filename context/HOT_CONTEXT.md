@@ -111,6 +111,6 @@ Why: the September 3 changelog entry says "twelve bots" because twelve bots is w
 ## Source Index
 
 - `context/CURRENT_STATE.md` · 245,695 bytes · SHA-256 `d494557a12dd…`
-- `context/TASK_BOARD.md` · 171,545 bytes · SHA-256 `284933f00242…`
-- `context/DECISIONS.md` · 166,067 bytes · SHA-256 `5b9165c4fd7b…`
+- `context/TASK_BOARD.md` · 171,721 bytes · SHA-256 `1138e0da1932…`
+- `context/DECISIONS.md` · 166,642 bytes · SHA-256 `6d9b8fbd432b…`
 - `docs/AUDIT_2026-09-29_2.json` · 7,385 bytes · SHA-256 `cc01a284e112…`

@@ -1,9 +1,9 @@
 {
   "vectorVersion": "1.0",
   "generatedAt": "2026-10-02",
-  "generatedAtMs": 1790969901566,
+  "generatedAtMs": 1790973122860,
   "session": 181,
-  "vectorHash": "2e3090b1842243d8",
+  "vectorHash": "0ccd0c922610ac37",
   "silTotal": 955,
   "silAvg3": 955.3,
   "velocity": 3,
@@ -21,7 +21,7 @@
   "topNext": [
     "[SIL:2] **S181 evidence gate** Test Field Lab valve consequences, complaint cues",
     "[SIL:1] **S181 measurement gate** If paid project inference is introduced, measu",
-    "[SIL:1] **S180 carryover** Re-check `sharp` 0.35.5 and `@supabase/supabase-js` 2"
+    "[SIL:1] **S180 carryover** Re-check `@supabase/supabase-js` 2.117.2 after its re"
   ],
   "health": "green",
   "truthStatus": "Current route/content contracts and staged browser output agree; three novel game mechanics are disclosed prototypes, not live competitive systems. The new feedback aggregate has real database backing, currently zero reports, and separately labels 38 run-fact identifiers as a runner sample rather than feedback participants. The final uncontended suite passes 281/281 files and 1,741/1,741 tests; earlier artifact-order and host-contention failures are superseded. Staging is verified, production awaits exact-main CI/deploy. SPARKED remains NO-GO.",
