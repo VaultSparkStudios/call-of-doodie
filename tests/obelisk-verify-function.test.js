@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { verifyObeliskRequest } from "../functions/api/obelisk-verify.js";
+import { verifyProfileCapability } from "../src/server/profileCapability.js";
 
 function request(body, method = "POST") {
   return new Request("https://callofdoodie.wtf/api/obelisk-verify", {
@@ -80,6 +81,8 @@ describe("obelisk verify Pages Function", () => {
     });
     expect(JSON.stringify(body)).not.toContain("private@example.test");
     expect(JSON.stringify(body)).not.toContain("session-token");
+    expect(body.profileCapabilityExpiresAt).toBe(1023456);
+    expect(await verifyProfileCapability("secret-value", body.profileCapability, "player-123", "session-token", 123456)).toBe(true);
   });
 
   it("rejects failed upstream verification", async () => {
@@ -96,5 +99,14 @@ describe("obelisk verify Pages Function", () => {
 
     expect(response.status).toBe(401);
     expect(await readJson(response)).toMatchObject({ ok: false, reason: "bad-session" });
+  });
+
+  it("rejects oversized and wrong-type bodies before the upstream verifier", async () => {
+    const fetchImpl = vi.fn();
+    const oversized = await verifyObeliskRequest({ request: request({ token: "é".repeat(5000) }), env: { OBELISK_VERIFY_URL: "https://obeliskgate.com/verify" }, fetchImpl });
+    const wrongType = await verifyObeliskRequest({ request: new Request("https://callofdoodie.wtf/api/obelisk-verify", { method: "POST", headers: { "content-type": "text/plain" }, body: "{}" }), env: { OBELISK_VERIFY_URL: "https://obeliskgate.com/verify" }, fetchImpl });
+    expect(oversized.status).toBe(413);
+    expect(wrongType.status).toBe(415);
+    expect(fetchImpl).not.toHaveBeenCalled();
   });
 });

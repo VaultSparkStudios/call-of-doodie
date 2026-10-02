@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 import { WEAPONS } from "../constants.js";
 import { loadCareerStats } from "../storage.js";
 import { getWeaponKillMastery } from "../utils/arsenalMastery.js";
@@ -100,15 +101,27 @@ export function DesktopWeaponDock(props) {
   } = props;
   const selected = WEAPONS[currentWeapon] || WEAPONS[0];
   const mastery = useWeaponMastery();
+  const [open, setOpen] = useState(false);
   return (
+    <>
     <div className="weapon-dock weapon-dock--desktop" data-testid="desktop-weapon-dock">
       <div className="weapon-dock__current" style={{ "--weapon-color": selected.color }}>
         <span>ACTIVE WEAPON</span>
         <strong>{selected.emoji} {selected.name}</strong>
         <small>{isReloading ? "RELOADING…" : `${ammo}/${selected.maxAmmo} AMMO`}</small>
-        <button type="button" onClick={onReload}>{isReloading ? "LOADING" : "R · RELOAD"}</button>
       </div>
-      <div className={`weapon-dock__grid ${showAmmoBars ? "has-ammo" : ""}`} role="group" aria-label="Weapons">
+      <button type="button" className="weapon-dock__arsenal-toggle" onClick={() => setOpen((value) => !value)} aria-expanded={open} aria-controls="desktop-weapon-selector" aria-label={`${open ? "Close" : "Open"} weapon selector`}>
+        <span>ARSENAL</span><b>{open ? "× CLOSE" : "12 WEAPONS ▴"}</b>
+      </button>
+      <div className="weapon-dock__actions">
+        <button type="button" onClick={onReload}><span>R</span><b>{isReloading ? "LOADING" : "RELOAD"}</b></button>
+        <button type="button" className={grenadeReady ? "is-ready" : ""} onClick={onGrenade}><span>Q / G</span><b>💣 GRENADE</b></button>
+        <button type="button" className={dashReady ? "is-ready is-cyan" : ""} onClick={onDash}><span>SHIFT</span><b>💨 DASH</b></button>
+      </div>
+    </div>
+    {open && createPortal(<div id="desktop-weapon-selector" className="weapon-dock__drawer" role="group" aria-label="Weapons" data-cod-surface="game">
+      <div className="weapon-dock__drawer-header"><strong>CHOOSE WEAPON <small>· 1–9 / 0 / - / =</small></strong><button type="button" onClick={() => setOpen(false)} aria-label="Close weapon selector">×</button></div>
+      <div className={`weapon-dock__grid ${showAmmoBars ? "has-ammo" : ""}`}>
         {WEAPONS.map((weapon, index) => (
           <WeaponButton
             key={weapon.name}
@@ -119,16 +132,13 @@ export function DesktopWeaponDock(props) {
             upgrades={weaponUpgrades?.[index]}
             mod={weaponMods?.[index]}
             mastery={mastery[index]}
-            onSelect={onSwitchWeapon}
+            onSelect={(next) => { onSwitchWeapon(next); setOpen(false); }}
             compact
           />
         ))}
       </div>
-      <div className="weapon-dock__actions">
-        <button type="button" className={grenadeReady ? "is-ready" : ""} onClick={onGrenade}><span>Q / G</span><b>💣 GRENADE</b></button>
-        <button type="button" className={dashReady ? "is-ready is-cyan" : ""} onClick={onDash}><span>SHIFT</span><b>💨 DASH</b></button>
-      </div>
-    </div>
+    </div>, document.body)}
+    </>
   );
 }
 

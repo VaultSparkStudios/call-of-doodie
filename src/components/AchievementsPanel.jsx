@@ -1,8 +1,9 @@
 import { ACHIEVEMENTS, ACHIEVEMENT_PROGRESS } from "../constants.js";
 import { loadCareerStats } from "../storage.js";
+import DialogShell from "./DialogShell.jsx";
 
 export default function AchievementsPanel({ achievementsUnlocked, onClose, runStats = null }) {
-  const card = { background: "rgba(255,255,255,0.05)", borderRadius: 10, border: "1px solid rgba(255,255,255,0.1)", padding: 16 };
+  const card = { background: "var(--cod-panel-strong)", borderRadius: 10, border: "1px solid var(--cod-line)", padding: 16 };
   const tierColors = { bronze: "#CD7F32", silver: "#C0C0C0", gold: "#FFD700", legendary: "#FF44FF" };
   const tierNames  = { bronze: "BRONZE",   silver: "SILVER",   gold: "GOLD",   legendary: "LEGENDARY" };
   const unlocked = achievementsUnlocked.length;
@@ -14,9 +15,9 @@ export default function AchievementsPanel({ achievementsUnlocked, onClose, runSt
   const stats = runStats || { kills: career.totalKills, bestStreak: career.bestStreak, totalDamage: career.totalDamage };
 
   return (
-    <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.9)", zIndex: 110, display: "flex", alignItems: "flex-start", justifyContent: "center", padding: "max(12px, env(safe-area-inset-top)) 12px max(18px, env(safe-area-inset-bottom))", overflowY: "auto", WebkitOverflowScrolling: "touch", backdropFilter: "blur(4px)" }}>
+    <DialogShell title="Career Achievements" onClose={onClose} zIndex={110}>
       <div style={{ ...card, maxWidth: 520, width: "100%", overflow: "visible", position: "relative", border: "1px solid rgba(255,215,0,0.25)", padding: "18px 14px", color: "#fff", margin: "auto 0" }}>
-        <button onClick={onClose} style={{ position: "absolute", top: 10, right: 14, background: "none", border: "none", color: "#CCC", fontSize: 20, cursor: "pointer", fontFamily: "monospace" }}>X</button>
+        <button onClick={onClose} aria-label="Close achievements" style={{ position: "absolute", top: 4, right: 4, width: 44, height: 44, background: "none", border: "none", color: "var(--cod-ink)", fontSize: 20, cursor: "pointer", fontFamily: "monospace" }}>×</button>
         <h3 style={{ color: "var(--cod-gold)", margin: "0 0 2px", fontSize: 18, letterSpacing: 2 }}>🏅 CAREER ACHIEVEMENTS</h3>
         <div style={{ marginBottom: 14 }}>
           <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, color: "#CCC", marginBottom: 3 }}>
@@ -40,14 +41,14 @@ export default function AchievementsPanel({ achievementsUnlocked, onClose, runSt
                 const current = progressDef ? Math.min(progressDef[1], stats[progressDef[0]] || 0) : 0;
                 const progressPct = progressDef ? Math.round((current / progressDef[1]) * 100) : 0;
                 return (
-                  <div key={a.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "6px 4px", borderRadius: 6, marginBottom: 2, background: isUnlocked ? "rgba(255,215,0,0.06)" : "transparent", opacity: isUnlocked ? 1 : 0.5 }}>
+                  <div key={a.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "6px 4px", borderRadius: 6, marginBottom: 2, background: isUnlocked ? "rgba(255,215,0,0.06)" : "rgba(255,255,255,0.025)", borderLeft: isUnlocked ? "2px solid var(--cod-gold)" : "2px solid #4F5660" }}>
                     <span style={{ fontSize: 20, filter: isUnlocked ? "none" : "grayscale(1)" }}>{a.emoji}</span>
                     <div style={{ flex: 1 }}>
-                      <div style={{ fontSize: 12, fontWeight: 700, color: isUnlocked ? tierColors[tier] : "#999" }}>{a.name}</div>
-                      <div style={{ fontSize: 10, color: isUnlocked ? "#CCC" : "#666" }}>{a.desc}</div>
+                      <div style={{ fontSize: 12, fontWeight: 700, color: isUnlocked ? tierColors[tier] : "#D0D0D0" }}>{a.name}</div>
+                      <div style={{ fontSize: 10, color: isUnlocked ? "#CCC" : "#A9A9A9" }}>{a.desc}</div>
                       {progressDef && progressPct > 0 && (
                         <div style={{ marginTop: 3 }}>
-                          <div style={{ display: "flex", justifyContent: "space-between", fontSize: 8, color: "#666", marginBottom: 1 }}>
+                          <div style={{ display: "flex", justifyContent: "space-between", fontSize: 9, color: "#A9A9A9", marginBottom: 1 }}>
                             <span>{current.toLocaleString()} / {progressDef[1].toLocaleString()}</span>
                             <span>{progressPct}%</span>
                           </div>
@@ -65,6 +66,6 @@ export default function AchievementsPanel({ achievementsUnlocked, onClose, runSt
           );
         })}
       </div>
-    </div>
+    </DialogShell>
   );
 }

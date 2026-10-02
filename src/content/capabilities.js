@@ -1,0 +1,46 @@
+// Public capability truth. Dates record evidence, not a promise of uptime.
+// Availability: live = observed on production, local = works in the browser,
+// unavailable = not usable on this deployment, planned = not implemented.
+export const CAPABILITY_EVIDENCE = Object.freeze({
+  checkedAt: "2026-09-30T20:06:09Z",
+  productionOrigin: "https://callofdoodie.wtf",
+  scope: "Production shell, /_health, /api/top-scores, /api/community-stats and /api/profile; browser gameplay verified in the September 29 audit.",
+});
+
+export const PUBLIC_CAPABILITIES = Object.freeze([
+  { id: "classic-play", label: "Classic Survival", benefit: "Start a free endless arena run in the browser.", availability: "local", evidenceDate: "2026-09-29", route: "/", group: "shipped" },
+  { id: "operations", label: "Three authored Operations", benefit: "Choose routes through seven-encounter missions with local progression.", availability: "local", evidenceDate: "2026-09-29", route: "/modes/", group: "shipped" },
+  { id: "arcade-modes", label: "Arcade modes", benefit: "Play Extraction, Bot Royale, Boss Gauntlet, Hold the Throne and seeded rulesets with distinct objectives.", availability: "local", evidenceDate: "2026-09-29", route: "/modes/", group: "shipped" },
+  { id: "local-backup", label: "Your Sewer Record", benefit: "Review career and stash, download a credential-free save, and preview a restore on this device.", availability: "local", evidenceDate: "2026-09-30", route: "/#profile", group: "shipped" },
+  { id: "challenge-links", label: "Previewed challenge links", benefit: "Inspect a shared run's seed, mode, build, score scope and expiry before independent guest play. Friendly scores are self-reported, not a live match or verified result.", availability: "local", evidenceDate: "2026-10-02", route: "/challenge/", group: "shipped" },
+  { id: "run-export", label: "Player-owned run pack", benefit: "Download a redacted, hashed JSON summary from a saved debrief for your own analysis or an AI agent; no upload or score attestation is included.", availability: "local", evidenceDate: "2026-10-02", route: "/", group: "shipped" },
+  { id: "field-lab", label: "Field Lab prototypes", benefit: "Try three authored, unranked tactics models for pressure routing, nemesis counters and paired practice; they do not change live Operations or scored runs.", availability: "local", evidenceDate: "2026-10-02", route: "/field-lab/", group: "shipped" },
+  { id: "squad-codes", label: "Squad codes", benefit: "Create or join a code locally and use it with supported score submissions.", availability: "local", evidenceDate: "2026-09-29", route: "/#profile", group: "shipped" },
+  { id: "public-board", label: "Public score board", benefit: "Read live top scores and community totals with stated coverage and trust limits.", availability: "live", evidenceDate: "2026-09-30", route: "/board/", group: "shipped" },
+  { id: "field-guide", label: "Field Manual and Bestiary", benefit: "Find controls, rules and enemy information in public guides.", availability: "live", evidenceDate: "2026-09-29", route: "/field-manual/", group: "shipped" },
+  { id: "cloud-backup", label: "Cross-device career recovery", benefit: "Recover browser progress after verifying an active Obelisk session.", availability: "unavailable", evidenceDate: "2026-09-30", route: "/#profile", group: "next" },
+  { id: "online-duels", label: "Online duel results", benefit: "See a friend's independent response attached to a shared challenge.", availability: "unavailable", evidenceDate: "2026-09-30", route: "/", group: "next" },
+  { id: "daily-board-ghost", label: "Daily board ghost", benefit: "Race a published board leader's path when one is available.", availability: "unavailable", evidenceDate: "2026-09-30", route: "/modes/", group: "next" },
+  { id: "royale-balancing", label: "Royale pacing from player evidence", benefit: "Tune bot count and flood timing after comparable playtests.", availability: "planned", evidenceDate: "2026-09-30", route: "/modes/", group: "next" },
+  { id: "realtime-coop", label: "Real-time co-op", benefit: "Play a shared arena with friends.", availability: "planned", evidenceDate: "2026-09-30", route: "/roadmap/", group: "later" },
+  { id: "networked-royale", label: "Networked Toilet Royale", benefit: "Face other people instead of computer-controlled opponents.", availability: "planned", evidenceDate: "2026-09-30", route: "/roadmap/", group: "later" },
+]);
+
+export function capability(id) {
+  return PUBLIC_CAPABILITIES.find((entry) => entry.id === id);
+}
+
+export function publicCapabilityManifest() {
+  return {
+    schemaVersion: "public-capabilities-v1",
+    evidence: CAPABILITY_EVIDENCE,
+    capabilities: PUBLIC_CAPABILITIES.map(({ id, label, benefit, availability, evidenceDate, route }) => ({ id, label, benefit, availability, evidenceDate, route })),
+  };
+}
+
+export function currentReleaseNote() {
+  return [
+    "October 2, 2026 · Clearer challenges, better run evidence, and safer exports",
+    `${capability("challenge-links").benefit} ${capability("run-export").benefit} The debrief now offers one local evidence lesson and says when comparable runs are missing. Browser progress remains locally backed up, while cloud recovery stays unavailable until its hosted checks pass.`,
+  ];
+}

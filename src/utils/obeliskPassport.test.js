@@ -9,7 +9,7 @@ function memoryStorage() {
 describe("Porcelain Passport", () => {
   it("stores only the minimum verified identity receipt", () => {
     const passport = sanitizeObeliskIdentity({ ok: true, identity: { subject: "player-123", tier: "T4", token: "must-not-persist", email: "private@example.com" } }, 0);
-    expect(passport).toEqual({ schemaVersion: "porcelain-passport-v1", issuer: "Obelisk", project: "call-of-doodie", subject: "player-123", tier: "T4", verifiedAt: "1970-01-01T00:00:00.000Z", profileKey: null });
+    expect(passport).toEqual({ schemaVersion: "porcelain-passport-v1", issuer: "Obelisk", project: "call-of-doodie", subject: "player-123", tier: "T4", verifiedAt: "1970-01-01T00:00:00.000Z" });
     expect(JSON.stringify(passport)).not.toContain("must-not-persist");
     expect(JSON.stringify(passport)).not.toContain("private@example.com");
   });
@@ -25,5 +25,13 @@ describe("Porcelain Passport", () => {
     const passport = sanitizeObeliskIdentity({ ok: true, identity: { subject: "player-123" } }, 0);
     expect(savePassport(passport, storage)).toBe(true);
     expect(readPassport(storage)).toEqual(passport);
+  });
+
+  it("strips imported or stale session-like fields from local receipts", () => {
+    const storage = memoryStorage();
+    const passport = sanitizeObeliskIdentity({ ok: true, identity: { subject: "player-123" } }, 0);
+    expect(savePassport({ ...passport, profileKey: "old-secret", sessionToken: "not-authority" }, storage)).toBe(true);
+    expect(readPassport(storage)).toEqual(passport);
+    expect(exportPassport({ ...passport, sessionToken: "not-authority" })).not.toContain("not-authority");
   });
 });

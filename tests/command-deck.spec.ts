@@ -37,8 +37,7 @@ test("loads a Scenario Cartridge only after integrity validation", async ({ page
   test.skip(testInfo.project.name === "mobile-chrome", "Advanced run-code relays are a desktop command-deck surface.");
   await page.goto("/");
   await enterRuntime(page);
-  const config = page.getByRole("button", { name: /Change mode or difficulty/i });
-  if (await config.isVisible().catch(() => false)) await config.click();
+  await page.getByRole("button", { name: "Change setup & run codes" }).click();
   await page.getByText("ADVANCED RUN CODES & RELAYS", { exact: true }).click();
   await expect(page.getByTestId("scenario-cartridge")).toBeVisible();
   await page.getByLabel("Scenario Cartridge code").fill("tampered");

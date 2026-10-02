@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { OPERATIONS, getOperation } from "../systems/operationCampaign.js";
 import { getOperationRouteIntel } from "../systems/operationDirector.js";
 import { deriveOperationCampaignCarryIn, loadOperationCampaignProgress } from "../utils/operationCampaignProgress.js";
@@ -78,7 +78,25 @@ function routeOptions(operation) {
   return operation.acts?.find((act) => act?.routeFork)?.routeFork?.routes || [];
 }
 
-export default function OperationCommandDeck({ onStart, palette = FALLBACK_PALETTE }) {
+// The launch descriptor is shared with Home so the single Start button uses
+// exactly the same verified route and seed as this deck.
+// eslint-disable-next-line react-refresh/only-export-components
+export function getOperationLaunch(operationId, routeId) {
+  const operation = getOperation(operationId);
+  if (!operation) return null;
+  const verifiedRoute = getOperationRouteIntel(operationId, routeId)
+    || routeOptions(operation).map((route) => getOperationRouteIntel(operationId, route.id)).find(Boolean);
+  if (!verifiedRoute) return null;
+  return {
+    seed: operationSeed(operation),
+    challenge: { operationId, operationMode: true, operationRoute: verifiedRoute.routeId },
+    title: operationTitle(operation, OPERATIONS.findIndex((entry) => entry.id === operationId)),
+    routeLabel: verifiedRoute.routeLabel,
+    duration: durationLabel(operation),
+  };
+}
+
+export default function OperationCommandDeck({ onStart, onSelect, selectedOperationId, selectedRouteId, selectionOnly = false, palette = FALLBACK_PALETTE }) {
   const colors = { ...FALLBACK_PALETTE, ...palette };
   const operations = OPERATIONS.slice(0, 3).map((entry) => getOperation(entry.id) || entry);
   const [selectedRoutes, setSelectedRoutes] = useState(() => Object.fromEntries(
@@ -88,6 +106,11 @@ export default function OperationCommandDeck({ onStart, palette = FALLBACK_PALET
     ]),
   ));
   const campaignProgress = useMemo(() => loadOperationCampaignProgress(), []);
+
+  useEffect(() => {
+    if (!selectionOnly || !getOperationRouteIntel(selectedOperationId, selectedRouteId)) return;
+    setSelectedRoutes((current) => current[selectedOperationId] === selectedRouteId ? current : { ...current, [selectedOperationId]: selectedRouteId });
+  }, [selectedOperationId, selectedRouteId, selectionOnly]);
 
   return (
     <section
@@ -184,6 +207,7 @@ export default function OperationCommandDeck({ onStart, palette = FALLBACK_PALET
                         onChange={(event) => {
                           if (!getOperationRouteIntel(operationId, event.target.value)) return;
                           setSelectedRoutes((current) => ({ ...current, [operationId]: event.target.value }));
+                          if (selectionOnly && selectedOperationId === operationId) onSelect?.(getOperationLaunch(operationId, event.target.value));
                         }}
                       />
                       <span style={{ display: "grid", minWidth: 0, gap: 3, overflowWrap: "anywhere" }}>
@@ -219,12 +243,14 @@ export default function OperationCommandDeck({ onStart, palette = FALLBACK_PALET
                 </> : "ROUTE INTEL UNAVAILABLE — SELECT A VERIFIED ROUTE"}
               </div>
               <button
-                aria-label={`Start operation ${title}`}
+                aria-label={`${selectionOnly ? "Select" : "Start"} operation ${title}`}
                 aria-describedby={selectedPreviewId}
+                aria-pressed={selectionOnly ? selectedOperationId === operationId : undefined}
                 disabled={!selectedIntel}
                 onClick={() => {
                   if (!selectedIntel) return;
-                  onStart?.(seed, { operationId, operationMode: true, operationRoute: selectedIntel.routeId });
+                  if (selectionOnly) onSelect?.(getOperationLaunch(operationId, selectedIntel.routeId));
+                  else onStart?.(seed, { operationId, operationMode: true, operationRoute: selectedIntel.routeId });
                 }}
                 style={{
                   minHeight: 48,
@@ -242,7 +268,7 @@ export default function OperationCommandDeck({ onStart, palette = FALLBACK_PALET
                 }}
                 type="button"
               >
-                START OPERATION
+                {selectionOnly ? (selectedOperationId === operationId ? "SELECTED OPERATION" : "SELECT OPERATION") : "START OPERATION"}
               </button>
             </article>
           );

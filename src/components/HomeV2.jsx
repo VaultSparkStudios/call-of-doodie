@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo, useCallback, useRef, lazy, startTransition } from "react";
 import AsyncPanelBoundary from "./AsyncPanelBoundary.jsx";
+import DialogShell from "./DialogShell.jsx";
 import SiteFooter from "./SiteFooter.jsx";
 import { useGamepadNav } from "../hooks/useGamepadNav.js";
 import { WEAPONS, ENEMY_TYPES, DIFFICULTIES, STARTER_LOADOUTS, NEW_FEATURES, getWeeklyMutation, getWeeklyGauntlet } from "../constants.js";
@@ -9,8 +10,9 @@ import {
   loadRunHistory, loadRivalryHistory, loadStudioGameEvents, getDailyChampion, getMissionStreak,
   countIncompleteMissions,
 } from "../storage.js";
-import { clearHash, watchHash } from "../utils/hashRoute.js";
+import { clearHash, navigateHash, watchHash } from "../utils/hashRoute.js";
 import { duelHoursLeft, duelStatus, isDuelId, loadDuel } from "../utils/duels.js";
+import { parseChallengeInvite } from "../utils/challengePayload.js";
 import ModePicker from "./ModePicker.jsx";
 import { FULL_MODE_CATALOG as MODE_CATALOG, resolveSelectedModeId } from "../config/modeCatalog.js";
 import { QUICK_RULES } from "../config/quickRules.js";
@@ -35,6 +37,7 @@ import { getStorageHealth, probeLocalStorage, STORAGE_HEALTH_EVENT } from "../ut
 import { readPreference, writePreference } from "../utils/gamePreferences.js";
 import { resetTutorialProgress } from "../utils/tutorialProgress.js";
 import { buildScenarioCartridge, buildSewerRelayUrl, decodeScenarioCartridge } from "../utils/scenarioCartridge.js";
+import { parseLaunchIntent } from "../utils/launchIntent.js";
 import { buildNemesisChronicle } from "../utils/nemesisChronicle.js";
 import { buildFieldManualTruth } from "../utils/fieldManualTruth.js";
 import { isPlaytestMode, loadPlaytestPulse } from "../utils/playtestFlightRecorder.js";
@@ -46,13 +49,14 @@ import CommandersOrders from "./CommandersOrders.jsx";
 import PlaytestPulsePanel from "./PlaytestPulsePanel.jsx";
 import MobileDeployConfig from "./MobileDeployConfig.jsx";
 import PrimaryNavigation from "./PrimaryNavigation.jsx";
-import OperationCommandDeck from "./OperationCommandDeck.jsx";
+import OperationCommandDeck, { getOperationLaunch } from "./OperationCommandDeck.jsx";
 import "./home-arcade.css";
 
 const DemoCanvas = lazy(() => import("./DemoCanvas.jsx"));
 const LeaderboardPanel = lazy(() => import("./LeaderboardPanel.jsx"));
 const AchievementsPanel = lazy(() => import("./AchievementsPanel.jsx"));
 const ProfilePanel = lazy(() => import("./ProfilePanel.jsx"));
+const BuildPanel = lazy(() => import("./BuildPanel.jsx"));
 const SettingsPanel = lazy(() => import("./SettingsPanel.jsx"));
 const MetaTreePanel = lazy(() => import("./MetaTreePanel.jsx"));
 const SupporterModal = lazy(() => import("./SupporterModal.jsx"));
@@ -66,12 +70,15 @@ const MP_Missions       = lazy(() => import("./MenuPanels.jsx").then(m => ({ def
 const MP_Upgrades       = lazy(() => import("./MenuPanels.jsx").then(m => ({ default: m.UpgradesPanel })));
 const MP_NewFeatures    = lazy(() => import("./MenuPanels.jsx").then(m => ({ default: m.NewFeaturesPanel })));
 
-const PANEL = { position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 100, display: "flex", alignItems: "flex-start", justifyContent: "center", padding: "max(12px, env(safe-area-inset-top)) 12px max(18px, env(safe-area-inset-bottom))", overflowY: "auto", WebkitOverflowScrolling: "touch", backdropFilter: "blur(4px)" };
 
 // Mode identity comes from the shared catalog (S155) — this view uses the
 // arcade-caps label variant.
 const MODE_DEFS = MODE_CATALOG.map(m => ({ ...m, label: m.arcadeLabel }));
 const currentModeId = resolveSelectedModeId;
+const rememberedArcadeMode = () => {
+  const id = readPreference("cod-arcade-mode-v1", "zombies", "local", "home");
+  return MODE_DEFS.some((mode) => mode.id === id && id !== "standard") ? id : "zombies";
+};
 
 export default function HomeV2(props) {
   const {
@@ -99,7 +106,9 @@ export default function HomeV2(props) {
   } = props;
 
   const modeId = MODE_DEFS.some(m => m.id === _gameModeId && m.isNew) ? _gameModeId : currentModeId({ scoreAttackMode, dailyChallengeMode, cursedRunMode, bossRushMode, speedrunMode, gauntletMode, zombiesMode });
-  const selectedMode = MODE_DEFS.find(m => m.id === modeId) || MODE_DEFS[0];
+  const [pendingModeId, setPendingModeId] = useState(null);
+  const modeSwitching = pendingModeId !== null && pendingModeId !== modeId;
+  const selectedMode = MODE_DEFS.find(m => m.id === (modeSwitching ? pendingModeId : modeId)) || MODE_DEFS[0];
   const selectedLoadout = STARTER_LOADOUTS.find(l => l.id === starterLoadout) || STARTER_LOADOUTS[0];
   const selectedDiff = DIFFICULTIES[difficulty] || DIFFICULTIES.normal;
 
@@ -112,18 +121,21 @@ export default function HomeV2(props) {
   const [studioEvents, setStudioEvents] = useState([]);
   const [customSeed, setCustomSeed] = useState("");
   const [challengeMode, setChallengeMode] = useState(null);
-  const [tab, setTab] = useState("progress");
+  const [inviteState, setInviteState] = useState(() => new URLSearchParams(window.location.search).has("cv") ? "validating" : "none");
+  const [playIntent, setPlayIntent] = useState(() => {
+    if (modeId !== "standard") return "arcade";
+    const remembered = readPreference("cod-play-intent-v1", "classic", "local", "home");
+    return ["classic", "operations", "arcade"].includes(remembered) ? remembered : "classic";
+  });
+  const [operationLaunch, setOperationLaunch] = useState(() => getOperationLaunch("blacksite-flush"));
+  const restoredPlayIntent = useRef(false);
+  const [tab, setTab] = useState("field_manual");
   const deployDetailsRef = useRef(null);
   const deployToggleRef = useRef(null);
   const setDeployPanelOpen = useCallback((open) => {
     const panel = deployDetailsRef.current;
     if (panel) {
       const expanded = Boolean(open);
-      if (panel.dataset.alwaysOpen === "true") {
-        if (expanded) panel.querySelector('[role="radio"]')?.focus();
-        deployToggleRef.current?.setAttribute("aria-expanded", "true");
-        return;
-      }
       const nativePopover = panel.hasAttribute("popover") && panel.showPopover;
       const isOpen = nativePopover ? panel.matches(":popover-open") : panel.dataset.open === "true";
       if (nativePopover) {
@@ -142,6 +154,11 @@ export default function HomeV2(props) {
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [showAchievements, setShowAchievements] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
+  const [profileTab, setProfileTab] = useState("overview");
+  const [showBuild, setShowBuild] = useState(false);
+  const [buildTab, setBuildTab] = useState("earned");
+  const [returnToRecord, setReturnToRecord] = useState(null);
+  const [returnToBuild, setReturnToBuild] = useState(null);
   const [showSettings, setShowSettings] = useState(false);
   const [showMetaTree, setShowMetaTree] = useState(false);
   const [showSupporter, setShowSupporter] = useState(false);
@@ -212,8 +229,44 @@ export default function HomeV2(props) {
     setMissionStreak(getMissionStreak().streak || 0);
     track("home_v2_view");
     const params = new URLSearchParams(window.location.search);
+    const inviteAttempt = params.has("cv") ? parseChallengeInvite(params.toString()) : null;
+    if (inviteAttempt) {
+      if (!inviteAttempt.ok) {
+        setInviteState("rejected");
+        setScenarioNotice(`${inviteAttempt.reason} Challenge not loaded.`);
+      }
+      else {
+        const invite = inviteAttempt.invite;
+        const applyInvite = (duel = null) => {
+          setInviteState("ready");
+          setCustomSeed(String(invite.seed));
+          setDifficulty(invite.difficulty);
+          setStarterLoadout?.(invite.loadout);
+          selectMode(invite.mode);
+          setChallengeMode({ seed: String(invite.seed), diff: invite.difficulty, vs: invite.vsScore, vsName: invite.vsName, duelId: invite.duelId, expiresAt: invite.expiresAt,
+            ...(duel ? { duelStatus: "open", duelHoursLeft: duelHoursLeft(duel) } : {}) });
+          setDeployPanelOpen(true);
+          setScenarioNotice("Friendly challenge checked. Review the setup before starting.");
+        };
+        if (!invite.duelId) applyInvite();
+        else loadDuel(invite.duelId).then((duel) => {
+          if (duel && duelStatus(duel) === "open" && Number(duel.seed) === invite.seed && duel.mode === invite.mode && duel.difficulty === invite.difficulty && Number(duel.challenger_score) === invite.vsScore && duel.challenger_name === invite.vsName && Math.abs(Date.parse(duel.expires_at) - Date.parse(invite.expiresAt)) < 1000) applyInvite(duel);
+          else { setInviteState("rejected"); setScenarioNotice("Saved duel is expired, answered or mismatched. Challenge not loaded."); }
+        }).catch(() => { setInviteState("rejected"); setScenarioNotice("Saved duel could not be confirmed. Challenge not loaded."); });
+      }
+    }
+    const launchIntent = parseLaunchIntent(window.location.search);
+    if (!inviteAttempt && launchIntent?.kind === "mode") selectMode(launchIntent.id);
+    if (!inviteAttempt && launchIntent?.kind === "operation") {
+      const launch = getOperationLaunch(launchIntent.id, launchIntent.route);
+      if (launch) {
+        setOperationLaunch(launch);
+        setPlayIntent("operations");
+        writePreference("cod-play-intent-v1", "operations", "local", "home");
+      }
+    }
     const scenario = decodeScenarioCartridge(params.get("scenario"));
-    if (scenario) {
+    if (!inviteAttempt && scenario) {
       setCustomSeed(String(scenario.seed));
       setDifficulty(scenario.difficulty);
       setStarterLoadout?.(scenario.loadout);
@@ -223,7 +276,7 @@ export default function HomeV2(props) {
       setScenarioNotice("Scenario Cartridge verified and loaded.");
     }
     const urlReplay = params.get("replay");
-    if (!scenario && urlReplay && isValidReplayCode(urlReplay)) {
+    if (!inviteAttempt && !scenario && urlReplay && isValidReplayCode(urlReplay)) {
       const r = decodeReplayCode(urlReplay);
       if (r) {
         setCustomSeed(String(r.seed));
@@ -232,9 +285,9 @@ export default function HomeV2(props) {
         selectMode(r.mode);
         setDeployPanelOpen(true);
       }
-    } else {
+    } else if (!inviteAttempt) {
       const urlSeed = params.get("seed");
-      if (urlSeed && !isNaN(parseInt(urlSeed))) {
+      if (urlSeed && /^[1-9]\d{0,8}$/.test(urlSeed)) {
         setCustomSeed(urlSeed);
         const urlDiff = params.get("diff");
         if (urlDiff && Object.keys(DIFFICULTIES).includes(urlDiff)) setDifficulty(urlDiff);
@@ -382,6 +435,10 @@ export default function HomeV2(props) {
   }, [challengeMode?.vs, dailyAlreadyPlayed, difficulty, modeId, runIntel.focus, runIntel.telemetry, selectedLoadout.id]);
 
   const selectMode = useCallback((id) => {
+    setPendingModeId(id);
+    setPlayIntent(id === "standard" ? "classic" : "arcade");
+    writePreference("cod-play-intent-v1", id === "standard" ? "classic" : "arcade", "local", "home");
+    if (id !== "standard") writePreference("cod-arcade-mode-v1", id, "local", "home");
     const setters = {
       standard:        () => { onSetScoreAttackMode?.(false); onSetDailyChallengeMode?.(false); onSetCursedRunMode?.(false); onSetBossRushMode?.(false); onSetSpeedrunMode?.(false); onSetGauntletMode?.(false); onSetZombiesMode?.(false); },
       score_attack:    () => onSetScoreAttackMode?.(true),
@@ -398,6 +455,15 @@ export default function HomeV2(props) {
     startTransition(() => { (setters[id] || setters.standard)(); onSetGameModeId?.(id); });
   }, [onSetScoreAttackMode, onSetDailyChallengeMode, onSetCursedRunMode, onSetBossRushMode, onSetSpeedrunMode, onSetGauntletMode, onSetZombiesMode, onSetGameModeId]);
 
+  useEffect(() => {
+    if (restoredPlayIntent.current) return;
+    restoredPlayIntent.current = true;
+    if (modeId !== "standard" || playIntent !== "arcade") return;
+    const params = new URLSearchParams(window.location.search);
+    if (["scenario", "replay", "seed", "mode", "operation"].some((key) => params.has(key))) return;
+    selectMode(rememberedArcadeMode());
+  }, [modeId, playIntent, selectMode]);
+
   const deploy = useCallback(() => {
     const carriedDrill = sanitizeCarriedRunDrill(pendingNextRunContract);
     const seed = carriedDrill?.seed || (dailyChallengeMode ? todaySeedStr : (customSeed || undefined));
@@ -412,6 +478,33 @@ export default function HomeV2(props) {
     onConsumeNextRunContract();
     onStart(seed, challenge);
   }, [challengeMode, customSeed, dailyChallengeMode, difficulty, modeId, onConsumeNextRunContract, onStart, pendingNextRunContract, recordFrontDoorAction, runIntel.focus, selectedLoadout.id, todaySeedStr]);
+
+  const choosePlayIntent = useCallback((intent) => {
+    setPlayIntent(intent);
+    writePreference("cod-play-intent-v1", intent, "local", "home");
+    if (intent === "classic" && modeId !== "standard") selectMode("standard");
+    if (intent === "arcade" && modeId === "standard") selectMode(rememberedArcadeMode());
+    track("play_console_intent", { intent });
+  }, [modeId, selectMode]);
+
+  const startSelectedPlay = useCallback(() => {
+    if (inviteState === "validating" || inviteState === "rejected") return;
+    if (challengeMode?.expiresAt && Date.parse(challengeMode.expiresAt) <= Date.now()) {
+      setInviteState("rejected");
+      setScenarioNotice("This invite has expired. Challenge not loaded.");
+      setChallengeMode(null);
+      return;
+    }
+    if (playIntent !== "operations" && modeSwitching) return;
+    track("play_console_start", { intent: playIntent, mode: playIntent === "operations" ? "operation" : modeId, operationId: playIntent === "operations" ? operationLaunch?.challenge.operationId : undefined });
+    if (playIntent === "operations") {
+      if (!operationLaunch) return;
+      onConsumeNextRunContract();
+      onStart(operationLaunch.seed, operationLaunch.challenge);
+      return;
+    }
+    deploy();
+  }, [challengeMode, deploy, inviteState, modeId, modeSwitching, onConsumeNextRunContract, onStart, operationLaunch, playIntent]);
 
   const switchTab = useCallback((t) => { setTab(t); track("home_v2_tab", { tab: t }); }, []);
   const handleContinuationAction = useCallback((plan = journey.secondary, source = "journey_card") => {
@@ -511,34 +604,41 @@ export default function HomeV2(props) {
     onStart(String(seed), challenge);
   }, [difficulty, modeId, onStart, recordFrontDoorAction, runIntel.focus, selectedLoadout.id]);
 
-  // S163 hash routes: /#profile, /#board, /#field-manual, /#changelog, /#modes, /#achievements, /#leaderboard.
-  useEffect(() => watchHash(({ id }) => {
-    if (id === "profile") setShowProfile(true);
+  // Player screens keep their tab in the URL so direct links and history work.
+  useEffect(() => watchHash((route) => {
+    const { id, arg } = route || {};
+    setShowProfile(id === "profile");
+    setShowBuild(id === "build");
+    setShowSettings(id === "settings");
+    if (id === "profile") setProfileTab(["overview", "runs", "collection", "save"].includes(arg) ? arg : "overview");
+    else if (id === "build") setBuildTab(["earned", "setup"].includes(arg) ? arg : "earned");
     else if (id === "board" || id === "leaderboard") { onRefreshLeaderboard?.(); setShowLeaderboard(true); }
     else if (id === "field-manual") setShowRules(true);
     else if (id === "changelog") setShowNewFeatures(true);
-    else if (id === "achievements") setShowAchievements(true);
     else if (id === "modes") { setDeployPanelOpen(true); document.getElementById("deploy")?.scrollIntoView({ block: "start" }); }
   }), [onRefreshLeaderboard, setDeployPanelOpen]);
   const closeProfile = useCallback(() => { setShowProfile(false); clearHash(); }, []);
+  const closeBuild = useCallback(() => { setShowBuild(false); clearHash(); }, []);
+  const openRecordDetail = useCallback((tab, open) => { setReturnToRecord(tab); setShowProfile(false); clearHash(); open(); }, []);
+  const openBuildDetail = useCallback((tab, open) => { setReturnToBuild(tab); setShowBuild(false); clearHash(); open(); }, []);
+  const finishRecordDetail = useCallback((close) => { close(); if (returnToRecord) { navigateHash("profile", returnToRecord); setReturnToRecord(null); } }, [returnToRecord]);
+  const finishBuildDetail = useCallback((close) => { close(); if (returnToBuild) { navigateHash("build", returnToBuild); setReturnToBuild(null); } }, [returnToBuild]);
 
   const CMD_ACTIONS = useMemo(() => [
-    () => { recordFrontDoorAction("open_career_stats", { source: "command_center" }); setCareer(loadCareerStats()); setMeta(loadMetaProgress()); setShowCareerStats(true); },
-    () => { recordFrontDoorAction("open_missions", { source: "command_center" }); setMissions(getDailyMissions()); setMissionProgress(loadMissionProgress()); setShowMissions(true); },
-    () => { recordFrontDoorAction("open_upgrades", { source: "command_center" }); setMeta(loadMetaProgress()); setShowUpgrades(true); },
-    () => { recordFrontDoorAction("open_meta_tree", { source: "command_center" }); setShowMetaTree(true); },
-    () => { recordFrontDoorAction("open_run_history", { source: "command_center" }); setRunHistory(loadRunHistory()); setRivalryHistory(loadRivalryHistory()); setStudioEvents(loadStudioGameEvents()); setShowRunHistory(true); },
-    () => { recordFrontDoorAction("open_loadouts", { source: "command_center" }); setShowLoadoutBuilder(true); },
+    () => { recordFrontDoorAction("open_profile", { source: "command_center" }); navigateHash("profile"); },
+    () => { recordFrontDoorAction("open_build", { source: "command_center" }); navigateHash("build"); },
+    () => { onRefreshLeaderboard?.(); setShowLeaderboard(true); },
+    () => { location.href = `${import.meta.env.BASE_URL}board/`; },
     () => { recordFrontDoorAction("open_rules", { source: "command_center" }); setShowRules(true); },
     () => { recordFrontDoorAction("open_controls", { source: "command_center" }); setShowControls(true); },
     () => { recordFrontDoorAction("open_most_wanted", { source: "command_center" }); setShowMostWanted(true); },
     () => { recordFrontDoorAction("open_whats_new", { source: "command_center" }); setShowNewFeatures(true); },
-  ], [recordFrontDoorAction]);
+  ], [onRefreshLeaderboard, recordFrontDoorAction]);
 
   const cmdBtnRefs = useRef([]);
   const cmdFocusIdx = useGamepadNav({
     count: CMD_ACTIONS.length,
-    cols: 5,
+    cols: 4,
     enabled: !!gamepadConnected,
     onConfirm: (i) => CMD_ACTIONS[i]?.(),
   });
@@ -563,23 +663,16 @@ export default function HomeV2(props) {
   const hero = { textAlign: "center", marginBottom: 14 };
   const title = { fontSize: "clamp(40px,10vw,72px)", fontWeight: 900, margin: 0, lineHeight: 1, letterSpacing: -2, background: "linear-gradient(180deg,var(--cod-gold),#FF6B00)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", filter: "drop-shadow(0 0 24px rgba(255,107,0,0.45))" };
   const tag = { marginTop: 4, fontSize: "clamp(11px,2.4vw,15px)", color: "var(--cod-orange)", letterSpacing: 4, fontWeight: 700 };
-  const deployRow = { display: "flex", justifyContent: "center", alignItems: "stretch", gap: 0, margin: "18px auto 8px", maxWidth: 540 };
   const deployBtn = {
     flex: 1, padding: "18px 22px", fontSize: 22, fontWeight: 900, fontFamily: "'Courier New',monospace",
     background: "linear-gradient(180deg,#FF8A3D,#CC4400)", color: "#FFF",
-    border: "none", borderRadius: "10px 0 0 10px", cursor: "pointer", letterSpacing: 3,
+    border: "none", borderRadius: 10, cursor: "pointer", letterSpacing: 2,
     boxShadow: "0 0 28px rgba(255,107,0,0.35), inset 0 1px 0 rgba(255,255,255,0.25)",
-  };
-  const deployDropdownBtn = {
-    padding: "18px 18px", fontSize: 14, fontWeight: 900, fontFamily: "'Courier New',monospace",
-    background: theme === "porcelain-day" ? "linear-gradient(180deg,#fff6e8,#ead8c5)" : "linear-gradient(180deg,#3a2012,#1a0f08)", color: theme === "porcelain-day" ? themePalette.accent : selectedMode.color,
-    border: "none", borderLeft: `1px solid ${themePalette.line}`, borderRadius: "0 10px 10px 0",
-    cursor: "pointer", letterSpacing: 1, minWidth: 150, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 3,
   };
   const dropdownPanel = {
     position: "fixed", inset: "auto", top: "50%", left: "50%", width: "min(540px, calc(100vw - 32px))",
     transform: "translate(-50%, -50%)", maxHeight: "min(78dvh, 720px)", overflowY: "auto", margin: 0,
-    background: themePalette.panelStrong, border: "1px solid rgba(255,107,53,0.42)",
+    background: theme === "porcelain-day" ? "#fff7ed" : "#141014", border: "1px solid rgba(255,107,53,0.42)",
     borderRadius: 10, padding: 12, boxShadow: `0 12px 36px ${themePalette.shadow}`, zIndex: 40,
     contain: "layout paint style",
   };
@@ -617,8 +710,8 @@ export default function HomeV2(props) {
 
         <PrimaryNavigation
           palette={themePalette}
-          onOpenProgress={() => { setCmdCenterExpanded(true); requestAnimationFrame(() => document.getElementById("player-tools")?.scrollIntoView({ behavior: "smooth", block: "start" })); }}
-          onOpenLoadout={() => { setShowLoadoutBuilder(true); }}
+          onOpenProgress={() => navigateHash("profile")}
+          onOpenLoadout={() => navigateHash("build", "setup")}
         />
 
         {/* Top bar */}
@@ -644,7 +737,7 @@ export default function HomeV2(props) {
               title={`Theme: ${themePalette.label}`}
               data-theme-toggle
             >{themePalette.icon}</button>
-            <button style={iconBtn} onClick={() => setShowSettings(true)} aria-label="Settings">⚙</button>
+            <button style={iconBtn} onClick={() => navigateHash("settings")} aria-label="Settings">⚙</button>
             <button style={iconBtn} onClick={() => switchTab("field_manual")} aria-label="Open Field Manual">❓</button>
           </div>
         </div>
@@ -677,67 +770,43 @@ export default function HomeV2(props) {
           )}
         </div>
 
-        <section aria-label="Original game" style={{margin:"16px auto",padding:18,borderRadius:12,border:"1px solid "+themePalette.accent,background:themePalette.panel,color:themePalette.ink}}>
-          <div style={{fontSize:11,fontWeight:900,letterSpacing:1.5,color:themePalette.accent}}>THE ORIGINAL GAME</div>
-          <h2 style={{margin:"8px 0",fontSize:24}}>Classic Survival</h2>
-          <p style={{fontSize:13,lineHeight:1.6,margin:"0 0 14px"}}>Fight endless waves, choose perks, and upgrade your weapons. Start here for the original Call of Doodie experience.</p>
-          <div style={{display:"flex",gap:10,flexWrap:"wrap"}}>
-            <button data-testid="classic-start" onClick={() => { selectMode("standard"); setChallengeMode(null); setCustomSeed(""); onConsumeNextRunContract(); onStart(); }} style={{...quickBtn,minHeight:48,padding:"12px 18px",fontSize:13,background:themePalette.accent,color:themePalette.colorScheme==="light"?"#FFF":"#111"}}>▶ PLAY CLASSIC</button>
-            <button onClick={() => { document.getElementById("deploy")?.scrollIntoView({block:"start"}); setDeployPanelOpen(true); }} style={{...quickBtn,minHeight:48,fontSize:12}}>EXPLORE MODES</button>
+        <section id="deploy" className="play-console" aria-label="Choose your play" style={{ color: themePalette.ink, background: themePalette.panelStrong, borderColor: themePalette.line }}>
+          <div className="play-console__proof">
+            <img src="/visual-assets/play-console-gameplay.webp" alt="A real Call of Doodie survival run inside the sewer arena" width="720" height="405" loading="eager" />
+            <p>One run becomes your story. Survive the chaos, learn the arena, and bring back a better plan.</p>
+          </div>
+          <div className="play-console__controls">
+            <span className="play-console__eyebrow" style={{ color: themePalette.accent }}>YOUR NEXT RUN</span>
+            <h2>Where do you want to drop?</h2>
+            <div className="play-console__intents" role="group" aria-label="Choose play style">
+              {[
+                ["classic", "CLASSIC", "Endless survival"],
+                ["operations", "OPERATIONS", "Story missions"],
+                ["arcade", "ARCADE", "Modes & challenges"],
+              ].map(([id, label, hint]) => <button key={id} type="button" aria-pressed={playIntent === id} onClick={() => choosePlayIntent(id)} style={{ borderColor: playIntent === id ? themePalette.accent : themePalette.line, background: playIntent === id ? `${themePalette.accent}22` : themePalette.panel, color: themePalette.ink }}><strong>{label}</strong><span>{hint}</span></button>)}
+            </div>
+            <p className="play-console__summary" role="status">
+              {playIntent === "classic" ? "Fight endless waves, choose perks, and upgrade your weapons. Start with the original game." : playIntent === "operations" ? `${operationLaunch?.title || "Choose an operation"} · ${operationLaunch?.routeLabel || "Verified route"} · ${operationLaunch?.duration || "12–18 MIN"}` : `${selectedMode.label} · ${selectedMode.blurb}`}
+            </p>
+            {inviteState !== "none" && <div className={`play-console__invite play-console__invite--${inviteState}`} role="status" data-testid="challenge-invite-status">
+              <strong>{inviteState === "ready" ? "FRIENDLY INVITE READY" : inviteState === "validating" ? "CHECKING SAVED INVITE" : "INVITE REJECTED"}</strong>
+              <span>{inviteState === "validating" ? "Checking the saved run before you can start." : scenarioNotice}</span>
+              {inviteState === "rejected" && <button type="button" onClick={() => { window.history.replaceState(null, "", `${window.location.pathname}${window.location.hash}`); setInviteState("none"); setScenarioNotice(""); setChallengeMode(null); setCustomSeed(""); }}>Continue without challenge</button>}
+            </div>}
+            {playIntent === "operations" && <details className="play-console__choice-details"><summary>Choose mission and route</summary><OperationCommandDeck selectionOnly selectedOperationId={operationLaunch?.challenge.operationId} selectedRouteId={operationLaunch?.challenge.operationRoute} onSelect={setOperationLaunch} palette={themePalette} /></details>}
+            <button type="button" data-testid="front-door-deploy" className="arcade-home__deploy-button play-console__start" onClick={startSelectedPlay} disabled={inviteState === "validating" || inviteState === "rejected" || (playIntent === "operations" && !operationLaunch) || (playIntent !== "operations" && modeSwitching)} aria-busy={inviteState === "validating" || (playIntent !== "operations" && modeSwitching)} aria-label={`Start ${playIntent === "operations" ? operationLaunch?.title || "operation" : playIntent === "classic" ? "Classic Survival" : selectedMode.label}`} style={deployBtn}>
+              ▶ START {playIntent === "operations" ? operationLaunch?.title || "OPERATION" : playIntent === "classic" ? "CLASSIC SURVIVAL" : selectedMode.label.toUpperCase()}
+            </button>
+            <div className="play-console__setup">
+              <span>{playIntent === "operations" ? "Authored mission · route choices" : `${selectedDiff.label} difficulty · ${selectedLoadout.name} loadout`}</span>
+              {playIntent !== "operations" && <button type="button" ref={deployToggleRef} popoverTarget="deploy-config-panel" aria-expanded="false" aria-controls="deploy-config-panel">Change setup &amp; run codes</button>}
+            </div>
           </div>
         </section>
-        <details style={{margin:"12px auto",color:themePalette.ink,border:"1px solid "+themePalette.line,borderRadius:10,padding:12}}>
-          <summary style={{cursor:"pointer",fontSize:14,fontWeight:900}}>OPERATIONS · Three missions with objectives</summary>
-          <OperationCommandDeck onStart={onStart} palette={themePalette} />
-        </details>
 
-        <div
-          id="arcade-rivals-title"
-          role="heading"
-          aria-level="2"
-          style={{ margin: "12px auto 4px", color: themePalette.ink, fontSize: 14, fontWeight: 900, letterSpacing: 2.4, textAlign: "center" }}
-        >
-          MODES &amp; CHALLENGES
-        </div>
-        <p style={{ margin: "0 auto 10px", color: themePalette.muted, fontSize: 10, textAlign: "center" }}>
-          Choose a different objective or a twist on classic survival.
-        </p>
+        <CommandersOrders order={commandersOrder} palette={themePalette} onAction={(action) => handleContinuationAction(action, "commanders_orders")} onDismiss={onConsumeNextRunContract} />
 
-        <CommandersOrders
-          order={commandersOrder}
-          palette={themePalette}
-          onAction={(action) => handleContinuationAction(action, "commanders_orders")}
-          onDismiss={onConsumeNextRunContract}
-        />
-
-        {/* DEPLOY split-button */}
-        <div id="deploy" className="arcade-home__deploy" style={deployRow}>
-          <button
-            onClick={deploy}
-            data-testid="front-door-deploy"
-            aria-label={`Deploy — ${selectedMode.label}, ${selectedDiff.label}`}
-            className="arcade-home__deploy-button"
-            style={deployBtn}
-          >
-            ▶ PLAY {selectedMode.label}
-          </button>
-          {!isMobile && <button
-            ref={deployToggleRef}
-            popoverTarget="deploy-config-panel"
-            aria-label="Change mode or difficulty"
-            aria-expanded="false"
-            aria-controls="deploy-config-panel"
-            style={deployDropdownBtn}
-          >
-            <span style={{ fontSize: 11, color: theme === "porcelain-day" ? themePalette.accent : selectedMode.color, letterSpacing: 1 }}>
-              {selectedMode.emoji} {selectedMode.label}
-            </span>
-            <span style={{ fontSize: 10, color: theme === "porcelain-day" ? themePalette.ink : selectedDiff.color }}>
-              {selectedDiff.emoji} {selectedDiff.label} ▾
-            </span>
-          </button>}
-        </div>
-
+        <details className="play-console__extras"><summary>Character visuals</summary>
         <div data-testid="visual-pack-selector" aria-label="Character visual pack" style={{ marginTop: 8, display: "flex", alignItems: "center", justifyContent: "center", gap: 6, flexWrap: "wrap" }}>
           <span style={{ color: themePalette.muted, fontSize: 9, fontWeight: 900, letterSpacing: 1.4 }}>CHARACTER VISUALS</span>
           {[{ id: "modern", label: "MODERN ATLAS" }, { id: "retro", label: "RETRO ORIGINAL" }].map(pack => {
@@ -754,22 +823,17 @@ export default function HomeV2(props) {
           })}
         </div>
 
-        {/* Deploy dropdown */}
+        </details>
+
+        {/* Run setup stays reachable from the play console on every viewport. */}
         <div style={isMobile ? { position: "relative", zIndex: 4, marginTop: 8 } : { position: "relative", height: 0, zIndex: 40 }}>
           <div
             ref={deployDetailsRef}
             id="deploy-config-panel"
-            popover={isMobile ? undefined : "auto"}
-            data-open={isMobile ? "true" : "false"}
-            data-always-open={isMobile ? "true" : undefined}
+            popover="auto"
+            data-open="false"
             onToggle={(event) => deployToggleRef.current?.setAttribute("aria-expanded", String(event.currentTarget.matches(":popover-open")))}
-            style={{
-              ...dropdownPanel,
-              ...(isMobile ? {
-                position: "static", inset: "auto", transform: "none", width: "auto", maxHeight: "none",
-                overflow: "visible", margin: 0, boxShadow: "none",
-              } : {}),
-            }}
+            style={dropdownPanel}
           >
             {isMobile && (
               <MobileDeployConfig
@@ -876,7 +940,9 @@ export default function HomeV2(props) {
           </div>
         </div>
 
+        <details className="play-console__extras"><summary>Choose primary weapon</summary>
         <PrimaryWeaponSelector selectedIndex={primaryWeaponIndex} onSelect={onSelectPrimaryWeapon} />
+        </details>
 
         <div id="live-stats" style={{ marginTop: 18, scrollMarginTop: 86 }}>
           <CommunityStatsPanel career={career} runHistory={runHistory} compact defaultTab="live" showcase />
@@ -902,21 +968,6 @@ export default function HomeV2(props) {
             onStart(launch.seed, { gauntletWeek: launch.week });
           }}>
             🏆 GAUNTLET
-          </button>
-          <button style={quickBtn} onClick={() => {
-            const studioEvent = recordFrontDoorAction("open_leaderboard", { source: "quick_chip" });
-            track("front_door_action", { actionId: "open_leaderboard", surface: "home_v2", mode: modeId, difficulty, loadout: selectedLoadout.id, intelligenceFocus: runIntel.focus, studioEvent });
-            onRefreshLeaderboard();
-            setShowLeaderboard(true);
-          }}>
-            ⚔️ LEADERBOARD
-          </button>
-          <button style={quickBtn} onClick={() => {
-            const studioEvent = recordFrontDoorAction("open_achievements", { source: "quick_chip" });
-            track("front_door_action", { actionId: "open_achievements", surface: "home_v2", mode: modeId, difficulty, loadout: selectedLoadout.id, intelligenceFocus: runIntel.focus, studioEvent });
-            setShowAchievements(true);
-          }}>
-            🏅 ACHIEVEMENTS
           </button>
           {assistAvailable && (
             <button style={{ ...quickBtn, borderColor: "rgba(68,255,136,0.5)", color: "#44FF88" }} onClick={onApplyAssist}>
@@ -1035,10 +1086,10 @@ export default function HomeV2(props) {
           </div>
           {cmdCenterExpanded && <div className="home-tool-groups">
             {[
-              ["Progress", [["👤 YOUR RECORD", () => { recordFrontDoorAction("open_profile", { source: "command_center" }); setShowProfile(true); }, null], ["📊 CAREER STATS", CMD_ACTIONS[0], 0], ["📋 MISSIONS", CMD_ACTIONS[1], 1], ["🏅 ACHIEVEMENTS", () => setShowAchievements(true), null]]],
-              ["Build", [["🎖️ UPGRADES", CMD_ACTIONS[2], 2], ["🌳 META TREE", CMD_ACTIONS[3], 3], ["⚙️ LOADOUTS", CMD_ACTIONS[5], 5]]],
-              ["History", [["📜 RUN HISTORY", CMD_ACTIONS[4], 4], ["⚔️ LEADERBOARD", () => { onRefreshLeaderboard(); setShowLeaderboard(true); }, null], ["📊 COMMUNITY STATS", () => { location.href = `${import.meta.env.BASE_URL}board/`; }, null]]],
-              ["Learn", [["📜 RULES", CMD_ACTIONS[6], 6], ["⌨ CONTROLS", CMD_ACTIONS[7], 7], ["👾 MOST WANTED", CMD_ACTIONS[8], 8], ["✦ WHAT'S NEW", CMD_ACTIONS[9], 9]]],
+              ["Progress", [["👤 YOUR RECORD", CMD_ACTIONS[0], 0]]],
+              ["Build", [["⚙️ YOUR BUILD", CMD_ACTIONS[1], 1]]],
+              ["Community", [["⚔️ LEADERBOARD", CMD_ACTIONS[2], 2], ["📊 COMMUNITY STATS", CMD_ACTIONS[3], 3]]],
+              ["Learn", [["📜 RULES", CMD_ACTIONS[4], 4], ["⌨ CONTROLS", CMD_ACTIONS[5], 5], ["👾 MOST WANTED", CMD_ACTIONS[6], 6], ["✦ WHAT'S NEW", CMD_ACTIONS[7], 7]]],
             ].map(([group, items]) => (
               <section key={group} className="home-tool-group">
                 <h3>{group}</h3>
@@ -1125,16 +1176,14 @@ export default function HomeV2(props) {
 
         {/* Secondary detail area */}
         <div className="arcade-home__tabs" style={tabsRow}>
-          {["progress", "field_manual", "support"].map(t => (
+          {["field_manual", "support"].map(t => (
             <button key={t} style={tabBtn(tab === t)} onClick={() => switchTab(t)}>
-              {t === "progress" && "📊 PLAYER PROGRESS"}
               {t === "field_manual" && "📖 FIELD MANUAL"}
               {t === "support" && "❤️ SUPPORT"}
             </button>
           ))}
         </div>
         <div style={tabBody}>
-          {tab === "progress" && <CareerTab career={career} meta={meta} missions={missions} missionProgress={missionProgress} onOpenMetaTree={() => setShowMetaTree(true)} nemesis={nemesisChronicle} />}
           {tab === "field_manual" && <CodexTab truthGraph={truthGraph} />}
           {tab === "support" && (
             <SupportTab onOpen={() => setShowSupporter(true)} />
@@ -1150,35 +1199,44 @@ export default function HomeV2(props) {
 
       {/* Modals (lazy) */}
       {showLeaderboard && (
-        <div style={PANEL}>
-          <AsyncPanelBoundary>
-            <LeaderboardPanel leaderboard={leaderboard} lbLoading={lbLoading} lbHasMore={lbHasMore} onLoadMore={onLoadMore} username={username} onClose={() => setShowLeaderboard(false)} />
-          </AsyncPanelBoundary>
-        </div>
+        <AsyncPanelBoundary>
+          <LeaderboardPanel leaderboard={leaderboard} lbLoading={lbLoading} lbHasMore={lbHasMore} onLoadMore={onLoadMore} username={username} onClose={() => setShowLeaderboard(false)} />
+        </AsyncPanelBoundary>
       )}
       {showProfile && (
         <AsyncPanelBoundary>
-          <ProfilePanel username={username} onClose={closeProfile} />
+          <ProfilePanel username={username} nemesisChronicle={nemesisChronicle} activeTab={profileTab} onTabChange={(next) => navigateHash("profile", next)} onClose={closeProfile}
+            onOpenCareerStats={() => openRecordDetail("overview", () => { setCareer(loadCareerStats()); setMeta(loadMetaProgress()); setShowCareerStats(true); })}
+            onOpenRuns={() => openRecordDetail("runs", () => { setRunHistory(loadRunHistory()); setRivalryHistory(loadRivalryHistory()); setStudioEvents(loadStudioGameEvents()); setShowRunHistory(true); })}
+            onOpenAchievements={() => openRecordDetail("collection", () => setShowAchievements(true))}
+            onOpenMissions={() => openRecordDetail("collection", () => { setMissions(getDailyMissions()); setMissionProgress(loadMissionProgress()); setShowMissions(true); })}
+            onOpenBuild={() => navigateHash("build", "earned")}
+          />
+        </AsyncPanelBoundary>
+      )}
+      {showBuild && (
+        <AsyncPanelBoundary>
+          <BuildPanel activeTab={buildTab} onTabChange={(next) => navigateHash("build", next)} onClose={closeBuild} meta={meta} accountLevel={accountLevel} starterLoadout={starterLoadout} primaryWeaponIndex={primaryWeaponIndex}
+            onOpenUpgrades={() => openBuildDetail("earned", () => { setMeta(loadMetaProgress()); setShowUpgrades(true); })}
+            onOpenMetaTree={() => openBuildDetail("earned", () => setShowMetaTree(true))}
+            onOpenLoadouts={() => openBuildDetail("setup", () => setShowLoadoutBuilder(true))}
+          />
         </AsyncPanelBoundary>
       )}
       {showAchievements && (
-        <div style={PANEL}>
-          <AsyncPanelBoundary>
-            <AchievementsPanel achievementsUnlocked={career?.achievementsEver || []} onClose={() => setShowAchievements(false)} />
-          </AsyncPanelBoundary>
-        </div>
+        <AsyncPanelBoundary>
+          <AchievementsPanel achievementsUnlocked={career?.achievementsEver || []} onClose={() => finishRecordDetail(() => setShowAchievements(false))} />
+        </AsyncPanelBoundary>
       )}
       {showSettings && (
         <AsyncPanelBoundary>
-          <SettingsPanel settings={gameSettings} onSave={onSaveSettings} onClose={() => setShowSettings(false)} />
+          <SettingsPanel settings={gameSettings} onSave={onSaveSettings} onClose={() => { setShowSettings(false); clearHash(); }} />
         </AsyncPanelBoundary>
       )}
       {showMetaTree && (
-        <div style={PANEL}>
-          <AsyncPanelBoundary>
-            <MetaTreePanel onClose={() => setShowMetaTree(false)} />
-          </AsyncPanelBoundary>
-        </div>
+        <AsyncPanelBoundary>
+          <MetaTreePanel onClose={() => finishBuildDetail(() => setShowMetaTree(false))} />
+        </AsyncPanelBoundary>
       )}
       {showSupporter && (
         <AsyncPanelBoundary>
@@ -1200,7 +1258,7 @@ export default function HomeV2(props) {
       )}
       {showCareerStats && (
         <AsyncPanelBoundary>
-          <MP_CareerStats career={career} meta={meta} onClose={() => setShowCareerStats(false)} />
+          <MP_CareerStats career={career} meta={meta} onClose={() => finishRecordDetail(() => setShowCareerStats(false))} />
         </AsyncPanelBoundary>
       )}
       {showRules && (
@@ -1220,12 +1278,12 @@ export default function HomeV2(props) {
       )}
       {showMissions && (
         <AsyncPanelBoundary>
-          <MP_Missions missions={missions} missionProgress={missionProgress} onClose={() => setShowMissions(false)} />
+          <MP_Missions missions={missions} missionProgress={missionProgress} onClose={() => finishRecordDetail(() => setShowMissions(false))} />
         </AsyncPanelBoundary>
       )}
       {showUpgrades && (
         <AsyncPanelBoundary>
-          <MP_Upgrades meta={meta} accountLevel={accountLevel} onClose={() => { setMeta(loadMetaProgress()); setShowUpgrades(false); }} />
+          <MP_Upgrades meta={meta} accountLevel={accountLevel} onClose={() => finishBuildDetail(() => { setMeta(loadMetaProgress()); setShowUpgrades(false); })} />
         </AsyncPanelBoundary>
       )}
       {showRunHistory && (
@@ -1237,13 +1295,16 @@ export default function HomeV2(props) {
             dailyChampion={dailyChampion}
             username={username}
             onLaunchSeed={launchHistorySeed}
-            onClose={() => setShowRunHistory(false)}
+            onClose={(reason) => {
+              if (reason?.launched) { setReturnToRecord(null); setShowRunHistory(false); return; }
+              finishRecordDetail(() => setShowRunHistory(false));
+            }}
           />
         </AsyncPanelBoundary>
       )}
       {showLoadoutBuilder && (
         <AsyncPanelBoundary>
-          <MP_LoadoutBuilder onClose={() => setShowLoadoutBuilder(false)} />
+          <MP_LoadoutBuilder onClose={() => finishBuildDetail(() => setShowLoadoutBuilder(false))} />
         </AsyncPanelBoundary>
       )}
       {showNewFeatures && (
@@ -1322,7 +1383,7 @@ function AimCheckPanel({ controllerType, onVerify, onDiagnostics, onClose }) {
     : "MOUSE / TOUCH / KEYBOARD / CONTROLLER";
   const remaining = AIM_CALIBRATION_BUCKETS.length - evidence.buckets.length;
   return (
-    <div style={PANEL} role="dialog" aria-modal="true" aria-labelledby="aim-check-title">
+    <DialogShell titleId="aim-check-title" onClose={onClose}>
       <div style={{ width: "min(460px, 100%)", margin: "auto 0", padding: 18, borderRadius: 10, background: "rgba(8,12,18,0.98)", border: "1px solid rgba(0,229,255,0.32)", color: "#EEE", textAlign: "center", boxShadow: "0 14px 40px rgba(0,0,0,0.65)" }}>
         <div style={{ color: "var(--cod-cyan)", fontSize: 10, fontWeight: 900, letterSpacing: 2 }}>EVIDENCE-BACKED AIM CHECK</div>
         <h2 id="aim-check-title" style={{ margin: "8px 0 6px", fontSize: 22, color: "#FFF", letterSpacing: 1 }}>Verify Full-Circle Control</h2>
@@ -1353,60 +1414,21 @@ function AimCheckPanel({ controllerType, onVerify, onDiagnostics, onClose }) {
           <button
             disabled={!evidence.complete}
             onClick={() => onVerify(evidence)}
-            style={{ padding: "10px 18px", borderRadius: 8, border: "none", background: evidence.complete ? "linear-gradient(180deg,#00E5FF,#007A99)" : "#27313A", color: evidence.complete ? "#001018" : "#7B8792", fontSize: 12, fontWeight: 900, letterSpacing: 1, cursor: evidence.complete ? "pointer" : "not-allowed", fontFamily: "inherit" }}
+            style={{ padding: "10px 18px", borderRadius: 8, border: "none", background: evidence.complete ? "linear-gradient(180deg,#00E5FF,#007A99)" : "#27313A", color: evidence.complete ? "#001018" : "#BFC9D4", fontSize: 12, fontWeight: 900, letterSpacing: 1, cursor: evidence.complete ? "pointer" : "not-allowed", fontFamily: "inherit" }}
           >
             VERIFY CONTROLS
           </button>
           <button onClick={onDiagnostics} style={{ padding: "10px 14px", borderRadius: 8, border: "1px solid rgba(255,255,255,0.16)", background: "rgba(255,255,255,0.06)", color: "#DDD", fontSize: 12, fontWeight: 900, letterSpacing: 1, cursor: "pointer", fontFamily: "inherit" }}>
             OPEN DIAGNOSTICS
           </button>
-          <button onClick={onClose} style={{ padding: "10px 14px", borderRadius: 8, border: "1px solid rgba(255,255,255,0.1)", background: "transparent", color: "#888", fontSize: 12, fontWeight: 900, letterSpacing: 1, cursor: "pointer", fontFamily: "inherit" }}>
+          <button onClick={onClose} style={{ padding: "10px 14px", borderRadius: 8, border: "1px solid rgba(255,255,255,0.2)", background: "transparent", color: "#C5C5C5", fontSize: 12, fontWeight: 900, letterSpacing: 1, cursor: "pointer", fontFamily: "inherit" }}>
             LATER
           </button>
         </div>
       </div>
-    </div>
+    </DialogShell>
   );
 }
-function CareerTab({ career, meta, missions, missionProgress, onOpenMetaTree, nemesis }) {
-  if (!career) return <div style={{ color: "#888", textAlign: "center" }}>Loading…</div>;
-  const incomplete = countIncompleteMissions(missions, missionProgress);
-  return (
-    <div>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(160px,1fr))", gap: 10 }}>
-        <StatChip label="TOTAL KILLS" value={(career.totalKills || 0).toLocaleString()} />
-        <StatChip label="BEST WAVE" value={career.bestWave || 0} />
-        <StatChip label="BEST SCORE" value={(career.bestScore || 0).toLocaleString()} />
-        <StatChip label="CAREER PTS" value={(meta?.careerPoints || 0).toLocaleString()} />
-        <StatChip label="PRESTIGE" value={`P${meta?.prestige || 0}`} />
-        <StatChip label="MISSIONS" value={`${(missions?.length || 0) - incomplete}/${missions?.length || 0}`} />
-      </div>
-      <div style={{ marginTop: 12, display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
-        <button onClick={onOpenMetaTree} style={{ padding: "8px 14px", fontSize: 12, fontWeight: 800, fontFamily: "inherit", cursor: "pointer", background: "rgba(255,215,0,0.1)", border: "1px solid rgba(255,215,0,0.35)", color: "var(--cod-gold)", borderRadius: 8 }}>🌳 META TREE</button>
-      </div>
-      <div style={{ marginTop: 12, fontSize: 10, color: "#888", textAlign: "center" }}>
-        Daily missions: <strong style={{ color: incomplete > 0 ? "#FFD700" : "#00FF88" }}>{incomplete}</strong> incomplete
-      </div>
-      <div data-testid="nemesis-chronicle" style={{ marginTop: 12, padding: "11px 12px", borderRadius: 9, border: "1px solid rgba(255,105,180,0.3)", background: "linear-gradient(135deg,rgba(255,105,180,0.08),rgba(127,230,255,0.04))" }}>
-        <div style={{ color: "#FF9BCD", fontSize: 9, fontWeight: 900, letterSpacing: 1.7 }}>{nemesis.threat} · CHAPTER {nemesis.chapter}/3</div>
-        <div style={{ color: "#FFF", fontSize: 13, fontWeight: 900, marginTop: 4 }}>{nemesis.title}</div>
-        <div style={{ color: "#CCC", fontSize: 10, lineHeight: 1.45, marginTop: 3 }}>{nemesis.detail}</div>
-        <div style={{ color: "#9FEAFF", fontSize: 10, lineHeight: 1.45, marginTop: 5 }}>Countermove: {nemesis.counterMove}</div>
-        <div style={{ color: "#A98CC8", fontSize: 9, marginTop: 5 }}>{nemesis.cosmeticSignal}</div>
-      </div>
-    </div>
-  );
-}
-
-function StatChip({ label, value }) {
-  return (
-    <div style={{ padding: "10px 12px", borderRadius: 8, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
-      <div style={{ fontSize: 9, color: "#888", letterSpacing: 2 }}>{label}</div>
-      <div style={{ fontSize: 18, fontWeight: 900, color: "#EEE", marginTop: 3 }}>{value}</div>
-    </div>
-  );
-}
-
 function CodexTab({ truthGraph }) {
   const [section, setSection] = useState("truth");
   const btn = (active) => ({ padding: "5px 10px", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: "inherit", background: active ? "rgba(255,107,53,0.14)" : "transparent", border: "1px solid " + (active ? "rgba(255,107,53,0.5)" : "rgba(255,255,255,0.12)"), color: active ? "#FF9960" : "#AAA", borderRadius: 6 });

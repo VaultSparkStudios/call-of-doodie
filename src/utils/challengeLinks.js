@@ -1,46 +1,22 @@
 import { CANONICAL_SITE_URL } from "../config/site.js";
-
-function cleanSeed(seed) {
-  const num = Number(seed);
-  return Number.isFinite(num) && num > 0 ? Math.floor(num) : null;
-}
-
-function cleanDifficulty(difficulty) {
-  return typeof difficulty === "string" && difficulty.trim() ? difficulty.trim() : "normal";
-}
-
-function cleanVsScore(vsScore) {
-  const num = Number(vsScore);
-  return Number.isFinite(num) && num >= 0 ? Math.floor(num) : null;
-}
-
-function cleanVsName(vsName) {
-  return typeof vsName === "string" && vsName.trim() ? vsName.trim() : "";
-}
+import { buildChallengeParams } from "./challengePayload.js";
 
 export function buildChallengeUrl({
   seed,
   difficulty = "normal",
+  mode = "standard",
+  loadout = "standard",
   vsScore = null,
   vsName = "",
   duelId = null,
+  expiresAt = null,
   baseUrl = null,
 } = {}) {
-  const safeSeed = cleanSeed(seed);
-  if (!safeSeed) return null;
-
-  const params = new URLSearchParams({
-    seed: String(safeSeed),
-    diff: cleanDifficulty(difficulty),
-  });
-  const safeVsScore = cleanVsScore(vsScore);
-  const safeVsName = cleanVsName(vsName);
-  if (safeVsScore != null) params.set("vs", String(safeVsScore));
-  if (safeVsName) params.set("vsName", safeVsName);
-  if (typeof duelId === "string" && /^[0-9a-f-]{36}$/i.test(duelId)) params.set("duel", duelId);
+  const params = buildChallengeParams({ seed, difficulty, mode, loadout, vsScore, vsName, duelId, expiresAt });
+  if (!params) return null;
 
   const resolvedBase = baseUrl
-    || CANONICAL_SITE_URL
+    || `${CANONICAL_SITE_URL}challenge/`
     || (typeof window !== "undefined" ? `${window.location.origin}${window.location.pathname}` : "");
   if (!resolvedBase) return `?${params.toString()}`;
   return `${resolvedBase}?${params.toString()}`;

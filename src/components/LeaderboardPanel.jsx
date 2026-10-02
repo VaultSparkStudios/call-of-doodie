@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { compareLeaderboardEntries, getDailyChallengeSeed, loadLeaderboardToday, searchLeaderboard } from "../storage.js";
 import CommunityStatsPanel from "./CommunityStatsPanel.jsx";
 import { getSquadCode, loadSquadBoard } from "../utils/squads.js";
+import DialogShell from "./DialogShell.jsx";
 
 const MODE_TABS = [
   { key: null,              label: "ALL",          color: "#AAA" },
@@ -174,9 +175,9 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
   const activeTab = DIFF_TABS.find(t => t.key === activeDiff);
 
   return (
-    <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.88)", zIndex: 100, display: "flex", alignItems: "flex-start", justifyContent: "center", padding: "max(12px, env(safe-area-inset-top)) 12px max(18px, env(safe-area-inset-bottom))", overflowY: "auto", WebkitOverflowScrolling: "touch", backdropFilter: "blur(4px)" }}>
+    <DialogShell title="Global Leaderboard" onClose={onClose}>
       <div style={{ ...card, maxWidth: 820, width: "100%", minHeight: 0, overflow: "visible", position: "relative", border: "1px solid rgba(255,215,0,0.2)", padding: "18px 16px", color: "#fff", margin: "auto 0" }}>
-        <button onClick={onClose} style={{ position: "absolute", top: 10, right: 14, background: "none", border: "none", color: "#CCC", fontSize: 20, cursor: "pointer", fontFamily: "monospace" }}>X</button>
+        <button onClick={onClose} aria-label="Close leaderboard" style={{ position: "absolute", top: 4, right: 4, width: 44, height: 44, background: "none", border: "none", color: "var(--cod-ink)", fontSize: 20, cursor: "pointer", fontFamily: "monospace" }}>×</button>
 
         <h3 style={{ color: "var(--cod-gold)", margin: "0 0 2px", fontSize: 18, letterSpacing: 2 }}>GLOBAL LEADERBOARD</h3>
         <p style={{ color: "#BBB", fontSize: 11, margin: "0 0 8px" }}>Global leaderboard · showing {leaderboard.length}</p>
@@ -223,7 +224,7 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
                   cursor: "pointer", borderRadius: 4,
                   background: isActive ? `rgba(${hexToRgb(tab.color)},0.18)` : "rgba(255,255,255,0.04)",
                   border: isActive ? `1px solid ${tab.color}` : "1px solid rgba(255,255,255,0.1)",
-                  color: isActive ? tab.color : "#666",
+                  color: isActive ? tab.color : "#C5C5C5",
                   transition: "all 0.15s",
                 }}
               >{tab.label}</button>
@@ -247,7 +248,7 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
                     cursor: "pointer", borderRadius: 3,
                     background: isActive ? "rgba(255,51,51,0.2)" : "rgba(255,255,255,0.04)",
                     border: isActive ? "1px solid rgba(255,51,51,0.6)" : "1px solid rgba(255,255,255,0.1)",
-                    color: isActive ? "#FF3333" : "#666",
+                    color: isActive ? "#FF3333" : "#C5C5C5",
                   }}
                 >{st.label}</button>
               );
@@ -441,7 +442,7 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
           <p style={{ textAlign: "center", color: "#bbb", fontSize: 12, marginTop: 10 }}>Loading…</p>
         )}
       </div>
-    </div>
+    </DialogShell>
   );
 }
 

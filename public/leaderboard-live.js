@@ -3,9 +3,14 @@
 // fallback copy on failure, refresh on visibility, no external dependencies.
 (() => {
   const REFRESH_MS = 60000;
+  const MAX_BACKOFF_MS = 300000;
   const table = document.querySelector("[data-top-scores]");
   const statusNode = document.querySelector("[data-top-scores-status]");
   if (!table) return;
+  let pending = null;
+  let nextAttemptAt = 0;
+  let failures = 0;
+  let lastSuccessAt = null;
 
   const esc = (value) => String(value).replace(/[&<>"']/g, (ch) => (
     { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]
@@ -31,25 +36,42 @@
     table.hidden = false;
   }
 
-  async function refresh() {
-    try {
-      const response = await fetch("/api/top-scores", { headers: { accept: "application/json" } });
-      if (!response.ok) throw new Error(String(response.status));
-      const body = await response.json();
-      if (!Array.isArray(body.entries) || body.entries.length === 0) {
-        setStatus("empty", "No verified runs on the board yet — deploy and claim the first slot.");
-        return;
+  function staleStatus() {
+    if (lastSuccessAt) setStatus("cached", `Last verified board: ${new Date(lastSuccessAt).toLocaleTimeString()} · waiting to reconnect.`);
+  }
+
+  function refresh() {
+    if (document.visibilityState === "hidden" || pending) return pending;
+    if (Date.now() < nextAttemptAt) { staleStatus(); return null; }
+    pending = (async () => {
+      try {
+        const response = await fetch("/api/top-scores", { headers: { accept: "application/json" } });
+        if (!response.ok) throw new Error(String(response.status));
+        const body = await response.json();
+        failures = 0;
+        nextAttemptAt = Date.now() + REFRESH_MS;
+        lastSuccessAt = Date.parse(body.checkedAt) || Date.now();
+        if (!Array.isArray(body.entries) || body.entries.length === 0) {
+          table.hidden = true;
+          setStatus("empty", "No verified runs on the board yet — deploy and claim the first slot.");
+          return;
+        }
+        render(body.entries);
+        setStatus("live", `Verified top ${body.entries.length} · checked ${new Date(lastSuccessAt).toLocaleTimeString()}`);
+      } catch {
+        failures += 1;
+        nextAttemptAt = Date.now() + Math.min(MAX_BACKOFF_MS, 30000 * 2 ** (failures - 1));
+        if (lastSuccessAt) staleStatus();
+        else setStatus("offline", "Live board unavailable right now. Your local run record remains on this device.");
       }
-      render(body.entries);
-      setStatus("live", `Live top ${body.entries.length} · refreshed ${new Date().toLocaleTimeString()}`);
-    } catch {
-      setStatus("offline", "Live board unavailable right now — scores are still recorded in game.");
-    }
+    })().finally(() => { pending = null; });
+    return pending;
   }
 
   refresh();
   setInterval(refresh, REFRESH_MS);
   document.addEventListener("visibilitychange", () => {
     if (document.visibilityState === "visible") refresh();
+    else staleStatus();
   });
 })();

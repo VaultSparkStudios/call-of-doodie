@@ -1,13 +1,19 @@
+## Session 181 — Full-site audit and implementation
+
+- [x] [SIL:3] Address all 25 ranked audit outcomes in source, with the three new game systems identified as local prototypes and live rollout contingent on play evidence.
+- [x] [SIL:2] Review all public routes at desktop and mobile widths in both themes; refresh the hash-bound visual receipt and correct redundant Board and Press Kit content.
+- [x] [SIL:2] **IN PROGRESS S181 · TRACKED IN NOW** Release gates, staging, closeout, and exact hosted-revision verification are the remaining session work.
+
 ## Session 180 — Toolchain currency and stale-PR hygiene
 
 - [x] [SIL:2] Move lint off the end-of-support ESLint 9 line to ESLint 10 without widening the enforced ruleset (`eslint-plugin-react` dropped; hooks rules pinned to the two classic rules).
 - [x] [SIL:2] Apply cooled-down in-range updates (React/React DOM 19.3.0, Vite 7.3.6, Sentry 8.55.2, Vite React plugin 5.2.0) after the package-trust gate; staging `e02ebb39` verified.
 - [x] [SIL:1] Close superseded PRs #163 (perk facts, shipped S178), #153 (eslint) and #156 (globals) with evidence.
-- [ ] [SIL:1] Re-check `sharp` 0.35.5 and `@supabase/supabase-js` 2.117.2 once each is past the release-age cooldown (sharp from about 2026-10-04, Supabase from about 2026-10-02).
-- [ ] [SIL:1] Decide whether to adopt the React Compiler rules in `eslint-plugin-react-hooks` 7 (177 findings: refs written during render, setState in effects). Product/architecture decision, not hygiene.
-- [ ] [SIL:1] Major bumps each need their own verified change: vitest and coverage 5 (#154, #157), vite 8 with plugin-react 6 (#140), jsdom 29, Sentry 10+ (#155).
+- [x] [SIL:1] **CARRIED S181** Re-check `sharp` 0.35.5 and `@supabase/supabase-js` 2.117.2 after release-age cooldown; retained under Next.
+- [x] [SIL:1] **CARRIED S181** React Compiler lint-rule adoption is an architecture decision; retained under Next.
+- [x] [SIL:1] **CARRIED S181** Major toolchain bumps each need isolated verification; retained under Next.
 
-Scaffold: 3 S180 audit workstreams; 3 done; 0 in progress; 3 open follow-ups.
+Scaffold: 3 S180 audit workstreams; 3 done; 0 in progress; 3 carried follow-ups.
 
 ## Session 179 — Public stats truth and follow-through
 
@@ -337,6 +343,8 @@ First checkpoint the bounded post-S159 propagation/CI/deploy recovery. Then begi
 
 ## Now
 
+- [ ] [SIL:2] **S181 release follow-through** Complete release gates, stage, close out, commit, push, and verify the exact hosted production revision.
+
 - [x] [SIL:1] **DONE S169** Surface flood and lockdown in MOST WANTED as typed environmental case files; stable IDs, event-specific counts, countermeasures, migration, and hosted rendered proof shipped.
 - [x] [SIL:1] **DONE S169** Open every lazy death-analysis subsection through a natural public run; seven semantic landmarks, lazy-load/error checks, both themes, and mobile/desktop hosted proof pass.
 
@@ -640,7 +648,13 @@ First checkpoint the bounded post-S159 propagation/CI/deploy recovery. Then begi
 
 ## Next
 
-- [ ] [SIL:2] **S178 follow-up** Restore a real, navigable `/stats` page from the existing aggregate feed and descriptor; deepen breakdowns/history and verify CANON-054 without inventing counts.
+- [ ] [SIL:2] **S181 evidence gate** Test Field Lab valve consequences, complaint cues and paired tactical attempts with representative players before considering live unranked Operation integration; retain competitive isolation until readability and fairness are observed.
+- [ ] [SIL:1] **S181 measurement gate** If paid project inference is introduced, measure real billed prompt/completion tokens and quality on representative tasks; current bounded-context byte counts are only a proxy.
+- [ ] [SIL:1] **S180 carryover** Re-check `sharp` 0.35.5 and `@supabase/supabase-js` 2.117.2 after their release-age cooldown and package-trust gate.
+- [ ] [SIL:1] **S180 carryover** Decide whether to adopt React Compiler rules in `eslint-plugin-react-hooks` 7; the 177 existing findings require an architecture decision.
+- [ ] [SIL:1] **S180 carryover** Verify each major toolchain bump separately: vitest/coverage 5, vite 8/plugin-react 6, jsdom 29, and Sentry 10+.
+
+- [x] [SIL:2] **DONE S179 · stale follow-up reconciled S181** Restore a real, navigable `/stats` page from the existing aggregate feed and descriptor; deepen breakdowns/history and verify CANON-054 without inventing counts.
 - [ ] [SIL:1] [ARK] **S178 follow-up** Confirm Studio Ops repaired protocol propagation compatibility before allowing its script bundle to overwrite this repo's project-specific contracts again.
 - [x] **DONE S177** Objective victory/loss advice and all retry actions now follow the actual objective receipt; timed-mode checks and objective replay guards pass.
 - [ ] Collect longer participant playtests for the four objective modes and all three Operations; short scripted input checks and controlled endings do not establish balance or physical-device feel.

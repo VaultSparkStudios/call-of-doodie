@@ -1,6 +1,14 @@
 # Release Parity — Call of Doodie
 
-Last reviewed: 2026-08-25 (Session 161 staging gate)
+Last reviewed: 2026-10-02 (Session 181 engineering staging)
+
+## Session 181 staging and release boundary
+
+- Immutable staging: `https://8442b7df.call-of-doodie.pages.dev/`; branch alias: `https://session-181-staging.call-of-doodie.pages.dev/`. Shell and typed edge health pass 7/7. The aggregate feedback endpoint returns 200 from the game project.
+- Hosted browser parity: 22 public routes, two themes, 390px/1440px = 88/88 states without missing heading/footer, horizontal overflow or page errors. Local hash-bound receipt covers 429 touched states; representative pixels were inspected. Desktop and mobile browser experiences are present; no native app is shipped.
+- Strict lint, deployable build, 35-file public contract, schema, runtime/entry boundaries, zero-vulnerability security audit and supply-chain scan pass. Final full suite passes 281/281 files and 1,741/1,741 tests. Browser E2E passes 19 cases with one intentional mobile-only Scenario Cartridge skip. Exact-main CI/production evidence follow this pre-push record.
+- Rollback: previous immutable production remains available; `docs/DEPLOY_ROLLBACK.md` gives the non-force-push revert path.
+- Verdict: engineering staging GO; SPARKED/public launch NO-GO pending participant/device/Core Web Vitals/identity/mail and other lifecycle evidence. Field Lab mechanics remain unranked prototypes.
 
 ## Session 161 verified release
 

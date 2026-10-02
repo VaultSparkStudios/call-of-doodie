@@ -54,6 +54,8 @@ const ALLOW = [
   /token-cost/,
   /zero-token/,
   /\btoken:\s*[A-Za-z_$][\w$]*\.token\b/,
+  /^\s*"receipt":\s*"output\/playwright\/[^"\r\n]+\.json",?$/,
+  /authorization\.startsWith\("Bearer "\).*authorization\.slice\(7\)/,
 ];
 
 function shannon(value) {
@@ -102,7 +104,10 @@ function collectLines() {
   const diffArgs = modeAll
     ? ['diff', '--unified=0', '--', '.']
     : ['diff', '--cached', '--unified=0', '--', '.'];
-  const diff = execFileSync('git', diffArgs, { encoding: 'utf8' });
+  // A visual-QA release can stage hundreds of small captures and generated
+  // public pages. Keep the scan fail-closed without Node's 1 MiB subprocess
+  // default truncating the Git diff before we examine added lines.
+  const diff = execFileSync('git', diffArgs, { encoding: 'utf8', maxBuffer: 32 * 1024 * 1024 });
   return addedLinesFromDiff(diff).map((text, idx) => ({ file: modeStaged ? 'staged-diff' : 'working-diff', lineNo: idx + 1, text }));
 }
 

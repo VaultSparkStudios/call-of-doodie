@@ -1,3 +1,7 @@
+import { issueProfileCapability } from "../../src/server/profileCapability.js";
+import { readBoundedJson } from "../../src/server/httpIngress.js";
+import { createLocalRateLimiter } from "../../src/server/localRateLimiter.js";
+
 const PROJECT = "Call of Doodie";
 const RECEIPT_VERSION = "cod-obelisk-receipt-v1";
 
@@ -11,6 +15,7 @@ const ALLOWED_ORIGINS = new Set([
   "https://www.playcallofdoodie.com",
   "http://localhost:5173",
   "http://localhost:4173",
+  "http://localhost:4174",
 ]);
 
 function isAllowedOrigin(origin) {
@@ -18,8 +23,8 @@ function isAllowedOrigin(origin) {
   if (ALLOWED_ORIGINS.has(origin)) return true;
   // Cloudflare Pages preview deployments of this project.
   try {
-    const host = new URL(origin).hostname;
-    return host.endsWith(".call-of-doodie.pages.dev") || host === "call-of-doodie.pages.dev";
+    const url = new URL(origin);
+    return url.protocol === "https:" && (url.hostname.endsWith(".call-of-doodie.pages.dev") || url.hostname === "call-of-doodie.pages.dev");
   } catch { return false; }
 }
 
@@ -27,19 +32,7 @@ function isAllowedOrigin(origin) {
 // not a distributed quota — it bounds abuse cheaply until a KV/DO budget is
 // justified; the upstream verifier keeps its own authoritative limits.
 const RATE_LIMIT_PER_MINUTE = 12;
-const rateBuckets = new Map();
-
-function consumeLocalRate(key, now = Date.now()) {
-  const minute = Math.floor(now / 60000);
-  const bucket = rateBuckets.get(key);
-  if (!bucket || bucket.minute !== minute) {
-    rateBuckets.set(key, { minute, count: 1 });
-    if (rateBuckets.size > 2048) rateBuckets.clear();
-    return true;
-  }
-  bucket.count += 1;
-  return bucket.count <= RATE_LIMIT_PER_MINUTE;
-}
+const consumeLocalRate = createLocalRateLimiter(RATE_LIMIT_PER_MINUTE);
 
 function json(body, init = {}) {
   return new Response(JSON.stringify(body), {
@@ -78,15 +71,6 @@ function isVerified(upstream) {
   return Boolean(pickIdentity(upstream));
 }
 
-async function readToken(request) {
-  try {
-    const body = await request.json();
-    return typeof body?.token === "string" ? body.token.trim() : "";
-  } catch {
-    return "";
-  }
-}
-
 export async function verifyObeliskRequest({ request, env = {}, fetchImpl = fetch, now = () => Date.now() }) {
   if (request.method !== "POST") {
     return json({ ok: false, reason: "method-not-allowed" }, { status: 405, headers: { allow: "POST" } });
@@ -101,7 +85,9 @@ export async function verifyObeliskRequest({ request, env = {}, fetchImpl = fetc
     return json({ ok: false, reason: "rate-limited" }, { status: 429, headers: { "retry-after": "60" } });
   }
 
-  const token = await readToken(request);
+  const parsed = await readBoundedJson(request, 8192);
+  if (parsed.error) return json({ ok: false, reason: parsed.error }, { status: parsed.status, headers: parsed.status === 408 ? { "retry-after": "5" } : {} });
+  const token = typeof parsed.body.token === "string" ? parsed.body.token.trim() : "";
   if (!token) return json({ ok: false, reason: "no-token" }, { status: 400 });
   if (token.length > 4096) return json({ ok: false, reason: "token-too-large" }, { status: 400 });
 
@@ -118,13 +104,16 @@ export async function verifyObeliskRequest({ request, env = {}, fetchImpl = fetc
   if (env.OBELISK_VERIFY_SECRET) headers.authorization = `Bearer ${env.OBELISK_VERIFY_SECRET}`;
 
   let upstreamResponse;
+  const signal = AbortSignal.timeout(5000);
   try {
     upstreamResponse = await fetchImpl(verifyUrl, {
       method: "POST",
       headers,
       body: JSON.stringify({ token, project: PROJECT }),
+      signal,
     });
   } catch {
+    if (signal.aborted) return json({ ok: false, reason: "verify-timeout" }, { status: 504, headers: { "retry-after": "5" } });
     return json({ ok: false, reason: "verify-unreachable" }, { status: 502 });
   }
 
@@ -132,6 +121,7 @@ export async function verifyObeliskRequest({ request, env = {}, fetchImpl = fetc
   try {
     upstream = await upstreamResponse.json();
   } catch {
+    if (signal.aborted) return json({ ok: false, reason: "verify-timeout" }, { status: 504, headers: { "retry-after": "5" } });
     return json({ ok: false, reason: "verify-invalid-response" }, { status: 502 });
   }
 
@@ -140,6 +130,9 @@ export async function verifyObeliskRequest({ request, env = {}, fetchImpl = fetc
   }
 
   const identity = pickIdentity(upstream);
+  const profileAccess = env.OBELISK_VERIFY_SECRET
+    ? await issueProfileCapability(env.OBELISK_VERIFY_SECRET, identity.subject, token, now())
+    : null;
   return json({
     ok: true,
     provider: "obelisk",
@@ -151,9 +144,8 @@ export async function verifyObeliskRequest({ request, env = {}, fetchImpl = fetc
       tokenHash: await sha256(token),
       subjectHash: await sha256(identity.subject),
     },
-    // S163: project-scoped capability for /api/profile cloud backups. Derived
-    // from the deployment secret and the subject; never the upstream token.
-    profileKey: env.OBELISK_VERIFY_SECRET ? await sha256(`profile:${env.OBELISK_VERIFY_SECRET}:${identity.subject}`) : null,
+    profileCapability: profileAccess?.capability || null,
+    profileCapabilityExpiresAt: profileAccess?.expiresAt || null,
   });
 }
 

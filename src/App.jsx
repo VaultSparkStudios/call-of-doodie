@@ -1,12 +1,12 @@
 import { getRunXpGain, getPlayerProjectileSpeed, getPickupCollectionRange, shouldDropStandardPickup } from "./config/weeklyMutationRuntime.js";
+import { version as appVersion } from "../package.json";
 import { applyMetaUpgrades, applyMetaTree, finalizeMetaStart, multiplyKillScore, applyWeeklyMutationWithAffinity, consumeGauntletMetaChoice, metaUpgradeValue, metaIncrease, META_TREE_FACTS } from "./config/upgradeFacts.js";
 import { PERK_FACTS } from "./config/perkFacts.js";
 import { useState, useEffect, useRef, useCallback, useMemo, lazy } from "react";
 import AsyncPanelBoundary from "./components/AsyncPanelBoundary.jsx";
-import { drawGame } from "./drawGame.js";
 import {
   WEAPONS, ENEMY_TYPES, KILLSTREAKS, DEATH_MESSAGES, TIPS, PERKS,
-  ACHIEVEMENTS, DIFFICULTIES, KILL_MILESTONES, META_UPGRADES,
+  ACHIEVEMENTS, DIFFICULTIES, STARTER_LOADOUTS, KILL_MILESTONES, META_UPGRADES,
   GRENADE_COOLDOWN, DASH_COOLDOWN, DASH_SPEED, DASH_DURATION,
   COMBO_TIMER_BASE, RUN_MODIFIERS, getWeeklyMutation, WEAPON_SYNERGIES,
   WAVE_CHALLENGE_MUTATIONS, WEAPON_ARSENAL_MILESTONE_LEVELS, BOSS_GRUDGE_QUOTES,
@@ -46,7 +46,6 @@ import { buildSessionSubmission } from "./utils/runSubmission.js";
 import { analyzeReplayCommandTrace, buildReplayProofReceipt, directionBucket, encodeReplayCommandTrace, recordReplayCommandEvent } from "./utils/replayCommandTrace.js";
 import { detectControllerType, getPrimaryGamepad, readGamepadControls, rememberControllerProfile } from "./utils/gamepad.js";
 import { getRandomPerks, getFullyCursedPerks } from "./utils/perkOptions.js";
-import { buildWeeklyGauntletLaunch } from "./utils/gauntletLaunch.js";
 import { scheduleIdleWork } from "./utils/deferredWork.js";
 import { applyCanvasScale, watchCanvasScale, measureGameViewport, MOBILE_DOCK_HEIGHT } from "./utils/canvasScale.js";
 import { captureGifFrame } from "./utils/gifCapture.js";
@@ -54,7 +53,6 @@ import { getRouteOptions } from "./utils/routeOptions.js";
 import { useGameLoop } from "./hooks/useGameLoop.js";
 import { useShellLifecycle } from "./hooks/useShellLifecycle.js";
 const HUD = lazy(() => import("./components/HUD.jsx"));
-import { getOperation } from "./systems/operationCampaign.js";
 import { buildOperationReceipt, getCurrentEncounter } from "./systems/operationDirector.js";
 import { useOperationMode } from "./hooks/useOperationMode.js";
 // Per-weapon camera recoil magnitude (index-aligned with WEAPONS). Heavy
@@ -82,14 +80,15 @@ import { buildInputCalibrationRecord, loadInputCalibration, saveInputCalibration
 import { markTutorialAction, normalizeTutorialEvidence, shouldShowTutorial, TUTORIAL_ACTIONS } from "./utils/tutorialProgress.js";
 import { isPlaytestMode, recordActivePlaytestMilestone, startActivePlaytestFlight } from "./utils/playtestFlightRecorder.js";
 import { getRoastCallout } from "./utils/roastDirector.js";
-import { interpolateBossQuote, getBossTone } from "./utils/bossDialogue.js";
+import { interpolateBossQuote, getBossTone, chooseBossQuote } from "./utils/bossDialogue.js";
 import { getRunAct } from "./utils/runNarrative.js";
 import { buildStudioGameEvent } from "./utils/runIntelligence.js";
 import { addParticles, addScreenText, addText, announce } from "./systems/transientPresentation.js";
 import { buildIntegrityLocalSubmissionResult, getRunIntegrityReceipt, recordRunIntegrityFault } from "./systems/runIntegrity.js";
 import { planPauseTransition } from "./systems/pauseTransition.js";
 import { createCamera, resolveArenaBounds, resolveArenaSize, resizeArenaViewport, updateCamera, viewCenter } from "./systems/camera.js";
-import { getInputActivityAge, releaseInputState } from "./systems/inputLifecycle.js";
+import { getInputActivityAge } from "./systems/inputLifecycle.js";
+import { markInputActivity as markBridgeActivity, releaseAllInputs as releaseBridgeInputs, sampleCommandTrace as sampleBridgeTrace } from "./systems/inputBridge.js";
 import { resolveRunEndAttempt, RUN_PHASE } from "./systems/runTermination.js";
 import { resolveDeathAttribution } from "./systems/deathAttribution.js";
 import { normalizeVisualPack, VISUAL_PACKS } from "./utils/visualPack.js";
@@ -130,7 +129,8 @@ import { reconcileOwnership } from "./utils/cosmeticTrack.js";
 import { matchesExperiment } from "./utils/runBrain.js";
 import { applyThreatRecommendationChoice, queueCompletedRunFact, recordPostRunFieldReport } from "./systems/runFactFlow.js";
 import { applyModeRules, getModeRewardFlow, isBossWaveForMode, resolveModeId } from "./systems/modeRules.js";
-import { getModeMeta, loadModeRuntime, needsModeRuntime } from "./systems/modeRegistry.js";
+import { getModeMeta } from "./systems/modeRegistry.js";
+import { resolveRunLaunch, prepareRunDependencies } from "./systems/runLaunch.js";
 
 // Combat systems chunk (enemy AI, projectiles). Preloaded at mount so a run start
 // never waits on the network; startGame still awaits it as a safety net.
@@ -138,6 +138,11 @@ let combatRuntimePromise = null;
 function loadCombatRuntime() {
   if (!combatRuntimePromise) combatRuntimePromise = import("./systems/combatRuntime.js");
   return combatRuntimePromise;
+}
+let drawGamePromise = null;
+function loadDrawGame() {
+  if (!drawGamePromise) drawGamePromise = import("./drawGame.js");
+  return drawGamePromise;
 }
 
 const AchievementsPanel = lazy(() => import("./components/AchievementsPanel.jsx"));
@@ -205,6 +210,7 @@ export default function CallOfDoodie() {
   const waveDeathCountsRef = useRef({});  // {wave: N} — how many LB players died on each wave
   const weaponEvolutionsRef = useRef([]); // per-weapon evolution state loaded at game start
   const bossSessionDeathsRef = useRef({}); // {bossTypeIdx: N} — deaths to each boss this session
+  const bossQuoteRecentRef = useRef({}); // last two authored variants per boss/relationship tier
   const communityChokePointsRef = useRef(new Set()); // wave numbers that are community choke points
   const gamepadShootRef  = useRef(false); // gamepad RT fire signal
   const gamepadMoveRef   = useRef({ x: 0, y: 0, active: false }); // left-stick movement, kept separate from keyboard state
@@ -279,7 +285,10 @@ export default function CallOfDoodie() {
   const [pauseReason, setPauseReason] = useState(null);
   const [showAchievements, setShowAchievements] = useState(false);
   const [extraLives, setExtraLives]   = useState(0);
-  const [difficulty, setDifficulty]   = useState("normal");
+  const [difficulty, setDifficulty]   = useState(() => {
+    const saved = readPreference("cod-last-difficulty", "normal");
+    return Object.hasOwn(DIFFICULTIES, saved) ? saved : "normal";
+  });
   const [guardianAngelFlash, setGuardianAngelFlash] = useState(false);
   const [weaponUpgrades, setWeaponUpgrades] = useState(() => WEAPONS.map(() => 0));
   const [activePerks, setActivePerks] = useState([]);
@@ -291,7 +300,10 @@ export default function CallOfDoodie() {
   const [bossWaveBanner, setBossWaveBanner] = useState(false);
   const [bossCutscene, setBossCutscene]     = useState(null); // { emoji, name, title, quote, wave }
   const [coins, setCoins]                   = useState(0);   // 💩 Doodie Coins per run
-  const [starterLoadout, setStarterLoadout] = useState("standard");
+  const [starterLoadout, setStarterLoadout] = useState(() => {
+    const saved = readPreference("cod-last-loadout", "standard");
+    return STARTER_LOADOUTS.some((loadout) => loadout.id === saved) ? saved : "standard";
+  });
   const [runSeed, setRunSeed]             = useState(0);
   const [runModifier, setRunModifier]     = useState(null);
   const [scoreAttackMode, setScoreAttackMode]       = useState(false);
@@ -315,8 +327,10 @@ export default function CallOfDoodie() {
   const modeRuntimeRef = useRef(null);
   // Per-frame combat systems (enemy AI, projectiles) load as one chunk at run start.
   const combatRuntimeRef = useRef(null);
+  const drawGameRef = useRef(null);
   useEffect(() => { loadSounds().catch(() => {}); }, []);
   useEffect(() => { let alive = true; loadCombatRuntime().then((m) => { if (alive) combatRuntimeRef.current = m; }).catch(() => {}); return () => { alive = false; }; }, []);
+  useEffect(() => { let alive = true; loadDrawGame().then((m) => { if (alive) drawGameRef.current = m.drawGame; }).catch(() => {}); return () => { alive = false; }; }, []);
   const modeBossWave = (gs, legacy) => (modeDefRef.current?.isBossWave ? !!modeDefRef.current.isBossWave(gs) : !!legacy);
   const modeWaveCount = (gs, computed) => (modeDefRef.current?.waveEnemyCount ? Math.max(0, Math.floor(modeDefRef.current.waveEnemyCount(gs, computed))) : computed);
   const perkOptionsRef        = useRef([]); // mirrors perkOptions state for analytics (no stale closure)
@@ -386,6 +400,8 @@ export default function CallOfDoodie() {
   useEffect(() => { pausedRef.current = paused; }, [paused]);
   useEffect(() => { extraLivesRef.current = extraLives; }, [extraLives]);
   useEffect(() => { difficultyRef.current = difficulty; }, [difficulty]);
+  useEffect(() => { writePreference("cod-last-difficulty", difficulty); }, [difficulty]);
+  useEffect(() => { writePreference("cod-last-loadout", starterLoadout); }, [starterLoadout]);
   useEffect(() => {
     const gs = gsRef.current;
     if (screen !== "game" || !gs?.player || health <= 0) return;
@@ -702,6 +718,7 @@ export default function CallOfDoodie() {
     communityChokePointsRef.current = getCommunityChokePoints(waveDeathCountsRef.current);
     weaponEvolutionsRef.current = WEAPONS.map((_, i) => getWeaponEvolutionState(i));
     bossSessionDeathsRef.current = {};
+    bossQuoteRecentRef.current = {};
     if (highlightUrlRef.current) { URL.revokeObjectURL(highlightUrlRef.current); highlightUrlRef.current = null; }
     setHighlightGifUrl(null);
     xpRef.current = { xp: 0, level: 1 };
@@ -910,11 +927,10 @@ export default function CallOfDoodie() {
     }
   }, [kills, markTutorialEvidence]);
   const markInputActivity = useCallback((source) => {
-    const key = ["keyboard", "mouse", "touch", "gamepad"].includes(source) ? source : "keyboard";
-    inputActivityRef.current[key] = Date.now();
+    markBridgeActivity(inputActivityRef, source);
   }, []);
   const releaseAllInputs = useCallback((reason = "explicit", scopes) => {
-    const receipt = releaseInputState({
+    return releaseBridgeInputs({
       keysRef,
       mouseRef,
       joystickRef,
@@ -922,9 +938,7 @@ export default function CallOfDoodie() {
       gamepadMoveRef,
       gamepadShootRef,
       gamepadAngleRef,
-    }, { reason, scopes });
-    inputReleaseReceiptRef.current = receipt;
-    return receipt;
+    }, inputReleaseReceiptRef, reason, scopes);
   }, []);
   const transitionPause = useCallback((nextPaused, reason = "explicit") => {
     const transition = planPauseTransition({
@@ -946,13 +960,7 @@ export default function CallOfDoodie() {
     return transition;
   }, [recordCommandTrace, releaseAllInputs]);
   const sampleCommandTrace = useCallback((action, bucket, interval = 30) => {
-    const state = action === "aim" ? lastTraceAimRef.current : lastTraceMoveRef.current;
-    const frame = frameCountRef.current;
-    if (bucket !== state.bucket || frame - state.frame >= interval) {
-      state.bucket = bucket;
-      state.frame = frame;
-      recordCommandTrace(action, bucket);
-    }
+    sampleBridgeTrace({ action, bucket, interval, lastTraceAimRef, lastTraceMoveRef, frameCountRef, recordCommandTrace });
   }, [recordCommandTrace]);
   const openQueuedPerkSelection = useCallback(() => {
     const choiceRng = getRunRng(gsRef.current, "choices");
@@ -2076,7 +2084,8 @@ export default function CallOfDoodie() {
   // ── Start game ────────────────────────────────────────────────────────────
   const startGame = useCallback(async (forceSeed, challengeOpts = {}) => {
     setPendingNextRunContract(null);
-    const requestedOperation = challengeOpts.operationId ? getOperation(challengeOpts.operationId) : null;
+    const launch = resolveRunLaunch({ operationId: challengeOpts.operationId, modeId: gameModeIdRef.current, gauntlet: gauntletRef.current });
+    const requestedOperation = launch.operation;
     // Operations own their rules. A previously selected arcade mode must not
     // inject its bosses, flood, timer, weekly kit, or victory condition.
     if (requestedOperation) {
@@ -2084,14 +2093,14 @@ export default function CallOfDoodie() {
       scoreAttackRef.current = dailyChallengeRef.current = cursedRunRef.current = bossRushRef.current = speedrunRef.current = gauntletRef.current = zombiesRef.current = false;
       setScoreAttackMode(false); setDailyChallengeMode(false); setCursedRunMode(false); setBossRushMode(false); setSpeedrunMode(false); setGauntletMode(false); setZombiesMode(false);
     }
-    // S163 bundle diet: only new modes and Operations pay for the mode runtime chunk.
-    if (needsModeRuntime(gameModeIdRef.current, { operation: !!requestedOperation })) {
-      modeRuntimeRef.current = await loadModeRuntime(gameModeIdRef.current, { operation: !!requestedOperation });
-    } else {
-      modeRuntimeRef.current = null;
-    }
-    if (!combatRuntimeRef.current) combatRuntimeRef.current = await loadCombatRuntime();
-    const gauntletLaunch = gauntletRef.current ? buildWeeklyGauntletLaunch(getWeeklyGauntlet()) : null;
+    const [prepared, renderer] = await Promise.all([
+      prepareRunDependencies({ launch, combatRuntime: combatRuntimeRef.current, loadCombatRuntime }),
+      loadDrawGame(),
+    ]);
+    modeRuntimeRef.current = prepared.modeRuntime;
+    combatRuntimeRef.current = prepared.combatRuntime;
+    drawGameRef.current = renderer.drawGame;
+    const gauntletLaunch = prepared.gauntletLaunch;
     if (gauntletLaunch) {
       forceSeed = gauntletLaunch.seed;
       difficultyRef.current = gauntletLaunch.difficulty; setDifficulty(gauntletLaunch.difficulty);
@@ -2413,6 +2422,9 @@ export default function CallOfDoodie() {
   const savePostRunFieldReport = useCallback((feedback) => recordPostRunFieldReport(feedback, {
     runToken: runTokenRef.current, summarySig: runSummarySigRef.current, name: username,
     runFlags: readRunModeFlags(scoreAttackRef, dailyChallengeRef, cursedRunRef, bossRushRef, speedrunRef, gauntletRef, zombiesRef),
+    modeId: gsRef.current?.operationMode ? "operation" : gameModeIdRef.current,
+    inputDevice: inputDeviceRef.current,
+    version: appVersion,
     difficulty, seed: runSeed, starterLoadout, score, kills, wave, durationSeconds: timeSurvived,
     totalDamage, stats: statsRef.current, practiceRun: gsRef.current?.practiceRun,
   }), [difficulty, kills, runSeed, score, starterLoadout, timeSurvived, totalDamage, username, wave]);
@@ -3090,7 +3102,10 @@ export default function CallOfDoodie() {
             : _bossRec.deaths > 0 || _sessionEscalate ? 'grudge'
             : 'taunt';
           const _grudgePool = BOSS_GRUDGE_QUOTES[_primaryType]?.[_grudgeVariant];
-          const _rawQuote = _grudgePool ? _grudgePool[Math.floor(cosmeticRandom() * _grudgePool.length)] : null;
+          const _quoteKey = `${_primaryType}:${_grudgeVariant}`;
+          const _chosenQuote = chooseBossQuote(_grudgePool, `${_primaryType}|${gs.currentWave}|${_grudgeVariant}|${_sessionBossDeaths}|${_bossRec.kills}`, bossQuoteRecentRef.current[_quoteKey]);
+          const _rawQuote = _chosenQuote.quote;
+          if (_chosenQuote.index >= 0) bossQuoteRecentRef.current[_quoteKey] = [...(bossQuoteRecentRef.current[_quoteKey] || []), _chosenQuote.index].slice(-2);
           const _bossWave = gs.currentWave;
           const _bossWeapon = WEAPONS[currentWeaponRef.current]?.name || 'that';
           const _bossAct = _bossWave < 10 ? 'prologue' : _bossWave < 25 ? 'rising' : _bossWave < 40 ? 'climax' : 'epilogue';
@@ -3418,7 +3433,7 @@ export default function CallOfDoodie() {
 
     // ────────────────── RENDER ──────────────────────────────────────────────
     // S163 fixed step: catch-up steps simulate only; the last step of the frame renders.
-    if (render) drawGame(ctx, canvas, W, H, gs, { dashRef, mouseRef, joystickRef, shootStickRef, startTimeRef, frameCountRef, isMobile, tip, wpnIdx });
+    if (render) drawGameRef.current(ctx, canvas, W, H, gs, { dashRef, mouseRef, joystickRef, shootStickRef, startTimeRef, frameCountRef, isMobile, tip, wpnIdx });
 
   }, [handleModeVictory, shoot, spawnEnemy, spawnBoss, doReload, isMobile, checkAchievements, checkDailyMissions, tip, handlePlayerDeath, addXp, openQueuedPerkSelection, operationStateRef, resolveOperationWave, sampleCommandTrace, inputDebugEnabled, dashReady, grenadeReady, _modeAnnounce]);
 

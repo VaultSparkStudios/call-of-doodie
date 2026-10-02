@@ -1,5 +1,6 @@
 {
-  "schemaVersion": "gameplay-contract-v3",
+  "schemaVersion": "gameplay-contract-v4",
+  "evidenceAsOf": "2026-09-30T20:06:09Z",
   "canonicalUrl": "https://callofdoodie.wtf/",
   "publisher": "VaultSpark Studios LLC",
   "rights": "Proprietary — All Rights Reserved, VaultSpark Studios LLC",
@@ -76,6 +77,11 @@
     "survive_wave",
     "review_debrief"
   ],
+  "controls": {
+    "humanGuide": "/field-manual/",
+    "summary": "Move with WASD / left stick · Aim with mouse / right stick. · Dash (Shift / A button) — Invincible dodge. Grenade (Space / B) — AOE. · Weapon keys 1–9 swap · R reloads · Esc pauses. · Boss every 5 waves. Perks unlock on level-up. Wave shop between waves. · Earn Doodie Coins for streaks — spend in the wave shop.",
+    "source": "src/content/fieldManual.js"
+  },
   "formations": [
     {
       "id": "pincer",
@@ -102,6 +108,8 @@
     {
       "id": "blacksite-flush",
       "title": "BLACKSITE FLUSH",
+      "brief": "Breach Karen's complaint bunker and flush the evidence before extraction.",
+      "antagonist": "Regional Manager Karen",
       "seed": 3101,
       "durationMinutes": [
         12,
@@ -116,6 +124,16 @@
         "ESCAPE",
         "BOSS"
       ],
+      "encounterTitles": [
+        "Kick the Stall",
+        "Courtesy Hold",
+        "Plunger Detail",
+        "Complaint Hunt",
+        "Void Validation",
+        "Courtesy Flush",
+        "Regional Manager Karen"
+      ],
+      "priorRouteConsequence": null,
       "routeOptions": [
         "service-tunnel",
         "executive-washroom"
@@ -214,6 +232,8 @@
     {
       "id": "porcelain-siege",
       "title": "PORCELAIN SIEGE",
+      "brief": "Retake the porcelain district from Deputy Landlord's rent collectors.",
+      "antagonist": "Deputy Landlord",
       "seed": 4102,
       "durationMinutes": [
         12,
@@ -228,6 +248,23 @@
         "ESCAPE",
         "BOSS"
       ],
+      "encounterTitles": [
+        "Serve Notice",
+        "Security Deposit",
+        "Eviction Convoy",
+        "Leasebreaker",
+        "Cut Utilities",
+        "Thirty-Day Notice",
+        "Deputy Landlord"
+      ],
+      "priorRouteConsequence": {
+        "sourceOperationId": "blacksite-flush",
+        "routeId": "service-tunnel",
+        "id": "tunnel-debt",
+        "description": "The prior tunnel route powers clean pressure for the opening siege.",
+        "targetId": "valve-east",
+        "command": "power"
+      },
       "routeOptions": [
         "laundry-annex",
         "boiler-room"
@@ -326,6 +363,8 @@
     {
       "id": "final-notice",
       "title": "FINAL NOTICE",
+      "brief": "Return Karen and the Landlord's legally dubious super-complaint to sender.",
+      "antagonist": "The HOA Board",
       "seed": 5103,
       "durationMinutes": [
         12,
@@ -340,6 +379,23 @@
         "ESCAPE",
         "BOSS"
       ],
+      "encounterTitles": [
+        "Break Quorum",
+        "Appeals Window",
+        "Certified Mail",
+        "Paper Trail",
+        "Shred Fine Print",
+        "Return to Sender",
+        "The HOA Board"
+      ],
+      "priorRouteConsequence": {
+        "sourceOperationId": "porcelain-siege",
+        "routeId": "boiler-room",
+        "id": "boiler-paper-trail",
+        "description": "The prior boiler route opens a rear records lane.",
+        "targetId": "door-south",
+        "command": "open"
+      },
       "routeOptions": [
         "records-office",
         "executive-penthouse"
@@ -432,59 +488,115 @@
   "modes": [
     {
       "id": "standard",
-      "label": "Standard",
+      "label": "Classic Survival",
       "kind": "mode",
+      "objective": "The original game: fight waves, choose perks and upgrade your weapons. Survive until you run out of lives.",
       "seededReplayCode": true,
-      "scoring": "global-leaderboard-eligible"
+      "scoring": "global-leaderboard-eligible",
+      "capabilities": {
+        "play": "browser-local",
+        "officialBoard": "eligible-only-after-server-check",
+        "unrankedPractice": true,
+        "liveMultiplayer": false
+      }
     },
     {
       "id": "score_attack",
       "label": "Score Attack",
       "kind": "ruleset",
+      "objective": "Five minutes, faster spawns, maximum score.",
       "seededReplayCode": true,
-      "scoring": "global-leaderboard-eligible"
+      "scoring": "global-leaderboard-eligible",
+      "capabilities": {
+        "play": "browser-local",
+        "officialBoard": "eligible-only-after-server-check",
+        "unrankedPractice": true,
+        "liveMultiplayer": false
+      }
     },
     {
       "id": "daily_challenge",
       "label": "Daily Challenge",
       "kind": "ruleset",
+      "objective": "The same seeded run for every player today.",
       "seededReplayCode": true,
-      "scoring": "global-leaderboard-eligible"
+      "scoring": "global-leaderboard-eligible",
+      "capabilities": {
+        "play": "browser-local",
+        "officialBoard": "eligible-only-after-server-check",
+        "unrankedPractice": true,
+        "liveMultiplayer": false
+      }
     },
     {
       "id": "cursed",
-      "label": "Cursed",
+      "label": "Cursed Run",
       "kind": "ruleset",
+      "objective": "Hard modifiers with a three-times score multiplier.",
       "seededReplayCode": true,
-      "scoring": "global-leaderboard-eligible"
+      "scoring": "global-leaderboard-eligible",
+      "capabilities": {
+        "play": "browser-local",
+        "officialBoard": "eligible-only-after-server-check",
+        "unrankedPractice": true,
+        "liveMultiplayer": false
+      }
     },
     {
       "id": "boss_rush",
       "label": "Boss Rush",
       "kind": "ruleset",
+      "objective": "Gear up for three warmup waves, then fight bosses every wave. Survive as long as you can; later fights pair bosses.",
       "seededReplayCode": true,
-      "scoring": "global-leaderboard-eligible"
+      "scoring": "global-leaderboard-eligible",
+      "capabilities": {
+        "play": "browser-local",
+        "officialBoard": "eligible-only-after-server-check",
+        "unrankedPractice": true,
+        "liveMultiplayer": false
+      }
     },
     {
       "id": "speedrun",
-      "label": "Speedrun",
+      "label": "Timed Survival",
       "kind": "ruleset",
+      "objective": "Classic survival with a precise elapsed-time display. Set your own wave target; the run ends when you run out of lives.",
       "seededReplayCode": true,
-      "scoring": "global-leaderboard-eligible"
+      "scoring": "global-leaderboard-eligible",
+      "capabilities": {
+        "play": "browser-local",
+        "officialBoard": "eligible-only-after-server-check",
+        "unrankedPractice": true,
+        "liveMultiplayer": false
+      }
     },
     {
       "id": "gauntlet",
-      "label": "Gauntlet",
+      "label": "Weekly Gauntlet",
       "kind": "ruleset",
+      "objective": "A fixed weekly opening kit with no shop.",
       "seededReplayCode": true,
-      "scoring": "global-leaderboard-eligible"
+      "scoring": "global-leaderboard-eligible",
+      "capabilities": {
+        "play": "browser-local",
+        "officialBoard": "eligible-only-after-server-check",
+        "unrankedPractice": true,
+        "liveMultiplayer": false
+      }
     },
     {
       "id": "zombies",
-      "label": "Zombies",
+      "label": "Sewer Zombies",
       "kind": "mode",
+      "objective": "Escalating undead hordes with a surge every third wave.",
       "seededReplayCode": true,
-      "scoring": "global-leaderboard-eligible"
+      "scoring": "global-leaderboard-eligible",
+      "capabilities": {
+        "play": "browser-local",
+        "officialBoard": "eligible-only-after-server-check",
+        "unrankedPractice": true,
+        "liveMultiplayer": false
+      }
     },
     {
       "id": "boss_gauntlet",
@@ -492,7 +604,13 @@
       "kind": "mode",
       "objective": "Fight six bosses in order, one at a time. Defeat all six to win; beating the six-minute target is optional. Bosses may summon reinforcements.",
       "seededReplayCode": false,
-      "scoring": "local-only"
+      "scoring": "local-only",
+      "capabilities": {
+        "play": "browser-local",
+        "officialBoard": "not-offered",
+        "unrankedPractice": true,
+        "liveMultiplayer": false
+      }
     },
     {
       "id": "sewer_extraction",
@@ -500,7 +618,13 @@
       "kind": "mode",
       "objective": "Collect crates and reach the evac toilet to bank your loot. The exit opens at alarm 60 and locks at 100. Die before extracting and the haul is lost.",
       "seededReplayCode": false,
-      "scoring": "local-only"
+      "scoring": "local-only",
+      "capabilities": {
+        "play": "browser-local",
+        "officialBoard": "not-offered",
+        "unrankedPractice": true,
+        "liveMultiplayer": false
+      }
     },
     {
       "id": "bot_royale",
@@ -508,7 +632,13 @@
       "kind": "mode",
       "objective": "Free-for-all against sixteen bots while the sewer floods inward. Last one standing wins.",
       "seededReplayCode": false,
-      "scoring": "local-only"
+      "scoring": "local-only",
+      "capabilities": {
+        "play": "browser-local",
+        "officialBoard": "not-offered",
+        "unrankedPractice": true,
+        "liveMultiplayer": false
+      }
     },
     {
       "id": "hold_the_throne",
@@ -516,7 +646,13 @@
       "kind": "mode",
       "objective": "Hold each of three thrones for thirty uncontested seconds to win. You can retake one lost throne; a second loss ends the run. Your squad helps defend.",
       "seededReplayCode": false,
-      "scoring": "local-only"
+      "scoring": "local-only",
+      "capabilities": {
+        "play": "browser-local",
+        "officialBoard": "not-offered",
+        "unrankedPractice": true,
+        "liveMultiplayer": false
+      }
     }
   ],
   "difficulties": [
@@ -571,85 +707,193 @@
   "weapons": [
     {
       "index": 0,
+      "runtimeId": "weapon:0",
       "name": "Banana Blaster",
       "emoji": "🍌",
+      "description": "Reliable sidearm. Peel & deal.",
+      "baseDamagePerProjectile": 15,
+      "baseFireIntervalMs": 200,
+      "baseMagazine": 30,
+      "baseReloadMs": 1500,
+      "projectilesPerTrigger": 1,
+      "pattern": "direct",
+      "rangeCue": "Flexible",
       "availableAtStart": true,
       "arsenalMilestoneLevel": 1
     },
     {
       "index": 1,
+      "runtimeId": "weapon:1",
       "name": "Rubber Chicken RPG",
       "emoji": "🐔",
+      "description": "Massive damage, slow reload. BAWK!",
+      "baseDamagePerProjectile": 80,
+      "baseFireIntervalMs": 1200,
+      "baseMagazine": 3,
+      "baseReloadMs": 3000,
+      "projectilesPerTrigger": 1,
+      "pattern": "direct",
+      "rangeCue": "Flexible",
       "availableAtStart": true,
       "arsenalMilestoneLevel": 1
     },
     {
       "index": 2,
+      "runtimeId": "weapon:2",
       "name": "Nerf Minigun",
       "emoji": "🔫",
+      "description": "Spray & pray. 200 foam darts of fury.",
+      "baseDamagePerProjectile": 5,
+      "baseFireIntervalMs": 50,
+      "baseMagazine": 200,
+      "baseReloadMs": 4000,
+      "projectilesPerTrigger": 1,
+      "pattern": "direct",
+      "rangeCue": "Flexible",
       "availableAtStart": true,
       "arsenalMilestoneLevel": 1
     },
     {
       "index": 3,
+      "runtimeId": "weapon:3",
       "name": "Plunger Launcher",
       "emoji": "🪠",
+      "description": "Mid-range plunger justice. THWONK!",
+      "baseDamagePerProjectile": 40,
+      "baseFireIntervalMs": 600,
+      "baseMagazine": 8,
+      "baseReloadMs": 2000,
+      "projectilesPerTrigger": 1,
+      "pattern": "direct",
+      "rangeCue": "Mid",
       "availableAtStart": true,
       "arsenalMilestoneLevel": 2
     },
     {
       "index": 4,
+      "runtimeId": "weapon:4",
       "name": "Sniper-ator 3000",
       "emoji": "🎯",
+      "description": "One-tap precision. Enemies won't get a second chance.",
+      "baseDamagePerProjectile": 120,
+      "baseFireIntervalMs": 1800,
+      "baseMagazine": 5,
+      "baseReloadMs": 2500,
+      "projectilesPerTrigger": 1,
+      "pattern": "direct",
+      "rangeCue": "Long",
       "availableAtStart": true,
       "arsenalMilestoneLevel": 3
     },
     {
       "index": 5,
+      "runtimeId": "weapon:5",
       "name": "Spicy Squirt Gun",
       "emoji": "🌶️",
+      "description": "Short range, ridiculous fire rate. 100 shots of burning regret.",
+      "baseDamagePerProjectile": 4,
+      "baseFireIntervalMs": 28,
+      "baseMagazine": 100,
+      "baseReloadMs": 2800,
+      "projectilesPerTrigger": 1,
+      "pattern": "direct",
+      "rangeCue": "Close",
       "availableAtStart": true,
       "arsenalMilestoneLevel": 4
     },
     {
       "index": 6,
+      "runtimeId": "weapon:6",
       "name": "Confetti Cannon",
       "emoji": "🎊",
+      "description": "6 confetti pellets per blast. Close range chaos.",
+      "baseDamagePerProjectile": 12,
+      "baseFireIntervalMs": 900,
+      "baseMagazine": 18,
+      "baseReloadMs": 2000,
+      "projectilesPerTrigger": 6,
+      "pattern": "spread",
+      "rangeCue": "Close",
       "availableAtStart": true,
       "arsenalMilestoneLevel": 6
     },
     {
       "index": 7,
+      "runtimeId": "weapon:7",
       "name": "Shock Zapper",
       "emoji": "⚡",
+      "description": "3-shot burst, medium range. Zap zap zap.",
+      "baseDamagePerProjectile": 32,
+      "baseFireIntervalMs": 1100,
+      "baseMagazine": 15,
+      "baseReloadMs": 2400,
+      "projectilesPerTrigger": 3,
+      "pattern": "burst",
+      "rangeCue": "Mid",
       "availableAtStart": true,
       "arsenalMilestoneLevel": 8
     },
     {
       "index": 8,
+      "runtimeId": "weapon:8",
       "name": "Boomerang Blaster",
       "emoji": "🪃",
+      "description": "Curves out, returns to you. Pierces every enemy both ways.",
+      "baseDamagePerProjectile": 28,
+      "baseFireIntervalMs": 1100,
+      "baseMagazine": 5,
+      "baseReloadMs": 1800,
+      "projectilesPerTrigger": 1,
+      "pattern": "return",
+      "rangeCue": "Flexible",
       "availableAtStart": true,
       "arsenalMilestoneLevel": 10
     },
     {
       "index": 9,
+      "runtimeId": "weapon:9",
       "name": "Railgun",
       "emoji": "🔦",
+      "description": "Instant hitscan beam. Penetrates every enemy in a straight line.",
+      "baseDamagePerProjectile": 160,
+      "baseFireIntervalMs": 2800,
+      "baseMagazine": 4,
+      "baseReloadMs": 3500,
+      "projectilesPerTrigger": 1,
+      "pattern": "beam",
+      "rangeCue": "Long",
       "availableAtStart": true,
       "arsenalMilestoneLevel": 12
     },
     {
       "index": 10,
+      "runtimeId": "weapon:10",
       "name": "Ricochet Pistol",
       "emoji": "🎱",
+      "description": "Bounces up to 10 times per shot. Angles are your best friend.",
+      "baseDamagePerProjectile": 35,
+      "baseFireIntervalMs": 340,
+      "baseMagazine": 18,
+      "baseReloadMs": 1800,
+      "projectilesPerTrigger": 1,
+      "pattern": "ricochet",
+      "rangeCue": "Flexible",
       "availableAtStart": true,
       "arsenalMilestoneLevel": 14
     },
     {
       "index": 11,
+      "runtimeId": "weapon:11",
       "name": "Nuclear Kazoo",
       "emoji": "🎵",
+      "description": "3-wide shots per fire. Annoyingly effective in crowds.",
+      "baseDamagePerProjectile": 22,
+      "baseFireIntervalMs": 260,
+      "baseMagazine": 24,
+      "baseReloadMs": 2000,
+      "projectilesPerTrigger": 3,
+      "pattern": "spread",
+      "rangeCue": "Flexible",
       "availableAtStart": true,
       "arsenalMilestoneLevel": 16
     }
@@ -657,157 +901,267 @@
   "enemies": [
     {
       "index": 0,
+      "runtimeId": "enemy:0",
       "name": "Mall Cop",
       "emoji": "👮",
       "ranged": false,
-      "boss": false
+      "boss": false,
+      "role": "pursuer",
+      "baseHealth": 30,
+      "baseSpeed": 1.2,
+      "projectileIntervalFrames": null
     },
     {
       "index": 1,
+      "runtimeId": "enemy:1",
       "name": "Karen",
       "emoji": "💇‍♀️",
       "ranged": true,
-      "boss": false
+      "boss": false,
+      "role": "ranged",
+      "baseHealth": 50,
+      "baseSpeed": 0.8,
+      "projectileIntervalFrames": 150
     },
     {
       "index": 2,
+      "runtimeId": "enemy:2",
       "name": "Florida Man",
       "emoji": "🐊",
       "ranged": false,
-      "boss": false
+      "boss": false,
+      "role": "rusher",
+      "baseHealth": 80,
+      "baseSpeed": 2,
+      "projectileIntervalFrames": null
     },
     {
       "index": 3,
+      "runtimeId": "enemy:3",
       "name": "HOA President",
       "emoji": "📋",
       "ranged": true,
-      "boss": false
+      "boss": false,
+      "role": "ranged",
+      "baseHealth": 120,
+      "baseSpeed": 0.5,
+      "projectileIntervalFrames": 200
     },
     {
       "index": 4,
+      "runtimeId": "enemy:4",
       "name": "Mega Karen",
       "emoji": "👹",
       "ranged": true,
-      "boss": true
+      "boss": true,
+      "role": "boss",
+      "baseHealth": 400,
+      "baseSpeed": 0.4,
+      "projectileIntervalFrames": 90
     },
     {
       "index": 5,
+      "runtimeId": "enemy:5",
       "name": "IT Guy",
       "emoji": "💻",
       "ranged": false,
-      "boss": false
+      "boss": false,
+      "role": "pursuer",
+      "baseHealth": 60,
+      "baseSpeed": 1.5,
+      "projectileIntervalFrames": null
     },
     {
       "index": 6,
+      "runtimeId": "enemy:6",
       "name": "Gym Bro",
       "emoji": "💪",
       "ranged": false,
-      "boss": false
+      "boss": false,
+      "role": "heavy",
+      "baseHealth": 100,
+      "baseSpeed": 1.8,
+      "projectileIntervalFrames": null
     },
     {
       "index": 7,
+      "runtimeId": "enemy:7",
       "name": "Influencer",
       "emoji": "🤳",
       "ranged": false,
-      "boss": false
+      "boss": false,
+      "role": "rusher",
+      "baseHealth": 40,
+      "baseSpeed": 2.2,
+      "projectileIntervalFrames": null
     },
     {
       "index": 8,
+      "runtimeId": "enemy:8",
       "name": "Conspiracy Bro",
       "emoji": "🛸",
       "ranged": true,
-      "boss": false
+      "boss": false,
+      "role": "ranged",
+      "baseHealth": 90,
+      "baseSpeed": 1.6,
+      "projectileIntervalFrames": 180
     },
     {
       "index": 9,
+      "runtimeId": "enemy:9",
       "name": "Landlord",
       "emoji": "🏠",
       "ranged": true,
-      "boss": true
+      "boss": true,
+      "role": "boss",
+      "baseHealth": 250,
+      "baseSpeed": 0.5,
+      "projectileIntervalFrames": 100
     },
     {
       "index": 10,
+      "runtimeId": "enemy:10",
       "name": "Crypto Bro",
       "emoji": "📈",
       "ranged": false,
-      "boss": false
+      "boss": false,
+      "role": "rusher",
+      "baseHealth": 30,
+      "baseSpeed": 3,
+      "projectileIntervalFrames": null
     },
     {
       "index": 11,
+      "runtimeId": "enemy:11",
       "name": "Shield Guy",
       "emoji": "🛡️",
       "ranged": false,
-      "boss": false
+      "boss": false,
+      "role": "pursuer",
+      "baseHealth": 90,
+      "baseSpeed": 1,
+      "projectileIntervalFrames": null
     },
     {
       "index": 12,
+      "runtimeId": "enemy:12",
       "name": "YOLO Bomber",
       "emoji": "💥",
       "ranged": false,
-      "boss": false
+      "boss": false,
+      "role": "rusher",
+      "baseHealth": 20,
+      "baseSpeed": 3.8,
+      "projectileIntervalFrames": null
     },
     {
       "index": 13,
+      "runtimeId": "enemy:13",
       "name": "Sergeant Karen",
       "emoji": "📣",
       "ranged": false,
-      "boss": false
+      "boss": false,
+      "role": "pursuer",
+      "baseHealth": 55,
+      "baseSpeed": 0.8,
+      "projectileIntervalFrames": null
     },
     {
       "index": 14,
+      "runtimeId": "enemy:14",
       "name": "Life Coach",
       "emoji": "📚",
       "ranged": false,
-      "boss": false
+      "boss": false,
+      "role": "rusher",
+      "baseHealth": 70,
+      "baseSpeed": 2.4,
+      "projectileIntervalFrames": null
     },
     {
       "index": 15,
+      "runtimeId": "enemy:15",
       "name": "Tech CEO",
       "emoji": "💼",
       "ranged": true,
-      "boss": false
+      "boss": false,
+      "role": "ranged",
+      "baseHealth": 320,
+      "baseSpeed": 0.3,
+      "projectileIntervalFrames": 80
     },
     {
       "index": 16,
+      "runtimeId": "enemy:16",
       "name": "Splitter",
       "emoji": "💔",
       "ranged": true,
-      "boss": true
+      "boss": true,
+      "role": "boss",
+      "baseHealth": 450,
+      "baseSpeed": 1,
+      "projectileIntervalFrames": 110
     },
     {
       "index": 17,
+      "runtimeId": "enemy:17",
       "name": "Juggernaut",
       "emoji": "🦏",
       "ranged": false,
-      "boss": true
+      "boss": true,
+      "role": "boss",
+      "baseHealth": 900,
+      "baseSpeed": 0.55,
+      "projectileIntervalFrames": null
     },
     {
       "index": 18,
+      "runtimeId": "enemy:18",
       "name": "Summoner",
       "emoji": "🌀",
       "ranged": true,
-      "boss": true
+      "boss": true,
+      "role": "boss",
+      "baseHealth": 320,
+      "baseSpeed": 0.4,
+      "projectileIntervalFrames": 190
     },
     {
       "index": 19,
+      "runtimeId": "enemy:19",
       "name": "Doomscroller",
       "emoji": "📱",
       "ranged": false,
-      "boss": false
+      "boss": false,
+      "role": "pursuer",
+      "baseHealth": 55,
+      "baseSpeed": 1.5,
+      "projectileIntervalFrames": null
     },
     {
       "index": 20,
+      "runtimeId": "enemy:20",
       "name": "The Algorithm",
       "emoji": "📊",
       "ranged": true,
-      "boss": true
+      "boss": true,
+      "role": "boss",
+      "baseHealth": 700,
+      "baseSpeed": 0.5,
+      "projectileIntervalFrames": 85
     },
     {
       "index": 21,
+      "runtimeId": "enemy:21",
       "name": "The Developer",
       "emoji": "💻",
       "ranged": true,
-      "boss": false
+      "boss": false,
+      "role": "ranged",
+      "baseHealth": 2000,
+      "baseSpeed": 0.4,
+      "projectileIntervalFrames": 50
     }
   ],
   "permanentUpgrades": [
@@ -1047,13 +1401,34 @@
       ]
     },
     "rivalry": {
+      "route": "/challenge/",
+      "schemaVersion": "challenge-invite-v2",
+      "queryParameters": [
+        "cv",
+        "seed",
+        "diff",
+        "mode",
+        "loadout",
+        "vs",
+        "vsName",
+        "duel",
+        "exp",
+        "check"
+      ],
+      "maxAgeDays": 7,
+      "integrity": "Non-cryptographic checksum; saved duel rows checked separately. Scores remain friendly and self-reported.",
+      "opponent": "saved-player-run-not-bot-or-live-person",
+      "launch": "preview-first-guest-accept-no-auto-start"
+    },
+    "legacySeedLink": {
+      "route": "/",
       "queryParameters": [
         "seed",
         "diff",
         "vs",
         "vsName"
       ],
-      "note": "Player choices remain player-controlled."
+      "note": "Direct legacy seed setup remains supported; it is not a verified score receipt."
     },
     "scenarioCartridge": {
       "schemaVersion": "sewer-scenario-v1",
@@ -1077,6 +1452,8 @@
     "terms": "https://callofdoodie.wtf/terms/",
     "rights": "https://callofdoodie.wtf/ip/",
     "fieldManual": "https://callofdoodie.wtf/field-manual.json",
+    "runAnalysisSchema": "https://callofdoodie.wtf/run-analysis-schema.json",
     "status": "https://callofdoodie.wtf/status.json"
-  }
+  },
+  "contentHash": "sha256:0681f1d7d97a65627c85d98dca06c9cd7fd965a2f619713666c544b4f664eade"
 }

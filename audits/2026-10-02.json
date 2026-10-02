@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "1.3",
+  "session": 181,
+  "date": "2026-10-02",
+  "headline": "A whole-site audit streamlined the player journey and shipped truthful, testable feedback and agent surfaces.",
+  "shipped": [
+    "21 local outcomes cover play entry, HUD, debrief, Player Record, Operation discovery, public docs, security and efficiency.",
+    "Three disclosed, unranked Field Lab concepts provide deterministic local prototypes for valves, nemesis complaints and paired tactics.",
+    "The public feedback response aggregates consented reports without exposing raw comments or identities."
+  ],
+  "validation": "Staging 8442b7df: shell 7/7, hosted 22-route/2-theme/2-width matrix 88/88, aggregate API 200; 429 hash-bound local captures; lint/build/public/schema/runtime/security/supply-chain gates pass. Full suite 281/281 files and 1,741/1,741 tests pass after the required closeout artifacts were rendered. Exact-main CI pending. Browser E2E 19 passed / 1 intentional mobile-only skip.",
+  "limits": "Field Lab is not live combat. Participant comprehension, balance, retention, physical controls, current Core Web Vitals, mail alias and Obelisk evidence remain unverified. FORGE/public-unlaunched. Studio-wide doctor has one remedy-drift blocker outside this repo.",
+  "production": {
+    "status": "pending-exact-main-ci",
+    "staging": "https://8442b7df.call-of-doodie.pages.dev/",
+    "stagingShellAssertions": 7,
+    "hostedStates": 88
+  },
+  "closeout": {
+    "intent": "founder-authorized-implement-closeout-deploy",
+    "silScore": 955,
+    "scaffold": {
+      "tasks": 25,
+      "done": 21,
+      "inProgress": 0,
+      "open": 4
+    },
+    "state": "staging-verified-production-pending"
+  }
+}

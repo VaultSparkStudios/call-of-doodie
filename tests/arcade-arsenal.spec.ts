@@ -10,6 +10,7 @@ test("retro command center exposes and carries the chosen primary into combat", 
 
   await expect(page.getByRole("heading", { name: /call of doodie/i })).toBeVisible();
   await expect(page.getByText(/insert courage/i)).toBeVisible();
+  await page.getByText("Choose primary weapon", { exact: true }).click();
   const primarySelector = page.getByRole("group", { name: "Choose primary weapon" });
   await expect(primarySelector.getByRole("button")).toHaveCount(12);
   await primarySelector.getByRole("button", { name: /equip rubber chicken rpg/i }).click();
@@ -30,7 +31,8 @@ test("retro command center exposes and carries the chosen primary into combat", 
   } else {
     const desktopDock = page.getByTestId("desktop-weapon-dock");
     await expect(desktopDock).toContainText("Rubber Chicken RPG");
-    await expect(desktopDock.getByRole("group", { name: "Weapons" }).getByRole("button")).toHaveCount(12);
+    await desktopDock.getByRole("button", { name: "Open weapon selector" }).click();
+    await expect(page.getByRole("group", { name: "Weapons" }).locator(".weapon-dock__grid").getByRole("button")).toHaveCount(12);
   }
   await page.screenshot({ path: testInfo.outputPath("combat-weapon-dock.png"), fullPage: true });
 });

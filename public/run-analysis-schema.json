@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "run-analysis-schema-v1",
+  "format": "application/json",
+  "access": {
+    "generation": "player-action-on-device",
+    "upload": "none",
+    "agentWrites": "not-offered"
+  },
+  "identity": "No player name, account, Passport, session, token, device identifier or local-storage dump.",
+  "trust": "Player-owned local summary. Values are not a score attestation, authenticated replay or full physics simulation.",
+  "eventMeaning": {
+    "finalSource": "Recorded final-damage attribution only when the game observed it; typeIndex resolves through gameplay-contract.json enemies. Null means unknown.",
+    "coachReason": "Deterministic local comparison code; it does not prove causality."
+  },
+  "units": {
+    "score": "points",
+    "wave": "wave index",
+    "kills": "count",
+    "durationSeconds": "seconds",
+    "totalShots": "count",
+    "totalHits": "count",
+    "seed": "integer",
+    "recordedAt": "ISO 8601 UTC"
+  },
+  "hash": "SHA-256 over UTF-8 JSON of every export field except contentHash, in insertion order.",
+  "gameplayContract": "/gameplay-contract.json"
+}

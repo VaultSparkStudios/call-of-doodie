@@ -1,14 +1,15 @@
 {
   "schemaVersion": "public-service-status-v1",
-  "effectiveDate": "2026-09-29",
-  "overall": "operational",
+  "effectiveDate": "2026-09-30",
+  "checkedAt": "2026-09-30T20:06:09Z",
+  "overall": "last-observed-healthy",
   "surfaces": {
     "browserGame": {
-      "status": "operational",
+      "status": "last-observed-healthy",
       "fallback": "local-play"
     },
     "leaderboard": {
-      "status": "operational",
+      "status": "last-observed-healthy",
       "controls": [
         "origin-allowlist",
         "bounded-request-quota",
@@ -17,7 +18,7 @@
       ]
     },
     "careerProgress": {
-      "status": "browser-local",
+      "status": "local",
       "crossDeviceSync": false
     },
     "identity": {

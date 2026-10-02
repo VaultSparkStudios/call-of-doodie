@@ -1,4 +1,5 @@
 // changelog.js — single source of truth for release history (S155).
+import { currentReleaseNote } from "../content/capabilities.js";
 //
 // Two granularities live here, previously maintained in three divergent
 // places (public /changelog/ hand-written in the route registry, NEW_FEATURES
@@ -9,6 +10,7 @@
 //    and the share card (constants.js re-exports it for back-compat)
 
 export const CHANGELOG_ENTRIES = [
+  currentReleaseNote(),
   ["September 9, 2026 · Worlds bigger than the screen, and a debrief that names names", "BOT ROYALE now drops sixteen bots into a two-screen scrolling sewer and SEWER EXTRACTION spreads its crates across a world one-and-a-half screens wide; the radar shows the whole map with loot and the evac toilet marked. Announcements (level-ups, doctrine, objectives, flood phases) now stay on your screen instead of at a fixed spot in the world. The debrief names what actually landed the last hit, including the flood, instead of guessing at the nearest enemy, so MOST WANTED, the run coach, and adaptive warnings finally learn from your deaths. Every mode's debrief says what the run was worth: loot banked or lost, thrones held, bosses down against par, or your royale placement."],
   ["September 3, 2026 · Duels, squads, and one board", "Seed duels: the challenge link from your debrief now opens a 24-hour duel and the rival's result comes back as a card (friendly, unverified). Squad codes: create or join one on Your Record and the board's new SQUAD tab shows your crew's best verified runs. The site consolidated: /board/ merges the leaderboard and live stats, /field-manual/ replaces How to Play, /bestiary/ replaces Enemies; old links redirect. Under the hood the game bundle shrank by a quarter, so the arena starts faster."],
   ["September 3, 2026 · Extraction, royale, and your record", "Two more modes that play differently: SEWER EXTRACTION (loot crates, a climbing alarm, an evac toilet, lockdown at 100, and a persistent stash) and BOT ROYALE (twelve bots, a shrinking sewer flood, supply drops, and a placement on the debrief). Operations now use behavioral objectives: breach the door, hold the point, escort the cart, hunt the runner, sabotage the pump, escape before the alarm. A profile page at /#profile with career, stash, and guest-safe backup download and restore. The share sheet attaches your highlight clip. The Daily can race the board leader's ghost once a path is published. Under the hood: the game bundle dropped below its byte budget again."],

@@ -131,7 +131,8 @@ export default function DeathScreenSecondaryAnalysis({ model }) {
         {/* Inspectable evidence stays available without competing with the one-verdict card. */}
         <details data-testid="coach-evidence" style={{ ...card, marginBottom: 8, textAlign: "left", border: "1px solid rgba(0,229,255,0.25)", background: "linear-gradient(180deg,rgba(0,229,255,0.06),rgba(255,255,255,0.03))" }}>
           <summary style={{ color: "#9EDFF0", fontSize: 10, fontWeight: 900, letterSpacing: 1.6, cursor: "pointer" }}>WHY THIS VERDICT · {insightGraph.nodes.length} EVIDENCE NODES · {insightGraph.fingerprint}</summary>
-          <div style={{ fontSize: 10, color: "#5CE6FF", letterSpacing: 2, fontWeight: 900, margin: "10px 0 6px" }}>🧠 RUN COACH EVIDENCE</div>
+          <div style={{ fontSize: 10, color: "#5CE6FF", letterSpacing: 2, fontWeight: 900, margin: "10px 0 6px" }}>🧠 OTHER LOCAL SIGNALS · EXPLORATORY</div>
+          <p style={{ color: "#C9D2DF", fontSize: 10, lineHeight: 1.45 }}>These can suggest a direction. The primary lesson above requires comparable saved runs and shows missing evidence before treating a pattern as repeatable.</p>
           <div style={{ fontSize: 11, color: "#FFB3B3", lineHeight: 1.45, marginBottom: 4 }}>
             <span style={{ color: "#FF6B6B", fontWeight: 700 }}>Killed by:</span> {runCoach.killedBy}
           </div>

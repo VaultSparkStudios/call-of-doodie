@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { SETTINGS_DEFAULTS, saveSettings, loadPresets, savePresets } from "../settings.js";
 import { soundUIClose } from "../audio/soundFacade.js";
 import { isPlaytestMode, setPlaytestPulseEnabled } from "../utils/playtestFlightRecorder.js";
+import DialogShell from "./DialogShell.jsx";
 
 const TABS = ["Quick", "Advanced"];
 
@@ -189,25 +190,22 @@ export default function SettingsPanel({ settings, onSave, onClose }) {
   const focusStyle = { outline: "2px solid var(--cod-orange)", outlineOffset: 2, boxShadow: "0 0 10px rgba(255,107,53,0.35)" };
 
   return (
-    <div
-      onClick={e => { if (e.target === e.currentTarget) apply(); }}
-      style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 120, display: "flex", alignItems: "flex-start", justifyContent: "center", padding: "max(12px, env(safe-area-inset-top)) 12px max(18px, env(safe-area-inset-bottom))", overflowY: "auto", WebkitOverflowScrolling: "touch", backdropFilter: "blur(4px)" }}
-    >
-      <div style={{ maxWidth: 480, width: "100%", background: "rgba(12,12,18,0.98)", border: "1px solid rgba(255,107,53,0.35)", borderRadius: 12, color: "#fff", display: "flex", flexDirection: "column", maxHeight: "none", overflow: "visible", margin: "auto 0" }}>
+    <DialogShell title="Settings" onClose={apply} onBackdrop={apply} zIndex={120}>
+      <div style={{ maxWidth: 480, width: "100%", background: "var(--cod-panel-strong)", border: "1px solid var(--cod-line-warm)", borderRadius: 12, color: "var(--cod-ink)", display: "flex", flexDirection: "column", maxHeight: "none", overflow: "visible", margin: "auto 0" }}>
 
         {/* Header */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 16px 10px", borderBottom: "1px solid rgba(255,107,53,0.2)", flexShrink: 0 }}>
           <h3 style={{ color: "var(--cod-orange)", margin: 0, fontSize: 16, letterSpacing: 2, fontFamily: "'Courier New',monospace" }}>⚙ SETTINGS</h3>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <span style={{ fontSize: 9, color: "#555", letterSpacing: 1 }}>🎮 LB/RB = tabs · D-pad navigates</span>
-            <button onClick={apply} style={{ ...base, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.14)", color: "#AAA", fontSize: 15, width: 34, height: 34, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</button>
+            <span className="cod-dialog-gamepad-hint" style={{ fontSize: 10, color: "var(--cod-muted)", letterSpacing: 0.5 }}>🎮 LB/RB = tabs · D-pad navigates</span>
+            <button onClick={apply} aria-label="Apply and close settings" style={{ ...base, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.14)", color: "var(--cod-ink)", fontSize: 15, width: 44, height: 44, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</button>
           </div>
         </div>
 
         {/* Tabs */}
-        <div style={{ display: "flex", gap: 4, padding: "10px 16px 0", flexShrink: 0 }}>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 4, padding: "10px 16px 0", flexShrink: 0 }}>
           {TABS.map(t => (
-            <button key={t} onClick={() => setTab(t)} style={{ ...base, fontSize: 11, padding: "7px 14px", background: tab === t ? "rgba(255,107,53,0.18)" : "rgba(255,255,255,0.04)", border: tab === t ? "1px solid rgba(255,107,53,0.5)" : "1px solid rgba(255,255,255,0.1)", color: tab === t ? "#FF6B35" : "#777" }}>
+            <button key={t} onClick={() => setTab(t)} style={{ ...base, fontSize: 11, padding: "7px 14px", background: tab === t ? "rgba(255,107,53,0.18)" : "rgba(255,255,255,0.04)", border: tab === t ? "1px solid rgba(255,107,53,0.5)" : "1px solid rgba(255,255,255,0.1)", color: tab === t ? "#FF6B35" : "#C5C5C5" }}>
               {t}
             </button>
           ))}
@@ -323,7 +321,7 @@ export default function SettingsPanel({ settings, onSave, onClose }) {
 
         {/* Footer — Apply (gamepad-focusable) + Reset */}
         <div style={{ borderTop: "1px solid rgba(255,107,53,0.2)", padding: "10px 16px", flexShrink: 0 }}>
-          <div style={{ display: "flex", gap: 6 }}>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
             <button
               onClick={apply}
               style={{
@@ -350,6 +348,6 @@ export default function SettingsPanel({ settings, onSave, onClose }) {
           <div style={{ fontSize: 10, color: "#aaa", textAlign: "center", marginTop: 6 }}>Settings apply from the next game started · current run unaffected</div>
         </div>
       </div>
-    </div>
+    </DialogShell>
   );
 }

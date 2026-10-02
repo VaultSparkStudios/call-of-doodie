@@ -51,6 +51,28 @@ describe("TutorialOverlay observed action flow", () => {
     expect(container.textContent).toBe("");
     expect(localStorage.getItem(TUTORIAL_KEY)).toBe("1");
   });
+
+  it("keeps the five combat-training prompts tied to observed actions", () => {
+    const evidence = {};
+    const steps = [
+      { action: { move: true }, next: "Fire and defeat one enemy" },
+      { action: { shoot: true, kill: true }, next: "Dash" },
+      { action: { dash: true }, next: "Throw a grenade" },
+      { action: { grenade: true }, next: "Choose an upgrade" },
+    ];
+    render(evidence);
+    expect(container.textContent).toContain("Move");
+    for (const { action, next } of steps) {
+      Object.assign(evidence, action);
+      render(evidence);
+      act(() => vi.advanceTimersByTime(600));
+      expect(container.textContent).toContain(next);
+    }
+    evidence.perk = true;
+    render(evidence);
+    act(() => vi.advanceTimersByTime(700));
+    expect(container.textContent).toBe("");
+  });
 });
 
 

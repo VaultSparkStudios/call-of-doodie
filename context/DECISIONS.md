@@ -1539,3 +1539,7 @@ Full Operation sequences are assisted functional evidence, not human balance pro
 ### S177 derived snapshot refresh
 
 The canonical genome writer still keys by date plus session and appended a second S177 row during this closeout. Reconciled only the current generated S177 snapshot into its existing session slot; prior historical rows are unchanged. The six historical defects remain visible to the genome ledger gate. IGNIS uses the installed CLI with this repository as its explicit target, because the touched-repository wrapper is scoped to the control plane.
+
+## 2026-10-02 — S181 full-site audit release boundary
+
+Decision: consolidate duplicated play/profile/Board content and keep public copy tied to shipped capabilities. Field Lab's Living Plumbing, Complaint Cascade and Forked Fate are disclosed local, unranked prototypes; do not wire them into competitive runs or claim learning/balance outcomes before formative playtests. The feedback surface reads only a 90-day aggregate RPC; raw report comments remain private and client consent controls sync. The game Supabase project lacked the repository's older studio event table, so apply that additive prerequisite before the aggregate function to the explicit game ref, never the gateway's default studio ref. A current development-dependency advisory justified the trust-reviewed patch to brace-expansion 5.0.12. Engineering staging/push/deploy authority remains distinct from SPARKED or launch-announcement approval.

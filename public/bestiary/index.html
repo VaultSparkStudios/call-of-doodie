@@ -10,7 +10,8 @@
   <link rel="stylesheet" href="../tokens.css">
   <link rel="stylesheet" href="../doc.css">
   <script src="../theme.js" defer></script>
-  <title>Every problem has a silhouette. | Call of Doodie</title>
+  <script src="../field-guide.js" defer></script>
+  <title>Know your enemies. | Call of Doodie</title>
 </head>
 <body class="fx-vignette">
   <div class="shell">
@@ -24,19 +25,170 @@
     </nav></header>
     <main>
       <p class="eyebrow">Bestiary</p>
-      <h1>Every problem has a silhouette.</h1>
-      <p class="lede">The live roster contains 22 threats. Art cohorts describe atlas delivery; the boss rotation below comes from gameplay rules.</p>
-      
-    <figure class="roster-art card">
-      <img src="../visual-assets/enemy-atlas-core-v3.webp" alt="Core enemy roster atlas">
-      <img src="../visual-assets/enemy-atlas-specialists.webp" alt="Specialist enemy roster atlas">
-      <img src="../visual-assets/enemy-atlas-bosses.webp" alt="Signature encounter roster atlas">
-      <figcaption>Production character art shown at high resolution; in-game silhouettes are optimized for combat scale. Gameplay classifications come from the live contract below.</figcaption>
-    </figure>
-      <div class="card-grid"><section class="card"><h2>Core threat atlas</h2><p>Mall Cop · Karen · Florida Man · HOA President · IT Guy · Gym Bro · Influencer · Conspiracy Bro</p></section><section class="card"><h2>Specialist threat atlas</h2><p>Landlord · Crypto Bro · Shield Guy · YOLO Bomber · Sergeant Karen · Life Coach · Tech CEO · Splitter</p></section><section class="card"><h2>Signature encounter atlas</h2><p>Mega Karen · Juggernaut · Summoner · Doomscroller · The Algorithm · The Developer</p></section><section class="card"><h2>Boss rotation</h2><p>Mega Karen · Landlord · Splitter · Juggernaut · Summoner · The Algorithm</p></section></div>
-      <aside class="next-links card" aria-label="Explore more"><strong>Keep exploring</strong><a href="../modes/">Modes</a><a href="../arsenal/">Arsenal</a><a href="../accessibility/">Accessibility</a><a href="../support/">Support</a></aside>
+      <h1>Know your enemies.</h1>
+      <p class="lede">22 live threats. Read the signal, then choose the counter.</p>
+
+      <section class="field-guide" aria-label="Enemy field guide"><div class="field-guide__intro"><p class="eyebrow">Encounter intelligence · 22 live types</p><p>Base values are unmodified; waves and difficulty change the fight. Lane sketches show approach and projectile direction, not exact collision geometry.</p></div>
+    <label class="field-filter">Show threat role <select data-threat-filter><option value="all">All 22 threats</option><option value="boss">Boss</option><option value="ranged">Ranged</option><option value="rusher">Rusher</option><option value="heavy">Heavy</option><option value="pursuer">Pursuer</option></select></label>
+    <p class="field-filter__count" data-threat-count aria-live="polite">Showing all 22 threats.</p>
+    <div class="field-card-grid"><article class="field-card threat-card" id="enemy-0" data-threat-role="pursuer" aria-labelledby="enemy-title-0">
+    <div class="field-sprite" role="img" aria-label="Mall Cop illustration"><span class="field-sprite__clip"><img src="../visual-assets/enemy-atlas-core-v3.webp" alt="" width="1024" height="512" loading="eager" decoding="async" style="width:872px;height:436px;left:-0px;top:-0px"></span></div>
+    <div class="field-card__body"><div class="field-card__meta"><span>THREAT 01</span><span>Pursuer</span></div>
+    <h2 id="enemy-title-0">Mall Cop</h2>
+    <div class="threat-signal" data-role="pursuer" aria-hidden="true"><span class="threat-signal__enemy">👮</span><span class="threat-signal__lane">→ → →</span><span class="threat-signal__player">◆</span></div>
+    <dl class="field-card__facts"><div><dt>Base health</dt><dd>30</dd></div><div><dt>Base speed</dt><dd>1.2</dd></div><div><dt>Attack</dt><dd>Contact</dd></div></dl>
+    <div class="field-card__read"><p><strong>Watch for</strong>Closing distance</p><p><strong>Answer</strong>Keep moving and clear a route before the group surrounds you.</p></div>
+    </div></article><article class="field-card threat-card" id="enemy-1" data-threat-role="ranged" aria-labelledby="enemy-title-1">
+    <div class="field-sprite" role="img" aria-label="Karen illustration"><span class="field-sprite__clip"><img src="../visual-assets/enemy-atlas-core-v3.webp" alt="" width="1024" height="512" loading="eager" decoding="async" style="width:872px;height:436px;left:-218px;top:-0px"></span></div>
+    <div class="field-card__body"><div class="field-card__meta"><span>THREAT 02</span><span>Ranged</span></div>
+    <h2 id="enemy-title-1">Karen</h2>
+    <div class="threat-signal" data-role="ranged" aria-hidden="true"><span class="threat-signal__enemy">💇‍♀️</span><span class="threat-signal__lane">· · · ▶</span><span class="threat-signal__player">◆</span></div>
+    <dl class="field-card__facts"><div><dt>Base health</dt><dd>50</dd></div><div><dt>Base speed</dt><dd>0.8</dd></div><div><dt>Attack</dt><dd>Projectile</dd></div></dl>
+    <div class="field-card__read"><p><strong>Watch for</strong>Incoming projectile lane</p><p><strong>Answer</strong>Strafe across the lane and approach from an angle.</p></div>
+    </div></article><article class="field-card threat-card" id="enemy-2" data-threat-role="rusher" aria-labelledby="enemy-title-2">
+    <div class="field-sprite" role="img" aria-label="Florida Man illustration"><span class="field-sprite__clip"><img src="../visual-assets/enemy-atlas-core-v3.webp" alt="" width="1024" height="512" loading="lazy" decoding="async" style="width:872px;height:436px;left:-436px;top:-0px"></span></div>
+    <div class="field-card__body"><div class="field-card__meta"><span>THREAT 03</span><span>Rusher</span></div>
+    <h2 id="enemy-title-2">Florida Man</h2>
+    <div class="threat-signal" data-role="rusher" aria-hidden="true"><span class="threat-signal__enemy">🐊</span><span class="threat-signal__lane">→ → →</span><span class="threat-signal__player">◆</span></div>
+    <dl class="field-card__facts"><div><dt>Base health</dt><dd>80</dd></div><div><dt>Base speed</dt><dd>2</dd></div><div><dt>Attack</dt><dd>Contact</dd></div></dl>
+    <div class="field-card__read"><p><strong>Watch for</strong>Fast closing distance</p><p><strong>Answer</strong>Create space early and save a dash for the final approach.</p></div>
+    </div></article><article class="field-card threat-card" id="enemy-3" data-threat-role="ranged" aria-labelledby="enemy-title-3">
+    <div class="field-sprite" role="img" aria-label="HOA President illustration"><span class="field-sprite__clip"><img src="../visual-assets/enemy-atlas-core-v3.webp" alt="" width="1024" height="512" loading="lazy" decoding="async" style="width:872px;height:436px;left:-654px;top:-0px"></span></div>
+    <div class="field-card__body"><div class="field-card__meta"><span>THREAT 04</span><span>Ranged</span></div>
+    <h2 id="enemy-title-3">HOA President</h2>
+    <div class="threat-signal" data-role="ranged" aria-hidden="true"><span class="threat-signal__enemy">📋</span><span class="threat-signal__lane">· · · ▶</span><span class="threat-signal__player">◆</span></div>
+    <dl class="field-card__facts"><div><dt>Base health</dt><dd>120</dd></div><div><dt>Base speed</dt><dd>0.5</dd></div><div><dt>Attack</dt><dd>Projectile</dd></div></dl>
+    <div class="field-card__read"><p><strong>Watch for</strong>Incoming projectile lane</p><p><strong>Answer</strong>Strafe across the lane and approach from an angle.</p></div>
+    </div></article><article class="field-card threat-card" id="enemy-4" data-threat-role="boss" aria-labelledby="enemy-title-4">
+    <div class="field-sprite" role="img" aria-label="Mega Karen illustration"><span class="field-sprite__clip"><img src="../visual-assets/enemy-atlas-bosses.webp" alt="" width="768" height="512" loading="lazy" decoding="async" style="width:654px;height:436px;left:-0px;top:-0px"></span></div>
+    <div class="field-card__body"><div class="field-card__meta"><span>THREAT 05</span><span>Boss</span></div>
+    <h2 id="enemy-title-4">Mega Karen</h2>
+    <div class="threat-signal" data-role="boss" aria-hidden="true"><span class="threat-signal__enemy">👹</span><span class="threat-signal__lane">· · · ▶</span><span class="threat-signal__player">◆</span></div>
+    <dl class="field-card__facts"><div><dt>Base health</dt><dd>400</dd></div><div><dt>Base speed</dt><dd>0.4</dd></div><div><dt>Attack</dt><dd>Projectile</dd></div></dl>
+    <div class="field-card__read"><p><strong>Watch for</strong>Boss arena cue</p><p><strong>Answer</strong>Read the boss pattern, keep an escape lane, then commit damage.</p></div>
+    </div></article><article class="field-card threat-card" id="enemy-5" data-threat-role="pursuer" aria-labelledby="enemy-title-5">
+    <div class="field-sprite" role="img" aria-label="IT Guy illustration"><span class="field-sprite__clip"><img src="../visual-assets/enemy-atlas-core-v3.webp" alt="" width="1024" height="512" loading="lazy" decoding="async" style="width:872px;height:436px;left:-0px;top:-218px"></span></div>
+    <div class="field-card__body"><div class="field-card__meta"><span>THREAT 06</span><span>Pursuer</span></div>
+    <h2 id="enemy-title-5">IT Guy</h2>
+    <div class="threat-signal" data-role="pursuer" aria-hidden="true"><span class="threat-signal__enemy">💻</span><span class="threat-signal__lane">→ → →</span><span class="threat-signal__player">◆</span></div>
+    <dl class="field-card__facts"><div><dt>Base health</dt><dd>60</dd></div><div><dt>Base speed</dt><dd>1.5</dd></div><div><dt>Attack</dt><dd>Contact</dd></div></dl>
+    <div class="field-card__read"><p><strong>Watch for</strong>Closing distance</p><p><strong>Answer</strong>Keep moving and clear a route before the group surrounds you.</p></div>
+    </div></article><article class="field-card threat-card" id="enemy-6" data-threat-role="heavy" aria-labelledby="enemy-title-6">
+    <div class="field-sprite" role="img" aria-label="Gym Bro illustration"><span class="field-sprite__clip"><img src="../visual-assets/enemy-atlas-core-v3.webp" alt="" width="1024" height="512" loading="lazy" decoding="async" style="width:872px;height:436px;left:-218px;top:-218px"></span></div>
+    <div class="field-card__body"><div class="field-card__meta"><span>THREAT 07</span><span>Heavy</span></div>
+    <h2 id="enemy-title-6">Gym Bro</h2>
+    <div class="threat-signal" data-role="heavy" aria-hidden="true"><span class="threat-signal__enemy">💪</span><span class="threat-signal__lane">→ → →</span><span class="threat-signal__player">◆</span></div>
+    <dl class="field-card__facts"><div><dt>Base health</dt><dd>100</dd></div><div><dt>Base speed</dt><dd>1.8</dd></div><div><dt>Attack</dt><dd>Contact</dd></div></dl>
+    <div class="field-card__read"><p><strong>Watch for</strong>High-health advance</p><p><strong>Answer</strong>Kite around open space instead of standing still to trade.</p></div>
+    </div></article><article class="field-card threat-card" id="enemy-7" data-threat-role="rusher" aria-labelledby="enemy-title-7">
+    <div class="field-sprite" role="img" aria-label="Influencer illustration"><span class="field-sprite__clip"><img src="../visual-assets/enemy-atlas-core-v3.webp" alt="" width="1024" height="512" loading="lazy" decoding="async" style="width:872px;height:436px;left:-436px;top:-218px"></span></div>
+    <div class="field-card__body"><div class="field-card__meta"><span>THREAT 08</span><span>Rusher</span></div>
+    <h2 id="enemy-title-7">Influencer</h2>
+    <div class="threat-signal" data-role="rusher" aria-hidden="true"><span class="threat-signal__enemy">🤳</span><span class="threat-signal__lane">→ → →</span><span class="threat-signal__player">◆</span></div>
+    <dl class="field-card__facts"><div><dt>Base health</dt><dd>40</dd></div><div><dt>Base speed</dt><dd>2.2</dd></div><div><dt>Attack</dt><dd>Contact</dd></div></dl>
+    <div class="field-card__read"><p><strong>Watch for</strong>Fast closing distance</p><p><strong>Answer</strong>Create space early and save a dash for the final approach.</p></div>
+    </div></article><article class="field-card threat-card" id="enemy-8" data-threat-role="ranged" aria-labelledby="enemy-title-8">
+    <div class="field-sprite" role="img" aria-label="Conspiracy Bro illustration"><span class="field-sprite__clip"><img src="../visual-assets/enemy-atlas-core-v3.webp" alt="" width="1024" height="512" loading="lazy" decoding="async" style="width:872px;height:436px;left:-654px;top:-218px"></span></div>
+    <div class="field-card__body"><div class="field-card__meta"><span>THREAT 09</span><span>Ranged</span></div>
+    <h2 id="enemy-title-8">Conspiracy Bro</h2>
+    <div class="threat-signal" data-role="ranged" aria-hidden="true"><span class="threat-signal__enemy">🛸</span><span class="threat-signal__lane">· · · ▶</span><span class="threat-signal__player">◆</span></div>
+    <dl class="field-card__facts"><div><dt>Base health</dt><dd>90</dd></div><div><dt>Base speed</dt><dd>1.6</dd></div><div><dt>Attack</dt><dd>Projectile</dd></div></dl>
+    <div class="field-card__read"><p><strong>Watch for</strong>Incoming projectile lane</p><p><strong>Answer</strong>Strafe across the lane and approach from an angle.</p></div>
+    </div></article><article class="field-card threat-card" id="enemy-9" data-threat-role="boss" aria-labelledby="enemy-title-9">
+    <div class="field-sprite" role="img" aria-label="Landlord illustration"><span class="field-sprite__clip"><img src="../visual-assets/enemy-atlas-specialists.webp" alt="" width="1024" height="512" loading="lazy" decoding="async" style="width:872px;height:436px;left:-0px;top:-0px"></span></div>
+    <div class="field-card__body"><div class="field-card__meta"><span>THREAT 10</span><span>Boss</span></div>
+    <h2 id="enemy-title-9">Landlord</h2>
+    <div class="threat-signal" data-role="boss" aria-hidden="true"><span class="threat-signal__enemy">🏠</span><span class="threat-signal__lane">· · · ▶</span><span class="threat-signal__player">◆</span></div>
+    <dl class="field-card__facts"><div><dt>Base health</dt><dd>250</dd></div><div><dt>Base speed</dt><dd>0.5</dd></div><div><dt>Attack</dt><dd>Projectile</dd></div></dl>
+    <div class="field-card__read"><p><strong>Watch for</strong>Calls in tenants</p><p><strong>Answer</strong>Keep moving while you thin the extra enemies, then return fire.</p></div>
+    </div></article><article class="field-card threat-card" id="enemy-10" data-threat-role="rusher" aria-labelledby="enemy-title-10">
+    <div class="field-sprite" role="img" aria-label="Crypto Bro illustration"><span class="field-sprite__clip"><img src="../visual-assets/enemy-atlas-specialists.webp" alt="" width="1024" height="512" loading="lazy" decoding="async" style="width:872px;height:436px;left:-218px;top:-0px"></span></div>
+    <div class="field-card__body"><div class="field-card__meta"><span>THREAT 11</span><span>Rusher</span></div>
+    <h2 id="enemy-title-10">Crypto Bro</h2>
+    <div class="threat-signal" data-role="rusher" aria-hidden="true"><span class="threat-signal__enemy">📈</span><span class="threat-signal__lane">→ → →</span><span class="threat-signal__player">◆</span></div>
+    <dl class="field-card__facts"><div><dt>Base health</dt><dd>30</dd></div><div><dt>Base speed</dt><dd>3</dd></div><div><dt>Attack</dt><dd>Contact</dd></div></dl>
+    <div class="field-card__read"><p><strong>Watch for</strong>Fast closing distance</p><p><strong>Answer</strong>Create space early and save a dash for the final approach.</p></div>
+    </div></article><article class="field-card threat-card" id="enemy-11" data-threat-role="pursuer" aria-labelledby="enemy-title-11">
+    <div class="field-sprite" role="img" aria-label="Shield Guy illustration"><span class="field-sprite__clip"><img src="../visual-assets/enemy-atlas-specialists.webp" alt="" width="1024" height="512" loading="lazy" decoding="async" style="width:872px;height:436px;left:-436px;top:-0px"></span></div>
+    <div class="field-card__body"><div class="field-card__meta"><span>THREAT 12</span><span>Pursuer</span></div>
+    <h2 id="enemy-title-11">Shield Guy</h2>
+    <div class="threat-signal" data-role="pursuer" aria-hidden="true"><span class="threat-signal__enemy">🛡️</span><span class="threat-signal__lane">→ → →</span><span class="threat-signal__player">◆</span></div>
+    <dl class="field-card__facts"><div><dt>Base health</dt><dd>90</dd></div><div><dt>Base speed</dt><dd>1</dd></div><div><dt>Attack</dt><dd>Contact</dd></div></dl>
+    <div class="field-card__read"><p><strong>Watch for</strong>Shielded side</p><p><strong>Answer</strong>Rotate around the shield and fire at the exposed side.</p></div>
+    </div></article><article class="field-card threat-card" id="enemy-12" data-threat-role="rusher" aria-labelledby="enemy-title-12">
+    <div class="field-sprite" role="img" aria-label="YOLO Bomber illustration"><span class="field-sprite__clip"><img src="../visual-assets/enemy-atlas-specialists.webp" alt="" width="1024" height="512" loading="lazy" decoding="async" style="width:872px;height:436px;left:-654px;top:-0px"></span></div>
+    <div class="field-card__body"><div class="field-card__meta"><span>THREAT 13</span><span>Rusher</span></div>
+    <h2 id="enemy-title-12">YOLO Bomber</h2>
+    <div class="threat-signal" data-role="rusher" aria-hidden="true"><span class="threat-signal__enemy">💥</span><span class="threat-signal__lane">→ → →</span><span class="threat-signal__player">◆</span></div>
+    <dl class="field-card__facts"><div><dt>Base health</dt><dd>20</dd></div><div><dt>Base speed</dt><dd>3.8</dd></div><div><dt>Attack</dt><dd>Contact</dd></div></dl>
+    <div class="field-card__read"><p><strong>Watch for</strong>Explosive close approach</p><p><strong>Answer</strong>Dash clear before the bomber reaches contact range.</p></div>
+    </div></article><article class="field-card threat-card" id="enemy-13" data-threat-role="pursuer" aria-labelledby="enemy-title-13">
+    <div class="field-sprite" role="img" aria-label="Sergeant Karen illustration"><span class="field-sprite__clip"><img src="../visual-assets/enemy-atlas-specialists.webp" alt="" width="1024" height="512" loading="lazy" decoding="async" style="width:872px;height:436px;left:-0px;top:-218px"></span></div>
+    <div class="field-card__body"><div class="field-card__meta"><span>THREAT 14</span><span>Pursuer</span></div>
+    <h2 id="enemy-title-13">Sergeant Karen</h2>
+    <div class="threat-signal" data-role="pursuer" aria-hidden="true"><span class="threat-signal__enemy">📣</span><span class="threat-signal__lane">→ → →</span><span class="threat-signal__player">◆</span></div>
+    <dl class="field-card__facts"><div><dt>Base health</dt><dd>55</dd></div><div><dt>Base speed</dt><dd>0.8</dd></div><div><dt>Attack</dt><dd>Contact</dd></div></dl>
+    <div class="field-card__read"><p><strong>Watch for</strong>Closing distance</p><p><strong>Answer</strong>Keep moving and clear a route before the group surrounds you.</p></div>
+    </div></article><article class="field-card threat-card" id="enemy-14" data-threat-role="rusher" aria-labelledby="enemy-title-14">
+    <div class="field-sprite" role="img" aria-label="Life Coach illustration"><span class="field-sprite__clip"><img src="../visual-assets/enemy-atlas-specialists.webp" alt="" width="1024" height="512" loading="lazy" decoding="async" style="width:872px;height:436px;left:-218px;top:-218px"></span></div>
+    <div class="field-card__body"><div class="field-card__meta"><span>THREAT 15</span><span>Rusher</span></div>
+    <h2 id="enemy-title-14">Life Coach</h2>
+    <div class="threat-signal" data-role="rusher" aria-hidden="true"><span class="threat-signal__enemy">📚</span><span class="threat-signal__lane">→ → →</span><span class="threat-signal__player">◆</span></div>
+    <dl class="field-card__facts"><div><dt>Base health</dt><dd>70</dd></div><div><dt>Base speed</dt><dd>2.4</dd></div><div><dt>Attack</dt><dd>Contact</dd></div></dl>
+    <div class="field-card__read"><p><strong>Watch for</strong>Fast closing distance</p><p><strong>Answer</strong>Create space early and save a dash for the final approach.</p></div>
+    </div></article><article class="field-card threat-card" id="enemy-15" data-threat-role="ranged" aria-labelledby="enemy-title-15">
+    <div class="field-sprite" role="img" aria-label="Tech CEO illustration"><span class="field-sprite__clip"><img src="../visual-assets/enemy-atlas-specialists.webp" alt="" width="1024" height="512" loading="lazy" decoding="async" style="width:872px;height:436px;left:-436px;top:-218px"></span></div>
+    <div class="field-card__body"><div class="field-card__meta"><span>THREAT 16</span><span>Ranged</span></div>
+    <h2 id="enemy-title-15">Tech CEO</h2>
+    <div class="threat-signal" data-role="ranged" aria-hidden="true"><span class="threat-signal__enemy">💼</span><span class="threat-signal__lane">· · · ▶</span><span class="threat-signal__player">◆</span></div>
+    <dl class="field-card__facts"><div><dt>Base health</dt><dd>320</dd></div><div><dt>Base speed</dt><dd>0.3</dd></div><div><dt>Attack</dt><dd>Projectile</dd></div></dl>
+    <div class="field-card__read"><p><strong>Watch for</strong>Incoming projectile lane</p><p><strong>Answer</strong>Strafe across the lane and approach from an angle.</p></div>
+    </div></article><article class="field-card threat-card" id="enemy-16" data-threat-role="boss" aria-labelledby="enemy-title-16">
+    <div class="field-sprite" role="img" aria-label="Splitter illustration"><span class="field-sprite__clip"><img src="../visual-assets/enemy-atlas-specialists.webp" alt="" width="1024" height="512" loading="lazy" decoding="async" style="width:872px;height:436px;left:-654px;top:-218px"></span></div>
+    <div class="field-card__body"><div class="field-card__meta"><span>THREAT 17</span><span>Boss</span></div>
+    <h2 id="enemy-title-16">Splitter</h2>
+    <div class="threat-signal" data-role="boss" aria-hidden="true"><span class="threat-signal__enemy">💔</span><span class="threat-signal__lane">· · · ▶</span><span class="threat-signal__player">◆</span></div>
+    <dl class="field-card__facts"><div><dt>Base health</dt><dd>450</dd></div><div><dt>Base speed</dt><dd>1</dd></div><div><dt>Attack</dt><dd>Projectile</dd></div></dl>
+    <div class="field-card__read"><p><strong>Watch for</strong>Splits on defeat</p><p><strong>Answer</strong>Leave room for the three shards created by the final hit.</p></div>
+    </div></article><article class="field-card threat-card" id="enemy-17" data-threat-role="boss" aria-labelledby="enemy-title-17">
+    <div class="field-sprite" role="img" aria-label="Juggernaut illustration"><span class="field-sprite__clip"><img src="../visual-assets/enemy-atlas-bosses.webp" alt="" width="768" height="512" loading="lazy" decoding="async" style="width:654px;height:436px;left:-218px;top:-0px"></span></div>
+    <div class="field-card__body"><div class="field-card__meta"><span>THREAT 18</span><span>Boss</span></div>
+    <h2 id="enemy-title-17">Juggernaut</h2>
+    <div class="threat-signal" data-role="boss" aria-hidden="true"><span class="threat-signal__enemy">🦏</span><span class="threat-signal__lane">→ → →</span><span class="threat-signal__player">◆</span></div>
+    <dl class="field-card__facts"><div><dt>Base health</dt><dd>900</dd></div><div><dt>Base speed</dt><dd>0.55</dd></div><div><dt>Attack</dt><dd>Contact</dd></div></dl>
+    <div class="field-card__read"><p><strong>Watch for</strong>Charge lane and shield</p><p><strong>Answer</strong>Sidestep the charge; use its recovery to deal damage.</p></div>
+    </div></article><article class="field-card threat-card" id="enemy-18" data-threat-role="boss" aria-labelledby="enemy-title-18">
+    <div class="field-sprite" role="img" aria-label="Summoner illustration"><span class="field-sprite__clip"><img src="../visual-assets/enemy-atlas-bosses.webp" alt="" width="768" height="512" loading="lazy" decoding="async" style="width:654px;height:436px;left:-436px;top:-0px"></span></div>
+    <div class="field-card__body"><div class="field-card__meta"><span>THREAT 19</span><span>Boss</span></div>
+    <h2 id="enemy-title-18">Summoner</h2>
+    <div class="threat-signal" data-role="boss" aria-hidden="true"><span class="threat-signal__enemy">🌀</span><span class="threat-signal__lane">· · · ▶</span><span class="threat-signal__player">◆</span></div>
+    <dl class="field-card__facts"><div><dt>Base health</dt><dd>320</dd></div><div><dt>Base speed</dt><dd>0.4</dd></div><div><dt>Attack</dt><dd>Projectile</dd></div></dl>
+    <div class="field-card__read"><p><strong>Watch for</strong>Summoned escorts</p><p><strong>Answer</strong>Clear the escorts to open a damage window on the boss.</p></div>
+    </div></article><article class="field-card threat-card" id="enemy-19" data-threat-role="pursuer" aria-labelledby="enemy-title-19">
+    <div class="field-sprite" role="img" aria-label="Doomscroller illustration"><span class="field-sprite__clip"><img src="../visual-assets/enemy-atlas-bosses.webp" alt="" width="768" height="512" loading="lazy" decoding="async" style="width:654px;height:436px;left:-0px;top:-218px"></span></div>
+    <div class="field-card__body"><div class="field-card__meta"><span>THREAT 20</span><span>Pursuer</span></div>
+    <h2 id="enemy-title-19">Doomscroller</h2>
+    <div class="threat-signal" data-role="pursuer" aria-hidden="true"><span class="threat-signal__enemy">📱</span><span class="threat-signal__lane">→ → →</span><span class="threat-signal__player">◆</span></div>
+    <dl class="field-card__facts"><div><dt>Base health</dt><dd>55</dd></div><div><dt>Base speed</dt><dd>1.5</dd></div><div><dt>Attack</dt><dd>Contact</dd></div></dl>
+    <div class="field-card__read"><p><strong>Watch for</strong>Closing distance</p><p><strong>Answer</strong>Keep moving and clear a route before the group surrounds you.</p></div>
+    </div></article><article class="field-card threat-card" id="enemy-20" data-threat-role="boss" aria-labelledby="enemy-title-20">
+    <div class="field-sprite" role="img" aria-label="The Algorithm illustration"><span class="field-sprite__clip"><img src="../visual-assets/enemy-atlas-bosses.webp" alt="" width="768" height="512" loading="lazy" decoding="async" style="width:654px;height:436px;left:-218px;top:-218px"></span></div>
+    <div class="field-card__body"><div class="field-card__meta"><span>THREAT 21</span><span>Boss</span></div>
+    <h2 id="enemy-title-20">The Algorithm</h2>
+    <div class="threat-signal" data-role="boss" aria-hidden="true"><span class="threat-signal__enemy">📊</span><span class="threat-signal__lane">· · · ▶</span><span class="threat-signal__player">◆</span></div>
+    <dl class="field-card__facts"><div><dt>Base health</dt><dd>700</dd></div><div><dt>Base speed</dt><dd>0.5</dd></div><div><dt>Attack</dt><dd>Projectile</dd></div></dl>
+    <div class="field-card__read"><p><strong>Watch for</strong>Spreading projectile pattern</p><p><strong>Answer</strong>Keep a side lane open instead of retreating in a straight line.</p></div>
+    </div></article><article class="field-card threat-card" id="enemy-21" data-threat-role="ranged" aria-labelledby="enemy-title-21">
+    <div class="field-sprite" role="img" aria-label="The Developer illustration"><span class="field-sprite__clip"><img src="../visual-assets/enemy-atlas-bosses.webp" alt="" width="768" height="512" loading="lazy" decoding="async" style="width:654px;height:436px;left:-436px;top:-218px"></span></div>
+    <div class="field-card__body"><div class="field-card__meta"><span>THREAT 22</span><span>Ranged</span></div>
+    <h2 id="enemy-title-21">The Developer</h2>
+    <div class="threat-signal" data-role="ranged" aria-hidden="true"><span class="threat-signal__enemy">💻</span><span class="threat-signal__lane">· · · ▶</span><span class="threat-signal__player">◆</span></div>
+    <dl class="field-card__facts"><div><dt>Base health</dt><dd>2000</dd></div><div><dt>Base speed</dt><dd>0.4</dd></div><div><dt>Attack</dt><dd>Projectile</dd></div></dl>
+    <div class="field-card__read"><p><strong>Watch for</strong>Incoming projectile lane</p><p><strong>Answer</strong>Strafe across the lane and approach from an angle.</p></div>
+    </div></article></div></section>
+      <aside class="next-links card" aria-label="Explore more"><strong>Keep exploring</strong><a href="../modes/">Modes</a><a href="../operations/">Operations</a><a href="../field-lab/">Field Lab</a><a href="../arsenal/">Arsenal</a></aside>
     </main>
-    <footer><div class="footer-links"><nav aria-label="Play links"><strong>PLAY</strong><a href="../modes/">Modes</a><a href="../board/">Board</a><a href="../stats/">Stats</a></nav><nav aria-label="Learn links"><strong>LEARN</strong><a href="../field-manual/">Field Manual</a><a href="../bestiary/">Bestiary</a><a href="../arsenal/">Arsenal</a><a href="../changelog/">Changelog</a><a href="../roadmap/">Roadmap</a><a href="../accessibility/">Accessibility</a></nav><nav aria-label="Studio links"><strong>STUDIO</strong><a href="../about/">About</a><a href="../press-kit/">Press Kit</a><a href="../support/">Support</a><a href="../contact/">Contact</a><a href="../status/">Status</a><a href="../privacy/">Privacy</a><a href="../terms/">Terms</a><a href="../ip/">Rights &amp; IP</a><a href="../">Home</a></nav></div><p class="parody-note">Call of Doodie is a parody game and is not affiliated with, endorsed by, or associated with Activision, the Call of Duty franchise, or any related entity.</p><div>© 2026 <a href="https://vaultsparkstudios.com/">VaultSpark Studios LLC</a>. All rights reserved.</div></footer>
+    <footer><div class="footer-links"><nav aria-label="Play links"><strong>PLAY</strong><a href="../modes/">Modes</a><a href="../operations/">Operations</a><a href="../field-lab/">Field Lab</a><a href="../challenge/">Challenges</a><a href="../board/">Board</a><a href="../stats/">Stats</a><a href="../feedback/">Player Feedback</a></nav><nav aria-label="Learn links"><strong>LEARN</strong><a href="../field-manual/">Field Manual</a><a href="../bestiary/">Bestiary</a><a href="../arsenal/">Arsenal</a><a href="../changelog/">Changelog</a><a href="../roadmap/">Roadmap</a><a href="../accessibility/">Accessibility</a></nav><nav aria-label="Studio links"><strong>STUDIO</strong><a href="../about/">About</a><a href="../press-kit/">Press Kit</a><a href="../support/">Support</a><a href="../contact/">Contact</a><a href="../status/">Status</a><a href="../privacy/">Privacy</a><a href="../terms/">Terms</a><a href="../ip/">Rights &amp; IP</a><a href="../">Home</a></nav></div><p class="parody-note">Call of Doodie is a parody game and is not affiliated with, endorsed by, or associated with Activision, the Call of Duty franchise, or any related entity.</p><div>© 2026 <a href="https://vaultsparkstudios.com/">VaultSpark Studios LLC</a>. All rights reserved.</div></footer>
   </div>
 </body>
 </html>

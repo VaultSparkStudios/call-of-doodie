@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { interpolateBossQuote, getBossTone } from './bossDialogue.js';
+import { interpolateBossQuote, getBossTone, chooseBossQuote } from './bossDialogue.js';
 
 describe('interpolateBossQuote', () => {
   it('interpolates all original tokens', () => {
@@ -77,5 +77,25 @@ describe('getBossTone', () => {
     expect(getBossTone('normal')).toBe('adequately');
     expect(getBossTone(undefined)).toBe('adequately');
     expect(getBossTone(null)).toBe('adequately');
+  });
+});
+
+describe('chooseBossQuote', () => {
+  it('is deterministic for a typed event signature', () => {
+    const pool = ['first', 'second', 'third'];
+    expect(chooseBossQuote(pool, 'boss|wave-5')).toEqual(chooseBossQuote(pool, 'boss|wave-5'));
+  });
+
+  it('avoids the two most recent variants when the pool allows it', () => {
+    const pool = ['first', 'second', 'third'];
+    const initial = chooseBossQuote(pool, 'boss|wave-5');
+    const next = chooseBossQuote(pool, 'boss|wave-5', [initial.index]);
+    const third = chooseBossQuote(pool, 'boss|wave-5', [initial.index, next.index]);
+    expect(new Set([initial.index, next.index, third.index]).size).toBe(3);
+  });
+
+  it('handles an empty or fully recent pool without inventing dialogue', () => {
+    expect(chooseBossQuote([], 'boss')).toEqual({ quote: null, index: -1 });
+    expect(chooseBossQuote(['only'], 'boss', [0])).toEqual({ quote: 'only', index: 0 });
   });
 });

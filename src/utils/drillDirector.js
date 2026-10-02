@@ -21,6 +21,11 @@ export function buildNextRunDrill({
   if (debrief?.objective) {
     return { ...base, id: debrief.nextRunContract.id, title: debrief.nextRunContract.focus, detail: debrief.nextRunContract.target, cta: debrief.replayLabel };
   }
+  if (runCoach?.lesson) {
+    const lesson = runCoach.lesson;
+    return { ...base, id: lesson.drill.id, title: lesson.status === "ready" ? "Test one local lesson" : "Gather one more comparable run",
+      detail: `${lesson.suggestion} ${lesson.drill.target}`, evidenceLevel: lesson.evidenceLevel, evidenceReason: lesson.reason };
+  }
   if (runCoach?.brain?.chokeWarning) {
     return {
       ...base,

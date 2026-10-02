@@ -4,14 +4,16 @@
 // matching panel on the arcade home without a router. `#deploy` stays a plain
 // scroll anchor. Static pages link `../#board` etc. so the SPA/static seam is
 // invisible to players and crawlers.
+import { PLAYER_LEGACY_HASHES } from "../config/playerNavigation.js";
 
-export const HASH_PANELS = Object.freeze(["profile", "board", "field-manual", "changelog", "modes", "achievements", "leaderboard"]);
+export const HASH_PANELS = Object.freeze(["profile", "build", "settings", "board", "field-manual", "changelog", "modes", "leaderboard", ...Object.keys(PLAYER_LEGACY_HASHES)]);
 
 export function parseHash(hash = "") {
   const raw = String(hash || "").replace(/^#/, "").trim();
   if (!raw) return null;
   const [id, ...rest] = raw.split("/");
   if (!HASH_PANELS.includes(id)) return null;
+  if (PLAYER_LEGACY_HASHES[id]) return PLAYER_LEGACY_HASHES[id];
   return { id, arg: rest.join("/") || null };
 }
 
@@ -31,7 +33,7 @@ export function clearHash(win = globalThis.window) {
 /** Subscribe to hash panels. Returns an unsubscribe function. Fires once for the current hash. */
 export function watchHash(onPanel, win = globalThis.window) {
   if (!win) return () => {};
-  const handler = () => { const route = parseHash(win.location.hash); if (route) onPanel(route); };
+  const handler = () => onPanel(parseHash(win.location.hash));
   win.addEventListener("hashchange", handler);
   handler();
   return () => win.removeEventListener("hashchange", handler);

@@ -21,9 +21,16 @@ import {
 } from "./lib/public-route-registry.mjs";
 import { copyrightYear } from "./lib/build-date.mjs";
 import { buildPublicGameplayContract } from "./lib/public-gameplay-contract.mjs";
-import { ENEMY_ATLAS_CONTRACT } from "../src/utils/enemyAtlasContract.js";
+import { renderVisualFieldGuide } from "./lib/field-guide-render.mjs";
+import { renderModeDiscovery, renderOperationDiscovery } from "./lib/play-discovery-render.mjs";
+import { renderSupportCenter } from "./lib/support-render.mjs";
+import { renderChallengePreview } from "./lib/challenge-render.mjs";
+import { renderFieldLab } from "./lib/field-lab-render.mjs";
+import { CAPABILITY_EVIDENCE, PUBLIC_CAPABILITIES, capability, publicCapabilityManifest } from "../src/content/capabilities.js";
+import { RUN_ANALYSIS_SCHEMA } from "../src/utils/agentRunPack.js";
 
 const root = path.resolve("public");
+const liveGameplay = buildPublicGameplayContract();
 const checkOnly = process.argv.includes("--check");
 if (process.argv.includes("--help")) {
   console.log("Usage: node scripts/generate-public-pages.mjs [--check]");
@@ -38,6 +45,8 @@ function queue(relativePath, content) {
 
 const EXPLORE_POOL = [
   ["modes", "Modes"],
+  ["operations", "Operations"],
+  ["field-lab", "Field Lab"],
   ["arsenal", "Arsenal"],
   ["accessibility", "Accessibility"],
   ["support", "Support"],
@@ -56,17 +65,39 @@ function card([title, body]) {
   return `<section class="card"><h2>${escapeHtml(title)}</h2><p>${escapeHtml(body)}</p></section>`;
 }
 
-function renderArt() {
-  // S155: atlas filenames come from the runtime contract (a version bump in
-  // enemyAtlasContract.js used to leave this page pointing at a dead file).
-  const atlasImg = (atlas, alt) => `<img src="../${atlas.runtimePath.replace(/^public\//, "")}" alt="${alt}">`;
-  return `
-    <figure class="roster-art card">
-      ${atlasImg(ENEMY_ATLAS_CONTRACT.core, "Core enemy roster atlas")}
-      ${atlasImg(ENEMY_ATLAS_CONTRACT.specialists, "Specialist enemy roster atlas")}
-      ${atlasImg(ENEMY_ATLAS_CONTRACT.bosses, "Signature encounter roster atlas")}
-      <figcaption>Production character art shown at high resolution; in-game silhouettes are optimized for combat scale. Gameplay classifications come from the live contract below.</figcaption>
-    </figure>`;
+function renderPressKit() {
+  const assets = [
+    ["Game mark", "../icon.svg", "SVG", "Call of Doodie illustrated icon"],
+    ["Original nemesis", "../visual-assets/cod-karen-nemesis-v2.png", "PNG", "Original Call of Doodie nemesis illustration"],
+    ["Actual play frame", "../visual-assets/play-console-gameplay.webp", "WebP", "Call of Doodie arena gameplay frame"],
+    ["Original operative", "../visual-assets/cod-doodie-operative-v3.png", "PNG", "Original Call of Doodie operative illustration"],
+  ];
+  return `<div class="press-kit" id="materials">
+    <section class="card press-facts" aria-labelledby="press-facts-heading"><p class="eyebrow">Current fact sheet</p><h2 id="press-facts-heading">The game in one breath</h2>
+      <p>A free, comedy-first browser arena roguelite by VaultSpark Studios LLC. Guests can start without an account; progress is stored in the browser and can be exported. A run combines movement, improvised weapons, escalating waves and authored challenges.</p>
+      <dl><div><dt>Play</dt><dd>Free browser game · desktop, touch and compatible gamepad</dd></div><div><dt>Content</dt><dd>${liveGameplay.operations.length} authored Operations · ${liveGameplay.enemies.length} live enemy types · ${liveGameplay.weapons.length} weapons</dd></div><div><dt>Competition</dt><dd>Separate verified score checks; replay receipts are advisory, not frame-perfect proof</dd></div><div><dt>Current limits</dt><dd>Cloud recovery and online duel results are not available on the last checked deployment</dd></div></dl>
+      <p class="press-facts__date">Product-service availability last checked ${escapeHtml(CAPABILITY_EVIDENCE.checkedAt.slice(0, 10))}; see <a href="../status/">dated status</a> and <a href="../capabilities.json">machine-readable capabilities</a>.</p>
+    </section>
+    <section class="press-assets" aria-labelledby="press-assets-heading"><div class="press-assets__head"><div><p class="eyebrow">First-party files</p><h2 id="press-assets-heading">Look at the world</h2></div><p>Download the source files for review. The game and its assets remain proprietary; this page does not grant a reuse license.</p></div>
+      <div class="press-assets__grid">${assets.map(([title, href, format, alt]) => `<figure class="press-asset"><div class="press-asset__image"><img src="${href}" alt="${escapeHtml(alt)}" loading="lazy"></div><figcaption><strong>${escapeHtml(title)}</strong><span>${format}</span><a href="${href}" download>Download file ↓</a></figcaption></figure>`).join("")}</div>
+    </section>
+    <section class="card press-permission"><h2>Attribution and permission</h2><p>Credit “Call of Doodie © VaultSpark Studios LLC” when discussing the game. Original art, code, characters, music and written material are proprietary and all rights are reserved. For publication, asset reuse or a different format, <a href="../contact/">request permission</a> and review the <a href="../ip/">Rights &amp; IP page</a>. This parody is not affiliated with Activision or the Call of Duty® franchise.</p></section>
+  </div>`;
+}
+
+function renderCapabilityRoadmap() {
+  const groups = [
+    ["shipped", "Playable now", "Choose a mode, make a save, or read the public board today."],
+    ["next", "In progress", "These online services and refinements are not being advertised as live."],
+    ["later", "On the horizon", "Ideas we want to earn through player evidence."],
+  ];
+  const labels = { live: "Observed online", local: "In your browser", unavailable: "Not available yet", planned: "Planned" };
+  return `<div class="capability-roadmap">${groups.map(([group, title, summary], index) => `
+    <section class="capability-group card" aria-labelledby="capability-${group}">
+      <div class="capability-group-head"><span class="capability-index">0${index + 1}</span><div><h2 id="capability-${group}">${title}</h2><p>${summary}</p></div></div>
+      <ul class="capability-list">${PUBLIC_CAPABILITIES.filter((entry) => entry.group === group).map((entry) => `
+        <li><div><strong>${escapeHtml(entry.label)}</strong><span class="capability-badge" data-availability="${entry.availability}">${labels[entry.availability]}</span></div><p>${escapeHtml(entry.benefit)}</p>${group === "shipped" ? `<a href="..${escapeHtml(entry.route)}">Explore <span aria-hidden="true">→</span></a>` : ""}</li>`).join("")}</ul>
+    </section>`).join("")}</div>`;
 }
 
 // S155: fallback numbers come from the committed snapshot
@@ -79,6 +110,14 @@ const fmtInt = (value) => Number(value || 0).toLocaleString("en-US");
 function renderLiveCommunityStats(page) {
   if (page.id !== "board" && page.id !== "stats") return "";
   const snap = statsSnapshot.stats;
+  if (page.id === "board") return `
+      <section class="live-stats board-stats-summary" aria-labelledby="board-stats-heading">
+        <div class="live-stats-head"><div><p class="eyebrow">From the same verified feed</p><h2 id="board-stats-heading">The room at a glance</h2></div><span class="status" data-community-status data-state="connecting" aria-live="polite">Connecting to live totals…</span></div>
+        <div class="live-stat-grid">${[["runs", "Runs", fmtInt(snap.runs)], ["runners", "Runners", fmtInt(snap.runners)], ["kills", "Enemies terminated", fmtInt(snap.kills)], ["score", "Total score", fmtInt(snap.score)]].map(([id, label, fallback]) => `<div class="live-stat"><span>${escapeHtml(label)}</span><strong data-community-stat="${id}">${escapeHtml(fallback)}</strong></div>`).join("")}</div>
+        <p class="live-coverage" data-community-coverage>Verified fallback snapshot from ${escapeHtml(statsSnapshot.snapshotDate)}; live totals replace it when connected.</p>
+        <p class="live-caveat">Recorded activity is not a retention or balance result. Historical coverage and definitions live with the full analysis.</p>
+        <a class="stats-detail-link" href="../stats/">Read the full stats and definitions →</a>
+      </section>`;
   const metrics = [
     ["runs", "Runs", fmtInt(snap.runs)],
     ["runners", "Runners", fmtInt(snap.runners)],
@@ -147,25 +186,37 @@ function renderLiveLeaderboard(page) {
   return `
       <section class="live-stats" aria-labelledby="live-board-heading">
         <div class="live-stats-head">
-          <div><p class="eyebrow">Verified global board</p><h2 id="live-board-heading">Top 10 right now</h2></div>
+          <div><p class="eyebrow">Verified global board</p><h2 id="live-board-heading">Latest verified top 10</h2></div>
           <span class="status" data-top-scores-status data-state="connecting" aria-live="polite">Connecting to the live board…</span>
         </div>
-        <div style="overflow-x:auto">
-          <table data-top-scores hidden style="width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums">
+        <div class="board-table-scroll" tabindex="0" aria-label="Latest verified scores; scroll horizontally to see every column">
+          <table class="board-table" data-top-scores hidden>
             <thead><tr style="text-align:left"><th>#</th><th>Callsign</th><th>Score</th><th>Wave</th><th>Kills</th><th>Mode</th></tr></thead>
             <tbody></tbody>
           </table>
         </div>
+        <p class="board-table-hint">Swipe or scroll the score table to see every column.</p>
         <p class="live-caveat">Scores carry trust checks; runs with modified gameplay settings are badged in game. Play as a guest and submit with any callsign.</p>
       </section>`;
 }
 
 function renderPage(page) {
-  const art = page.art ? renderArt() : "";
-  const liveStats = renderLiveCommunityStats(page) + renderLiveLeaderboard(page);
-  const liveStatsScript = page.id === "board"
+  const visualGuide = renderVisualFieldGuide(page.id, liveGameplay);
+  const discovery = page.id === "modes" ? renderModeDiscovery(liveGameplay) : page.id === "operations" ? renderOperationDiscovery(liveGameplay) : "";
+  const supportCenter = page.id === "support" ? renderSupportCenter(liveGameplay) : "";
+  const challengePreview = page.id === "challenge" ? renderChallengePreview() : "";
+  const fieldLab = page.id === "field-lab" ? renderFieldLab() : "";
+  const pressKit = page.id === "press-kit" ? renderPressKit() : "";
+  const feedbackPanel = page.id === "feedback" ? `<section class="card feedback-summary" aria-labelledby="feedback-summary-heading" data-feedback-summary>
+        <p class="eyebrow">Consented categories · live aggregate</p><h2 id="feedback-summary-heading">Field Report signal</h2>
+        <p data-feedback-status role="status">Checking the report aggregate. No result is assumed while it loads.</p>
+        <div class="feedback-summary-grid" data-feedback-results hidden></div>
+        <p class="live-caveat">Responses are reports, not unique people. Reporters are distinct consenting IDs; returning reporters sent two reports at least 24 hours apart. The runner sample counts separate completed server run facts, not everyone who opened the game. No response count proves retention or the effect of a change.</p>
+      </section>` : "";
+  const liveStats = renderLiveLeaderboard(page) + renderLiveCommunityStats(page) + feedbackPanel;
+  const liveStatsScript = page.id === "bestiary" || page.id === "field-manual" ? '<script src="../field-guide.js" defer></script>' : page.id === "board"
     ? '<script src="../leaderboard-live.js" defer></script>\n  <script src="../community-stats-live.js" defer></script>'
-    : page.id === "stats" ? '<script src="../community-stats-live.js" defer></script>' : "";
+    : page.id === "stats" ? '<script src="../community-stats-live.js" defer></script>' : page.id === "feedback" ? '<script src="../feedback-summary-live.js" defer></script>' : page.id === "support" ? '<script src="../support-diagnostics.js" defer></script>' : page.id === "challenge" ? '<script type="module" src="../challenge-preview.js"></script>' : page.id === "field-lab" ? '<script type="module" src="../field-lab.js"></script>' : "";
   const cta = page.cta
     ? `<a class="primary-cta" href="${escapeHtml(page.cta[1])}">${escapeHtml(page.cta[0])} <span aria-hidden="true">→</span></a>`
     : "";
@@ -192,19 +243,21 @@ ${renderHeaderNav("../")}
       <p class="eyebrow">${escapeHtml(page.eyebrow)}</p>
       <h1>${escapeHtml(page.title)}</h1>
       <p class="lede">${escapeHtml(page.lede)}</p>
-      ${cta}${liveStats}${renderStatsAnalysis(page)}${art}
-      <div class="card-grid${page.id === "stats" ? " stats-card-grid" : ""}">${page.sections.map(card).join("")}</div>
+      ${cta}${liveStats}${renderStatsAnalysis(page)}
+      ${visualGuide || discovery || supportCenter || fieldLab || pressKit || challengePreview + (page.id === "challenge" ? `<div class="card-grid">${page.sections.map(card).join("")}</div>` : "") || (page.id === "roadmap" ? renderCapabilityRoadmap() : `<div class="card-grid${page.id === "stats" ? " stats-card-grid" : ""}">${page.sections.map(card).join("")}</div>`)}
       <aside class="next-links card" aria-label="Explore more"><strong>Keep exploring</strong>${buildExploreLinks(page)}</aside>
     </main>
     <footer><div class="footer-links">${renderFooterLinks("../")}</div><p class="parody-note">${escapeHtml(PARODY_DISCLAIMER)}</p><div>© ${copyrightYear()} <a href="https://vaultsparkstudios.com/">VaultSpark Studios LLC</a>. All rights reserved.</div></footer>
   </div>
 </body>
-</html>`;
+</html>`.replace(/^[ \t]+$/gm, "");
 }
 
 for (const page of getGeneratedCompanionPages()) {
   queue(path.join(page.id, "index.html"), renderPage(page));
 }
+queue("challenge-payload.js", fs.readFileSync(path.resolve("src/utils/challengePayload.js"), "utf8"));
+queue("field-lab-models.js", fs.readFileSync(path.resolve("src/utils/fieldLabModels.js"), "utf8"));
 
 const sharedNav = `<nav aria-label="Primary navigation">\n${renderHeaderNav("../")}\n      </nav>`;
 const sharedFooter = `<div class="footer-links">${renderFooterLinks("../")}</div>`;
@@ -221,9 +274,10 @@ for (const route of getPublicRouteRegistry().filter((entry) => !entry.generated 
 queue("footer-manifest.json", JSON.stringify(buildFooterManifest(), null, 2));
 queue("sitemap.xml", buildSitemapXml());
 queue("agents.json", JSON.stringify(buildAgentsManifest(), null, 2));
+queue("run-analysis-schema.json", JSON.stringify(RUN_ANALYSIS_SCHEMA, null, 2));
 queue("route-contract.json", JSON.stringify(buildRouteContractProof(), null, 2));
+queue("capabilities.json", JSON.stringify(publicCapabilityManifest(), null, 2));
 queue(path.join(".well-known", "llms.txt"), buildLlmsText());
-const liveGameplay = buildPublicGameplayContract();
 queue("field-manual.json", JSON.stringify({
   schemaVersion: "field-manual-truth-v1",
   effectiveDate: PUBLIC_CONTENT_VERSION_DATE,
@@ -265,7 +319,7 @@ queue("field-manual.json", JSON.stringify({
     precomputed: true,
     source: statsSnapshot.source,
     scope: "All recoverable server history; automated health checks, practice, and quarantined rows excluded",
-    freshness: `Verified fallback snapshot from ${statsSnapshot.snapshotDate}; the live endpoint is checked every 15 seconds while visible, which does not imply a new completed run`,
+    freshness: `Verified fallback snapshot from ${statsSnapshot.snapshotDate}; the live endpoint is checked every 15 seconds while visible and healthy, with bounded retry delays after failures. A check does not imply a new completed run`,
     snapshotCheckedAt: statsSnapshot.checkedAt,
     lastCompletedAt: statsSnapshot.lastCompletedAt,
     recentWindow: { hours: 24, runs: snap.runs24h, kills: snap.kills24h },
@@ -294,12 +348,13 @@ queue("field-manual.json", JSON.stringify({
 
 queue("status.json", JSON.stringify({
   schemaVersion: "public-service-status-v1",
-  effectiveDate: PUBLIC_CONTENT_VERSION_DATE,
-  overall: "operational",
+  effectiveDate: CAPABILITY_EVIDENCE.checkedAt.slice(0, 10),
+  checkedAt: CAPABILITY_EVIDENCE.checkedAt,
+  overall: "last-observed-healthy",
   surfaces: {
-    browserGame: { status: "operational", fallback: "local-play" },
-    leaderboard: { status: "operational", controls: ["origin-allowlist", "bounded-request-quota", "replay-check", "reversible-anomaly-quarantine"] },
-    careerProgress: { status: "browser-local", crossDeviceSync: false },
+    browserGame: { status: "last-observed-healthy", fallback: "local-play" },
+    leaderboard: { status: "last-observed-healthy", controls: ["origin-allowlist", "bounded-request-quota", "replay-check", "reversible-anomaly-quarantine"] },
+    careerProgress: { status: capability("local-backup").availability, crossDeviceSync: capability("cloud-backup").availability === "live" },
     identity: { status: "guest-first", passport: "optional-local-receipt" },
   },
   source: "/status/",

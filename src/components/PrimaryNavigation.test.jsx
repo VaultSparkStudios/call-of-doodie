@@ -33,7 +33,7 @@ describe("PrimaryNavigation", () => {
     expect(document.activeElement).toBe(more);
   });
 
-  it("routes mobile Progress and Loadout actions without adding a page layer", async () => {
+  it("routes mobile Record and Build actions without adding a page layer", async () => {
     container = document.createElement("div");
     document.body.appendChild(container);
     const onOpenProgress = vi.fn();
@@ -44,8 +44,8 @@ describe("PrimaryNavigation", () => {
     });
     const mobile = container.querySelector('[aria-label="Game navigation"]');
     await act(async () => {
-      [...mobile.querySelectorAll("button")].find((button) => button.textContent.includes("Progress")).click();
-      [...mobile.querySelectorAll("button")].find((button) => button.textContent.includes("Loadout")).click();
+      [...mobile.querySelectorAll("button")].find((button) => button.textContent.includes("Record")).click();
+      [...mobile.querySelectorAll("button")].find((button) => button.textContent.includes("Build")).click();
     });
     expect(onOpenProgress).toHaveBeenCalledTimes(1);
     expect(onOpenLoadout).toHaveBeenCalledTimes(1);

@@ -1,5 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { clearPassport, exportPassport, importPassport, readPassport, savePassport } from "./utils/obeliskPassport.js";
+import { clearCloudSession } from "./utils/cloudSession.js";
+import { describeAccountState, revalidateAccountSession } from "./utils/accountSession.js";
+import { saveAuthReturn } from "./utils/authReturn.js";
 import { applyTheme, nextTheme, readTheme, THEMES } from "./utils/theme.js";
 
 const IDP = "https://obeliskgate.com";
@@ -8,10 +11,12 @@ export function ObeliskLogin({ project = "Call of Doodie", tier = "T4", returnUr
   const fileRef = useRef(null);
   const [passport, setPassport] = useState(() => readPassport());
   const [notice, setNotice] = useState("");
+  const [sessionStatus, setSessionStatus] = useState(passport ? "checking" : "guest");
   const [theme, setTheme] = useState(() => readTheme());
 
   useEffect(() => {
-    const ret = returnUrl || `${location.origin}/auth/callback`;
+    const target = saveAuthReturn(new URLSearchParams(location.search).get("next") || "/");
+    const ret = returnUrl || `${location.origin}/auth/callback?next=${encodeURIComponent(target)}`;
     const script = document.createElement("script");
     script.src = `${IDP}/auth-client.js`;
     script.dataset.obeliskIdp = IDP;
@@ -21,6 +26,19 @@ export function ObeliskLogin({ project = "Call of Doodie", tier = "T4", returnUr
     document.body.appendChild(script);
     return () => script.remove();
   }, [project, tier, returnUrl]);
+
+  useEffect(() => {
+    if (!passport) { setSessionStatus("guest"); return; }
+    let alive = true;
+    revalidateAccountSession(passport).then((result) => { if (alive) setSessionStatus(result.state); });
+    return () => { alive = false; };
+  }, [passport]);
+
+  const recheckSession = async () => {
+    setSessionStatus("checking");
+    const result = await revalidateAccountSession(passport);
+    setSessionStatus(result.state);
+  };
 
   const toggleTheme = () => {
     const next = nextTheme(theme);
@@ -44,15 +62,19 @@ export function ObeliskLogin({ project = "Call of Doodie", tier = "T4", returnUr
       const file = event.target.files?.[0];
       if (!file) return;
       const restored = importPassport(await file.text());
+      clearCloudSession();
       savePassport(restored);
       setPassport(restored);
-      setNotice("Local Passport restored on this device.");
+      setSessionStatus("receipt");
+      setNotice("Local receipt restored. Verify with Obelisk to start a session; the export checksum does not prove identity.");
     } catch (error) {
       setNotice(error instanceof Error ? error.message : "Passport restore failed.");
     } finally {
       event.target.value = "";
     }
   };
+
+  const account = describeAccountState(passport, sessionStatus, false);
 
   return (
     <main className="auth-shell">
@@ -67,23 +89,25 @@ export function ObeliskLogin({ project = "Call of Doodie", tier = "T4", returnUr
 
         {passport ? (
           <section className="passport-receipt" aria-label="Local Passport receipt">
-            <div><span>Identity</span><strong>Verified locally</strong></div>
+            <div><span>Identity</span><strong>{sessionStatus === "checking" ? "Checking active session…" : account.label}</strong></div>
             <div><span>Issuer</span><strong>{passport.issuer}</strong></div>
-            <div><span>Verified</span><strong>{new Date(passport.verifiedAt).toLocaleDateString()}</strong></div>
-            <p>This receipt identifies you to supported VaultSpark surfaces. It does not upload this game’s local progress.</p>
+            <div><span>Receipt saved</span><strong>{new Date(passport.verifiedAt).toLocaleDateString()}</strong></div>
+            <p>The receipt is a local copy, not an active sign-in. Its export checksum checks file integrity, not identity authenticity. Game progress stays separate.</p>
             <div className="auth-actions auth-actions--compact">
-              <button type="button" onClick={downloadPassport}>Download backup</button>
-              <button type="button" onClick={() => fileRef.current?.click()}>Restore backup</button>
-              <button type="button" className="auth-danger" onClick={() => { clearPassport(); setPassport(null); setNotice("Local Passport forgotten."); }}>Forget this device</button>
+              <button type="button" onClick={recheckSession}>Recheck session</button>
+              {sessionStatus === "verified" && <button type="button" onClick={() => { clearCloudSession(); setSessionStatus("receipt"); setNotice("Obelisk session ended on this tab. Your local game save remains."); }}>End session</button>}
+              <button type="button" onClick={downloadPassport}>Download local receipt</button>
+              <button type="button" onClick={() => fileRef.current?.click()}>Restore local receipt</button>
+              <button type="button" className="auth-danger" onClick={() => { clearCloudSession(); clearPassport(); setPassport(null); setSessionStatus("guest"); setNotice("Local Passport forgotten. Game progress remains on this device."); }}>Forget this device</button>
             </div>
           </section>
-        ) : (
-          <div className="auth-actions">
-            <button data-obelisk-signin type="button" className="auth-primary">Verify with Obelisk</button>
-            <button data-obelisk-signup type="button">Create a VaultSpark identity</button>
-            <button data-obelisk-recover type="button" className="auth-link">Recover Obelisk access</button>
-          </div>
-        )}
+        ) : null}
+
+        <div className="auth-actions">
+          <button data-obelisk-signin type="button" className="auth-primary">{passport ? "Verify again with Obelisk" : "Verify with Obelisk"}</button>
+          <button data-obelisk-signup type="button">Create a VaultSpark identity</button>
+          <button data-obelisk-recover type="button" className="auth-link">Recover Obelisk access</button>
+        </div>
 
         <input ref={fileRef} className="auth-file" type="file" accept="application/json" onChange={restorePassport} aria-label="Restore Porcelain Passport backup" />
         {notice ? <p className="auth-notice" role="status">{notice}</p> : null}

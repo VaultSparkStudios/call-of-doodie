@@ -4,6 +4,7 @@ import { isSupporter } from "./utils/supporter.js";
 import { WEAPON_EVOLVED_NAMES } from "./constants.js";
 import { removeLocalState, writeLocalState } from "./utils/storageHealth.js";
 import { normalizeCommunityStats } from "./utils/gameStats.js";
+import { cleanFieldReportComment, normalizeFieldReportReason } from "./utils/fieldReport.js";
 import { incrementHazardChronicle, normalizeHazardChronicle } from "./utils/hazardCaseFiles.js";
 import {
   buildCommunityStatsCacheRecord,
@@ -82,7 +83,7 @@ export async function claimCallsign(name) {
 }
 
 const LB_KEY = "cod-lb-v5"; // kept as localStorage fallback key
-const VALID_MODES = new Set(["score_attack", "daily_challenge", "boss_rush", "cursed", "speedrun", "gauntlet", "zombies", "normal"]);
+const VALID_MODES = new Set(["standard", "score_attack", "daily_challenge", "boss_rush", "cursed", "speedrun", "gauntlet", "zombies", "boss_gauntlet", "sewer_extraction", "bot_royale", "hold_the_throne", "operation", "normal"]);
 const VALID_DIFFICULTIES = new Set(["easy", "normal", "hard", "insane"]);
 const VALID_INPUT_DEVICES = new Set(["mouse", "mobile", "controller", "generic", "xbox", "ps"]);
 
@@ -1027,11 +1028,15 @@ export function saveRunToHistory(run) {
 }
 
 const FIELD_REPORTS_KEY = "cod-field-reports-v1";
+const FIELD_REPORT_RETENTION_MS = 90 * 24 * 60 * 60 * 1000;
 
 export function loadFieldReports(limit = 20) {
   try {
     const reports = JSON.parse(localStorage.getItem(FIELD_REPORTS_KEY) || "[]");
-    return Array.isArray(reports) ? reports.slice(0, Math.max(1, limit)) : [];
+    if (!Array.isArray(reports)) return [];
+    const retained = reports.filter((report) => Number.isFinite(Number(report.ts)) && Date.now() - Number(report.ts) < FIELD_REPORT_RETENTION_MS);
+    if (retained.length !== reports.length) persistProgression(FIELD_REPORTS_KEY, JSON.stringify(retained));
+    return retained.slice(0, Math.max(1, limit));
   } catch { return []; }
 }
 
@@ -1039,18 +1044,33 @@ export function saveFieldReport(report = {}) {
   const feedback = ["too_easy", "dialed_in", "brutal"].includes(report.feedback) ? report.feedback : null;
   if (!feedback) return loadFieldReports();
   const reports = loadFieldReports(50);
+  const reportId = /^[a-f0-9-]{36}$/i.test(String(report.reportId || "")) ? report.reportId : makeStudioEventId();
+  const previous = reports.find((entry) => entry.reportId === reportId);
   const next = [{
+    reportId,
     feedback,
     mode: VALID_MODES.has(report.mode) ? report.mode : "standard",
     difficulty: VALID_DIFFICULTIES.has(report.difficulty) ? report.difficulty : "normal",
+    reason: normalizeFieldReportReason(report.reason),
+    comment: cleanFieldReportComment(report.comment),
+    consent: report.consent === true,
+    inputDevice: VALID_INPUT_DEVICES.has(report.inputDevice) ? report.inputDevice : "generic",
+    durationBucket: ["under-2m", "2-5m", "5-15m", "15m-plus"].includes(report.durationBucket) ? report.durationBucket : "under-2m",
+    version: _cleanText(report.version, 24, "unknown"),
     score: _clampInt(report.score, 0, 10000000, 0),
     kills: _clampInt(report.kills, 0, 1000000, 0),
     wave: _clampInt(report.wave, 1, 10000, 1),
     runSeed: report.runSeed == null ? null : _clampInt(report.runSeed, 0, 999999999, 0),
-    ts: Date.now(),
-  }, ...reports].slice(0, 50);
+    ts: previous?.ts || Date.now(),
+  }, ...reports.filter((entry) => entry.reportId !== reportId)].slice(0, 50);
   persistProgression(FIELD_REPORTS_KEY, JSON.stringify(next));
   return next;
+}
+
+export function deleteLocalFieldReport(reportId) {
+  const reports = loadFieldReports(50);
+  const next = reports.filter((report) => report.reportId !== reportId);
+  return next.length < reports.length && persistProgression(FIELD_REPORTS_KEY, JSON.stringify(next));
 }
 
 export function loadRunHistory() {
@@ -1107,7 +1127,7 @@ function persistStudioGameEvents(events) {
 
 function getPendingStudioGameEvents(limit = 25) {
   return loadStudioGameEvents()
-    .filter((event) => event.syncStatus === "pending")
+    .filter((event) => event.syncStatus === "pending" || event.syncStatus === "failed")
     .slice()
     .reverse()
     .slice(0, limit);
@@ -1144,6 +1164,14 @@ export function loadStudioGameEvents() {
       .map((event) => normalizeStudioGameEvent(event));
   }
   catch { return []; }
+}
+
+export function removeLocalStudioGameEvent(clientEventId) {
+  const events = loadStudioGameEvents();
+  const target = events.find((event) => event.clientEventId === clientEventId);
+  if (!target) return false;
+  persistStudioGameEvents(events.filter((event) => event.clientEventId !== clientEventId));
+  return true;
 }
 
 export async function syncStudioGameEvents({ limit = 25 } = {}) {
@@ -1583,28 +1611,8 @@ export function saveStash(stash) {
   return stash;
 }
 
-// ── S163 progress backup (guest-safe export/import + cloud blob) ────────────
-const BACKUP_SCHEMA = "cod-progress-backup-v1";
-export function exportProgressBackup(storage = globalThis.localStorage) {
-  const entries = {};
-  try {
-    for (let i = 0; i < storage.length; i += 1) {
-      const key = storage.key(i);
-      if (key && key.startsWith("cod-")) entries[key] = storage.getItem(key);
-    }
-  } catch {}
-  return { schema: BACKUP_SCHEMA, exportedAt: new Date().toISOString(), keys: Object.keys(entries).length, entries };
-}
-export function importProgressBackup(backup, storage = globalThis.localStorage) {
-  const parsed = typeof backup === "string" ? JSON.parse(backup) : backup;
-  if (!parsed || parsed.schema !== BACKUP_SCHEMA || typeof parsed.entries !== "object") throw new Error("Not a Call of Doodie progress backup");
-  let restored = 0;
-  for (const [key, value] of Object.entries(parsed.entries)) {
-    if (!key.startsWith("cod-") || typeof value !== "string" || value.length > 2_000_000) continue;
-    try { storage.setItem(key, value); restored += 1; } catch {}
-  }
-  return { restored, exportedAt: parsed.exportedAt || null };
-}
+// ── Portable progress is explicitly separated from Passport credentials. ──
+export { exportProgressBackup, importProgressBackup, previewProgressBackup } from "./utils/progressBackup.js";
 
 // ── S163 live ghost race: the top scorer's downsampled path for a board ──────
 export async function loadTopGhostPath(mode = "standard", difficulty = "normal", { sinceMs = 7 * 86400000, now = Date.now() } = {}) {

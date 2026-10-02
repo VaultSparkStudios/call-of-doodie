@@ -35,6 +35,10 @@ import {
   isDoctrineForged,
   recordDoctrineForge,
   recordHazardEvent,
+  deleteLocalFieldReport,
+  loadFieldReports,
+  removeLocalStudioGameEvent,
+  saveFieldReport,
 } from "./storage.js";
 
 // Formula: Math.floor(Math.sqrt(kills / 20)) + 1
@@ -172,6 +176,21 @@ describe("buildSubmitScorePayload", () => {
 });
 
 describe("local Studio event and rivalry persistence", () => {
+  it("deduplicates a Field Report, expires old local comments, and removes its event mirror", () => {
+    localStorage.clear();
+    const reportId = "12345678-1234-1234-1234-123456789abc";
+    localStorage.setItem("cod-field-reports-v1", JSON.stringify([{ reportId: "old", feedback: "brutal", comment: "old comment", ts: Date.now() - 91 * 86400000 }]));
+    expect(loadFieldReports()).toEqual([]);
+    saveFieldReport({ reportId, feedback: "brutal", reason: "controls", comment: "private", mode: "standard" });
+    saveFieldReport({ reportId, feedback: "brutal", reason: "controls", comment: "updated", mode: "standard" });
+    expect(loadFieldReports()).toHaveLength(1);
+    expect(loadFieldReports()[0].comment).toBe("updated");
+    saveStudioGameEvent({ clientEventId: reportId, type: "field_report_v2" });
+    expect(removeLocalStudioGameEvent(reportId)).toBe(true);
+    expect(loadStudioGameEvents()).toHaveLength(0);
+    expect(deleteLocalFieldReport(reportId)).toBe(true);
+    expect(loadFieldReports()).toHaveLength(0);
+  });
   it("stores Studio game events locally", () => {
     localStorage.clear();
     const stored = saveStudioGameEvent({ type: "debrief", payload: { cause: "chain_control" } });

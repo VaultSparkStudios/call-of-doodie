@@ -1,0 +1,37 @@
+{
+  "session": 181,
+  "date": "2026-10-02",
+  "headline": "A full-site refinement now connects play, debrief, feedback, public information and agent-readable evidence while keeping experimental mechanics honest.",
+  "items": [
+    {
+      "title": "Player journey and visual hierarchy",
+      "projectImpact": "High",
+      "ecosystemImpact": "Medium",
+      "evidence": "Play entry, Player Record, HUD/debrief, Operation discovery; 429 visual captures and 88/88 hosted route states"
+    },
+    {
+      "title": "Truthful public site and feedback loop",
+      "projectImpact": "High",
+      "ecosystemImpact": "Medium",
+      "evidence": "Board/Stats dedupe, Press Kit, Field Lab, 35-file public contract, aggregate API 200"
+    },
+    {
+      "title": "Security, efficiency and agent surfaces",
+      "projectImpact": "High",
+      "ecosystemImpact": "High",
+      "evidence": "Credential-free saves, bounded ingress/polling, run-pack allowlist, zero-vulnerability npm audit"
+    }
+  ],
+  "validation": [
+    "Deployable build, strict lint, public/schema/runtime/entry/security and supply-chain gates pass.",
+    "Clean Vitest 281/281 files and 1,741/1,741 tests; browser E2E 19 passed with one intentional mobile-only skip.",
+    "Staging immutable 8442b7df: shell 7/7, 22 routes × 2 themes × 2 widths = 88/88 browser states; aggregate feedback endpoint returns 200. Exact-main CI/production evidence follow."
+  ],
+  "followUps": [
+    "Field Lab's three mechanics require formative comprehension and balance tests before live Operation or ranked integration.",
+    "Measure actual API token/cost effects only if project-owned paid inference is introduced; bounded context size is a proxy, not billing evidence."
+  ],
+  "blockers": [
+    "SPARKED/public-launch evidence remains incomplete: participants, physical controls/PWA, current Core Web Vitals, Obelisk identity and reply-capable mail. This engineering deploy does not flip lifecycle."
+  ]
+}

@@ -21,11 +21,11 @@ describe("run narrative", () => {
       bestStreak: 44,
     })).toEqual({
       act: "THE PUSH",
-      actDesc: "Past the mid-game wall — the run had real legs.",
+      actDesc: "You cleared wave 24 and kept going.",
       moments: [
         { label: "LAST STAND", desc: "Dropped to 2 HP on wave 12 (2× total near-deaths)." },
         { label: "AIM LOCKED", desc: "Peak 14× precision streak — triggered FLOW STATE 2×." },
-        { label: "BOSS HUNTER", desc: "3 bosses defeated including phase-two pressure." },
+        { label: "BOSS HUNTER", desc: "3 bosses defeated in this run." },
       ],
     });
   });

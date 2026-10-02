@@ -1,4 +1,19 @@
-# Latest Handoff — Session 180
+# Latest Handoff — Session 181
+
+## Where We Left Off (Session 181)
+
+Session Intent: Execute the 25-item full-site audit plan at sound depth, then close out, push directly to main and fully deploy the engineering release under the founder's existing authorization.
+Intent outcome: Repository-owned release candidate staged and verified. Exact-main CI and production follow-through remain pending as this pre-push record is written.
+
+The site and game now center one play entry and a clearer player journey: polished modal/focus behavior, HUD priorities, Player Record and Build, Operation and mode discovery, defeat-to-rematch guidance, mastery, a feedback/support loop, and current public pages. The Board leads with rankings and links to full Stats instead of repeating the aggregate; the Press Kit offers a current fact sheet and first-party downloads. A new Field Lab page holds three unranked, deterministic, no-API prototypes: pressure valves, a nemesis complaint/counter, and two timed tactical attempts. They are experiments, not live combat systems or measured retention/balance improvements.
+
+Security and operational work adds credential-free save/export paths, explicit account failure states, bounded request handling and hidden-tab polling, scoped challenge previews, an allowlisted agent-readable run pack, fact-gated narration, and a feedback API that exposes only 90-day aggregates. The game project's missing earlier event-table migration and the new aggregate function were applied explicitly to project ref hash `4f1d8f1cd0df8dd9`; the anonymous RPC returned 200 with zero reports and 38 existing run-fact identifiers. No raw comments are in that response. A trust-reviewed patch moved the dev-only `brace-expansion` override from 5.0.9 to 5.0.12; npm audit now reports zero vulnerabilities.
+
+Validation: deployable build, strict lint, 35-file public contract, schema, entry/runtime boundaries, zero-vulnerability security release gate, supply-chain incident scan and git diff check pass. The final uncontended Vitest run passes all 281 files and 1,741 tests after the stale closeout artifacts were generated. Earlier stale-context and contended import failures are superseded by this clean full run. Local visual receipt contains 429 hash-bound captures across two themes. Immutable staging `https://8442b7df.call-of-doodie.pages.dev/` and stable session branch `https://session-181-staging.call-of-doodie.pages.dev/` serve shell/health 7/7, aggregate endpoint 200 and 22 routes × two themes × two widths = 88/88 browser states with no failures. Studio Ops' separate responsive-audit script skipped because its own package lacks Playwright; the repository's Playwright sweep did run.
+
+Next: finish the pre-push security/coherence gate, commit/push through closeout autopilot, confirm exact-SHA GitHub Actions and canonical production health, then seal release records. Keep FORGE/public-unlaunched. Real participants, physical controls/PWA, current Core Web Vitals, Zoho reply identity and Obelisk evidence remain separate SPARKED gates; none is asserted as complete. The three prototype rollouts need comprehension and balance tests before live combat adoption. The private ranked plan and implementation log are in `.cache/audit-2026-09-30/docs/` and intentionally gitignored.
+
+Browser E2E follow-through: 19 passed and one mobile-only Scenario Cartridge case remained intentionally skipped. The initial failures came from test paths that still assumed weapon and visual controls were always expanded and the desktop weapon grid lived inside the dock; the tests now open the visible setup/selector controls and verify the portaled grid. The Studio-wide doctor ran on October 2 and found one blocking remedy-drift decision in Studio Ops, outside this project; a zero-blocker claim is not made.
 
 ## Where We Left Off (Session 180)
 

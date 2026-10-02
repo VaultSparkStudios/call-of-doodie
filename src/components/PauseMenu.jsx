@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, lazy } from "react";
 import AsyncPanelBoundary from "./AsyncPanelBoundary.jsx";
+import DialogShell from "./DialogShell.jsx";
 import { useGamepadNav } from "../hooks/useGamepadNav.js";
 import { WEAPONS, ENEMY_TYPES, ACHIEVEMENTS } from "../constants.js";
 import { getControllerLabels } from "../utils/gamepad.js";
@@ -48,12 +49,11 @@ export default function PauseMenu({ wave, timeSurvived, score, isMobile, achieve
   };
   const focusRing = { outline: "2px solid var(--cod-orange)", outlineOffset: 2, boxShadow: "0 0 12px rgba(255,107,53,0.45)" };
 
-  const card = { background: "rgba(255,255,255,0.05)", borderRadius: 10, border: "1px solid rgba(255,255,255,0.1)", padding: 16 };
+  const card = { background: "var(--cod-panel-strong)", borderRadius: 10, border: "1px solid var(--cod-line)", padding: 16 };
   const pBtn = { padding: "12px 24px", fontSize: 15, fontWeight: 900, fontFamily: "'Courier New',monospace", background: "rgba(255,255,255,0.08)", color: "#FFF", border: "1px solid rgba(255,255,255,0.2)", borderRadius: 8, cursor: "pointer", width: "100%", maxWidth: 300 };
   const backBtn = { ...pBtn, marginTop: 16, background: "linear-gradient(180deg,var(--cod-orange),#CC4400)", border: "none" };
 
-  const overlay = { position: "fixed", inset: 0, background: "rgba(0,0,0,0.85)", zIndex: 90, display: "flex", alignItems: "flex-start", justifyContent: "center", padding: "max(16px, env(safe-area-inset-top)) 16px max(20px, env(safe-area-inset-bottom))", overflowY: "auto", WebkitOverflowScrolling: "touch", backdropFilter: "blur(6px)" };
-  const panel = { ...card, maxWidth: 460, width: "100%", padding: "24px 20px", color: "#fff", border: "1px solid rgba(255,215,0,0.25)", overflowY: "visible", margin: "auto 0" };
+  const panel = { ...card, maxWidth: 460, width: "100%", padding: "24px 20px", color: "var(--cod-ink)", border: "1px solid var(--cod-line-warm)", overflowY: "visible", margin: "auto 0" };
 
   // ── Mini-map ref + effect — MUST be before any early returns (Rules of Hooks) ──
   const mapRef = useRef(null);
@@ -92,7 +92,7 @@ export default function PauseMenu({ wave, timeSurvived, score, isMobile, achieve
   if (showLb) return <AsyncPanelBoundary><LeaderboardPanel leaderboard={leaderboard || []} lbLoading={lbLoading} lbHasMore={lbHasMore} onLoadMore={onLoadMore} username={username} onClose={() => setShowLb(false)} /></AsyncPanelBoundary>;
 
   if (view === "rules") return (
-    <div style={overlay}>
+    <DialogShell title="Rules of Engagement" onClose={() => setView("main")} zIndex={90}>
       <div style={panel}>
         <h3 style={{ color: "var(--cod-gold)", margin: "0 0 12px", fontSize: 18 }}>📜 RULES OF ENGAGEMENT</h3>
         <div style={{ fontSize: 13, color: "#EEE", lineHeight: 2 }}>
@@ -113,11 +113,11 @@ export default function PauseMenu({ wave, timeSurvived, score, isMobile, achieve
         </div>
         <button onClick={() => setView("main")} style={backBtn}>← BACK</button>
       </div>
-    </div>
+    </DialogShell>
   );
 
   if (view === "controls") return (
-    <div style={overlay}>
+    <DialogShell title="Controls" onClose={() => setView("main")} zIndex={90}>
       <div style={panel}>
         <h3 style={{ color: "var(--cod-gold)", margin: "0 0 12px", fontSize: 18 }}>⌨ CONTROLS</h3>
         {isMobile ? (
@@ -176,11 +176,11 @@ export default function PauseMenu({ wave, timeSurvived, score, isMobile, achieve
         </div>
         <button onClick={() => setView("main")} style={backBtn}>← BACK</button>
       </div>
-    </div>
+    </DialogShell>
   );
 
   if (view === "bestiary") return (
-    <div style={overlay}>
+    <DialogShell title="Most Wanted List" onClose={() => setView("main")} zIndex={90}>
       <div style={panel}>
         <h3 style={{ color: "var(--cod-gold)", margin: "0 0 12px", fontSize: 18 }}>👾 MOST WANTED LIST</h3>
         {ENEMY_TYPES.map((e, i) => (
@@ -195,7 +195,7 @@ export default function PauseMenu({ wave, timeSurvived, score, isMobile, achieve
         ))}
         <button onClick={() => setView("main")} style={backBtn}>← BACK</button>
       </div>
-    </div>
+    </DialogShell>
   );
 
   if (view === "build") {
@@ -216,8 +216,8 @@ export default function PauseMenu({ wave, timeSurvived, score, isMobile, achieve
     if (pm.bounces > 0)                   stats.push({ label: "Bounces",     val: `+${pm.bounces} extra`,              color: "#7FFF00" });
     if (pm.extraPellets > 0)              stats.push({ label: "Pellets",     val: `+${pm.extraPellets} per shot`,      color: "#FF69B4" });
     return (
-      <div style={overlay}>
-        <div style={{ background: "rgba(255,255,255,0.05)", borderRadius: 10, border: "1px solid rgba(255,215,0,0.25)", padding: "24px 20px", maxWidth: 480, width: "100%", color: "#fff", overflowY: "visible", margin: "auto 0" }}>
+      <DialogShell title="Your Build" onClose={() => setView("main")} zIndex={90}>
+        <div style={{ background: "var(--cod-panel-strong)", borderRadius: 10, border: "1px solid var(--cod-line-warm)", padding: "24px 20px", maxWidth: 480, width: "100%", color: "var(--cod-ink)", overflowY: "visible", margin: "auto 0" }}>
           <h3 style={{ color: "#FF88FF", margin: "0 0 4px", fontSize: 18, fontFamily: "'Courier New',monospace", letterSpacing: 2 }}>🔧 YOUR BUILD</h3>
           <p style={{ fontSize: 10, color: "#888", margin: "0 0 16px", letterSpacing: 1 }}>Active perks, synergies & stat bonuses this run</p>
 
@@ -284,14 +284,14 @@ export default function PauseMenu({ wave, timeSurvived, score, isMobile, achieve
 
           <button onClick={() => setView("main")} style={{ padding: "12px 24px", fontSize: 15, fontWeight: 900, fontFamily: "'Courier New',monospace", background: "linear-gradient(180deg,var(--cod-orange),#CC4400)", color: "#FFF", border: "none", borderRadius: 8, cursor: "pointer", width: "100%", maxWidth: 300, marginTop: 20 }}>← BACK</button>
         </div>
-      </div>
+      </DialogShell>
     );
   }
 
   // Main pause view
   return (
-    <div style={overlay}>
-      <div style={{ textAlign: "center", maxWidth: 320, width: "100%" }}>
+    <DialogShell title="Game paused" onClose={onResume} zIndex={90}>
+      <div style={{ textAlign: "center", maxWidth: 360, width: "100%", background: "var(--cod-panel-strong)", border: "1px solid var(--cod-line-warm)", borderRadius: 12, padding: 18, margin: "auto 0" }}>
         <div style={{ fontSize: 36, marginBottom: 4 }}>⏸</div>
         <h2 style={{ color: "var(--cod-gold)", fontSize: 28, margin: "0 0 4px", letterSpacing: 3, fontFamily: "'Courier New',monospace" }}>PAUSED</h2>
         {pauseReason?.label && (
@@ -347,6 +347,6 @@ export default function PauseMenu({ wave, timeSurvived, score, isMobile, achieve
           <div style={{ fontSize: 8, color: "#444", marginTop: 4 }}>🔵 YOU  🔴 BOSS  🟡 ELITE</div>
         </div>
       </div>
-    </div>
+    </DialogShell>
   );
 }

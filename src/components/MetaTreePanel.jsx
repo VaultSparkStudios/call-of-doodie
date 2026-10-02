@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { META_TREE } from "../constants.js";
 import { loadMetaTree, loadMetaProgress, unlockMetaNode } from "../storage.js";
+import DialogShell from "./DialogShell.jsx";
 
 export default function MetaTreePanel({ onClose }) {
   const [unlocked, setUnlocked] = useState(() => loadMetaTree());
@@ -24,14 +25,10 @@ export default function MetaTreePanel({ onClose }) {
     }
   }
 
-  const overlay = {
-    position: "fixed", inset: 0, zIndex: 300, background: "rgba(0,0,0,0.92)",
-    display: "flex", flexDirection: "column", alignItems: "center",
-    fontFamily: "'Courier New', monospace", overflowY: "auto",
-  };
   const panel = {
     width: "100%", maxWidth: 780, padding: "24px 16px 40px",
-    display: "flex", flexDirection: "column", gap: 24,
+    display: "flex", flexDirection: "column", gap: 24, margin: "auto 0",
+    background: "var(--cod-panel-strong)", border: "1px solid var(--cod-line-warm)", borderRadius: 12,
   };
   const header = {
     display: "flex", justifyContent: "space-between", alignItems: "center",
@@ -39,7 +36,7 @@ export default function MetaTreePanel({ onClose }) {
   };
 
   return (
-    <div style={overlay} data-gamepad-scroll>
+    <DialogShell title="Meta Progression Tree" onClose={onClose} zIndex={300} data-gamepad-scroll style={{ fontFamily: "var(--font-mono)" }}>
       <div style={panel}>
         {/* Header */}
         <div style={header}>
@@ -123,6 +120,6 @@ export default function MetaTreePanel({ onClose }) {
           Career points earned: 1 pt per kill · Unlocks persist across all runs and prestige resets
         </div>
       </div>
-    </div>
+    </DialogShell>
   );
 }

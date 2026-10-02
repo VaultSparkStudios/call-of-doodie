@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#070b10">
-  <meta name="description" content="Compare authored Operations, live seeded arcade modes, and difficulty profiles in Call of Doodie.">
+  <meta name="description" content="Compare solo game modes and rulesets by objective, run shape, computer squad, replay code and score eligibility.">
   <link rel="canonical" href="https://callofdoodie.wtf/modes/">
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../tokens.css">
@@ -25,12 +25,77 @@
     <main>
       <p class="eyebrow">Ways to play</p>
       <h1>One arena. Several reasons to come back.</h1>
-      <p class="lede">Deploy into 3 authored Operations, or pick from 12 Arcade &amp; Rivals modes across 4 difficulty profiles.</p>
-      
-      <div class="card-grid"><section class="card"><h2>Authored Operations</h2><p>BLACKSITE FLUSH · 7 encounters · 12–18 min | PORCELAIN SIEGE · 7 encounters · 12–18 min | FINAL NOTICE · 7 encounters · 12–18 min</p></section><section class="card"><h2>Seeded run modes</h2><p>Standard · Score Attack · Daily Challenge · Cursed · Boss Rush · Speedrun · Gauntlet · Zombies · Boss Gauntlet · Sewer Extraction · Bot Royale · Hold the Throne</p></section><section class="card"><h2>Difficulty profiles</h2><p>Easy · Normal · Hard · INSANE</p></section><section class="card"><h2>Replay-code scope</h2><p>Replay codes capture Seed, Mode, Difficulty, Weapon, Starter Loadout. They are advisory deterministic decision-stream evidence, not full physics resimulation.</p></section></div>
-      <aside class="next-links card" aria-label="Explore more"><strong>Keep exploring</strong><a href="../arsenal/">Arsenal</a><a href="../accessibility/">Accessibility</a><a href="../support/">Support</a><a href="../stats/">Stats</a></aside>
+      <p class="lede">Choose from 6 game modes, 6 rulesets, or 3 authored Operations. Selection never starts a run for you.</p>
+
+      <div class="play-discovery">
+    <section class="discovery-lead card"><p class="eyebrow">Choose by outcome</p><h2>What kind of run do you want?</h2><p>A game mode changes the objective. A ruleset reshapes the original survival loop. Every match here is played solo; bots and squadmates are computer controlled, not other people in a live lobby.</p><a href="../operations/">Browse the authored Operations →</a></section>
+    <section aria-labelledby="mode-games"><div class="discovery-section-head"><span>01 / GAME MODES</span><h2 id="mode-games">Change the objective</h2><p>6 playable modes. Some end in a win; Classic and Zombies ask how long you can survive.</p></div><div class="discovery-grid"><article class="discovery-card" id="mode-standard" data-mode-id="standard">
+    <div class="discovery-card__top"><span>GAME MODE</span><span>REPLAY CODE</span></div>
+    <h3>Classic Survival</h3><p class="discovery-card__objective">The original game: fight waves, choose perks and upgrade your weapons. Survive until you run out of lives.</p>
+    <dl><div><dt>Run shape</dt><dd>Open-ended wave survival</dd></div><div><dt>Squad</dt><dd>Solo player vs computer threats</dd></div><div><dt>Result</dt><dd>Eligible for the public board when a valid run is submitted</dd></div></dl>
+    <a href="../?mode=standard#deploy" aria-label="Select Classic Survival for your next run">Select Classic Survival <span aria-hidden="true">→</span></a>
+  </article><article class="discovery-card" id="mode-zombies" data-mode-id="zombies">
+    <div class="discovery-card__top"><span>GAME MODE</span><span>REPLAY CODE</span></div>
+    <h3>Sewer Zombies</h3><p class="discovery-card__objective">Escalating undead hordes with a surge every third wave.</p>
+    <dl><div><dt>Run shape</dt><dd>Open-ended horde survival</dd></div><div><dt>Squad</dt><dd>Solo player vs computer threats</dd></div><div><dt>Result</dt><dd>Eligible for the public board when a valid run is submitted</dd></div></dl>
+    <a href="../?mode=zombies#deploy" aria-label="Select Sewer Zombies for your next run">Select Sewer Zombies <span aria-hidden="true">→</span></a>
+  </article><article class="discovery-card" id="mode-boss_gauntlet" data-mode-id="boss_gauntlet">
+    <div class="discovery-card__top"><span>GAME MODE</span><span>NO REPLAY CODE</span></div>
+    <h3>Boss Gauntlet</h3><p class="discovery-card__objective">Fight six bosses in order, one at a time. Defeat all six to win; beating the six-minute target is optional. Bosses may summon reinforcements.</p>
+    <dl><div><dt>Run shape</dt><dd>six ordered boss fights; clear all to win</dd></div><div><dt>Squad</dt><dd>Solo player vs computer threats</dd></div><div><dt>Result</dt><dd>Local results only</dd></div></dl>
+    <a href="../?mode=boss_gauntlet#deploy" aria-label="Select Boss Gauntlet for your next run">Select Boss Gauntlet <span aria-hidden="true">→</span></a>
+  </article><article class="discovery-card" id="mode-sewer_extraction" data-mode-id="sewer_extraction">
+    <div class="discovery-card__top"><span>GAME MODE</span><span>NO REPLAY CODE</span></div>
+    <h3>Sewer Extraction</h3><p class="discovery-card__objective">Collect crates and reach the evac toilet to bank your loot. The exit opens at alarm 60 and locks at 100. Die before extracting and the haul is lost.</p>
+    <dl><div><dt>Run shape</dt><dd>Collect crates, then extract to bank loot</dd></div><div><dt>Squad</dt><dd>Solo player vs computer threats</dd></div><div><dt>Result</dt><dd>Local results only</dd></div></dl>
+    <a href="../?mode=sewer_extraction#deploy" aria-label="Select Sewer Extraction for your next run">Select Sewer Extraction <span aria-hidden="true">→</span></a>
+  </article><article class="discovery-card" id="mode-bot_royale" data-mode-id="bot_royale">
+    <div class="discovery-card__top"><span>GAME MODE</span><span>NO REPLAY CODE</span></div>
+    <h3>Bot Royale</h3><p class="discovery-card__objective">Free-for-all against sixteen bots while the sewer floods inward. Last one standing wins.</p>
+    <dl><div><dt>Run shape</dt><dd>Shrinking flood; last one standing wins</dd></div><div><dt>Squad</dt><dd>Solo player vs computer bots</dd></div><div><dt>Result</dt><dd>Local results only</dd></div></dl>
+    <a href="../?mode=bot_royale#deploy" aria-label="Select Bot Royale for your next run">Select Bot Royale <span aria-hidden="true">→</span></a>
+  </article><article class="discovery-card" id="mode-hold_the_throne" data-mode-id="hold_the_throne">
+    <div class="discovery-card__top"><span>GAME MODE</span><span>NO REPLAY CODE</span></div>
+    <h3>Hold the Throne</h3><p class="discovery-card__objective">Hold each of three thrones for thirty uncontested seconds to win. You can retake one lost throne; a second loss ends the run. Your squad helps defend.</p>
+    <dl><div><dt>Run shape</dt><dd>Capture three thrones to win</dd></div><div><dt>Squad</dt><dd>Solo player + computer squad</dd></div><div><dt>Result</dt><dd>Local results only</dd></div></dl>
+    <a href="../?mode=hold_the_throne#deploy" aria-label="Select Hold the Throne for your next run">Select Hold the Throne <span aria-hidden="true">→</span></a>
+  </article></div></section>
+    <section aria-labelledby="mode-rulesets"><div class="discovery-section-head"><span>02 / RULESETS</span><h2 id="mode-rulesets">Change the pressure</h2><p>6 survival variants, from a timed score sprint to boss-after-boss combat.</p></div><div class="discovery-grid"><article class="discovery-card" id="mode-score_attack" data-mode-id="score_attack">
+    <div class="discovery-card__top"><span>RULESET</span><span>REPLAY CODE</span></div>
+    <h3>Score Attack</h3><p class="discovery-card__objective">Five minutes, faster spawns, maximum score.</p>
+    <dl><div><dt>Run shape</dt><dd>Five-minute score sprint</dd></div><div><dt>Squad</dt><dd>Solo player vs computer threats</dd></div><div><dt>Result</dt><dd>Eligible for the public board when a valid run is submitted</dd></div></dl>
+    <a href="../?mode=score_attack#deploy" aria-label="Select Score Attack for your next run">Select Score Attack <span aria-hidden="true">→</span></a>
+  </article><article class="discovery-card" id="mode-daily_challenge" data-mode-id="daily_challenge">
+    <div class="discovery-card__top"><span>RULESET</span><span>REPLAY CODE</span></div>
+    <h3>Daily Challenge</h3><p class="discovery-card__objective">The same seeded run for every player today.</p>
+    <dl><div><dt>Run shape</dt><dd>One shared daily seed</dd></div><div><dt>Squad</dt><dd>Solo player vs computer threats</dd></div><div><dt>Result</dt><dd>Eligible for the public board when a valid run is submitted</dd></div></dl>
+    <a href="../?mode=daily_challenge#deploy" aria-label="Select Daily Challenge for your next run">Select Daily Challenge <span aria-hidden="true">→</span></a>
+  </article><article class="discovery-card" id="mode-cursed" data-mode-id="cursed">
+    <div class="discovery-card__top"><span>RULESET</span><span>REPLAY CODE</span></div>
+    <h3>Cursed Run</h3><p class="discovery-card__objective">Hard modifiers with a three-times score multiplier.</p>
+    <dl><div><dt>Run shape</dt><dd>Open-ended hard-modifier run</dd></div><div><dt>Squad</dt><dd>Solo player vs computer threats</dd></div><div><dt>Result</dt><dd>Eligible for the public board when a valid run is submitted</dd></div></dl>
+    <a href="../?mode=cursed#deploy" aria-label="Select Cursed Run for your next run">Select Cursed Run <span aria-hidden="true">→</span></a>
+  </article><article class="discovery-card" id="mode-boss_rush" data-mode-id="boss_rush">
+    <div class="discovery-card__top"><span>RULESET</span><span>REPLAY CODE</span></div>
+    <h3>Boss Rush</h3><p class="discovery-card__objective">Gear up for three warmup waves, then fight bosses every wave. Survive as long as you can; later fights pair bosses.</p>
+    <dl><div><dt>Run shape</dt><dd>three warmup waves, then bosses each wave</dd></div><div><dt>Squad</dt><dd>Solo player vs computer threats</dd></div><div><dt>Result</dt><dd>Eligible for the public board when a valid run is submitted</dd></div></dl>
+    <a href="../?mode=boss_rush#deploy" aria-label="Select Boss Rush for your next run">Select Boss Rush <span aria-hidden="true">→</span></a>
+  </article><article class="discovery-card" id="mode-speedrun" data-mode-id="speedrun">
+    <div class="discovery-card__top"><span>RULESET</span><span>REPLAY CODE</span></div>
+    <h3>Timed Survival</h3><p class="discovery-card__objective">Classic survival with a precise elapsed-time display. Set your own wave target; the run ends when you run out of lives.</p>
+    <dl><div><dt>Run shape</dt><dd>Open-ended survival against your stopwatch</dd></div><div><dt>Squad</dt><dd>Solo player vs computer threats</dd></div><div><dt>Result</dt><dd>Eligible for the public board when a valid run is submitted</dd></div></dl>
+    <a href="../?mode=speedrun#deploy" aria-label="Select Timed Survival for your next run">Select Timed Survival <span aria-hidden="true">→</span></a>
+  </article><article class="discovery-card" id="mode-gauntlet" data-mode-id="gauntlet">
+    <div class="discovery-card__top"><span>RULESET</span><span>REPLAY CODE</span></div>
+    <h3>Weekly Gauntlet</h3><p class="discovery-card__objective">A fixed weekly opening kit with no shop.</p>
+    <dl><div><dt>Run shape</dt><dd>Weekly fixed opening kit</dd></div><div><dt>Squad</dt><dd>Solo player vs computer threats</dd></div><div><dt>Result</dt><dd>Eligible for the public board when a valid run is submitted</dd></div></dl>
+    <a href="../?mode=gauntlet#deploy" aria-label="Select Weekly Gauntlet for your next run">Select Weekly Gauntlet <span aria-hidden="true">→</span></a>
+  </article></div></section>
+    <aside class="field-guide__outro"><strong>Local does not mean lesser.</strong><p>Every mode can be played in your browser. Public board eligibility depends on a valid submission. A replay code records supported setup and advisory evidence; it is not a full physics replay. Newer objective modes are currently local-only and have no replay code.</p><a href="../board/">Read the board rules →</a></aside>
+  </div>
+      <aside class="next-links card" aria-label="Explore more"><strong>Keep exploring</strong><a href="../operations/">Operations</a><a href="../field-lab/">Field Lab</a><a href="../arsenal/">Arsenal</a><a href="../accessibility/">Accessibility</a></aside>
     </main>
-    <footer><div class="footer-links"><nav aria-label="Play links"><strong>PLAY</strong><a href="../modes/">Modes</a><a href="../board/">Board</a><a href="../stats/">Stats</a></nav><nav aria-label="Learn links"><strong>LEARN</strong><a href="../field-manual/">Field Manual</a><a href="../bestiary/">Bestiary</a><a href="../arsenal/">Arsenal</a><a href="../changelog/">Changelog</a><a href="../roadmap/">Roadmap</a><a href="../accessibility/">Accessibility</a></nav><nav aria-label="Studio links"><strong>STUDIO</strong><a href="../about/">About</a><a href="../press-kit/">Press Kit</a><a href="../support/">Support</a><a href="../contact/">Contact</a><a href="../status/">Status</a><a href="../privacy/">Privacy</a><a href="../terms/">Terms</a><a href="../ip/">Rights &amp; IP</a><a href="../">Home</a></nav></div><p class="parody-note">Call of Doodie is a parody game and is not affiliated with, endorsed by, or associated with Activision, the Call of Duty franchise, or any related entity.</p><div>© 2026 <a href="https://vaultsparkstudios.com/">VaultSpark Studios LLC</a>. All rights reserved.</div></footer>
+    <footer><div class="footer-links"><nav aria-label="Play links"><strong>PLAY</strong><a href="../modes/">Modes</a><a href="../operations/">Operations</a><a href="../field-lab/">Field Lab</a><a href="../challenge/">Challenges</a><a href="../board/">Board</a><a href="../stats/">Stats</a><a href="../feedback/">Player Feedback</a></nav><nav aria-label="Learn links"><strong>LEARN</strong><a href="../field-manual/">Field Manual</a><a href="../bestiary/">Bestiary</a><a href="../arsenal/">Arsenal</a><a href="../changelog/">Changelog</a><a href="../roadmap/">Roadmap</a><a href="../accessibility/">Accessibility</a></nav><nav aria-label="Studio links"><strong>STUDIO</strong><a href="../about/">About</a><a href="../press-kit/">Press Kit</a><a href="../support/">Support</a><a href="../contact/">Contact</a><a href="../status/">Status</a><a href="../privacy/">Privacy</a><a href="../terms/">Terms</a><a href="../ip/">Rights &amp; IP</a><a href="../">Home</a></nav></div><p class="parody-note">Call of Doodie is a parody game and is not affiliated with, endorsed by, or associated with Activision, the Call of Duty franchise, or any related entity.</p><div>© 2026 <a href="https://vaultsparkstudios.com/">VaultSpark Studios LLC</a>. All rights reserved.</div></footer>
   </div>
 </body>
 </html>

@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   BOSS_GAUNTLET_BOSS_COUNT,
   BOSS_GAUNTLET_PAR_SECONDS,
+  BOSS_RUSH_WARMUP_WAVES,
   BOT_ROYALE_BOT_COUNT,
   EXTRACTION_ALARM_LOCK,
   PLAYER_FACING_MODE_FACTS,
@@ -78,6 +79,12 @@ describe("mode facts are bound to real runtime behavior", () => {
     expect(isBossWaveForMode("standard", STANDARD_BOSS_WAVE_INTERVAL)).toBe(true);
     expect(isBossWaveForMode("standard", STANDARD_BOSS_WAVE_INTERVAL * 2)).toBe(true);
     expect(isBossWaveForMode("standard", STANDARD_BOSS_WAVE_INTERVAL - 1)).toBe(false);
+  });
+
+  it("Boss Rush warmup copy matches its first boss wave", () => {
+    expect(getModeRules("boss_rush").boss.firstWave - 1).toBe(BOSS_RUSH_WARMUP_WAVES);
+    expect(getMode("boss_rush").blurb).toContain(`${BOSS_RUSH_WARMUP_WAVES} warmup waves`);
+    expect(getMode("boss_rush").description).toContain(`${spell(BOSS_RUSH_WARMUP_WAVES)} warmup waves`);
   });
 
   it("the quick-reference boss line quotes the live cadence", () => {

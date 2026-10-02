@@ -21,6 +21,7 @@ test.beforeEach(async ({ page }) => {
 
 test("Retro Original is opt-in, persists, and reaches combat", async ({ page }, testInfo) => {
   await page.goto("/");
+  await page.getByText("Character visuals", { exact: true }).click();
   const selector = page.getByTestId("visual-pack-selector");
   const modern = selector.getByRole("button", { name: /modern atlas/i });
   const retro = selector.getByRole("button", { name: /retro original/i });
@@ -29,6 +30,7 @@ test("Retro Original is opt-in, persists, and reaches combat", async ({ page }, 
   await retro.click();
   await expect(retro).toHaveAttribute("aria-pressed", "true");
   await page.reload();
+  await page.getByText("Character visuals", { exact: true }).click();
   await expect(page.getByTestId("visual-pack-selector").getByRole("button", { name: /retro original/i }))
     .toHaveAttribute("aria-pressed", "true");
 

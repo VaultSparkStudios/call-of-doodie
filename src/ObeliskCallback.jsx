@@ -1,7 +1,20 @@
 import { useEffect, useState } from "react";
 import { handleObeliskCallback } from "./obelisk-callback.js";
 import { sanitizeObeliskIdentity, savePassport } from "./utils/obeliskPassport.js";
+import { saveCloudSession } from "./utils/cloudSession.js";
+import { takeAuthReturn } from "./utils/authReturn.js";
 import { applyTheme, nextTheme, readTheme, THEMES } from "./utils/theme.js";
+
+let callbackAttempt = null;
+function beginCallback() {
+  if (callbackAttempt) return callbackAttempt;
+  const params = new URLSearchParams(location.search);
+  const token = params.get("obelisk_session");
+  const returnTarget = takeAuthReturn(params.get("next"));
+  history.replaceState(null, "", "/auth/callback");
+  callbackAttempt = { token, returnTarget, promise: handleObeliskCallback({ token }) };
+  return callbackAttempt;
+}
 
 export function ObeliskCallback() {
   const [state, setState] = useState({ status: "verifying", detail: "Checking your Obelisk session..." });
@@ -9,7 +22,8 @@ export function ObeliskCallback() {
 
   useEffect(() => {
     let cancelled = false;
-    handleObeliskCallback()
+    const attempt = beginCallback();
+    attempt.promise
       .then((result) => {
         if (cancelled) return;
         if (result?.ok) {
@@ -18,14 +32,17 @@ export function ObeliskCallback() {
             setState({ status: "error", detail: "The identity response could not be stored safely on this device." });
             return;
           }
-          setState({ status: "success", detail: "Identity verified locally. Your game progress remains on this device." });
-          setTimeout(() => { location.href = "/"; }, 900);
+          const activeSession = attempt.token && saveCloudSession({ token: attempt.token, subject: passport.subject, capability: result.profileCapability, expiresAt: result.profileCapabilityExpiresAt });
+          setState({ status: "success", detail: activeSession ? "Obelisk verified your session. Game progress remains on this device." : "Obelisk verified your identity. Your local receipt is saved; cloud backup is not active." });
+          setTimeout(() => { location.replace(attempt.returnTarget); }, 900);
           return;
         }
-        setState({ status: "error", detail: result?.detail || result?.reason || "verify-failed" });
+        setState({ status: "error", detail: result?.reason === "no-token"
+          ? "The sign-in link did not include a session. Start verification again from Passport."
+          : "Obelisk could not confirm this session. Your local game progress is safe; start verification again from Passport." });
       })
       .catch(() => {
-        if (!cancelled) setState({ status: "error", detail: "verify-failed" });
+        if (!cancelled) setState({ status: "error", detail: "Verification could not finish right now. Your local game progress is safe; try again from Passport." });
       });
     return () => { cancelled = true; };
   }, []);
@@ -42,7 +59,7 @@ export function ObeliskCallback() {
         <h1>{isError ? "Verification needs another pass" : "Verifying identity"}</h1>
         <p className="auth-lede">{state.detail}</p>
         {isError ? (
-          <a href="/login" className="auth-brand">Back to Passport</a>
+          <a href={`/login?next=${encodeURIComponent(callbackAttempt?.returnTarget || "/")}`} className="auth-brand">Back to Passport</a>
         ) : null}
       </section>
     </main>

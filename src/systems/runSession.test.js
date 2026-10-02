@@ -11,8 +11,12 @@ import {
 
 describe("runSession", () => {
   it("resolves the active run mode from flags", () => {
+    expect(resolveRunModeFromFlags({ scoreAttack: true })).toBe("score_attack");
     expect(resolveRunModeFromFlags({ bossRush: true })).toBe("boss_rush");
     expect(resolveRunModeFromFlags({ dailyChallenge: true })).toBe("daily_challenge");
+    expect(resolveRunModeFromFlags({ cursed: true })).toBe("cursed");
+    expect(resolveRunModeFromFlags({ speedrun: true })).toBe("speedrun");
+    expect(resolveRunModeFromFlags({ gauntlet: true })).toBe("gauntlet");
     expect(resolveRunModeFromFlags({ zombies: true })).toBe("zombies");
     expect(resolveRunModeFromFlags({})).toBe("standard");
   });

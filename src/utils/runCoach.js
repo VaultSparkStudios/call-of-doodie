@@ -16,6 +16,7 @@ import { getRecommendedMetaUpgrade } from "./metaClarity.js";
 import { WEAPONS, ENEMY_TYPES } from "../constants.js";
 import { buildRunBrain, mostFrequentKiller } from "./runBrain.js";
 import { getArchetypeProgress } from "./buildArchetypes.js";
+import { buildLocalCoachLesson } from "./localCoachLesson.js";
 
 /**
  * Surfaces a "you were one perk from forging a doctrine" line when the run's
@@ -246,7 +247,8 @@ export function buildWeaponDeathCoach(weaponKills, recentDeathsByEnemy) {
  * @param {{ career: object, meta: object, runSummary: object, runHistory: object[], studioEvents: object[], doctrineArchive: object|null }} ctx
  * @returns {{ killedBy: string, tryNext: string, working: string, weaponTip: string|null, precisionTip: string|null, crossRunTip: string|null, doctrineNearMissTip: string|null, enemyLab: object|null, brain: object }}
  */
-export function buildRunCoach({ career = {}, meta = {}, runSummary = {}, runHistory = [], studioEvents = [], chokeWaves = null, doctrineArchive = null } = {}) {
+export function buildRunCoach({ career = {}, meta = {}, runSummary = {}, runHistory = [], latestRun = null, mode = null, difficulty = null, studioEvents = [], chokeWaves = null, doctrineArchive = null } = {}) {
+  const lesson = buildLocalCoachLesson({ latestRun, runHistory, mode, difficulty });
   const brain = buildRunBrain({
     career,
     runHistory,
@@ -282,6 +284,7 @@ export function buildRunCoach({ career = {}, meta = {}, runSummary = {}, runHist
     weaponDeathTip: buildWeaponDeathCoach(runSummary?.weaponKills, career?.recentDeathsByEnemy),
     doctrineNearMissTip: buildDoctrineNearMissTip(runSummary?.activePerks, doctrineArchive),
     enemyLab: buildEnemyLab(career, runSummary),
+    lesson,
     brain,
   };
 }

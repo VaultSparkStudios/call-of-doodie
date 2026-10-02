@@ -15,15 +15,43 @@ import { OPERATIONS } from "../../src/systems/operationCampaign.js";
 import { MODE_CATALOG, NEW_MODE_CATALOG } from "../../src/config/modeCatalog.js";
 import { getOperationRouteIntel } from "../../src/systems/operationDirector.js";
 import { OPERATION_ENCOUNTER_SCORE } from "../../src/systems/operationAudioDirector.js";
+import { FIELD_MANUAL_SECTIONS } from "../../src/content/fieldManual.js";
+import { CAPABILITY_EVIDENCE } from "../../src/content/capabilities.js";
+import { createHash } from "node:crypto";
 
 function label(id) {
   return String(id).split("_").map((part) => part.charAt(0).toUpperCase() + part.slice(1)).join(" ");
 }
 
+function weaponPattern(weapon) {
+  if (weapon.hitscan) return "beam";
+  if (weapon.boomerang) return "return";
+  if (weapon.bouncesLeft) return "ricochet";
+  if (weapon.pellets > 1) return "spread";
+  if (weapon.burst > 1) return "burst";
+  return "direct";
+}
+
+function weaponRangeCue(weapon) {
+  if (/short range|close range/i.test(weapon.desc)) return "Close";
+  if (/mid-range|medium range/i.test(weapon.desc)) return "Mid";
+  if (weapon.hitscan || /precision/i.test(weapon.desc)) return "Long";
+  return "Flexible";
+}
+
+function enemyRole(enemy, boss) {
+  if (boss) return "boss";
+  if (enemy.ranged) return "ranged";
+  if (enemy.speed >= 2) return "rusher";
+  if (enemy.health >= 100) return "heavy";
+  return "pursuer";
+}
+
 export function buildPublicGameplayContract() {
   const bossTypes = new Set(BOSS_ROTATION);
-  return {
-    schemaVersion: "gameplay-contract-v3",
+  const contract = {
+    schemaVersion: "gameplay-contract-v4",
+    evidenceAsOf: CAPABILITY_EVIDENCE.checkedAt,
     canonicalUrl: "https://callofdoodie.wtf/",
     publisher: "VaultSpark Studios LLC",
     rights: "Proprietary — All Rights Reserved, VaultSpark Studios LLC",
@@ -35,13 +63,18 @@ export function buildPublicGameplayContract() {
       publicWriteActions: "not-offered",
     },
     loop: ["move", "shoot", "dash", "grenade", "switch_weapon", "interact", "choose_perk", "choose_route", "resolve_operation_encounter", "survive_wave", "review_debrief"],
+    controls: { humanGuide: "/field-manual/", summary: FIELD_MANUAL_SECTIONS.find(([title]) => title === "Controls")?.[1] || "", source: "src/content/fieldManual.js" },
     formations: Object.entries(FORMATION_COUNTERPLAY).map(([id, formation]) => ({ id, label: formation.label, counterplay: formation.drill })),
     operations: OPERATIONS.map((operation) => ({
       id: operation.id,
       title: operation.title,
+      brief: operation.brief,
+      antagonist: operation.antagonist.name,
       seed: operation.seed,
       durationMinutes: operation.durationMinutes,
       encounterVerbs: operation.encounters.map((encounter) => encounter.verb),
+      encounterTitles: operation.encounters.map((encounter) => encounter.title),
+      priorRouteConsequence: operation.priorRouteConsequence,
       routeOptions: operation.routeOptions,
       routeIntel: operation.routeOptions.map((routeId) => getOperationRouteIntel(operation.id, routeId)),
       scoring: operation.scoring.summary,
@@ -57,8 +90,13 @@ export function buildPublicGameplayContract() {
       realtimeCoop: "gated-not-live",
     })),
     modes: [
-      ...REPLAY_MODES.map((id) => ({ id, label: label(id), kind: MODE_CATALOG.find((m) => m.id === id)?.kind || "mode", seededReplayCode: true, scoring: "global-leaderboard-eligible" })),
-      ...NEW_MODE_CATALOG.map((mode) => ({ id: mode.id, label: mode.label, kind: mode.kind, objective: mode.description, seededReplayCode: false, scoring: "local-only" })),
+      ...REPLAY_MODES.map((id) => {
+        const mode = MODE_CATALOG.find((entry) => entry.id === id);
+        return { id, label: mode?.label || label(id), kind: mode?.kind || "mode", objective: mode?.description || "", seededReplayCode: true, scoring: "global-leaderboard-eligible",
+          capabilities: { play: "browser-local", officialBoard: "eligible-only-after-server-check", unrankedPractice: true, liveMultiplayer: false } };
+      }),
+      ...NEW_MODE_CATALOG.map((mode) => ({ id: mode.id, label: mode.label, kind: mode.kind, objective: mode.description, seededReplayCode: false, scoring: "local-only",
+        capabilities: { play: "browser-local", officialBoard: "not-offered", unrankedPractice: true, liveMultiplayer: false } })),
     ],
     difficulties: Object.entries(DIFFICULTIES).map(([id, difficulty]) => ({
       id,
@@ -73,17 +111,31 @@ export function buildPublicGameplayContract() {
     }),
     weapons: WEAPONS.map((weapon, index) => ({
       index,
+      runtimeId: `weapon:${index}`,
       name: weapon.name,
       emoji: weapon.emoji,
+      description: weapon.desc,
+      baseDamagePerProjectile: weapon.damage,
+      baseFireIntervalMs: weapon.fireRate,
+      baseMagazine: weapon.maxAmmo,
+      baseReloadMs: weapon.reloadTime,
+      projectilesPerTrigger: weapon.pellets || weapon.burst || 1,
+      pattern: weaponPattern(weapon),
+      rangeCue: weaponRangeCue(weapon),
       availableAtStart: true,
       arsenalMilestoneLevel: WEAPON_ARSENAL_MILESTONE_LEVELS[index] ?? 1,
     })),
     enemies: ENEMY_TYPES.map((enemy, index) => ({
       index,
+      runtimeId: `enemy:${index}`,
       name: enemy.name,
       emoji: enemy.emoji,
       ranged: Boolean(enemy.ranged),
       boss: bossTypes.has(index),
+      role: enemyRole(enemy, bossTypes.has(index)),
+      baseHealth: enemy.health,
+      baseSpeed: enemy.speed,
+      projectileIntervalFrames: enemy.ranged ? enemy.projRate : null,
     })),
     permanentUpgrades: META_UPGRADES.map((group) => ({
       id: group.id,
@@ -100,7 +152,10 @@ export function buildPublicGameplayContract() {
     },
     challengeLinks: {
       replayCode: { queryParameter: "replay", format: "12 hexadecimal characters", captures: ["seed", "mode", "difficulty", "weapon", "starter_loadout"] },
-      rivalry: { queryParameters: ["seed", "diff", "vs", "vsName"], note: "Player choices remain player-controlled." },
+      rivalry: { route: "/challenge/", schemaVersion: "challenge-invite-v2", queryParameters: ["cv", "seed", "diff", "mode", "loadout", "vs", "vsName", "duel", "exp", "check"],
+        maxAgeDays: 7, integrity: "Non-cryptographic checksum; saved duel rows checked separately. Scores remain friendly and self-reported.",
+        opponent: "saved-player-run-not-bot-or-live-person", launch: "preview-first-guest-accept-no-auto-start" },
+      legacySeedLink: { route: "/", queryParameters: ["seed", "diff", "vs", "vsName"], note: "Direct legacy seed setup remains supported; it is not a verified score receipt." },
       scenarioCartridge: {
         schemaVersion: "sewer-scenario-v1",
         queryParameter: "scenario",
@@ -116,7 +171,10 @@ export function buildPublicGameplayContract() {
       terms: "https://callofdoodie.wtf/terms/",
       rights: "https://callofdoodie.wtf/ip/",
       fieldManual: "https://callofdoodie.wtf/field-manual.json",
+      runAnalysisSchema: "https://callofdoodie.wtf/run-analysis-schema.json",
       status: "https://callofdoodie.wtf/status.json",
     },
   };
+  contract.contentHash = `sha256:${createHash("sha256").update(JSON.stringify(contract)).digest("hex")}`;
+  return contract;
 }

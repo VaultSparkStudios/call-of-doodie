@@ -124,6 +124,14 @@ Deno.serve(async (req) => {
       .select("client_event_id");
     if (error) throw new Error(error.message || "Studio event upsert failed.");
 
+    // Consent-based Field Report events have a bounded server lifetime. This
+    // best-effort cleanup also runs when an existing client sends other events.
+    await serviceClient.from("studio_game_events")
+      .delete()
+      .eq("game_id", "cod")
+      .eq("type", "field_report_v2")
+      .lt("received_at", new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString());
+
     const inserted = Array.isArray(data) ? data.length : normalized.length;
     const deduped = Math.max(0, normalized.length - inserted);
     return new Response(JSON.stringify({ ok: true, inserted, deduped }), {

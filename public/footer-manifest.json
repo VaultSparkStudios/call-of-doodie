@@ -44,6 +44,10 @@
       "label": "Modes"
     },
     {
+      "href": "/operations/",
+      "label": "Operations"
+    },
+    {
       "href": "/board/",
       "label": "Board"
     },
@@ -54,6 +58,18 @@
     {
       "href": "/accessibility/",
       "label": "Accessibility"
+    },
+    {
+      "href": "/field-lab/",
+      "label": "Field Lab"
+    },
+    {
+      "href": "/challenge/",
+      "label": "Challenges"
+    },
+    {
+      "href": "/feedback/",
+      "label": "Player Feedback"
     },
     {
       "href": "/support/",
@@ -96,8 +112,12 @@
     "/about/",
     "/field-manual/",
     "/bestiary/",
+    "/operations/",
     "/stats/",
     "/accessibility/",
+    "/field-lab/",
+    "/challenge/",
+    "/feedback/",
     "/support/",
     "/press-kit/",
     "/status/",

@@ -1,15 +1,5 @@
-import { useEffect } from "react";
 import OperationPlaytestCommandPost from "./OperationPlaytestCommandPost.jsx";
-
-const overlayStyle = {
-  position: "fixed",
-  inset: 0,
-  zIndex: 1200,
-  display: "grid",
-  placeItems: "center",
-  padding: 20,
-  background: "rgba(4, 7, 10, 0.9)",
-};
+import DialogShell from "./DialogShell.jsx";
 
 const panelStyle = {
   width: "min(560px, 100%)",
@@ -70,16 +60,6 @@ export default function OperationCompleteModal({
   onReturnToMenu,
   campaignGate = null,
 }) {
-  useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.key !== "Escape") return;
-      event.preventDefault();
-      onReturnToMenu?.();
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [onReturnToMenu]);
-
   const gate = gateCopy(campaignGate);
   const score = Number(receipt?.score ?? receipt?.finalScore ?? 0);
   const fingerprint = receipt?.fingerprint
@@ -90,12 +70,10 @@ export default function OperationCompleteModal({
     : null;
 
   return (
-    <div style={overlayStyle}>
+    <DialogShell titleId="operation-complete-title" onClose={onReturnToMenu} zIndex={1200}>
       <section
         aria-describedby="operation-complete-summary"
         aria-labelledby="operation-complete-title"
-        aria-modal="true"
-        role="dialog"
         style={panelStyle}
       >
         <p style={{ color: "var(--cod-cyan)", fontSize: 11, letterSpacing: 3, margin: "0 0 6px" }}>
@@ -179,6 +157,6 @@ export default function OperationCompleteModal({
           </button>
         </div>
       </section>
-    </div>
+    </DialogShell>
   );
 }

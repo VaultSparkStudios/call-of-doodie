@@ -109,4 +109,36 @@ describe("community stats store (S145)", () => {
     expect(getCommunityStatsStatus()).toBe("cached");
     un();
   });
+
+  it("backs off failed background polls and refreshes once on visible wake", async () => {
+    loadCommunityStats.mockResolvedValue({ dataSource: "cache", runs: 10 });
+    const un = subscribeCommunityStats(() => {});
+    await refreshCommunityStatsNow();
+    await vi.advanceTimersByTimeAsync(300000);
+    expect(loadCommunityStats.mock.calls.length).toBeLessThanOrEqual(6);
+    const beforeHide = loadCommunityStats.mock.calls.length;
+    const visibility = vi.spyOn(document, "visibilityState", "get").mockReturnValue("hidden");
+    document.dispatchEvent(new Event("visibilitychange"));
+    await vi.advanceTimersByTimeAsync(300000);
+    expect(loadCommunityStats.mock.calls.length).toBe(beforeHide);
+    visibility.mockReturnValue("visible");
+    document.dispatchEvent(new Event("visibilitychange"));
+    await vi.advanceTimersByTimeAsync(0);
+    expect(loadCommunityStats.mock.calls.length).toBe(beforeHide + 1);
+    visibility.mockRestore();
+    un();
+  });
+
+  it("never overlaps a slow aggregate refresh", async () => {
+    let resolveLoad;
+    loadCommunityStats.mockImplementation(() => new Promise((resolve) => { resolveLoad = resolve; }));
+    const un = subscribeCommunityStats(() => {});
+    await vi.advanceTimersByTimeAsync(0);
+    expect(loadCommunityStats).toHaveBeenCalledTimes(1);
+    await vi.advanceTimersByTimeAsync(60000);
+    expect(loadCommunityStats).toHaveBeenCalledTimes(1);
+    resolveLoad(liveStats());
+    await vi.advanceTimersByTimeAsync(0);
+    un();
+  });
 });

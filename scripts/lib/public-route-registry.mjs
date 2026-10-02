@@ -4,6 +4,7 @@ import { FOOTER_GROUPS, groupFooterLinks, PRIMARY_PUBLIC_NAV } from "../../src/c
 import { roadmapSections } from "../../src/content/roadmap.js";
 import { FIELD_MANUAL_SECTIONS } from "../../src/content/fieldManual.js";
 import { CHANGELOG_ENTRIES } from "../../src/config/changelog.js";
+import { CAPABILITY_EVIDENCE, PUBLIC_CAPABILITIES, capability } from "../../src/content/capabilities.js";
 import { deriveContentVersionDate } from "./build-date.mjs";
 import { ENEMY_ATLAS_CONTRACT } from "../../src/utils/enemyAtlasContract.js";
 
@@ -11,6 +12,7 @@ export const PUBLIC_CANONICAL_ORIGIN = "https://callofdoodie.wtf";
 // S155: derived from the newest git commit touching content-bearing sources
 // (deterministic per commit) instead of a hand-frozen string that drifted.
 export const PUBLIC_CONTENT_VERSION_DATE = deriveContentVersionDate();
+const PUBLIC_CHECK_LABEL = `${new Intl.DateTimeFormat("en-US", { timeZone: "UTC", month: "long", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit", hour12: false }).format(new Date(CAPABILITY_EVIDENCE.checkedAt))} UTC`;
 
 export function formatPublicContentDate() {
   const [year, month, day] = PUBLIC_CONTENT_VERSION_DATE.split("-").map(Number);
@@ -28,7 +30,7 @@ const SPECIALIST_ATLAS_INDICES = ENEMY_ATLAS_CONTRACT.specialists.typeIndices;
 const SIGNATURE_ATLAS_INDICES = ENEMY_ATLAS_CONTRACT.bosses.typeIndices;
 
 function titleCase(value) {
-  return String(value).replaceAll("_", " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
+  return String(value).replace(/[_-]/g, " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
 }
 
 export function escapeHtml(value) {
@@ -80,7 +82,7 @@ function buildArsenalSections(gameplay) {
 function buildModeSections(gameplay) {
   return [
     ["Authored Operations", gameplay.operations.map((operation) => `${operation.title} · ${operation.encounterVerbs.length} encounters · ${operation.durationMinutes[0]}–${operation.durationMinutes[1]} min`).join(" | ")],
-    ["Seeded run modes", gameplay.modes.map((mode) => mode.label).join(" · ")],
+    ["Playable modes and rulesets", gameplay.modes.map((mode) => mode.label).join(" · ")],
     ["Difficulty profiles", gameplay.difficulties.map((difficulty) => difficulty.label).join(" · ")],
     ["Replay-code scope", `Replay codes capture ${gameplay.challengeLinks.replayCode.captures.map(titleCase).join(", ")}. They are ${gameplay.trust.replayEvidence}, ${gameplay.trust.excludedClaim}.`],
   ];
@@ -110,31 +112,37 @@ const ROUTE_DEFINITIONS = [
   },
   {
     id: "bestiary", path: "/bestiary/", label: "Bestiary", rel: "enemies", priority: 0.8, generated: true,
-    eyebrow: "Bestiary", title: "Every problem has a silhouette.",
+    eyebrow: "Bestiary", title: "Know your enemies.",
     description: "Meet every enemy and boss in the live Call of Doodie roster.",
-    lede: (gameplay) => `The live roster contains ${gameplay.enemies.length} threats. Art cohorts describe atlas delivery; the boss rotation below comes from gameplay rules.`,
+    lede: (gameplay) => `${gameplay.enemies.length} live threats. Read the signal, then choose the counter.`,
     sections: buildEnemySections,
-    art: true,
   },
   {
     id: "arsenal", path: "/arsenal/", label: "Arsenal", rel: "arsenal", priority: 0.6, generated: true,
-    eyebrow: "Weapons and builds", title: "Choose a tool. Then make it unreasonable.",
+    eyebrow: "Weapons and builds", title: "Choose your weapon.",
     description: "Explore the live weapons, starter loadouts, and permanent upgrades in Call of Doodie.",
-    lede: (gameplay) => `${gameplay.weapons.length} weapons establish the rhythm; run perks and ${gameplay.permanentUpgrades.length} permanent upgrade tracks shape how far that rhythm can go.`,
+    lede: (gameplay) => `${gameplay.weapons.length} live weapons. Each one changes the rhythm of a run.`,
     sections: buildArsenalSections,
   },
   {
     id: "modes", path: "/modes/", label: "Modes", rel: "modes", priority: 0.6, generated: true,
     eyebrow: "Ways to play", title: "One arena. Several reasons to come back.",
-    description: "Compare authored Operations, live seeded arcade modes, and difficulty profiles in Call of Doodie.",
-    lede: (gameplay) => `Deploy into ${gameplay.operations.length} authored Operations, or pick from ${gameplay.modes.length} Arcade & Rivals modes across ${gameplay.difficulties.length} difficulty profiles.`,
+    description: "Compare solo game modes and rulesets by objective, run shape, computer squad, replay code and score eligibility.",
+    lede: (gameplay) => `Choose from ${gameplay.modes.filter((mode) => mode.kind === "mode").length} game modes, ${gameplay.modes.filter((mode) => mode.kind === "ruleset").length} rulesets, or ${gameplay.operations.length} authored Operations. Selection never starts a run for you.`,
+    sections: buildModeSections,
+  },
+  {
+    id: "operations", path: "/operations/", label: "Operations", rel: "operations", priority: 0.7, generated: true,
+    eyebrow: "Operation dossiers", title: "Three missions. Choose the bargain.",
+    description: "Explore Blacksite Flush, Porcelain Siege and Final Notice with their scenes, encounters, route consequences and exact launch links.",
+    lede: "Seven authored encounters per Operation, with a route bargain before deployment. Prior completed routes can echo into the next mission; the dossiers show only authored consequences.",
     sections: buildModeSections,
   },
   {
     id: "board", path: "/board/", label: "Board", rel: "leaderboard", priority: 0.7, generated: true,
     eyebrow: "The Sewer Board", title: "Scores, stats, and the trust behind them.",
-    description: "The live Call of Doodie board: verified top scores, community statistics, shared seeds, replay receipts, and run integrity on one page.",
-    lede: "One page for every number that matters: the verified top 10, live community totals that refresh every 15 seconds, and the rules that make a score mean something. Guest play is fine; a callsign is only asked for when identity adds value.",
+    description: "The live Call of Doodie score board: verified top scores, shared seeds, replay receipts and run integrity, with a link to full community statistics.",
+    lede: "Start with the verified top 10 and the rules behind each score. A short community pulse follows; Stats owns the full history, definitions and coverage. Guest play is fine; a callsign is only asked for when identity adds value.",
     sections: [
       ["Shared conditions", "Daily and Gauntlet modes use shared seeds so players can compare results under common starting conditions. Squad codes group friends on the in-game board."],
       ["Run receipts", "Replay proof is advisory deterministic evidence, not a promise of full physics resimulation. Integrity indicators explain when a run is local-only or has unusual conditions."],
@@ -169,6 +177,36 @@ const ROUTE_DEFINITIONS = [
     ],
   },
   {
+    id: "field-lab", path: "/field-lab/", label: "Field Lab", rel: "field-lab", priority: 0.5, generated: true,
+    eyebrow: "Unranked practice prototypes", title: "Test the tactic before it enters the game.",
+    description: "Three local Call of Doodie tactics prototypes: reroute a pressure room, counter a nemesis complaint, and compare paired practice approaches.",
+    lede: "Play with three experimental combat decisions in a browser-local sandbox. Every outcome is authored and visible; no prototype changes a scored run or pretends to replay a death.",
+    sections: [],
+  },
+  {
+    id: "challenge", path: "/challenge/", label: "Challenges", rel: "challenge", priority: 0.7, generated: true,
+    eyebrow: "Friendly rivalry", title: "See the dare before you take it.",
+    description: "Preview a Call of Doodie seed challenge, rules and friendly score before guest play.",
+    lede: "A challenge is a recorded run to beat, not a live human opponent. Open a shared link to inspect its seed, mode, loadout, expiry and score scope before choosing to play.",
+    sections: [
+      ["Saved run, not live multiplayer", "The target comes from a shared saved run. A seed duel may store one friendly response, but nobody is playing live against you and no bot is standing in for that person."],
+      ["What matches", "The invite fixes seed, difficulty, game mode and starter loadout. Your upgrades and decisions can still differ. A replay code is advisory evidence, not a frame-perfect or competitive verification receipt."],
+      ["Score trust", "The rival target and duel result are friendly, self-reported comparisons. Public leaderboard eligibility follows the game's separate signed-run checks. An invite checksum detects damaged links but cannot authenticate a score."],
+    ],
+  },
+  {
+    id: "feedback", path: "/feedback/", label: "Player Feedback", rel: "feedback", priority: 0.6, generated: true,
+    eyebrow: "Player voice", title: "What players report. What we change.",
+    description: "Consented Call of Doodie field report counts and a transparent change log.",
+    lede: "A Field Report is an optional post-run feeling and reason. Counts here come only from reports players chose to send; written comments and player identifiers are never published.",
+    sections: [
+      ["You said", "The live panel below shows report counts and reasons when available. Zero reports means zero evidence, not a positive or negative verdict. Small groups are descriptive, not statistically representative."],
+      ["Changed", "The debrief now puts the next action beside observed run evidence, and Field Reports offer an optional reason, a local-only comment, explicit consent, and a retry state. These changes came from the project audit; they are not attributed to player reports without evidence."],
+      ["How to respond", "Finish a run and choose a Field Report in the debrief, or use Support for a specific bug. Skipping is always an option. Sending a category is opt-in; comments remain on your device."],
+    ],
+    cta: ["Play and leave a Field Report", "../#deploy"],
+  },
+  {
     id: "support", path: "/support/", label: "Support", rel: "support", priority: 0.6, generated: true,
     eyebrow: "Player support", title: "Get unstuck without sharing private information.",
     description: "Troubleshooting and support for Call of Doodie.",
@@ -178,7 +216,7 @@ const ROUTE_DEFINITIONS = [
       ["Controls feel wrong", "Disconnect duplicate gamepads, reload after reconnecting a controller, and check the in-game settings panel. On touch devices, keep both thumbs inside the arena zones."],
       ["Report a bug", "Include browser, device, mode, wave, expected result, and actual result. Never send passwords, keys, payment details, or private account information."],
     ],
-    cta: ["Contact support", "../contact/"],
+    cta: ["Prepare a report", "#report"],
   },
   {
     id: "press-kit", path: "/press-kit/", label: "Press Kit", rel: "press-kit", priority: 0.5, generated: true,
@@ -187,10 +225,11 @@ const ROUTE_DEFINITIONS = [
     lede: "Call of Doodie is a free comedy-first browser roguelite shooter created by VaultSpark Studios LLC.",
     sections: (gameplay) => [
       ["One-line description", "A fast browser arena shooter where improvised weapons, absurd enemies, and escalating buildcraft turn every short run into a story."],
-      ["Live feature facts", `Instant browser play · desktop, touch, and gamepad input · ${gameplay.operations.length} authored Operations · ${gameplay.enemies.length}-character roster · ${gameplay.modes.length} Arcade & Rivals modes · permanent progression · advisory replay receipts`],
+      ["Live feature facts", `Instant browser play · desktop, touch, and gamepad input · ${gameplay.operations.length} authored Operations · ${gameplay.enemies.length}-character roster · ${gameplay.modes.length} game modes and rulesets · permanent progression · advisory replay receipts · ${capability("public-board").benefit}`],
+      ["Availability", `Browser saves work locally. ${capability("cloud-backup").label} and ${capability("online-duels").label.toLowerCase()} are not available on the current deployment. Last checked ${CAPABILITY_EVIDENCE.checkedAt.slice(0, 10)}.`],
       ["Rights and attribution", "All original code, content, characters, assets, and designs are proprietary and all rights are reserved by VaultSpark Studios LLC. Review the Rights & IP page before reuse."],
     ],
-    cta: ["Request press materials", "../contact/"],
+    cta: ["Explore press materials", "#materials"],
   },
   {
     id: "status", path: "/status/", label: "Status", rel: "status", priority: 0.5, generated: true,
@@ -198,9 +237,9 @@ const ROUTE_DEFINITIONS = [
     description: "Current public service posture for Call of Doodie.",
     lede: "The browser game and public documentation are the primary surfaces. This page states product behavior without promising uninterrupted availability.",
     sections: [
-      ["Browser game · operational", `Public health checks passed ${formatPublicContentDate()}. Local play can continue when optional online score services are unavailable.`],
-      ["Leaderboard trust · operational", "Origin controls, bounded request quotas, replay checks, and reversible anomaly quarantine are active. Eligibility can still fall back to local-only."],
-      ["Known limitation", "Progress is browser-local. Porcelain Passport can export a minimal verification receipt, but cross-device career synchronization is not currently promised."],
+      ["Last observed public check", `At ${PUBLIC_CHECK_LABEL}, the browser shell and health endpoint responded. Local play can continue if optional score services are unavailable. This dated check is not a promise of current uptime.`],
+      ["Public score services", `At ${PUBLIC_CHECK_LABEL}, top scores and community totals responded. Scores carry origin controls, bounded quotas, replay checks and reversible anomaly quarantine; eligibility may fall back to local-only.`],
+      ["Progress and identity", `${capability("local-backup").benefit} ${capability("cloud-backup").label} is not available on this deployment. Obelisk verification remains optional for guest play.`],
     ],
   },
   {
@@ -344,13 +383,15 @@ export function getAgentResources() {
     { rel: "game-stats", href: `${PUBLIC_CANONICAL_ORIGIN}/stats-surface.json` },
     { rel: "game-stats-live", href: `${PUBLIC_CANONICAL_ORIGIN}/api/community-stats` },
     { rel: "service-status", href: `${PUBLIC_CANONICAL_ORIGIN}/status.json` },
+    { rel: "product-capabilities", href: `${PUBLIC_CANONICAL_ORIGIN}/capabilities.json` },
+    { rel: "run-analysis-schema", href: `${PUBLIC_CANONICAL_ORIGIN}/run-analysis-schema.json` },
   ];
 }
 
 export function buildAgentsManifest() {
   const gameplay = buildPublicGameplayContract();
   return {
-    schemaVersion: "1.2",
+    schemaVersion: "1.3",
     name: "Call of Doodie",
     canonicalUrl: `${PUBLIC_CANONICAL_ORIGIN}/`,
     publisher: { name: "VaultSpark Studios LLC", url: "https://vaultsparkstudios.com/" },
@@ -358,10 +399,12 @@ export function buildAgentsManifest() {
     audience: ["humans", "ai-agents"],
     access: { play: "public", readDocumentation: "public", writeActions: "not-offered", authentication: "none-required-for-public-read" },
     resources: getAgentResources(),
+    productCapabilities: PUBLIC_CAPABILITIES.map(({ id, availability, evidenceDate, route }) => ({ id, availability, evidenceDate, route })),
     capabilities: [
       { id: "game.describe", mode: "read", description: "Describe the public loop, modes, roster, accessibility, and competitive-trust posture." },
       { id: "game.inspect-rules", mode: "read", description: "Inspect the versioned gameplay contract for modes, weapons, mastery, enemies, and challenge-link grammar." },
       { id: "game.inspect-live-truth", mode: "read", description: "Inspect effective-dated product claims, source links, current service posture, and known limitations." },
+      { id: "game.analyze-player-export", mode: "read-local", description: "Read a player-provided, redacted run JSON pack with event units, advisory trust scope and SHA-256 integrity. The player must download and share the file; no API or agent write authority is offered." },
     ],
     trust: {
       competitiveReplayClaim: "advisory deterministic evidence; not full physics resimulation",
@@ -389,7 +432,7 @@ Rights: ${gameplay.rights}
 
 ## What players do
 
-Players ${gameplay.loop.map(titleCase).join(", ").toLowerCase()}. The live contract publishes ${gameplay.modes.length} seeded modes, ${gameplay.weapons.length} weapons, and ${gameplay.enemies.length} enemies. Replay proof is ${gameplay.trust.replayEvidence} and ${gameplay.trust.excludedClaim}.
+Players ${gameplay.loop.map(titleCase).join(", ").toLowerCase()}. The live contract publishes ${gameplay.modes.length} modes and rulesets, ${gameplay.weapons.length} weapons, and ${gameplay.enemies.length} enemies. Replay proof is ${gameplay.trust.replayEvidence} and ${gameplay.trust.excludedClaim}. Product capability availability was last checked ${CAPABILITY_EVIDENCE.checkedAt}; browser-local features and unavailable online features are listed separately in capabilities.json.
 
 ## Public resources
 

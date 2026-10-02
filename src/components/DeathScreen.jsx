@@ -1,9 +1,11 @@
 import { useState, useRef, useEffect, useMemo, lazy } from "react";
 import AsyncPanelBoundary from "./AsyncPanelBoundary.jsx";
+import DialogShell from "./DialogShell.jsx";
 import { ACHIEVEMENTS, ENEMY_TYPES, RANK_NAMES, WEAPONS } from "../constants.js";
 
 import { buildRunDebrief } from "../utils/runDebrief.js";
 import { buildRunNarrative } from "../utils/runNarrative.js";
+import { buildRunVoice, readRecentRunVoices, rememberRunVoice } from "../utils/runVoice.js";
 import { buildRunCoach } from "../utils/runCoach.js";
 import { buildPostRunIntelligence, buildRunEventDigest, buildStudioGameEvent } from "../utils/runIntelligence.js";
 import { buildInsightGraph } from "../utils/insightGraph.js";
@@ -24,9 +26,10 @@ import { buildDeathCoachTelemetry, buildDebriefStudioEventPlan, buildRunTheFixCo
 import { buildCollapseCoaching } from "../systems/collapseCoaching.js";
 import { recordActivePlaytestContinuation } from "../utils/playtestFlightRecorder.js";
 import PlaytestFlightReceipt from "./PlaytestFlightReceipt.jsx";
-import { recordRivalryResult, requestStudioEventSync, saveStudioGameEvent, loadCareerStats, loadMetaProgress, loadRunHistory, loadRivalryHistory, loadStudioGameEvents, saveExperimentIntent, loadDoctrineArchive } from "../storage.js";
-import { FIELD_REPORTS } from "../utils/fieldReport.js";
+import { deleteLocalFieldReport, removeLocalStudioGameEvent, recordRivalryResult, requestStudioEventSync, saveStudioGameEvent, loadCareerStats, loadMetaProgress, loadRunHistory, loadRivalryHistory, loadStudioGameEvents, saveExperimentIntent, loadDoctrineArchive } from "../storage.js";
+import { FIELD_REPORTS, FIELD_REPORT_REASONS } from "../utils/fieldReport.js";
 import CommunityStatsPanel from "./CommunityStatsPanel.jsx";
+import { buildAgentRunPack } from "../utils/agentRunPack.js";
 
 const LeaderboardPanel = lazy(() => import("./LeaderboardPanel.jsx"));
 // S165 diet: the on-screen keyboard is only mounted for touch name entry.
@@ -65,13 +68,25 @@ export default function DeathScreen({
   performanceReceipt = null,
 }) {
   const [showLeaderboard, setShowLeaderboard] = useState(false);
+  const [runVoice] = useState(() => buildRunVoice({ wave, kills, bossKillCount, precisionPeakStreak,
+    nearDeathEvents: nearDeathEvents?.[0] ? [nearDeathEvents[0]] : [] }, readRecentRunVoices()));
+  useEffect(() => { rememberRunVoice(runVoice.id); }, [runVoice.id]);
   const [lastWords, setLastWords] = useState("");
   const [submitStatus, setSubmitStatus] = useState(null); // null | 'pending' | 'online' | 'local'
   const [submitFeedback, setSubmitFeedback] = useState(null);
   const [difficultyFeedback, setDifficultyFeedback] = useState(null);
+  const [reportSelection, setReportSelection] = useState(null);
+  const [reportReason, setReportReason] = useState(null);
+  const [reportComment, setReportComment] = useState("");
+  const [reportConsent, setReportConsent] = useState(false);
+  const [reportStatus, setReportStatus] = useState("");
+  const [reportBusy, setReportBusy] = useState(false);
+  const [reportSkipped, setReportSkipped] = useState(false);
+  const reportIdRef = useRef(null);
   const [threatRecommendation, setThreatRecommendation] = useState(null);
   const [globalRank, setGlobalRank] = useState(null);
   const [sharing, setSharing] = useState(false);
+  const [runPackStatus, setRunPackStatus] = useState("");
   const [activeTooltip, setActiveTooltip] = useState(null);
   const [showLastWordsKeyboard, setShowLastWordsKeyboard] = useState(false);
   const [copiedChallenge, setCopiedChallenge] = useState(false);
@@ -218,10 +233,21 @@ export default function DeathScreen({
     return () => { if (rafId) cancelAnimationFrame(rafId); };
   }, [ghostData, replayNonce, replayMode, precisionPeakFrame]);
 
+  const mode = modeOutcome?.modeId || (zombiesMode ? "zombies"
+    : bossRushMode ? "boss_rush"
+    : cursedRunMode ? "cursed"
+      : scoreAttackMode ? "score_attack"
+        : dailyChallengeMode ? "daily_challenge"
+          : _speedrunMode ? "speedrun"
+            : _gauntletMode ? "gauntlet"
+              : "standard");
+
   // ── QR code rendering ─────────────────────────────────────────────────────
   const challengeUrl = buildChallengeUrl({
     seed: runSeed,
     difficulty,
+    mode,
+    loadout: starterLoadout,
     vsScore: score,
     vsName: username,
   });
@@ -310,14 +336,6 @@ export default function DeathScreen({
   const diff = DIFFICULTIES[difficulty] || DIFFICULTIES.normal;
   const ghostDeathReadout = buildGhostDeathReadout(ghostData, ENEMY_TYPES);
   const rankIndex = Math.min(Math.floor(kills / 10), RANK_NAMES.length - 1);
-  const mode = modeOutcome?.modeId || (zombiesMode ? "zombies"
-    : bossRushMode ? "boss_rush"
-    : cursedRunMode ? "cursed"
-      : scoreAttackMode ? "score_attack"
-        : dailyChallengeMode ? "daily_challenge"
-          : _speedrunMode ? "speedrun"
-            : _gauntletMode ? "gauntlet"
-              : "standard");
   const debrief = buildRunDebrief({
     victory, modeOutcome,
     score,
@@ -349,6 +367,7 @@ export default function DeathScreen({
     return { weapon: WEAPONS[bi], kills: wk[bi], share: (wk[bi] || 0) / total };
   })();
   const runHistory = loadRunHistory();
+  const currentRun = runHistory[0]?.score === score && runHistory[0]?.wave === wave && Number(runHistory[0]?.runSeed) === Number(runSeed) ? runHistory[0] : null;
   const replayProofPresenter = buildReplayProofPresenter({ traceEvidence, runHistory });
   const replayProofReceipt = replayProofPresenter.receipt;
   const proofTrend = replayProofPresenter.trend;
@@ -365,6 +384,9 @@ export default function DeathScreen({
     meta: loadMetaProgress(),
     runSummary: { wave, kills, bestStreak, crits, topWeapon: _topWpn, weaponKills: weaponKills || [], bestPrecisionStreak, activePerks },
     runHistory,
+    latestRun: currentRun,
+    mode,
+    difficulty,
     studioEvents,
     chokeWaves: communityChokeWaves,
     doctrineArchive: loadDoctrineArchive(),
@@ -401,11 +423,26 @@ export default function DeathScreen({
     postRunIntel,
     collapseCoaching,
     nextRunDrill,
+    localLesson: runCoach.lesson,
     runSeed,
     wave,
     rematchWave: resolveRematchStartWave(wave),
   });
   const insightGraph = buildInsightGraph({ runCoach, collapseCoaching, postRunIntel, debrief, runTheFix });
+  const downloadRunPack = async () => {
+    try {
+      const pack = await buildAgentRunPack({ run: currentRun, coachLesson: runCoach.lesson });
+      const url = URL.createObjectURL(new Blob([`${JSON.stringify(pack, null, 2)}\n`], { type: "application/json" }));
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `call-of-doodie-run-${pack.run.seed ?? "local"}.json`;
+      link.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      setRunPackStatus("Redacted run pack downloaded. It stays on your device until you choose to share it.");
+    } catch {
+      setRunPackStatus("Run pack unavailable. Keep this run in your local Record and try again on a secure browser.");
+    }
+  };
   const eventDigest = buildRunEventDigest({
     mode,
     difficulty,
@@ -563,6 +600,24 @@ export default function DeathScreen({
     }
   };
 
+  const playAgain = () => {
+    recordPlaytestChoice("play_again");
+    track("debrief_play_again", { score, wave, runSeed, intelligenceCause: postRunIntel.cause });
+    onStartGame();
+  };
+
+  const replaySameSeed = () => {
+    recordPlaytestChoice("replay_seed");
+    track("debrief_replay_seed", { seed: runSeed, score, wave, intelligenceCause: postRunIntel.cause });
+    onStartGame(runSeed);
+  };
+
+  const practiceThisWave = () => {
+    recordPlaytestChoice("rematch_wave");
+    track("debrief_rematch_wave", { seed: runSeed, deathWave: wave, startWave: rematchWave, score, intelligenceCause: postRunIntel.cause, drillId: nextRunDrill.id });
+    onStartGame(runSeed, { startWave: rematchWave, drill: { ...makeDrillLaunch("rematch"), deathWave: wave } });
+  };
+
   const handleSubmit = async () => {
     const words = lastWords.trim().split(/\s+/).filter(Boolean);
     if (words.length > 5) { setLastWords(words.slice(0, 5).join(" ")); return; }
@@ -588,6 +643,30 @@ export default function DeathScreen({
     }
   };
 
+  const submitFieldReport = async () => {
+    if (!reportSelection || reportBusy) return;
+    if (!reportIdRef.current) reportIdRef.current = crypto.randomUUID();
+    setReportBusy(true);
+    try {
+      const result = await onSaveFieldReport?.({
+        reportId: reportIdRef.current,
+        feedback: reportSelection,
+        reason: reportReason,
+        comment: reportComment,
+        consent: reportConsent,
+      });
+      setReportStatus(result?.status || "storage-error");
+      if (result?.status && result.status !== "storage-error" && result.status !== "invalid") {
+        setDifficultyFeedback(reportConsent ? reportSelection : null);
+        setThreatRecommendation(result.recommendation || null);
+      }
+    } catch {
+      setReportStatus("submission-error");
+    } finally {
+      setReportBusy(false);
+    }
+  };
+
   const drillOutcomeBrief = drillOutcome ? (
     <div data-focus-order="last_order_result" data-testid="run-drill-outcome" style={{ ...card, marginBottom: 12, textAlign: "left", border: `1px solid ${drillOutcome.status === "improved" ? "rgba(0,255,136,0.58)" : "rgba(255,209,102,0.42)"}`, background: "linear-gradient(145deg,rgba(0,229,255,0.10),rgba(12,12,18,0.96))" }}>
       <div style={{ fontSize: 10, color: drillOutcome.status === "improved" ? "#7CFFBE" : "#FFD166", letterSpacing: 2, fontWeight: 900 }}>LAST ORDER RESULT · {drillOutcome.label}</div>
@@ -605,16 +684,36 @@ export default function DeathScreen({
   const revengeBrief = (
     <div data-focus-order="run_the_fix" data-testid="insight-verdict" style={{ ...card, marginBottom: 12, textAlign: "left", border: "1px solid rgba(255,138,61,0.72)", background: "linear-gradient(145deg,rgba(255,107,53,0.24),rgba(12,12,18,0.96))", boxShadow: "0 18px 44px rgba(0,0,0,0.28)" }}>
       <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap", fontSize: 10, color: "#FFB36B", letterSpacing: 2.4, fontWeight: 900 }}>
-        <span>ONE VERDICT</span><span>{Math.round(insightGraph.verdict.confidence * 100)}% · {insightGraph.verdict.evidenceLevel.replaceAll("_", " ").toUpperCase()}</span>
+        <span>RUN EVIDENCE &amp; HYPOTHESIS</span><span>{Math.round(insightGraph.verdict.confidence * 100)}% · {insightGraph.verdict.evidenceLevel.replaceAll("_", " ").toUpperCase()}</span>
       </div>
       <div style={{ marginTop: 9, fontSize: 16, color: "#FFF", fontWeight: 900 }}>{insightGraph.verdict.statement}</div>
-      {insightGraph.lesson !== runTheFix.target && <div style={{ marginTop: 7, fontSize: 11, color: "#FFD7C2", lineHeight: 1.5 }}>
+      {!runTheFix.target.includes(insightGraph.lesson) && <div style={{ marginTop: 7, fontSize: 11, color: "#FFD7C2", lineHeight: 1.5 }}>
         <strong style={{ color: "#FF9A67" }}>Lesson:</strong> {insightGraph.lesson}
       </div>}
       <div style={{ marginTop: 8, padding: "9px 10px", borderRadius: 7, background: "rgba(0,0,0,0.28)", border: "1px solid rgba(255,255,255,0.1)" }}>
+        <strong style={{ display: "block", marginBottom: 4, color: "#FFB36B", fontSize: 9, letterSpacing: 1.5 }}>SUGGESTED ADJUSTMENT</strong>
         <div style={{ fontSize: 11, color: "#FFF", lineHeight: 1.45 }}>{runTheFix.target}</div>
         <div style={{ marginTop: 4, fontSize: 10, color: "var(--cod-cyan)", lineHeight: 1.45 }}>Proof target: {runTheFix.proof}</div>
       </div>
+      {!debrief.objective && <details data-testid="coach-lesson-evidence" style={{ marginTop: 8, color: "#DDE6EE", fontSize: 10, lineHeight: 1.5 }}>
+        <summary style={{ cursor: "pointer", fontWeight: 900, color: "#9FEAF3" }}>WHY THIS SUGGESTION · {runCoach.lesson.status === "ready" ? "LOCAL EVIDENCE" : "EVIDENCE LIMITED"}</summary>
+        <p><strong>Observed:</strong> {runCoach.lesson.observed}</p>
+        <p><strong>Likely factor:</strong> {runCoach.lesson.likelyFactor || "No factor meets the repeat-evidence threshold."}</p>
+        <p><strong>Missing evidence:</strong> {runCoach.lesson.missingEvidence.length ? runCoach.lesson.missingEvidence.join(" ") : "No missing evidence required for this suggestion."}</p>
+        <p><strong>Reason:</strong> {runCoach.lesson.why}</p>
+        <p>Computed on this device from saved runs. It does not change enemies, scoring or rankings.</p>
+      </details>}
+      <div data-testid="debrief-next-run" style={{ display: "grid", gap: 8, marginTop: 10 }}>
+        <button data-testid="debrief-primary-rematch" onClick={debrief.objective ? executeRunTheFix : playAgain} style={{ width: "100%", minHeight: 48, padding: "10px 12px", borderRadius: 8, border: "none", background: "linear-gradient(180deg,#FF9A4D,#D54500)", color: "#FFF", fontSize: 14, fontWeight: 900, letterSpacing: 1.4, cursor: "pointer", fontFamily: "'Courier New',monospace" }}>
+          {debrief.objective ? "RETRY OBJECTIVE" : "PLAY AGAIN"}
+        </button>
+        {!debrief.objective && <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(130px,1fr))", gap: 7 }}>
+          {runSeed > 0 && <button onClick={replaySameSeed} style={{ ...btnS, minHeight: 44, fontSize: 10 }}>REPLAY SAME SEED</button>}
+          {runSeed > 0 && rematchWave != null && <button onClick={practiceThisWave} style={{ ...btnS, minHeight: 44, fontSize: 10, border: "1px solid rgba(0,229,255,0.45)", color: "var(--cod-cyan)" }}>PRACTICE W{rematchWave}</button>}
+        </div>}
+        {!debrief.objective && runSeed > 0 && rematchWave != null && <div style={{ color: "#B9C4D8", fontSize: 9, lineHeight: 1.35 }}>Practice starts near the failed wave and never submits to the leaderboard. Replay starts the same seed from wave one.</div>}
+      </div>
+      {!debrief.objective && <button data-testid="run-the-fix" aria-label={`${runTheFix.action.label}: ${runTheFix.target}`} onClick={executeRunTheFix} style={{ ...btnS, width: "100%", minHeight: 44, marginTop: 8, fontSize: 10 }}>TRY SUGGESTED PLAN · {runTheFix.action.label}</button>}
       <details style={{ marginTop: 8 }}>
         <summary style={{ color: "#B9C4D8", fontSize: 9, fontWeight: 900, cursor: "pointer" }}>INSPECT RANKED REASONING · {insightGraph.contradictions.length ? `${insightGraph.contradictions.length} CONFLICT` : "NO CONFLICTS"}</summary>
         <div style={{ marginTop: 7, display: "grid", gap: 5 }}>
@@ -625,14 +724,6 @@ export default function DeathScreen({
           ))}
         </div>
       </details>
-      <button
-        data-testid="run-the-fix"
-        aria-label={`${runTheFix.action.label}: ${runTheFix.target}`}
-        onClick={executeRunTheFix}
-        style={{ marginTop: 10, width: "100%", padding: "11px 12px", borderRadius: 8, border: "none", background: "linear-gradient(180deg,#FF9A4D,#D54500)", color: "#FFF", fontSize: 13, fontWeight: 900, letterSpacing: 1.4, cursor: "pointer", fontFamily: "'Courier New',monospace" }}
-      >
-        {runTheFix.action.label}
-      </button>
     </div>
   );
 
@@ -651,6 +742,13 @@ export default function DeathScreen({
         {duelResult && (
           <div data-testid="duel-result" style={{ display: "inline-block", padding: "2px 10px", marginBottom: 4, marginLeft: 6, borderRadius: 10, border: "1px solid rgba(51,230,255,0.45)", color: "var(--cod-cyan)", fontSize: 11, fontWeight: 800, letterSpacing: 1 }}>
             {duelResult.ok ? (duelResult.status === "responder_won" ? "⚔️ DUEL WON · recorded" : "⚔️ DUEL LOST · recorded") : "⚔️ DUEL " + (duelResult.reason === "already_answered_or_expired" ? "EXPIRED OR ANSWERED" : "NOT RECORDED")} · friendly, unverified
+          </div>
+        )}
+        {duelResult?.ok && Number.isFinite(Number(duelResult.duel?.challenger_score)) && (
+          <div data-testid="duel-comparison" style={{ margin: "5px auto 8px", maxWidth: 420, padding: "10px 12px", borderRadius: 9, border: "1px solid rgba(51,230,255,0.38)", background: "rgba(51,230,255,0.07)", color: "#EAFBFF", textAlign: "left", fontSize: 11, lineHeight: 1.5 }}>
+            <strong>RIVAL RESULT · {duelResult.status === "responder_won" ? "YOU WON" : "RIVAL WON"}</strong>
+            <div>You {Number(score || 0).toLocaleString()} · {duelResult.duel.challenger_name || "Rival"} {Number(duelResult.duel.challenger_score).toLocaleString()} · gap {Math.abs(Number(score || 0) - Number(duelResult.duel.challenger_score)).toLocaleString()}</div>
+            <div style={{ color: "#B9CED7" }}>One saved result each. Friendly self-reported scores; this is separate from official rankings.</div>
           </div>
         )}
         {modeOutcome?.headline && (
@@ -729,6 +827,8 @@ export default function DeathScreen({
           )}
         </details>
 
+        <details data-testid="debrief-run-record" style={{ width: "100%", marginBottom: 10 }}>
+          <summary style={{ padding: "10px 12px", borderRadius: 8, border: "1px solid rgba(255,255,255,0.18)", color: "#D5DCE8", cursor: "pointer", fontSize: 11, fontWeight: 900 }}>RUN RECORD · BUILD, MILESTONES &amp; RIVALS</summary>
         <PlaytestFlightReceipt cardStyle={card} buttonStyle={btnS} />
 
         {/* Weapon kill breakdown */}
@@ -898,6 +998,7 @@ export default function DeathScreen({
           </div>
           <div style={{ fontSize: 14, fontWeight: 900, color: "#EEE", letterSpacing: 2, marginBottom: 4 }}>{runNarrative.act}</div>
           <div style={{ fontSize: 11, color: "#888", lineHeight: 1.5, marginBottom: runNarrative.moments.length > 0 ? 10 : 0 }}>{runNarrative.actDesc}</div>
+          <div data-testid="run-voice" style={{ marginBottom: 10, color: "#FFD19A", fontSize: 11, fontStyle: "italic", lineHeight: 1.5 }}>{runVoice.line}</div>
           {runNarrative.moments.map((m, i) => (
             <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 8, padding: "4px 0", borderTop: "1px solid #1A1A1A" }}>
               <div style={{ fontSize: 8, color: "var(--cod-gold)", letterSpacing: 2, fontFamily: "'Courier New',monospace", whiteSpace: "nowrap", marginTop: 2 }}>{m.label}</div>
@@ -1003,20 +1104,37 @@ export default function DeathScreen({
           <CommunityStatsPanel compact />
         </div>
 
+        </details>
+
         {!practiceRun && (
           <div data-testid="field-report" style={{ ...card, marginBottom: 12, border: "1px solid rgba(127,230,255,0.22)", background: "rgba(4,24,28,0.58)" }}>
             <div style={{ color: "var(--cod-cyan)", fontSize: 10, fontWeight: 900, letterSpacing: 2 }}>FIELD REPORT · HOW WAS THE THREAT?</div>
-            <div style={{ color: "#8B989F", fontSize: 9, marginTop: 4 }}>One tap helps tune future modes. Your answer never changes difficulty without your approval.</div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3,minmax(0,1fr))", gap: 6, marginTop: 9 }}>
+            <div style={{ color: "#B4C5CC", fontSize: 10, marginTop: 4 }}>Optional. Pick a feeling, add one reason, then decide whether to send a category. Your answer never changes difficulty without your approval.</div>
+            {!reportSkipped && !reportStatus && <div style={{ display: "grid", gridTemplateColumns: "repeat(3,minmax(0,1fr))", gap: 6, marginTop: 9 }}>
               {Object.values(FIELD_REPORTS).map(report => {
-                const selected = difficultyFeedback === report.id;
-                return <button key={report.id} type="button" aria-pressed={selected} onClick={async () => {
-                  setDifficultyFeedback(report.id);
-                  const recommendation = await onSaveFieldReport?.(report.id);
-                  setThreatRecommendation(recommendation || null);
-                }} style={{ minWidth: 0, padding: "9px 4px", borderRadius: 6, cursor: "pointer", border: selected ? `1px solid ${report.color}` : "1px solid rgba(255,255,255,0.12)", background: selected ? `${report.color}18` : "rgba(255,255,255,0.035)", color: selected ? report.color : "#AAB3B8", fontSize: 9, fontWeight: 900, letterSpacing: 0.7 }}>{report.emoji} {report.label}</button>;
+                const selected = reportSelection === report.id;
+                return <button key={report.id} type="button" aria-pressed={selected} onClick={() => setReportSelection(report.id)} style={{ minWidth: 0, minHeight: 44, padding: "9px 4px", borderRadius: 6, cursor: "pointer", border: selected ? `1px solid ${report.color}` : "1px solid rgba(255,255,255,0.25)", background: selected ? `${report.color}18` : "rgba(255,255,255,0.035)", color: selected ? report.color : "#D1DFE5", fontSize: 9, fontWeight: 900, letterSpacing: 0.7 }}>{report.emoji} {report.label}</button>;
               })}
+            </div>}
+            {!reportSkipped && !reportStatus && reportSelection && <div style={{ marginTop: 12, textAlign: "left" }}>
+              <div style={{ color: "#D1DFE5", fontSize: 10, fontWeight: 900 }}>What shaped that answer? <span style={{ fontWeight: 400 }}>(optional)</span></div>
+              <div role="group" aria-label="Field report reason" style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 7 }}>
+                {FIELD_REPORT_REASONS.map(reason => <button key={reason.id} type="button" aria-pressed={reportReason === reason.id} onClick={() => setReportReason(current => current === reason.id ? null : reason.id)} style={{ ...btnS, minHeight: 40, padding: "6px 9px", fontSize: 9, color: reportReason === reason.id ? "var(--cod-cyan)" : "#D1DFE5", border: reportReason === reason.id ? "1px solid var(--cod-cyan)" : "1px solid rgba(255,255,255,0.25)" }}>{reason.label}</button>)}
+              </div>
+              <label style={{ display: "grid", gap: 5, marginTop: 10, color: "#D1DFE5", fontSize: 10, fontWeight: 900 }}>Anything else? <span style={{ fontWeight: 400 }}>(optional, stays on this device)</span>
+                <textarea value={reportComment} maxLength={280} onChange={event => setReportComment(event.target.value)} rows={3} style={{ width: "100%", boxSizing: "border-box", resize: "vertical", padding: 10, border: "1px solid rgba(255,255,255,0.28)", borderRadius: 7, background: "rgba(0,0,0,0.28)", color: "#FFF", font: "11px 'Courier New',monospace" }} />
+              </label>
+              <label style={{ display: "flex", alignItems: "flex-start", gap: 8, marginTop: 10, color: "#D1DFE5", fontSize: 10, lineHeight: 1.45 }}><input type="checkbox" checked={reportConsent} onChange={event => setReportConsent(event.target.checked)} style={{ marginTop: 2 }} /> Send my feeling and reason with mode, difficulty, input type, session-length band and app version. My comment stays on this device.</label>
+              <button type="button" onClick={submitFieldReport} disabled={reportBusy} style={{ ...btnP, width: "100%", minHeight: 44, marginTop: 12, opacity: reportBusy ? .6 : 1 }}>{reportBusy ? "SAVING…" : reportConsent ? "SAVE & SEND FIELD REPORT" : "SAVE ON THIS DEVICE"}</button>
+            </div>}
+            <div style={{ marginTop: 8, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
+              {!reportStatus && <button type="button" onClick={() => { setReportSkipped(current => !current); setReportSelection(null); }} disabled={reportBusy} style={{ background: "none", border: 0, color: "#BDD1DA", textDecoration: "underline", minHeight: 40, cursor: "pointer", fontSize: 10 }}>{reportSkipped ? "Add a report" : "Skip field report"}</button>}
+              {reportStatus && <span role="status" style={{ color: reportStatus === "sent" ? "#8DFFB5" : "#D1DFE5", fontSize: 10, textAlign: "right" }}>{reportStatus === "sent" ? "Category sent. Comment saved here." : reportStatus === "sent-category-only" ? "Category sent; detailed sync is pending." : reportStatus === "saved-on-device" ? "Saved on this device only." : reportStatus === "saved-pending-sync" ? "Saved here. Sending is pending; retry when online." : reportStatus === "deleted-local" ? "Local copy deleted. Any queued report was removed." : "Could not save. Try again."}</span>}
+              {reportSkipped && !reportStatus && <span role="status" style={{ color: "#D1DFE5", fontSize: 10 }}>Skipped. No report saved.</span>}
             </div>
+            {["saved-pending-sync", "sent-category-only"].includes(reportStatus) && <button type="button" onClick={submitFieldReport} disabled={reportBusy} style={{ ...btnS, width: "100%", minHeight: 44, marginTop: 6 }}>RETRY SEND</button>}
+            {["storage-error", "invalid", "submission-error"].includes(reportStatus) && <button type="button" onClick={() => setReportStatus("")} style={{ ...btnS, width: "100%", minHeight: 44, marginTop: 6 }}>TRY AGAIN</button>}
+            {reportStatus && !["storage-error", "invalid", "submission-error", "deleted-local"].includes(reportStatus) && <div style={{ marginTop: 6, fontSize: 9, color: "#B4C5CC", lineHeight: 1.4 }}>Local reports expire after 90 days. <button type="button" onClick={() => { if (deleteLocalFieldReport(reportIdRef.current)) { removeLocalStudioGameEvent(reportIdRef.current); setReportStatus("deleted-local"); setReportSelection(null); setReportComment(""); setDifficultyFeedback(null); setThreatRecommendation(null); reportIdRef.current = null; } }} style={{ border: 0, background: "none", color: "#D1DFE5", textDecoration: "underline", cursor: "pointer", font: "inherit" }}>Delete local copy</button>. If you opted to send it, request server deletion through <a href="/contact/" style={{ color: "#B7EFFF" }}>Contact</a>.</div>}
             {threatRecommendation && threatRecommendation.kind !== "practice" && (
               <div style={{ marginTop: 9, padding: 8, borderRadius: 6, textAlign: "left", border: "1px solid rgba(141,255,103,0.28)", background: "rgba(141,255,103,0.06)" }}>
                 <div style={{ color: "#8DFF67", fontSize: 9, fontWeight: 900, letterSpacing: 1 }}>OPTIONAL THREAT RESPONSE</div>
@@ -1039,6 +1157,8 @@ export default function DeathScreen({
           </AsyncPanelBoundary>
         )}
 
+        <details data-testid="debrief-score-trust" style={{ width: "100%", marginBottom: 10 }}>
+          <summary style={{ padding: "10px 12px", borderRadius: 8, border: "1px solid rgba(255,255,255,0.18)", color: "#D5DCE8", cursor: "pointer", fontSize: 11, fontWeight: 900 }}>SCORE &amp; RUN TRUST</summary>
         {practiceRun ? (
           <div style={{ ...card, marginBottom: 12, border: "1px solid rgba(0,229,255,0.25)" }}>
             <div style={{ fontSize: 12, color: "var(--cod-cyan)", letterSpacing: 1, fontWeight: 700 }}>🔁 DRILL RUN</div>
@@ -1130,6 +1250,10 @@ export default function DeathScreen({
           </div>
         )}
 
+        </details>
+
+        <details data-testid="debrief-share" style={{ width: "100%", marginBottom: 10 }}>
+          <summary style={{ padding: "10px 12px", borderRadius: 8, border: "1px solid rgba(255,255,255,0.18)", color: "#D5DCE8", cursor: "pointer", fontSize: 11, fontWeight: 900 }}>SHARE THIS RUN &amp; HIGHLIGHT</summary>
         <div style={{ marginBottom: 10 }}>
           <button
             onClick={handleShare}
@@ -1138,6 +1262,12 @@ export default function DeathScreen({
           >
             {sharing ? "⏳ GENERATING..." : "📸 SHARE SCORE"}
           </button>
+        </div>
+        <div style={{ marginBottom: 12, padding: "9px 10px", border: "1px solid rgba(51,230,255,0.28)", borderRadius: 8, background: "rgba(51,230,255,0.05)", textAlign: "left" }}>
+          <button type="button" data-testid="download-run-pack" onClick={downloadRunPack} disabled={!currentRun} style={{ ...btnS, minHeight: 44, width: "100%", color: "var(--cod-cyan)", border: "1px solid rgba(51,230,255,0.5)" }}>DOWNLOAD REDACTED RUN PACK · JSON</button>
+          <p style={{ margin: "7px 0 0", color: "#BFCED4", fontSize: 10, lineHeight: 1.45 }}>Player-owned local summary for an AI agent or your own analysis. No name, account token or full replay. Download only; nothing is uploaded.</p>
+          {!currentRun && <p style={{ color: "#FFCF98", fontSize: 10 }}>This run was not saved locally, so no pack is available.</p>}
+          {runPackStatus && <p role="status" style={{ color: "#A6F4D2", fontSize: 10 }}>{runPackStatus}</p>}
         </div>
 
         {/* Highlight GIF */}
@@ -1171,6 +1301,8 @@ export default function DeathScreen({
           </div>
         )}
 
+        </details>
+
         <details data-focus-order="more_run_actions" style={{ width: "100%", marginTop: 4 }}>
           <summary style={{ padding: "9px 11px", borderRadius: 7, border: "1px solid rgba(255,255,255,0.12)", background: "rgba(255,255,255,0.035)", color: "#9299A8", fontSize: 10, fontWeight: 900, letterSpacing: 1.5, cursor: "pointer" }}>
             MORE RUN ACTIONS
@@ -1187,23 +1319,23 @@ export default function DeathScreen({
               }}
               style={{ padding: "3px 8px", fontSize: 9, fontFamily: "'Courier New',monospace", background: "rgba(255,255,255,0.05)", border: "1px solid #555", borderRadius: 4, color: "#aaa", cursor: "pointer", letterSpacing: 1 }}
             >📋 COPY</button>
-            <button
+            {challengeUrl && <button
               onClick={() => {
                 track("debrief_copy_challenge", { seed: runSeed, score, wave, difficulty });
                 // S163 seed duel: open a 24-hour duel row so the rival's result comes back as a card.
-                createDuel({ seed: runSeed, difficulty, name: username, score, wave }).then((duel) => copyChallengeUrl({ seed: runSeed, difficulty, vsScore: score, vsName: username, duelId: duel?.id || null })).then((url) => {
+                createDuel({ seed: runSeed, mode, difficulty, name: username, score, wave }).then((duel) => copyChallengeUrl({ seed: runSeed, difficulty, mode, loadout: starterLoadout, vsScore: score, vsName: username, duelId: duel?.id || null, expiresAt: duel?.expiresAt || null })).then((url) => {
                   if (!url) return;
                   setCopiedChallenge(true);
                   setTimeout(() => setCopiedChallenge(false), 1500);
                 });
               }}
               style={{ padding: "3px 8px", fontSize: 9, fontFamily: "'Courier New',monospace", background: copiedChallenge ? "rgba(0,255,136,0.1)" : "rgba(255,107,53,0.08)", border: copiedChallenge ? "1px solid rgba(0,255,136,0.4)" : "1px solid rgba(255,107,53,0.35)", borderRadius: 4, color: copiedChallenge ? "#00FF88" : "#FF6B35", cursor: "pointer", letterSpacing: 1, transition: "all 0.2s" }}
-            >{copiedChallenge ? "✓ COPIED!" : "⚔️ COPY CHALLENGE LINK"}</button>
-            <button
+            >{copiedChallenge ? "✓ COPIED!" : "⚔️ COPY CHALLENGE LINK"}</button>}
+            {challengeUrl && <button
               aria-label="Show QR code for challenge link"
               onClick={() => setShowQR(true)}
               style={{ padding: "3px 8px", fontSize: 9, fontFamily: "'Courier New',monospace", background: "rgba(255,255,255,0.05)", border: "1px solid #555", borderRadius: 4, color: "#aaa", cursor: "pointer", letterSpacing: 1 }}
-            >📷 QR</button>
+            >📷 QR</button>}
           </div>
         )}
 
@@ -1217,21 +1349,6 @@ export default function DeathScreen({
         )}
 
         <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
-          <button aria-label="Play again — start a new run" onClick={() => { recordPlaytestChoice("play_again"); track("debrief_play_again", { score, wave, runSeed, intelligenceCause: postRunIntel.cause }); onStartGame(); }} style={{ ...btnP, minWidth: 110, fontSize: 15 }}>PLAY AGAIN</button>
-          {runSeed > 0 && (
-            <button aria-label={`Replay seed ${runSeed} — same map`} onClick={() => { recordPlaytestChoice("replay_seed"); track("debrief_replay_seed", { seed: runSeed, score, wave, intelligenceCause: postRunIntel.cause }); onStartGame(runSeed); }} style={{ ...btnS, minWidth: 130, fontSize: 13 }}>🔄 REPLAY #{runSeed}</button>
-          )}
-          {!debrief.objective && runSeed > 0 && rematchWave != null && (
-            <button
-              aria-label={`Rematch wave ${rematchWave} — practice the wave that killed you on the same seed`}
-              onClick={() => {
-                recordPlaytestChoice("rematch_wave");
-                track("debrief_rematch_wave", { seed: runSeed, deathWave: wave, startWave: rematchWave, score, intelligenceCause: postRunIntel.cause, drillId: nextRunDrill.id });
-                onStartGame(runSeed, { startWave: rematchWave, drill: { ...makeDrillLaunch("rematch"), deathWave: wave } });
-              }}
-              style={{ ...btnS, minWidth: 130, fontSize: 13, border: "1px solid rgba(0,229,255,0.45)", color: "var(--cod-cyan)" }}
-            >🔁 REMATCH W{rematchWave}</button>
-          )}
           {runSeed > 0 && (
             <button
               aria-label="Copy shareable link for this run"
@@ -1245,7 +1362,7 @@ export default function DeathScreen({
             >🔗 SHARE RUN</button>
           )}
           <button aria-label="View leaderboard" onClick={() => { recordPlaytestChoice("leaderboard"); track("debrief_view_leaderboard", { score, wave, intelligenceCause: postRunIntel.cause }); onRefreshLeaderboard(); setShowLeaderboard(true); }} style={{ ...btnS, minWidth: 130, fontSize: 15 }}>LEADERBOARD</button>
-          <button aria-label="Return to main menu" onClick={() => { recordPlaytestChoice("menu"); track("debrief_menu", { score, wave, intelligenceCause: postRunIntel.cause, nextRunContractId: debrief.nextRunContract?.id || null }); onMenu(makeDrillLaunch(runSeed > 0 ? "replay_seed" : "new_run")); }} style={{ ...btnS, minWidth: 110, fontSize: 15 }}>RAGE QUIT</button>
+          <button aria-label="Back to Command" onClick={() => { recordPlaytestChoice("menu"); track("debrief_menu", { score, wave, intelligenceCause: postRunIntel.cause, nextRunContractId: debrief.nextRunContract?.id || null }); onMenu(makeDrillLaunch(runSeed > 0 ? "replay_seed" : "new_run")); }} style={{ ...btnS, minWidth: 110, fontSize: 15 }}>BACK TO COMMAND</button>
         </div>
         </details>
       </div>
@@ -1253,8 +1370,8 @@ export default function DeathScreen({
 
       {/* QR Code modal */}
       {showQR && challengeUrl && (
-        <div style={{ position: "fixed", inset: 0, zIndex: 400, background: "rgba(0,0,0,0.9)", display: "flex", alignItems: "center", justifyContent: "center" }} onClick={() => setShowQR(false)}>
-          <div style={{ background: "#111", border: "1px solid #333", borderRadius: 12, padding: 24, textAlign: "center", maxWidth: 320 }} onClick={e => e.stopPropagation()}>
+        <DialogShell title="Scan to challenge" onClose={() => setShowQR(false)} onBackdrop={() => setShowQR(false)} zIndex={400}>
+          <div style={{ background: "var(--cod-panel-strong)", border: "1px solid var(--cod-line)", borderRadius: 12, padding: 24, textAlign: "center", maxWidth: 320, width: "100%", margin: "auto 0" }}>
             <div style={{ fontSize: 11, color: "#888", letterSpacing: 2, marginBottom: 12, fontFamily: "'Courier New',monospace" }}>SCAN TO CHALLENGE</div>
             {qrError ? (
               <div style={{ padding: "12px 0" }}>
@@ -1262,11 +1379,11 @@ export default function DeathScreen({
                 <div style={{ fontSize: 9, color: "#888", wordBreak: "break-all", fontFamily: "'Courier New',monospace", userSelect: "all" }}>{challengeUrl}</div>
               </div>
             ) : (
-              <canvas ref={qrCanvasRef} style={{ imageRendering: "pixelated" }} />
+              <canvas ref={qrCanvasRef} style={{ imageRendering: "pixelated", maxWidth: "100%" }} />
             )}
-            <div style={{ fontSize: 10, color: "#555", marginTop: 10 }}>tap outside to close</div>
+            <button type="button" onClick={() => setShowQR(false)} style={{ marginTop: 12, padding: "10px 18px", minHeight: 44, borderRadius: 8, border: "1px solid var(--cod-line)", background: "var(--cod-panel-soft)", color: "var(--cod-ink)", cursor: "pointer" }}>Close</button>
           </div>
-        </div>
+        </DialogShell>
       )}
     </div>
   );

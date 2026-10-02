@@ -3,10 +3,9 @@
 // verified identity via your backend proxy (which must call the IdP — never
 // verify on the client, and never embed a secret). If you have no backend, run
 // the included Cloudflare Worker (see OBELISK_PASSPORT.md).
-export async function handleObeliskCallback({ verifyEndpoint = "/api/obelisk-verify" } = {}) {
-  const token = new URLSearchParams(location.search).get("obelisk_session");
+export async function handleObeliskCallback({ verifyEndpoint = "/api/obelisk-verify", token = new URLSearchParams(location.search).get("obelisk_session"), fetchImpl = globalThis.fetch } = {}) {
   if (!token) return { ok: false, reason: "no-token" };
-  const res = await fetch(verifyEndpoint, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ token }) });
+  const res = await fetchImpl(verifyEndpoint, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ token }), signal: AbortSignal.timeout(5000) });
   let body = null;
   try { body = await res.json(); } catch {}
   return res.ok ? body : { ok: false, reason: body?.reason || "verify-failed", detail: body?.detail || null };

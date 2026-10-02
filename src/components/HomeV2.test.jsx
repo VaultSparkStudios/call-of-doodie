@@ -62,16 +62,20 @@ function saveVerifiedInput() {
 }
 
 describe("HomeV2", () => {
-  it("identifies a selected new mode and keeps the original game first", async () => {
+  it("identifies a selected new mode and lets the player choose an operation", async () => {
     const host=document.createElement("div");document.body.appendChild(host);const tree=createRoot(host);
     await act(async()=>tree.render(<HomeV2 {...baseProps} gameModeId="boss_gauntlet" />));
     expect(host.querySelector('[data-testid="front-door-deploy"]').textContent).toContain("BOSS GAUNTLET");
     expect(host.querySelector('[data-mode-id="boss_gauntlet"]').getAttribute("aria-checked")).toBe("true");
-    expect(host.querySelector('[data-testid="classic-start"]')).toBeTruthy();
-    const intro=host.querySelector('[aria-label="Original game"]');
-    const operations=host.querySelector('[data-testid="operation-command-deck"]');
-    expect(intro.compareDocumentPosition(operations)&Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
-    expect(operations.closest("details").open).toBe(false);
+    expect(host.querySelectorAll('[data-testid="front-door-deploy"]')).toHaveLength(1);
+    expect(host.querySelector('[aria-label="Choose your play"]')).toBeTruthy();
+    await act(async () => host.querySelector('[aria-label="Choose play style"] button:nth-child(2)').click());
+    expect(host.querySelector('[data-testid="operation-command-deck"]')).toBeTruthy();
+    expect(host.querySelector('[data-testid="front-door-deploy"]').textContent).toContain("BLACKSITE FLUSH");
+    const onStart = vi.fn();
+    await act(async()=>tree.render(<HomeV2 {...baseProps} onStart={onStart} gameModeId="boss_gauntlet" />));
+    await act(async()=>host.querySelector('[data-testid="front-door-deploy"]').click());
+    expect(onStart).toHaveBeenCalledWith(3101, expect.objectContaining({ operationId: "blacksite-flush", operationMode: true, operationRoute: expect.any(String) }));
     await act(async()=>tree.unmount());host.remove();
   });
 
@@ -88,6 +92,8 @@ describe("HomeV2", () => {
     localStorage.removeItem("cod-run-history-v1");
     localStorage.removeItem("cod-career-v1");
     localStorage.removeItem("cod-theme");
+    localStorage.removeItem("cod-play-intent-v1");
+    localStorage.removeItem("cod-arcade-mode-v1");
     document.documentElement.removeAttribute("data-cod-theme");
     sessionStorage.removeItem("cod-insight-dismissed");
     vi.unstubAllGlobals();
@@ -108,6 +114,26 @@ describe("HomeV2", () => {
     const deployBtn = container.querySelector('[data-testid="front-door-deploy"]');
     expect(deployBtn).toBeTruthy();
     await act(async () => { deployBtn.click(); });
+    expect(onStart).toHaveBeenCalledTimes(1);
+  });
+
+  it("waits for an Arcade mode transition before offering Start", async () => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    const onStart = vi.fn();
+    const onSetZombiesMode = vi.fn();
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} onStart={onStart} onSetZombiesMode={onSetZombiesMode} />);
+    });
+    await act(async () => { container.querySelector('[aria-label="Choose play style"] button:nth-child(3)').click(); });
+    const start = container.querySelector('[data-testid="front-door-deploy"]');
+    expect(start.disabled).toBe(true);
+    expect(start.textContent).toContain("SEWER ZOMBIES");
+    expect(onSetZombiesMode).toHaveBeenCalledWith(true);
+    await act(async () => { root.render(<HomeV2 {...baseProps} onStart={onStart} onSetZombiesMode={onSetZombiesMode} zombiesMode gameModeId="zombies" />); });
+    expect(start.disabled).toBe(false);
+    await act(async () => { start.click(); });
     expect(onStart).toHaveBeenCalledTimes(1);
   });
 
@@ -185,7 +211,7 @@ describe("HomeV2", () => {
     expect(localStorage.getItem("cod-theme")).toBe("sewer-night");
   });
 
-  it("exposes the streamlined Progress / Field Manual / Support information architecture", async () => {
+  it("keeps reference and support content below play without a duplicate progress summary", async () => {
     container = document.createElement("div");
     document.body.appendChild(container);
     await act(async () => {
@@ -193,9 +219,9 @@ describe("HomeV2", () => {
       root.render(<HomeV2 {...baseProps} />);
     });
     const txt = container.textContent;
-    expect(txt).toMatch(/PLAYER PROGRESS/);
     expect(txt).toMatch(/FIELD MANUAL/);
     expect(txt).toMatch(/SUPPORT/);
+    expect(txt).not.toMatch(/PLAYER PROGRESS/);
   });
 
   it("shows one journey order and keeps secondary player tools collapsed", async () => {

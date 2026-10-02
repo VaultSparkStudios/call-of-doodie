@@ -2,7 +2,7 @@
 // Values intentionally mirror the legacy App.jsx branches so a later caller can
 // migrate orchestration without changing player-visible behavior.
 
-import { STANDARD_BOSS_WAVE_INTERVAL } from "../config/modeFacts.js";
+import { BOSS_RUSH_WARMUP_WAVES, STANDARD_BOSS_WAVE_INTERVAL } from "../config/modeFacts.js";
 
 export const LEGACY_MODE_IDS = Object.freeze([
   "standard", "score_attack", "daily_challenge", "cursed",
@@ -59,7 +59,7 @@ export const MODE_RULES = Object.freeze({
     ],
   }),
   boss_rush: mode({
-    boss: { interval: 1, firstWave: 4, allowDeveloperBoss: false },
+    boss: { interval: 1, firstWave: BOSS_RUSH_WARMUP_WAVES + 1, allowDeveloperBoss: false },
     routes: false, mutations: false,
   }),
   speedrun: mode({ timer: { direction: "up", limitFrames: null, timeoutEndsRun: false } }),

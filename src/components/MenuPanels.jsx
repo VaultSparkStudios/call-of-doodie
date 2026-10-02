@@ -1,4 +1,5 @@
 import { useState } from "react";
+import DialogShell from "./DialogShell.jsx";
 import { WEAPONS, ENEMY_TYPES, STARTER_LOADOUTS, ACHIEVEMENTS, META_UPGRADES, NEW_FEATURES } from "../constants.js";
 import {
   loadCustomLoadouts, saveCustomLoadout, loadRunHistory, loadRivalryHistory, loadStudioGameEvents,
@@ -30,12 +31,11 @@ import { isOpsDebug } from "../utils/debugFlags.js";
 import { COSMETICS, isCosmeticOwned, equipCosmetic } from "../utils/cosmeticTrack.js";
 import { buildHazardCaseFileRows } from "../utils/hazardCaseFiles.js";
 
-const OVERLAY = { position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 100, display: "flex", alignItems: "flex-start", justifyContent: "center", padding: "max(12px, env(safe-area-inset-top)) 12px max(18px, env(safe-area-inset-bottom))", overflowY: "auto", WebkitOverflowScrolling: "touch", backdropFilter: "blur(4px)" };
-const CARD = { background: "rgba(255,255,255,0.05)", borderRadius: 10, border: "1px solid rgba(255,255,255,0.1)", padding: "20px 16px", color: "#fff", maxHeight: "none", width: "100%", position: "relative", margin: "auto 0" };
+const CARD = { background: "var(--cod-panel-strong)", borderRadius: 10, border: "1px solid rgba(255,255,255,0.1)", padding: "20px 16px", color: "var(--cod-ink)", maxHeight: "none", width: "100%", position: "relative", margin: "auto 0" };
 const BTN_P = { padding: "12px 24px", fontSize: 14, fontWeight: 900, fontFamily: "'Courier New',monospace", background: "linear-gradient(180deg,var(--cod-orange),#CC4400)", color: "#FFF", border: "none", borderRadius: 6, cursor: "pointer", letterSpacing: 2 };
-const BTN_S = { ...BTN_P, background: "rgba(255,255,255,0.08)", color: "#CCC", border: "1px solid #444" };
-const CLOSE_X = { position: "absolute", top: 10, right: 14, background: "none", border: "none", color: "#CCC", fontSize: 20, cursor: "pointer", fontFamily: "monospace" };
-const MINI_BTN = { padding: "5px 8px", fontSize: 9, fontWeight: 800, fontFamily: "'Courier New',monospace", background: "rgba(255,255,255,0.05)", color: "#DDD", border: "1px solid rgba(255,255,255,0.16)", borderRadius: 5, cursor: "pointer", letterSpacing: 1 };
+const BTN_S = { ...BTN_P, background: "var(--cod-panel-soft)", color: "var(--cod-ink)", border: "1px solid var(--cod-line)" };
+const CLOSE_X = { position: "absolute", top: 10, right: 14, background: "none", border: "none", color: "var(--cod-ink)", fontSize: 20, cursor: "pointer", fontFamily: "monospace" };
+const MINI_BTN = { padding: "5px 8px", fontSize: 9, fontWeight: 800, fontFamily: "'Courier New',monospace", background: "var(--cod-panel-soft)", color: "var(--cod-ink)", border: "1px solid rgba(255,255,255,0.16)", borderRadius: 5, cursor: "pointer", letterSpacing: 1 };
 
 const TIER_LABELS = ["", "Ⅰ", "Ⅱ", "Ⅲ"];
 const TIER_COLORS = ["#555", "#CD7F32", "#C0C0C0", "#FFD700"];
@@ -63,7 +63,7 @@ function fmtTime(s) {
 // ── RULES ────────────────────────────────────────────────────────────────────
 export function RulesPanel({ onClose }) {
   return (
-    <div style={OVERLAY}>
+    <DialogShell title="Rules of Engagement" onClose={onClose}>
       <div data-gamepad-scroll="" style={{ ...CARD, maxWidth: 460, border: "1px solid rgba(255,215,0,0.25)" }}>
         <h3 style={{ color: "var(--cod-gold)", margin: "0 0 12px", fontSize: 18 }}>📜 RULES OF ENGAGEMENT</h3>
         <div style={{ fontSize: 13, color: "#EEE", lineHeight: 2 }}>
@@ -86,7 +86,7 @@ export function RulesPanel({ onClose }) {
         </div>
         <button onClick={onClose} style={{ ...BTN_P, marginTop: 16, width: "100%", maxWidth: 300 }}>← BACK</button>
       </div>
-    </div>
+    </DialogShell>
   );
 }
 
@@ -94,7 +94,7 @@ export function RulesPanel({ onClose }) {
 export function ControlsPanel({ onClose, isMobile, controllerType }) {
   const labels = getControllerLabels(controllerType);
   return (
-    <div style={OVERLAY}>
+    <DialogShell title="Controls" onClose={onClose}>
       <div data-gamepad-scroll="" style={{ ...CARD, maxWidth: 460, border: "1px solid rgba(255,215,0,0.25)" }}>
         <h3 style={{ color: "var(--cod-gold)", margin: "0 0 12px", fontSize: 18 }}>⌨ CONTROLS</h3>
         {isMobile ? (
@@ -153,7 +153,7 @@ export function ControlsPanel({ onClose, isMobile, controllerType }) {
         </div>
         <button onClick={onClose} style={{ ...BTN_P, marginTop: 16, width: "100%", maxWidth: 300 }}>← BACK</button>
       </div>
-    </div>
+    </DialogShell>
   );
 }
 
@@ -174,7 +174,7 @@ export function MostWantedPanel({ onClose }) {
   });
   const nemesisType = nemesis && nemesis.losses > 0 ? Number(nemesis.agentProjection?.type) : null;
   return (
-    <div style={OVERLAY}>
+    <DialogShell title="Most Wanted List" onClose={onClose}>
       <div data-gamepad-scroll="" style={{ ...CARD, maxWidth: 460, border: "1px solid rgba(255,215,0,0.25)" }}>
         <h3 style={{ color: "var(--cod-gold)", margin: "0 0 12px", fontSize: 18 }}>👾 MOST WANTED LIST</h3>
         {ENEMY_TYPES.map((e, i) => {
@@ -220,7 +220,7 @@ export function MostWantedPanel({ onClose }) {
         )}
         <button onClick={onClose} style={{ ...BTN_P, marginTop: 16, width: "100%", maxWidth: 300 }}>← BACK</button>
       </div>
-    </div>
+    </DialogShell>
   );
 }
 
@@ -254,13 +254,13 @@ export function RunHistoryPanel({
   const launchSeed = (seed, challenge = null) => {
     if (!seed || typeof onLaunchSeed !== "function") return;
     onLaunchSeed(seed, challenge || {});
-    onClose?.();
+    onClose?.({ launched: true });
   };
   const copySeedChallenge = async (seed, difficulty = "normal", vsScore = null, vsName = username) => {
     await copyChallengeUrl({ seed, difficulty, vsScore, vsName });
   };
   return (
-    <div style={OVERLAY}>
+    <DialogShell title="Run History" onClose={onClose}>
       <div data-gamepad-scroll="" style={{ ...CARD, maxWidth: 520, border: "1px solid rgba(255,107,53,0.3)" }}>
         <button onClick={onClose} style={CLOSE_X}>X</button>
         <h3 style={{ color: "var(--cod-orange)", margin: "0 0 4px", fontSize: 18, letterSpacing: 2 }}>📜 RUN HISTORY</h3>
@@ -497,7 +497,7 @@ export function RunHistoryPanel({
         )}
         <button onClick={onClose} style={{ ...BTN_P, marginTop: 16, width: "100%" }}>← CLOSE</button>
       </div>
-    </div>
+    </DialogShell>
   );
 }
 
@@ -514,7 +514,7 @@ export function LoadoutBuilderPanel({ onClose }) {
   const [loadoutCodeError, setLoadoutCodeError] = useState("");
 
   return (
-    <div style={OVERLAY}>
+    <DialogShell title="Loadout Builder" onClose={onClose}>
       <div data-gamepad-scroll="" style={{ ...CARD, maxWidth: 500, border: "1px solid rgba(255,107,53,0.35)" }}>
         <button onClick={() => { setEditingSlot(null); onClose(); }} style={CLOSE_X}>X</button>
         <h3 style={{ color: "var(--cod-orange)", margin: "0 0 4px", fontSize: 18, letterSpacing: 2 }}>⚙️ CUSTOM LOADOUTS</h3>
@@ -642,7 +642,7 @@ export function LoadoutBuilderPanel({ onClose }) {
           </div>
         )}
       </div>
-    </div>
+    </DialogShell>
   );
 }
 
@@ -669,7 +669,7 @@ export function CareerStatsPanel({ career, meta, onClose }) {
   const survivalRate = career.totalRuns > 0 ? (((career.totalRuns - (career.totalDeaths || career.totalRuns)) / career.totalRuns) * 100).toFixed(1) : 0;
 
   return (
-    <div style={OVERLAY}>
+    <DialogShell title="Career Stats" onClose={onClose}>
       <div data-gamepad-scroll="" style={{ ...CARD, maxWidth: 440, border: "1px solid rgba(0,229,255,0.25)" }}>
         <button onClick={onClose} style={CLOSE_X}>X</button>
         <h3 style={{ color: "var(--cod-cyan)", margin: "0 0 8px", fontSize: 18, letterSpacing: 2 }}>📊 CAREER STATS</h3>
@@ -724,7 +724,7 @@ export function CareerStatsPanel({ career, meta, onClose }) {
           </>
         )}
       </div>
-    </div>
+    </DialogShell>
   );
 }
 
@@ -736,7 +736,7 @@ export function MissionsPanel({ missions, missionProgress, onClose }) {
   const h = Math.floor(msLeft / 3600000);
   const m = Math.floor((msLeft % 3600000) / 60000);
   return (
-    <div style={OVERLAY}>
+    <DialogShell title="Missions" onClose={onClose}>
       <div data-gamepad-scroll="" style={{ ...CARD, maxWidth: 460, border: "1px solid rgba(255,215,0,0.3)" }}>
         <h3 style={{ color: "var(--cod-gold)", margin: "0 0 4px", fontSize: 18 }}>📋 DAILY MISSIONS</h3>
         <p style={{ color: "#bbb", fontSize: 11, margin: "0 0 14px" }}>Resets in {h}h {m}m · Complete for career point bonuses</p>
@@ -760,7 +760,7 @@ export function MissionsPanel({ missions, missionProgress, onClose }) {
         </div>
         <button onClick={onClose} style={{ ...BTN_P, marginTop: 16, width: "100%" }}>← BACK</button>
       </div>
-    </div>
+    </DialogShell>
   );
 }
 
@@ -778,7 +778,7 @@ export function UpgradesPanel({ meta: initMeta, accountLevel, onClose }) {
   };
   if (!meta) return null;
   return (
-    <div style={OVERLAY}>
+    <DialogShell title="Upgrades" onClose={onClose}>
       <div data-gamepad-scroll="" style={{ ...CARD, maxWidth: 520, border: "1px solid rgba(255,107,53,0.3)" }}>
         <h3 style={{ color: "var(--cod-orange)", margin: "0 0 4px", fontSize: 18 }}>🎖️ META UPGRADES</h3>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
@@ -968,7 +968,7 @@ export function UpgradesPanel({ meta: initMeta, accountLevel, onClose }) {
         <button onClick={onClose} style={{ ...BTN_P, marginTop: 14, width: "100%" }}>← BACK</button>
 
         {showPrestigeConfirm && (
-          <div style={{ ...OVERLAY, zIndex: 200, background: "rgba(0,0,0,0.96)" }}>
+          <DialogShell title="Confirm prestige" onClose={() => setShowPrestigeConfirm(false)} zIndex={200}>
             <div style={{ ...CARD, maxWidth: 400, border: "1px solid rgba(255,50,50,0.5)", padding: "28px 20px", textAlign: "center" }}>
               <div style={{ fontSize: 52, marginBottom: 10 }}>⭐</div>
               <h2 style={{ color: "var(--cod-gold)", margin: "0 0 6px", fontSize: 22, letterSpacing: 2 }}>PRESTIGE {prestige + 1}</h2>
@@ -1000,10 +1000,10 @@ export function UpgradesPanel({ meta: initMeta, accountLevel, onClose }) {
                 <button onClick={handlePrestige} style={{ ...BTN_P, padding: "10px 24px", background: "linear-gradient(180deg,var(--cod-danger),#AA0000)", border: "1px solid rgba(255,50,50,0.6)" }}>CONFIRM PRESTIGE</button>
               </div>
             </div>
-          </div>
+          </DialogShell>
         )}
       </div>
-    </div>
+    </DialogShell>
   );
 }
 
@@ -1012,8 +1012,7 @@ export function NewFeaturesPanel({ onClose }) {
   return (
     <>
       <style>{`.wnscroll::-webkit-scrollbar{width:5px}.wnscroll::-webkit-scrollbar-track{background:rgba(255,255,255,0.04);border-radius:3px}.wnscroll::-webkit-scrollbar-thumb{background:rgba(255,107,53,0.55);border-radius:3px}.wnscroll{scrollbar-width:thin;scrollbar-color:rgba(255,107,53,0.55) rgba(255,255,255,0.04)}`}</style>
-      <div onClick={e => { if (e.target === e.currentTarget) onClose(); }}
-        style={{ ...OVERLAY, padding: "12px 12px env(safe-area-inset-bottom,12px)" }}>
+      <DialogShell title="What’s New" onClose={onClose} onBackdrop={onClose}>
         <div style={{ ...CARD, maxWidth: 460, border: "1px solid rgba(255,107,53,0.4)", padding: 0, display: "flex", flexDirection: "column", maxHeight: "90dvh", overflow: "hidden" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 16px 12px", borderBottom: "1px solid rgba(255,107,53,0.2)", flexShrink: 0 }}>
             <h3 style={{ color: "var(--cod-orange)", margin: 0, fontSize: 17, letterSpacing: 2 }}>✦ WHAT'S NEW</h3>
@@ -1028,7 +1027,7 @@ export function NewFeaturesPanel({ onClose }) {
             </div>
           </div>
         </div>
-      </div>
+      </DialogShell>
     </>
   );
 }

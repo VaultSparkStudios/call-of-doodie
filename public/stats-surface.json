@@ -16,7 +16,7 @@
   "precomputed": true,
   "source": "Production get_cod_community_stats verification receipt",
   "scope": "All recoverable server history; automated health checks, practice, and quarantined rows excluded",
-  "freshness": "Verified fallback snapshot from 2026-09-29; the live endpoint is checked every 15 seconds while visible, which does not imply a new completed run",
+  "freshness": "Verified fallback snapshot from 2026-09-29; the live endpoint is checked every 15 seconds while visible and healthy, with bounded retry delays after failures. A check does not imply a new completed run",
   "snapshotCheckedAt": "2026-09-29T16:21:41.964Z",
   "lastCompletedAt": "2026-09-29T16:19:40.989Z",
   "recentWindow": {

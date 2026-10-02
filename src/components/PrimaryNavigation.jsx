@@ -42,8 +42,8 @@ export default function PrimaryNavigation({ palette, onOpenProgress, onOpenLoado
       <nav className="home-mobile-nav" aria-label="Game navigation">
         <a href="#deploy"><span aria-hidden="true">{iconById.play}</span>Play</a>
         <a href="#live-stats"><span aria-hidden="true">{iconById.stats}</span>Stats</a>
-        <button type="button" onClick={onOpenProgress}><span aria-hidden="true">{iconById.progress}</span>Progress</button>
-        <button type="button" onClick={onOpenLoadout}><span aria-hidden="true">{iconById.loadout}</span>Loadout</button>
+        <button type="button" onClick={onOpenProgress}><span aria-hidden="true">{iconById.progress}</span>Record</button>
+        <button type="button" onClick={onOpenLoadout}><span aria-hidden="true">{iconById.loadout}</span>Build</button>
         <button type="button" aria-expanded={moreOpen} aria-controls="home-more-menu" onClick={() => setMoreOpen(true)}><span aria-hidden="true">{iconById.more}</span>More</button>
       </nav>
 
@@ -56,8 +56,8 @@ export default function PrimaryNavigation({ palette, onOpenProgress, onOpenLoado
             </div>
             <div className="home-more-menu__grid">
               {MORE_PUBLIC_NAV.map((item) => <a key={item.id} href={item.href}>{item.label}<span aria-hidden="true">→</span></a>)}
-              <button type="button" onClick={action(onOpenProgress)}>Player Progress<span aria-hidden="true">→</span></button>
-              <button type="button" onClick={action(onOpenLoadout)}>Loadouts<span aria-hidden="true">→</span></button>
+              <button type="button" onClick={action(onOpenProgress)}>Player Record<span aria-hidden="true">→</span></button>
+              <button type="button" onClick={action(onOpenLoadout)}>Your Build<span aria-hidden="true">→</span></button>
             </div>
           </section>
         </div>

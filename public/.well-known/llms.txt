@@ -8,7 +8,7 @@ Rights: Proprietary — All Rights Reserved, VaultSpark Studios LLC
 
 ## What players do
 
-Players move, shoot, dash, grenade, switch weapon, interact, choose perk, choose route, resolve operation encounter, survive wave, review debrief. The live contract publishes 12 seeded modes, 12 weapons, and 22 enemies. Replay proof is advisory deterministic decision-stream evidence and not full physics resimulation.
+Players move, shoot, dash, grenade, switch weapon, interact, choose perk, choose route, resolve operation encounter, survive wave, review debrief. The live contract publishes 12 modes and rulesets, 12 weapons, and 22 enemies. Replay proof is advisory deterministic decision-stream evidence and not full physics resimulation. Product capability availability was last checked 2026-09-30T20:06:09Z; browser-local features and unavailable online features are listed separately in capabilities.json.
 
 ## Public resources
 
@@ -18,9 +18,13 @@ Players move, shoot, dash, grenade, switch weapon, interact, choose perk, choose
 - Bestiary: https://callofdoodie.wtf/bestiary/
 - Arsenal: https://callofdoodie.wtf/arsenal/
 - Modes: https://callofdoodie.wtf/modes/
+- Operations: https://callofdoodie.wtf/operations/
 - Board: https://callofdoodie.wtf/board/
 - Stats: https://callofdoodie.wtf/stats/
 - Accessibility: https://callofdoodie.wtf/accessibility/
+- Field Lab: https://callofdoodie.wtf/field-lab/
+- Challenges: https://callofdoodie.wtf/challenge/
+- Player Feedback: https://callofdoodie.wtf/feedback/
 - Support: https://callofdoodie.wtf/support/
 - Press Kit: https://callofdoodie.wtf/press-kit/
 - Status: https://callofdoodie.wtf/status/
@@ -33,12 +37,14 @@ Players move, shoot, dash, grenade, switch weapon, interact, choose perk, choose
 - Security: https://callofdoodie.wtf/.well-known/security.txt
 - Llms: https://callofdoodie.wtf/.well-known/llms.txt
 - Sitemap: https://callofdoodie.wtf/sitemap.xml
-- Gameplay-Contract: https://callofdoodie.wtf/gameplay-contract.json
-- Route-Contract: https://callofdoodie.wtf/route-contract.json
-- Field-Manual: https://callofdoodie.wtf/field-manual.json
-- Game-Stats: https://callofdoodie.wtf/stats-surface.json
-- Game-Stats-Live: https://callofdoodie.wtf/api/community-stats
-- Service-Status: https://callofdoodie.wtf/status.json
+- Gameplay Contract: https://callofdoodie.wtf/gameplay-contract.json
+- Route Contract: https://callofdoodie.wtf/route-contract.json
+- Field Manual: https://callofdoodie.wtf/field-manual.json
+- Game Stats: https://callofdoodie.wtf/stats-surface.json
+- Game Stats Live: https://callofdoodie.wtf/api/community-stats
+- Service Status: https://callofdoodie.wtf/status.json
+- Product Capabilities: https://callofdoodie.wtf/capabilities.json
+- Run Analysis Schema: https://callofdoodie.wtf/run-analysis-schema.json
 
 ## Agent guidance
 

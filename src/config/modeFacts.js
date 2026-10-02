@@ -48,6 +48,9 @@ export const EXTRACTION_ALARM_LOCK = 100;
  *  `boss.interval`, and for the "Boss every N waves" line in QUICK_RULES. */
 export const STANDARD_BOSS_WAVE_INTERVAL = 5;
 
+/** Boss Rush — ordinary waves before the first boss wave. */
+export const BOSS_RUSH_WARMUP_WAVES = 3;
+
 // Prose in this game spells small numbers as words ("sixteen bots", "six
 // bosses"). Copy composed from a fact therefore needs the word, not the
 // numeral, or the derivation would silently change the voice of the writing

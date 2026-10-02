@@ -1,4 +1,9 @@
 # Work Log
+
+## 2026-10-02 (Session 181 — full-site audit implementation)
+
+- Addressed the ranked 25-item audit; staged a 22-route, two-theme site/game refinement with 88/88 hosted browser states and 429 hash-bound captures; applied the prerequisite event table and aggregate RPC to the correct game database, cleared the dev-dependency advisory, and recorded three game innovations as unranked prototypes pending player evidence. Exact-main CI/production follow-through occurs after this write-back.
+
 ## 2026-09-29 (Session 180 — toolchain currency)
 
 - Ran `/arc` under standing direct-to-main and deploy authorization. Triage found the S179 record current (tree clean, remote synced, write-back probe clean), so no recovery was needed. Baseline was green (262 files / 1,671 tests, strict lint, `npm audit` 0). The executable Genius List held no gameplay work: all 17 open board lines need devices, participants, provider dashboards or a founder decision, and the three doctor reds are studio-wide.

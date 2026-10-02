@@ -91,6 +91,21 @@ describe("buildDeathScreenProps", () => {
     });
   });
 
+  it("keeps the primary adjustment aligned with the local evidence lesson", () => {
+    const localLesson = { status: "abstain", observed: "Run ended on wave 1.", likelyFactor: null,
+      suggestion: "Replay this seed and compare.", drill: { target: "Record another comparable run." } };
+    const contract = buildRunTheFixContract({
+      debrief: { objective: false, nextRunContract: { target: "Complete an unrelated daily mission." } },
+      nextRunDrill: { title: "Gather evidence", detail: "Replay this seed and compare.", action: "replay_seed" },
+      localLesson,
+      runSeed: 42,
+    });
+    expect(contract.target).toContain("Replay this seed and compare.");
+    expect(contract.target).not.toContain("daily mission");
+    expect(contract.diagnosis).toBe(localLesson.observed);
+    expect(contract.proof).toContain("does not prove cause");
+  });
+
   it("keeps keyboard focus order primary-first with disclosures after it", () => {
     const source = fs.readFileSync(path.resolve(import.meta.dirname, "..", "components", "DeathScreen.jsx"), "utf8");
     const primary = source.indexOf('data-focus-order="run_the_fix"');

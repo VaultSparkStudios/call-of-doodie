@@ -1,7 +1,5 @@
 import { act } from "react";
 import { createRoot } from "react-dom/client";
-import { readFileSync } from "node:fs";
-import { resolve } from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import OperationCommandDeck from "./OperationCommandDeck.jsx";
@@ -110,16 +108,18 @@ describe("OperationCommandDeck", () => {
     });
   });
 
-  it("is integrated above the explicitly preserved Arcade and Rivals front door", () => {
-    const source = readFileSync(resolve(process.cwd(), "src/components/HomeV2.jsx"), "utf8");
-    const operationIndex = source.indexOf("<OperationCommandDeck");
-    const arcadeIndex = source.indexOf("MODES &amp; CHALLENGES");
-    const legacyDeployIndex = source.indexOf('data-testid="front-door-deploy"');
-
-    expect(source).toContain('import OperationCommandDeck from "./OperationCommandDeck.jsx";');
-    expect(source).toContain("<OperationCommandDeck onStart={onStart} palette={themePalette} />");
-    expect(operationIndex).toBeGreaterThan(0);
-    expect(arcadeIndex).toBeGreaterThan(operationIndex);
-    expect(legacyDeployIndex).toBeGreaterThan(arcadeIndex);
+  it("selects a verified mission for the shared play button without launching", async () => {
+    const onSelect = vi.fn();
+    const onStart = vi.fn();
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    root = createRoot(container);
+    await act(async () => root.render(<OperationCommandDeck selectionOnly selectedOperationId="blacksite-flush" onSelect={onSelect} onStart={onStart} />));
+    await act(async () => container.querySelector('[aria-label="Select operation PORCELAIN SIEGE"]').click());
+    expect(onSelect).toHaveBeenCalledWith(expect.objectContaining({
+      seed: OPERATIONS[1].seed,
+      challenge: expect.objectContaining({ operationId: OPERATIONS[1].id, operationMode: true }),
+    }));
+    expect(onStart).not.toHaveBeenCalled();
   });
 });

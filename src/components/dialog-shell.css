@@ -1,0 +1,25 @@
+.cod-dialog {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(18px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+  background: rgba(2, 3, 5, .94);
+  color: var(--cod-ink);
+  backdrop-filter: blur(4px);
+}
+
+.cod-dialog:focus { outline: none; }
+.cod-dialog :focus-visible { outline: 2px solid var(--cod-focus); outline-offset: 2px; }
+.cod-dialog > :first-child { flex-shrink: 0; }
+.cod-dialog--full { display: block; background: var(--cod-bg-deep); backdrop-filter: none; }
+:root[data-cod-theme="porcelain-day"] .cod-dialog:not([data-cod-surface="game"]):not(.cod-dialog--full) {
+  background: rgba(44, 29, 19, .7);
+}
+@media (max-width: 560px) { .cod-dialog-gamepad-hint { display: none; } }

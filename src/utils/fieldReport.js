@@ -4,6 +4,31 @@ export const FIELD_REPORTS = Object.freeze({
   brutal: { id: "brutal", label: "BRUTAL", emoji: "💀", color: "#FF7A66" },
 });
 
+export const FIELD_REPORT_REASONS = Object.freeze([
+  { id: "controls", label: "Controls" },
+  { id: "clarity", label: "Clarity" },
+  { id: "pacing", label: "Pacing" },
+  { id: "balance", label: "Balance" },
+  { id: "bug", label: "Bug" },
+  { id: "other", label: "Other" },
+]);
+
+export function normalizeFieldReportReason(value) {
+  return FIELD_REPORT_REASONS.some((reason) => reason.id === value) ? value : null;
+}
+
+export function fieldReportDurationBucket(seconds) {
+  const duration = Math.max(0, Number(seconds) || 0);
+  if (duration < 120) return "under-2m";
+  if (duration < 300) return "2-5m";
+  if (duration < 900) return "5-15m";
+  return "15m-plus";
+}
+
+export function cleanFieldReportComment(value) {
+  return String(value || "").replace(/[\u0000-\u001f\u007f]/g, " ").replace(/\s+/g, " ").trim().slice(0, 280);
+}
+
 const DIFFICULTY_ORDER = ["easy", "normal", "hard", "insane"];
 
 export function normalizeFieldReport(value) {

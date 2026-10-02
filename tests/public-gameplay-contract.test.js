@@ -8,7 +8,7 @@ describe("public gameplay contract", () => {
   it("derives mechanics from source and keeps trust scope explicit", () => {
     const contract = buildPublicGameplayContract();
     expect(contract.weapons).toHaveLength(WEAPONS.length);
-    expect(contract.schemaVersion).toBe("gameplay-contract-v3");
+    expect(contract.schemaVersion).toBe("gameplay-contract-v4");
     expect(contract.operations).toHaveLength(3);
     expect(contract.operations.every((operation) => operation.encounterVerbs.length === 7)).toBe(true);
     for (const operation of contract.operations) {

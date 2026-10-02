@@ -1,10 +1,10 @@
 // Act classification + turning-point detection for the death screen RUN ARC card.
 
 function classifyAct(wave) {
-  if (wave >= 35) return { act: "THE LEGEND", desc: "You pushed into territory most players never see." };
-  if (wave >= 25) return { act: "THE PUSH", desc: "Past the mid-game wall — the run had real legs." };
-  if (wave >= 10) return { act: "THE GRIND", desc: "The build came online but the pressure kept rising." };
-  return { act: "THE OPENER", desc: "The run ended before the build found its identity." };
+  if (wave >= 35) return { act: "THE LEGEND", desc: "You pushed beyond wave 34 and kept the run alive." };
+  if (wave >= 25) return { act: "THE PUSH", desc: "You cleared wave 24 and kept going." };
+  if (wave >= 10) return { act: "THE GRIND", desc: "You cleared the early waves and kept the attempt moving." };
+  return { act: "THE OPENER", desc: "The run ended before many upgrade choices could unfold." };
 }
 
 export function getRunAct(wave) {
@@ -44,7 +44,7 @@ export function buildRunNarrative({
   if (bossKillCount >= 1) {
     moments.push({
       label: bossKillCount >= 3 ? "BOSS HUNTER" : "BOSS SLAYER",
-      desc: `${bossKillCount} boss${bossKillCount === 1 ? "" : "es"} defeated including phase-two pressure.`,
+      desc: `${bossKillCount} boss${bossKillCount === 1 ? "" : "es"} defeated in this run.`,
     });
   }
 

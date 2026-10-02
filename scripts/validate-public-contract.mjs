@@ -18,6 +18,7 @@ import {
   renderHeaderNav,
 } from "./lib/public-route-registry.mjs";
 import { checkPublicStatsRoute } from "./lib/public-stats-route-contract.mjs";
+import { RUN_ANALYSIS_SCHEMA } from "../src/utils/agentRunPack.js";
 
 const root = process.cwd();
 const jsonMode = process.argv.includes("--json");
@@ -63,6 +64,7 @@ const requiredFiles = [
   ...routeRegistry.filter((route) => route.path !== "/").map((route) => relative(...route.filePath.split("/"))),
   relative("public", "agents.json"),
   relative("public", "gameplay-contract.json"),
+  relative("public", "run-analysis-schema.json"),
   relative("public", "route-contract.json"),
   relative("public", ".well-known", "llms.txt"),
   relative("public", "sitemap.xml"),
@@ -71,6 +73,7 @@ const requiredFiles = [
   relative("public", "doc.css"),
   relative("public", "tokens.css"),
   relative("public", "theme.js"),
+  relative("public", "field-guide.js"),
   relative("docs", "DEPLOY_ROLLBACK.md"),
   relative("docs", "RELEASE_PARITY.md"),
 ];
@@ -153,7 +156,33 @@ if (gameplayContract) {
   if (JSON.stringify(gameplayContract) !== JSON.stringify(expectedGameplayContract)) {
     errors.push("gameplay-contract.json drifted from source; run npm run gameplay:contract");
   }
+  if (gameplayContract.controls?.summary !== (await import("../src/content/fieldManual.js")).FIELD_MANUAL_SECTIONS.find(([title]) => title === "Controls")?.[1]) errors.push("gameplay controls drifted from the human Field Manual");
+  const bestiary = contentByFile[relative("public", "bestiary", "index.html")] || "";
+  const arsenal = contentByFile[relative("public", "arsenal", "index.html")] || "";
+  for (const enemy of gameplayContract.enemies || []) {
+    if (enemy.runtimeId !== `enemy:${enemy.index}` || !bestiary.includes(`id="enemy-${enemy.index}"`)) errors.push(`bestiary missing runtime enemy:${enemy.index}`);
+  }
+  for (const weapon of gameplayContract.weapons || []) {
+    if (weapon.runtimeId !== `weapon:${weapon.index}` || !arsenal.includes(`id="weapon-${weapon.index}"`)) errors.push(`arsenal missing runtime weapon:${weapon.index}`);
+  }
+  if ((gameplayContract.enemies || []).length !== 22 || (gameplayContract.weapons || []).length !== 12) errors.push("field guide roster count changed; review atlas coverage and card rendering");
+  requireIncludes("bestiary", bestiary, ["data-threat-filter", "loading=\"lazy\"", "../field-guide.js"]);
+  requireIncludes("field-manual", contentByFile[relative("public", "field-manual", "index.html")] || "", ["data-control-picker", "mode-rule-grid", "../field-guide.js"]);
+  const modes = contentByFile[relative("public", "modes", "index.html")] || "";
+  const operations = contentByFile[relative("public", "operations", "index.html")] || "";
+  for (const mode of gameplayContract.modes || []) {
+    if (!modes.includes(`data-mode-id="${mode.id}"`) || !modes.includes(`?mode=${encodeURIComponent(mode.id)}#deploy`)) errors.push(`mode discovery missing launch: ${mode.id}`);
+  }
+  for (const operation of gameplayContract.operations || []) {
+    if (!operations.includes(`data-operation-id="${operation.id}"`)) errors.push(`operation dossier missing: ${operation.id}`);
+    for (const routeId of operation.routeOptions) {
+      if (!operations.includes(`?operation=${operation.id}&amp;route=${routeId}#deploy`)) errors.push(`operation route launch missing: ${operation.id}/${routeId}`);
+    }
+  }
 }
+try {
+  if (JSON.stringify(JSON.parse(contentByFile[relative("public", "run-analysis-schema.json")])) !== JSON.stringify(RUN_ANALYSIS_SCHEMA)) errors.push("run-analysis-schema.json drifted from player export contract");
+} catch (error) { errors.push("run-analysis-schema.json invalid JSON: " + error.message); }
 
 const expectedHeaderNav = renderHeaderNav("../");
 const expectedFooterLinks = renderFooterLinks("../");

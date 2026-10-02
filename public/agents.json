@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.2",
+  "schemaVersion": "1.3",
   "name": "Call of Doodie",
   "canonicalUrl": "https://callofdoodie.wtf/",
   "publisher": {
@@ -43,6 +43,10 @@
       "href": "https://callofdoodie.wtf/modes/"
     },
     {
+      "rel": "operations",
+      "href": "https://callofdoodie.wtf/operations/"
+    },
+    {
       "rel": "leaderboard",
       "href": "https://callofdoodie.wtf/board/"
     },
@@ -53,6 +57,18 @@
     {
       "rel": "accessibility",
       "href": "https://callofdoodie.wtf/accessibility/"
+    },
+    {
+      "rel": "field-lab",
+      "href": "https://callofdoodie.wtf/field-lab/"
+    },
+    {
+      "rel": "challenge",
+      "href": "https://callofdoodie.wtf/challenge/"
+    },
+    {
+      "rel": "feedback",
+      "href": "https://callofdoodie.wtf/feedback/"
     },
     {
       "rel": "support",
@@ -125,6 +141,112 @@
     {
       "rel": "service-status",
       "href": "https://callofdoodie.wtf/status.json"
+    },
+    {
+      "rel": "product-capabilities",
+      "href": "https://callofdoodie.wtf/capabilities.json"
+    },
+    {
+      "rel": "run-analysis-schema",
+      "href": "https://callofdoodie.wtf/run-analysis-schema.json"
+    }
+  ],
+  "productCapabilities": [
+    {
+      "id": "classic-play",
+      "availability": "local",
+      "evidenceDate": "2026-09-29",
+      "route": "/"
+    },
+    {
+      "id": "operations",
+      "availability": "local",
+      "evidenceDate": "2026-09-29",
+      "route": "/modes/"
+    },
+    {
+      "id": "arcade-modes",
+      "availability": "local",
+      "evidenceDate": "2026-09-29",
+      "route": "/modes/"
+    },
+    {
+      "id": "local-backup",
+      "availability": "local",
+      "evidenceDate": "2026-09-30",
+      "route": "/#profile"
+    },
+    {
+      "id": "challenge-links",
+      "availability": "local",
+      "evidenceDate": "2026-10-02",
+      "route": "/challenge/"
+    },
+    {
+      "id": "run-export",
+      "availability": "local",
+      "evidenceDate": "2026-10-02",
+      "route": "/"
+    },
+    {
+      "id": "field-lab",
+      "availability": "local",
+      "evidenceDate": "2026-10-02",
+      "route": "/field-lab/"
+    },
+    {
+      "id": "squad-codes",
+      "availability": "local",
+      "evidenceDate": "2026-09-29",
+      "route": "/#profile"
+    },
+    {
+      "id": "public-board",
+      "availability": "live",
+      "evidenceDate": "2026-09-30",
+      "route": "/board/"
+    },
+    {
+      "id": "field-guide",
+      "availability": "live",
+      "evidenceDate": "2026-09-29",
+      "route": "/field-manual/"
+    },
+    {
+      "id": "cloud-backup",
+      "availability": "unavailable",
+      "evidenceDate": "2026-09-30",
+      "route": "/#profile"
+    },
+    {
+      "id": "online-duels",
+      "availability": "unavailable",
+      "evidenceDate": "2026-09-30",
+      "route": "/"
+    },
+    {
+      "id": "daily-board-ghost",
+      "availability": "unavailable",
+      "evidenceDate": "2026-09-30",
+      "route": "/modes/"
+    },
+    {
+      "id": "royale-balancing",
+      "availability": "planned",
+      "evidenceDate": "2026-09-30",
+      "route": "/modes/"
+    },
+    {
+      "id": "realtime-coop",
+      "availability": "planned",
+      "evidenceDate": "2026-09-30",
+      "route": "/roadmap/"
+    },
+    {
+      "id": "networked-royale",
+      "availability": "planned",
+      "evidenceDate": "2026-09-30",
+      "route": "/roadmap/"
     }
   ],
   "capabilities": [
@@ -142,6 +264,11 @@
       "id": "game.inspect-live-truth",
       "mode": "read",
       "description": "Inspect effective-dated product claims, source links, current service posture, and known limitations."
+    },
+    {
+      "id": "game.analyze-player-export",
+      "mode": "read-local",
+      "description": "Read a player-provided, redacted run JSON pack with event units, advisory trust scope and SHA-256 integrity. The player must download and share the file; no API or agent write authority is offered."
     }
   ],
   "trust": {

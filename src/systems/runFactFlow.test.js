@@ -3,6 +3,10 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 const storage = vi.hoisted(() => ({
   saveFieldReport: vi.fn(),
   syncCompletedRunFact: vi.fn(),
+  loadFieldReports: vi.fn(),
+  loadStudioGameEvents: vi.fn(),
+  saveStudioGameEvent: vi.fn(),
+  requestStudioEventSync: vi.fn(),
 }));
 
 vi.mock("../storage.js", () => storage);
@@ -34,6 +38,10 @@ describe("runFactFlow", () => {
   beforeEach(() => {
     storage.saveFieldReport.mockReset();
     storage.syncCompletedRunFact.mockReset().mockResolvedValue({ submission: "synced" });
+    storage.loadFieldReports.mockReset().mockReturnValue([]);
+    storage.loadStudioGameEvents.mockReset().mockReturnValue([]);
+    storage.saveStudioGameEvent.mockReset();
+    storage.requestStudioEventSync.mockReset().mockResolvedValue({ ok: false, reason: "offline" });
   });
 
   it("maps one complete run into the durable fact contract", async () => {
@@ -57,6 +65,35 @@ describe("runFactFlow", () => {
       value: "hard",
       evidence: "repeated_player_sentiment",
     });
+  });
+
+  it("keeps an unconsented report on device without queuing telemetry", async () => {
+    const reportId = "12345678-1234-1234-1234-123456789abc";
+    storage.saveFieldReport.mockReturnValue([{ reportId, feedback: "brutal", inputDevice: "mobile", durationBucket: "2-5m", version: "1.0.0" }]);
+    storage.loadFieldReports.mockReturnValue([{ reportId }]);
+    const result = await recordPostRunFieldReport({ reportId, feedback: "brutal", reason: "controls", comment: "  Too  slippery  ", consent: false }, { ...context, modeId: "bot_royale", inputDevice: "mobile", version: "1.0.0" });
+    expect(result.status).toBe("saved-on-device");
+    expect(storage.saveFieldReport).toHaveBeenCalledWith(expect.objectContaining({ mode: "bot_royale", comment: "Too slippery", reason: "controls" }));
+    expect(storage.saveStudioGameEvent).not.toHaveBeenCalled();
+    expect(storage.syncCompletedRunFact).not.toHaveBeenCalled();
+  });
+
+  it("retries an opted-in report with one ID and never sends its private comment", async () => {
+    const reportId = "12345678-1234-1234-1234-123456789abc";
+    storage.saveFieldReport.mockReturnValue([{ reportId, feedback: "brutal", inputDevice: "mobile", durationBucket: "2-5m", version: "1.0.0" }]);
+    storage.loadFieldReports.mockReturnValue([{ reportId }]);
+    const events = [];
+    storage.loadStudioGameEvents.mockImplementation(() => events);
+    storage.saveStudioGameEvent.mockImplementation((event) => events.push({ ...event, syncStatus: "pending" }));
+    storage.syncCompletedRunFact.mockResolvedValue({ submission: "offline" });
+    const submission = { reportId, feedback: "brutal", reason: "controls", comment: "private detail", consent: true };
+    const first = await recordPostRunFieldReport(submission, context);
+    const second = await recordPostRunFieldReport(submission, context);
+    expect(first.status).toBe("saved-pending-sync");
+    expect(second.status).toBe("saved-pending-sync");
+    expect(storage.saveStudioGameEvent).toHaveBeenCalledTimes(1);
+    expect(events[0].payload).toMatchObject({ sentiment: "brutal", reason: "controls", durationBucket: "2-5m" });
+    expect(JSON.stringify(events[0])).not.toContain("private detail");
   });
 
   it("applies a selected Zombies response while disabling other modes", () => {

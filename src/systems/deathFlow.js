@@ -12,21 +12,22 @@ export function deadMansHandDamage(distance, amplified = false) {
 }
 
 export function buildRunTheFixContract({
-  debrief = {},
-  postRunIntel = {},
-  collapseCoaching = null,
-  nextRunDrill = {},
+    debrief = {},
+    postRunIntel = {},
+    collapseCoaching = null,
+    nextRunDrill = {},
+    localLesson = null,
   runSeed = 0,
   wave = 1,
   rematchWave = null,
 } = {}) {
   const nextContract = debrief?.nextRunContract || {};
   const evidence = debrief.objective ? null : collapseCoaching?.contributingFactor || collapseCoaching?.primary || null;
-  const diagnosis = evidence?.statement
-    || debrief?.collapseReason
-    || String(postRunIntel?.cause || "pressure breakdown").replace(/_/g, " ");
-  const target = nextContract.target || nextRunDrill.detail || "Survive one more wave with one deliberate adjustment.";
-  const proof = nextContract.proof || "Win condition: finish the target and bank the result.";
+    const diagnosis = (!debrief.objective && localLesson?.status === "ready" ? localLesson.likelyFactor : !debrief.objective && localLesson ? localLesson.observed : null) || evidence?.statement
+      || debrief?.collapseReason
+      || String(postRunIntel?.cause || "pressure breakdown").replace(/_/g, " ");
+    const target = !debrief.objective && localLesson ? `${localLesson.suggestion} ${localLesson.drill.target}` : nextContract.target || nextRunDrill.detail || "Survive one more wave with one deliberate adjustment.";
+    const proof = !debrief.objective && localLesson ? "Compare the next wave, score, and recorded final source. This does not prove cause." : nextContract.proof || "Win condition: finish the target and bank the result.";
   const seeded = Number(runSeed) > 0;
   const canRematch = !debrief.objective && seeded && Number(rematchWave) > 0 && Number(wave) > 1;
 
@@ -50,7 +51,7 @@ export function buildRunTheFixContract({
     diagnosis,
     evidenceLabel: evidence?.label || "COACHING HYPOTHESIS",
     evidenceLevel: evidence?.evidenceLevel || "hypothesis",
-    focus: nextContract.focus || nextRunDrill.title || "Stabilize the opener",
+      focus: !debrief.objective && localLesson ? nextRunDrill.title : nextContract.focus || nextRunDrill.title || "Stabilize the opener",
     target,
     proof,
     action,

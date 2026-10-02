@@ -1,3 +1,5 @@
+import { createLocalRateLimiter } from "../../src/server/localRateLimiter.js";
+
 const RPC_PATH = "/rest/v1/rpc/get_cod_community_stats";
 const UPSTREAM_TIMEOUT_MS = 5000;
 
@@ -13,14 +15,15 @@ const ALLOWED_ORIGINS = new Set([
   "https://www.playcallofdoodie.com",
   "http://localhost:5173",
   "http://localhost:4173",
+  "http://localhost:4174",
 ]);
 
 function isAllowedOrigin(origin) {
   if (!origin) return true;
   if (ALLOWED_ORIGINS.has(origin)) return true;
   try {
-    const host = new URL(origin).hostname;
-    return host.endsWith(".call-of-doodie.pages.dev") || host === "call-of-doodie.pages.dev";
+    const url = new URL(origin);
+    return url.protocol === "https:" && (url.hostname.endsWith(".call-of-doodie.pages.dev") || url.hostname === "call-of-doodie.pages.dev");
   } catch { return false; }
 }
 
@@ -28,19 +31,7 @@ function isAllowedOrigin(origin) {
 // distributed quota — it bounds abuse cheaply on this public read-heavy
 // endpoint until a KV/DO budget is justified.
 const RATE_LIMIT_PER_MINUTE = 60;
-const rateBuckets = new Map();
-
-function consumeLocalRate(key, now = Date.now()) {
-  const minute = Math.floor(now / 60000);
-  const bucket = rateBuckets.get(key);
-  if (!bucket || bucket.minute !== minute) {
-    rateBuckets.set(key, { minute, count: 1 });
-    if (rateBuckets.size > 2048) rateBuckets.clear();
-    return true;
-  }
-  bucket.count += 1;
-  return bucket.count <= RATE_LIMIT_PER_MINUTE;
-}
+const consumeLocalRate = createLocalRateLimiter(RATE_LIMIT_PER_MINUTE);
 
 function json(body, init = {}) {
   return new Response(JSON.stringify(body), {

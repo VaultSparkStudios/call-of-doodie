@@ -10,7 +10,7 @@ import { REPLAY_MODES } from "../utils/replayCode.js";
 // S175: the numbers quoted in mode prose are derived, not typed. See
 // modeFacts.js for why (a ten-session-old "twelve bots" claim against a
 // sixteen-bot loop). This module stays cheap: modeFacts has no imports.
-import { BOT_ROYALE_BOT_COUNT, BOSS_GAUNTLET_BOSS_COUNT, BOSS_GAUNTLET_PAR_SECONDS, THRONE_COUNT, THRONE_CAPTURE_SECONDS, EXTRACTION_ALARM_EVAC, EXTRACTION_ALARM_LOCK, spell } from "./modeFacts.js";
+import { BOT_ROYALE_BOT_COUNT, BOSS_GAUNTLET_BOSS_COUNT, BOSS_GAUNTLET_PAR_SECONDS, BOSS_RUSH_WARMUP_WAVES, THRONE_COUNT, THRONE_CAPTURE_SECONDS, EXTRACTION_ALARM_EVAC, EXTRACTION_ALARM_LOCK, spell } from "./modeFacts.js";
 
 // S163: every legacy entry is tagged. "mode" = a different game; "ruleset" =
 // a challenge overlay on the survival loop. New replay-ineligible modes live in
@@ -20,7 +20,7 @@ export const MODE_CATALOG = Object.freeze([
   { id: "score_attack",    kind: "ruleset", label: "Score Attack",   short: "Score",    arcadeLabel: "SCORE ATTACK",  emoji: "⏱",  icon: "⌁", color: "#FF6600", blurb: "5 min · faster spawns · max score",            description: "Five minutes, faster spawns, maximum score." },
   { id: "daily_challenge", kind: "ruleset", label: "Daily Challenge", short: "Daily",   arcadeLabel: "DAILY",         emoji: "📅", icon: "◈", color: "#00E5FF", blurb: "Same seed · global ranking",                   description: "The same seeded run for every player today." },
   { id: "cursed",          kind: "ruleset", label: "Cursed Run",     short: "Cursed",   arcadeLabel: "CURSED",        emoji: "☠",  icon: "✦", color: "#CC00FF", blurb: "All cursed perks · 3× score",                  description: "Hard modifiers with a three-times score multiplier." },
-  { id: "boss_rush",       kind: "ruleset", label: "Boss Rush",      short: "Boss Rush", arcadeLabel: "BOSS RUSH",    emoji: "☠",  icon: "⚠", color: "#FF3333", blurb: "3 warmup waves · then endless boss waves", description: "Gear up for three waves, then fight bosses every wave. Survive as long as you can; later fights pair bosses." },
+  { id: "boss_rush",       kind: "ruleset", label: "Boss Rush",      short: "Boss Rush", arcadeLabel: "BOSS RUSH",    emoji: "☠",  icon: "⚠", color: "#FF3333", blurb: `${BOSS_RUSH_WARMUP_WAVES} warmup waves · then endless boss waves`, description: `Gear up for ${spell(BOSS_RUSH_WARMUP_WAVES)} warmup waves, then fight bosses every wave. Survive as long as you can; later fights pair bosses.` },
   { id: "speedrun",        kind: "ruleset", label: "Timed Survival", short: "Timed", arcadeLabel: "TIMED SURVIVAL",      emoji: "⏱",  icon: "»", color: "#00FF80", blurb: "Survival with a stopwatch · no finish line", description: "Classic survival with a precise elapsed-time display. Set your own wave target; the run ends when you run out of lives." },
   { id: "gauntlet",        kind: "ruleset", label: "Weekly Gauntlet", short: "Weekly", arcadeLabel: "WEEKLY GAUNTLET",     emoji: "🏆", icon: "◆", color: "#FFC800", blurb: "Weekly fixed opening kit · no shop",           description: "A fixed weekly opening kit with no shop." },
   { id: "zombies",         kind: "mode",    label: "Sewer Zombies",  short: "Zombies",  arcadeLabel: "SEWER ZOMBIES", emoji: "🧟", icon: "🧟", color: "#8DFF67", blurb: "Escalating hordes · surge every 3 waves",     description: "Escalating undead hordes with a surge every third wave." },

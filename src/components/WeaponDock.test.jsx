@@ -38,11 +38,19 @@ describe("WeaponDock", () => {
     });
   }
 
-  it("exposes all twelve weapons in the pre-run and desktop selectors", async () => {
-    await render(<><PrimaryWeaponSelector selectedIndex={0} onSelect={noop} /><DesktopWeaponDock {...sharedProps} onSwitchWeapon={noop} /></>);
+  it("keeps twelve pre-run choices but collapses the combat dock until requested", async () => {
+    const onSwitchWeapon = vi.fn();
+    await render(<><PrimaryWeaponSelector selectedIndex={0} onSelect={noop} /><DesktopWeaponDock {...sharedProps} onSwitchWeapon={onSwitchWeapon} /></>);
     expect(container.querySelector('[aria-label="Choose primary weapon"]').querySelectorAll("button")).toHaveLength(12);
-    expect(container.querySelector('[aria-label="Weapons"]').querySelectorAll("button")).toHaveLength(12);
     expect(container.textContent).toContain("ACTIVE WEAPON");
+    expect(document.querySelector('[aria-label="Weapons"]')).toBeNull();
+    const toggle = container.querySelector('[aria-controls="desktop-weapon-selector"]');
+    await act(async () => toggle.click());
+    const selector = document.querySelector('[aria-label="Weapons"]');
+    expect(selector.querySelectorAll('.weapon-dock__weapon')).toHaveLength(12);
+    await act(async () => selector.querySelectorAll('.weapon-dock__weapon')[4].click());
+    expect(onSwitchWeapon).toHaveBeenCalledWith(4);
+    expect(document.querySelector('[aria-label="Weapons"]')).toBeNull();
   });
 
   it("opens the mobile arsenal and equips a weapon in one tap", async () => {

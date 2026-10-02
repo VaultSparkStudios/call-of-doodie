@@ -28,6 +28,8 @@ let timer = null;
 let channel = null;
 let refreshPromise = null;
 let disposed = false;
+let nextAttemptAt = 0;
+let failures = 0;
 
 function emit() {
   for (const listener of subscribers) {
@@ -47,11 +49,18 @@ function pushTrend(stats) {
   trend = [...trend.slice(-(TREND_CAP - 1)), point];
 }
 
-async function refresh() {
+async function refresh(force = false) {
   if (refreshPromise) return refreshPromise;
+  if (!force && ((typeof document !== "undefined" && document.visibilityState === "hidden") || Date.now() < nextAttemptAt)) return snapshot;
   refreshPromise = (async () => {
-    await requestCompletedRunFactSync({ limit: 20 });
-    const next = await loadCommunityStats();
+    let next;
+    try {
+      await requestCompletedRunFactSync({ limit: 20 });
+      next = await loadCommunityStats();
+    } catch { next = loadCachedCommunityStats(); }
+    next ||= { dataSource: "empty" };
+    if (next.dataSource === "live") { failures = 0; nextAttemptAt = Date.now() + COMMUNITY_STATS_POLL_MS; }
+    else { failures += 1; nextAttemptAt = Date.now() + Math.min(300000, 30000 * 2 ** (failures - 1)); }
     if (!disposed) {
       snapshot = next;
       status = next.dataSource === "live" ? "live" : next.dataSource === "cache" ? "cached" : "offline";
@@ -68,14 +77,16 @@ function wake() {
   refresh();
 }
 
+function onExternalUpdate() { if (typeof document === "undefined" || document.visibilityState !== "hidden") refresh(true); }
+
 function start() {
   if (timer !== null || typeof window === "undefined") return;
   disposed = false;
-  refresh();
+  wake();
   timer = setInterval(wake, COMMUNITY_STATS_POLL_MS);
   window.addEventListener("online", wake);
   window.addEventListener("focus", wake);
-  window.addEventListener("cod:community-stats-updated", wake);
+  window.addEventListener("cod:community-stats-updated", onExternalUpdate);
   document.addEventListener("visibilitychange", wake);
   getSupabaseClient().then((client) => {
     if (disposed || !client?.channel || channel) return;
@@ -91,7 +102,7 @@ function stop() {
   if (typeof window !== "undefined") {
     window.removeEventListener("online", wake);
     window.removeEventListener("focus", wake);
-    window.removeEventListener("cod:community-stats-updated", wake);
+    window.removeEventListener("cod:community-stats-updated", onExternalUpdate);
     document.removeEventListener("visibilitychange", wake);
   }
   if (channel) {
@@ -127,12 +138,14 @@ export function getCommunityStatsTrend() {
 }
 
 export function refreshCommunityStatsNow() {
-  return refresh();
+  return refresh(true);
 }
 
 // Test-only reset — never called from app code.
 export function __resetCommunityStatsStoreForTests() {
   stop();
+  nextAttemptAt = 0;
+  failures = 0;
   subscribers.clear();
   snapshot = null;
   status = "connecting";

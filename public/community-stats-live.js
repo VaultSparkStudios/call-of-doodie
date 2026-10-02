@@ -4,6 +4,8 @@
   const TREND_CAP = 48;
   const TREND_METRICS = ["runs", "runners", "kills", "score", "damage", "bosses"];
   let pending = null;
+  let failures = 0;
+  let nextAttemptAt = 0;
 
   const number = (value) => Number.isFinite(Number(value)) ? Number(value) : 0;
   const format = (id, value, stats) => {
@@ -167,20 +169,23 @@
     renderFeedback(stats);
     renderSparklines(recordTrend(stats));
     renderAnalysis(stats, payload);
-    setStatus(`Feed checked ${new Date(payload.checkedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })} · refreshes every 15 seconds`, "live");
+    setStatus(`Feed checked ${new Date(payload.checkedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })} · refreshes every 15 seconds while healthy`, "live");
   }
 
   async function refresh() {
     if (pending || document.visibilityState === "hidden") return pending;
-    pending = fetch("../api/community-stats", { headers: { accept: "application/json" }, cache: "no-store" })
+    if (Date.now() < nextAttemptAt) return null;
+    pending = fetch("../api/community-stats", { headers: { accept: "application/json" } })
       .then((response) => {
         if (!response.ok) throw new Error("Community Stats unavailable");
         return response.json();
       })
-      .then(render)
+      .then((payload) => { failures = 0; nextAttemptAt = Date.now() + POLL_MS; render(payload); })
       .catch(() => {
+        failures += 1;
+        nextAttemptAt = Date.now() + Math.min(300000, 30000 * 2 ** (failures - 1));
         renderSparklines(loadTrend());
-        setStatus("Verified snapshot shown · reconnecting automatically", "cached");
+        setStatus(`Verified snapshot shown · retrying in ${Math.ceil((nextAttemptAt - Date.now()) / 1000)} seconds`, "cached");
       })
       .finally(() => { pending = null; });
     return pending;
