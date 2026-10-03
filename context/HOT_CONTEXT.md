@@ -99,7 +99,7 @@ Close the existing S182 delivery rather than count an extra implementation sessi
 
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 248,124 bytes · SHA-256 `3379ebb8662e…`
-- `context/TASK_BOARD.md` · 172,714 bytes · SHA-256 `6e54a27bdcd7…`
+- `context/CURRENT_STATE.md` · 248,610 bytes · SHA-256 `87226ddf7d0e…`
+- `context/TASK_BOARD.md` · 173,200 bytes · SHA-256 `185bd536660c…`
 - `context/DECISIONS.md` · 167,478 bytes · SHA-256 `55723ae6ec27…`
 - `docs/AUDIT_2026-09-29_2.json` · 7,385 bytes · SHA-256 `cc01a284e112…`

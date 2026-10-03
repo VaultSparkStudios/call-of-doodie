@@ -986,7 +986,7 @@
         "contradiction_density": 5
       },
       "delta": 1,
-      "cause": "S182 rebuild complete, deployed and production verified; explicit closeout records reconciled."
+      "cause": "S182 rebuild and explicit closeout complete; production verified."
     }
   ]
 }

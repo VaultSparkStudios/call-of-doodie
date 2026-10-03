@@ -29,11 +29,11 @@
       "inProgress": 0,
       "open": 0
     },
-    "state": "production-verified",
+    "state": "production-verified-and-explicitly-closed",
     "explicitFounderRequested": true,
     "recordsSeal": {
-      "commit": "2d0bdf9d5306fd9816a9cc4fd8469a693ea09c47",
-      "workflow": 37158694453,
+      "commit": "5e3537d18386b181f0940650a16a15be8f821fcd",
+      "workflow": 37161648350,
       "status": "production-verified",
       "shellAssertions": 7
     },
@@ -42,7 +42,7 @@
       "exitCode": 1,
       "date": "2026-10-03",
       "generatedAt": "2026-10-03T22:50:20.888Z",
-      "passing": 149,
+      "passing": 150,
       "total": 233,
       "score": 65,
       "blockingFailing": 2,
@@ -66,6 +66,16 @@
       ]
     },
     "arkImpactCargo": "01K41VS6GAC47527BC3DC108B3",
-    "writeback": "all-ten-reconciled"
+    "writeback": "all-ten-reconciled",
+    "autopilot": "passed-exit-0",
+    "hygiene": {
+      "session": 182,
+      "enumeratedAt": "2026-10-03T23:31:07.481Z",
+      "started": 26,
+      "closed": 26,
+      "running": 0,
+      "scope": "25 yielded closeout PTY jobs through the first deploy watch, plus the original owned persistent dev server. All jobs reconciled: one test startup failed then passed on forks; one read-only board stdout process was stopped after the canonical board file had passed validation. Later finite seal/verification commands are confirmed at handback. Independent host processes are excluded."
+    },
+    "centralQuestionCargo": "01K421056UE581B4746A170B41"
   }
 }

@@ -10,11 +10,11 @@
 ║  Live:  preview  →  https://callofdoodie.wtf/                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED · last 5 commits ═══════════════════════════════╗
+║  ✓ chore: close out S182 rebuild and deployment records          ║
 ║  ✓ docs: seal verified S182 gameplay production release          ║
 ║  ✓ Seal rebuild visual evidence and refresh public contracts     ║
 ║  ✓ Rebuild music, tactical Operations and Sewer Zombies; stream  ║
 ║  ✓ fix: restore project Node floor after template sync           ║
-║  ✓ docs: sync Studio OS .github/workflows/brief-format-check.ym  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 951/1000 ═══════════════════════════════════════╗
 ║    Dev Health         96   ██████████                            ║
@@ -41,7 +41,7 @@
 ║  · agent memory (Claude/Codex project memory)                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 16 files  ·  M:16 A:0 D:0 ?:0                          ║
+║  Changes: 15 files  ·  M:15 A:0 D:0 ?:0                          ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -50,14 +50,14 @@
 ║  Live:     https://callofdoodie.wtf/  ·  preview/FORGE (not yet  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
-║  Doctor:        149/233                                          ║
+║  Doctor:        150/233                                          ║
 ║  Compliance:    —                                                ║
 ║  Tests:         285/285                                          ║
 ║  Validation:    full-fresh                                       ║
 ║  IGNIS:         4d ago                                           ║
 ║  Truth:         engineering-ready-sparked-no-go                  ║
 ║  Sanitization:  1d ago                                           ║
-║  shells:        1 started · 1 closed · 0 running                 ║
+║  shells:        26 started · 26 closed · 0 running               ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ NEXT SESSION ════════════════════════════════════════════════╗
 ║  (no genius cache — run `node scripts/cache-genius-list.mjs`)    ║

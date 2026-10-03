@@ -4,7 +4,7 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "S182 rebuild complete, deployed and production verified; explicit closeout records reconciled.",
+  "currentFocus": "S182 rebuild and explicit closeout complete; production verified.",
   "nextMilestone": "Gather participant, physical-device, current Core Web Vitals, Zoho reply-as and Obelisk evidence before any SPARKED decision; test Field Lab prototypes before live integration.",
   "testingSurfaces": [
     {
@@ -183,25 +183,25 @@
   "sanitizationLastCleared": "2026-10-03",
   "sessionShellHygiene": {
     "session": 182,
-    "enumeratedAt": "2026-10-03T22:24:27.648Z",
-    "started": 1,
-    "closed": 1,
+    "enumeratedAt": "2026-10-03T23:31:07.481Z",
+    "started": 26,
+    "closed": 26,
     "running": 0,
-    "scope": "Persistent development server explicitly tracked and stopped. Finite browser/check sessions completed; process enumeration found no owned QA Node processes. Independent host processes excluded."
+    "scope": "25 yielded closeout PTY jobs through the first deploy watch, plus the original owned persistent dev server. All jobs reconciled: one test startup failed then passed on forks; one read-only board stdout process was stopped after the canonical board file had passed validation. Later finite seal/verification commands are confirmed at handback. Independent host processes are excluded."
   },
   "doctorScore": {
     "date": "2026-10-03",
-    "generatedAt": "2026-10-03T22:50:20.888Z",
-    "passing": 149,
+    "generatedAt": "2026-10-03T23:22:02.856Z",
+    "passing": 150,
     "total": 233,
     "score": 65,
-    "warning": 78,
+    "warning": 77,
     "failing": 3,
     "blockingFailing": 2,
     "advisoryFailing": 1,
     "note": "Studio-wide (not project-only): orphan-producers and remedy-drift are central Studio Ops findings; advisory foundation-reconciliation mirror drift. Project schema, tests, rendered visuals and production evidence pass."
   },
-  "lastSessionSummary": "S182 rebuild production verified; formal closeout reconciles all context and memory.",
+  "lastSessionSummary": "S182 rebuilt music and mode loops, reduced reward sprawl, and completed explicit founder closeout with deployed records.",
   "testsAssertionsPassing": 1762,
   "testsAssertionsTotal": 1762,
   "testsAssertionsFiles": 285,
@@ -216,13 +216,13 @@
   "lastShipped": "S182 rebuild deployed; records seal 2d0bdf9d5306 verified.",
   "truthStatus": "Gameplay source 9f508f9eda50 passed exact-main workflow 37157705445: 285/285 files and 1,762/1,762 tests, strict lint, build and Cloudflare deploy. Immutable https://554d0a13.call-of-doodie.pages.dev/ and canonical https://callofdoodie.wtf/ pass shell/health 7/7 each. Canonical production passes all six assisted Operations routes, zombie pump-to-hatch victory, four Classic checkpoint skips and twelve theme/width gameplay captures with zero browser errors. FORGE/public-unlaunched.",
   "testsFocusedSupplement": "Final App, MobileHUD and Operations overlay checks pass: 3 files / 9 tests, after mode-label and clipped-cue corrections.",
-  "lastDeployCommit": "2d0bdf9d5306fd9816a9cc4fd8469a693ea09c47",
-  "lastDeployAt": "2026-10-03T22:15:22.570Z",
+  "lastDeployCommit": "5e3537d18386b181f0940650a16a15be8f821fcd",
+  "lastDeployAt": "2026-10-03T23:25:58Z",
   "closeoutAcceptance": {
     "session": 182,
     "requestedAt": "2026-10-03T22:45:18.137Z",
-    "verifiedProductionCommit": "2d0bdf9d5306fd9816a9cc4fd8469a693ea09c47",
-    "workflow": 37158694453,
+    "verifiedProductionCommit": "5e3537d18386b181f0940650a16a15be8f821fcd",
+    "workflow": 37161648350,
     "shellAssertions": 7,
     "gameplaySource": "9f508f9eda50e9d8e987a2f2eae6e8f2dc0d8980",
     "recordOnly": true,
@@ -230,8 +230,8 @@
       "scope": "studio-wide",
       "exitCode": 1,
       "date": "2026-10-03",
-      "generatedAt": "2026-10-03T22:50:20.888Z",
-      "passing": 149,
+      "generatedAt": "2026-10-03T23:22:02.856Z",
+      "passing": 150,
       "total": 233,
       "score": 65,
       "blockingFailing": 2,
@@ -262,6 +262,12 @@
       "done": 4,
       "inProgress": 0,
       "open": 0
-    }
+    },
+    "autopilot": "passed-exit-0",
+    "autopilotCommit": "5e3537d18386b181f0940650a16a15be8f821fcd",
+    "verifiedAt": "2026-10-03T23:26:07.122Z",
+    "centralQuestionCargo": "01K421056UE581B4746A170B41",
+    "trace": "completed",
+    "hygiene": "zero-running"
   }
 }

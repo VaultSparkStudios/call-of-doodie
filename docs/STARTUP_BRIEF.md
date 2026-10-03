@@ -20,7 +20,7 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ LAST SESSION (S182) - WHAT SHIPPED ══════════════════════════╗
-║  S182 rebuild production verified; formal closeout reconciles a  ║
+║  S182 rebuilt music and mode loops, reduced reward sprawl, and   ║
 ║  Tests  -                                                        ║
 ║  Deploy -                                                        ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -69,7 +69,7 @@
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
 ║  ⚠  ░░░░░░░░░░░░░░░░░░░░░░░░    2% used                          ║
-║     313,577 / 200,000 tok  ·  unknown  ·  heuristic-stale        ║
+║     314,185 / 200,000 tok  ·  unknown  ·  heuristic-stale        ║
 ║     Verdict: CONSIDER_CLOSEOUT  ← act now                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -88,7 +88,7 @@
 ║  ✓  Templates     v3.3 aligned                                   ║
 ║  ⛔  Revenue sig.  not found  ⚠ stale                             ║
 ║  ✓  Deploy gaps   no gaps (run: ops deploy-gaps)                 ║
-║  ⛔  Doctor        149/233 (65%)  ·  3 failing                    ║
+║  ⛔  Doctor        150/233 (65%)  ·  3 failing                    ║
 ║  ✓  Codex trust   trusted project active                         ║
 ║  ✓  Canon adopt.  0/54 pending review                            ║
 ║  ✓  Cost          flat-rate Max Plan · usage ledger…             ║
