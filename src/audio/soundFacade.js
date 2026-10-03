@@ -34,13 +34,16 @@ function call(name, args, fallback) {
 }
 
 export function duckMusic(...args) { return call("duckMusic", args, undefined); }
-export function getMusicBPM(...args) { return call("getMusicBPM", args, 108); }
+export function getMusicBPM(...args) { return call("getMusicBPM", args, 116); }
 export function getMusicBeat(...args) { return call("getMusicBeat", args, 0); }
+export function getMusicState(...args) { return call("getMusicState", args, { active: false, paused: false, mode: "classic", bpm: 116, beat: 0 }); }
 export function getMusicVibe(...args) { return call("getMusicVibe", args, "action"); }
 export function getMuted(...args) { return call("getMuted", args, false); }
 export function setBusVolume(...args) { return call("setBusVolume", args, undefined); }
 export function setDangerIntensity(...args) { return call("setDangerIntensity", args, undefined); }
 export function setMusicIntensity(...args) { return call("setMusicIntensity", args, undefined); }
+export function setMusicMode(...args) { return call("setMusicMode", args, undefined); }
+export function setMusicPaused(...args) { return call("setMusicPaused", args, undefined); }
 export function setMusicLowpass(...args) { return call("setMusicLowpass", args, undefined); }
 export function setMusicTier(...args) { return call("setMusicTier", args, undefined); }
 export function setMusicVibe(...args) { return call("setMusicVibe", args, undefined); }

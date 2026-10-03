@@ -11,6 +11,6 @@ export const QUICK_RULES = Object.freeze([
   ["🎯", "Move", " with WASD / left stick · ", "Aim", " with mouse / right stick."],
   ["💨", "Dash", " (Shift / A button) — Invincible dodge. ", "Grenade", " (Space / B) — AOE."],
   ["🔢", "Weapon keys 1–9", " swap · ", "R", " reloads · Esc pauses."],
-  ["⚠️", `Boss every ${STANDARD_BOSS_WAVE_INTERVAL} waves.`, " Perks unlock on level-up. Wave shop between waves.", "", ""],
+  ["⚠️", `Boss every ${STANDARD_BOSS_WAVE_INTERVAL} waves.`, " Classic: one build choice at each four-wave checkpoint, no reward chains.", "", ""],
   ["💩", "Earn Doodie Coins", " for streaks — spend in the wave shop.", "", ""],
 ]);

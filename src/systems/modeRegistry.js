@@ -31,7 +31,7 @@ export function getModeMeta(id = "standard") {
 
 /** Does this run need the mode runtime chunk? */
 export function needsModeRuntime(id, { operation = false } = {}) {
-  return operation || isNewModeId(id);
+  return operation || id === "zombies" || isNewModeId(id);
 }
 
 /** Load the runtime chunk once; returns the module namespace or null. */

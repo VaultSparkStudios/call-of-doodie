@@ -10,6 +10,7 @@ import { currentReleaseNote } from "../content/capabilities.js";
 //    and the share card (constants.js re-exports it for back-compat)
 
 export const CHANGELOG_ENTRIES = [
+  ["October 3, 2026 · Three games, three scores, fewer interruptions", "Music rebuilt with original funk-chase, industrial mission and crooked horror scores, evolving arrangements and clean pause/resume. Operations now advance on field tasks with patrols still alive, on distinct mission maps. Sewer Zombies is a four-minute pump-and-escape campaign with five articulated horror-comedy creatures, readable attack tells and a rising backflow. Classic deploys straight into combat: one build choice every four waves, no chained routes/mutations/rewards, and shorter boss introductions."],
   currentReleaseNote(),
   ["September 9, 2026 · Worlds bigger than the screen, and a debrief that names names", "BOT ROYALE now drops sixteen bots into a two-screen scrolling sewer and SEWER EXTRACTION spreads its crates across a world one-and-a-half screens wide; the radar shows the whole map with loot and the evac toilet marked. Announcements (level-ups, doctrine, objectives, flood phases) now stay on your screen instead of at a fixed spot in the world. The debrief names what actually landed the last hit, including the flood, instead of guessing at the nearest enemy, so MOST WANTED, the run coach, and adaptive warnings finally learn from your deaths. Every mode's debrief says what the run was worth: loot banked or lost, thrones held, bosses down against par, or your royale placement."],
   ["September 3, 2026 · Duels, squads, and one board", "Seed duels: the challenge link from your debrief now opens a 24-hour duel and the rival's result comes back as a card (friendly, unverified). Squad codes: create or join one on Your Record and the board's new SQUAD tab shows your crew's best verified runs. The site consolidated: /board/ merges the leaderboard and live stats, /field-manual/ replaces How to Play, /bestiary/ replaces Enemies; old links redirect. Under the hood the game bundle shrank by a quarter, so the arena starts faster."],
@@ -28,6 +29,9 @@ export const CHANGELOG_ENTRIES = [
 ];
 
 export const NEW_FEATURES = [
+  "🧟 SEWER ZOMBIES REBUILT — five animated creatures, sludge pumps and a backflow escape",
+  "🎵 THREE ORIGINAL SCORES — funk chase, tactical industrial and crooked sewer horror",
+  "▶ CLASSIC FLOW — instant deployment, one choice every four waves, no reward chains",
   "⚔️ SEED DUELS — 24-hour duel links with a result card on the debrief",
   "🤝 SQUAD CODES — create or join on Your Record; SQUAD tab on the board",
   "📦 SEWER EXTRACTION — loot, climbing alarm, evac toilet, lockdown, persistent stash",
@@ -57,7 +61,7 @@ export const NEW_FEATURES = [
   "🏆 66 Achievements — wave 25, 500 kills, 3 nukes, 10 boss kills & more",
   "⚔️ Challenge Links — share a run seed + difficulty for friends to race",
   "📷 GIF Highlight Reel — auto-captures your peak killstreak moment",
-  "🗺️ 8 Map Themes — Office, Bunker, Factory, Ruins, Desert, Forest, Space, Arctic",
+  "🗺️ 9 Map Themes — Office, Bunker, Factory, Ruins, Desert, Forest, Space, Arctic, Sewer",
   "🌍 Global Leaderboard — compete worldwide with seed, loadout & device badges",
   "⭐ Prestige System — reset & raise the stakes",
   "🎲 Run Modifiers — 8 game-changers like Glass Cannon, Vampire, Ricochet+",
@@ -75,7 +79,7 @@ export const NEW_FEATURES = [
   "🏋️ Gauntlet Mode — weekly locked weapon + perk loadout, no shop; pure skill on a shared build",
   "🌳 META Tree — 16 permanent upgrade nodes across 4 branches; bonuses carry into every run forever",
   "🃏 Run Draft — pick one bonus perk before deploying; reshuffles every run for fresh builds",
-  "🧟 Sewer Zombies — seeded outbreak mode with horde budgets, surge waves & 4 undead variants",
+  "🧟 Sewer Zombies — continuous pump-and-escape campaign with 5 undead variants",
   "📊 Community Stats — live verified player + run totals on the menu, debrief & /stats/ page",
   "🗂️ Doctrine Archive — every build doctrine you forge is recorded forever in a collection grid",
   "📳 Mobile Haptics — tactile hit, kill, boss & low-HP feedback on touch devices",

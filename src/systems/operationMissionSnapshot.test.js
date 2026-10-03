@@ -38,7 +38,7 @@ describe("operationMissionSnapshot", () => {
 
   it("derives honest bounded pace from the authored duration window", () => {
     expect(deriveOperationScorePace({ operationId: "blacksite-flush", score: 0, elapsedMs: 1_000 })).toBe(1);
-    expect(deriveOperationScorePace({ operationId: "blacksite-flush", score: 6_000, elapsedMs: 540_000 })).toBeGreaterThan(0.65);
+    expect(deriveOperationScorePace({ operationId: "blacksite-flush", score: 6_000, elapsedMs: 240_000 })).toBeGreaterThan(0.65);
     expect(deriveOperationScorePace({ operationId: "blacksite-flush", score: 500, elapsedMs: 900_000 })).toBeLessThan(0.65);
     expect(deriveOperationScorePace({ operationId: "unknown", score: 50_000, elapsedMs: 900_000 })).toBe(1);
   });

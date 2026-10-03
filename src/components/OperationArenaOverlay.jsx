@@ -85,8 +85,10 @@ export default function OperationArenaOverlay({
         top: "max(150px, calc(env(safe-area-inset-top) + 72px))",
         right: 8,
         zIndex: 48,
-        width: "min(310px, calc(100vw - 16px))",
-        padding: 10,
+        width: "min(244px, calc(100vw - 16px))",
+        maxHeight: "calc(100dvh - 360px)",
+        overflowY: "auto",
+        padding: 8,
         pointerEvents: "all",
         border: "1px solid rgba(80,225,255,.46)",
         borderRadius: 12,
@@ -98,21 +100,20 @@ export default function OperationArenaOverlay({
       }}
     >
       <div style={{ display: "flex", justifyContent: "space-between", gap: 8, color: "#72E8FF", fontSize: 9, fontWeight: 900, letterSpacing: 1.2 }}>
-        <span>OPERATION · ACT {act}</span>
+        <span>FIELD ORDERS · ACT {act}</span>
         <span>{encounterNumber}/{encounterTotal} · {missionScore.toLocaleString()} PTS</span>
       </div>
       <strong style={{ display: "block", marginTop: 6, fontSize: 14, letterSpacing: .6 }}>
         {verbOf(encounter)} · {encounter.label || encounter.title || "FIELD ORDER"}
       </strong>
+      <details open={channel} key={encounter.id || encounter.verb} style={{ marginTop: 5 }}>
+      <summary style={{ minHeight: 44, display: "flex", alignItems: "center", cursor: "pointer", color: "#AFC4CD", fontSize: 10 }}>Support &amp; radio ▾</summary>
       <span style={{ display: "block", marginTop: 3, color: "#AFC4CD", fontSize: 10, lineHeight: 1.35 }}>
         {encounter.description || encounter.objective || action?.benefit}
       </span>
-      <span data-testid="operation-field-task" style={{ display: "block", marginTop: 5, color: "#EAFBFF", fontSize: 10, lineHeight: 1.4 }}>
-        {{ BREACH: "Open the north door, then shoot the marked breach door and clear the room.", HOLD: "Power the turret, then defend the marked point for 30 seconds and clear enemies.", ESCORT: "Pressurize the lane, then protect the cart until it reaches its destination.", HUNT: "Take the watchtower, defeat the marked target and clear the room.", SABOTAGE: "Flood the west pump, then stay beside it and hold SABOTAGE for 3 seconds.", ESCAPE: "Arm extraction, reach the marked exit before the alarm fills, then clear enemies.", BOSS: "Drain the floor and defeat the Operation boss and its reinforcements." }[verbOf(encounter)]}
-      </span>
-      {directorReason && <span style={{ display: "block", marginTop: 5, color: "#FFD57B", fontSize: 9 }}>DIRECTOR: {directorReason}</span>}
+      {directorReason && <span style={{ display: "block", marginTop: 5, color: "#FFD57B", fontSize: 9 }}>RADIO: {directorReason}</span>}
       {objectiveState && <span data-testid="operation-objective-status" style={{ display: "block", marginTop: 5, color: objectiveState.actionComplete ? "#7CFFB8" : "#FFD57B", fontSize: 9, fontWeight: 900 }}>
-        {objectiveState.actionComplete ? "LINK CONFIRMED · FINISH FIELD TASK" : objectiveState.reinforcementCount > 0 ? `OBJECTIVE REQUIRED · REINFORCEMENTS ${objectiveState.reinforcementCount}` : "OBJECTIVE ACTION REQUIRED"}
+        {objectiveState.actionComplete ? "SUPPORT ONLINE · FINISH FIELD TASK" : "OPTIONAL SUPPORT · KEEP PURSUING THE FIELD TASK"}
       </span>}
       {action && !completed && <div
         data-testid="operation-proximity-status"
@@ -167,6 +168,10 @@ export default function OperationArenaOverlay({
         </button>
       )}
       {cue && <div role="status" aria-live="polite" style={{ marginTop: 5, color: cue.tone === "danger" ? "#FFAA91" : "#9FE9C6", fontSize: 9 }}>{cue.worldCue} · {cue.pattern}</div>}
+      </details>
+      <span data-testid="operation-field-task" style={{ display: "block", marginTop: 5, color: "#EAFBFF", fontSize: 11, lineHeight: 1.4 }}>
+        {{ BREACH: "Shoot the blast door. Guards do not block progress.", HOLD: "Hold the relay for 18 seconds. Clear its ring.", ESCORT: "Protect the cart through the service corridor.", HUNT: "Defeat the marked fleeing courier.", SABOTAGE: "Hold E / USE at the pump for 4 seconds.", ESCAPE: "Reach the exit before the 35-second lockdown.", BOSS: "Defeat the commander. Ignore distractions." }[verbOf(encounter)]}
+      </span>
     </aside>
   );
 }

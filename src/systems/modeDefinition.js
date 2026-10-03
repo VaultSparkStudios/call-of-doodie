@@ -17,6 +17,7 @@ import { BOSS_GAUNTLET } from "../modes/bossGauntlet.js";
 import { HOLD_THE_THRONE } from "../modes/holdTheThrone.js";
 import { SEWER_EXTRACTION } from "../modes/sewerExtraction.js";
 import { BOT_ROYALE } from "../modes/botRoyale.js";
+import { SEWER_ZOMBIES } from "../modes/sewerZombies.js";
 
 function passthrough(id) {
   return Object.freeze({
@@ -33,13 +34,14 @@ function passthrough(id) {
 }
 
 const DEFINITIONS = new Map([
+  [SEWER_ZOMBIES.id, SEWER_ZOMBIES],
   [BOSS_GAUNTLET.id, BOSS_GAUNTLET],
   [HOLD_THE_THRONE.id, HOLD_THE_THRONE],
   [SEWER_EXTRACTION.id, SEWER_EXTRACTION],
   [BOT_ROYALE.id, BOT_ROYALE],
 ]);
 
-export const PLAYABLE_MODE_IDS = Object.freeze([...LEGACY_MODE_IDS, ...DEFINITIONS.keys()]);
+export const PLAYABLE_MODE_IDS = Object.freeze([...new Set([...LEGACY_MODE_IDS, ...DEFINITIONS.keys()])]);
 
 export function getModeDefinition(id = "standard") {
   if (DEFINITIONS.has(id)) return DEFINITIONS.get(id);

@@ -47,13 +47,13 @@ describe("modeRules legacy compatibility", () => {
     expect(isBossWaveForMode("boss_rush", 4)).toBe(true);
     expect(isBossWaveForMode("standard", 2, true)).toBe(true);
     expect(getModeRewardFlow("standard", 10)).toEqual({
-      showRoute: true, showMutation: true, showShop: true, awardLevelPerks: true,
+      showRoute: false, showMutation: false, showShop: false, awardLevelPerks: true,
     });
     expect(getModeRewardFlow("daily_challenge", 10)).toEqual({
-      showRoute: false, showMutation: false, showShop: true, awardLevelPerks: true,
+      showRoute: false, showMutation: false, showShop: false, awardLevelPerks: true,
     });
     expect(getModeRewardFlow("gauntlet", 10)).toEqual({
-      showRoute: true, showMutation: false, showShop: false, awardLevelPerks: false,
+      showRoute: false, showMutation: false, showShop: false, awardLevelPerks: false,
     });
   });
 
@@ -62,6 +62,18 @@ describe("modeRules legacy compatibility", () => {
     expect(getModeWaveEffects("cursed", 5, input)).toMatchObject({ mutAlwaysEnraged: true });
     expect(getModeWaveEffects("cursed", 25, input)).toMatchObject({ waveEnemyMult: 3 });
     expect(input).toEqual({ waveEnemyMult: 1.5 });
+  });
+
+  it("keeps every mode free of chained route/mutation menus and gates shops to checkpoints", () => {
+    for (const id of LEGACY_MODE_IDS) {
+      expect(getModeRules(id).draft).toBe(false);
+      for (let wave = 1; wave <= 40; wave++) {
+        const flow = getModeRewardFlow(id, wave);
+        expect(flow.showRoute || flow.showMutation).toBe(false);
+        if (flow.showShop) expect(wave % 4).toBe(0);
+      }
+    }
+    expect(getModeRewardFlow("zombies", 4)).toMatchObject({ showShop: false, awardLevelPerks: false });
   });
 
   it("retains special seed, draft, timer, event, and outbreak contracts", () => {

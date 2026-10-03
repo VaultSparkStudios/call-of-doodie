@@ -16,14 +16,14 @@ describe("progressionFlow", () => {
       getRandomPerks,
       getFullyCursedPerks,
     })).toEqual({
-      bankedPerkChoices: 1,
+      bankedPerkChoices: 0,
       perkOptions: [{ id: "a" }, { id: "b" }, { id: "c" }],
     });
     expect(getRandomPerks).toHaveBeenCalledWith(3);
     expect(getFullyCursedPerks).not.toHaveBeenCalled();
   });
 
-  test("prioritizes perk selection at wave clear and defers the rest", () => {
+  test("offers one perk at a checkpoint without chaining other rewards", () => {
     expect(createWaveRewardPlan({
       hasBankedPerkChoices: true,
       showMutation: true,
@@ -31,8 +31,8 @@ describe("progressionFlow", () => {
       mutationOptions: [{ id: "mut_1" }, { id: "mut_2" }],
     })).toEqual({
       action: "perk",
-      deferredMutationPending: true,
-      deferredMutationOptions: [{ id: "mut_1" }, { id: "mut_2" }],
+      deferredMutationPending: false,
+      deferredMutationOptions: [],
       deferredShopPending: false,
     });
   });

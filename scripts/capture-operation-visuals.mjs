@@ -95,7 +95,7 @@ try {
     const consoleErrors = [];
     page.on("pageerror", (error) => pageErrors.push(error.message));
     page.on("console", (message) => { if (message.type() === "error") consoleErrors.push(message.text()); });
-    const url = new URL("/?home=v2", baseUrl);
+    const url = new URL("/?home=v2&operation=blacksite-flush", baseUrl);
     url.searchParams.set("theme", entry.theme);
     const response = await page.goto(url.href, { waitUntil: "domcontentloaded" });
 

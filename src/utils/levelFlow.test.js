@@ -8,16 +8,14 @@ describe("levelFlow", () => {
     expect(getLevelXpNeeded(14)).toBe(9100);
   });
 
-  test("awards perk choices more frequently early than late", () => {
-    expect(shouldAwardPerkChoice(3)).toBe(true);
-    expect(shouldAwardPerkChoice(6)).toBe(true);
-    expect(shouldAwardPerkChoice(10)).toBe(false);
-    expect(shouldAwardPerkChoice(12)).toBe(true);
+  test("limits doctrine awards to four spaced levels across a run", () => {
+    expect(Array.from({ length: 100 }, (_, i) => i + 1).filter(shouldAwardPerkChoice)).toEqual([5, 10, 15, 20]);
   });
 
   test("finds the next perk level breakpoint", () => {
-    expect(getNextPerkLevel(2)).toBe(3);
-    expect(getNextPerkLevel(9)).toBe(12);
-    expect(getNextPerkLevel(12)).toBe(15); // cadence: every 3 levels through level 18
+    expect(getNextPerkLevel(2)).toBe(5);
+    expect(getNextPerkLevel(9)).toBe(10);
+    expect(getNextPerkLevel(12)).toBe(15);
+    expect(getNextPerkLevel(20)).toBeNull();
   });
 });

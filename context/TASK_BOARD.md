@@ -807,3 +807,12 @@ First checkpoint the bounded post-S159 propagation/CI/deploy recovery. Then begi
 - [x] [SIL:2] **DONE S107** Deploy gate repair — `scripts/render-startup-brief.mjs` now normalizes plain `generate-genius-list --brief` output into a canonical boxed `GENIUS HIT LIST`, always renders a `HUMAN PRESSURE` tile with an honest empty state, and GitHub Actions has the missing Cloudflare Pages deploy secrets restored from the Studio Ops gateway. Validation: brief validator, lint, 550/550 tests, and build passing.
 
 - [x] **DONE S177** Arena sizing, safe spawning and clipped world-space feedback were repaired and visually verified before the final mode and Operation follow-through.
+
+## Session 182 delivered gameplay scope
+
+- [x] Rebuild the music composer, instrument rack and mode/pause/mute lifecycle.
+- [x] Rebuild Operations as task-driven missions with continuous patrols and optional support.
+- [x] Rebuild Sewer Zombies with five articulated creatures, pump fuel and finite extraction.
+- [x] Remove reward chains and draft interruptions; add sparse, skippable checkpoints.
+
+Release verification is in progress; no unrelated gameplay maintenance was added.

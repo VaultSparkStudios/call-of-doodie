@@ -11,6 +11,8 @@ import { buildFlowField, sampleFlowField } from "./flowField.js";
 import { stepBossDecoys } from "./bossAbilities.js";
 import { invalidateArenaLayers } from "./backgroundLayer.js";
 
+import { stepZombieEnemy } from "./zombieMode.js";
+
 const MAX_DYING_ANIM = 20;
 const DEVELOPER_DEBUG_FRAMES = 240;
 
@@ -103,6 +105,19 @@ export function stepEnemyFrame({
   // ── Enemy movement & melee ──
   gs.enemies.forEach(e => {
     const t = pickTarget(e, gs, p);
+    if (e.isZombie) {
+      const slow = ((gs.freezeTimer || 0) > 0 ? 0.35 : 1) * ((gs.timeDilationTimer || 0) > 0 ? 0.18 : 1);
+      stepZombieEnemy(e, { gs, target: t, world: { W, H }, speedMult: slow * (gs.enemySpeedMult || 1) });
+      if (dashActiveFrames <= 0 && Math.hypot(p.x - e.x, p.y - e.y) < e.size / 2 + 15 && p.invincible <= 0) {
+        const damage = (e.contactDamage || 12) * (gs._treeArmorMult || 1) * (gs.glassjaw ? (gs.glassjawMult || 2) : 1);
+        applyObservedPlayerDamage(gs, { damage, frame, kind: "contact", sourceType: e.typeIndex, sourceName: e.name, sourceId: e.id ?? null });
+        p.invincible = 40; gs.damageFlash = 10; gs.screenShake = 5; gs.damageThisWave = (gs.damageThisWave || 0) + 1;
+        setHealth(Math.max(0, p.health));
+        addText(gs, p.x, p.y - 30, `-${Math.floor(damage)} HP`, "#ff927c");
+        if (p.health <= 0) handlePlayerDeath(gs);
+      }
+      return;
+    }
     // Phantom elite: toggle visibility every 90 frames
     if (e.eliteType === "phantom") {
       e.phantomTimer = (e.phantomTimer || 0) + 1;
@@ -639,3 +654,4 @@ export function stepEnemyFrame({
 
   return { ok: true };
 }
+

@@ -22,10 +22,10 @@ function mode(overrides) {
     scoreMultiplier: 1,
     perkPool: "standard",
     fixedOpeningKit: false,
-    draft: true,
+    draft: false,
     awardLevelPerks: true,
-    routes: true,
-    mutations: true,
+    routes: false,
+    mutations: false,
     shop: true,
     waveDirectorEvents: true,
     zombies: false,
@@ -67,7 +67,7 @@ export const MODE_RULES = Object.freeze({
     seedPolicy: "weekly_fixed", fixedOpeningKit: true, draft: false,
     awardLevelPerks: false, shop: false, mutations: false, waveDirectorEvents: false,
   }),
-  zombies: mode({ zombies: true }),
+  zombies: mode({ zombies: true, shop: false, awardLevelPerks: false, waveDirectorEvents: false }),
 });
 
 export function getModeRules(modeId = "standard") {
@@ -124,7 +124,7 @@ export function getModeRewardFlow(modeId, wave, { bossWave = false } = {}) {
   return {
     showRoute: rules.routes && !bossWave && normalizedWave >= 2,
     showMutation: rules.mutations && !bossWave && normalizedWave % 5 === 0,
-    showShop: rules.shop && !bossWave && (normalizedWave < 5 || normalizedWave % 2 === 0),
+    showShop: rules.shop && !bossWave && normalizedWave % 4 === 0,
     awardLevelPerks: rules.awardLevelPerks,
   };
 }

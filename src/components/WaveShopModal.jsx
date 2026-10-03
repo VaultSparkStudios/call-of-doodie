@@ -40,7 +40,7 @@ function WeaponStatBars({ weaponIdx }) {
   );
 }
 
-export default function WaveShopModal({ options, wave, onSelect, boughtHistory = [], currentWeapon = 0, coins = 0, coinShopOptions = [], onCoinBuy, buildArchetype, gs }) {
+export default function WaveShopModal({ options, wave, onSelect, onSkip, boughtHistory = [], currentWeapon = 0, coins = 0, coinShopOptions = [], onCoinBuy, buildArchetype, gs }) {
   const onSelectRef = useRef(onSelect);
   onSelectRef.current = onSelect;
   const [hoveredId, setHoveredId] = useState(null);
@@ -66,12 +66,13 @@ export default function WaveShopModal({ options, wave, onSelect, boughtHistory =
       <div style={{ maxWidth: 480, width: "100%", textAlign: "center", margin: "auto 0" }}>
         <div style={{ fontSize: 32, marginBottom: 4 }}>📦</div>
         <h2 style={{ fontSize: "clamp(16px,4vw,24px)", fontWeight: 900, margin: "0 0 4px", color: "var(--cod-gold)", letterSpacing: 2 }}>
-          WAVE {wave - 1} CLEAR!
+          FIELD CHECKPOINT · WAVE {wave}
         </h2>
         <p style={{ color: "#AAA", fontSize: 12, margin: "0 0 18px" }}>
           Choose your reward — one pick only.
           <span style={{ color: "#555", marginLeft: 8 }}>🎮 D-pad + A</span>
         </p>
+        {onSkip && <button onClick={onSkip} style={{ width: "100%", minHeight: 44, marginBottom: 14, border: "1px solid #88FFCC", borderRadius: 8, background: "#102820", color: "#DDFFF0", font: "bold 14px monospace", cursor: "pointer" }}>KEEP GOING · NO UPGRADE</button>}
         {buildArchetype && (
           <div style={{ marginBottom: 14, padding: "8px 12px", borderRadius: 8, background: "rgba(255,255,255,0.03)", border: `1px solid ${buildArchetype.color}44`, textAlign: "left" }}>
             <div style={{ fontSize: 10, color: buildArchetype.color, fontWeight: 900, letterSpacing: 1 }}>
@@ -148,7 +149,8 @@ export default function WaveShopModal({ options, wave, onSelect, boughtHistory =
 
         {/* 💩 Doodie Coin Shop */}
         {coinShopOptions.length > 0 && (
-          <div style={{ marginTop: 22 }}>
+          <details style={{ marginTop: 22 }}>
+            <summary style={{ minHeight: 44, color: "#FFD700", cursor: "pointer", padding: "12px 0" }}>Optional supplies · {coins} coins</summary>
             {/* Divider */}
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
               <div style={{ flex: 1, height: 1, background: "rgba(200,160,0,0.2)" }} />
@@ -212,7 +214,7 @@ export default function WaveShopModal({ options, wave, onSelect, boughtHistory =
                 );
               })}
             </div>
-          </div>
+          </details>
         )}
       </div>
     </div>

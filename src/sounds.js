@@ -13,13 +13,14 @@ let muted = false;
 export function setMuted(val) {
   muted = val;
   setMasterMuted(val);
+  if (val) { _releaseScore(); _nextMusicTime = 0; }
   // Muted sessions shouldn't burn the audio thread: suspend the context and
   // let the next getCtx()/unmute resume it (context exists from a gesture, so
   // resume is allowed).
   try {
     if (audioCtx) {
-      if (val && audioCtx.state === "running") audioCtx.suspend();
-      else if (!val && audioCtx.state === "suspended") audioCtx.resume();
+      if (val && audioCtx.state === "running") audioCtx.suspend()?.catch?.(() => {});
+      else if (!val && audioCtx.state === "suspended") audioCtx.resume()?.catch?.(() => {});
     }
   } catch { /* ignore */ }
 }
@@ -101,10 +102,15 @@ function _prewarmNoiseBuffers(ctx) {
 
 function _unlockAudio() {
   if (muted) return;
-  if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
+  if (audioCtx && audioCtx.state !== "running" && audioCtx.state !== "closed") audioCtx.resume()?.catch?.(() => {});
   if (!audioCtx) _createAudioContext();
 }
-if (typeof document !== "undefined") document.addEventListener("pointerdown", _unlockAudio, { once: true });
+if (typeof document !== "undefined") {
+  // Keep the unlock gesture available after a muted first interaction and an
+  // iOS interruption; keyboard-only play also needs a trusted audio gesture.
+  document.addEventListener("pointerdown", _unlockAudio);
+  document.addEventListener("keydown", _unlockAudio);
+}
 
 // Construct the context during an idle slice so the first meaningful mobile
 // interaction does not pay device/audio-backend initialization synchronously.
@@ -119,14 +125,14 @@ function getCtx() {
   if (muted) return null;
   if (!audioCtx && !_createAudioContext()) return null;
   // Resume if suspended (browser autoplay policy / iOS background)
-  if (audioCtx.state === "suspended") audioCtx.resume();
+  if (audioCtx.state === "suspended") audioCtx.resume()?.catch?.(() => {});
   return audioCtx;
 }
 
 // Re-unlock on visibility change (iOS suspends AudioContext when app backgrounds)
 if (typeof document !== "undefined") document.addEventListener("visibilitychange", () => {
   if (!muted && document.visibilityState === "visible" && audioCtx && audioCtx.state === "suspended") {
-    audioCtx.resume();
+    audioCtx.resume()?.catch?.(() => {});
   }
 });
 
@@ -749,289 +755,114 @@ function _tickAmbient() {
   _ambientTimer = setTimeout(_tickAmbient, _AMBIENT_TICK[_ambientTheme] ?? 900);
 }
 
-// ===== BACKGROUND MUSIC =====
-// Procedural 8-beat loop — kicks, snares, hats, bass. No audio files.
+// ===== ADAPTIVE ORIGINAL SOUNDTRACK =====
+// 16th-note transport; mode scores evolve over a 32-bar arrangement.
+import { composeScoreStep, normalizeScoreMode, normalizeScoreVibe, scoreBPM } from "./audio/scoreComposer.js";
+import { createScoreSynth } from "./audio/scoreSynth.js";
+export { MUSIC_VIBES } from "./audio/musicVibes.js";
 let _musicActive = false;
-let _musicBoss = false;
-let _musicBeat = 0;
-let _musicTimer = null;
+let _musicPaused = false;
 let _musicVibe = "action";
-// Reactive combo tier: 0=normal, 1=action-bump, 2=intense
-let _musicComboTier = 0;
+let _musicMode = "classic";
+let _musicBoss = false;
+let _musicTier = 0;
+let _musicTimer = null;
+let _musicStep = 0;
+let _nextMusicTime = 0;
+let _scoreSynth = null;
+let _pendingScore = {};
+let _audibleBeats = [];
+let _lastAudibleBeat = 0;
 
-/**
- * Drive the music energy tier from the heat meter (heatTier 0/1/2).
- * tier 0 = use player's chosen vibe as-is
- * tier 1 = escalate chill → action
- * tier 2 = escalate chill/action → intense
- * retro / spooky / boss are never overridden.
- * Changes are quantized to the next bar boundary by the scheduler so the
- * escalation lands musically instead of cutting mid-phrase.
- */
-export function setMusicTier(tier) {
-  const t = Math.max(0, Math.min(2, tier));
-  if (t === _musicComboTier) { _pendingTier = null; return; }
-  _pendingTier = t;
+function _scoreState() { return { mode: _musicMode, vibe: _musicVibe, boss: _musicBoss, tier: _musicTier }; }
+function _changeScore(key, value) {
+  if (_musicActive) _pendingScore[key] = value;
+  else _applyScore({ [key]: value });
 }
-
-import { MUSIC_VIBES } from "./audio/musicVibes.js";
-export { MUSIC_VIBES };
-
-// ===== MUSIC DEPTH (S155) =====
-// Each vibe now plays a 4-bar cycle (A · A · B · A-with-fill) over a chord
-// progression instead of a single looping bar, which stretches the perceived
-// loop from ~3–4s to ~25–30s. `chord` is a frequency ratio applied to bass and
-// melody voices; `section` is 0 = A, 1 = B (variation), 2 = fill bar.
-// Progressions are i–i–bVI–bVII style minor loops, voiced in the low octave.
-const _PROGRESSIONS = {
-  chill:   [1, 1, 0.8909, 0.7937],   // i · i · bVII · bVI
-  action:  [1, 0.7937, 0.8909, 1],   // i · bVI · bVII · i
-  intense: [1, 1.1892, 0.8909, 1],   // i · bIII · bVII · i
-  retro:   [1, 0.8909, 0.7937, 0.8909], // i · bVII · bVI · bVII
-  spooky:  [1, 1, 1.0595, 1],        // i · i · bii (dissonant lean) · i
-  boss:    [1, 0.7937, 1.1892, 0.8909], // i · bVI · bIII · bVII
-};
-
-// Shared fill: bars 6–7 of the fill section get a drum roll + pitch run.
-function _drumFill(beat, bar, chord, base = 220, punch = 1) {
-  if (bar === 6) {
-    noise(beat * 0.08, 0.06 * punch);
-    noise(beat * 0.08, 0.05 * punch, beat * 0.5);
-  } else if (bar === 7) {
-    noise(beat * 0.06, 0.07 * punch);
-    noise(beat * 0.06, 0.06 * punch, beat * 0.33);
-    noise(beat * 0.06, 0.05 * punch, beat * 0.66);
-    tone(base * chord, beat * 0.3, "triangle", 0.03 * punch, base * chord * 1.5);
-  }
+function _applyScore(next) {
+  if (next.mode != null) _musicMode = next.mode;
+  if (next.vibe != null) _musicVibe = next.vibe;
+  if (next.boss != null) _musicBoss = next.boss;
+  if (next.tier != null) _musicTier = next.tier;
 }
-
-// Heat-tier energy overlay — layered on top of EVERY vibe (including retro/
-// spooky/boss, which previously had zero adaptivity). Tier 1 adds an offbeat
-// hat + soft pulse; tier 2 adds a driving eighth-note bass and extra kick.
-function _tierOverlay(beat, bar, tier, chord, type) {
-  if (tier >= 1) {
-    tone(6800, beat * 0.03, type, 0.008, 5200, beat * 0.5);
-  }
-  if (tier >= 2) {
-    tone(110 * chord, beat * 0.14, type === "sine" ? "triangle" : "sawtooth", 0.028, 104 * chord);
-    tone(110 * chord, beat * 0.14, type === "sine" ? "triangle" : "sawtooth", 0.022, 104 * chord, beat * 0.5);
-    if (bar % 2 === 0) { tone(60, beat * 0.2, "sine", 0.05, 34); }
-  }
+export function setMusicMode(mode) { _changeScore("mode", normalizeScoreMode(mode)); }
+export function setMusicVibe(vibe) { _changeScore("vibe", normalizeScoreVibe(vibe)); }
+export function getMusicVibe() { return _pendingScore.vibe ?? _musicVibe; }
+export function setMusicTier(tier) { _changeScore("tier", Math.max(0, Math.min(2, Math.floor(Number(tier) || 0)))); }
+export function setMusicIntensity(boss) { _changeScore("boss", Boolean(boss)); }
+export function getMusicBPM() { return scoreBPM(_scoreState()); }
+export function getMusicBeat() {
+  const now = audioCtx?.currentTime ?? 0;
+  while (_audibleBeats.length && _audibleBeats[0].time <= now) _lastAudibleBeat = _audibleBeats.shift().beat;
+  return _lastAudibleBeat;
 }
-
-function _beatChill(ctx, beat, bar, chord = 1, section = 0) {
-  // 72 BPM · sine-only · no snare · deep drone bass · chord pads
-  if (bar === 0 || bar === 4) tone(50 * chord, beat * 0.65, "sine", 0.07, 32 * chord);
-  if (bar === 2 || bar === 6) noise(beat * 0.08, 0.018); // whisper brush
-  const bass = [41,41,44,41,37,37,44,41];
-  tone(bass[bar] * chord, beat * 0.75, "sine", 0.055, bass[bar] * chord * 0.93);
-  if (bar === 0) { tone(220 * chord, beat * 3.8, "sine", 0.011); tone(277 * chord, beat * 3.8, "sine", 0.008); tone(330 * chord, beat * 3.8, "sine", 0.006); }
-  if (bar === 4) { tone(196 * chord, beat * 3.8, "sine", 0.011); tone(247 * chord, beat * 3.8, "sine", 0.008); }
-  if (section === 1) {
-    // B section: gentle 2-note answer melody over the pads
-    const answer = [0, 330, 0, 392, 0, 330, 294, 0];
-    if (answer[bar]) tone(answer[bar] * chord, beat * 1.4, "sine", 0.012, answer[bar] * chord * 0.97);
-  }
-  if (section === 2) _drumFill(beat, bar, chord, 165, 0.4);
+export function getMusicState() {
+  return { ..._scoreState(), active: _musicActive, paused: _musicPaused, bpm: getMusicBPM(), beat: getMusicBeat(), section: Math.floor(_musicStep / 128) % 4, voices: _scoreSynth?.voiceCount ?? 0 };
 }
-
-function _beatAction(ctx, beat, bar, chord = 1, section = 0) {
-  // 108 BPM · original default groove, now progression-aware
-  const vol = 1.0;
-  if (bar === 0 || bar === 4) { tone(75, beat * 0.45, "sine", 0.10 * vol, 38); noise(beat * 0.18, 0.07 * vol); }
-  if (bar === 2 || bar === 6) { noise(beat * 0.22, 0.08 * vol); tone(220, beat * 0.15, "square", 0.03 * vol, 160); }
-  if (bar % 2 === 1) noise(beat * 0.065, 0.018 * vol);
-  noise(beat * 0.035, 0.012 * vol);
-  // A restrained call-and-response motif gives the groove a musical identity.
-  const melody = section === 1 ? [0, 392, 330, 0, 294, 0, 262, 294] : [220, 0, 262, 0, 294, 262, 0, 196];
-  if (melody[bar]) tone(melody[bar] * chord, beat * 0.65, "triangle", 0.018);
-  const bass = [55, 55, 65, 55, 49, 55, 58, 55];
-  tone(bass[bar] * chord, beat * 0.38, "sawtooth", 0.065 * vol, bass[bar] * chord * 0.88);
-  if (section === 1) {
-    // B section: syncopated extra kick + call-response stab
-    if (bar === 3 || bar === 7) tone(75, beat * 0.3, "sine", 0.07, 40);
-    if (bar === 1 || bar === 5) tone(262 * chord, beat * 0.12, "square", 0.02, 220 * chord);
-  }
-  if (section === 2) _drumFill(beat, bar, chord, 220, 0.8);
+function _releaseScore() {
+  _scoreSynth?.dispose();
+  _scoreSynth = null;
+  _audibleBeats = [];
 }
-
-function _beatIntense(ctx, beat, bar, chord = 1, section = 0) {
-  // 150 BPM · kick every beat · sawtooth everything · synth stab · lead riff
-  tone(62, beat * 0.32, "sine", 0.14, 28); noise(beat * 0.10, 0.10); // kick every beat
-  if (bar === 2 || bar === 6) { noise(beat * 0.20, 0.13); tone(180, beat * 0.09, "sawtooth", 0.04, 110); }
-  if (bar % 2 === 1) { noise(beat * 0.07, 0.05); tone(8000, beat * 0.025, "square", 0.011, 5500); }
-  tone(10000, beat * 0.02, "square", 0.009, 7000);
-  const bass = [55, 73, 82, 73, 49, 65, 82, 65];
-  tone(bass[bar] * chord, beat * 0.30, "sawtooth", 0.095, bass[bar] * chord * 0.84);
-  if (bar === 0) { tone(330 * chord, beat * 0.07, "sawtooth", 0.04, 260 * chord); tone(415 * chord, beat * 0.07, "sawtooth", 0.03, 330 * chord); }
-  const riff = section === 1
-    ? [466, 0, 392, 0, 523, 0, 466, 392]  // B: inverted, busier riff
-    : [0, 392, 0, 466, 0, 392, 349, 0];
-  if (riff[bar]) tone(riff[bar] * chord, beat * 0.11, "sawtooth", 0.026, riff[bar] * chord * 0.9);
-  if (section === 2) _drumFill(beat, bar, chord, 330, 1.1);
+export function setMusicPaused(paused) {
+  const next = Boolean(paused);
+  if (_musicPaused === next) return;
+  _musicPaused = next;
+  _releaseScore();
+  _nextMusicTime = 0;
+  // Resume on the same phrase, quantized to a beat, without stale scheduled voices.
+  if (!next) _musicStep = Math.ceil(_musicStep / 4) * 4;
 }
-
-function _beatRetro(ctx, beat, bar, chord = 1, section = 0) {
-  // 120 BPM · square waves ONLY · chiptune percussion · arpeggio melody
-  if (bar === 0 || bar === 4) { tone(120, beat * 0.10, "square", 0.10, 38); noise(beat * 0.05, 0.08); }
-  if (bar === 2 || bar === 6) { noise(beat * 0.09, 0.10); tone(440, beat * 0.07, "square", 0.025, 220); }
-  if (bar % 2 === 1) tone(6500, beat * 0.035, "square", 0.01, 4200);
-  const bass = [110,110,131,110,98,110,131,147];
-  tone(bass[bar] * chord, beat * 0.26, "square", 0.052, bass[bar] * chord * 0.91);
-  const arp  = section === 1
-    ? [440, 523, 587, 523, 440, 392, 440, 523]  // B: arpeggio up a fourth
-    : [330, 392, 440, 392, 330, 294, 330, 392];
-  const arp2 = [262, 330, 349, 330, 262, 247, 262, 330];
-  tone(arp[bar] * chord,  beat * 0.17, "square", 0.022, arp[bar] * chord * 0.95);
-  tone(arp2[bar] * chord * 2, beat * 0.09, "square", 0.011);
-  if (section === 2) _drumFill(beat, bar, chord, 262, 0.9);
-}
-
-function _beatSpooky(ctx, beat, bar, chord = 1, section = 0) {
-  // 82 BPM · NO kick · minor key drone · eerie descending sine melody · dissonance
-  if (bar === 0) { tone(28, beat * 0.9, "sine", 0.09, 22); noise(beat * 0.45, 0.028); }
-  if (bar === 2 || bar === 6) noise(beat * 0.12, 0.020);
-  const drone = [41,41,41,44,37,37,41,41];
-  tone(drone[bar] * chord, beat * 0.92, "sine", 0.052, drone[bar] * chord * 0.96);
-  const mel = section === 1
-    ? [370, 392, 415, 392, 440, 415, 392, 370]  // B: rising unease
-    : [440, 415, 392, 415, 370, 370, 392, 415];
-  if (bar % 2 === 0) tone(mel[bar] * chord, beat * 1.7, "sine", 0.017, mel[bar] * chord * 0.93);
-  if (bar === 4) tone(466 * chord, beat * 0.55, "sine", 0.012, 415 * chord); // tritone tension
-  if (bar === 0) tone(1760, beat * 0.28, "sine", 0.007, 1320); // ethereal ping
-  if (section === 2 && bar === 7) tone(233 * chord, beat * 1.2, "sine", 0.02, 220 * chord); // fill: low moan
-}
-
-function _beatBoss(ctx, beat, bar, chord = 1, section = 0) {
-  // Boss override — original boss mode, vol boosted, progression-aware
-  const vol = 1.4;
-  if (bar === 0 || bar === 4) { tone(75, beat * 0.45, "sine", 0.10 * vol, 38); noise(beat * 0.18, 0.07 * vol); }
-  if (bar === 2 || bar === 6) { noise(beat * 0.22, 0.08 * vol); tone(220, beat * 0.15, "square", 0.03 * vol, 160); }
-  if (bar % 2 === 1) tone(7500, beat * 0.06, "square", 0.012 * vol, 5000);
-  tone(9000, beat * 0.03, "square", 0.008 * vol, 7000);
-  const bass = [55, 65, 73, 65, 49, 58, 73, 58];
-  tone(bass[bar] * chord, beat * 0.38, "sawtooth", 0.065 * vol, bass[bar] * chord * 0.88);
-  if (bar === 0) tone(330 * chord, beat * 0.12, "square", 0.025, 280 * chord);
-  if (section === 1 && (bar === 1 || bar === 5)) {
-    // B section: menacing brass-ish stab pair
-    tone(196 * chord, beat * 0.2, "sawtooth", 0.035, 185 * chord);
-    tone(247 * chord, beat * 0.2, "sawtooth", 0.028, 233 * chord);
-  }
-  if (section === 2) _drumFill(beat, bar, chord, 196, 1.3);
-}
-
-export function getMusicVibe() { return _musicVibe; }
-export function setMusicVibe(vibe) {
-  if (_musicActive) _pendingVibe = vibe; // land it on the next bar boundary
-  else _musicVibe = vibe;
-}
-export function getMusicBeat() { return _musicBeat; }
-export function getMusicBPM() {
-  const vibe = _musicBoss ? "boss" : (_musicVibe || "action");
-  return _BPM[vibe] || 108;
-}
-
-// ===== LOOKAHEAD SCHEDULER =====
-// Two-clock pattern: a coarse setInterval tick schedules every beat whose
-// AudioContext-clock time falls inside the lookahead window, using absolute
-// times. The old setTimeout(beat*1000 - 8) chain drifted under load, which
-// desynced beat-kill coin rewards and beat visuals from the audible pulse.
-const _MUSIC_TICK_MS = 25;
-const _MUSIC_LOOKAHEAD_S = 0.12;
-let _nextBeatTime = 0;
-let _pendingVibe = null;
-let _pendingTier = null;
-let _pendingBoss = null;
-
 export function startMusic(isBossWave = false) {
-  if (_musicActive) return;
+  if (_musicActive) { setMusicIntensity(isBossWave); return; }
   _musicActive = true;
-  _musicBoss = isBossWave;
-  _musicBeat = 0;
-  _pendingVibe = _pendingTier = _pendingBoss = null;
-  const ctx = getCtx();
-  _nextBeatTime = ctx ? ctx.currentTime + 0.05 : 0;
-  _musicTimer = setInterval(_schedulerTick, _MUSIC_TICK_MS);
+  _musicPaused = false;
+  _musicBoss = Boolean(isBossWave);
+  _musicTier = 0;
+  _musicStep = 0;
+  _lastAudibleBeat = 0;
+  _nextMusicTime = 0;
+  _applyScore(_pendingScore);
+  _pendingScore = {};
+  _musicTimer = setInterval(_tickScore, 25);
+  _tickScore();
 }
-
 export function stopMusic() {
   _musicActive = false;
-  if (_musicTimer) { clearInterval(_musicTimer); _musicTimer = null; }
+  if (_musicTimer != null) clearInterval(_musicTimer);
+  _musicTimer = null;
+  _applyScore(_pendingScore);
+  _pendingScore = {};
+  _releaseScore();
+  _nextMusicTime = 0;
 }
-
-// Boss transitions are quantized to the next beat (a full-bar wait is too slow
-// for a boss entrance); a short duck softens the swap into a pseudo-crossfade.
-export function setMusicIntensity(isBossWave) {
-  if (!_musicActive) { _musicBoss = isBossWave; return; }
-  if (isBossWave === _musicBoss) { _pendingBoss = null; return; }
-  _pendingBoss = isBossWave;
-}
-
-const _BPM = { chill: 72, action: 108, intense: 150, retro: 120, spooky: 82, boss: 138 };
-
-function _resolveVibe() {
-  let vibe = _musicBoss ? "boss" : (_musicVibe || "action");
-  if (!_musicBoss && vibe !== "retro" && vibe !== "spooky") {
-    if (_musicComboTier >= 2) {
-      if (vibe === "chill" || vibe === "action") vibe = "intense";
-    } else if (_musicComboTier >= 1 && vibe === "chill") {
-      vibe = "action";
-    }
-  }
-  return vibe;
-}
-
-function _playBeat(ctx, vibe, beat, bar) {
-  // 4-bar cycle: A · A · B · A+fill, over the vibe's chord progression.
-  const cycleBar = Math.floor(_musicBeat / 8) % 4;
-  const chord = (_PROGRESSIONS[vibe] || _PROGRESSIONS.action)[cycleBar] ?? 1;
-  const section = cycleBar === 2 ? 1 : cycleBar === 3 ? 2 : 0;
-  switch (vibe) {
-    case "chill":   _beatChill(ctx, beat, bar, chord, section);   break;
-    case "action":  _beatAction(ctx, beat, bar, chord, section);  break;
-    case "intense": _beatIntense(ctx, beat, bar, chord, section); break;
-    case "retro":   _beatRetro(ctx, beat, bar, chord, section);   break;
-    case "spooky":  _beatSpooky(ctx, beat, bar, chord, section);  break;
-    case "boss":    _beatBoss(ctx, beat, bar, chord, section);    break;
-    default:        _beatAction(ctx, beat, bar, chord, section);
-  }
-  // Heat adaptivity for every vibe — including retro/spooky/boss, whose core
-  // pattern identity stays untouched (the escalation is additive layers).
-  if (_musicComboTier > 0) {
-    _tierOverlay(beat, bar, _musicComboTier, chord, vibe === "chill" || vibe === "spooky" ? "sine" : "square");
-  }
-}
-
-function _schedulerTick() {
-  if (!_musicActive) return;
+function _tickScore() {
+  if (!_musicActive || _musicPaused || muted || (typeof document !== "undefined" && document.visibilityState === "hidden")) return;
   const ctx = getCtx();
-  if (!ctx) return; // muted/suspended — recovery clause below re-anchors on resume
-  if (_nextBeatTime < ctx.currentTime - 0.25) {
-    // Tab throttling or a long suspend left us behind; re-anchor instead of
-    // burst-scheduling a backlog of beats.
-    _nextBeatTime = ctx.currentTime + 0.02;
+  if (!ctx || ctx.state !== "running") return;
+  if (!_scoreSynth) _scoreSynth = createScoreSynth(ctx, busDest("music") || ctx.destination);
+  if (!_nextMusicTime || _nextMusicTime < ctx.currentTime - 0.2) {
+    _nextMusicTime = ctx.currentTime + 0.04;
+    _musicStep = Math.ceil(_musicStep / 4) * 4;
   }
-  while (_nextBeatTime < ctx.currentTime + _MUSIC_LOOKAHEAD_S) {
-    const bar = _musicBeat % 8;
-    if (bar === 0) {
-      if (_pendingVibe != null) { _musicVibe = _pendingVibe; _pendingVibe = null; }
-      if (_pendingTier != null) { _musicComboTier = _pendingTier; _pendingTier = null; }
+  while (_nextMusicTime < ctx.currentTime + 0.1) {
+    // Energy/setting changes land at bar boundaries. Boss response lands on a beat.
+    if (_musicStep % 16 === 0) { _applyScore(_pendingScore); _pendingScore = {}; }
+    else if (_musicStep % 4 === 0 && _pendingScore.boss != null) {
+      _musicBoss = _pendingScore.boss;
+      delete _pendingScore.boss;
     }
-    if (_pendingBoss != null) {
-      _musicBoss = _pendingBoss;
-      _pendingBoss = null;
-      duckMusic(0.5, 320);
-    }
-    const vibe = _resolveVibe();
-    const beat = 60 / (_BPM[vibe] || 108);
-    const delay = Math.max(0, _nextBeatTime - ctx.currentTime);
-    _scheduleOffset = delay;
-    try {
-      _withBus("music", () => _playBeat(ctx, vibe, beat, bar));
-    } finally {
-      _scheduleOffset = 0;
-    }
-    _musicBeat++;
-    _nextBeatTime += beat;
+    const stepSeconds = 60 / getMusicBPM() / 4;
+    const { events } = composeScoreStep(_musicStep, _scoreState());
+    for (const event of events) _scoreSynth.play(event, _nextMusicTime, stepSeconds);
+    if (_musicStep % 4 === 0) _audibleBeats.push({ time: _nextMusicTime, beat: _musicStep / 4 });
+    // Trim consumed beat metadata even when no visualization reads the clock.
+    getMusicBeat();
+    _musicStep++;
+    _nextMusicTime += stepSeconds;
   }
 }
+if (typeof document !== "undefined") document.addEventListener("visibilitychange", () => {
+  _releaseScore();
+  _nextMusicTime = 0;
+});

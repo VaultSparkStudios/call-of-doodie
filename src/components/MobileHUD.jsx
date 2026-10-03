@@ -11,7 +11,7 @@ const TONE_COLOR = {
 
 export default function MobileHUD({
   isMobile = false,
-  wave, timeSurvived, score, kills, deaths, health, maxHealth, level,
+  wave, waveLabel = "WAVE", timeSurvived, score, kills, deaths, health, maxHealth, level,
   currentWeapon, ammo, isReloading, extraLives, fmtTime, onPause,
   activeDrill, drillProgress, practiceEvidence, runIntegrity, runModifier, rivalPace,
   vsScore, vsName, topGhosts, weeklyRival, bankedPerkChoices,
@@ -40,7 +40,7 @@ export default function MobileHUD({
       <div style={{ position: "absolute", top: "max(6px, env(safe-area-inset-top))", ...horizontal, minHeight: 52, display: "grid", gridTemplateColumns: "1fr auto 1fr", alignItems: "center", gap: 6, padding: "5px 6px", border: "1px solid rgba(255,255,255,.16)", borderRadius: 14, background: "rgba(5,8,10,.82)", boxShadow: "0 8px 24px rgba(0,0,0,.28)", backdropFilter: "blur(10px)" }}>
         <div style={{ minWidth: 0 }}>
           <div style={{ color: "#93A3B3", fontSize: 9, fontWeight: 800, letterSpacing: 1 }}>LEVEL {level}</div>
-          <div style={{ marginTop: 2, fontSize: 12, fontWeight: 900, whiteSpace: "nowrap" }}>WAVE {wave}</div>
+          <div style={{ marginTop: 2, fontSize: 12, fontWeight: 900, whiteSpace: "nowrap" }}>{waveLabel} {wave}</div>
         </div>
         <div style={{ minWidth: 84, textAlign: "center" }}>
           <div style={{ color: "#93A3B3", fontSize: 9, fontWeight: 800, letterSpacing: 1 }}>{clockLabel}</div>

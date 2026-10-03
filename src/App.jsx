@@ -13,7 +13,7 @@ import {
   getWeeklyGauntlet,
 } from "./constants.js";
 import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, advanceMissionStreak, loadMetaProgress, getLockedCallsign, lockCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken, saveStudioGameEvent, loadStudioGameEvents, recordDeathByEnemy, recordHazardEvent, loadRivalryHistory, loadTopGhosts, loadWeeklyTopGhost, loadExperimentIntent, getBossKillRecord, saveBossKillRecord, isNemesis, getAdaptiveSpawnMods, getProximityRivals, getWaveDeathCounts, getWeaponEvolutionState, getCommunityChokePoints, updateEnemyCareerStatsBatch, recordDoctrineForge } from "./storage.js";
-import { createOperationBossPlan } from "./systems/operationRuntimeRules.js";
+import { createOperationBossPlan, operationEncounterReady, operationReinforcementPlan } from "./systems/operationRuntimeRules.js";
 import { spawnEnemy as _spawnEnemy, spawnBoss as _spawnBoss, BOSS_ROTATION, applyEliteType, getRandomEliteType, getWaveSpawnRng } from "./gameHelpers.js";
 import { preloadBossAtlas, preloadEnemyAtlasesForTypes, preloadObjectAtlases, preloadZombieAtlas } from "./utils/visualAssetLibrary.js";
 import { cosmeticRandom, createNamedRunRng, getRunRng, shuffleWithRng } from "./systems/runRng.js";
@@ -33,7 +33,7 @@ import {
   setMusicVibe, startAmbient, stopAmbient,
   setDangerIntensity, stopDangerDrone, setMusicTier,
   getMusicBPM,
-  setBusVolume, setMusicLowpass,
+  setBusVolume, setMusicLowpass, setMusicMode, setMusicPaused,
   soundPlayerHurt, soundEmptyMag, soundWeaponSwap, soundWaveAnnounce,
   soundCoinAt, soundShopPurchase, soundShopDeny,
 } from "./audio/soundFacade.js";
@@ -128,7 +128,7 @@ import { buildDeathScreenProps, deadMansHandDamage } from "./systems/deathFlow.j
 import { reconcileOwnership } from "./utils/cosmeticTrack.js";
 import { matchesExperiment } from "./utils/runBrain.js";
 import { applyThreatRecommendationChoice, queueCompletedRunFact, recordPostRunFieldReport } from "./systems/runFactFlow.js";
-import { applyModeRules, getModeRewardFlow, isBossWaveForMode, resolveModeId } from "./systems/modeRules.js";
+import { applyModeRules, getModeRewardFlow, getModeRules, isBossWaveForMode, resolveModeId } from "./systems/modeRules.js";
 import { getModeMeta } from "./systems/modeRegistry.js";
 import { resolveRunLaunch, prepareRunDependencies } from "./systems/runLaunch.js";
 
@@ -377,7 +377,7 @@ export default function CallOfDoodie() {
   const [routeOptions, setRouteOptions]         = useState([]);
   const [bankedPerkChoices, setBankedPerkChoices] = useState(0);
   const [missionToast, setMissionToast]         = useState(null);
-  const [waveAnnounce, setWaveAnnounce]         = useState(null);
+  const waveAnnounce = null;
   const [activeWaveContract, setActiveWaveContract] = useState(null);
   const [mutationPending, setMutationPending]   = useState(false);
   const [mutationOptions, setMutationOptions]   = useState([]);
@@ -398,6 +398,9 @@ export default function CallOfDoodie() {
   useEffect(() => { currentWeaponRef.current = currentWeapon; }, [currentWeapon]);
   useEffect(() => { isReloadingRef.current = isReloading; }, [isReloading]);
   useEffect(() => { pausedRef.current = paused; }, [paused]);
+  useEffect(() => {
+    setMusicPaused(screen !== "game" || paused || perkPending || shopPending || routePending || mutationPending || Boolean(bossCutscene));
+  }, [screen, paused, perkPending, shopPending, routePending, mutationPending, bossCutscene]);
   useEffect(() => { extraLivesRef.current = extraLives; }, [extraLives]);
   useEffect(() => { difficultyRef.current = difficulty; }, [difficulty]);
   useEffect(() => { writePreference("cod-last-difficulty", difficulty); }, [difficulty]);
@@ -748,7 +751,8 @@ export default function CallOfDoodie() {
       gauntletMode: gauntletRef.current,
       zombiesMode: zombiesRef.current,
     })));
-    modeDefRef.current = modeRuntimeRef.current ? modeRuntimeRef.current.getModeDefinition(gameModeIdRef.current) : getModeMeta(gameModeIdRef.current);
+    const activeModeId = zombiesRef.current ? "zombies" : gameModeIdRef.current;
+    modeDefRef.current = modeRuntimeRef.current ? modeRuntimeRef.current.getModeDefinition(activeModeId) : getModeMeta(activeModeId);
     // S163: a new mode carries its own ruleset (timer, boss cadence, shop/draft/route flow).
     if (modeDefRef.current.kind !== "legacy") {
       Object.assign(gsRef.current, applyModeRules(gsRef.current, modeDefRef.current.rulesetId));
@@ -1018,18 +1022,17 @@ export default function CallOfDoodie() {
     if (ref.xp >= needed) {
       ref.xp -= needed; ref.level++;
       setLevel(ref.level);
-      soundLevelUp();
+      if (!gsRef.current?.operationMode && !zombiesRef.current) soundLevelUp();
       if (gsRef.current) {
-        addScreenText(gsRef.current, GW() / 2, GH() / 2 - 60, "⬆ LEVEL " + ref.level + "!", "#00FF88", true);
+        if (!gsRef.current.operationMode && !zombiesRef.current) addText(gsRef.current, gsRef.current.player.x, gsRef.current.player.y - 35, "LEVEL " + ref.level, "#00FF88");
         gsRef.current.player.speed += 0.12;
       }
-      if (!gauntletRef.current && shouldAwardPerkChoice(ref.level) && perksThisWaveRef.current < 1) {
-        bankedPerkChoicesRef.current += 1;
+      if (!gsRef.current?.operationMode && !zombiesRef.current && !gauntletRef.current && shouldAwardPerkChoice(ref.level) && perksThisWaveRef.current < 1) {
+        bankedPerkChoicesRef.current = Math.min(1, bankedPerkChoicesRef.current + 1);
         perksThisWaveRef.current += 1;
         setBankedPerkChoices(bankedPerkChoicesRef.current);
         if (gsRef.current) {
-          addScreenText(gsRef.current, GW() / 2, GH() / 2 - 92, "✨ DOCTRINE READY", "#FFD700", true);
-          addScreenText(gsRef.current, GW() / 2, GH() / 2 - 66, `Next safe pause unlocks ${bankedPerkChoicesRef.current > 1 ? `${bankedPerkChoicesRef.current} perk picks` : "a perk pick"}.`, "#DDD");
+          addText(gsRef.current, gsRef.current.player.x, gsRef.current.player.y - 35, "Doctrine ready at next checkpoint", "#FFD700");
         }
       }
     }
@@ -1295,7 +1298,10 @@ export default function CallOfDoodie() {
     const world = resolveArenaBounds(gs, GW(), GH());
     _spawnEnemy(gs, world.W, world.H, difficultyRef.current);
     const ne = gs.enemies[gs.enemies.length - 1];
-    if (ne && gs.zombiesMode) combatRuntimeRef.current.mutateEnemyForZombieMode(ne, { wave: gs.currentWave, ordinal: gs.enemiesThisWave });
+    if (ne && gs.zombiesMode) {
+      gs._sewerSpawnOrdinal = (gs._sewerSpawnOrdinal || 0) + 1;
+      combatRuntimeRef.current.mutateEnemyForZombieMode(ne, { wave: gs.currentWave, ordinal: gs._sewerSpawnOrdinal });
+    }
     if (ne && gs.visualPack !== VISUAL_PACKS.RETRO) {
       const activeRoster = [ne.typeIndex, ...gs.enemies.slice(-12).map((enemy) => enemy.typeIndex)];
       preloadEnemyAtlasesForTypes(activeRoster);
@@ -1870,7 +1876,7 @@ export default function CallOfDoodie() {
       waveKills[e.typeIndex] = { count: (waveKills[e.typeIndex]?.count || 0) + 1, name: e.name || `TYPE${e.typeIndex}` };
     }
 
-    if (defeatMeta.beatEligible) {
+    if (defeatMeta.beatEligible && !gs.operationMode && !gs.zombiesMode) {
       try {
         const framesPerBeat = Math.round(60 / getMusicBPM() * 60);
         const beatPhase = frameCountRef.current % framesPerBeat;
@@ -1886,7 +1892,7 @@ export default function CallOfDoodie() {
 
     gs.coinStreakKills++;
     gs.coinStreakTimer = 180;
-    if (gs.coinStreakKills >= 5 && !gs.coinMultActive) {
+    if (!gs.operationMode && !gs.zombiesMode && gs.coinStreakKills >= 5 && !gs.coinMultActive) {
       gs.coinMultActive = true;
       gs.coinMultTimer = 600;
       gs.coinStreakKills = 0;
@@ -2084,7 +2090,7 @@ export default function CallOfDoodie() {
   // ── Start game ────────────────────────────────────────────────────────────
   const startGame = useCallback(async (forceSeed, challengeOpts = {}) => {
     setPendingNextRunContract(null);
-    const launch = resolveRunLaunch({ operationId: challengeOpts.operationId, modeId: gameModeIdRef.current, gauntlet: gauntletRef.current });
+    const launch = resolveRunLaunch({ operationId: challengeOpts.operationId, modeId: zombiesRef.current ? "zombies" : gameModeIdRef.current, gauntlet: gauntletRef.current });
     const requestedOperation = launch.operation;
     // Operations own their rules. A previously selected arcade mode must not
     // inject its bosses, flood, timer, weekly kit, or victory condition.
@@ -2108,7 +2114,7 @@ export default function CallOfDoodie() {
       challengeOpts = { ...challengeOpts, gauntletWeek: gauntletLaunch.week };
     }
     // Show pre-deployment perk draft (skip in Daily Challenge to preserve seed fairness)
-    if (!draftShownRef.current && !dailyChallengeRef.current && !gauntletLaunch) {
+    if (!draftShownRef.current && getModeRules(resolveModeId({ zombies: zombiesRef.current, cursed: cursedRunRef.current, bossRush: bossRushRef.current, scoreAttack: scoreAttackRef.current })).draft && !requestedOperation && !dailyChallengeRef.current && !gauntletLaunch) {
       const draftSeed = Number(forceSeed);
       const draftRng = Number.isFinite(draftSeed) && draftSeed > 0
         ? createNamedRunRng({ seed: draftSeed, wave: 1, name: "choices" })
@@ -2228,6 +2234,8 @@ export default function CallOfDoodie() {
     if (timerRef.current) clearInterval(timerRef.current);
     timerRef.current = setInterval(() => { if (!pausedRef.current && !perkPendingRef.current && !shopPendingRef.current && !routePendingRef.current && !bossCutsceneRef.current && !waveAnnouncePendingRef.current && !mutationPendingRef.current) setTimeSurvived(t => t + 1); }, 1000);
     setMusicLowpass(false); // clear any lingering last-stand muffle from the previous run
+    setMusicMode(requestedOperation ? "operations" : zombiesRef.current ? "zombies" : "classic");
+    setMusicPaused(false);
     preloadBossAtlas(); // warm boss sprites before the first boss wave (S155)
     setTimeout(() => {
       startMusic(Boolean(gsRef.current?.bossWave));
@@ -2626,7 +2634,7 @@ export default function CallOfDoodie() {
       statsRef.current.objectiveChains = objectiveFrame.objectiveChains;
       if (objectiveFrame.coinsTotal != null) setCoins(objectiveFrame.coinsTotal);
       if (objectiveFrame.bankedPerkDelta) {
-        bankedPerkChoicesRef.current += objectiveFrame.bankedPerkDelta;
+        bankedPerkChoicesRef.current = !gs.operationMode && !gs.zombiesMode ? Math.min(1, bankedPerkChoicesRef.current + objectiveFrame.bankedPerkDelta) : 0;
         setBankedPerkChoices(bankedPerkChoicesRef.current);
       }
       addScreenText(gs, GW() / 2, GH() / 2, objectiveFrame.message, objectiveFrame.color, objectiveFrame.kind === "completed");
@@ -2747,7 +2755,12 @@ export default function CallOfDoodie() {
 
     // ── Wave / boss wave logic ──
     const diffS = DIFFICULTIES[difficultyRef.current] || DIFFICULTIES.normal;
-    if (!gs.bossWave) {
+    const operationPressure = gs.operationMode ? operationReinforcementPlan(gs) : null;
+    if (operationPressure?.spawn) {
+      spawnEnemy(gs);
+      gs._operationLastReinforcementFrame = gs.frame;
+    }
+    if (!gs.bossWave && !gs.operationMode && !gs.zombiesMode) {
       gs.spawnTimer += gs.scoreAttackMode ? 1.5 : (gs.algorithmSurge ? 2.5 : 1);
       const directorState = gs.waveDirector
         ? getWaveDirectorState(gs.waveDirector, gs.enemiesThisWave, gs.maxEnemiesThisWave, gs.enemies.length)
@@ -2834,7 +2847,7 @@ export default function CallOfDoodie() {
       }
     }
     // Wave cleared
-    if (gs.enemies.length === 0 && gs.enemiesThisWave >= gs.maxEnemiesThisWave && !modeDefRef.current?.winCondition?.(gs)) {
+    if ((gs.operationMode ? operationEncounterReady(gs) : !gs.zombiesMode && gs.enemies.length === 0 && gs.enemiesThisWave >= gs.maxEnemiesThisWave) && !modeDefRef.current?.winCondition?.(gs)) {
       // Respite gate: count down after high-threat wave before advancing
       if (gs._respiteLock) {
         gs._respiteTimer = (gs._respiteTimer || 1) - 1;
@@ -2889,10 +2902,10 @@ export default function CallOfDoodie() {
       try { if (!gs.practiceRun) updateEnemyCareerStatsBatch(gs._wkbt || {}); } catch {}
       gs._wkbt = {};
       // Survival bonus XP: awarded before resetting _waveDeaths
-      if ((gs._waveDeaths || 0) === 0 && !gs.bossWave) {
+      if ((gs._waveDeaths || 0) === 0 && !gs.bossWave && !gs.operationMode && !gs.zombiesMode) {
         const bonus = getWaveSurvivalBonus(gs.currentWave, xpRef.current.level);
         addXp(bonus);
-        if (gs.currentWave >= 3) addScreenText(gs, GW() / 2, GH() / 2 - 100, `+${bonus} XP FLAWLESS WAVE!`, "#44FF88", true);
+        if (gs.currentWave >= 3) addText(gs, p.x, p.y - 35, `+${bonus} XP · flawless`, "#44FF88");
       }
       gs._runAct = getRunAct(gs.currentWave);
       gs._waveDeaths = 0;          // reset per-wave death counter for adaptive assist
@@ -2947,11 +2960,11 @@ export default function CallOfDoodie() {
         addScreenText(gsRef.current, GW() / 2, GH() / 2, "Enemies are now faster all run", "#88CCFF");
       }
       // Post-threat-4 respite: spawn loot burst and pause before next wave
-      if (!gs.bossWave && !gs.bossRushMode) {
+      if (!gs.operationMode && !gs.zombiesMode && !gs.bossWave && !gs.bossRushMode) {
         const _rThreat = computeWaveThreatRating({ maxEnemies: gs.maxEnemiesThisWave, eliteType: gs.waveDirector?.eliteType, event: gs.waveEvent });
         if (_rThreat >= 4) {
           gs._respiteLock = true;
-          gs._respiteTimer = 120;
+          gs._respiteTimer = 30;
           const _mx = GW() / 2, _my = GH() / 2;
           const respiteRng = getRunRng(gs, "loot");
           gs.pickups.push({ x: _mx - 60 + respiteRng() * 120, y: _my - 80 + respiteRng() * 120, type: "health", life: 450 });
@@ -3052,7 +3065,7 @@ export default function CallOfDoodie() {
       }
       setWave(gs.currentWave);
       setMapTheme(gs.mapTheme ?? 0);
-      if (!gs.newBestWave && gs.currentWave > (gs.careerBest?.wave || 0)) {
+      if (!gs.operationMode && !gs.zombiesMode && !gs.newBestWave && gs.currentWave > (gs.careerBest?.wave || 0)) {
         gs.newBestWave = true;
         addScreenText(gs, SX, SY - 150, "🌊 NEW BEST WAVE!", "#00FFAA", true);
       }
@@ -3062,19 +3075,19 @@ export default function CallOfDoodie() {
       // Wave streak: consecutive clears without dying
       gs.waveStreak = (gs.waveStreak || 0) + 1;
       setWaveStreak(gs.waveStreak);
-      const streakBonus = gs.waveStreak >= 3 ? (gs.waveStreak - 2) * 200 : 0;
-      const waveBonus = gs.currentWave * 100 + streakBonus;
+      const streakBonus = !gs.operationMode && gs.waveStreak >= 3 ? (gs.waveStreak - 2) * 200 : 0;
+      const waveBonus = gs.operationMode ? 0 : gs.currentWave * 100 + streakBonus;
       gs.score += waveBonus; setScore(gs.score);
       setTip(TIPS[Math.floor(cosmeticRandom() * TIPS.length)]);
 
       if (nextIsBoss) {
         gs.bossWave = true;
         setBossWaveActive(true);
-        setBossWaveBanner(true);
-        soundBossWave();
+        setBossWaveBanner(!gs.operationMode);
+        if (!gs.operationMode) soundBossWave();
         bossFinalePlayedRef.current = false;
         setMusicIntensity(true);
-        gs.screenShake = 20;
+        gs.screenShake = gs.operationMode ? 6 : 20;
         // ── Boss rotation: Karen→Splitter→Juggernaut→Summoner→Landlord, cycling ──
         const bossPlan = createOperationBossPlan(gs, ENEMY_TYPES) || modeDefRef.current?.bossWavePlan?.(gs) || combatRuntimeRef.current.createBossWavePlan({
           currentWave: gs.currentWave,
@@ -3114,11 +3127,11 @@ export default function CallOfDoodie() {
           if (_grudgeVariant === 'grudge' || _grudgeVariant === 'nemesis') {
             try { soundBossGrudge(_grudgeVariant === 'nemesis' ? 2 : 1); } catch {}
           }
-          bossCutsceneRef.current = true;
-          setBossCutscene({ ...bossPlan.previewCard, guidance: _bossGuidance, bossKillLabel: _killLabel, isNemesis: _nemesisFlag, nemesisBrief: _nemesisBrief, dynamicQuote: _dynamicQuote });
+          bossCutsceneRef.current = !gs.operationMode;
+          if (!gs.operationMode) setBossCutscene({ ...bossPlan.previewCard, guidance: _bossGuidance, bossKillLabel: _killLabel, isNemesis: _nemesisFlag, nemesisBrief: _nemesisBrief, dynamicQuote: _dynamicQuote });
         } catch {
-          bossCutsceneRef.current = true;
-          setBossCutscene({ ...bossPlan.previewCard, guidance: _bossGuidance });
+          bossCutsceneRef.current = !gs.operationMode;
+          if (!gs.operationMode) setBossCutscene({ ...bossPlan.previewCard, guidance: _bossGuidance });
         }
         if (bossPlan.setLiveAnnounce) {
           setLiveAnnounce("Boss wave! " + (bossPlan.previewCard.name || "Boss") + " incoming on wave " + gs.currentWave);
@@ -3128,12 +3141,12 @@ export default function CallOfDoodie() {
           boss: _bossGuidance.headline,
           verb: _bossGuidance.verb,
         });
-        setTimeout(() => { bossCutsceneRef.current = false; setBossCutscene(null); }, 3000);
+        setTimeout(() => { if (gsRef.current === gs) { bossCutsceneRef.current = false; setBossCutscene(null); } }, 900);
         setTimeout(() => { setBossWaveBanner(false); }, 4800);
-        bossPlan.announceLines.forEach((line, index) => {
+        if (!gs.operationMode) bossPlan.announceLines.forEach((line, index) => {
           addScreenText(gs, SX, SY - 70 + (index * 20), line.text, line.color, line.emphasize);
         });
-        bossPlan.warningLines.forEach((line, index) => {
+        if (!gs.operationMode) bossPlan.warningLines.forEach((line, index) => {
           addScreenText(gs, SX, SY + 45 + (index * 20), line.text, line.color);
         });
         bossPlan.spawnBosses.forEach((bossType) => {
@@ -3147,7 +3160,7 @@ export default function CallOfDoodie() {
         }
         // Mark all boss enemies as "spawned" so the wave-clear condition can trigger
         gs.enemiesThisWave = gs.maxEnemiesThisWave;
-        addParticles(gs, VX, VY, "#FF0000", 40);
+        addParticles(gs, VX, VY, "#FF0000", gs.operationMode ? 8 : 40);
       } else {
         setMusicIntensity(false);
         // ── Wave director event layer ──
@@ -3182,40 +3195,24 @@ export default function CallOfDoodie() {
           if (cw === 20) { addScreenText(gs, SX, SY - 60, "☠ CURSED: ALL EXPLOSIVE", "#CC00FF", true); gs.mutAllExplosive = true; }
           if (cw === 25) { addScreenText(gs, SX, SY - 60, "☠ CURSED: SPAWNS DOUBLED", "#CC00FF", true); gs.waveEnemyMult = (gs.waveEnemyMult || 1) * 2; }
         }
-        addScreenText(gs, SX, SY, "WAVE " + gs.currentWave + "!", "#FFD700", true);
-        addScreenText(gs, SX, SY + 30, "+" + (gs.currentWave * 100) + " WAVE BONUS" + (streakBonus > 0 ? " +" + streakBonus + " STREAK" : ""), "#00FF88");
-        if (gs.waveStreak >= 3) addScreenText(gs, SX, SY + 55, "🔥 " + gs.waveStreak + "-WAVE STREAK!", "#FF8800", true);
-        soundWaveClear();
+        if (!gs.operationMode) {
+          addScreenText(gs, SX, SY, "WAVE " + gs.currentWave + "!", "#FFD700", true);
+          addScreenText(gs, SX, SY + 30, "+" + (gs.currentWave * 100) + " WAVE BONUS" + (streakBonus > 0 ? " +" + streakBonus + " STREAK" : ""), "#00FF88");
+          if (gs.waveStreak >= 3) addScreenText(gs, SX, SY + 55, "🔥 " + gs.waveStreak + "-WAVE STREAK!", "#FF8800", true);
+          soundWaveClear();
+        }
 
         // ── Wave incoming preview card then chain mutation/shop. Boss waves use
         // their dedicated cutscene; stacking this card can visually trap play.
-        const _evtMap = { fast_round: "⚡ FAST ROUND", elite_only: "⭐ ELITE SURGE", siege: "🏰 SIEGE MODE", fog_of_war: "🌫 FOG OF WAR" };
-        if (!nextIsBoss) {
-          waveAnnouncePendingRef.current = true;
-          soundWaveAnnounce(gs.currentWave);
-          const _fmtDescriptors = { FLANK: "pressure from the sides", PINCER: "split attack", SURGE: "overwhelming force" };
-          setWaveAnnounce({
-            waveNum: gs.currentWave,
-            isBoss: false,
-            eventLabel: gs.waveEvent ? (_evtMap[gs.waveEvent] || gs.waveEvent) : null,
-            estimatedCount: gs.maxEnemiesThisWave,
-            tempoLabel: gs.waveDirector?.label,
-            threatHint: gs.waveDirector?.hint,
-            telemetryBand: gs.waveTelemetryBand,
-            formationHint: gs._lastFormationLabel ? `${gs._lastFormationLabel} — ${_fmtDescriptors[gs._lastFormationLabel] || ""}` : null,
-            threatRating: computeWaveThreatRating({ maxEnemies: gs.maxEnemiesThisWave, eliteType: gs.waveDirector?.eliteType, event: gs.waveEvent }),
-            deathCount: waveDeathCountsRef.current[gs.currentWave] || 0,
-            isChokePoint: communityChokePointsRef.current.has(gs.currentWave),
-          });
-        }
+        // Wave intel lives in the HUD. Ordinary waves never stop the game.
+        if (!gs.operationMode) soundWaveAnnounce(gs.currentWave);
         // After preview: offer mutation challenge (every 5th non-boss wave, not in special modes)
         const _rewardFlow = getModeRewardFlow(resolveModeId(gs), gs.currentWave, { bossWave: nextIsBoss });
-        const _showMutation = !nextIsBoss && _rewardFlow.showMutation;
-        const _showShop = _rewardFlow.showShop;
-        postMutationShopRef.current = !nextIsBoss && _showShop;
-        if (!nextIsBoss) setTimeout(() => {
-          waveAnnouncePendingRef.current = false;
-          setWaveAnnounce(null);
+        const _checkpoint = !gs.operationMode && !gs.zombiesMode && gs.currentWave % 4 === 0;
+        const _showMutation = _checkpoint && !nextIsBoss && _rewardFlow.showMutation;
+        const _showShop = _checkpoint && _rewardFlow.showShop;
+        postMutationShopRef.current = false;
+        if (!nextIsBoss && _checkpoint) {
           const _pool = _showMutation
             ? shuffleWithRng(WAVE_CHALLENGE_MUTATIONS, getRunRng(gs, "choices")).slice(0, 2)
             : [];
@@ -3243,7 +3240,12 @@ export default function CallOfDoodie() {
             setShopPending(true);
             shopPendingRef.current = true;
           }
-        }, 2200);
+        }
+      }
+      if (gs.operationMode) {
+        // Field progress belongs to the mission HUD, with one small radio cue.
+        // Remove overlapping objective fanfare from the just-completed task.
+        gs.floatingTexts = (gs.floatingTexts || []).filter(text => !text.big);
       }
     }
 
@@ -3283,7 +3285,10 @@ export default function CallOfDoodie() {
     if ((gs.runPhase || RUN_PHASE.PLAYING) !== RUN_PHASE.PLAYING) return;
 
     // ── Mode mechanics: allies, zones, verb objectives, win/lose (S163) ──
+    const modeWaveBefore = gs.currentWave;
     const modeVerdict = modeRuntimeRef.current ? modeRuntimeRef.current.stepMode(gs, modeDefRef.current, { W: AW, H: AH, viewW: W, viewH: H, frame: frameCountRef.current, addText, addParticles, announce: _modeAnnounce, spawnEnemy, setHealth, handlePlayerDeath }) : null;
+    if (gs.currentWave !== modeWaveBefore) setWave(gs.currentWave);
+    if (gs.zombiesMode && frameCountRef.current % 30 === 0) setScore(gs.score);
     if (modeVerdict === "win") { handleModeVictory(gs); return; }
     if (modeVerdict === "lose") { handlePlayerDeath(gs, { cause: "mode_objective_failed", allowRecovery: false }); return; }
 
@@ -4011,14 +4016,14 @@ export default function CallOfDoodie() {
       {/* Wave clear shop */}
       {shopPending && !paused && (
         <AsyncPanelBoundary>
-          <WaveShopModal options={shopOptions} wave={wave} onSelect={applyShopOption} boughtHistory={shopHistory} currentWeapon={currentWeapon} coins={coins} coinShopOptions={coinShopOptions} onCoinBuy={applyCoinShopItem} buildArchetype={dominantArchetype} gs={gsRef.current} />
+          <WaveShopModal options={shopOptions} wave={wave} onSelect={applyShopOption} onSkip={() => { shopPendingRef.current = false; setShopPending(false); }} boughtHistory={shopHistory} currentWeapon={currentWeapon} coins={coins} coinShopOptions={coinShopOptions} onCoinBuy={applyCoinShopItem} buildArchetype={dominantArchetype} gs={gsRef.current} />
         </AsyncPanelBoundary>
       )}
 
       {/* Perk selection modal */}
       {perkPending && !paused && (
         <AsyncPanelBoundary>
-          <PerkModal options={perkOptions} level={level} onSelect={applyPerk} buildArchetype={dominantArchetype} unlockedArchetypes={unlockedArchetypes} activePerks={activePerks} />
+          <PerkModal options={perkOptions} level={level} onSelect={applyPerk} onSkip={() => { perkPendingRef.current = false; setPerkPending(false); }} buildArchetype={dominantArchetype} unlockedArchetypes={unlockedArchetypes} activePerks={activePerks} />
         </AsyncPanelBoundary>
       )}
 
@@ -4233,7 +4238,7 @@ export default function CallOfDoodie() {
       )}
 
       {/* Tutorial overlay — first-run hints */}
-      {!paused && !perkPending && !shopPending && !routePending && (
+      {!gsRef.current?.operationMode && !gsRef.current?.zombiesMode && !paused && !perkPending && !shopPending && !routePending && (
         <AsyncPanelBoundary>
           <TutorialOverlay isMobile={isMobile} controllerConnected={gamepadConnected} controllerType={controllerType} evidence={tutorialEvidence} />
         </AsyncPanelBoundary>
@@ -4246,6 +4251,7 @@ export default function CallOfDoodie() {
         runElapsedSeconds={frameCountRef.current / 60}
         modeHud={modeRuntimeRef.current ? modeRuntimeRef.current.getModeHudModel(gsRef.current, modeDefRef.current) : null}
         wave={wave} timeSurvived={timeSurvived} score={score} kills={kills} deaths={deaths}
+        waveLabel={gsRef.current?.operationMode ? "TASK" : gsRef.current?.zombiesMode ? "DEPTH" : "WAVE"}
         health={health} maxHealth={gsRef.current?.player?.maxHealth} ammo={ammo} isReloading={isReloading} currentWeapon={currentWeapon}
         combo={combo} comboTimer={comboTimer} killstreak={killstreak}
         level={level} xp={xp} xpNeeded={xpNeeded} killFeed={killFeed} username={username}

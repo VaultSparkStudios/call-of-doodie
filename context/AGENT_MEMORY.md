@@ -1,3 +1,11 @@
+## S182 gameplay maintenance notes
+
+- Music lives in scoreComposer/scoreSynth behind soundFacade; initialize intrinsic gain to zero before scheduled automation. Pause and mute cancel scheduled voices.
+- Operations task readiness is independent of remaining guards. Sewer Zombies owns spawn cadence and variant ordinal, pump progress and extraction.
+- Classic banks at most one doctrine and consumes backlog at one four-wave checkpoint; do not restore draft/routes/mutation reward chains.
+- Browser audio inspection must import the loaded facade module URL under Vite to avoid creating an HMR duplicate.
+- QA ending probes retain the last game-state reference because victory unmounts the canvas.
+
 # Runtime Maintenance Notes — S179
 
 ## S179 public stats and generated-date lesson

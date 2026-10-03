@@ -2,7 +2,7 @@ export const OPERATION_OBJECTIVE_SCHEMA = "operation-objective-state-v1";
 
 export const OPERATION_ENCOUNTER_ACTIONS = Object.freeze({
   BREACH: Object.freeze({ targetId: "door-north", command: "open", label: "BREACH THE NORTH DOOR", benefit: "Opens the short assault lane.", effect: Object.freeze({ id: "breach-tempo", scoreBonus: 40 }) }),
-  HOLD: Object.freeze({ targetId: "turret-northwest", command: "power", label: "POWER THE HOLD TURRET", benefit: "Adds bounded auto-defense pressure.", effect: Object.freeze({ id: "hold-repair", heal: 15 }) }),
+  HOLD: Object.freeze({ targetId: "turret-northwest", command: "power", label: "POWER THE HOLD TURRET", benefit: "Emergency field repair restores 15 health.", effect: Object.freeze({ id: "hold-repair", heal: 15 }) }),
   ESCORT: Object.freeze({ targetId: "valve-east", command: "power", label: "PRESSURIZE THE ESCORT LANE", benefit: "Keeps the cart lane clean and readable.", effect: Object.freeze({ id: "escort-relief", pressureMultiplier: 0.85 }) }),
   HUNT: Object.freeze({ targetId: "watchtower-center", command: "enter", label: "TAKE THE WATCHTOWER", benefit: "Marks the target sightline.", effect: Object.freeze({ id: "hunt-mark", scoreBonus: 75 }) }),
   SABOTAGE: Object.freeze({ targetId: "pump-west", command: "flood", label: "FLOOD THE ENEMY LINE", benefit: "Changes the west lane into a hazard.", effect: Object.freeze({ id: "sabotage-hazard", enemyDamageRatio: 0.15 }) }),

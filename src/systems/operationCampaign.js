@@ -21,7 +21,7 @@ function operation({ id, seed, title, brief, routeLabel, routeOptions, antagonis
     seed,
     title,
     brief,
-    durationMinutes: [12, 18],
+    durationMinutes: [4, 8],
     routeLabel,
     routeOptions,
     scoring: { summary: "Objectives + tempo + extraction" },

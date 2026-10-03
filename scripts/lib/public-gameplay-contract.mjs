@@ -62,7 +62,7 @@ export function buildPublicGameplayContract() {
       replayCoverage: buildReplayCoveragePassport(),
       publicWriteActions: "not-offered",
     },
-    loop: ["move", "shoot", "dash", "grenade", "switch_weapon", "interact", "choose_perk", "choose_route", "resolve_operation_encounter", "survive_wave", "review_debrief"],
+    loop: ["move", "shoot", "dash", "grenade", "switch_weapon", "interact", "checkpoint_choice", "power_sewer_pumps", "escape_backflow", "resolve_operation_encounter", "survive_wave", "review_debrief"],
     controls: { humanGuide: "/field-manual/", summary: FIELD_MANUAL_SECTIONS.find(([title]) => title === "Controls")?.[1] || "", source: "src/content/fieldManual.js" },
     formations: Object.entries(FORMATION_COUNTERPLAY).map(([id, formation]) => ({ id, label: formation.label, counterplay: formation.drill })),
     operations: OPERATIONS.map((operation) => ({
@@ -92,8 +92,8 @@ export function buildPublicGameplayContract() {
     modes: [
       ...REPLAY_MODES.map((id) => {
         const mode = MODE_CATALOG.find((entry) => entry.id === id);
-        return { id, label: mode?.label || label(id), kind: mode?.kind || "mode", objective: mode?.description || "", seededReplayCode: true, scoring: "global-leaderboard-eligible",
-          capabilities: { play: "browser-local", officialBoard: "eligible-only-after-server-check", unrankedPractice: true, liveMultiplayer: false } };
+        return { id, label: mode?.label || label(id), kind: mode?.kind || "mode", objective: mode?.description || "", seededReplayCode: id !== "zombies", scoring: id === "zombies" ? "local-only" : "global-leaderboard-eligible",
+          capabilities: { play: "browser-local", officialBoard: id === "zombies" ? "not-offered" : "eligible-only-after-server-check", unrankedPractice: true, liveMultiplayer: false } };
       }),
       ...NEW_MODE_CATALOG.map((mode) => ({ id: mode.id, label: mode.label, kind: mode.kind, objective: mode.description, seededReplayCode: false, scoring: "local-only",
         capabilities: { play: "browser-local", officialBoard: "not-offered", unrankedPractice: true, liveMultiplayer: false } })),

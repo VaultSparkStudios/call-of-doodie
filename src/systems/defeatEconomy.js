@@ -27,7 +27,7 @@ export function planEnemyDefeatScore({
   return {
     points,
     xpPoints,
-    careerBoss: isCareerBossType(enemy.typeIndex),
+    careerBoss: !enemy.isZombie && isCareerBossType(enemy.typeIndex),
     claim: "shared-enemy-defeat-economy-contract",
   };
 }

@@ -1,3 +1,4 @@
+import { drawZombieCreature, drawSewerObjectives } from "./systems/zombieRenderer.js";
 import { WEAPONS } from "./constants.js";
 import { getMusicBPM } from "./audio/soundFacade.js";
 import { buildWeaponAccent, drawShadedOrb, drawWeaponBarrel } from "./utils/visualPrimitives.js";
@@ -88,6 +89,7 @@ export const ARENA_THEMES = [
   { name: "forest",  bg: ["#0d2812", "#051208"], fzFill: "rgba(28,62,28,",  fzTile: "rgba(42,90,42,",   tc: { s: "#0a1c0a", c: "rgba(38,90,38,0.28)",  r: "#101e10", t: "#0a160a" }, grid: "rgba(45,120,45,0.06)",   border: "rgba(55,165,55,",  vignette: "10,50,10",   wall: ["rgba(24,54,24,0.95)", "rgba(52,115,52,0.75)", "#368A36", [44, 90, 44]],     ambient: ["190,255,190", 0.05, 10000] },
   { name: "space",   bg: ["#0e0322", "#03000b"], fzFill: "rgba(25,12,55,",  fzTile: "rgba(70,35,155,",  tc: { s: "#0e0820", c: "rgba(90,42,200,0.28)", r: "#1a1030", t: "#0c0818" }, grid: "rgba(110,55,220,0.07)",  border: "rgba(150,70,255,", vignette: "30,0,80",    wall: ["rgba(14,8,34,0.95)", "rgba(65,32,140,0.75)", "#7030C0", [52, 24, 112]],     ambient: ["220,220,255", 0.09, 14000] },
   { name: "arctic",  bg: ["#10213a", "#07101e"], fzFill: "rgba(40,60,90,",  fzTile: "rgba(65,100,148,", tc: { s: "#0c1a28", c: "rgba(60,100,155,0.28)", r: "#142230", t: "#0c1820" }, grid: "rgba(70,120,190,0.06)", border: "rgba(75,150,220,", vignette: "5,30,70",   wall: ["rgba(22,42,66,0.95)", "rgba(55,95,148,0.75)", "#4878B8", [44, 76, 118]],    ambient: ["235,245,255", 0.08, 6500] },
+  { name: "sewer", bg: ["#163b39", "#071518"], fzFill: "rgba(30,65,61,", fzTile: "rgba(62,110,99,", tc: { s: "#122827", c: "rgba(62,110,99,.28)", r: "#243c35", t: "#122827" }, grid: "rgba(111,193,166,.06)", border: "rgba(130,181,145,", vignette: "12,50,47", wall: ["rgba(31,53,52,.97)", "rgba(102,155,137,.75)", "#86AE9B", [55,90,78]], ambient: ["162,239,186", .08, 9000] },
 ];
 
 function getEnemyReadabilityStyle(enemy, timeNow) {
@@ -500,6 +502,7 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   } catch {}
 
   drawModeLayer(ctx, gs, refs);
+  drawSewerObjectives(ctx, gs, { reducedMotion: _rm, frame: frameCountRef?.current || 0 });
 
   // Enemies
   const _enemiesDraw = gs.enemies || [];
@@ -511,6 +514,11 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     if (gs.fogOfWar && !e.isBossEnemy && Math.hypot(e.x - p.x, e.y - p.y) > 195) continue;
     ctx.save(); ctx.translate(e.x, e.y);
     const r = e.size / 2;
+    if (e.isZombie) {
+      drawZombieCreature(ctx, e, { frame: frameCountRef?.current || 0, reducedMotion: _rm });
+      ctx.restore();
+      continue;
+    }
     const faceA = Math.atan2(p.y - e.y, p.x - e.x);
     const readability = getEnemyReadabilityStyle(e, dn);
     // Phantom elite: pulse between 15% and 100% opacity
@@ -1186,6 +1194,11 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   // emoji rise-out remains the fallback and the Retro-pack look.
   (gs.dyingEnemies || []).forEach(de => {
     const t = de.life / de.maxLife; // 1→0
+    if (de.isZombie) {
+      ctx.save(); ctx.translate(de.x, de.y + (1 - t) * 12); ctx.globalAlpha = t;
+      drawZombieCreature(ctx, de, { frame: (1 - t) * 60, reducedMotion: _rm, dying: true });
+      ctx.restore(); return;
+    }
     const _deSprite = (!retroCharacters && de.typeIndex !== undefined)
       ? ((de.isZombie && getRuntimeZombieSprite(de.zombieVariant, de.isBossEnemy)) || getRuntimeEnemySprite(de.typeIndex))
       : null;
@@ -1986,3 +1999,5 @@ function drawModeLayer(ctx, gs, refs) {
     ctx.restore();
   }
 }
+
+

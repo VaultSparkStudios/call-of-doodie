@@ -1,12 +1,12 @@
 <!-- generated-by: scripts/render-startup-brief.mjs v3.1 -->
-<!-- generated-at: 2026-10-02 (Session 181 closeout) -->
-<!-- semantic-freshness: hash=9c8487cd8d6c5a7a next=182 silSession=181 silScore=955 handoff=181 tests=- -->
+<!-- generated-at: 2026-10-03 (Session 182 closeout) -->
+<!-- semantic-freshness: hash=08cdeb4573179cab next=183 silSession=182 silScore=951 handoff=182 tests=- -->
 <!-- fast-boot-valid-until: next session if within 24h -->
 <!-- brief-coherent: true -->
 
 # Startup Brief — Call-Of-Doodie
 
-> **Fast-boot brief** — generated at Session 181 closeout · 2026-10-02.
+> **Fast-boot brief** — generated at Session 182 closeout · 2026-10-03.
 > Valid for next session if started within 24h. For sessions >24h later, load context files fresh (start.md §3).
 
 ---
@@ -15,18 +15,18 @@
 ╔════════════════════════════════════════════════════════════════╗
 ║  🚀 CALL-OF-DOODIE                                               ║
 ║  project · deployed/public-unlaunched · FORGE                    ║
-║  Session 182 · 2026-10-02 · FOUNDER MODE                         ║
+║  Session 183 · 2026-10-03 · FOUNDER MODE                         ║
 ║  Owner: VaultSpark Studios                                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ LAST SESSION (S181) - WHAT SHIPPED ══════════════════════════╗
-║  S181: 25-item full-site audit addressed at stated depth (21 lo  ║
+╔══ LAST SESSION (S182) - WHAT SHIPPED ══════════════════════════╗
+║  S182 gameplay/music rebuild verified locally and on staging; p  ║
 ║  Tests  -                                                        ║
 ║  Deploy -                                                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ WHERE TO TEST · Call-Of-Doodie ══════════════════════════════╗
-║  Unit tests    → npm test — 281/281 passing ✓                    ║
+║  Unit tests    → npm test — 285/285 passing ✓                    ║
 ║  hosted-visual-proof → session-169-staging · route/theme/wid ✓   ║
 ║  production-verification → source ca1324136f8c · workflow 34 ✓   ║
 ║  hosted-staging → session-170-staging · immutable 520a56d6 · ✓   ║
@@ -42,46 +42,46 @@
 
 ╔══ SCORE ═══════════════════════════════════════════════════════╗
 ║                                                                  ║
-║    955/1000   ██████████████████████░░   96%                     ║
-║    SIL v3.0  ·  Avg3: 952.3  ·  Velocity 3↑                      ║
+║    951/1000   ██████████████████████░░   95%                     ║
+║    SIL v3.0  ·  Avg3: 952.3  ·  Velocity 4↑                      ║
 ║    Last active: 0d  ·  Last closeout: 0d  ·  (active = newest…   ║
 ║    Trend  ▂▂▂▄▄  ↑  (last 5 sessions)                            ║
 ║                                                                  ║
 ║    Category         Score  Bar        Spark   Δ                  ║
 ║    ─────────────── ────── ────────── ──────── ─                  ║
-║    Dev Health        96    ██████████  ███▇▇▇▇▇ →                ║
-║    Alignment         98    ██████████  ███▇▇▇▇▇ →                ║
-║    Momentum          94    █████████░  ███▇▇▇▇▇ →                ║
-║    Engagement        95    ██████████  ▇▇█▇▇▇▇▇ →                ║
-║    Process Qual      93    █████████░  ███▇▇▇▇▇ →                ║
+║    Dev Health        96    ██████████  ██▇▇▇▇▇▇ →                ║
+║    Alignment         98    ██████████  ██▇▇▇▇▇▇ →                ║
+║    Momentum          95    ██████████  ██▇▇▇▇▇▇ →                ║
+║    Engagement        90    █████████░  ▇█▇▇▇▇▇▇ →                ║
+║    Process Qual      94    █████████░  ██▇▇▇▇▇▇ →                ║
 ║    Coherence         90    █████████░  ········ →                ║
 ║    Security          98    ██████████  ········ →                ║
-║    Ecosystem         95    ██████████  ········ →                ║
+║    Ecosystem         94    █████████░  ········ →                ║
 ║    Capital          100    ██████████  ········ →                ║
 ║    Automation        96    ██████████  ········ →                ║
 ║                                                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ WHERE WE LEFT OFF  ·  Session 181 ═══════════════════════════╗
+╔══ WHERE WE LEFT OFF  ·  Session 182 ═══════════════════════════╗
 ║  Shipped:  see LATEST_HANDOFF.md                                 ║
-║  Tests:    281/281 passing  ·  Deploy: N/A                       ║
+║  Tests:    285/285 passing  ·  Deploy: N/A                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
 ║  ⚠  ░░░░░░░░░░░░░░░░░░░░░░░░    1% used                          ║
-║     309,858 / 272,000 tok  ·  codex  ·  heuristic-stale          ║
+║     311,568 / 272,000 tok  ·  codex  ·  heuristic-stale          ║
 ║     Verdict: CONSIDER_CLOSEOUT  ← act now                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         281/281 passing (2026-10-02T19:37:25.729Z)     ║
-║  ✓  Velocity      3 ↑  ·  Debt: ↓                                ║
+║  ✓  Tests         285/285 passing (2026-10-03T21:40:58.701Z)     ║
+║  ✓  Velocity      4 ↑  ·  Debt: ↓                                ║
 ║  ✓  Runway        S179 stats arc and production complete;…       ║
 ║  ⛔  Context age   ?d                                             ║
-║  ✓  IGNIS         44206 FORGE  ·  2d old                         ║
-║  ⛔  Truth         Current route/content contracts and staged…    ║
+║  ✓  IGNIS         44206 FORGE  ·  3d old                         ║
+║  ⛔  Truth         Current route/content contracts, staging…      ║
 ║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs…        ║
-║  ⚠  Genome dims   drop: derived-view-freshness 5→4 ·…            ║
+║  ✓  Genome dims   all stable  (24/25)                            ║
 ║  ✓  Entropy       0.221  (healthy)                               ║
 ║  ✓  CDR           no gap detected                                ║
 ║  ✓  Patterns      no recurring pressure detected                 ║
@@ -96,8 +96,8 @@
 
 ╔══ FOUNDER UNLOCKS ═════════════════════════════════════════════╗
 ║  Single founder actions that reopen sprint surface:              ║
-║   141d · [S60] Rotate or narrow the broad Cloudflare `cloud      ║
-║   163d · Physical launch QA                                      ║
+║   142d · [S60] Rotate or narrow the broad Cloudflare `cloud      ║
+║   164d · Physical launch QA                                      ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ ORCHESTRATOR ════════════════════════════════════════════════╗
@@ -114,14 +114,14 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ MOMENTUM METER ══════════════════════════════════════════════╗
-║  Velocity:   ▂▂▂▄▄  3↑  (last 5 sessions)                        ║
+║  Velocity:   ▂▂▂▄▄  4↑  (last 5 sessions)                        ║
 ║  Intent:     ?% achieved last 5                                  ║
 ║  Streak:     — (last intent not achieved)                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIL FORECAST (next session) ═════════════════════════════════╗
-║  Projected:  954/1000  (↓1 vs current 955)                       ║
-║  At-risk:    Cross-Repo Coher Δ-4                                ║
+║  Projected:  948/1000  (↓3 vs current 951)                       ║
+║  At-risk:    Engagement Δ-3                                      ║
 ║  Calibration: MAE 12.3 over last 10 forecasts                    ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -149,5 +149,5 @@
 
 ---
 
-*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 181 closeout · 2026-10-02*
+*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 182 closeout · 2026-10-03*
 *Run `node scripts/ops.mjs doctor` for live health check · `node scripts/ops.mjs genius-list` to refresh hit list*

@@ -46,6 +46,8 @@ vi.mock("./audio/soundFacade.js", () => ({
   startMusic: vi.fn(),
   stopMusic: vi.fn(),
   setMusicIntensity: vi.fn(),
+  setMusicMode: vi.fn(),
+  setMusicPaused: vi.fn(),
   getMuted: vi.fn(() => false),
   setMuted: vi.fn(),
   setMusicVibe: vi.fn(),
@@ -249,7 +251,7 @@ afterEach(async () => {
 });
 
 describe("CallOfDoodie launch smoke", () => {
-  it("can progress directly from menu to draft to game and request a run token", async () => {
+  it("deploys and rematches directly without a draft and requests one run token each", async () => {
     const { default: App } = await import("./App.jsx");
 
     container = document.createElement("div");
@@ -266,17 +268,8 @@ describe("CallOfDoodie launch smoke", () => {
     });
     await flush();
 
-    await act(async () => {
-      container.querySelector("button")?.click();
-    });
-    await flush();
-
-    await act(async () => {
-      container.querySelector("button")?.click();
-    });
-    await flush();
-
     expect(container.querySelector("#game-canvas")).not.toBeNull();
+    expect(container.textContent).not.toContain("draft-skip");
     expect(issueRunTokenMock).toHaveBeenCalledTimes(1);
     const { useGameLoop } = await import("./hooks/useGameLoop.js");
     const report = vi.spyOn(console, "error").mockImplementation(() => {});
@@ -284,9 +277,7 @@ describe("CallOfDoodie launch smoke", () => {
     await flush();
     await act(async () => { container.querySelector("[data-testid=retry-run]").click(); });
     await flush();
-    expect(container.textContent).toContain("draft-skip");
-    await act(async () => { container.querySelector("button").click(); });
-    await flush();
+    expect(container.textContent).not.toContain("draft-skip");
     expect(container.querySelector("#game-canvas")).not.toBeNull();
     expect(issueRunTokenMock).toHaveBeenCalledTimes(2);
     report.mockRestore();

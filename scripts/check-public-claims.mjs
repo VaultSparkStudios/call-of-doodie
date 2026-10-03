@@ -14,7 +14,7 @@ import { spawnSync } from "./lib/safe-spawn.mjs";
 import { ACHIEVEMENTS, META_TREE_NODE_IDS, WEAPONS, ENEMY_TYPES } from "../src/constants.js";
 import { NEW_FEATURES } from "../src/config/changelog.js";
 import { ARENA_THEMES } from "../src/drawGame.js";
-import { ZOMBIE_VARIANT_CELLS } from "../src/utils/zombieAtlasContract.js";
+import { ZOMBIE_ROSTER } from "../src/systems/zombieMode.js";
 import { PLAYER_FACING_MODE_FACTS, spell } from "../src/config/modeFacts.js";
 import { NEW_MODE_CATALOG } from "../src/config/modeCatalog.js";
 import { FIELD_MANUAL_SECTIONS } from "../src/content/fieldManual.js";
@@ -27,7 +27,7 @@ const featureClaims = [
   ["achievement count", /(\d+) Achievements/, ACHIEVEMENTS.length],
   ["map theme count", /(\d+) Map Themes/, ARENA_THEMES.length],
   ["META tree node count", /(\d+) permanent upgrade nodes/, META_TREE_NODE_IDS.length],
-  ["zombie variant count", /(\d+) undead variants/, ZOMBIE_VARIANT_CELLS.length],
+  ["zombie variant count", /(\d+) undead variants/, ZOMBIE_ROSTER.length],
 ];
 
 for (const [label, pattern, expected] of featureClaims) {

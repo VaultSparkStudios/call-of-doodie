@@ -15,11 +15,11 @@ import { buildRunDrillLiveProgress } from "../systems/runDrill.js";
 import { buildRivalPace } from "../utils/rivalPace.js";
 import MobileHUD from "./MobileHUD.jsx";
 
-const THEME_NAMES = ["OFFICE","BUNKER","FACTORY","RUINS","DESERT","FOREST","SPACE","ARCTIC"];
+const THEME_NAMES = ["OFFICE","BUNKER","FACTORY","RUINS","DESERT","FOREST","SPACE","ARCTIC","SEWER"];
 const THEME_EMOJIS = ["🏢","🪖","🏭","🏚️","🌵","🌲","🚀","🧊"];
 
 export default function HUD({
-  wave, timeSurvived, score, kills, deaths, health, maxHealth, ammo, isReloading,
+  wave, waveLabel = "WAVE", timeSurvived, score, kills, deaths, health, maxHealth, ammo, isReloading,
   currentWeapon, combo, comboTimer, killstreak, level, xp, xpNeeded,
   killFeed, username, grenadeReady, dashReady, extraLives, guardianAngelFlash,
   bankedPerkChoices, nextPerkLevel,
@@ -83,7 +83,7 @@ export default function HUD({
     return (
       <MobileHUD
         isMobile={isMobile}
-        wave={wave} timeSurvived={timeSurvived} score={score} kills={kills} deaths={deaths}
+        wave={wave} waveLabel={waveLabel} timeSurvived={timeSurvived} score={score} kills={kills} deaths={deaths}
         health={health} maxHealth={healthLimit} level={level}
         currentWeapon={currentWeapon} ammo={ammo} isReloading={isReloading} extraLives={extraLives}
         fmtTime={fmtTime} onPause={onPause}
@@ -119,7 +119,7 @@ export default function HUD({
 
       {/* Wave / Timer */}
       <div style={{ position: "absolute", top: 6, left: "50%", transform: "translateX(-50%)", fontSize: 11, color: "#FFF", background: "rgba(0,0,0,0.5)", padding: "3px 12px", borderRadius: 10, fontWeight: 700, display: "flex", gap: 8, alignItems: "center" }}>
-        <span>WAVE {wave}</span>
+        <span>{waveLabel} {wave}</span>
         <span style={{ color: wave >= 15 ? "#FF0000" : wave >= 10 ? "#FF4500" : wave >= 5 ? "#FFD700" : "#0F0", fontSize: 9 }}>
           {wave >= 15 ? "☠️ EXTREME" : wave >= 10 ? "🔥 HARD" : wave >= 5 ? "⚠️ MEDIUM" : "✅ EASY"}
         </span>

@@ -71,15 +71,16 @@
     "grenade",
     "switch_weapon",
     "interact",
-    "choose_perk",
-    "choose_route",
+    "checkpoint_choice",
+    "power_sewer_pumps",
+    "escape_backflow",
     "resolve_operation_encounter",
     "survive_wave",
     "review_debrief"
   ],
   "controls": {
     "humanGuide": "/field-manual/",
-    "summary": "Move with WASD / left stick · Aim with mouse / right stick. · Dash (Shift / A button) — Invincible dodge. Grenade (Space / B) — AOE. · Weapon keys 1–9 swap · R reloads · Esc pauses. · Boss every 5 waves. Perks unlock on level-up. Wave shop between waves. · Earn Doodie Coins for streaks — spend in the wave shop.",
+    "summary": "Move with WASD / left stick · Aim with mouse / right stick. · Dash (Shift / A button) — Invincible dodge. Grenade (Space / B) — AOE. · Weapon keys 1–9 swap · R reloads · Esc pauses. · Boss every 5 waves. Classic: one build choice at each four-wave checkpoint, no reward chains. · Earn Doodie Coins for streaks — spend in the wave shop.",
     "source": "src/content/fieldManual.js"
   },
   "formations": [
@@ -112,8 +113,8 @@
       "antagonist": "Regional Manager Karen",
       "seed": 3101,
       "durationMinutes": [
-        12,
-        18
+        4,
+        8
       ],
       "encounterVerbs": [
         "BREACH",
@@ -236,8 +237,8 @@
       "antagonist": "Deputy Landlord",
       "seed": 4102,
       "durationMinutes": [
-        12,
-        18
+        4,
+        8
       ],
       "encounterVerbs": [
         "BREACH",
@@ -367,8 +368,8 @@
       "antagonist": "The HOA Board",
       "seed": 5103,
       "durationMinutes": [
-        12,
-        18
+        4,
+        8
       ],
       "encounterVerbs": [
         "BREACH",
@@ -490,7 +491,7 @@
       "id": "standard",
       "label": "Classic Survival",
       "kind": "mode",
-      "objective": "The original game: fight waves, choose perks and upgrade your weapons. Survive until you run out of lives.",
+      "objective": "Deploy straight into endless survival. Wave intel stays in the HUD; one build choice per four-wave checkpoint, with no chained reward screens.",
       "seededReplayCode": true,
       "scoring": "global-leaderboard-eligible",
       "capabilities": {
@@ -588,12 +589,12 @@
       "id": "zombies",
       "label": "Sewer Zombies",
       "kind": "mode",
-      "objective": "Escalating undead hordes with a surge every third wave.",
-      "seededReplayCode": true,
-      "scoring": "global-leaderboard-eligible",
+      "objective": "Five grotesque sewer creatures hunt you. Collect sludge from kills, power three pumps and escape through the hatch before the flood. No upgrade interruptions.",
+      "seededReplayCode": false,
+      "scoring": "local-only",
       "capabilities": {
         "play": "browser-local",
-        "officialBoard": "eligible-only-after-server-check",
+        "officialBoard": "not-offered",
         "unrankedPractice": true,
         "liveMultiplayer": false
       }
@@ -1455,5 +1456,5 @@
     "runAnalysisSchema": "https://callofdoodie.wtf/run-analysis-schema.json",
     "status": "https://callofdoodie.wtf/status.json"
   },
-  "contentHash": "sha256:0681f1d7d97a65627c85d98dca06c9cd7fd965a2f619713666c544b4f664eade"
+  "contentHash": "sha256:429c36ea082d4384d590b86862ca4c061b4a5670c96cd6e7c194124ad64a8aa2"
 }

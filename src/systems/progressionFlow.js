@@ -7,7 +7,7 @@ export function consumeBankedPerkChoice({
   if (bankedPerkChoices <= 0) return null;
   const perkOptions = isCursedRun ? getFullyCursedPerks(3) : getRandomPerks(3);
   return {
-    bankedPerkChoices: Math.max(0, bankedPerkChoices - 1),
+    bankedPerkChoices: 0,
     perkOptions,
   };
 }
@@ -21,9 +21,9 @@ export function createWaveRewardPlan({
   if (hasBankedPerkChoices) {
     return {
       action: "perk",
-      deferredMutationPending: showMutation,
-      deferredMutationOptions: showMutation ? mutationOptions : [],
-      deferredShopPending: !showMutation && showShop,
+      deferredMutationPending: false,
+      deferredMutationOptions: [],
+      deferredShopPending: false,
     };
   }
 

@@ -1,55 +1,53 @@
 # Game Loop
 
-Protocol-readable game-loop source for `/game-loop-review`. The public summary lives in `docs/GAME_LOOP.md`.
+The public gameplay summary lives in `docs/GAME_LOOP.md`. These three grammars define the current player experience.
 
 ## Player promise
 
-Drop into a browser arena in seconds, read the pressure, improvise a ridiculous build, and turn defeat into one evidence-ranked correction plus an immediate rematch. Guest play is the default; no power depends on payment or an account.
+Drop into a browser arena in seconds, read the danger, improvise a ridiculous run, and turn defeat into an observed lesson plus an immediate rematch. Guest play is the default; payment and accounts do not buy combat power.
 
-## Two run grammars
+## Classic: survive and improvise
 
-### Operations
+- Choose a difficulty, starter loadout, and optional seed.
+- Move, aim, shoot, dash, grenade, and switch weapons under escalating wave pressure.
+- Keep ordinary wave transitions moving. Offer one sparse, skippable checkpoint every four waves.
+- Avoid recurring draft screens, route selections, and mutation chains. Manual pause remains available.
+- Defeat bosses, survive, inspect the result, and rematch.
 
-- Choose one of three authored Operations and one of two disclosed routes.
-- Execute BREACH → HOLD → ESCORT → HUNT → SABOTAGE → ESCAPE → BOSS.
-- Reach the exact live target and perform its authored action; clearing enemies alone cannot advance the encounter.
-- Carry bounded route consequences into later Operations without locking any mission.
-- Finish with a local `operation-score-v2` breakdown for objectives, interactions, tempo, pressure, extraction, and route evidence.
-- Continue, deterministic-rematch, compare local rival evidence, or return to the command deck.
+## Operations: execute the mission
 
-### Arcade and rivals
+- Choose one of three authored missions and one of two disclosed deployment routes.
+- Use mission-owned cover geometry, insertion points, escort paths, and extraction positions.
+- Execute BREACH → HOLD → ESCORT → HUNT → SABOTAGE → ESCAPE → BOSS through their actual field tasks.
+- Replenish small bounded patrols during tasks. Advance on task completion even with guards alive; never require a kill-all wave gate.
+- Treat nearby support interactions as optional assistance, rather than a second mandatory objective.
+- Transition continuously with field supplies and compact orders, without perk, shop, or wave pause screens.
+- Preserve local objective, interaction, tempo, pressure, extraction, and route receipts; continue or rematch from the command deck.
 
-- Choose a mode, difficulty, loadout, seed, and optional challenge constraints.
-- Move, aim, shoot, dash, grenade, switch weapons, and survive escalating waves.
-- Choose perks, routes, mutations, and free shop rewards that form named build doctrines.
-- Resolve bosses, timers, or mode-specific goals while preserving replay and leaderboard eligibility labels.
-- Die, read one observed verdict, run the fix, rematch, or share a bounded challenge.
+## Sewer Zombies: fuel and escape
+
+- Enter a mode-owned sewer with a four-minute flood deadline.
+- Kill creatures for sludge, then occupy each of three pump rings for six seconds with fuel available.
+- Clear contesting creatures from rings; powered pumps restore health directly.
+- After all three pumps are online, hold the uncontested hatch for five seconds to escape.
+- Use five distinct animated creature threats with readable comic windups, lunges, burps, and screams.
+- Keep the outbreak continuous: no perk drafts, shops, or wave pauses.
 
 ## Feedback and progression
 
-- Runtime feedback: redundant threat telegraphs, player-relative edge compass, objective state, reason-coded Mission Director guidance, performance state, and input-aware controls.
-- Build feedback: prospective perk doctrine milestones, active capstones/doctrines, weapon mastery, and free reversible experimentation.
-- Post-run feedback: observed run evidence is separated from coaching hypotheses; accepted corrective orders carry a baseline into the next run, report live progress, and write one deduplicated outcome receipt at defeat.
-- Meta loop: career points, achievements, daily missions, weapon mastery, Doctrine Archive, local ghosts, shared seeds, bounded run history, and a four-order evidence archive built from the latest three attempts per drill.
+Threat telegraphs, objective indicators, input-aware controls, and mode-specific music support readable decisions. Career points, achievements, daily missions, weapon mastery, local ghosts, shared seeds, and bounded history carry experimentation between runs.
+
+Post-run observed evidence remains separate from coaching hypotheses. Accepted corrective orders carry a baseline into the next run and preserve deduplicated outcome evidence.
 
 ## Evidence boundaries
 
-- Operation scores, campaign continuity, rivals, playtest receipts, coaching, and corrective-order evidence are local/advisory unless explicitly labelled otherwise.
-- A repeated-improvement label means two improved outcomes inside the latest three valid receipts for the same drill. It is not a causal or mastery claim, and malformed or duplicate receipts add no evidence.
-- Standard leaderboard submissions use their existing signed eligibility path; Operation score never mints that authority.
-- Replay coverage remains advisory until enemy/projectile state and physics resimulation parity are proven.
-- Real participant outcomes, physical-device behavior, provider delivery, and lifecycle readiness are never inferred from source or synthetic checks.
+Operations scores, campaign continuity, rivals, playtest receipts, coaching, and corrective orders remain local and advisory unless explicitly labelled otherwise. Standard leaderboard submissions retain their existing eligibility path; an Operation receipt does not establish that authority. Sewer Zombies is not replay eligible.
 
-## Current evidence
+Two improved outcomes among the latest three valid receipts for the same order support a repeated-improvement label, not a causal or mastery claim. Full deterministic replay physics parity remains unproven. Participant fun, balance, comprehension, retention, physical-device behavior, and release readiness require direct evidence.
 
-- Runtime: `src/App.jsx`, `src/drawGame.js`, `src/systems/waveDirector.js`, `src/hooks/useOperationMode.js`.
-- Operations: `src/systems/operationEncounterContract.js`, `operationProximity.js`, `operationScore.js`, `operationMissionSnapshot.js`, and `operationCampaign.js`.
-- Build doctrine: `src/utils/buildArchetypes.js`, `src/components/PerkModal.jsx`, `src/components/PauseMenu.jsx`.
-- Defeat/rematch: `src/components/DeathScreen.jsx`, `src/systems/deathFlow.js`, `src/systems/runDrill.js`, `src/components/HUD.jsx`, and `src/components/MenuPanels.jsx`.
-- Trust: `src/utils/replayCommandTrace.js`, `src/utils/replayResim.js`, `src/utils/studioEventOps.js`.
+## Runtime sources
 
-## Open risks
-
-- Full deterministic replay physics parity is future work; current replay language remains advisory.
-- Real-device Progressive Web App install, controller, and capture behavior remain physical checks.
-- Participant fun, balance, comprehension, and retention conclusions require consented evidence.
+- Gameplay and presentation: `src/App.jsx`, `src/drawGame.js`.
+- Operations: `src/hooks/useOperationMode.js`, `src/systems/operationBattlefield.js`, `src/systems/operationRuntimeRules.js`, `src/systems/operationScore.js`.
+- Sewer Zombies: `src/modes/sewerZombies.js`, `src/systems/zombieMode.js`, `src/systems/zombieRenderer.js`.
+- Music: `src/audio/scoreComposer.js`, `src/audio/scoreSynth.js`.

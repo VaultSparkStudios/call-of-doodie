@@ -11,7 +11,7 @@ const noText = { addText: () => {}, addParticles: () => {}, W: 1280, H: 720 };
 
 describe("mode definition layer (S163)", () => {
   it("legacy ids resolve to passthrough definitions that change nothing", () => {
-    for (const id of LEGACY_MODE_IDS) {
+    for (const id of LEGACY_MODE_IDS.filter(id => id !== "zombies")) {
       const def = getModeDefinition(id);
       expect(def.kind).toBe("legacy");
       expect(def.replayEligible).toBe(true);

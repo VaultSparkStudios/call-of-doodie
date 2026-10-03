@@ -8,7 +8,7 @@ Rights: Proprietary — All Rights Reserved, VaultSpark Studios LLC
 
 ## What players do
 
-Players move, shoot, dash, grenade, switch weapon, interact, choose perk, choose route, resolve operation encounter, survive wave, review debrief. The live contract publishes 12 modes and rulesets, 12 weapons, and 22 enemies. Replay proof is advisory deterministic decision-stream evidence and not full physics resimulation. Product capability availability was last checked 2026-09-30T20:06:09Z; browser-local features and unavailable online features are listed separately in capabilities.json.
+Players move, shoot, dash, grenade, switch weapon, interact, checkpoint choice, power sewer pumps, escape backflow, resolve operation encounter, survive wave, review debrief. The live contract publishes 12 modes and rulesets, 12 weapons, and 22 enemies. Replay proof is advisory deterministic decision-stream evidence and not full physics resimulation. Product capability availability was last checked 2026-09-30T20:06:09Z; browser-local features and unavailable online features are listed separately in capabilities.json.
 
 ## Public resources
 

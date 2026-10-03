@@ -152,16 +152,25 @@ describe("Operation objective audio integration", () => {
     expect(mocks.soundOperationObjective).not.toHaveBeenCalled();
   });
 
-  it("emits one bounded warning for an arena clear before the authored action", () => {
+  it("does not advance an empty room while the field objective is unfinished", () => {
     const { gsRef, hookProps } = mountOperation();
-    const encounter = getCurrentEncounter(operationApi.stateRef.current);
-    const action = getOperationEncounterAction(encounter);
-
     let result;
     act(() => { result = operationApi.resolveWave({ player: gsRef.current.player }); });
-    expect(result).toMatchObject({ handled: true, completed: false, blocked: true });
-    expect(mocks.soundOperationReinforcement).toHaveBeenCalledExactlyOnceWith(1);
-    expect(hookProps.setLiveAnnounce).toHaveBeenCalledWith(`${action.label} required. Reinforcements 1.`);
+    expect(result).toMatchObject({ handled: true, completed: false, blocked: true, reasonCode:"FIELD_TASK_IN_PROGRESS" });
+    expect(mocks.soundOperationReinforcement).not.toHaveBeenCalled();
+    expect(hookProps.setLiveAnnounce).not.toHaveBeenCalled();
+  });
+
+  it("advances from field success with living guards and no console interaction", () => {
+    const { gsRef } = mountOperation();
+    gsRef.current.frame = 600;
+    gsRef.current.activeVerbObjective = { verb:"BREACH", status:"done" };
+    gsRef.current.enemies = [{ health:100 }];
+    let result;
+    act(() => { result = operationApi.resolveWave(); });
+    expect(result).toMatchObject({ handled:true, completed:false, nextState:{currentEncounterIndex:1} });
+    expect(operationApi.stateRef.current.encounterReceipts[0].objectiveEvidence.targetId).toBe("door-north");
+    expect(gsRef.current.enemies).toHaveLength(1);
   });
 
   it("feeds bounded build and recent-damage evidence into the live Mission Director", () => {

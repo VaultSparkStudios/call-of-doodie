@@ -46,3 +46,10 @@ Release sequence: immutable staging verification, exact-revision main CI/deploym
 ## Final release reconciliation — 2026-09-15
 
 All four follow-through tasks complete; 0 in progress and 0 open. Staging f04e0cf1 verified before exact main workflow 34926899773 succeeded. Production 7cb07a99 serves 65f983937142 and passes shell 7/7 plus desktop/mobile input and audio checks. Formal record-only closeout follows this verified gameplay release.
+
+## S182 selected gameplay rebuild
+
+1. Composer and instrument rack; verify three arrangements and lifecycle. Complete.
+2. Task-driven Operations and finite animated Sewer Zombies. Complete.
+3. Sparse skippable checkpoints and no reward chains. Complete.
+4. Before/after rendered review, hosted staging, exact-main CI and production verification. In progress; audit receipt records final acceptance.

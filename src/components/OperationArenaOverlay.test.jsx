@@ -46,7 +46,7 @@ describe("OperationArenaOverlay", () => {
 
   it("makes the required objective and reinforcement state explicit", () => {
     render({ objectiveState: { actionComplete: false, reinforcementCount: 2 } });
-    expect(container.querySelector("[data-testid='operation-objective-status']").textContent).toContain("REINFORCEMENTS 2");
+    expect(container.querySelector("[data-testid='operation-objective-status']").textContent).toContain("OPTIONAL SUPPORT");
   });
 
   it("dispatches touch, keyboard, and controller receipts through the same command", () => {

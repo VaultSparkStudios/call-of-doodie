@@ -63,3 +63,4 @@ Audience: public-unlaunched · Live ACTIVE canons: 54 · Pending review: 0
 | CANON-053 | Rendered-Pixel UI Discipline: look at the real interface whi | adopted | Hosted route/theme/viewport courts and hash-bound visual receipts are mandatory for UI changes; unavailable subjective viewing is not fabricated. |
 | CANON-054 | Public Stats Surface: every website reports and analyzes its | adopted | `/stats/` publishes a dated six-metric release snapshot with interpretations, scope, privacy-safe aggregates, and `/stats-surface.json`; the live Sewer Network remains the current in-game view. |
 | CANON-055 | Surface Follow-Through: every project change reaches the thi | adopted | Session 181 reaches the landing page, play menu, debrief, account, feedback, public docs, Board and Stats; the route matrix and visual receipt cover both themes and desktop/mobile. |
+

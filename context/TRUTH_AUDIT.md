@@ -1,3 +1,16 @@
+## 2026-10-03 — S182 gameplay rebuild truth
+
+Overall status: Music, Operations, Sewer Zombies and sparse skippable checkpoints are implemented and verified locally and on isolated staging. Exact-main CI and production verification are pending. Automated and assisted evidence does not establish participant enjoyment or balance. FORGE/public-unlaunched.
+Last reviewed: 2026-10-03
+
+| Dimension | Score | Evidence |
+|---|---:|---|
+| Schema alignment | 5 | Runtime and public gameplay contracts describe the new loops and local zombie scoring. |
+| Prompt/template alignment | 4 | Creative direction and gameplay docs reflect the requested scope. |
+| Derived-view freshness | 4 | Build and hosted staging are current; production acceptance is pending. |
+| Handoff continuity | 5 | Rebuild behavior, verified checks and remaining release acceptance are recorded. |
+| Contradiction density | 5 | Assisted fixtures and synthetic render probes are labeled separately from participant outcomes. |
+
 ## 2026-10-02 — S181 whole-site and feedback truth
 
 Overall status: Current route/content contracts, staging and canonical production agree at verified source `d192f62a754e`; three novel game mechanics are disclosed prototypes, not live competitive systems. The feedback aggregate has real database backing, currently zero reports, and separately labels 38 run-fact identifiers as a runner sample rather than feedback participants. Exact-main CI passes 281/281 files and 1,741/1,741 tests. Both staging and production pass 88/88 browser states, and canonical and immutable production pass 7/7 shell/API probes. SPARKED remains NO-GO.
@@ -1659,3 +1672,7 @@ Last reviewed: 2026-09-10
 
 Overall status: exact-main engineering deployment green and production-verified; SPARKED remains NO-GO.
 Last reviewed: 2026-09-10
+
+## 2026-10-03 — Rebuild evidence boundary
+
+The public gameplay contract now describes checkpoint flow and marks rebuilt Sewer Zombies as local scoring without an offered official board or seeded replay code. Creature counts are checked against the live five-creature roster, not the retired atlas. Integration fixtures and render probes establish behavior and pixels; participant enjoyment, balance and physical controls remain unmeasured.

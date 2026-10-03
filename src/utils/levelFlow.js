@@ -7,13 +7,8 @@ export function getLevelXpNeeded(level = 1) {
 
 export function shouldAwardPerkChoice(level = 1) {
   const safeLevel = Math.max(1, level);
-  if (safeLevel < 3) return false;
-  // Levels 3–10: every 3 levels — keeps early pressure rewarding
-  if (safeLevel <= 10) return safeLevel % 3 === 0;
-  // Levels 11–18: every 3 levels still — mid-game cadence stays dense
-  if (safeLevel <= 18) return safeLevel % 3 === 0;
-  // Levels 19+: every 4 levels — late-game pulls back to prevent saturation
-  return safeLevel % 4 === 0;
+  // Four meaningful doctrines per run, earned slowly and offered at a checkpoint.
+  return safeLevel >= 5 && safeLevel <= 20 && safeLevel % 5 === 0;
 }
 
 export function getNextPerkLevel(level = 1) {
@@ -21,7 +16,7 @@ export function getNextPerkLevel(level = 1) {
   for (let probe = safeLevel + 1; probe <= safeLevel + 12; probe++) {
     if (shouldAwardPerkChoice(probe)) return probe;
   }
-  return safeLevel + 3;
+  return null;
 }
 
 /**

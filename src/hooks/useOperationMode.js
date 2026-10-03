@@ -18,6 +18,7 @@ import { deriveOperationCampaignCarryIn, loadOperationCampaignProgress, recordOp
 import { normalizePlayerMusicVibe, resolveOperationEncounterScore } from "../systems/operationAudioDirector.js";
 import { buildOperationProximitySnapshot, operationProximitySnapshotsEqual } from "../systems/operationProximity.js";
 import { buildOperationMissionSnapshot } from "../systems/operationMissionSnapshot.js";
+import { buildOperationBattlefield, buildOperationFieldSpec } from "../systems/operationBattlefield.js";
 
 export function applyOperationEncounterScore(verb) {
   const playerVibe = normalizePlayerMusicVibe(readPreference("cod-music-vibe", "action"));
@@ -94,6 +95,13 @@ export function useOperationMode({
     const route = operation.routeOptions[routeIndex];
     const routeSource = requestedIndex >= 0 ? "player_selected" : "seed_fallback";
     nextState = chooseOperationRoute(nextState, route);
+    const battlefield = buildOperationBattlefield({ operationId:operation.id, width:sizeRef.current.w, height:sizeRef.current.h, routeIndex });
+    const game = gsRef.current;
+    if (game) {
+      Object.assign(game, { obstacles:battlefield.obstacles, hazards:battlefield.hazards, mapTheme:battlefield.mapTheme, layoutName:battlefield.layoutName, props:[], terrain:[], floorZones:[], operationBattlefield:battlefield });
+      Object.assign(game.player, battlefield.insertion);
+      game._operationLastReinforcementFrame = game.frame || 0;
+    }
     const campaignCarryIn = deriveOperationCampaignCarryIn(loadOperationCampaignProgress(), operation.id);
     nextState = { ...nextState, campaignCarryIn };
     let nextArena = createOperationArenaState({ width: sizeRef.current.w, height: sizeRef.current.h, seed, obstacles: gsRef.current?.obstacles || [], hazards: gsRef.current?.hazards || [] });
@@ -112,7 +120,7 @@ export function useOperationMode({
     setProximitySnapshot(buildOperationProximitySnapshot({ player: gsRef.current?.player, target: proximityTarget }));
     if (encounter?.verb) applyOperationEncounterScore(encounter.verb);
     // S163: the encounter verb is behavioral. Start its handler once the run state exists.
-    queueMicrotask(() => { const g = gsRef.current; const rt = modeRuntimeRef.current; if (g?.operationMode && encounter?.verb && rt) { rt.clearVerbObjective(g); rt.startVerbObjective(g, encounter.verb, rt.verbSpecFor(encounter.verb, encounter), { W: sizeRef.current.w, H: sizeRef.current.h }); } });
+    queueMicrotask(() => { const g = gsRef.current; const rt = modeRuntimeRef.current; if (g?.operationMode && encounter?.verb && rt) { rt.clearVerbObjective(g); rt.startVerbObjective(g, encounter.verb, buildOperationFieldSpec(encounter, battlefield, nextArena, sizeRef.current), { W: sizeRef.current.w, H: sizeRef.current.h }); } });
     return {
       _operationStartFrame: gsRef.current?.frame || 0,
       operationMode: true, operationId: operation.id, operationRoute: route, operationRouteSource: routeSource,
@@ -196,12 +204,21 @@ export function useOperationMode({
     const currentState = stateRef.current;
     const encounter = getCurrentEncounter(currentState);
     if (!gs?.operationMode || !encounter) return { handled: false, completed: false };
-    const arenaReceipt = buildOperationArenaReceipt(arenaRef.current);
     const interactionBonus = Math.min(100, Math.max(0, Number(gs._operationInteractionBonuses?.[encounter.id]) || 0));
     // S163: a behavioral verb must be done (door breached, point held, cart delivered,
     // target hunted, pump sabotaged, exit reached, boss down) before the room clears.
     const verbState = gs.activeVerbObjective;
-    const verbDone = !verbState || verbState.status === "done";
+    const verbDone = verbState?.status === "done";
+    if (!verbDone) return { handled:true, completed:false, blocked:true, reasonCode:"FIELD_TASK_IN_PROGRESS", reinforcementCount:objectiveRef.current?.reinforcementCount || 0, nextState:currentState };
+    // The field task itself proves the objective. E links provide optional support;
+    // a completed breach/hold/escort never asks for a second trip to a console.
+    if (verbDone && !objectiveRef.current?.actionComplete) {
+      const action = getOperationEncounterAction(encounter);
+      const nextArena = applyOperationArenaTransition(arenaRef.current, { ...action, inputSource:"keyboard", actorId:"field-objective" });
+      arenaRef.current = nextArena; setArenaState(nextArena);
+      objectiveRef.current = recordOperationObjectiveAction(objectiveRef.current, action, { arenaSequence:nextArena.sequence, transitionFingerprint:buildOperationArenaReceipt(nextArena).transitionFingerprint });
+    }
+    const arenaReceipt = buildOperationArenaReceipt(arenaRef.current);
     const objectiveResult = evaluateOperationObjectiveClear(objectiveRef.current, { arenaCleared: verbDone });
     objectiveRef.current = objectiveResult.objectiveState;
     setObjectiveState(objectiveResult.objectiveState);
@@ -238,7 +255,11 @@ export function useOperationMode({
       const nextEncounter = getCurrentEncounter(nextState);
       const nextObjective = createOperationObjectiveState(nextEncounter);
       objectiveRef.current = nextObjective; setObjectiveState(nextObjective);
-      { const rt = modeRuntimeRef.current; if (rt) { rt.clearVerbObjective(gs); if (nextEncounter?.verb) rt.startVerbObjective(gs, nextEncounter.verb, Object.assign(rt.verbSpecFor(nextEncounter.verb, nextEncounter), nextEncounter.verb === "SABOTAGE" ? arenaRef.current.interactables.find((item) => item.id === "pump-west")?.position : {}), { W: sizeRef.current.w, H: sizeRef.current.h }); } }
+      { const rt = modeRuntimeRef.current; if (rt) { rt.clearVerbObjective(gs); if (nextEncounter?.verb) rt.startVerbObjective(gs, nextEncounter.verb, buildOperationFieldSpec(nextEncounter, gs.operationBattlefield, arenaRef.current, sizeRef.current), { W: sizeRef.current.w, H: sizeRef.current.h }); } }
+      gs._operationLastReinforcementFrame = gs.frame || 0;
+      // Supplies belong to field transitions, without a shop or upgrade screen.
+      gs.player.health = Math.min(gs.player.maxHealth, gs.player.health + 8);
+      setHealth(Math.floor(gs.player.health));
       const nextTarget = arenaRef.current.interactables.find((item) => item.id === getOperationEncounterAction(nextEncounter)?.targetId) || null;
       setProximitySnapshot(buildOperationProximitySnapshot({ player: gs.player, target: nextTarget }));
       gs._operationPressureMultiplier = Number(nextState.routeConsequence?.pressureMultiplier) || 1;
@@ -274,7 +295,7 @@ export function useOperationMode({
     track("operation_complete", { ...event, runScore: gs.score, durationSeconds: historyEntry.time, evidenceScope: "local-deterministic-not-causal-or-server-authoritative" });
     saveStudioGameEvent(buildStudioGameEvent("operation_complete", { surface: "operation_runtime", ...event }));
     return { handled: true, completed: true, nextState, receipt };
-  }, [chooseLiveDirective, difficultyRef, frameMonitorRef, gsRef, modeRefs, modeRuntimeRef, setLiveAnnounce, setPauseReason, setPaused, sizeRef, statsRef]);
+  }, [chooseLiveDirective, difficultyRef, frameMonitorRef, gsRef, modeRefs, modeRuntimeRef, setHealth, setLiveAnnounce, setPauseReason, setPaused, sizeRef, statsRef]);
 
   return { stateRef, arenaRef, objectiveRef, completeRef, state, arenaState, objectiveState, proximitySnapshot, directive, completeReceipt, start, reset, interact, setInteractHeld, resolveWave, setCompleteReceipt };
 }

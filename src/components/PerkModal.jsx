@@ -7,6 +7,7 @@ export default function PerkModal({
   options,
   level,
   onSelect,
+  onSkip,
   buildArchetype,
   unlockedArchetypes = [],
   activePerks = [],
@@ -36,12 +37,13 @@ export default function PerkModal({
       <div style={{ maxWidth: 480, width: "100%", maxHeight: "calc(100dvh - 32px)", overflowY: "auto", padding: 4, textAlign: "center", color: "#fff", fontFamily: "'Courier New',monospace" }}>
         <div style={{ fontSize: 32, marginBottom: 4 }}>✨</div>
         <h2 style={{ fontSize: "clamp(18px,5vw,28px)", fontWeight: 900, margin: "0 0 4px", color: "#00FF88", letterSpacing: 2 }}>
-          LEVEL {level} — PERK SELECT
+          FIELD CHECKPOINT · LEVEL {level}
         </h2>
         <p style={{ color: "#AAA", fontSize: 12, margin: "0 0 16px" }}>
-          Choose one upgrade. They stack!
+          Choose one doctrine, or keep moving.
           <span style={{ color: "#555", marginLeft: 8 }}>🎮 D-pad + A to pick</span>
         </p>
+        {onSkip && <button onClick={onSkip} style={{ width: "100%", minHeight: 44, marginBottom: 14, border: "1px solid #88FFCC", borderRadius: 8, background: "#102820", color: "#DDFFF0", font: "bold 14px monospace", cursor: "pointer" }}>KEEP GOING · NO UPGRADE</button>}
         {buildArchetype && (
           <div style={{ marginBottom: 12, padding: "8px 12px", borderRadius: 8, background: "rgba(255,255,255,0.04)", border: `1px solid ${buildArchetype.color}44`, textAlign: "left" }}>
             <div style={{ fontSize: 10, color: buildArchetype.color, fontWeight: 900, letterSpacing: 1 }}>
