@@ -177,3 +177,9 @@ Staging: https://7ae2d65c.call-of-doodie.pages.dev/ Built with the same deployab
 - Rollback: redeploy previously verified revision 74ff690, or revert the rebuild through a normal commit and run the existing deploy pipeline. No data rollback is needed.
 
 Assisted fixtures establish integration behavior, not participant balance or physical-device evidence. FORGE/public-unlaunched is preserved.
+
+### S182 production acceptance
+
+Gameplay source 9f508f9eda50 passed exact-main workflow 37157705445: 285/285 files and 1,762/1,762 tests, strict lint, build and Cloudflare deploy. Immutable https://554d0a13.call-of-doodie.pages.dev/ and canonical https://callofdoodie.wtf/ pass shell/health 7/7 each. Canonical production passes all six assisted Operations routes, zombie pump-to-hatch victory, four Classic checkpoint skips and twelve theme/width gameplay captures with zero browser errors.
+
+The rebuilt gameplay and source-bound visual receipt are verified. The following records-only seal does not change gameplay sources.

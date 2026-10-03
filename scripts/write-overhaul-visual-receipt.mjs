@@ -8,7 +8,7 @@ fs.mkdirSync(target,{recursive:true});
 const hash=file=>crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex');
 const captures=[];
 let stagingUrl;
-for(const phase of ['before','staging']) {
+for(const phase of ['before','staging',...(fs.existsSync('output/playwright/s182-production/receipt.json')?['production']:[])]) {
   const dir=path.resolve(`output/playwright/s182-${phase}`);
   const receipt=JSON.parse(fs.readFileSync(path.join(dir,'receipt.json'),'utf8'));
   if(receipt.failures.length || receipt.captures.length!==12) throw new Error(`${phase} matrix incomplete`);

@@ -51,3 +51,6 @@
 - Store keyboard/touch/controller held sources separately and combine them; a released source cannot cancel another held source.
 - Natural play and assisted authored-route completion are different receipts. Retain the aid list; never infer participant balance from forced health/damage/position.
 - Final gameplay proof: 65f983937142, workflow 34926899773, 260 files/1639 tests; staging f04e0cf1, production 7cb07a99. docs/PLAYTEST_FOLLOWUP_2026-09-14.md and docs/visual-qa/LATEST.json hold durable evidence.
+
+
+S182 deployment acceptance: Gameplay source 9f508f9eda50 passed exact-main workflow 37157705445: 285/285 files and 1,762/1,762 tests, strict lint, build and Cloudflare deploy. Immutable https://554d0a13.call-of-doodie.pages.dev/ and canonical https://callofdoodie.wtf/ pass shell/health 7/7 each. Canonical production passes all six assisted Operations routes, zombie pump-to-hatch victory, four Classic checkpoint skips and twelve theme/width gameplay captures with zero browser errors.

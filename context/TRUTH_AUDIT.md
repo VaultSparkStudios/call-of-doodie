@@ -1,13 +1,13 @@
 ## 2026-10-03 — S182 gameplay rebuild truth
 
-Overall status: Music, Operations, Sewer Zombies and sparse skippable checkpoints are implemented and verified locally and on isolated staging. Exact-main CI and production verification are pending. Automated and assisted evidence does not establish participant enjoyment or balance. FORGE/public-unlaunched.
+Overall status: Gameplay source 9f508f9eda50 passed exact-main workflow 37157705445: 285/285 files and 1,762/1,762 tests, strict lint, build and Cloudflare deploy. Immutable https://554d0a13.call-of-doodie.pages.dev/ and canonical https://callofdoodie.wtf/ pass shell/health 7/7 each. Canonical production passes all six assisted Operations routes, zombie pump-to-hatch victory, four Classic checkpoint skips and twelve theme/width gameplay captures with zero browser errors. Automated/assisted evidence does not establish participant enjoyment or balance. FORGE/public-unlaunched.
 Last reviewed: 2026-10-03
 
 | Dimension | Score | Evidence |
 |---|---:|---|
 | Schema alignment | 5 | Runtime and public gameplay contracts describe the new loops and local zombie scoring. |
 | Prompt/template alignment | 4 | Creative direction and gameplay docs reflect the requested scope. |
-| Derived-view freshness | 4 | Build and hosted staging are current; production acceptance is pending. |
+| Derived-view freshness | 5 | Exact-source CI, staging and canonical production agree on the rebuilt gameplay. |
 | Handoff continuity | 5 | Rebuild behavior, verified checks and remaining release acceptance are recorded. |
 | Contradiction density | 5 | Assisted fixtures and synthetic render probes are labeled separately from participant outcomes. |
 

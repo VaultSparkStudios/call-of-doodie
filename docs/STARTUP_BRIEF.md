@@ -20,7 +20,7 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ LAST SESSION (S182) - WHAT SHIPPED ══════════════════════════╗
-║  S182 gameplay/music rebuild verified locally and on staging; p  ║
+║  S182 rebuilt music, Operations and Sewer Zombies are deployed   ║
 ║  Tests  -                                                        ║
 ║  Deploy -                                                        ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -68,8 +68,8 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ⚠  ░░░░░░░░░░░░░░░░░░░░░░░░    1% used                          ║
-║     311,815 / 272,000 tok  ·  codex  ·  heuristic-stale          ║
+║  ⚠  ░░░░░░░░░░░░░░░░░░░░░░░░    2% used                          ║
+║     312,534 / 200,000 tok  ·  unknown  ·  heuristic-stale        ║
 ║     Verdict: CONSIDER_CLOSEOUT  ← act now                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -79,10 +79,10 @@
 ║  ✓  Runway        S179 stats arc and production complete;…       ║
 ║  ⛔  Context age   ?d                                             ║
 ║  ✓  IGNIS         44206 FORGE  ·  3d old                         ║
-║  ⛔  Truth         Music, Operations, Sewer Zombies and sparse…   ║
+║  ⛔  Truth         Gameplay source 9f508f9eda50 passed…           ║
 ║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs…        ║
 ║  ⚠  Genome dims   drop: prompt-template-alignment 5→4            ║
-║  ✓  Entropy       0.221  (healthy)                               ║
+║  ✓  Entropy       0.195  (healthy)                               ║
 ║  ✓  CDR           no gap detected                                ║
 ║  ✓  Patterns      no recurring pressure detected                 ║
 ║  ✓  Templates     v3.3 aligned                                   ║
@@ -116,7 +116,7 @@
 ╔══ MOMENTUM METER ══════════════════════════════════════════════╗
 ║  Velocity:   ▂▂▂▄▄  4↑  (last 5 sessions)                        ║
 ║  Intent:     ?% achieved last 5                                  ║
-║  Streak:     — (last intent not achieved)                        ║
+║  Streak:     ✓ 1 consecutive achieved-intent session             ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIL FORECAST (next session) ═════════════════════════════════╗

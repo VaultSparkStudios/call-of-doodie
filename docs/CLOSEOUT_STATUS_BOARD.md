@@ -1,31 +1,32 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.1 -->
-<!-- generated-at: 2026-09-15 (Session 177 closeout) -->
+<!-- generated-at: 2026-10-03 (Session 182 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S177 ════════════════════╗
-║  Date: 2026-09-15  ·  SIL: 950/1000  ·  Velocity: 5 down         ║
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S182 ════════════════════╗
+║  Date: 2026-10-03  ·  SIL: 951/1000  ·  Velocity: 4 flat         ║
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ║  Live:  preview  →  https://callofdoodie.wtf/                    ║
 ╚════════════════════════════════════════════════════════════════╝
-╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ Objective debrief advice and every replay action use the act  ║
-║  ✓ Operation retry opens the draft from the death screen, prese  ║
-║  ✓ Operation controls and targets occupy safe arena ground; esc  ║
-║  ✓ Sabotage reinforcement starts outside respite; boss-first co  ║
+╔══ WHAT SHIPPED · last 5 commits ═══════════════════════════════╗
+║  ✓ Seal rebuild visual evidence and refresh public contracts     ║
+║  ✓ Rebuild music, tactical Operations and Sewer Zombies; stream  ║
+║  ✓ fix: restore project Node floor after template sync           ║
+║  ✓ docs: sync Studio OS .github/workflows/brief-format-check.ym  ║
+║  ✓ docs: seal verified S181 production release                   ║
 ╚════════════════════════════════════════════════════════════════╝
-╔══ SCORES · SIL 950/1000 ═══════════════════════════════════════╗
-║    Dev Health         98   ██████████                            ║
+╔══ SCORES · SIL 951/1000 ═══════════════════════════════════════╗
+║    Dev Health         96   ██████████                            ║
 ║    Alignment          98   ██████████                            ║
-║    Momentum           96   ██████████                            ║
+║    Momentum           95   ██████████                            ║
 ║    Engagement         90   █████████░                            ║
-║    Process Qual       92   █████████░                            ║
-║    Coherence          96   ██████████                            ║
-║    Security           96   ██████████                            ║
-║    Ecosystem          90   █████████░                            ║
+║    Process Qual       94   █████████░                            ║
+║    Coherence          90   █████████░                            ║
+║    Security           98   ██████████                            ║
+║    Ecosystem          94   █████████░                            ║
 ║    Capital            100  ██████████                            ║
-║    Automation         94   █████████░                            ║
+║    Automation         96   ██████████                            ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WRITE-BACK STATUS ═══════════════════════════════════════════╗
 ║  ✓ context/CURRENT_STATE.md                                      ║
@@ -40,23 +41,23 @@
 ║  · agent memory (Claude/Codex project memory)                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 6 files  ·  M:6 A:0 D:0 ?:0                            ║
+║  Changes: 36 files  ·  M:24 A:0 D:0 ?:12                         ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ DEPLOYMENT ══════════════════════════════════════════════════╗
-║  Staging:  https://f04e0cf1.call-of-doodie.pages.dev  ·  cloudf  ║
+║  Staging:  https://7ae2d65c.call-of-doodie.pages.dev/  ·  cloud  ║
 ║  Live:     https://callofdoodie.wtf/  ·  preview/FORGE (not yet  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
-║  Doctor:        169/221                                          ║
+║  Doctor:        155/233                                          ║
 ║  Compliance:    —                                                ║
-║  Tests:         260/260                                          ║
+║  Tests:         285/285                                          ║
 ║  Validation:    full-fresh                                       ║
-║  IGNIS:         0d ago                                           ║
+║  IGNIS:         4d ago                                           ║
 ║  Truth:         engineering-ready-sparked-no-go                  ║
-║  Sanitization:  0d ago                                           ║
-║  shells:        9 started · 9 closed · 0 running                 ║
+║  Sanitization:  19d ago                                          ║
+║  shells:        1 started · 1 closed · 0 running                 ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ NEXT SESSION ════════════════════════════════════════════════╗
 ║  (no genius cache — run `node scripts/cache-genius-list.mjs`)    ║

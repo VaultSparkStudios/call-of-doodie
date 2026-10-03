@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-10-03T22:11:18.030Z",
+  "capturedAt": "2026-10-03T22:24:32.803Z",
   "uiBaseRef": "74ff690",
   "uiHeadRef": "Source hashes identify reviewed implementation",
   "stagingUrl": "https://7ae2d65c.call-of-doodie.pages.dev",
@@ -512,8 +512,152 @@
       "phase": "after"
     },
     {
+      "file": "session-182/production-standard-sewer-night-390.png",
+      "sha256": "b9b5d6c539baa29def0a94f8821f5ad0294a0fe5226275c18816a63aba94c4f7",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "standard live combat",
+      "phase": "after"
+    },
+    {
+      "file": "session-182/production-zombies-sewer-night-390.png",
+      "sha256": "0c359ef2a776d298f344ec6c00646d7df2f09867c22d7f1aaa85e207a65eaf05",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "zombies live combat",
+      "phase": "after"
+    },
+    {
+      "file": "session-182/production-operation-sewer-night-390.png",
+      "sha256": "11ba917348562e4f5186d5335f05fc7ea12dba2e920a2a16b3097e7a504adf05",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "operation live combat",
+      "phase": "after"
+    },
+    {
+      "file": "session-182/production-standard-porcelain-day-390.png",
+      "sha256": "eabe450f0bef856683b9e63473002f7d47d7c9ab122c591e14c2355db2eedcbd",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "standard live combat",
+      "phase": "after"
+    },
+    {
+      "file": "session-182/production-zombies-porcelain-day-390.png",
+      "sha256": "9ce2ec302499e28e2f78b116d7a27a1c4f3c3b4d631e67880562b8d23de60c10",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "zombies live combat",
+      "phase": "after"
+    },
+    {
+      "file": "session-182/production-operation-porcelain-day-390.png",
+      "sha256": "58cbf1899c71186194c979db443ca0b7dbed3e25a515357d9b970d20512aaece",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "operation live combat",
+      "phase": "after"
+    },
+    {
+      "file": "session-182/production-standard-sewer-night-1440.png",
+      "sha256": "55e1fab642e3a6aba737a81b2c0727d54cedfbfcd9e933bf692238bd997e387d",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "standard live combat",
+      "phase": "after"
+    },
+    {
+      "file": "session-182/production-zombies-sewer-night-1440.png",
+      "sha256": "a4ce1d4efcdaa2bfb42a86dbe8e3a96b0b2607803cdf1954f277ed1ca94f445a",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "zombies live combat",
+      "phase": "after"
+    },
+    {
+      "file": "session-182/production-operation-sewer-night-1440.png",
+      "sha256": "0942e32d5789eafe01a2936316b5acd2d2de3bb2f2c9ef697b3a793c80299eb4",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "operation live combat",
+      "phase": "after"
+    },
+    {
+      "file": "session-182/production-standard-porcelain-day-1440.png",
+      "sha256": "491090c80841ec895808d5cc06506c30f79f04a74acbb4bae8eec4de4534a4ec",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "standard live combat",
+      "phase": "after"
+    },
+    {
+      "file": "session-182/production-zombies-porcelain-day-1440.png",
+      "sha256": "ef64668194d054907dd3f45380db77dda191ea353d0e2ce8e90af0ebbf18648d",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "zombies live combat",
+      "phase": "after"
+    },
+    {
+      "file": "session-182/production-operation-porcelain-day-1440.png",
+      "sha256": "197e6eaf0870fad282d7ec2548d42445f681feb7606ab835893eb94865638405",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "operation live combat",
+      "phase": "after"
+    },
+    {
       "file": "session-182/checkpoint-porcelain-day-1440.png",
-      "sha256": "a2ef02950eb4ad1fac63333b449a3cec1b1ef320631cd589858a1676240b4f96",
+      "sha256": "597783a21cb6cd5f96b005f1de28cd8c08953d944cb5064f5be8d6a8581fbd15",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -525,7 +669,7 @@
     },
     {
       "file": "session-182/checkpoint-porcelain-day-390.png",
-      "sha256": "9397ab003a725c9db7a4b88a3ccdc28f48047e051dc1eb35fa38cde01ac3a71a",
+      "sha256": "a1a14a89269f59a2c9482a638f3c7aefd0307d22ca9638cc3604b6a258ed783e",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -537,7 +681,7 @@
     },
     {
       "file": "session-182/checkpoint-sewer-night-1440.png",
-      "sha256": "b5894d05f1cb99301e7be6f66d6a21cc15d185cbe3c443e33246abc691fcb0aa",
+      "sha256": "daba659c64acefa485e21e523918e168f0c4bf66524da061734aa151122c9b0a",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -549,7 +693,7 @@
     },
     {
       "file": "session-182/checkpoint-sewer-night-390.png",
-      "sha256": "afbf10a77990a632780dd3293123dd3f9fa56edbc1634e74a738da8765f66c1c",
+      "sha256": "22fb631150fb1d95c9f1139daece82b6986f736546f72821a2afacf5cc5112d2",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -707,7 +851,7 @@
   "inspection": {
     "renderedPixelsReviewed": true,
     "reviewer": "Codex direct image inspection",
-    "reviewedAt": "2026-10-03T22:11:18.035Z",
+    "reviewedAt": "2026-10-03T22:24:32.804Z",
     "scope": "Classic, Operations, Zombies at 390/1440px in both themes; skippable checkpoints and all five creature poses",
     "findings": [
       "Operations field orders are compact and optional support is collapsed.",

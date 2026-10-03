@@ -9,20 +9,26 @@
     "Five animated sewer creatures and finite pump extraction.",
     "Immediate deployment and sparse skippable upgrade checkpoints."
   ],
-  "validation": "Full suite: 285/285 files and 1,762/1,762 tests. Strict lint, deployable build, public contract/claims, schema, security and supply-chain checks pass. Browser fixtures complete all six Operations routes, zombie extraction and four desktop/mobile checkpoint skips. Audio lifecycle passes all three modes; offline renders peak below 0.125. Creature presentation covers 100 poses and reduced-motion probes. Staging shell passes 7/7. Exact-main CI and production verification remain pending.",
+  "validation": "Gameplay source 9f508f9eda50 passed exact-main workflow 37157705445: 285/285 files and 1,762/1,762 tests, strict lint, build and Cloudflare deploy. Immutable https://554d0a13.call-of-doodie.pages.dev/ and canonical https://callofdoodie.wtf/ pass shell/health 7/7 each. Canonical production passes all six assisted Operations routes, zombie pump-to-hatch victory, four Classic checkpoint skips and twelve theme/width gameplay captures with zero browser errors.",
   "limits": "Assisted fixtures are not participant or physical-device evidence. FORGE/public-unlaunched.",
   "production": {
-    "status": "pending-exact-main-ci",
-    "staging": "https://7ae2d65c.call-of-doodie.pages.dev/"
+    "status": "verified",
+    "sourceCommit": "9f508f9eda50e9d8e987a2f2eae6e8f2dc0d8980",
+    "workflow": 37157705445,
+    "immutable": "https://554d0a13.call-of-doodie.pages.dev/",
+    "canonical": "https://callofdoodie.wtf/",
+    "staging": "https://7ae2d65c.call-of-doodie.pages.dev/",
+    "shellAssertionsEach": 7,
+    "liveGameplayCaptures": 12
   },
   "closeout": {
     "silScore": 951,
     "scaffold": {
       "tasks": 4,
-      "done": 3,
-      "inProgress": 1,
+      "done": 4,
+      "inProgress": 0,
       "open": 0
     },
-    "state": "staging-verified-production-pending"
+    "state": "production-verified"
   }
 }

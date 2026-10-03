@@ -12,8 +12,8 @@ Headline: Rebuilt music with three original arrangements, Operations with field-
 
 ## Validation
 
-- Full suite: 285/285 files and 1,762/1,762 tests. Strict lint, deployable build, public contract/claims, schema, security and supply-chain checks pass. Browser fixtures complete all six Operations routes, zombie extraction and four desktop/mobile checkpoint skips. Audio lifecycle passes all three modes; offline renders peak below 0.125. Creature presentation covers 100 poses and reduced-motion probes. Staging shell passes 7/7. Exact-main CI and production verification remain pending.
+- Gameplay source 9f508f9eda50 passed exact-main workflow 37157705445: 285/285 files and 1,762/1,762 tests, strict lint, build and Cloudflare deploy. Immutable https://554d0a13.call-of-doodie.pages.dev/ and canonical https://callofdoodie.wtf/ pass shell/health 7/7 each. Canonical production passes all six assisted Operations routes, zombie pump-to-hatch victory, four Classic checkpoint skips and twelve theme/width gameplay captures with zero browser errors.
 
 ## Remaining
 
-- Exact-main CI and production smoke in progress.
+- No requested rebuild work remains. Participant balance and physical-device evidence are outside this automated verification.

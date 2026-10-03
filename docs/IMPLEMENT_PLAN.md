@@ -52,4 +52,4 @@ All four follow-through tasks complete; 0 in progress and 0 open. Staging f04e0c
 1. Composer and instrument rack; verify three arrangements and lifecycle. Complete.
 2. Task-driven Operations and finite animated Sewer Zombies. Complete.
 3. Sparse skippable checkpoints and no reward chains. Complete.
-4. Before/after rendered review, hosted staging, exact-main CI and production verification. In progress; audit receipt records final acceptance.
+4. Before/after rendered review, hosted staging, exact-main CI and production verification. Complete; audits/2026-10-03.json records acceptance.
