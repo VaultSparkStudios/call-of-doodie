@@ -1549,3 +1549,8 @@ S181 merge follow-through: upstream main added `sharp` 0.35.5 while this session
 ## 2026-10-03 — Distinct mode loops and sparse rewards
 
 Classic retains survival with four-wave checkpoints and at most one pending doctrine; checkpoints may be skipped. Operations advances on field tasks rather than enemy clearance. Sewer Zombies uses direct pump supplies and extraction rather than build screens. Each mode owns a musical arrangement. Existing guest access and local/verified score boundaries remain explicit.
+
+
+## 2026-10-03 — Session 182 explicit founder closeout
+
+Close the existing S182 delivery rather than count an extra implementation session. Preserve append-only historical records and add current acceptance above them. Use Studio Ark for central intelligence requests; a queued or shipped request is not proof that IGNIS applied a rescore. No gameplay, rights, spending or lifecycle decision changed.

@@ -1,3 +1,10 @@
+## Session 182 explicit founder closeout
+
+Session Intent: Close out the completed rebuild, update all context/memory/CDR/task records, push main and verify deployment.
+Intent outcome: The rebuild is achieved; this final records commit receives its own CI/deploy verification.
+Deploy: production verified at 2d0bdf9d5306 before this records-only closeout. Records seal 2d0bdf9d5306 passed GitHub Actions 37158694453 (quality and deployment). Canonical production health reports that revision and the live shell passes 7/7. Gameplay acceptance remains bound to 9f508f9eda50; subsequent commits change records and QA tooling only.
+Next: No requested gameplay work remains. Preserve FORGE/public-unlaunched and do not conflate assisted browser fixtures with participant evidence.
+
 ## Where We Left Off (Session 182 production seal)
 
 Requested rebuild is complete and production verified. Gameplay source 9f508f9eda50 passed exact-main workflow 37157705445: 285/285 files and 1,762/1,762 tests, strict lint, build and Cloudflare deploy. Immutable https://554d0a13.call-of-doodie.pages.dev/ and canonical https://callofdoodie.wtf/ pass shell/health 7/7 each. Canonical production passes all six assisted Operations routes, zombie pump-to-hatch victory, four Classic checkpoint skips and twelve theme/width gameplay captures with zero browser errors.

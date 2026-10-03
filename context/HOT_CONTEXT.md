@@ -4,7 +4,9 @@
 
 ## Current Session
 
-- Session 182 production seal (2026-10-03) — Gameplay source 9f508f9eda50 passed exact-main workflow 37157705445: 285/285 files and 1,762/1,762 tests, strict lint, build and Cloudflare deploy. Immutable https://554d0a13.call-of-doodie.pages.dev/ and canonical https://callofdoodie.wtf/ pass shell/health 7/7 each. Canonical production passes all six assisted Operations routes, zombie pump-to-hatch victory, four Classic checkpoint skips and twelve theme/width gameplay captures with zero browser errors. All four requested rebuild/release outcomes are verified. FORGE/public-unlaunched remains unchanged.
+## Session 182 explicit founder closeout
+
+Requested rebuild and engineering deployment are complete. Records seal 2d0bdf9d5306 passed GitHub Actions 37158694453 (quality and deployment). Canonical production health reports that revision and the live shell passes 7/7. Gameplay acceptance remains bound to 9f508f9eda50; subsequent commits change records and QA tooling only. This explicit closeout reconciles the existing S182 records rather than inventing a second implementation session.
 
 ## Open Work
 
@@ -66,22 +68,6 @@
 
 ## Recent Decisions
 
-## 2026-09-11 — S177 — Exact promises and bounded boss presentation
-
-Shared upgrade values drive the copy and execution. +10% fire rate means a shot interval divided by 1.10. Jackpot's independent XP multiplier must exclude its weekly score bonus so 2× XP does not silently become 6×. Other score-derived XP remains intact.
-
-Clone Decoy retains the ability pool's seeded order and stores one bounded presentation record outside enemy targeting/reward arrays. Lifesteal follows its existing global enemy-bullet wording, heals only after observed health loss, and cannot resurrect pending defeats.
-
-CANON-045 remains an existing external identity gap; CANON-054's conformance checker returned malformed evidence despite a live stats surface. No ABSOLUTE gap was reported. This maintenance deployment does not assert launch-tier eligibility.
-
-### 2026-09-14 — S177 mode clarity follow-through
-
-Keep original gameplay under Classic Survival, with a direct entry before collapsed Operations. Distinguish different objectives from challenge rules without changing replay IDs. Preserve Boss Rush's three warmups and endless character; give the six-boss objective its explicit solo plan. One lost Throne permits a retake, preserving the documented second-loss ending. Run clocks use reset simulation frames.
-
-Browser outcome fixtures and normal input runs are separate evidence. No balance/retention or physical-controller claim follows from automated completion. No dependencies, paid per-player services, identity or licensing changes were introduced.
-
-
-
 ## 2026-09-15 — S177 follow-through evidence and retry semantics
 
 Objective replay starts the same objective and never attaches a generic survival drill. Operation mission and route survive defeat; draft remains available outside the menu screen. Field objective geometry and escort navigation share actual arena collision evidence.
@@ -105,9 +91,15 @@ S181 merge follow-through: upstream main added `sharp` 0.35.5 while this session
 
 Classic retains survival with four-wave checkpoints and at most one pending doctrine; checkpoints may be skipped. Operations advances on field tasks rather than enemy clearance. Sewer Zombies uses direct pump supplies and extraction rather than build screens. Each mode owns a musical arrangement. Existing guest access and local/verified score boundaries remain explicit.
 
+
+
+## 2026-10-03 — Session 182 explicit founder closeout
+
+Close the existing S182 delivery rather than count an extra implementation session. Preserve append-only historical records and add current acceptance above them. Use Studio Ark for central intelligence requests; a queued or shipped request is not proof that IGNIS applied a rescore. No gameplay, rights, spending or lifecycle decision changed.
+
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 247,634 bytes · SHA-256 `d8bdc39834dc…`
-- `context/TASK_BOARD.md` · 172,427 bytes · SHA-256 `3930e6124c94…`
-- `context/DECISIONS.md` · 167,074 bytes · SHA-256 `ae8a3576d9a1…`
+- `context/CURRENT_STATE.md` · 248,124 bytes · SHA-256 `3379ebb8662e…`
+- `context/TASK_BOARD.md` · 172,714 bytes · SHA-256 `6e54a27bdcd7…`
+- `context/DECISIONS.md` · 167,478 bytes · SHA-256 `55723ae6ec27…`
 - `docs/AUDIT_2026-09-29_2.json` · 7,385 bytes · SHA-256 `cc01a284e112…`

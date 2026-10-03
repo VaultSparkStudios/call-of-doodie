@@ -29,6 +29,43 @@
       "inProgress": 0,
       "open": 0
     },
-    "state": "production-verified"
+    "state": "production-verified",
+    "explicitFounderRequested": true,
+    "recordsSeal": {
+      "commit": "2d0bdf9d5306fd9816a9cc4fd8469a693ea09c47",
+      "workflow": 37158694453,
+      "status": "production-verified",
+      "shellAssertions": 7
+    },
+    "formalChecks": {
+      "scope": "studio-wide",
+      "exitCode": 1,
+      "date": "2026-10-03",
+      "generatedAt": "2026-10-03T22:50:20.888Z",
+      "passing": 149,
+      "total": 233,
+      "score": 65,
+      "blockingFailing": 2,
+      "advisoryFailing": 1,
+      "failures": [
+        {
+          "id": "orphan-producers",
+          "blocking": true,
+          "detail": "1/102 producer(s) have NO executable caller: build-gatus-config.mjs — register a runner in portfolio/MAINTENANCE_REGISTRY.json or allowlist with a reason"
+        },
+        {
+          "id": "remedy-drift",
+          "blocking": true,
+          "detail": "1 remedy decision(s) recorded; warning remains — D-S351.3 (2026-09-20): Detached persistent daemon drains sibling propagation without its own session lock; standing authorization was withheld in D-S351.3. · 4 declared fix(es) run 1/2/39/2x and still red after 6+ sessions — fix the underlying red, not the command: node scripts/check-secrets.mjs --probe ; node scripts/ark-revoke.mjs --reason ; node scripts/refresh-test-count.mjs --full ; node scripts/package-trust-sweep.mjs --apply · 3 ungated fix(es) never run across 6+ sessions — run: node scripts/ark-revoke.mjs --reason ; node scripts/batch-adoption-dispatch.mjs --apply ; node scripts/mirror-gh-secrets.mjs --apply · 3 not actionable here (not-ownable-here/gated): compliance-velocity, analytica-feed-coverage · 64 declare NO fix anywhere (61 ours: 18 rollout, 10 measurement-only, 6 founder-gated, 3 remedy-unwritten, 2 cumulative-by-design) · ⛔ 22 UNDISPOSED — decide the kind: action-bound-receipts, approval-discipline-protocol, ark-inbox-depth"
+        },
+        {
+          "id": "foundation-reconciliation",
+          "blocking": false,
+          "detail": "1 mirror-drift — run --fix to refresh mirrors"
+        }
+      ]
+    },
+    "arkImpactCargo": "01K41VS6GAC47527BC3DC108B3",
+    "writeback": "all-ten-reconciled"
   }
 }

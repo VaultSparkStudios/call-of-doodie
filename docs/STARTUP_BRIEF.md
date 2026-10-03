@@ -20,7 +20,7 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ LAST SESSION (S182) - WHAT SHIPPED ══════════════════════════╗
-║  S182 rebuilt music, Operations and Sewer Zombies are deployed   ║
+║  S182 rebuild production verified; formal closeout reconciles a  ║
 ║  Tests  -                                                        ║
 ║  Deploy -                                                        ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -69,7 +69,7 @@
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
 ║  ⚠  ░░░░░░░░░░░░░░░░░░░░░░░░    2% used                          ║
-║     312,534 / 200,000 tok  ·  unknown  ·  heuristic-stale        ║
+║     313,577 / 200,000 tok  ·  unknown  ·  heuristic-stale        ║
 ║     Verdict: CONSIDER_CLOSEOUT  ← act now                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -82,13 +82,13 @@
 ║  ⛔  Truth         Gameplay source 9f508f9eda50 passed…           ║
 ║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs…        ║
 ║  ⚠  Genome dims   drop: prompt-template-alignment 5→4            ║
-║  ✓  Entropy       0.195  (healthy)                               ║
+║  ✓  Entropy       0.190  (healthy)                               ║
 ║  ✓  CDR           no gap detected                                ║
 ║  ✓  Patterns      no recurring pressure detected                 ║
 ║  ✓  Templates     v3.3 aligned                                   ║
 ║  ⛔  Revenue sig.  not found  ⚠ stale                             ║
 ║  ✓  Deploy gaps   no gaps (run: ops deploy-gaps)                 ║
-║  ⛔  Doctor        155/233 (67%)  ·  1 failing                    ║
+║  ⛔  Doctor        149/233 (65%)  ·  3 failing                    ║
 ║  ✓  Codex trust   trusted project active                         ║
 ║  ✓  Canon adopt.  0/54 pending review                            ║
 ║  ✓  Cost          flat-rate Max Plan · usage ledger…             ║
