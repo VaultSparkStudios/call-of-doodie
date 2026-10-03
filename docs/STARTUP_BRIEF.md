@@ -69,7 +69,7 @@
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
 ║  ⚠  ░░░░░░░░░░░░░░░░░░░░░░░░    1% used                          ║
-║     311,568 / 272,000 tok  ·  codex  ·  heuristic-stale          ║
+║     311,815 / 272,000 tok  ·  codex  ·  heuristic-stale          ║
 ║     Verdict: CONSIDER_CLOSEOUT  ← act now                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -79,9 +79,9 @@
 ║  ✓  Runway        S179 stats arc and production complete;…       ║
 ║  ⛔  Context age   ?d                                             ║
 ║  ✓  IGNIS         44206 FORGE  ·  3d old                         ║
-║  ⛔  Truth         Current route/content contracts, staging…      ║
+║  ⛔  Truth         Music, Operations, Sewer Zombies and sparse…   ║
 ║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs…        ║
-║  ✓  Genome dims   all stable  (24/25)                            ║
+║  ⚠  Genome dims   drop: prompt-template-alignment 5→4            ║
 ║  ✓  Entropy       0.221  (healthy)                               ║
 ║  ✓  CDR           no gap detected                                ║
 ║  ✓  Patterns      no recurring pressure detected                 ║

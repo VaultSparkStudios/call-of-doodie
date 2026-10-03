@@ -18,12 +18,13 @@ for(const phase of ['before','staging']) {
     captures.push({file:`session-182/${name}`,sha256:hash(path.join(target,name)),theme:c.theme==='sewer-night'?'dark':'light',projectTheme:c.theme,viewport:{width:c.width,height:c.height},page:`${c.mode} live combat`,phase:phase==='before'?'before':'after'});
   }
 }
-for(const kind of ['checkpoints','zombie-creatures']) {
+for(const kind of ['checkpoints','checkpoint-before','zombie-creatures','perk-checkpoints']) {
   const dir=path.resolve(`output/playwright/s182-${kind}`);
+  if (!fs.existsSync(dir)) continue;
   for(const name of fs.readdirSync(dir).filter(n=>n.endsWith('.png'))) {
     fs.copyFileSync(path.join(dir,name),path.join(target,name));
     const width=name.includes('390')?390:1440,theme=name.includes('porcelain-day')?'light':'dark';
-    captures.push({file:`session-182/${name}`,sha256:hash(path.join(target,name)),theme,projectTheme:theme==='dark'?'sewer-night':'porcelain-day',viewport:{width,height:900},page:kind==='checkpoints'?'Classic skippable checkpoint':'Five creatures and animation poses; assisted contrast fixture',phase:'after'});
+    captures.push({file:`session-182/${name}`,sha256:hash(path.join(target,name)),theme,projectTheme:theme==='dark'?'sewer-night':'porcelain-day',viewport:{width,height:900},page:kind==='zombie-creatures'?'Five creatures and animation poses; assisted contrast fixture':kind==='perk-checkpoints'?'Skippable doctrine checkpoint; component fixture':'Classic checkpoint; assisted threshold',phase:kind==='checkpoint-before'?'before':'after'});
   }
 }
 const tracked=spawnSync('git',['diff','--name-only','74ff690','--','src','public'],{encoding:'utf8',windowsHide:true});

@@ -134,7 +134,7 @@
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
   "truthAuditStatus": "engineering-ready-sparked-no-go",
-  "truthAuditLastRun": "2026-10-02",
+  "truthAuditLastRun": "2026-10-03",
   "ignisScore": 44206,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-09-30",
@@ -149,8 +149,8 @@
   "lastAgent": "codex",
   "testsPassing": 285,
   "testsTotal": 285,
-  "entropyScore": 0.221,
-  "entropyLastComputed": "2026-09-29",
+  "entropyScore": 0.195,
+  "entropyLastComputed": "2026-10-03",
   "silRubricVersion": "3.0",
   "silMax": 1000,
   "silScoreLegacy500": 478.5,
@@ -178,7 +178,7 @@
   "freeTierCostStatus": "cost-neutral",
   "runtimeUrl": "https://callofdoodie.wtf/",
   "stagingType": "cloudflare-pages",
-  "stagingUrl": "https://3b68118e.call-of-doodie.pages.dev/",
+  "stagingUrl": "https://7ae2d65c.call-of-doodie.pages.dev/",
   "testsLastRun": "2026-10-03T21:40:58.701Z",
   "sanitizationLastCleared": "2026-09-15",
   "sessionShellHygiene": {
@@ -220,7 +220,7 @@
   "testsAssertionsLastRun": "2026-10-03T21:40:58.703Z",
   "lastShipped": "S181 full-site/player journey, feedback and agent surfaces deployed as d192f62a754e; three Field Lab prototypes remain unranked and local.",
   "truthStatus": "Full suite: 285/285 files and 1,762/1,762 tests. Strict lint, deployable build, public contract/claims, schema, security and supply-chain checks pass. Browser fixtures complete all six Operations routes, zombie extraction and four desktop/mobile checkpoint skips. Audio lifecycle passes all three modes; offline renders peak below 0.125. Creature presentation covers 100 poses and reduced-motion probes. Staging shell passes 7/7. Exact-main CI and production verification remain pending. FORGE/public-unlaunched.",
-  "testsFocusedSupplement": "Final App/overlay checks pass after the mode-label and clipped-cue corrections.",
+  "testsFocusedSupplement": "Final App, MobileHUD and Operations overlay checks pass: 3 files / 9 tests, after mode-label and clipped-cue corrections.",
   "lastDeployCommit": "d192f62a754e27b2038b516ef47b24432b34851a",
   "lastDeployAt": "2026-10-02T20:48:57.993Z"
 }

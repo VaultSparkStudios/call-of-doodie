@@ -4,7 +4,7 @@ Requested outcome: three distinct gameplay/music identities and greatly reduced 
 
 Full suite: 285/285 files and 1,762/1,762 tests. Strict lint, deployable build, public contract/claims, schema, security and supply-chain checks pass. Browser fixtures complete all six Operations routes, zombie extraction and four desktop/mobile checkpoint skips. Audio lifecycle passes all three modes; offline renders peak below 0.125. Creature presentation covers 100 poses and reduced-motion probes. Staging shell passes 7/7. Exact-main CI and production verification remain pending.
 
-Staging: https://3b68118e.call-of-doodie.pages.dev/. Browser integrations use assisted task thresholds and are not participant evidence. Final source and hosted visual receipt: docs/visual-qa/LATEST.json. Production acceptance is tracked in audits/2026-10-03.json.
+Staging: https://7ae2d65c.call-of-doodie.pages.dev/. Browser integrations use assisted task thresholds and are not participant evidence. Final source and hosted visual receipt: docs/visual-qa/LATEST.json. Production acceptance is tracked in audits/2026-10-03.json.
 
 
 

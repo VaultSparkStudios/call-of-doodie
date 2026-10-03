@@ -164,3 +164,16 @@ S177 production seal: S177 complete: production 9d6c3eafd501 verified; CI 250/25
 S177 mode corrective update: final immutable staging https://138eef33.call-of-doodie.pages.dev passed shell7/7 and a mobile Boss Gauntlet touch/audio playtest. The shared mode UI has76 reviewed hash-bound before/after captures across1440/390px and both themes in docs/visual-qa/LATEST.json. All12 desktop modes plus Classic and four new mobile modes received short natural-input checks; four controlled actual six-boss sequences and16 clock/ending cases passed. Physical device/participant parity is not claimed. Rollback: restore affected runtime/UI sources from99b208f in a normal corrective commit and redeploy via CI; no force push or data migration.
 
 S177 final mode production seal (2026-09-15T01:41:30.290Z): Production 4eab033d534f verified: CI successful, edge revision matched, public shell 7/7 passed. Desktop Classic reached wave 2; mobile Boss Gauntlet reached a normal death screen. Real keyboard/touch playtests and audio mute/resume passed without browser errors; six production captures were visually inspected. Evidence: docs/visual-qa/modes-2026-09-14/production.json. A following documentation-only commit records this completed runtime release.
+
+## October 3, 2026 — Gameplay rebuild staging
+
+Staging: https://7ae2d65c.call-of-doodie.pages.dev/ Built with the same deployable-build configuration and gateway-resolved public runtime values used for production; no database migration, new dependency or account flow was added.
+
+- Desktop 1440px and mobile 390px, both interface themes: Classic, Operations and Sewer Zombies launch directly; all twelve captures have zero browser errors.
+- Six assisted Operations route completions, zombie pump-to-hatch victory and four Classic skip/resume checks pass on hosted staging.
+- Five creature silhouettes, animation states, warning paths and reduced motion were inspected in focused fixtures. Gameplay retains its authored dark arena palette in both interface themes.
+- Full suite: 285 files / 1,762 tests; final App/MobileHUD/overlay checks: 9 tests. Lint, deployable build, public/schema/security and supply-chain gates pass.
+- Last five hosted workflow runs were green before this release. Founder authorization covers direct-main publication. Exact-release CI and production smoke remain pending.
+- Rollback: redeploy previously verified revision 74ff690, or revert the rebuild through a normal commit and run the existing deploy pipeline. No data rollback is needed.
+
+Assisted fixtures establish integration behavior, not participant balance or physical-device evidence. FORGE/public-unlaunched is preserved.

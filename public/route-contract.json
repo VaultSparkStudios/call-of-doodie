@@ -1,8 +1,8 @@
 {
   "schemaVersion": "1.0",
   "source": "scripts/lib/public-route-registry.mjs",
-  "contentVersion": "2026-10-02",
-  "fingerprint": "734944e15fff956be7f297713af7bcef5d1daf4d367ce7e3bb98d8b85a4c3883",
+  "contentVersion": "2026-10-03",
+  "fingerprint": "33f0d63f66824ffbfbb791f2b3f8099c85bba3a1f66003cdffe6b8b25b0c8e29",
   "coverage": {
     "routes": 22,
     "headerRoutes": 4,

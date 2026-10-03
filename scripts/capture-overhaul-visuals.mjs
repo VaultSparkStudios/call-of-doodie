@@ -32,6 +32,7 @@ try {
     }
     await page.locator('[data-hud-surface]').first().waitFor({state:'attached',timeout:30000});
     if (phase !== 'before' && await clean.isVisible()) throw new Error(`${mode}: unwanted deployment draft`);
+    if (phase !== 'before' && mode !== 'standard') await page.getByText(mode === 'operation' ? /^TASK \d+$/ : /^DEPTH \d+$/).first().waitFor({state:'visible',timeout:10000});
     await page.mouse.move(width*.72,410);
     await page.mouse.down();
     await page.waitForTimeout(mode === 'zombies' ? 8500 : 3500);
