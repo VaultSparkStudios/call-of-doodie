@@ -1,3 +1,8 @@
+## End-game follow-up — 2026-10-03
+
+- [x] Make death/victory results fully scrollable, including short mobile screens; keep Back to Command outside optional disclosures.
+- [x] Expand leaderboard submission and share sections by default; verify both themes and desktop/mobile endings on staging, with 52 reviewed captures and eight passing navigation cases.
+
 ## Session 181 — Full-site audit and implementation
 
 - [x] [SIL:3] Address all 25 ranked audit outcomes in source, with the three new game systems identified as local prototypes and live rollout contingent on play evidence.

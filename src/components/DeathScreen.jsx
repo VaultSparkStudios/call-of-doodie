@@ -728,7 +728,7 @@ export default function DeathScreen({
   );
 
   return (
-    <div style={{ ...base, touchAction: "pan-y", overflowY: "auto", overflowX: "hidden", color: "#fff", background: "linear-gradient(135deg,#1a0000 0%,#2a0808 50%,#1a0000 100%)", boxSizing: "border-box" }}>
+    <div data-testid="death-results-scroll" role="region" aria-label="Run results" tabIndex={0} style={{ ...base, display: "block", touchAction: "pan-y", overflowY: "auto", overflowX: "hidden", overscrollBehaviorY: "contain", WebkitOverflowScrolling: "touch", color: "#fff", background: "linear-gradient(135deg,#1a0000 0%,#2a0808 50%,#1a0000 100%)", boxSizing: "border-box" }}>
       {showLeaderboard && (
         <AsyncPanelBoundary>
           <LeaderboardPanel leaderboard={leaderboard} lbLoading={lbLoading} lbHasMore={lbHasMore} onLoadMore={onLoadMore} username={username} onClose={() => setShowLeaderboard(false)} />
@@ -1157,8 +1157,8 @@ export default function DeathScreen({
           </AsyncPanelBoundary>
         )}
 
-        <details data-testid="debrief-score-trust" style={{ width: "100%", marginBottom: 10 }}>
-          <summary style={{ padding: "10px 12px", borderRadius: 8, border: "1px solid rgba(255,255,255,0.18)", color: "#D5DCE8", cursor: "pointer", fontSize: 11, fontWeight: 900 }}>SCORE &amp; RUN TRUST</summary>
+        <section data-testid="debrief-score-trust" aria-labelledby="debrief-score-heading" style={{ width: "100%", marginBottom: 10 }}>
+          <h3 id="debrief-score-heading" style={{ margin: "0 0 10px", padding: "10px 12px", borderRadius: 8, border: "1px solid rgba(255,255,255,0.18)", color: "#D5DCE8", fontFamily: "inherit", fontSize: 11, fontWeight: 900, letterSpacing: 1 }}>SCORE &amp; RUN TRUST</h3>
         {practiceRun ? (
           <div style={{ ...card, marginBottom: 12, border: "1px solid rgba(0,229,255,0.25)" }}>
             <div style={{ fontSize: 12, color: "var(--cod-cyan)", letterSpacing: 1, fontWeight: 700 }}>🔁 DRILL RUN</div>
@@ -1250,10 +1250,10 @@ export default function DeathScreen({
           </div>
         )}
 
-        </details>
+        </section>
 
-        <details data-testid="debrief-share" style={{ width: "100%", marginBottom: 10 }}>
-          <summary style={{ padding: "10px 12px", borderRadius: 8, border: "1px solid rgba(255,255,255,0.18)", color: "#D5DCE8", cursor: "pointer", fontSize: 11, fontWeight: 900 }}>SHARE THIS RUN &amp; HIGHLIGHT</summary>
+        <section data-testid="debrief-share" aria-labelledby="debrief-share-heading" style={{ width: "100%", marginBottom: 10 }}>
+          <h3 id="debrief-share-heading" style={{ margin: "0 0 10px", padding: "10px 12px", borderRadius: 8, border: "1px solid rgba(255,255,255,0.18)", color: "#D5DCE8", fontFamily: "inherit", fontSize: 11, fontWeight: 900, letterSpacing: 1 }}>SHARE THIS RUN &amp; HIGHLIGHT</h3>
         <div style={{ marginBottom: 10 }}>
           <button
             onClick={handleShare}
@@ -1301,7 +1301,7 @@ export default function DeathScreen({
           </div>
         )}
 
-        </details>
+        </section>
 
         <details data-focus-order="more_run_actions" style={{ width: "100%", marginTop: 4 }}>
           <summary style={{ padding: "9px 11px", borderRadius: 7, border: "1px solid rgba(255,255,255,0.12)", background: "rgba(255,255,255,0.035)", color: "#9299A8", fontSize: 10, fontWeight: 900, letterSpacing: 1.5, cursor: "pointer" }}>
@@ -1348,7 +1348,9 @@ export default function DeathScreen({
           </div>
         )}
 
-        <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
+        </details>
+
+        <nav aria-label="End-game actions" style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap", marginTop: 12 }}>
           {runSeed > 0 && (
             <button
               aria-label="Copy shareable link for this run"
@@ -1358,13 +1360,12 @@ export default function DeathScreen({
                 navigator.clipboard?.writeText?.(url);
                 track("debrief_share_replay_link", { seed: runSeed, score, wave, mode });
               }}
-              style={{ ...btnS, minWidth: 130, fontSize: 13 }}
+              style={{ ...btnS, minWidth: 130, minHeight: 44, fontSize: 13 }}
             >🔗 SHARE RUN</button>
           )}
-          <button aria-label="View leaderboard" onClick={() => { recordPlaytestChoice("leaderboard"); track("debrief_view_leaderboard", { score, wave, intelligenceCause: postRunIntel.cause }); onRefreshLeaderboard(); setShowLeaderboard(true); }} style={{ ...btnS, minWidth: 130, fontSize: 15 }}>LEADERBOARD</button>
-          <button aria-label="Back to Command" onClick={() => { recordPlaytestChoice("menu"); track("debrief_menu", { score, wave, intelligenceCause: postRunIntel.cause, nextRunContractId: debrief.nextRunContract?.id || null }); onMenu(makeDrillLaunch(runSeed > 0 ? "replay_seed" : "new_run")); }} style={{ ...btnS, minWidth: 110, fontSize: 15 }}>BACK TO COMMAND</button>
-        </div>
-        </details>
+          <button aria-label="View leaderboard" onClick={() => { recordPlaytestChoice("leaderboard"); track("debrief_view_leaderboard", { score, wave, intelligenceCause: postRunIntel.cause }); onRefreshLeaderboard(); setShowLeaderboard(true); }} style={{ ...btnS, minWidth: 130, minHeight: 44, fontSize: 15 }}>LEADERBOARD</button>
+          <button aria-label="Back to Command" onClick={() => { recordPlaytestChoice("menu"); track("debrief_menu", { score, wave, intelligenceCause: postRunIntel.cause, nextRunContractId: debrief.nextRunContract?.id || null }); onMenu(makeDrillLaunch(runSeed > 0 ? "replay_seed" : "new_run")); }} style={{ ...btnS, minWidth: 110, minHeight: 44, fontSize: 15 }}>BACK TO COMMAND</button>
+        </nav>
       </div>
       </div>
 

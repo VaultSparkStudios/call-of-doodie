@@ -1,5 +1,9 @@
 # Work Log
 
+## 2026-10-03 — End-game follow-up
+
+Fixed results scrolling and bottom clearance, exposed main-menu/leaderboard navigation outside optional disclosures, and made score submission and sharing always visible. Final staging fc2ca612 passes eight death/victory/theme/width cases, short mobile, keyboard End, touch swipe and actual menu return. Reviewed 52 before/after captures. Strict lint, build and 19 focused tests pass. Online submissions and external sharing were not exercised; exact-main CI/deployment follow this records snapshot.
+
 ## 2026-10-02 (Session 181 — full-site audit implementation)
 
 - Addressed the ranked 25-item audit; staged a 22-route, two-theme site/game refinement with 88/88 hosted browser states and 429 hash-bound captures; applied the prerequisite event table and aggregate RPC to the correct game database, cleared the dev-dependency advisory, and recorded three game innovations as unranked prototypes pending player evidence. Exact-main CI/production follow-through occurs after this write-back.

@@ -1,3 +1,7 @@
+## End-game follow-up — 2026-10-03
+
+Death and victory results now scroll fully, including short mobile viewports. Score submission and sharing remain expanded; leaderboard and Back to Command controls sit outside optional disclosures. Final staging fc2ca612 passes eight theme/width/ending cases, keyboard End, mobile touch scrolling and actual return-to-menu navigation. Strict lint, deployable build and 19 focused tests pass; 52 before/after captures are hash-bound in docs/visual-qa/LATEST.json. Production verification follows the direct-main deployment.
+
 ## Session 182 explicit founder closeout
 
 Requested rebuild and engineering deployment are complete. Records seal 2d0bdf9d5306 passed GitHub Actions 37158694453 (quality and deployment). Canonical production health reports that revision and the live shell passes 7/7. Gameplay acceptance remains bound to 9f508f9eda50; subsequent commits change records and QA tooling only. This explicit closeout reconciles the existing S182 records rather than inventing a second implementation session.

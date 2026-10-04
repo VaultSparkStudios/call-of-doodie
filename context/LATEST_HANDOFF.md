@@ -1,3 +1,7 @@
+## End-game follow-up — 2026-10-03
+
+Requested outcome: reach the main menu from the bottom of the end-game screen and show submission/sharing without expanding panels. Implemented in DeathScreen.jsx using a bounded block scroll region, always-rendered score/share sections and independent footer navigation with 44px touch targets. Staging https://fc2ca612.call-of-doodie.pages.dev passes all eight death/victory, theme and width cases, plus short mobile, keyboard End, touch swipe and return-to-menu checks. Directly reviewed 52 before/after screenshots; receipt hashes bind the final source. Lint, build and 19 focused tests pass. No online score submission or external sharing was performed. This bounded follow-up does not reopen the completed rebuild or paused goal. Exact-main CI and production verification follow this commit.
+
 ## Session 182 explicit founder closeout
 
 Session Intent: Close out the completed rebuild, update all context/memory/CDR/task records, push main and verify deployment.

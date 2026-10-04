@@ -1,5 +1,9 @@
 # Release Parity — Call of Doodie
 
+## 2026-10-03 — End-game follow-up staging
+
+Immutable staging https://fc2ca612.call-of-doodie.pages.dev passes shell 7/7 and eight assisted death/victory cases across both themes and 390px/1440px widths. All return to the main menu, with no horizontal overflow or browser errors. Keyboard End, mobile touch swipes and 390×360 bottom controls pass. Submission/share sections render without opening disclosures. Fifty-two directly reviewed before/after captures bind the changed source in docs/visual-qa/LATEST.json. Strict lint, build and 19 focused tests pass. Fixtures do not submit online scores or perform external sharing; production follow-through is verified after the direct-main workflow.
+
 Last reviewed: 2026-10-02 (Session 181 engineering production)
 
 ## Session 181 staging, production and release boundary

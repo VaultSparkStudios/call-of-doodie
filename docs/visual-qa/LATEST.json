@@ -1,875 +1,667 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-10-03T22:24:32.803Z",
-  "uiBaseRef": "74ff690",
-  "uiHeadRef": "Source hashes identify reviewed implementation",
-  "stagingUrl": "https://7ae2d65c.call-of-doodie.pages.dev",
+  "capturedAt": "2026-10-04T00:37:46.402Z",
+  "uiBaseRef": "616448f",
+  "uiHeadRef": "Changed UI source hashes identify reviewed implementation",
+  "stagingUrl": "https://fc2ca612.call-of-doodie.pages.dev",
   "themes": [
     "dark",
     "light"
   ],
   "sourceFiles": [
     {
-      "file": "public/.well-known/llms.txt",
-      "sha256": "4684a41c0af7f7d3e8d61b6621d5db4e3fd33475e6b5a0c1d1e81088d6358363"
-    },
-    {
-      "file": "public/changelog/index.html",
-      "sha256": "7f7cc4465b0b3c3f732686dae98ee5ba8c2fd2009219c4cc7b0fb5415fdb2c6a"
-    },
-    {
-      "file": "public/field-manual.json",
-      "sha256": "bca569f426edc154887c7d4bffc64ad8d742e5a81d304be11d091019639f49e7"
-    },
-    {
-      "file": "public/field-manual/index.html",
-      "sha256": "654b6f69e493207a79bb5f291d3cb5630ce2fa2b243f8e602de62df5ca3f5ab1"
-    },
-    {
-      "file": "public/gameplay-contract.json",
-      "sha256": "f68a2ba753890509263fab65afc068f9ba652b73802c927ee5131296c6ab6915"
-    },
-    {
-      "file": "public/modes/index.html",
-      "sha256": "af8ca4b6bbf1c7fe99f1e9724fb310da075c5ad873aae340018892181822a336"
-    },
-    {
-      "file": "public/operations/index.html",
-      "sha256": "4e9c30332e2c788c60596289499f575909833f4383e0fabfaa45d90a797c6fb2"
-    },
-    {
-      "file": "public/route-contract.json",
-      "sha256": "223cc60c034433ca0065e049eeeffb841bb4dece6e4adcccf319b590619df704"
-    },
-    {
-      "file": "public/sitemap.xml",
-      "sha256": "be7cce07883735d3fa3651e98715888be2b8c24c7d4244330805b657c5d5e595"
-    },
-    {
-      "file": "src/App.jsx",
-      "sha256": "4586f2e6409774063908e0748b56bb008a4a507130dc6dd5597c21fdd251869c"
-    },
-    {
-      "file": "src/App.launch.test.jsx",
-      "sha256": "2c58ef7c7a6eb62e9d5170df8e1bbca1f1511417fe2a8fddc4e0a760da9beae9"
-    },
-    {
-      "file": "src/audio/scoreComposer.js",
-      "sha256": "7c4f21496eec5b5bb5f4def14e2cb05f3be87eab7d3fa1c72e44485f0a3529d8"
-    },
-    {
-      "file": "src/audio/scoreComposer.test.js",
-      "sha256": "8361cd605a7f4e4df5a4e1b56d8f386cd9553b3b4d0d9ec1d90b3b682179a5bf"
-    },
-    {
-      "file": "src/audio/scoreSynth.js",
-      "sha256": "27483d6c3156e38a1065ec8ae77c3f3568778c48187b98d9371c9855185f5d1c"
-    },
-    {
-      "file": "src/audio/scoreSynth.test.js",
-      "sha256": "c2aaac35b9c4673a77caaf1f4bbefa8b467db8d34110d45afe8656d50a02e851"
-    },
-    {
-      "file": "src/audio/soundFacade.js",
-      "sha256": "b67cf017ca31e3a88e181d9f158147db75ebdaa68696c1f6b370472a214f3b45"
-    },
-    {
-      "file": "src/components/HUD.jsx",
-      "sha256": "5cbf4d25358a139e8a79cdbf2c51816f434f119e701b6ea4bad5e95b5682f5df"
-    },
-    {
-      "file": "src/components/MobileHUD.jsx",
-      "sha256": "0cf78466a4cb5c63a624600d826ac3b4acc778c07d720081bcc0c17f49bc8241"
-    },
-    {
-      "file": "src/components/OperationArenaOverlay.jsx",
-      "sha256": "490bc2e288b775fec94dc41588f1a0e0e73f55da04aefc6a599775eebad98230"
-    },
-    {
-      "file": "src/components/OperationArenaOverlay.test.jsx",
-      "sha256": "4cac49e106ead6252e6c9648aa66eb801a9821438eeccc39f4dbe42d5e6796d4"
-    },
-    {
-      "file": "src/components/PerkModal.jsx",
-      "sha256": "8ccb59d43bc62479474438a1a4d066dbc70cf884b6391ad6484819fc96647ccc"
-    },
-    {
-      "file": "src/components/WaveShopModal.jsx",
-      "sha256": "7cdef35ac4de9b6bf5852b29b9c5ca606b2bceb3c490053932831a25b23371ea"
-    },
-    {
-      "file": "src/config/changelog.js",
-      "sha256": "f7705f0c3e7b8ed16a21c608ae835ea0fefa7e425ab244277fee8617784d71a8"
-    },
-    {
-      "file": "src/config/modeCatalog.js",
-      "sha256": "37956e1acc3e5789d33be6c37b9f4b6c8c742d00cfb7f75622a7b87fcf39d80c"
-    },
-    {
-      "file": "src/config/quickRules.js",
-      "sha256": "50017a133db89abc5ae11e8dfb97dfad61ea3b6fc0f53d8c3c6f02182f581035"
-    },
-    {
-      "file": "src/content/fieldManual.js",
-      "sha256": "83f58c38a1261964201c3373c51d8eb9230e131d001ebc6389a39554bfc441bd"
-    },
-    {
-      "file": "src/drawGame.js",
-      "sha256": "f030ebf6631e01afbbfb7210174fe2304f98c1515cf08302ee46aa0f2bbe241a"
-    },
-    {
-      "file": "src/hooks/useOperationMode.interactionAudio.test.jsx",
-      "sha256": "27ceb1f9cc48370dbdde2e788822b7652356f48e92818ec7b11ab4aa921d02bc"
-    },
-    {
-      "file": "src/hooks/useOperationMode.js",
-      "sha256": "a1effa807b4ad4f12568c7436e1fc79a0e92ee578affbe48a21dd32c62b9e846"
-    },
-    {
-      "file": "src/modes/sewerZombies.js",
-      "sha256": "0420ed2fcb99fad0712ee6a0cb777a8a7ce216b1a27612d8509efdac1212cd8c"
-    },
-    {
-      "file": "src/modes/sewerZombies.test.js",
-      "sha256": "b971495ffc3a367c1991c098af8185ef1ec7353fa00baee4118463cc2a4952b5"
-    },
-    {
-      "file": "src/sounds.js",
-      "sha256": "b60a4d1448bd49a7b8da0a2f49ad41f59ad7a92909a09090e8be334220f48868"
-    },
-    {
-      "file": "src/systems/defeatEconomy.js",
-      "sha256": "d9a8286709da45ed99935017ac45b48bee9ff8f0206fc54bf0b3cc526a95d6c1"
-    },
-    {
-      "file": "src/systems/enemyFrame.js",
-      "sha256": "0b51f71d7ad403416d8dd99eb3f117c8e285ebe8f259ac4bc520f15c02d38d2a"
-    },
-    {
-      "file": "src/systems/modeDefinition.js",
-      "sha256": "02a6e80dce02f2f31ae1c7fc6c0b2d6e5cba4a8c3cb3993e6a78d8f7f0e74425"
-    },
-    {
-      "file": "src/systems/modeDefinition.test.js",
-      "sha256": "8e4838f3f85284e5b79c0c6897b838b791ccac1a1c3ad5f6ba987a109533adf3"
-    },
-    {
-      "file": "src/systems/modeRegistry.js",
-      "sha256": "a2a7157a4a32eaa870a87062beb627a082434df4dd85c06cf87d7d457acfbb18"
-    },
-    {
-      "file": "src/systems/modeRules.js",
-      "sha256": "7d72a84237baecff2df1b275e3a34a4ae070ac997dbfa9a9a2608991ea947d63"
-    },
-    {
-      "file": "src/systems/modeRules.test.js",
-      "sha256": "68d98e0ed150707d19faf66ea7486b3fb00b67e1791b9fc46b31aa83993e5c91"
-    },
-    {
-      "file": "src/systems/operationBattlefield.js",
-      "sha256": "da1e9016d68496fd8364808e411cc8d5ea7e5291d98c4ae1852075ae70cb6dcf"
-    },
-    {
-      "file": "src/systems/operationBattlefield.test.js",
-      "sha256": "54dd876f19decd43d24fb6e97936ea15661ff3000e3438cd36b60b49de663ea2"
-    },
-    {
-      "file": "src/systems/operationCampaign.js",
-      "sha256": "9bd3869253f9c0344fba5801659c7f81cc7c03d2d0b0b4bddd6a93ae3940023b"
-    },
-    {
-      "file": "src/systems/operationCampaign.test.js",
-      "sha256": "3aeea6b7bf8ae2c110df2072db6712d239a9cf05f418d4d44080753595279e3d"
-    },
-    {
-      "file": "src/systems/operationEncounterContract.js",
-      "sha256": "4644551a6901d223ca17ecb3191f6b3616a37dda1220fed27651e920eea3876e"
-    },
-    {
-      "file": "src/systems/operationMissionSnapshot.test.js",
-      "sha256": "f03253327b1959e58236eca4e00babb5639df0af5e8ea3d65b968f58663ef39b"
-    },
-    {
-      "file": "src/systems/operationRuntimeRules.js",
-      "sha256": "e838e34a516facb62785a02cc13bfde024a0e4515b42f2f5ee7c5452cbd87b4a"
-    },
-    {
-      "file": "src/systems/progressionFlow.js",
-      "sha256": "c23c579aa7ae2a62714db9bf48e9a768746f1bd2571a0b0b5e5d69b949971451"
-    },
-    {
-      "file": "src/systems/progressionFlow.test.js",
-      "sha256": "4c0ff2f670e27b0f7f47bbf1c70d2ecefecacbfd96553c7e78e2c2352b62039e"
-    },
-    {
-      "file": "src/systems/zombieMode.js",
-      "sha256": "23bbe250718ade0346ee4bfcef77e53da58c631e6429023dd0c7a39b809ccfc3"
-    },
-    {
-      "file": "src/systems/zombieMode.test.js",
-      "sha256": "2147fdc7be257c1e37350cc2609ff05b4ca3951859f0229836ed65a7457d9951"
-    },
-    {
-      "file": "src/systems/zombieRenderer.js",
-      "sha256": "72bc114ac8ce3821252d62b464c79389b4589b53f376af73650fe9dd61deb8f4"
-    },
-    {
-      "file": "src/utils/levelFlow.js",
-      "sha256": "4b10e97ce13c3d1cd8b3be811b3b350c17a4c1a84871344f75b623006d4e9587"
-    },
-    {
-      "file": "src/utils/levelFlow.test.js",
-      "sha256": "52e4ba8e20b92f086ace610e20769cb84b79c653c07d6eceb45a1ae8b745ea62"
+      "file": "src/components/DeathScreen.jsx",
+      "sha256": "09a709b6e5b72f6beaa08fffad990c91336b23e33051d4ed16009981f3858e68"
     }
   ],
   "captures": [
     {
-      "file": "session-182/before-standard-sewer-night-390.png",
-      "sha256": "6e533114b973824d7687f16278957c7d0919b0f27ef7a0c47832f419eb733e7b",
+      "file": "end-game-scroll/before-defeat-sewer-night-390-top.png",
+      "sha256": "f1638991c7f0647a94ab61c487caadbd325d60649ba83dec17abab2157d54f03",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
-        "height": 900
+        "height": 844
       },
-      "page": "standard live combat",
+      "page": "Death results · top",
       "phase": "before"
     },
     {
-      "file": "session-182/before-zombies-sewer-night-390.png",
-      "sha256": "25e22186ccfd7732f97edd54387038d3efeeb49ec037cfbfd1a86eed39bbfe1e",
+      "file": "end-game-scroll/before-defeat-sewer-night-390-submission.png",
+      "sha256": "29a74aeabb9fa3401371e24fcc486b4944e3d14bc4758dbf93869b19a0432306",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
-        "height": 900
+        "height": 844
       },
-      "page": "zombies live combat",
+      "page": "Death results · submission",
       "phase": "before"
     },
     {
-      "file": "session-182/before-operation-sewer-night-390.png",
-      "sha256": "e7ce8ea9ab4a714024e9d37e64e7504a60a70ced89a9c66e42caeabd52614ead",
+      "file": "end-game-scroll/before-defeat-sewer-night-390-bottom.png",
+      "sha256": "f5edafbae7e701692cc56bcf88c9cd5ef4a79f10e98e5cd6a75924e98e097d37",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
-        "height": 900
+        "height": 844
       },
-      "page": "operation live combat",
+      "page": "Death results · bottom",
       "phase": "before"
     },
     {
-      "file": "session-182/before-standard-porcelain-day-390.png",
-      "sha256": "cd5c206b23dbed102cbce013448f22c7ab02aeee03b18b3a5294a9e937ceb84a",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
+      "file": "end-game-scroll/before-defeat-sewer-night-1440-top.png",
+      "sha256": "576e7a812b23653e29c6696b2026bb9b3d4b3a0248b165b35ec36cebad43b82b",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
       "viewport": {
-        "width": 390,
+        "width": 1440,
         "height": 900
       },
-      "page": "standard live combat",
+      "page": "Death results · top",
       "phase": "before"
     },
     {
-      "file": "session-182/before-zombies-porcelain-day-390.png",
-      "sha256": "8fbdb33af7344d9b5cb68b5bd350e75604e8081f63a98ae5dc8761ee2be0e0d2",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
+      "file": "end-game-scroll/before-defeat-sewer-night-1440-submission.png",
+      "sha256": "a3ec307eff4b36a09143f82690858e84baa82a900a628759a227241051b0db1a",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
       "viewport": {
-        "width": 390,
+        "width": 1440,
         "height": 900
       },
-      "page": "zombies live combat",
+      "page": "Death results · submission",
       "phase": "before"
     },
     {
-      "file": "session-182/before-operation-porcelain-day-390.png",
-      "sha256": "8923e345d6895c4db2aa2e3452f5d4b7072d62c24929c34fd774e8c4376ac252",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
+      "file": "end-game-scroll/before-defeat-sewer-night-1440-bottom.png",
+      "sha256": "98cabb35e5fecf5c7cc6ee725a7ce871d984a7fe0a0e1ec119c2cce77c608888",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
       "viewport": {
-        "width": 390,
+        "width": 1440,
         "height": 900
       },
-      "page": "operation live combat",
+      "page": "Death results · bottom",
       "phase": "before"
     },
     {
-      "file": "session-182/before-standard-sewer-night-1440.png",
-      "sha256": "e9c3c02990aefdc9f436d76934f8e6e237d10d56541c67089c0e86b143b57687",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
+      "file": "end-game-scroll/before-defeat-porcelain-day-390-top.png",
+      "sha256": "f1638991c7f0647a94ab61c487caadbd325d60649ba83dec17abab2157d54f03",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
       "viewport": {
-        "width": 1440,
-        "height": 900
+        "width": 390,
+        "height": 844
       },
-      "page": "standard live combat",
+      "page": "Death results · top",
       "phase": "before"
     },
     {
-      "file": "session-182/before-zombies-sewer-night-1440.png",
-      "sha256": "651a59cdfc09ee0a7f491981752052a2b891465d5dd40d1659692ac8500a37bd",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
+      "file": "end-game-scroll/before-defeat-porcelain-day-390-submission.png",
+      "sha256": "29a74aeabb9fa3401371e24fcc486b4944e3d14bc4758dbf93869b19a0432306",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
       "viewport": {
-        "width": 1440,
-        "height": 900
+        "width": 390,
+        "height": 844
       },
-      "page": "zombies live combat",
+      "page": "Death results · submission",
       "phase": "before"
     },
     {
-      "file": "session-182/before-operation-sewer-night-1440.png",
-      "sha256": "a47b6a94228d2ca780311ba6f661a5700ea466602ae273b3f267bd162ce8669b",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
+      "file": "end-game-scroll/before-defeat-porcelain-day-390-bottom.png",
+      "sha256": "e738ee4b83598de9163a28bfcb73bcdc170db87dd8abaf6a423c22c2b13ec5dc",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
       "viewport": {
-        "width": 1440,
-        "height": 900
+        "width": 390,
+        "height": 844
       },
-      "page": "operation live combat",
+      "page": "Death results · bottom",
       "phase": "before"
     },
     {
-      "file": "session-182/before-standard-porcelain-day-1440.png",
-      "sha256": "1a1dd77c7b474d0cadb3e4fd7f19ed632f07f71c9e589a028276d51522a4143d",
+      "file": "end-game-scroll/before-defeat-porcelain-day-1440-top.png",
+      "sha256": "7c1456905954d4dc12f7d259f45381c7acaed66124507a65a12a8a82034899a7",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "standard live combat",
+      "page": "Death results · top",
       "phase": "before"
     },
     {
-      "file": "session-182/before-zombies-porcelain-day-1440.png",
-      "sha256": "33f42d4426c8655ab6eb00a36627010d5f5cb926e79a1065271337df749eaf55",
+      "file": "end-game-scroll/before-defeat-porcelain-day-1440-submission.png",
+      "sha256": "cccd0aff66607afa66ad630e0947e6f9b1ecf7ace8fe6b690ff163f362c08d64",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "zombies live combat",
+      "page": "Death results · submission",
       "phase": "before"
     },
     {
-      "file": "session-182/before-operation-porcelain-day-1440.png",
-      "sha256": "b0db5f505f15c3bcf473b7843579aab0f6b34f36b3344ce0711da3103125858c",
+      "file": "end-game-scroll/before-defeat-porcelain-day-1440-bottom.png",
+      "sha256": "942a7c6efa77deb0747237a3de84d79a13fb18ebd61dacc627c553058d9989f6",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "operation live combat",
+      "page": "Death results · bottom",
       "phase": "before"
     },
     {
-      "file": "session-182/staging-standard-sewer-night-390.png",
-      "sha256": "5d7e97b4783c2b6cb6bb95307eb6111dd65b3457e4fd30322fb28c3aa417b110",
+      "file": "end-game-scroll/before-victory-sewer-night-390-top.png",
+      "sha256": "8b92a2939cf3e14d05e9f5f4407e75bbd92c729463dec25c2b96bdd2c9be50f9",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
-        "height": 900
+        "height": 844
       },
-      "page": "standard live combat",
-      "phase": "after"
-    },
-    {
-      "file": "session-182/staging-zombies-sewer-night-390.png",
-      "sha256": "47c4f84b64606362f4e5000177c69fd55b348b8aede10673cf57a397a62e225a",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "page": "zombies live combat",
-      "phase": "after"
-    },
-    {
-      "file": "session-182/staging-operation-sewer-night-390.png",
-      "sha256": "859e3ba3b3e0dcc62dd0a41da9bd95bf7b08f9938fa4eea85fb1296286bd413f",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "page": "operation live combat",
-      "phase": "after"
-    },
-    {
-      "file": "session-182/staging-standard-porcelain-day-390.png",
-      "sha256": "1730de1ff06bd6bd34374cda47931e1843dda5624af5c0ef4b1a62cf13cd3f0a",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "page": "standard live combat",
-      "phase": "after"
-    },
-    {
-      "file": "session-182/staging-zombies-porcelain-day-390.png",
-      "sha256": "76cf131435418200f552e99680ec6a77646c829df2c6b92506b7e4878f8e3c3a",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "page": "zombies live combat",
-      "phase": "after"
-    },
-    {
-      "file": "session-182/staging-operation-porcelain-day-390.png",
-      "sha256": "efe708b42cb5aeef8a78fc79b397c33bc0e21f9ce1d97f3c5e845873704be1ac",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "page": "operation live combat",
-      "phase": "after"
-    },
-    {
-      "file": "session-182/staging-standard-sewer-night-1440.png",
-      "sha256": "daedaa8cc233029f2f8404dccf0ca7ab459cabeefb43660ea0a5eb71ff37bee8",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "standard live combat",
-      "phase": "after"
-    },
-    {
-      "file": "session-182/staging-zombies-sewer-night-1440.png",
-      "sha256": "ec8c99396c8c3a75c38d8dd8790e092e7cb256da70e6b5b3dc9bd00a92997d90",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "zombies live combat",
-      "phase": "after"
-    },
-    {
-      "file": "session-182/staging-operation-sewer-night-1440.png",
-      "sha256": "0a9c18be9b4e6dd52488c92d1d29207fbc6ba13435082c0dc964204ded2c788a",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "operation live combat",
-      "phase": "after"
-    },
-    {
-      "file": "session-182/staging-standard-porcelain-day-1440.png",
-      "sha256": "aaeec9c380ae436bb4db2a210edac99a68df10a186e3d75c2ffd0ffd5aadd890",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "standard live combat",
-      "phase": "after"
-    },
-    {
-      "file": "session-182/staging-zombies-porcelain-day-1440.png",
-      "sha256": "ce31abfde13dd1e3196d64e25a0c2ed7a51028501e5d256ad55fc6e93d4306b6",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "zombies live combat",
-      "phase": "after"
-    },
-    {
-      "file": "session-182/staging-operation-porcelain-day-1440.png",
-      "sha256": "fe26a322c1b1614c4ff4ebb9953d7ecdbcea70bb8d77e3644c19ed8d3d808534",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "operation live combat",
-      "phase": "after"
-    },
-    {
-      "file": "session-182/production-standard-sewer-night-390.png",
-      "sha256": "b9b5d6c539baa29def0a94f8821f5ad0294a0fe5226275c18816a63aba94c4f7",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "page": "standard live combat",
-      "phase": "after"
-    },
-    {
-      "file": "session-182/production-zombies-sewer-night-390.png",
-      "sha256": "0c359ef2a776d298f344ec6c00646d7df2f09867c22d7f1aaa85e207a65eaf05",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "page": "zombies live combat",
-      "phase": "after"
-    },
-    {
-      "file": "session-182/production-operation-sewer-night-390.png",
-      "sha256": "11ba917348562e4f5186d5335f05fc7ea12dba2e920a2a16b3097e7a504adf05",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "page": "operation live combat",
-      "phase": "after"
-    },
-    {
-      "file": "session-182/production-standard-porcelain-day-390.png",
-      "sha256": "eabe450f0bef856683b9e63473002f7d47d7c9ab122c591e14c2355db2eedcbd",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "page": "standard live combat",
-      "phase": "after"
-    },
-    {
-      "file": "session-182/production-zombies-porcelain-day-390.png",
-      "sha256": "9ce2ec302499e28e2f78b116d7a27a1c4f3c3b4d631e67880562b8d23de60c10",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "page": "zombies live combat",
-      "phase": "after"
-    },
-    {
-      "file": "session-182/production-operation-porcelain-day-390.png",
-      "sha256": "58cbf1899c71186194c979db443ca0b7dbed3e25a515357d9b970d20512aaece",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "page": "operation live combat",
-      "phase": "after"
-    },
-    {
-      "file": "session-182/production-standard-sewer-night-1440.png",
-      "sha256": "55e1fab642e3a6aba737a81b2c0727d54cedfbfcd9e933bf692238bd997e387d",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "standard live combat",
-      "phase": "after"
-    },
-    {
-      "file": "session-182/production-zombies-sewer-night-1440.png",
-      "sha256": "a4ce1d4efcdaa2bfb42a86dbe8e3a96b0b2607803cdf1954f277ed1ca94f445a",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "zombies live combat",
-      "phase": "after"
-    },
-    {
-      "file": "session-182/production-operation-sewer-night-1440.png",
-      "sha256": "0942e32d5789eafe01a2936316b5acd2d2de3bb2f2c9ef697b3a793c80299eb4",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "operation live combat",
-      "phase": "after"
-    },
-    {
-      "file": "session-182/production-standard-porcelain-day-1440.png",
-      "sha256": "491090c80841ec895808d5cc06506c30f79f04a74acbb4bae8eec4de4534a4ec",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "standard live combat",
-      "phase": "after"
-    },
-    {
-      "file": "session-182/production-zombies-porcelain-day-1440.png",
-      "sha256": "ef64668194d054907dd3f45380db77dda191ea353d0e2ce8e90af0ebbf18648d",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "zombies live combat",
-      "phase": "after"
-    },
-    {
-      "file": "session-182/production-operation-porcelain-day-1440.png",
-      "sha256": "197e6eaf0870fad282d7ec2548d42445f681feb7606ab835893eb94865638405",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "operation live combat",
-      "phase": "after"
-    },
-    {
-      "file": "session-182/checkpoint-porcelain-day-1440.png",
-      "sha256": "597783a21cb6cd5f96b005f1de28cd8c08953d944cb5064f5be8d6a8581fbd15",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "Classic checkpoint; assisted threshold",
-      "phase": "after"
-    },
-    {
-      "file": "session-182/checkpoint-porcelain-day-390.png",
-      "sha256": "a1a14a89269f59a2c9482a638f3c7aefd0307d22ca9638cc3604b6a258ed783e",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "page": "Classic checkpoint; assisted threshold",
-      "phase": "after"
-    },
-    {
-      "file": "session-182/checkpoint-sewer-night-1440.png",
-      "sha256": "daba659c64acefa485e21e523918e168f0c4bf66524da061734aa151122c9b0a",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "Classic checkpoint; assisted threshold",
-      "phase": "after"
-    },
-    {
-      "file": "session-182/checkpoint-sewer-night-390.png",
-      "sha256": "22fb631150fb1d95c9f1139daece82b6986f736546f72821a2afacf5cc5112d2",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "page": "Classic checkpoint; assisted threshold",
-      "phase": "after"
-    },
-    {
-      "file": "session-182/checkpoint-before-porcelain-day-1440.png",
-      "sha256": "a2952d506470c80d2f6258eafbbf0d29899b1903985154f1f3fa3d694a96cfec",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "Classic checkpoint; assisted threshold",
+      "page": "Victory results · top",
       "phase": "before"
     },
     {
-      "file": "session-182/checkpoint-before-porcelain-day-390.png",
-      "sha256": "16046228cb51ab9dd63a93327ffd7a80f428fdc2c6aca23c90821acd3571724c",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
+      "file": "end-game-scroll/before-victory-sewer-night-390-submission.png",
+      "sha256": "676cf5305a466c22f4dc335bcb9fb8832e8d000d3cd88f44c8810352c33d34e6",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
-        "height": 900
+        "height": 844
       },
-      "page": "Classic checkpoint; assisted threshold",
+      "page": "Victory results · submission",
       "phase": "before"
     },
     {
-      "file": "session-182/checkpoint-before-sewer-night-1440.png",
-      "sha256": "6ab41e449432d92c1dc27ae19d3cdd47e6812ab271103b26eb7d37dd2422999c",
+      "file": "end-game-scroll/before-victory-sewer-night-390-bottom.png",
+      "sha256": "86b18b7dc0c8ac741ba02de42999e7d53b362b4c78e8211f8a00c587bdef2e4b",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
-        "width": 1440,
-        "height": 900
+        "width": 390,
+        "height": 844
       },
-      "page": "Classic checkpoint; assisted threshold",
+      "page": "Victory results · bottom",
       "phase": "before"
     },
     {
-      "file": "session-182/checkpoint-before-sewer-night-390.png",
-      "sha256": "b5cee4e59a38bc89bce61f0c3333beae29121a1cf9dbc6330e5d60c0be4c2a47",
+      "file": "end-game-scroll/before-victory-sewer-night-1440-top.png",
+      "sha256": "9fd4e3026cc1d8a93745170895f6153fb419d1f75c44d73b4b84a1388cf5f5ef",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
-        "width": 390,
+        "width": 1440,
         "height": 900
       },
-      "page": "Classic checkpoint; assisted threshold",
+      "page": "Victory results · top",
       "phase": "before"
     },
     {
-      "file": "session-182/creatures-porcelain-day-1440.png",
-      "sha256": "370faee57d1c6dc96199044a6266dd5e43cb1142463abb1f3894356130c49011",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "Five creatures and animation poses; assisted contrast fixture",
-      "phase": "after"
-    },
-    {
-      "file": "session-182/creatures-porcelain-day-390.png",
-      "sha256": "47e9bee083b99246d66aa8b3d72fdd00418f411bfcf8c20681c00180a52c3ca1",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "page": "Five creatures and animation poses; assisted contrast fixture",
-      "phase": "after"
-    },
-    {
-      "file": "session-182/creatures-sewer-night-1440.png",
-      "sha256": "8d239f350e202ed75f94a7cad0ce34bcbcf08a68b8cf903a87a37aee1796dea2",
+      "file": "end-game-scroll/before-victory-sewer-night-1440-submission.png",
+      "sha256": "6210e638d947a83a60ebe873df505c46688349efb35dded0c14db6082c3f8faf",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "Five creatures and animation poses; assisted contrast fixture",
-      "phase": "after"
+      "page": "Victory results · submission",
+      "phase": "before"
     },
     {
-      "file": "session-182/creatures-sewer-night-390.png",
-      "sha256": "c58d99a99297f0200aa443e2682b4bcb46ee01952588c746345c810432e4856d",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "page": "Five creatures and animation poses; assisted contrast fixture",
-      "phase": "after"
-    },
-    {
-      "file": "session-182/perk-fixture-porcelain-day-1440.png",
-      "sha256": "b331bb3e5670c2c9c78d42e2e6d514c28edbf47e1c319b2af88c1348bb683009",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "Skippable doctrine checkpoint; component fixture",
-      "phase": "after"
-    },
-    {
-      "file": "session-182/perk-fixture-porcelain-day-390.png",
-      "sha256": "62ba0c8e397079e8d1b03a8777963d5660f906ca71c3c3e3ff8e138d89894fd3",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "page": "Skippable doctrine checkpoint; component fixture",
-      "phase": "after"
-    },
-    {
-      "file": "session-182/perk-fixture-sewer-night-1440.png",
-      "sha256": "b9eb317d1bae68465c9d2945abe172d1c71dd23b62970466f0fe1e6ea0b7f1ed",
+      "file": "end-game-scroll/before-victory-sewer-night-1440-bottom.png",
+      "sha256": "14329ffdab0d2624925dd3a86c8f9ccca6d2f6c67e5cc31a9397ae5ec151bf8d",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "Skippable doctrine checkpoint; component fixture",
-      "phase": "after"
+      "page": "Victory results · bottom",
+      "phase": "before"
     },
     {
-      "file": "session-182/perk-fixture-sewer-night-390.png",
-      "sha256": "0945668160f1123330a26120928b2f3b9c997e2aa0b6f8c24faa62512fc1b7ac",
+      "file": "end-game-scroll/before-victory-porcelain-day-390-top.png",
+      "sha256": "8b92a2939cf3e14d05e9f5f4407e75bbd92c729463dec25c2b96bdd2c9be50f9",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "page": "Victory results · top",
+      "phase": "before"
+    },
+    {
+      "file": "end-game-scroll/before-victory-porcelain-day-390-submission.png",
+      "sha256": "676cf5305a466c22f4dc335bcb9fb8832e8d000d3cd88f44c8810352c33d34e6",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "page": "Victory results · submission",
+      "phase": "before"
+    },
+    {
+      "file": "end-game-scroll/before-victory-porcelain-day-390-bottom.png",
+      "sha256": "f640866fd8ed49fa82285a53bab5873ade86469ace392213e403e761030bd7ac",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "page": "Victory results · bottom",
+      "phase": "before"
+    },
+    {
+      "file": "end-game-scroll/before-victory-porcelain-day-1440-top.png",
+      "sha256": "9fd4e3026cc1d8a93745170895f6153fb419d1f75c44d73b4b84a1388cf5f5ef",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Victory results · top",
+      "phase": "before"
+    },
+    {
+      "file": "end-game-scroll/before-victory-porcelain-day-1440-submission.png",
+      "sha256": "f0ecd12fe6cd9b5e8f92cd1d9237339de8a5f9e94793777bcedd1b5cb8114520",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Victory results · submission",
+      "phase": "before"
+    },
+    {
+      "file": "end-game-scroll/before-victory-porcelain-day-1440-bottom.png",
+      "sha256": "7455e330f86684bfdbe561568e2c667a38c4c3346b98955d4449ea86e902f8b6",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Victory results · bottom",
+      "phase": "before"
+    },
+    {
+      "file": "end-game-scroll/after-defeat-sewer-night-390-top.png",
+      "sha256": "39c9c9323d088efe64cde9c1ef8d83ab7fbe7b96e2bc10839f598cbe26e04715",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
+        "height": 844
+      },
+      "page": "Death results · top",
+      "phase": "after"
+    },
+    {
+      "file": "end-game-scroll/after-defeat-sewer-night-390-submission.png",
+      "sha256": "a9586c2290ee466d9147857f0611d4f54b56aa0861e322761b673402ae087b2e",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "page": "Death results · submission",
+      "phase": "after"
+    },
+    {
+      "file": "end-game-scroll/after-defeat-sewer-night-390-bottom.png",
+      "sha256": "0c34c9a7ec229b7bf1db1de5a0b855a9fb260167bbf7bedbbe313d91bded1bc5",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "page": "Death results · bottom",
+      "phase": "after"
+    },
+    {
+      "file": "end-game-scroll/after-defeat-sewer-night-390-short-bottom.png",
+      "sha256": "f684e6aa36ceb38795cbe6830d23b83d4c8eadb9a655241bd2413034f24a3b99",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 360
+      },
+      "page": "Death results · short-bottom",
+      "phase": "after"
+    },
+    {
+      "file": "end-game-scroll/after-defeat-sewer-night-1440-top.png",
+      "sha256": "96936952a3367657517eb136cf592f38c0514cdcc74bef25b059fbf3d1164088",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
         "height": 900
       },
-      "page": "Skippable doctrine checkpoint; component fixture",
+      "page": "Death results · top",
+      "phase": "after"
+    },
+    {
+      "file": "end-game-scroll/after-defeat-sewer-night-1440-submission.png",
+      "sha256": "a52ff8bb8d37881952a0d6f084f3f02e85636748cbfb88b41a5ee3669341ac27",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Death results · submission",
+      "phase": "after"
+    },
+    {
+      "file": "end-game-scroll/after-defeat-sewer-night-1440-bottom.png",
+      "sha256": "0161968888a0fb7f574ff56a04b3594b2b234e27b1d92497ca3b72b5e0e7057d",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Death results · bottom",
+      "phase": "after"
+    },
+    {
+      "file": "end-game-scroll/after-defeat-porcelain-day-390-top.png",
+      "sha256": "224f914d17280b816b3f9c64e3c80288746c47fc5a618a34c0a613fcbd414455",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "page": "Death results · top",
+      "phase": "after"
+    },
+    {
+      "file": "end-game-scroll/after-defeat-porcelain-day-390-submission.png",
+      "sha256": "00a7f0af6c3bc06683b367f6daed27d3a8f90a2c98eccc76892fda1d771ee2d3",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "page": "Death results · submission",
+      "phase": "after"
+    },
+    {
+      "file": "end-game-scroll/after-defeat-porcelain-day-390-bottom.png",
+      "sha256": "6d464cba61288523d4a5c24a5aa992350861d71ff35ccc68409358c768094522",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "page": "Death results · bottom",
+      "phase": "after"
+    },
+    {
+      "file": "end-game-scroll/after-defeat-porcelain-day-390-short-bottom.png",
+      "sha256": "b29f67777744d6ec5f40a3c033b1c72d18a7b3081a7c0065d918d4e60ec7cf9f",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 360
+      },
+      "page": "Death results · short-bottom",
+      "phase": "after"
+    },
+    {
+      "file": "end-game-scroll/after-defeat-porcelain-day-1440-top.png",
+      "sha256": "8a9d3904486daf1be070775b23903d43ec2349d69c8a6d8032dd5462fad85c96",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Death results · top",
+      "phase": "after"
+    },
+    {
+      "file": "end-game-scroll/after-defeat-porcelain-day-1440-submission.png",
+      "sha256": "cfb64015e89a6eeebaf977e52161d8dc4bb36635cc49a3b45ed273349a2ac56a",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Death results · submission",
+      "phase": "after"
+    },
+    {
+      "file": "end-game-scroll/after-defeat-porcelain-day-1440-bottom.png",
+      "sha256": "3163d605b3c8ddad638d71554408d854d09592c271cd40c2a38639501fece399",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Death results · bottom",
+      "phase": "after"
+    },
+    {
+      "file": "end-game-scroll/after-victory-sewer-night-390-top.png",
+      "sha256": "8b92a2939cf3e14d05e9f5f4407e75bbd92c729463dec25c2b96bdd2c9be50f9",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "page": "Victory results · top",
+      "phase": "after"
+    },
+    {
+      "file": "end-game-scroll/after-victory-sewer-night-390-submission.png",
+      "sha256": "c299cd8255b2fc62539ac2b9ea5b0b012043f787a47ce9d80d7e859ade7dc786",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "page": "Victory results · submission",
+      "phase": "after"
+    },
+    {
+      "file": "end-game-scroll/after-victory-sewer-night-390-bottom.png",
+      "sha256": "b2c0ab386a9864b54815468599b3bf33e0e93eb49049a7487f681c546b5ebe3e",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "page": "Victory results · bottom",
+      "phase": "after"
+    },
+    {
+      "file": "end-game-scroll/after-victory-sewer-night-390-short-bottom.png",
+      "sha256": "bc37dbcecc420526a6bdb663895a03b8e9a9030a14c4150b306fd12532c98fef",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 360
+      },
+      "page": "Victory results · short-bottom",
+      "phase": "after"
+    },
+    {
+      "file": "end-game-scroll/after-victory-sewer-night-1440-top.png",
+      "sha256": "9fd4e3026cc1d8a93745170895f6153fb419d1f75c44d73b4b84a1388cf5f5ef",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Victory results · top",
+      "phase": "after"
+    },
+    {
+      "file": "end-game-scroll/after-victory-sewer-night-1440-submission.png",
+      "sha256": "d8a4931832b971c208807b168235dbc48c1ea377ae4a20de3e251c2e7065b693",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Victory results · submission",
+      "phase": "after"
+    },
+    {
+      "file": "end-game-scroll/after-victory-sewer-night-1440-bottom.png",
+      "sha256": "b73c80aea31cbdd2c9dddcba331c6bb126f74cf384afe182afd350badecc57a0",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Victory results · bottom",
+      "phase": "after"
+    },
+    {
+      "file": "end-game-scroll/after-victory-porcelain-day-390-top.png",
+      "sha256": "8b92a2939cf3e14d05e9f5f4407e75bbd92c729463dec25c2b96bdd2c9be50f9",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "page": "Victory results · top",
+      "phase": "after"
+    },
+    {
+      "file": "end-game-scroll/after-victory-porcelain-day-390-submission.png",
+      "sha256": "c299cd8255b2fc62539ac2b9ea5b0b012043f787a47ce9d80d7e859ade7dc786",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "page": "Victory results · submission",
+      "phase": "after"
+    },
+    {
+      "file": "end-game-scroll/after-victory-porcelain-day-390-bottom.png",
+      "sha256": "dc7b6b45a0d7ff87cd1df2277e5d298249948b8fbbdf7cd42887b352107fc13e",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "page": "Victory results · bottom",
+      "phase": "after"
+    },
+    {
+      "file": "end-game-scroll/after-victory-porcelain-day-390-short-bottom.png",
+      "sha256": "54f55d9d4655fba8c3125ba1d6010d9dd3d89b0e620714c42732f4bf8dad1bac",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 360
+      },
+      "page": "Victory results · short-bottom",
+      "phase": "after"
+    },
+    {
+      "file": "end-game-scroll/after-victory-porcelain-day-1440-top.png",
+      "sha256": "9fd4e3026cc1d8a93745170895f6153fb419d1f75c44d73b4b84a1388cf5f5ef",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Victory results · top",
+      "phase": "after"
+    },
+    {
+      "file": "end-game-scroll/after-victory-porcelain-day-1440-submission.png",
+      "sha256": "18473e28b73443666b931de2ca23858d1c3307ef47fb06b229289b7079636e7c",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Victory results · submission",
+      "phase": "after"
+    },
+    {
+      "file": "end-game-scroll/after-victory-porcelain-day-1440-bottom.png",
+      "sha256": "cf0f180dec348c7ba63ed97e23110d2da5985f3041395b686a85fc68d511b53e",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Victory results · bottom",
       "phase": "after"
     }
   ],
   "inspection": {
     "renderedPixelsReviewed": true,
-    "reviewer": "Codex direct image inspection",
-    "reviewedAt": "2026-10-03T22:24:32.804Z",
-    "scope": "Classic, Operations, Zombies at 390/1440px in both themes; skippable checkpoints and all five creature poses",
+    "reviewer": "Codex direct contact-sheet and original-image inspection",
+    "reviewedAt": "2026-10-04T00:37:46.403Z",
+    "scope": "Death and victory end screens, both themes, 390/1440px, top/submission/full-expanded bottom and short mobile state",
     "findings": [
-      "Operations field orders are compact and optional support is collapsed.",
-      "Zombie arena, pump rings, distinct creatures and attack boundaries are readable.",
-      "Classic checkpoint offers immediate return to combat; optional supplies are collapsed.",
-      "Reduced-motion creature probes are static; normal animation probes change rendered pixels."
+      "Baseline collapses score, share and main-menu controls; fully expanded content clips at viewport bottom.",
+      "Fixed screen shows score submission and sharing without disclosures.",
+      "Exit controls remain outside the optional actions disclosure; expanded long content and short mobile viewport have usable bottom clearance.",
+      "Keyboard End and mobile touch swipe scroll the results; all eight cases return to the main menu."
     ],
     "fixesApplied": [
-      "Removed overlapping generic tutorials from Operations and Zombies.",
-      "Replaced Operations wave/boss fanfare with one compact field-order cue.",
-      "Gave Sewer Zombies its own arena palette and varied spawn ordinal.",
-      "Outlined attack telegraphs and added skippable, compact checkpoints."
+      "Use normal block flow inside a bounded results scroll region.",
+      "Replace score/share disclosures with always-rendered labelled sections.",
+      "Move leaderboard, share-link and Back to Command controls outside More Run Actions.",
+      "Use inherited monospace section headings and at least 44px footer touch targets."
     ],
     "blockingDefectsOpen": 0
   },
   "methodLimits": [
-    "Assisted task/checkpoint and creature fixtures are integration evidence, not participant playtests.",
-    "Gameplay canvases retain their authored dark palettes in both interface themes.",
-    "Light creature sheets use an artificial background for a contrast stress test."
+    "Assisted end-state fixtures check layout and navigation, not balance or participant outcomes.",
+    "No online score submission or external share was performed.",
+    "End-game canvas-adjacent results retain their authored dark/red palette under both interface themes."
   ]
 }

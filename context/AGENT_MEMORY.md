@@ -1,3 +1,9 @@
+## End-game follow-up — 2026-10-03
+
+- Keep end-game results in normal block flow inside the viewport scroll region; flex compression can hide bottom clearance.
+- Score submission and sharing are always-rendered sections. Main-menu and leaderboard navigation must remain outside optional More Run Actions.
+- Eight hosted ending/theme/width fixtures verify scroll, keyboard End, mobile touch and return-to-menu; these are assisted UI checks, not participant evidence.
+
 ## S182 gameplay maintenance notes
 
 - Music lives in scoreComposer/scoreSynth behind soundFacade; initialize intrinsic gain to zero before scheduled automation. Pause and mute cancel scheduled voices.
