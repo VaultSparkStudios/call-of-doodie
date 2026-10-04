@@ -1,3 +1,17 @@
+## S183 final staging evidence
+
+Final staging ce356fde passes shell 7/7 and all eight ending cases with actual death/victory pack downloads, bottom controls, keyboard/touch scroll and menu return. Setup 4/4 and creature practice 20/20 passed the same source implementation before the terminal-only synchronization fix. CANON-053 passes 144 directly reviewed hash-bound captures. Strict lint, configured build, public/security/supply-chain gates and all corrected targeted regressions pass. Exact-main hosted suite and production follow-through remain pending.
+
+## Session 183 gameplay audit follow-through
+
+Setup links and version-2 cartridges preserve all twelve modes and four difficulties. Settings have accessible names and states; mobile run-code controls match desktop. Zombies and Bot Royale honor difficulty factors. Mobile combat removes duplicate weapon/ammo panels. Objective music gains distinct mission/pump phrases. Optional creature practice and pump-paced Zombies remain local experiments. Run exports record bounded build, kit, mutation, pacing and objective provenance.
+
+Real playthroughs exposed paused wall-clock reload completion, stale starting-kit initialization, and terminal score/wave mismatch that disabled victory exports. These are repaired with simulation-clock reloads, kit selection before initialization, and final-state synchronization.
+
+Local full suite: 1,929/1,930 initially passed; the one stale mode-wiring assertion was corrected and its suite passed. Subsequent setup/export/terminal regressions pass. Strict lint, configured build, public contracts and security gate pass. Sixty fixed-seed setup observations and twenty-four all-mode pause/resume follow-ups cover twelve modes/four difficulties plus mobile Normal. Real audio/control probes pass Classic, Zombies and Operations. Staging setup and creature checks pass in both themes at 390/1440; eight ending cases pass including 390×360 scrolling. Final staging/CI/production evidence follows the terminal fix.
+
+Human-versus-agent comparative outcomes, humor/listening judgments, physical devices, model-token savings and isolated production performance remain unmeasured. Automation proves integration and observations, not enjoyment, balance or retention. All twenty audit items retain their detailed acceptance status in the private audit artifact; source implementation is not blanket acceptance. Production deployment pending exact-main CI; FORGE/public-unlaunched remains unchanged.
+
 ## End-game follow-up — 2026-10-03
 
 Death and victory results now scroll fully, including short mobile viewports. Score submission and sharing remain expanded; leaderboard and Back to Command controls sit outside optional disclosures. Final staging fc2ca612 passes eight theme/width/ending cases, keyboard End, mobile touch scrolling and actual return-to-menu navigation. Strict lint, deployable build and 19 focused tests pass; 52 before/after captures are hash-bound in docs/visual-qa/LATEST.json. Production verification follows the direct-main deployment.

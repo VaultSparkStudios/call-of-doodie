@@ -149,6 +149,10 @@
     {
       "rel": "run-analysis-schema",
       "href": "https://callofdoodie.wtf/run-analysis-schema.json"
+    },
+    {
+      "rel": "agent-evidence-pack",
+      "href": "https://callofdoodie.wtf/agent-evidence-pack.json"
     }
   ],
   "productCapabilities": [

@@ -22,6 +22,14 @@ const baseProps = {
 };
 
 describe("MobileHUD", () => {
+  it("leaves mobile weapon and ammo to the action dock while preserving health and objective", () => {
+    const mobile = renderToStaticMarkup(<MobileHUD {...baseProps} isMobile modeHud={{ banner: "POWER THREE PUMPS" }} />);
+    expect(mobile).toContain("POWER THREE PUMPS");
+    expect(mobile).toContain("80");
+    expect(mobile).not.toContain("8/12");
+    expect(mobile).not.toContain("Banana Blaster");
+    expect(renderToStaticMarkup(<MobileHUD {...baseProps} />)).toContain("Banana Blaster");
+  });
   it("renders contract and readiness capabilities on the compact surface", () => {
     const html = renderToStaticMarkup(
       <MobileHUD

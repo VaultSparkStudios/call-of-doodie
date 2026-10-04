@@ -72,3 +72,10 @@ Formal S182 closeout gates: schema/context/architecture/genome checks pass; memo
 
 
 Explicit S182 closeout completed: autopilot exit 0 committed and pushed 5e3537d18386 to main, cleared the lock, and finalized the skill trace. GitHub Actions 37161648350 passed quality and deployment; production health reported 5e3537d18386 and shell assertions passed 7/7. All ten write-back records are reconciled; CDR remains updated locally under its intentional gitignore rule. A final records-only seal follows, with exact-revision deployment verification reported at handback.
+
+
+## 2026-10-04 — Session 183 gameplay audit follow-through
+
+Setup links and version-2 cartridges preserve all twelve modes and four difficulties. Settings have accessible names and states; mobile run-code controls match desktop. Zombies and Bot Royale honor difficulty factors. Mobile combat removes duplicate weapon/ammo panels. Objective music gains distinct mission/pump phrases. Optional creature practice and pump-paced Zombies remain local experiments. Run exports record bounded build, kit, mutation, pacing and objective provenance.
+Real playthroughs exposed paused wall-clock reload completion, stale starting-kit initialization, and terminal score/wave mismatch that disabled victory exports. These are repaired with simulation-clock reloads, kit selection before initialization, and final-state synchronization.
+Never treat frame/property guesses as actual simulation advancement. Missing clocks stay unknown; world-state changes are a bounded fallback. Keep normal, state-assisted, participant and hardware evidence separate. Human-versus-agent comparative outcomes, humor/listening judgments, physical devices, model-token savings and isolated production performance remain unmeasured. Automation proves integration and observations, not enjoyment, balance or retention. All twenty audit items retain their detailed acceptance status in the private audit artifact; source implementation is not blanket acceptance.

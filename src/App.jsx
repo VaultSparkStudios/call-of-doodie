@@ -33,7 +33,7 @@ import {
   setMusicVibe, startAmbient, stopAmbient,
   setDangerIntensity, stopDangerDrone, setMusicTier,
   getMusicBPM,
-  setBusVolume, setMusicLowpass, setMusicMode, setMusicPaused,
+  setBusVolume, setMusicLowpass, setMusicMode, setMusicObjective, setMusicPaused,
   soundPlayerHurt, soundEmptyMag, soundWeaponSwap, soundWaveAnnounce,
   soundCoinAt, soundShopPurchase, soundShopDeny,
 } from "./audio/soundFacade.js";
@@ -130,6 +130,7 @@ import { matchesExperiment } from "./utils/runBrain.js";
 import { applyThreatRecommendationChoice, queueCompletedRunFact, recordPostRunFieldReport } from "./systems/runFactFlow.js";
 import { applyModeRules, getModeRewardFlow, getModeRules, isBossWaveForMode, resolveModeId } from "./systems/modeRules.js";
 import { getModeMeta } from "./systems/modeRegistry.js";
+import { beginWeaponReload, advanceWeaponReload } from "./systems/weaponReload.js";
 import { resolveRunLaunch, prepareRunDependencies } from "./systems/runLaunch.js";
 
 // Combat systems chunk (enemy AI, projectiles). Preloaded at mount so a run start
@@ -761,6 +762,7 @@ export default function CallOfDoodie() {
     // Apply weekly mutation on top of normal game
     const _weeklyMut = getWeeklyMutation();
     applyWeeklyMutationWithAffinity(gsRef.current, _weeklyMut, treeUnlocked);
+    gsRef.current.runWeeklyMutation = _weeklyMut?.id || null;
     gsRef.current.playerSkin = meta.playerSkin || "";
 
     applyMetaUpgrades(perkModsRef.current, gsRef.current, ut);
@@ -794,6 +796,7 @@ export default function CallOfDoodie() {
     );
     // Apply starter loadout
     const loadout = starterLoadoutRef.current;
+    gsRef.current.runStarterLoadout = loadout;
     if (loadout === "cannon") {
       perkModsRef.current.damageMult = (perkModsRef.current.damageMult || 1) * 1.50;
       gsRef.current.player.health = Math.max(20, Math.floor(gsRef.current.player.maxHealth * 0.60));
@@ -877,7 +880,8 @@ export default function CallOfDoodie() {
     gsRef.current.hazards = arena.hazards;
     Object.assign(gsRef.current.player, combatRuntimeRef.current.findSafeArenaSpawn(arena, aw, ah, gsRef.current.player));
     updateCamera(gsRef.current.camera, gsRef.current.player, { viewW: w, viewH: h, snap: true });
-    modeRuntimeRef.current?.createModeState(modeDefRef.current, gsRef.current, { W: aw, H: ah, viewW: w, viewH: h, addText, addParticles, announce: _modeAnnounce, spawnBoss: (state, type) => _spawnBoss(state, aw, ah, difficultyRef.current, type) });
+    gsRef.current.runDifficulty = difficultyRef.current;
+    modeRuntimeRef.current?.createModeState(modeDefRef.current, gsRef.current, { W: aw, H: ah, viewW: w, viewH: h, difficulty: difficultyRef.current, addText, addParticles, announce: _modeAnnounce, spawnBoss: (state, type) => _spawnBoss(state, aw, ah, difficultyRef.current, type) });
 
     // Show meta toast if upgrades active
     const metaSnap = loadMetaProgress();
@@ -1300,7 +1304,8 @@ export default function CallOfDoodie() {
     const ne = gs.enemies[gs.enemies.length - 1];
     if (ne && gs.zombiesMode) {
       gs._sewerSpawnOrdinal = (gs._sewerSpawnOrdinal || 0) + 1;
-      combatRuntimeRef.current.mutateEnemyForZombieMode(ne, { wave: gs.currentWave, ordinal: gs._sewerSpawnOrdinal });
+      combatRuntimeRef.current.mutateEnemyForZombieMode(ne, { wave: gs.currentWave, ordinal: gs._sewerSpawnOrdinal, difficulty: gs.runDifficulty || difficultyRef.current, completedPumps: gs.sewerRun?.completedPumps, pacing: gs.sewerRun?.pacing, entrance: gs.sewerRun?.pendingEntrance });
+      if (ne.zombieEntrance) { gs.sewerRun.pendingEntrance = null; addText(gs, ne.x, ne.y - 45, `${ne.name} · ${ne.zombieTell}`, ne.color, true); }
     }
     if (ne && gs.visualPack !== VISUAL_PACKS.RETRO) {
       const activeRoster = [ne.typeIndex, ...gs.enemies.slice(-12).map((enemy) => enemy.typeIndex)];
@@ -1346,17 +1351,7 @@ export default function CallOfDoodie() {
       }
     }
     soundReload();
-    setTimeout(() => {
-      if (gsRef.current) {
-        const upgLevel = gsRef.current.weaponUpgrades?.[wpnIdx] || 0;
-        const maxAmmo = Math.floor(WEAPONS[wpnIdx].maxAmmo * (1 + upgLevel * 0.25) * (perkModsRef.current.ammoMult || 1));
-        gsRef.current.ammoCount = maxAmmo;
-        gsRef.current.weaponAmmos[wpnIdx] = maxAmmo;
-        setAmmo(maxAmmo);
-      }
-      setIsReloading(false); isReloadingRef.current = false;
-      if (gsRef.current?.overclocked) { gsRef.current.overclockedShots = 0; setOverclockedShots(0); }
-    }, WEAPONS[wpnIdx].reloadTime);
+    beginWeaponReload(gs, wpnIdx, WEAPONS[wpnIdx].reloadTime);
   }, [recordCommandTrace]);
 
   // ── Shoot ─────────────────────────────────────────────────────────────────
@@ -1592,6 +1587,7 @@ export default function CallOfDoodie() {
     releaseAllInputs(`run-ending:${endAttempt.cause}`);
     criticalHealthVisualRef.current = false;
     gs.criticalHealthVisualActive = false;
+    setScore(gs.score); setKills(gs.kills); setWave(gs.currentWave);
     setScreen("death");
     const _victory = endAttempt.cause === "mode_victory";
     setDeathMessage(_victory
@@ -1782,6 +1778,15 @@ export default function CallOfDoodie() {
       totalCrits: statsRef.current.crits || 0,
       bossKills: statsRef.current.bossKills || 0,
     });
+    runHistoryEntry.setup = {
+        starterLoadout: gs.runStarterLoadout,
+        zombiePacing: gs.sewerRun?.pacing || null,
+        weeklyMutation: gs.runWeeklyMutation || null,
+      };
+    if (!gs.operationMode && modeDefRef.current?.kind !== "legacy") {
+      runHistoryEntry.mode = modeDefRef.current.id;
+      runHistoryEntry.modeOutcome = modeRuntimeRef.current?.getModeOutcomeReceipt?.(gs, modeDefRef.current) || null;
+    }
     if (gs.operationMode && operationStateRef.current) {
       const partialOperationReceipt = buildOperationReceipt(operationStateRef.current);
       runHistoryEntry.mode = "operation";
@@ -2153,7 +2158,9 @@ export default function CallOfDoodie() {
     const _pendingDuelId = challengeOpts.duelId || null;
     stopMusic(); stopAmbient();
     settingsRef.current = loadSettings(); // refresh settings at game start
+    starterLoadoutRef.current = starterLoadout;
     const seed = initGame(forceSeed, challengeOpts.startWave, challengeOpts.drill || null);
+    if (gsRef.current?.sewerRun) gsRef.current.sewerRun.pacing = new URLSearchParams(window.location.search).get("zombiePacing") === "pumps" ? "pumps" : "time";
     if (gsRef.current) gsRef.current._duelId = _pendingDuelId;
     if (requestedOperation) {
       Object.assign(gsRef.current, startOperation({ operation: requestedOperation, challenge: challengeOpts, seed }));
@@ -2187,7 +2194,6 @@ export default function CallOfDoodie() {
     setAchievementsUnlocked([]); setAchievementPopup(null); setTimeSurvived(0);
     pausedRef.current = false; setPaused(false); setPauseReason(null); setExtraLives(0); extraLivesRef.current = 0;
     setGuardianAngelFlash(false); setWeaponUpgrades(WEAPONS.map(() => 0));
-    starterLoadoutRef.current = starterLoadout;
     // Check if this run follows the last RunBrain experiment suggestion
     try {
       const _intent = loadExperimentIntent();
@@ -2235,6 +2241,7 @@ export default function CallOfDoodie() {
     timerRef.current = setInterval(() => { if (!pausedRef.current && !perkPendingRef.current && !shopPendingRef.current && !routePendingRef.current && !bossCutsceneRef.current && !waveAnnouncePendingRef.current && !mutationPendingRef.current) setTimeSurvived(t => t + 1); }, 1000);
     setMusicLowpass(false); // clear any lingering last-stand muffle from the previous run
     setMusicMode(requestedOperation ? "operations" : zombiesRef.current ? "zombies" : "classic");
+    setMusicObjective(requestedOperation ? gsRef.current.operationEncounterVerb : zombiesRef.current ? "pump-0" : "none");
     setMusicPaused(false);
     preloadBossAtlas(); // warm boss sprites before the first boss wave (S155)
     setTimeout(() => {
@@ -2321,6 +2328,7 @@ export default function CallOfDoodie() {
     const prevIdx = currentWeaponRef.current;
     if (idx !== prevIdx) soundWeaponSwap(idx);
     setCurrentWeapon(idx); currentWeaponRef.current = idx;
+    if (gs) gs.pendingReload = null;
     setIsReloading(false); isReloadingRef.current = false;
     recordCommandTrace("swap", `w${idx}`);
     // ── Analytics: weapon switch (throttled to once per 2s) ──
@@ -2468,6 +2476,16 @@ export default function CallOfDoodie() {
     }
 
     // ── Dash movement ──
+    const reloadedWeapon = advanceWeaponReload(gs);
+    if (reloadedWeapon !== null) {
+      const upgrade = gs.weaponUpgrades?.[reloadedWeapon] || 0;
+      const maxAmmo = Math.floor(WEAPONS[reloadedWeapon].maxAmmo * (1 + upgrade * 0.25) * (perkModsRef.current.ammoMult || 1));
+      gs.weaponAmmos[reloadedWeapon] = maxAmmo;
+      if (currentWeaponRef.current === reloadedWeapon) { gs.ammoCount = maxAmmo; setAmmo(maxAmmo); }
+      setIsReloading(false); isReloadingRef.current = false;
+      if (gs.overclocked) { gs.overclockedShots = 0; setOverclockedShots(0); }
+    }
+
     if (dashRef.current.active > 0) {
       dashRef.current.active--;
       p.x += dashRef.current.dx * DASH_SPEED;
@@ -3286,7 +3304,7 @@ export default function CallOfDoodie() {
 
     // ── Mode mechanics: allies, zones, verb objectives, win/lose (S163) ──
     const modeWaveBefore = gs.currentWave;
-    const modeVerdict = modeRuntimeRef.current ? modeRuntimeRef.current.stepMode(gs, modeDefRef.current, { W: AW, H: AH, viewW: W, viewH: H, frame: frameCountRef.current, addText, addParticles, announce: _modeAnnounce, spawnEnemy, setHealth, handlePlayerDeath }) : null;
+    const modeVerdict = modeRuntimeRef.current ? modeRuntimeRef.current.stepMode(gs, modeDefRef.current, { W: AW, H: AH, viewW: W, viewH: H, frame: frameCountRef.current, addText, addParticles, announce: _modeAnnounce, spawnEnemy, setHealth, setMusicObjective, handlePlayerDeath }) : null;
     if (gs.currentWave !== modeWaveBefore) setWave(gs.currentWave);
     if (gs.zombiesMode && frameCountRef.current % 30 === 0) setScore(gs.score);
     if (modeVerdict === "win") { handleModeVictory(gs); return; }

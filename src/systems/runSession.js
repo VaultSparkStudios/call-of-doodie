@@ -1,5 +1,6 @@
 import { buildRunClaim } from "../utils/runSubmission.js";
 import { buildStudioGameEvent } from "../utils/runIntelligence.js";
+import { BUILD_PROVENANCE, normalizeBuildProvenance } from "../config/buildProvenance.js";
 
 export function resolveRunModeFromFlags({
   scoreAttack = false,
@@ -67,6 +68,7 @@ export function createRunHistoryEntry({
   flags = {},
   runSeed = null,
   modifier = null,
+  buildProvenance = BUILD_PROVENANCE,
   killedByType = null,
   killedByName = null,
   traceEvidence = null,
@@ -92,6 +94,7 @@ export function createRunHistoryEntry({
     mode: resolveRunModeFromFlags(flags),
     runSeed,
     modifier,
+    buildProvenance: normalizeBuildProvenance(buildProvenance),
     killedByType,
     killedByName,
     totalDamage: Math.max(0, Math.floor(Number(totalDamage) || 0)),
@@ -131,16 +134,17 @@ export function createRunHistoryEntry({
     };
   }
   if (integrityReceipt?.onlineEligible === false) {
+    const localMode = integrityReceipt.status === "local-mode";
     entry.integrityReceipt = {
-      status: "degraded",
+      status: localMode ? "local-mode" : "degraded",
       onlineEligible: false,
       label: integrityReceipt.label || "LOCAL ONLY · RUNTIME RECOVERY",
-      faultCount: Math.max(1, Number(integrityReceipt.faultCount) || 1),
-      occurrenceCount: Math.max(1, Number(integrityReceipt.occurrenceCount) || 1),
+      faultCount: localMode ? 0 : Math.max(1, Number(integrityReceipt.faultCount) || 1),
+      occurrenceCount: localMode ? 0 : Math.max(1, Number(integrityReceipt.occurrenceCount) || 1),
       stages: Array.isArray(integrityReceipt.stages)
         ? integrityReceipt.stages.filter(Boolean).map(String).slice(0, 8)
         : [],
-      claim: "competitive-eligibility-fails-closed",
+      claim: localMode ? "mode-policy-local-only" : "competitive-eligibility-fails-closed",
     };
   }
   if (performanceReceipt?.totalFrames > 0) {

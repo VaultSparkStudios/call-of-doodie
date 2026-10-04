@@ -1554,3 +1554,13 @@ Classic retains survival with four-wave checkpoints and at most one pending doct
 ## 2026-10-03 — Session 182 explicit founder closeout
 
 Close the existing S182 delivery rather than count an extra implementation session. Preserve append-only historical records and add current acceptance above them. Use Studio Ark for central intelligence requests; a queued or shipped request is not proof that IGNIS applied a rescore. No gameplay, rights, spending or lifecycle decision changed.
+
+
+## 2026-10-04 — Session 183 gameplay audit follow-through
+
+Keep depth-paced Zombies as the default; pump-paced introductions require the explicit experimental query. Creature practice is optional and lazy-loaded. Preserve player music preference and objective timers. Historical build/setup provenance stays unknown. Match terminal UI score/wave to saved authoritative state. The propagated brief workflow uses the checker’s documented Node 20 exception; project-owned build/deploy stays at Node 22+. Engineering redeployment does not promote FORGE to SPARKED; five-green-run launch history remains nonpassing.
+
+
+### S183 final release evidence
+
+Final staging is ce356fde. Studio doctor ran 230 of 233 checks: 155 passing, 4 failing, 2 blocking and 2 advisory failures; this is a central Studio health result, not a passing project-wide zero-blocker claim. Local project release/security/visual checks are recorded separately. No protocol hook is bypassed. Generic responsive tooling skipped; actual touched-state browser checks supply parity evidence. No SPARKED launch is authorized or declared.

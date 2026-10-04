@@ -113,7 +113,7 @@ export default function MobileHUD({
           )}
         </div>
       )}
-      <div data-testid="hud-vitals" style={{ position: "absolute", bottom: isMobile ? 8 : 132, left: isMobile ? 8 : "50%", right: isMobile ? 8 : "auto", width: isMobile ? "auto" : "min(680px, calc(100vw - 32px))", transform: isMobile ? "none" : "translateX(-50%)", display: "grid", gridTemplateColumns: "minmax(105px, 1fr) auto", alignItems: "end", gap: 8 }}>
+      <div data-testid="hud-vitals" style={{ position: "absolute", bottom: isMobile ? 8 : 132, left: isMobile ? 8 : "50%", right: isMobile ? 8 : "auto", width: isMobile ? "auto" : "min(680px, calc(100vw - 32px))", transform: isMobile ? "none" : "translateX(-50%)", display: "grid", gridTemplateColumns: isMobile ? "1fr" : "minmax(105px, 1fr) auto", alignItems: "end", gap: 8 }}>
         <div style={{ padding: "8px 10px", border: "1px solid rgba(255,255,255,.14)", borderRadius: 11, background: "rgba(4,7,10,.78)", backdropFilter: "blur(8px)" }}>
           <div style={{ display: "flex", justifyContent: "space-between", gap: 8, fontSize: 10, fontWeight: 850 }}><span>HEALTH{extraLives > 0 ? " · EXTRA LIFE" : ""}</span><span>{health}/{maxHealth}</span></div>
           <div style={{ height: 7, marginTop: 5, overflow: "hidden", borderRadius: 99, background: "rgba(255,255,255,.12)" }}>
@@ -127,11 +127,11 @@ export default function MobileHUD({
             ))}
           </div>
         </div>
-        <div style={{ minWidth: 112, padding: "8px 10px", border: `1px solid ${weapon.color}66`, borderRadius: 11, background: "rgba(4,7,10,.78)", textAlign: "right", backdropFilter: "blur(8px)" }}>
+        {!isMobile && <div style={{ minWidth: 112, padding: "8px 10px", border: `1px solid ${weapon.color}66`, borderRadius: 11, background: "rgba(4,7,10,.78)", textAlign: "right", backdropFilter: "blur(8px)" }}>
           <div style={{ color: weapon.color, fontSize: 10, fontWeight: 850, maxWidth: 120, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{weapon.emoji} {weapon.name}</div>
           <div style={{ marginTop: 2, fontSize: 15, fontWeight: 950 }}>{isReloading ? "Reloading" : `${ammo}/${weapon.maxAmmo}`}</div>
           <div style={{ marginTop: 3, color: "#94A0AE", fontSize: 8, fontWeight: 750 }}>{isMobile ? "Use action controls" : "R reload · Shift dash · Q grenade"}</div>
-        </div>
+        </div>}
       </div>
 
       {health < maxHealth * .3 && <div style={{ position: "absolute", inset: 0, boxShadow: `inset 0 0 ${Math.max(35, 110 - health)}px rgba(255,0,0,.34)` }} />}

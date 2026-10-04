@@ -28,6 +28,7 @@ import { renderChallengePreview } from "./lib/challenge-render.mjs";
 import { renderFieldLab } from "./lib/field-lab-render.mjs";
 import { CAPABILITY_EVIDENCE, PUBLIC_CAPABILITIES, capability, publicCapabilityManifest } from "../src/content/capabilities.js";
 import { RUN_ANALYSIS_SCHEMA } from "../src/utils/agentRunPack.js";
+import { buildAgentEvidencePack } from "./lib/agent-evidence-pack.mjs";
 
 const root = path.resolve("public");
 const liveGameplay = buildPublicGameplayContract();
@@ -361,6 +362,14 @@ queue("status.json", JSON.stringify({
 }, null, 2));
 
 const stale = [];
+queue("agent-evidence-pack.json", JSON.stringify(buildAgentEvidencePack({
+  gameplay: liveGameplay, runSchema: RUN_ANALYSIS_SCHEMA,
+  resources: {
+    '/gameplay-contract.json': `${JSON.stringify(liveGameplay, null, 2)}\n`,
+    '/run-analysis-schema.json': expected.get(path.join(root, 'run-analysis-schema.json')),
+    '/agents.json': expected.get(path.join(root, 'agents.json')),
+  },
+}), null, 2));
 for (const [target, content] of expected) {
   const current = fs.existsSync(target) ? fs.readFileSync(target, "utf8") : "";
   if (current === content) continue;

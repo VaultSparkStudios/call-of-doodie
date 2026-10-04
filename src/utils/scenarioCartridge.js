@@ -1,6 +1,12 @@
-const SCHEMA = "sewer-scenario-v1";
-const MODES = new Set(["standard", "score_attack", "daily_challenge", "cursed", "boss_rush", "speedrun", "gauntlet", "zombies"]);
-const DIFFICULTIES = new Set(["easy", "normal", "hard", "nightmare"]);
+import { DIFFICULTIES } from "../constants.js";
+import { FULL_MODE_CATALOG, MODE_CATALOG } from "../config/modeCatalog.js";
+
+export const SCENARIO_SCHEMA_VERSION = "sewer-scenario-v2";
+const SCHEMA = SCENARIO_SCHEMA_VERSION;
+const LEGACY_SCHEMA = "sewer-scenario-v1";
+const MODES = new Set(FULL_MODE_CATALOG.map(({ id }) => id));
+const LEGACY_MODES = new Set(MODE_CATALOG.map(({ id }) => id));
+const LEGACY_DIFFICULTIES = new Set(["easy", "normal", "hard", "nightmare"]);
 
 function safeText(value, max = 24) {
   return String(value ?? "").replace(/[^a-zA-Z0-9 _-]/g, "").trim().slice(0, max);
@@ -12,12 +18,16 @@ function checksum(value) {
   return (hash >>> 0).toString(36).padStart(7, "0");
 }
 
-export function buildScenarioCartridge({ seed, mode, difficulty, loadout, targetScore = null, rival = null } = {}) {
+function createCartridge({ seed, mode = "standard", difficulty = "normal", loadout, targetScore = null, rival = null } = {}, schema = SCHEMA) {
+  const legacy = schema === LEGACY_SCHEMA;
+  if (!(legacy ? LEGACY_MODES : MODES).has(mode) || !(legacy ? LEGACY_DIFFICULTIES.has(difficulty) : Object.hasOwn(DIFFICULTIES, difficulty))) return null;
+  const normalizedSeed = Number(seed ?? 0);
+  if (!Number.isSafeInteger(normalizedSeed) || normalizedSeed < 0 || normalizedSeed > 999999999) return null;
   const body = {
-    schemaVersion: SCHEMA,
-    seed: Math.max(0, Math.floor(Number(seed) || 0)),
-    mode: MODES.has(mode) ? mode : "standard",
-    difficulty: DIFFICULTIES.has(difficulty) ? difficulty : "normal",
+    schemaVersion: schema,
+    seed: normalizedSeed,
+    mode,
+    difficulty,
     loadout: safeText(loadout || "standard", 20) || "standard",
     targetScore: Number.isFinite(Number(targetScore)) ? Math.max(0, Math.floor(Number(targetScore))) : null,
     rival: safeText(rival, 18) || null,
@@ -25,11 +35,17 @@ export function buildScenarioCartridge({ seed, mode, difficulty, loadout, target
   return { ...body, checksum: checksum(JSON.stringify(body)) };
 }
 
+export function buildScenarioCartridge(input = {}) { return createCartridge(input); }
+
 export function validateScenarioCartridge(value) {
-  if (!value || value.schemaVersion !== SCHEMA) return { valid: false, reason: "schema" };
-  const rebuilt = buildScenarioCartridge(value);
+  if (!value || ![SCHEMA, LEGACY_SCHEMA].includes(value.schemaVersion)) return { valid: false, reason: "schema" };
+  const rebuilt = createCartridge(value, value.schemaVersion);
+  if (!rebuilt) return { valid: false, reason: "unsupported-setup" };
   if (rebuilt.checksum !== value.checksum) return { valid: false, reason: "integrity" };
-  return { valid: true, cartridge: rebuilt };
+  // Authenticate the old bytes before upgrading the obsolete difficulty name.
+  const cartridge = value.schemaVersion === LEGACY_SCHEMA
+    ? createCartridge({ ...rebuilt, difficulty: rebuilt.difficulty === "nightmare" ? "insane" : rebuilt.difficulty }) : rebuilt;
+  return { valid: true, cartridge };
 }
 
 export function encodeScenarioCartridge(value) {

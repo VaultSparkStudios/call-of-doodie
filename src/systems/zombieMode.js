@@ -1,3 +1,4 @@
+import { DIFFICULTIES } from "../constants.js";
 // Sewer creatures own their bodies and combat vocabulary, independent of classic AI.
 export const ZOMBIE_ROSTER = Object.freeze([
   { id: "shambler", name: "Union of the Unflushed", color: "#9fcb8f", health: 1.2, speed: 0.82, damage: 12, size: 36, tell: "BACK TO WORK", cycle: 240, windup: 48, active: 20 },
@@ -15,11 +16,18 @@ export function getZombieOutbreakPlan(wave = 1) {
 export function getZombieWaveEnemyCount(baseCount, wave = 1) {
   return Math.min(64, Math.max(1, Math.ceil((Number(baseCount) || 1) * getZombieOutbreakPlan(wave).enemyCountMult)));
 }
-export function mutateEnemyForZombieMode(enemy, { wave = 1, ordinal = 0 } = {}) {
+export function getZombieRosterAvailability({ wave = 1, completedPumps = 0, pacing = "time" } = {}) {
+  const depthAvailable = wave < 2 ? 2 : wave < 4 ? 4 : 5;
+  return pacing === "pumps" ? Math.max(depthAvailable, completedPumps >= 2 ? 5 : completedPumps >= 1 ? 4 : 2) : depthAvailable;
+}
+export function mutateEnemyForZombieMode(enemy, { wave = 1, ordinal = 0, difficulty = "normal", completedPumps = 0, pacing = "time", entrance = null } = {}) {
   if (!enemy || enemy.isZombie) return enemy;
   const plan = getZombieOutbreakPlan(wave);
-  const available = wave < 2 ? 2 : wave < 4 ? 4 : 5;
-  const spec = ZOMBIE_ROSTER[Math.abs(Math.floor(Number(ordinal) || 0) * 7 + plan.wave * 3) % available];
+  const diff = DIFFICULTIES[difficulty] || DIFFICULTIES.normal;
+  const available = getZombieRosterAvailability({ wave, completedPumps, pacing });
+  const introduction = pacing === "pumps" ? ZOMBIE_ROSTER.slice(0, available).find(spec => spec.id === entrance) : null;
+  const spec = introduction || ZOMBIE_ROSTER[Math.abs(Math.floor(Number(ordinal) || 0) * 7 + plan.wave * 3) % available];
+  enemy.zombieEntrance = Boolean(introduction);
   const boss = enemy.isBossEnemy === true;
   enemy.originalName = enemy.name;
   Object.assign(enemy, { isZombie: true, zombieVariant: spec.id, name: boss ? `The Clogfather · ${spec.name}` : spec.name, emoji: "🧟", color: spec.color, typeIndex: ZOMBIE_ROSTER.indexOf(spec), ranged: false, eliteType: null, splitOnDeath: false, dmgMult: 1, size: spec.size * (boss ? 1.6 : 1), speed: spec.speed * plan.speedMult * (boss ? 0.85 : 1), contactDamage: spec.damage, zombieClock: Math.abs(ordinal * 37) % 90, zombieState: "stalk", zombieTell: spec.tell });
@@ -27,7 +35,8 @@ export function mutateEnemyForZombieMode(enemy, { wave = 1, ordinal = 0 } = {}) 
   enemy.shieldPulseActive = false;
   enemy.summonerInvuln = false;
   enemy.jugShield = 0;
-  enemy.health = (42 + plan.wave * 6) * spec.health * (boss ? 5 : 1);
+  enemy.speed *= diff.speedMult;
+  enemy.health = (42 + plan.wave * 6) * spec.health * (boss ? 5 : 1) * diff.healthMult;
   enemy.maxHealth = enemy.health;
   enemy.points = Math.round((enemy.points || 50) * (boss ? 1.5 : 1.1));
   return enemy;

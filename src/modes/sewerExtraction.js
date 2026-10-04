@@ -128,12 +128,12 @@ export const SEWER_EXTRACTION = Object.freeze({
   },
 
   banner(gs) {
-    const state = gs._extractLocked ? "LOCKDOWN" : gs._extractOpen ? "EVAC OPEN" : `EVAC AT ${ALARM_EVAC}`;
+    const state = gs._extractLocked ? "LAST STAND · EVAC SEALED" : gs._extractOpen ? "EVAC OPEN" : `EVAC AT ${ALARM_EVAC}`;
     return `LOOT ${gs._extractLoot || 0} · ALARM ${Math.floor(gs.alarm || 0)} · ${state}`;
   },
 
   progress(gs) {
-    return { label: "ALARM", value: gs.alarm || 0, pct: Math.min(1, (gs.alarm || 0) / ALARM_LOCK), unit: "", pressure: (gs.alarm || 0) / ALARM_LOCK };
+    return { label: gs._extractLocked ? "LAST STAND · LOOT CANNOT BE BANKED" : "ALARM", value: gs.alarm || 0, pct: Math.min(1, (gs.alarm || 0) / ALARM_LOCK), unit: "", pressure: (gs.alarm || 0) / ALARM_LOCK };
   },
 
   // What the run was worth, for the death/victory screen (S167). Pure, bounded,

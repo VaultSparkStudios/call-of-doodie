@@ -10,7 +10,9 @@
   "trust": "Player-owned local summary. Values are not a score attestation, authenticated replay or full physics simulation.",
   "eventMeaning": {
     "finalSource": "Recorded final-damage attribution only when the game observed it; typeIndex resolves through gameplay-contract.json enemies. Null means unknown.",
-    "coachReason": "Deterministic local comparison code; it does not prove causality."
+    "coachReason": "Deterministic local comparison code; it does not prove causality.",
+    "provenance": "Recorded build commit and dirty-tree flag. Null means unavailable; old runs are never assigned the current build.",
+    "objective": "Mode-owned terminal result and primary metric; null means not recorded. A victory is not a global score attestation."
   },
   "units": {
     "score": "points",

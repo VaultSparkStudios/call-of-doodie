@@ -6,6 +6,15 @@ export const SCORE_PROFILES = {
   zombies: { title: "The Drain Waltz", bpm: 94, root: 40, swing: 0.18, progression: [0, 1, 0, 6, 0, 8, 1, 0], chord: [0, 3, 6, 11] },
 };
 const VIBES = new Set(["chill", "action", "intense", "retro", "spooky"]);
+// Objective phrases sit inside the existing arrangement and respect the player's vibe.
+export const OBJECTIVE_PHRASES = Object.freeze({
+  BREACH: [12, 19, 14, 24], HOLD: [12, 12, 19, 12],
+  ESCORT: [12, 14, 19, 17], HUNT: [19, 14, 12, 10],
+  SABOTAGE: [12, 13, 19, 13], ESCAPE: [12, 17, 19, 24], BOSS: [12, 11, 18, 19],
+  "pump-0": [24, 23, 18, 13], "pump-1": [24, 18, 25, 13],
+  "pump-2": [24, 25, 18, 30], hatch: [12, 18, 23, 24],
+});
+export function normalizeScoreObjective(value) { return Object.hasOwn(OBJECTIVE_PHRASES, value) ? value : "none"; }
 export function normalizeScoreMode(mode) {
   if (["zombies", "sewer-zombies", "sewer_zombies"].includes(mode)) return "zombies";
   return mode === "operations" || mode === "operation" ? "operations" : "classic";
@@ -30,6 +39,11 @@ export function composeScoreStep(step, state = {}) {
   const events = [];
   const add = (instrument, note, length, volume, pan = 0, offset = 0) => events.push({ instrument, note, length, volume, pan, offset });
   const breakdown = section === 2 && !state.boss && energy < 2;
+  const objective = normalizeScoreObjective(state.objective);
+  const phrase = OBJECTIVE_PHRASES[objective];
+  if (mode !== "classic" && phrase && s % 4 === 0) {
+    add(mode === "zombies" ? "bell" : "pluck", root + 12 + phrase[s / 4], 1.6, 0.021, s < 8 ? -0.3 : 0.3);
+  }
   const swing = s % 2 === 1 ? profile.swing : 0;
   const kickSteps = mode === "classic" ? [0, 6, 8, 11] : mode === "operations" ? [0, 3, 8, 10] : [0, 7, 10];
   if ((!breakdown || s === 0) && (kickSteps.includes(s) || energy >= 2 && [4, 12].includes(s))) add("kick", 0, 1, 0.12);

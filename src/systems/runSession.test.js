@@ -10,6 +10,10 @@ import {
 } from "./runSession.js";
 
 describe("runSession", () => {
+  it("preserves intentional local-mode history without inventing recovered faults", () => {
+    expect(createRunHistoryEntry({ integrityReceipt: { status: "local-mode", onlineEligible: false, faultCount: 0, occurrenceCount: 0, label: "LOCAL RUN · UNRANKED MODE" } }).integrityReceipt)
+      .toMatchObject({ status: "local-mode", onlineEligible: false, faultCount: 0, occurrenceCount: 0, claim: "mode-policy-local-only" });
+  });
   it("resolves the active run mode from flags", () => {
     expect(resolveRunModeFromFlags({ scoreAttack: true })).toBe("score_attack");
     expect(resolveRunModeFromFlags({ bossRush: true })).toBe("boss_rush");

@@ -42,3 +42,14 @@ export function deriveContentVersionDate() {
 export function copyrightYear() {
   return Number(deriveContentVersionDate().slice(0, 4));
 }
+
+export function deriveBuildProvenance() {
+  try {
+    const options = { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] };
+    const sourceSha = execFileSync("git", ["rev-parse", "HEAD"], options).trim();
+    const dirty = execFileSync("git", ["status", "--porcelain", "--untracked-files=normal"], options).trim().length > 0;
+    return { sourceSha: /^[a-f0-9]{40}$/.test(sourceSha) ? sourceSha : null, workingTreeDirty: dirty };
+  } catch {
+    return { sourceSha: null, workingTreeDirty: null };
+  }
+}

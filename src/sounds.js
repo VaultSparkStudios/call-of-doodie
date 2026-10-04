@@ -757,7 +757,7 @@ function _tickAmbient() {
 
 // ===== ADAPTIVE ORIGINAL SOUNDTRACK =====
 // 16th-note transport; mode scores evolve over a 32-bar arrangement.
-import { composeScoreStep, normalizeScoreMode, normalizeScoreVibe, scoreBPM } from "./audio/scoreComposer.js";
+import { composeScoreStep, normalizeScoreMode, normalizeScoreVibe, normalizeScoreObjective, scoreBPM } from "./audio/scoreComposer.js";
 import { createScoreSynth } from "./audio/scoreSynth.js";
 export { MUSIC_VIBES } from "./audio/musicVibes.js";
 let _musicActive = false;
@@ -766,6 +766,7 @@ let _musicVibe = "action";
 let _musicMode = "classic";
 let _musicBoss = false;
 let _musicTier = 0;
+let _musicObjective = "none";
 let _musicTimer = null;
 let _musicStep = 0;
 let _nextMusicTime = 0;
@@ -774,7 +775,7 @@ let _pendingScore = {};
 let _audibleBeats = [];
 let _lastAudibleBeat = 0;
 
-function _scoreState() { return { mode: _musicMode, vibe: _musicVibe, boss: _musicBoss, tier: _musicTier }; }
+function _scoreState() { return { mode: _musicMode, vibe: _musicVibe, boss: _musicBoss, tier: _musicTier, objective: _musicObjective }; }
 function _changeScore(key, value) {
   if (_musicActive) _pendingScore[key] = value;
   else _applyScore({ [key]: value });
@@ -784,7 +785,9 @@ function _applyScore(next) {
   if (next.vibe != null) _musicVibe = next.vibe;
   if (next.boss != null) _musicBoss = next.boss;
   if (next.tier != null) _musicTier = next.tier;
+  if (next.objective != null) _musicObjective = next.objective;
 }
+export function setMusicObjective(objective) { _changeScore("objective", normalizeScoreObjective(objective)); }
 export function setMusicMode(mode) { _changeScore("mode", normalizeScoreMode(mode)); }
 export function setMusicVibe(vibe) { _changeScore("vibe", normalizeScoreVibe(vibe)); }
 export function getMusicVibe() { return _pendingScore.vibe ?? _musicVibe; }

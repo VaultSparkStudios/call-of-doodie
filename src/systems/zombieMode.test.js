@@ -3,6 +3,14 @@ import { describe, expect, it } from "vitest";
 import { describeZombieOutbreak, getZombieOutbreakPlan, getZombieWaveEnemyCount, mutateEnemyForZombieMode, stepZombieEnemy } from "./zombieMode.js";
 const source = () => ({ x: 120, y: 120, name: "Influencer", ranged: true, eliteType: "armored", splitOnDeath: true, health: 9999, speed: 8, size: 50, points: 50 });
 describe("rebuilt Sewer Zombies", () => {
+  it("keeps default depth pacing and permits pump introductions only in the unranked prototype", () => {
+    const defaultCreature = mutateEnemyForZombieMode(source(), { wave: 1, ordinal: 0, completedPumps: 2, entrance: "screecher" });
+    expect(["shambler", "crawler"]).toContain(defaultCreature.zombieVariant);
+    expect(defaultCreature.zombieEntrance).toBe(false);
+    const introduced = mutateEnemyForZombieMode(source(), { wave: 1, pacing: "pumps", completedPumps: 1, entrance: "sprinter" });
+    expect(introduced).toMatchObject({ zombieVariant: "sprinter", zombieEntrance: true, zombieState: "stalk" });
+    expect(mutateEnemyForZombieMode(source(), { wave: 1, pacing: "pumps", completedPumps: 0, entrance: "screecher" }).zombieEntrance).toBe(false);
+  });
   it("owns sewer bodies and prevents classic AI traits from leaking in", () => {
     const e = mutateEnemyForZombieMode(source(), { wave: 7, ordinal: 4 });
     expect(e).toEqual(mutateEnemyForZombieMode(source(), { wave: 7, ordinal: 4 }));

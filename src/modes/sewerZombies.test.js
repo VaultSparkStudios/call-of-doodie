@@ -2,6 +2,14 @@ import { describe, expect, it } from "vitest";
 import { createSewerRun, SEWER_ZOMBIES, stepSewerRun } from "./sewerZombies.js";
 function run() { return { player: { x: 0, y: 0, health: 50, maxHealth: 100 }, kills: 0, score: 0, enemies: [], sewerRun: createSewerRun() }; }
 describe("sewer pump and escape campaign", () => {
+  it("queues an experimental entrance after earned pump completion without pausing combat", () => {
+    const gs = run(), pump = gs.sewerRun.pumps[0];
+    gs.sewerRun.pacing = "pumps"; gs.sewerRun.sludge = 1; pump.charge = 359;
+    Object.assign(gs.player, { x: pump.x, y: pump.y });
+    expect(stepSewerRun(gs).map(event => event.type)).toEqual(["pump"]);
+    expect(gs.sewerRun.pendingEntrance).toBe("sprinter");
+    expect(gs.sewerRun.phase).toBe("pumps");
+  });
   it("requires earned fuel and prevents enemies contesting a pump", () => {
     const gs = run(), p = gs.sewerRun.pumps[0]; Object.assign(gs.player, { x: p.x, y: p.y });
     stepSewerRun(gs); expect(p.charge).toBe(0);

@@ -1,4 +1,5 @@
 import { getZombieOutbreakPlan } from "../systems/zombieMode.js";
+import { DIFFICULTIES } from "../constants.js";
 const PUMP_FRAMES = 360;
 const FLOOD_FRAMES = 240 * 60;
 export function createSewerRun(W = 1280, H = 720) {
@@ -24,6 +25,7 @@ export function stepSewerRun(gs) {
       target.complete = true; s.completedPumps++; s.activePump++; s.fuelTick = 0;
       gs.score = (gs.score || 0) + 1500;
       events.push({ type: "pump", pump: target });
+      if (s.pacing === "pumps" && s.completedPumps < 3) s.pendingEntrance = s.completedPumps === 1 ? "sprinter" : "screecher";
       // Each pump restores some health immediately, with no reward modal.
       gs.player.health = Math.min(gs.player.maxHealth || 100, gs.player.health + 15);
       if (s.completedPumps === 3) { s.phase = "extraction"; events.push({ type: "hatch" }); }
@@ -40,6 +42,7 @@ export const SEWER_ZOMBIES = Object.freeze({
   id: "zombies", kind: "mode", label: "SEWER ZOMBIES", replayEligible: false, rulesetId: "zombies", allies: [],
   arena: { themePool: [8] }, hud: { squad: false, zones: false, parTimer: false, verbObjective: false }, usesDirectorObjectives: false,
   init(gs, ctx = {}) {
+    gs.runDifficulty = ctx.difficulty || gs.runDifficulty || "normal";
     gs.zombiesMode = true;
     gs.sewerRun = createSewerRun(ctx.W || gs._W || 1280, ctx.H || gs._H || 720);
     gs.sewerRun.lastKills = gs.kills || 0;
@@ -71,13 +74,13 @@ export const SEWER_ZOMBIES = Object.freeze({
     gs.sewerSpawnTimer = (gs.sewerSpawnTimer || 0) - 1;
     const cap = s.phase === "extraction" ? 28 : Math.min(36, 14 + depth * 3);
     if (gs.sewerSpawnTimer <= 0) {
-      gs.sewerSpawnTimer = Math.max(35, 90 - depth * 6) * (depth % 3 === 0 ? 0.75 : 1);
+      gs.sewerSpawnTimer = Math.max(35, 90 - depth * 6) * (depth % 3 === 0 ? 0.75 : 1) * (DIFFICULTIES[gs.runDifficulty] || DIFFICULTIES.normal).spawnMult;
       if ((gs.enemies || []).filter(e => e.health > 0).length < cap) {
         ctx.spawnEnemy?.(gs);
       }
     }
     for (const ev of stepSewerRun(gs)) {
-      if (ev.type === "pump") { ctx.addText?.(gs, ev.pump.x, ev.pump.y - 85, "PUMP ONLINE · +15 HEALTH", "#a8df82", true); ctx.setHealth?.(gs.player.health); }
+      if (ev.type === "pump") { ctx.addText?.(gs, ev.pump.x, ev.pump.y - 85, "PUMP ONLINE · +15 HEALTH", "#a8df82", true); ctx.setHealth?.(gs.player.health); ctx.setMusicObjective?.(s.completedPumps < 3 ? `pump-${s.completedPumps}` : "hatch"); }
       if (ev.type === "hatch") ctx.announce?.(gs, "ALL PUMPS ONLINE · HOLD THE HATCH FOR 5 SECONDS", "#f6d178", true);
     }
   },

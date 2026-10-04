@@ -1,3 +1,8 @@
+import { normalizeBuildProvenance } from '../config/buildProvenance.js';
+import { RUN_MODIFIERS, STARTER_LOADOUTS, WEEKLY_MUTATIONS } from '../constants.js';
+const MODIFIER_IDS = new Set(RUN_MODIFIERS.map(modifier => modifier.id));
+const LOADOUT_IDS = new Set(STARTER_LOADOUTS.map(loadout => loadout.id));
+const MUTATION_IDS = new Set(WEEKLY_MUTATIONS.map(mutation => mutation.id));
 const MODE_IDS = new Set(['standard', 'score_attack', 'daily_challenge', 'cursed', 'boss_rush', 'speedrun', 'gauntlet', 'zombies', 'boss_gauntlet', 'sewer_extraction', 'bot_royale', 'hold_the_throne', 'operation']);
 const DIFFICULTY_IDS = new Set(['easy', 'normal', 'hard', 'insane']);
 const COACH_REASONS = new Set(['insufficient-comparable-evidence', 'contradictory-killer-evidence', 'repeated-observed-final-source', 'measured-accuracy-drop', 'repeat-wave-plateau']);
@@ -16,6 +21,8 @@ export const RUN_ANALYSIS_SCHEMA = Object.freeze({
   eventMeaning: {
     finalSource: 'Recorded final-damage attribution only when the game observed it; typeIndex resolves through gameplay-contract.json enemies. Null means unknown.',
     coachReason: 'Deterministic local comparison code; it does not prove causality.',
+    provenance: 'Recorded build commit and dirty-tree flag. Null means unavailable; old runs are never assigned the current build.',
+    objective: 'Mode-owned terminal result and primary metric; null means not recorded. A victory is not a global score attestation.',
   },
   units: { score: 'points', wave: 'wave index', kills: 'count', durationSeconds: 'seconds', totalShots: 'count', totalHits: 'count', seed: 'integer', recordedAt: 'ISO 8601 UTC' },
   hash: 'SHA-256 over UTF-8 JSON of every export field except contentHash, in insertion order.',
@@ -32,6 +39,16 @@ export async function buildAgentRunPack({ run, coachLesson = null, generatedAt =
     run: {
       mode: MODE_IDS.has(run.mode) ? run.mode : 'unknown',
       difficulty: DIFFICULTY_IDS.has(run.difficulty) ? run.difficulty : 'unknown',
+      build: normalizeBuildProvenance(run.buildProvenance),
+      modifier: MODIFIER_IDS.has(run.modifier) ? run.modifier : null,
+      setup: {
+        starterLoadout: LOADOUT_IDS.has(run.setup?.starterLoadout) ? run.setup.starterLoadout : null,
+        weeklyMutation: MUTATION_IDS.has(run.setup?.weeklyMutation) ? run.setup.weeklyMutation : null,
+        zombiePacing: ['time', 'pumps'].includes(run.setup?.zombiePacing) ? run.setup.zombiePacing : null,
+      },
+      objective: MODE_IDS.has(run.modeOutcome?.modeId) ? { mode: run.modeOutcome.modeId,
+        victory: typeof run.modeOutcome.victory === 'boolean' ? run.modeOutcome.victory : null,
+        primaryMetric: boundedInt(run.modeOutcome.stat, 1000000000) } : null,
       recordedAt: observedAt(run.ts),
       seed: boundedInt(run.runSeed, 999999999), score: boundedInt(run.score, 1000000000),
       wave: boundedInt(run.wave, 100000), kills: boundedInt(run.kills, 1000000),

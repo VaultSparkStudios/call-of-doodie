@@ -3,11 +3,13 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 const mocks = vi.hoisted(() => ({
   readPreference: vi.fn(),
   setMusicVibe: vi.fn(),
+  setMusicObjective: vi.fn(),
 }));
 
 vi.mock("../utils/gamePreferences.js", () => ({ readPreference: mocks.readPreference }));
 vi.mock("../audio/soundFacade.js", () => ({
   setMusicVibe: mocks.setMusicVibe,
+  setMusicObjective: mocks.setMusicObjective,
   soundOperationObjective: vi.fn(),
   soundOperationReinforcement: vi.fn(),
   soundWaveClear: vi.fn(),
@@ -19,6 +21,7 @@ describe("Operation score lifecycle boundary", () => {
   beforeEach(() => {
     mocks.readPreference.mockReset();
     mocks.setMusicVibe.mockReset();
+    mocks.setMusicObjective.mockReset();
   });
 
   it("adapts the default Action preference for an authored chapter", () => {
@@ -31,6 +34,7 @@ describe("Operation score lifecycle boundary", () => {
     mocks.readPreference.mockReturnValue("chill");
     expect(applyOperationEncounterScore("BREACH")).toMatchObject({ targetVibe: null, reasonCode: "PLAYER_VIBE_PRESERVED" });
     expect(mocks.setMusicVibe).not.toHaveBeenCalled();
+    expect(mocks.setMusicObjective).toHaveBeenCalledExactlyOnceWith("BREACH");
   });
 
   it("leaves the boss chapter to the existing runtime intensity path", () => {

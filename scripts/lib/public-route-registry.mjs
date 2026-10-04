@@ -385,6 +385,7 @@ export function getAgentResources() {
     { rel: "service-status", href: `${PUBLIC_CANONICAL_ORIGIN}/status.json` },
     { rel: "product-capabilities", href: `${PUBLIC_CANONICAL_ORIGIN}/capabilities.json` },
     { rel: "run-analysis-schema", href: `${PUBLIC_CANONICAL_ORIGIN}/run-analysis-schema.json` },
+    { rel: "agent-evidence-pack", href: `${PUBLIC_CANONICAL_ORIGIN}/agent-evidence-pack.json` },
   ];
 }
 

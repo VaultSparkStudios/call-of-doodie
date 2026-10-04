@@ -895,7 +895,7 @@ export const COMBO_TIMER_BASE = 120;
 export const DIFFICULTIES = {
   easy:   { label: "Easy",   emoji: "🟢", desc: "Chill mode. Enemies are weaker and slower.", healthMult: 0.7, speedMult: 0.8, spawnMult: 1.3, playerHP: 150, color: "#44CC44" },
   normal: { label: "Normal", emoji: "🟡", desc: "The standard Call of Doodie experience.",   healthMult: 1.0, speedMult: 1.0, spawnMult: 1.0, playerHP: 100, color: "#FFD700" },
-  hard:   { label: "Hard",   emoji: "🔴", desc: "Enemies hit harder and faster. Git gud.",    healthMult: 1.4, speedMult: 1.2, spawnMult: 0.75, playerHP: 80, color: "#FF4444" },
+  hard:   { label: "Hard",   emoji: "🔴", desc: "Tougher, faster enemies. Less starting health. Git gud.", healthMult: 1.4, speedMult: 1.2, spawnMult: 0.75, playerHP: 80, color: "#FF4444" },
   insane: { label: "INSANE", emoji: "💀", desc: "You WILL die. Guaranteed. No refunds.",      healthMult: 1.8, speedMult: 1.4, spawnMult: 0.5,  playerHP: 60, color: "#FF00FF" },
 };
 

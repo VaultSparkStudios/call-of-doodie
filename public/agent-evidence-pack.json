@@ -1,0 +1,959 @@
+{
+  "schemaVersion": "agent-evidence-pack-v1",
+  "scope": [
+    "mode objectives and ranking policy",
+    "difficulty factors",
+    "launch and cartridge grammar",
+    "local run export meaning"
+  ],
+  "access": "public-read-only-no-agent-writes-no-paid-inference",
+  "gameplayRevision": "sha256:b6c1e5e9dd8c2154def431df1781f8dbc467888750cb5bda36ee2bbeb524aef1",
+  "facts": {
+    "loop": [
+      "move",
+      "shoot",
+      "dash",
+      "grenade",
+      "switch_weapon",
+      "interact",
+      "checkpoint_choice",
+      "power_sewer_pumps",
+      "escape_backflow",
+      "resolve_operation_encounter",
+      "survive_wave",
+      "review_debrief"
+    ],
+    "modes": [
+      {
+        "id": "standard",
+        "label": "Classic Survival",
+        "kind": "mode",
+        "objective": "Deploy straight into endless survival. Wave intel stays in the HUD; one build choice per four-wave checkpoint, with no chained reward screens.",
+        "seededReplayCode": true,
+        "scoring": "global-leaderboard-eligible",
+        "capabilities": {
+          "play": "browser-local",
+          "officialBoard": "eligible-only-after-server-check",
+          "unrankedPractice": true,
+          "liveMultiplayer": false
+        }
+      },
+      {
+        "id": "score_attack",
+        "label": "Score Attack",
+        "kind": "ruleset",
+        "objective": "Five minutes, faster spawns, maximum score.",
+        "seededReplayCode": true,
+        "scoring": "global-leaderboard-eligible",
+        "capabilities": {
+          "play": "browser-local",
+          "officialBoard": "eligible-only-after-server-check",
+          "unrankedPractice": true,
+          "liveMultiplayer": false
+        }
+      },
+      {
+        "id": "daily_challenge",
+        "label": "Daily Challenge",
+        "kind": "ruleset",
+        "objective": "The same seeded run for every player today.",
+        "seededReplayCode": true,
+        "scoring": "global-leaderboard-eligible",
+        "capabilities": {
+          "play": "browser-local",
+          "officialBoard": "eligible-only-after-server-check",
+          "unrankedPractice": true,
+          "liveMultiplayer": false
+        }
+      },
+      {
+        "id": "cursed",
+        "label": "Cursed Run",
+        "kind": "ruleset",
+        "objective": "Hard modifiers with a three-times score multiplier.",
+        "seededReplayCode": true,
+        "scoring": "global-leaderboard-eligible",
+        "capabilities": {
+          "play": "browser-local",
+          "officialBoard": "eligible-only-after-server-check",
+          "unrankedPractice": true,
+          "liveMultiplayer": false
+        }
+      },
+      {
+        "id": "boss_rush",
+        "label": "Boss Rush",
+        "kind": "ruleset",
+        "objective": "Gear up for three warmup waves, then fight bosses every wave. Survive as long as you can; later fights pair bosses.",
+        "seededReplayCode": true,
+        "scoring": "global-leaderboard-eligible",
+        "capabilities": {
+          "play": "browser-local",
+          "officialBoard": "eligible-only-after-server-check",
+          "unrankedPractice": true,
+          "liveMultiplayer": false
+        }
+      },
+      {
+        "id": "speedrun",
+        "label": "Timed Survival",
+        "kind": "ruleset",
+        "objective": "Classic survival with a precise elapsed-time display. Set your own wave target; the run ends when you run out of lives.",
+        "seededReplayCode": true,
+        "scoring": "global-leaderboard-eligible",
+        "capabilities": {
+          "play": "browser-local",
+          "officialBoard": "eligible-only-after-server-check",
+          "unrankedPractice": true,
+          "liveMultiplayer": false
+        }
+      },
+      {
+        "id": "gauntlet",
+        "label": "Weekly Gauntlet",
+        "kind": "ruleset",
+        "objective": "A fixed weekly opening kit with no shop.",
+        "seededReplayCode": true,
+        "scoring": "global-leaderboard-eligible",
+        "capabilities": {
+          "play": "browser-local",
+          "officialBoard": "eligible-only-after-server-check",
+          "unrankedPractice": true,
+          "liveMultiplayer": false
+        }
+      },
+      {
+        "id": "zombies",
+        "label": "Sewer Zombies",
+        "kind": "mode",
+        "objective": "Five grotesque sewer creatures hunt you. Collect sludge from kills, power three pumps and escape through the hatch before the flood. No upgrade interruptions.",
+        "seededReplayCode": false,
+        "scoring": "local-only",
+        "capabilities": {
+          "play": "browser-local",
+          "officialBoard": "not-offered",
+          "unrankedPractice": true,
+          "liveMultiplayer": false
+        }
+      },
+      {
+        "id": "boss_gauntlet",
+        "label": "Boss Gauntlet",
+        "kind": "mode",
+        "objective": "Fight six bosses in order, one at a time. Defeat all six to win; beating the six-minute target is optional. Bosses may summon reinforcements.",
+        "seededReplayCode": false,
+        "scoring": "local-only",
+        "capabilities": {
+          "play": "browser-local",
+          "officialBoard": "not-offered",
+          "unrankedPractice": true,
+          "liveMultiplayer": false
+        }
+      },
+      {
+        "id": "sewer_extraction",
+        "label": "Sewer Extraction",
+        "kind": "mode",
+        "objective": "Collect crates and reach the evac toilet to bank your loot. The exit opens at alarm 60 and locks at 100. Die before extracting and the haul is lost.",
+        "seededReplayCode": false,
+        "scoring": "local-only",
+        "capabilities": {
+          "play": "browser-local",
+          "officialBoard": "not-offered",
+          "unrankedPractice": true,
+          "liveMultiplayer": false
+        }
+      },
+      {
+        "id": "bot_royale",
+        "label": "Bot Royale",
+        "kind": "mode",
+        "objective": "Free-for-all against sixteen bots while the sewer floods inward. Last one standing wins.",
+        "seededReplayCode": false,
+        "scoring": "local-only",
+        "capabilities": {
+          "play": "browser-local",
+          "officialBoard": "not-offered",
+          "unrankedPractice": true,
+          "liveMultiplayer": false
+        }
+      },
+      {
+        "id": "hold_the_throne",
+        "label": "Hold the Throne",
+        "kind": "mode",
+        "objective": "Hold each of three thrones for thirty uncontested seconds to win. You can retake one lost throne; a second loss ends the run. Your squad helps defend.",
+        "seededReplayCode": false,
+        "scoring": "local-only",
+        "capabilities": {
+          "play": "browser-local",
+          "officialBoard": "not-offered",
+          "unrankedPractice": true,
+          "liveMultiplayer": false
+        }
+      }
+    ],
+    "difficulties": [
+      {
+        "id": "easy",
+        "label": "Easy",
+        "playerHp": 150,
+        "spawnMultiplier": 1.3,
+        "enemyHealthMultiplier": 0.7,
+        "enemySpeedMultiplier": 0.8,
+        "incomingDamageMultiplier": 1,
+        "modePolicies": [
+          {
+            "mode": "standard",
+            "difficulty": "easy",
+            "playerStartingHealth": 150,
+            "enemyHealthMultiplier": 0.7,
+            "enemySpeedMultiplier": 0.8,
+            "spawnIntervalMultiplier": 1.3,
+            "objectiveTimers": "mode-defined",
+            "incomingDamageMultiplier": 1,
+            "modifiers": "Run modifiers and player settings apply separately; compare identical setups."
+          },
+          {
+            "mode": "score_attack",
+            "difficulty": "easy",
+            "playerStartingHealth": 150,
+            "enemyHealthMultiplier": 0.7,
+            "enemySpeedMultiplier": 0.8,
+            "spawnIntervalMultiplier": 1.3,
+            "objectiveTimers": "mode-defined",
+            "incomingDamageMultiplier": 1,
+            "modifiers": "Run modifiers and player settings apply separately; compare identical setups."
+          },
+          {
+            "mode": "daily_challenge",
+            "difficulty": "easy",
+            "playerStartingHealth": 150,
+            "enemyHealthMultiplier": 0.7,
+            "enemySpeedMultiplier": 0.8,
+            "spawnIntervalMultiplier": 1.3,
+            "objectiveTimers": "mode-defined",
+            "incomingDamageMultiplier": 1,
+            "modifiers": "Run modifiers and player settings apply separately; compare identical setups."
+          },
+          {
+            "mode": "cursed",
+            "difficulty": "easy",
+            "playerStartingHealth": 150,
+            "enemyHealthMultiplier": 0.7,
+            "enemySpeedMultiplier": 0.8,
+            "spawnIntervalMultiplier": 1.3,
+            "objectiveTimers": "mode-defined",
+            "incomingDamageMultiplier": 1,
+            "modifiers": "Run modifiers and player settings apply separately; compare identical setups."
+          },
+          {
+            "mode": "boss_rush",
+            "difficulty": "easy",
+            "playerStartingHealth": 150,
+            "enemyHealthMultiplier": 0.7,
+            "enemySpeedMultiplier": 0.8,
+            "spawnIntervalMultiplier": 1.3,
+            "objectiveTimers": "mode-defined",
+            "incomingDamageMultiplier": 1,
+            "modifiers": "Run modifiers and player settings apply separately; compare identical setups."
+          },
+          {
+            "mode": "speedrun",
+            "difficulty": "easy",
+            "playerStartingHealth": 150,
+            "enemyHealthMultiplier": 0.7,
+            "enemySpeedMultiplier": 0.8,
+            "spawnIntervalMultiplier": 1.3,
+            "objectiveTimers": "mode-defined",
+            "incomingDamageMultiplier": 1,
+            "modifiers": "Run modifiers and player settings apply separately; compare identical setups."
+          },
+          {
+            "mode": "gauntlet",
+            "difficulty": "easy",
+            "playerStartingHealth": 150,
+            "enemyHealthMultiplier": 0.7,
+            "enemySpeedMultiplier": 0.8,
+            "spawnIntervalMultiplier": 1.3,
+            "objectiveTimers": "mode-defined",
+            "incomingDamageMultiplier": 1,
+            "modifiers": "Run modifiers and player settings apply separately; compare identical setups."
+          },
+          {
+            "mode": "zombies",
+            "difficulty": "easy",
+            "playerStartingHealth": 150,
+            "enemyHealthMultiplier": 0.7,
+            "enemySpeedMultiplier": 0.8,
+            "spawnIntervalMultiplier": 1.3,
+            "objectiveTimers": "mode-defined",
+            "incomingDamageMultiplier": 1,
+            "modifiers": "Run modifiers and player settings apply separately; compare identical setups."
+          },
+          {
+            "mode": "boss_gauntlet",
+            "difficulty": "easy",
+            "playerStartingHealth": 150,
+            "enemyHealthMultiplier": 0.7,
+            "enemySpeedMultiplier": 0.8,
+            "spawnIntervalMultiplier": 1.3,
+            "objectiveTimers": "mode-defined",
+            "incomingDamageMultiplier": 1,
+            "modifiers": "Run modifiers and player settings apply separately; compare identical setups."
+          },
+          {
+            "mode": "sewer_extraction",
+            "difficulty": "easy",
+            "playerStartingHealth": 150,
+            "enemyHealthMultiplier": 0.7,
+            "enemySpeedMultiplier": 0.8,
+            "spawnIntervalMultiplier": 1.3,
+            "objectiveTimers": "mode-defined",
+            "incomingDamageMultiplier": 1,
+            "modifiers": "Run modifiers and player settings apply separately; compare identical setups."
+          },
+          {
+            "mode": "bot_royale",
+            "difficulty": "easy",
+            "playerStartingHealth": 150,
+            "enemyHealthMultiplier": 0.7,
+            "enemySpeedMultiplier": 0.8,
+            "spawnIntervalMultiplier": null,
+            "objectiveTimers": "mode-defined",
+            "incomingDamageMultiplier": 1,
+            "modifiers": "Run modifiers and player settings apply separately; compare identical setups."
+          },
+          {
+            "mode": "hold_the_throne",
+            "difficulty": "easy",
+            "playerStartingHealth": 150,
+            "enemyHealthMultiplier": 0.7,
+            "enemySpeedMultiplier": 0.8,
+            "spawnIntervalMultiplier": 1.3,
+            "objectiveTimers": "mode-defined",
+            "incomingDamageMultiplier": 1,
+            "modifiers": "Run modifiers and player settings apply separately; compare identical setups."
+          }
+        ]
+      },
+      {
+        "id": "normal",
+        "label": "Normal",
+        "playerHp": 100,
+        "spawnMultiplier": 1,
+        "enemyHealthMultiplier": 1,
+        "enemySpeedMultiplier": 1,
+        "incomingDamageMultiplier": 1,
+        "modePolicies": [
+          {
+            "mode": "standard",
+            "difficulty": "normal",
+            "playerStartingHealth": 100,
+            "enemyHealthMultiplier": 1,
+            "enemySpeedMultiplier": 1,
+            "spawnIntervalMultiplier": 1,
+            "objectiveTimers": "mode-defined",
+            "incomingDamageMultiplier": 1,
+            "modifiers": "Run modifiers and player settings apply separately; compare identical setups."
+          },
+          {
+            "mode": "score_attack",
+            "difficulty": "normal",
+            "playerStartingHealth": 100,
+            "enemyHealthMultiplier": 1,
+            "enemySpeedMultiplier": 1,
+            "spawnIntervalMultiplier": 1,
+            "objectiveTimers": "mode-defined",
+            "incomingDamageMultiplier": 1,
+            "modifiers": "Run modifiers and player settings apply separately; compare identical setups."
+          },
+          {
+            "mode": "daily_challenge",
+            "difficulty": "normal",
+            "playerStartingHealth": 100,
+            "enemyHealthMultiplier": 1,
+            "enemySpeedMultiplier": 1,
+            "spawnIntervalMultiplier": 1,
+            "objectiveTimers": "mode-defined",
+            "incomingDamageMultiplier": 1,
+            "modifiers": "Run modifiers and player settings apply separately; compare identical setups."
+          },
+          {
+            "mode": "cursed",
+            "difficulty": "normal",
+            "playerStartingHealth": 100,
+            "enemyHealthMultiplier": 1,
+            "enemySpeedMultiplier": 1,
+            "spawnIntervalMultiplier": 1,
+            "objectiveTimers": "mode-defined",
+            "incomingDamageMultiplier": 1,
+            "modifiers": "Run modifiers and player settings apply separately; compare identical setups."
+          },
+          {
+            "mode": "boss_rush",
+            "difficulty": "normal",
+            "playerStartingHealth": 100,
+            "enemyHealthMultiplier": 1,
+            "enemySpeedMultiplier": 1,
+            "spawnIntervalMultiplier": 1,
+            "objectiveTimers": "mode-defined",
+            "incomingDamageMultiplier": 1,
+            "modifiers": "Run modifiers and player settings apply separately; compare identical setups."
+          },
+          {
+            "mode": "speedrun",
+            "difficulty": "normal",
+            "playerStartingHealth": 100,
+            "enemyHealthMultiplier": 1,
+            "enemySpeedMultiplier": 1,
+            "spawnIntervalMultiplier": 1,
+            "objectiveTimers": "mode-defined",
+            "incomingDamageMultiplier": 1,
+            "modifiers": "Run modifiers and player settings apply separately; compare identical setups."
+          },
+          {
+            "mode": "gauntlet",
+            "difficulty": "normal",
+            "playerStartingHealth": 100,
+            "enemyHealthMultiplier": 1,
+            "enemySpeedMultiplier": 1,
+            "spawnIntervalMultiplier": 1,
+            "objectiveTimers": "mode-defined",
+            "incomingDamageMultiplier": 1,
+            "modifiers": "Run modifiers and player settings apply separately; compare identical setups."
+          },
+          {
+            "mode": "zombies",
+            "difficulty": "normal",
+            "playerStartingHealth": 100,
+            "enemyHealthMultiplier": 1,
+            "enemySpeedMultiplier": 1,
+            "spawnIntervalMultiplier": 1,
+            "objectiveTimers": "mode-defined",
+            "incomingDamageMultiplier": 1,
+            "modifiers": "Run modifiers and player settings apply separately; compare identical setups."
+          },
+          {
+            "mode": "boss_gauntlet",
+            "difficulty": "normal",
+            "playerStartingHealth": 100,
+            "enemyHealthMultiplier": 1,
+            "enemySpeedMultiplier": 1,
+            "spawnIntervalMultiplier": 1,
+            "objectiveTimers": "mode-defined",
+            "incomingDamageMultiplier": 1,
+            "modifiers": "Run modifiers and player settings apply separately; compare identical setups."
+          },
+          {
+            "mode": "sewer_extraction",
+            "difficulty": "normal",
+            "playerStartingHealth": 100,
+            "enemyHealthMultiplier": 1,
+            "enemySpeedMultiplier": 1,
+            "spawnIntervalMultiplier": 1,
+            "objectiveTimers": "mode-defined",
+            "incomingDamageMultiplier": 1,
+            "modifiers": "Run modifiers and player settings apply separately; compare identical setups."
+          },
+          {
+            "mode": "bot_royale",
+            "difficulty": "normal",
+            "playerStartingHealth": 100,
+            "enemyHealthMultiplier": 1,
+            "enemySpeedMultiplier": 1,
+            "spawnIntervalMultiplier": null,
+            "objectiveTimers": "mode-defined",
+            "incomingDamageMultiplier": 1,
+            "modifiers": "Run modifiers and player settings apply separately; compare identical setups."
+          },
+          {
+            "mode": "hold_the_throne",
+            "difficulty": "normal",
+            "playerStartingHealth": 100,
+            "enemyHealthMultiplier": 1,
+            "enemySpeedMultiplier": 1,
+            "spawnIntervalMultiplier": 1,
+            "objectiveTimers": "mode-defined",
+            "incomingDamageMultiplier": 1,
+            "modifiers": "Run modifiers and player settings apply separately; compare identical setups."
+          }
+        ]
+      },
+      {
+        "id": "hard",
+        "label": "Hard",
+        "playerHp": 80,
+        "spawnMultiplier": 0.75,
+        "enemyHealthMultiplier": 1.4,
+        "enemySpeedMultiplier": 1.2,
+        "incomingDamageMultiplier": 1,
+        "modePolicies": [
+          {
+            "mode": "standard",
+            "difficulty": "hard",
+            "playerStartingHealth": 80,
+            "enemyHealthMultiplier": 1.4,
+            "enemySpeedMultiplier": 1.2,
+            "spawnIntervalMultiplier": 0.75,
+            "objectiveTimers": "mode-defined",
+            "incomingDamageMultiplier": 1,
+            "modifiers": "Run modifiers and player settings apply separately; compare identical setups."
+          },
+          {
+            "mode": "score_attack",
+            "difficulty": "hard",
+            "playerStartingHealth": 80,
+            "enemyHealthMultiplier": 1.4,
+            "enemySpeedMultiplier": 1.2,
+            "spawnIntervalMultiplier": 0.75,
+            "objectiveTimers": "mode-defined",
+            "incomingDamageMultiplier": 1,
+            "modifiers": "Run modifiers and player settings apply separately; compare identical setups."
+          },
+          {
+            "mode": "daily_challenge",
+            "difficulty": "hard",
+            "playerStartingHealth": 80,
+            "enemyHealthMultiplier": 1.4,
+            "enemySpeedMultiplier": 1.2,
+            "spawnIntervalMultiplier": 0.75,
+            "objectiveTimers": "mode-defined",
+            "incomingDamageMultiplier": 1,
+            "modifiers": "Run modifiers and player settings apply separately; compare identical setups."
+          },
+          {
+            "mode": "cursed",
+            "difficulty": "hard",
+            "playerStartingHealth": 80,
+            "enemyHealthMultiplier": 1.4,
+            "enemySpeedMultiplier": 1.2,
+            "spawnIntervalMultiplier": 0.75,
+            "objectiveTimers": "mode-defined",
+            "incomingDamageMultiplier": 1,
+            "modifiers": "Run modifiers and player settings apply separately; compare identical setups."
+          },
+          {
+            "mode": "boss_rush",
+            "difficulty": "hard",
+            "playerStartingHealth": 80,
+            "enemyHealthMultiplier": 1.4,
+            "enemySpeedMultiplier": 1.2,
+            "spawnIntervalMultiplier": 0.75,
+            "objectiveTimers": "mode-defined",
+            "incomingDamageMultiplier": 1,
+            "modifiers": "Run modifiers and player settings apply separately; compare identical setups."
+          },
+          {
+            "mode": "speedrun",
+            "difficulty": "hard",
+            "playerStartingHealth": 80,
+            "enemyHealthMultiplier": 1.4,
+            "enemySpeedMultiplier": 1.2,
+            "spawnIntervalMultiplier": 0.75,
+            "objectiveTimers": "mode-defined",
+            "incomingDamageMultiplier": 1,
+            "modifiers": "Run modifiers and player settings apply separately; compare identical setups."
+          },
+          {
+            "mode": "gauntlet",
+            "difficulty": "hard",
+            "playerStartingHealth": 80,
+            "enemyHealthMultiplier": 1.4,
+            "enemySpeedMultiplier": 1.2,
+            "spawnIntervalMultiplier": 0.75,
+            "objectiveTimers": "mode-defined",
+            "incomingDamageMultiplier": 1,
+            "modifiers": "Run modifiers and player settings apply separately; compare identical setups."
+          },
+          {
+            "mode": "zombies",
+            "difficulty": "hard",
+            "playerStartingHealth": 80,
+            "enemyHealthMultiplier": 1.4,
+            "enemySpeedMultiplier": 1.2,
+            "spawnIntervalMultiplier": 0.75,
+            "objectiveTimers": "mode-defined",
+            "incomingDamageMultiplier": 1,
+            "modifiers": "Run modifiers and player settings apply separately; compare identical setups."
+          },
+          {
+            "mode": "boss_gauntlet",
+            "difficulty": "hard",
+            "playerStartingHealth": 80,
+            "enemyHealthMultiplier": 1.4,
+            "enemySpeedMultiplier": 1.2,
+            "spawnIntervalMultiplier": 0.75,
+            "objectiveTimers": "mode-defined",
+            "incomingDamageMultiplier": 1,
+            "modifiers": "Run modifiers and player settings apply separately; compare identical setups."
+          },
+          {
+            "mode": "sewer_extraction",
+            "difficulty": "hard",
+            "playerStartingHealth": 80,
+            "enemyHealthMultiplier": 1.4,
+            "enemySpeedMultiplier": 1.2,
+            "spawnIntervalMultiplier": 0.75,
+            "objectiveTimers": "mode-defined",
+            "incomingDamageMultiplier": 1,
+            "modifiers": "Run modifiers and player settings apply separately; compare identical setups."
+          },
+          {
+            "mode": "bot_royale",
+            "difficulty": "hard",
+            "playerStartingHealth": 80,
+            "enemyHealthMultiplier": 1.4,
+            "enemySpeedMultiplier": 1.2,
+            "spawnIntervalMultiplier": null,
+            "objectiveTimers": "mode-defined",
+            "incomingDamageMultiplier": 1,
+            "modifiers": "Run modifiers and player settings apply separately; compare identical setups."
+          },
+          {
+            "mode": "hold_the_throne",
+            "difficulty": "hard",
+            "playerStartingHealth": 80,
+            "enemyHealthMultiplier": 1.4,
+            "enemySpeedMultiplier": 1.2,
+            "spawnIntervalMultiplier": 0.75,
+            "objectiveTimers": "mode-defined",
+            "incomingDamageMultiplier": 1,
+            "modifiers": "Run modifiers and player settings apply separately; compare identical setups."
+          }
+        ]
+      },
+      {
+        "id": "insane",
+        "label": "INSANE",
+        "playerHp": 60,
+        "spawnMultiplier": 0.5,
+        "enemyHealthMultiplier": 1.8,
+        "enemySpeedMultiplier": 1.4,
+        "incomingDamageMultiplier": 1,
+        "modePolicies": [
+          {
+            "mode": "standard",
+            "difficulty": "insane",
+            "playerStartingHealth": 60,
+            "enemyHealthMultiplier": 1.8,
+            "enemySpeedMultiplier": 1.4,
+            "spawnIntervalMultiplier": 0.5,
+            "objectiveTimers": "mode-defined",
+            "incomingDamageMultiplier": 1,
+            "modifiers": "Run modifiers and player settings apply separately; compare identical setups."
+          },
+          {
+            "mode": "score_attack",
+            "difficulty": "insane",
+            "playerStartingHealth": 60,
+            "enemyHealthMultiplier": 1.8,
+            "enemySpeedMultiplier": 1.4,
+            "spawnIntervalMultiplier": 0.5,
+            "objectiveTimers": "mode-defined",
+            "incomingDamageMultiplier": 1,
+            "modifiers": "Run modifiers and player settings apply separately; compare identical setups."
+          },
+          {
+            "mode": "daily_challenge",
+            "difficulty": "insane",
+            "playerStartingHealth": 60,
+            "enemyHealthMultiplier": 1.8,
+            "enemySpeedMultiplier": 1.4,
+            "spawnIntervalMultiplier": 0.5,
+            "objectiveTimers": "mode-defined",
+            "incomingDamageMultiplier": 1,
+            "modifiers": "Run modifiers and player settings apply separately; compare identical setups."
+          },
+          {
+            "mode": "cursed",
+            "difficulty": "insane",
+            "playerStartingHealth": 60,
+            "enemyHealthMultiplier": 1.8,
+            "enemySpeedMultiplier": 1.4,
+            "spawnIntervalMultiplier": 0.5,
+            "objectiveTimers": "mode-defined",
+            "incomingDamageMultiplier": 1,
+            "modifiers": "Run modifiers and player settings apply separately; compare identical setups."
+          },
+          {
+            "mode": "boss_rush",
+            "difficulty": "insane",
+            "playerStartingHealth": 60,
+            "enemyHealthMultiplier": 1.8,
+            "enemySpeedMultiplier": 1.4,
+            "spawnIntervalMultiplier": 0.5,
+            "objectiveTimers": "mode-defined",
+            "incomingDamageMultiplier": 1,
+            "modifiers": "Run modifiers and player settings apply separately; compare identical setups."
+          },
+          {
+            "mode": "speedrun",
+            "difficulty": "insane",
+            "playerStartingHealth": 60,
+            "enemyHealthMultiplier": 1.8,
+            "enemySpeedMultiplier": 1.4,
+            "spawnIntervalMultiplier": 0.5,
+            "objectiveTimers": "mode-defined",
+            "incomingDamageMultiplier": 1,
+            "modifiers": "Run modifiers and player settings apply separately; compare identical setups."
+          },
+          {
+            "mode": "gauntlet",
+            "difficulty": "insane",
+            "playerStartingHealth": 60,
+            "enemyHealthMultiplier": 1.8,
+            "enemySpeedMultiplier": 1.4,
+            "spawnIntervalMultiplier": 0.5,
+            "objectiveTimers": "mode-defined",
+            "incomingDamageMultiplier": 1,
+            "modifiers": "Run modifiers and player settings apply separately; compare identical setups."
+          },
+          {
+            "mode": "zombies",
+            "difficulty": "insane",
+            "playerStartingHealth": 60,
+            "enemyHealthMultiplier": 1.8,
+            "enemySpeedMultiplier": 1.4,
+            "spawnIntervalMultiplier": 0.5,
+            "objectiveTimers": "mode-defined",
+            "incomingDamageMultiplier": 1,
+            "modifiers": "Run modifiers and player settings apply separately; compare identical setups."
+          },
+          {
+            "mode": "boss_gauntlet",
+            "difficulty": "insane",
+            "playerStartingHealth": 60,
+            "enemyHealthMultiplier": 1.8,
+            "enemySpeedMultiplier": 1.4,
+            "spawnIntervalMultiplier": 0.5,
+            "objectiveTimers": "mode-defined",
+            "incomingDamageMultiplier": 1,
+            "modifiers": "Run modifiers and player settings apply separately; compare identical setups."
+          },
+          {
+            "mode": "sewer_extraction",
+            "difficulty": "insane",
+            "playerStartingHealth": 60,
+            "enemyHealthMultiplier": 1.8,
+            "enemySpeedMultiplier": 1.4,
+            "spawnIntervalMultiplier": 0.5,
+            "objectiveTimers": "mode-defined",
+            "incomingDamageMultiplier": 1,
+            "modifiers": "Run modifiers and player settings apply separately; compare identical setups."
+          },
+          {
+            "mode": "bot_royale",
+            "difficulty": "insane",
+            "playerStartingHealth": 60,
+            "enemyHealthMultiplier": 1.8,
+            "enemySpeedMultiplier": 1.4,
+            "spawnIntervalMultiplier": null,
+            "objectiveTimers": "mode-defined",
+            "incomingDamageMultiplier": 1,
+            "modifiers": "Run modifiers and player settings apply separately; compare identical setups."
+          },
+          {
+            "mode": "hold_the_throne",
+            "difficulty": "insane",
+            "playerStartingHealth": 60,
+            "enemyHealthMultiplier": 1.8,
+            "enemySpeedMultiplier": 1.4,
+            "spawnIntervalMultiplier": 0.5,
+            "objectiveTimers": "mode-defined",
+            "incomingDamageMultiplier": 1,
+            "modifiers": "Run modifiers and player settings apply separately; compare identical setups."
+          }
+        ]
+      }
+    ],
+    "challengeLinks": {
+      "replayCode": {
+        "queryParameter": "replay",
+        "format": "12 hexadecimal characters",
+        "captures": [
+          "seed",
+          "mode",
+          "difficulty",
+          "weapon",
+          "starter_loadout"
+        ]
+      },
+      "rivalry": {
+        "route": "/challenge/",
+        "schemaVersion": "challenge-invite-v2",
+        "queryParameters": [
+          "cv",
+          "seed",
+          "diff",
+          "mode",
+          "loadout",
+          "vs",
+          "vsName",
+          "duel",
+          "exp",
+          "check"
+        ],
+        "maxAgeDays": 7,
+        "integrity": "Non-cryptographic checksum; saved duel rows checked separately. Scores remain friendly and self-reported.",
+        "opponent": "saved-player-run-not-bot-or-live-person",
+        "launch": "preview-first-guest-accept-no-auto-start"
+      },
+      "legacySeedLink": {
+        "route": "/",
+        "queryParameters": [
+          "seed",
+          "diff",
+          "vs",
+          "vsName"
+        ],
+        "note": "Direct legacy seed setup remains supported; it is not a verified score receipt."
+      },
+      "scenarioCartridge": {
+        "schemaVersion": "sewer-scenario-v2",
+        "supportedModes": [
+          "standard",
+          "score_attack",
+          "daily_challenge",
+          "cursed",
+          "boss_rush",
+          "speedrun",
+          "gauntlet",
+          "zombies",
+          "boss_gauntlet",
+          "sewer_extraction",
+          "bot_royale",
+          "hold_the_throne"
+        ],
+        "supportedDifficulties": [
+          "easy",
+          "normal",
+          "hard",
+          "insane"
+        ],
+        "acceptsLegacy": "sewer-scenario-v1; authenticated nightmare slots migrate to insane",
+        "queryParameter": "scenario",
+        "captures": [
+          "seed",
+          "mode",
+          "difficulty",
+          "starter_loadout",
+          "optional_target_score",
+          "optional_rival"
+        ],
+        "integrity": "FNV-1a checksum rejects accidental or opportunistic field tampering; it is not a cryptographic signature.",
+        "relay": "Account-free asynchronous URL handoff. Loading never auto-starts a run."
+      }
+    },
+    "trust": {
+      "replayEvidence": "advisory deterministic decision-stream evidence",
+      "excludedClaim": "not full physics resimulation",
+      "replayCoverage": {
+        "schemaVersion": "replay-coverage-v1",
+        "confidenceCeiling": "advisory",
+        "claim": "Deterministic slices reproduce declared command and derived-state lanes; they do not reproduce the full played fight.",
+        "covered": [
+          {
+            "id": "movement-aim",
+            "label": "Movement + aim",
+            "method": "deterministic_replay_state_stepper_v1",
+            "coverage": "movement_aim_only",
+            "evidence": "Steps bounded movement vectors, aim buckets, canvas bounds, and command checkpoints from the recorded trace."
+          },
+          {
+            "id": "combat-actions",
+            "label": "Combat actions",
+            "method": "deterministic_replay_combat_slice_v1",
+            "coverage": "trace_movement_actions_no_enemies",
+            "evidence": "Steps dash, shoot, reload, grenade, ammunition, reserve, and cooldown state without enemies."
+          },
+          {
+            "id": "derived-contact-enemy",
+            "label": "One derived contact enemy",
+            "method": "deterministic_contact_enemy_slice_v1",
+            "coverage": "trace_movement_one_contact_enemy_derived",
+            "evidence": "Derives one basic seeded chase/contact model; it is not the enemy history from the played run."
+          },
+          {
+            "id": "recorded-wave-plans",
+            "label": "Recorded planned pressure",
+            "method": "recorded_wave_plan_fingerprint_v1",
+            "coverage": "planned_pressure_not_spawn_physics_or_outcomes",
+            "evidence": "Fingerprints bounded wave-director plan snapshots recorded by the played run; it does not replay the resulting spawns or fight."
+          }
+        ],
+        "excluded": [
+          {
+            "id": "full-wave-state",
+            "label": "Actual wave spawns, formation execution, elites, bosses, and objective outcomes"
+          },
+          {
+            "id": "full-combat-physics",
+            "label": "Projectile paths, enemy attacks, hit resolution, pickups, perks, shops, and damage parity"
+          },
+          {
+            "id": "authoritative-outcome",
+            "label": "Exact played score, wave, health, deaths, or leaderboard authority"
+          }
+        ],
+        "nextFrontier": "Capture versioned enemy/projectile state and prove physics parity before raising the advisory ceiling.",
+        "source": "src/utils/replayResim.js + src/systems/wavePlanReceipt.js"
+      },
+      "publicWriteActions": "not-offered"
+    },
+    "runAnalysisSchema": {
+      "schemaVersion": "run-analysis-schema-v1",
+      "format": "application/json",
+      "access": {
+        "generation": "player-action-on-device",
+        "upload": "none",
+        "agentWrites": "not-offered"
+      },
+      "identity": "No player name, account, Passport, session, token, device identifier or local-storage dump.",
+      "trust": "Player-owned local summary. Values are not a score attestation, authenticated replay or full physics simulation.",
+      "eventMeaning": {
+        "finalSource": "Recorded final-damage attribution only when the game observed it; typeIndex resolves through gameplay-contract.json enemies. Null means unknown.",
+        "coachReason": "Deterministic local comparison code; it does not prove causality.",
+        "provenance": "Recorded build commit and dirty-tree flag. Null means unavailable; old runs are never assigned the current build.",
+        "objective": "Mode-owned terminal result and primary metric; null means not recorded. A victory is not a global score attestation."
+      },
+      "units": {
+        "score": "points",
+        "wave": "wave index",
+        "kills": "count",
+        "durationSeconds": "seconds",
+        "totalShots": "count",
+        "totalHits": "count",
+        "seed": "integer",
+        "recordedAt": "ISO 8601 UTC"
+      },
+      "hash": "SHA-256 over UTF-8 JSON of every export field except contentHash, in insertion order.",
+      "gameplayContract": "/gameplay-contract.json"
+    }
+  },
+  "resources": [
+    {
+      "href": "/gameplay-contract.json",
+      "contentHash": "sha256:b340ff41cbf608984c3d17c9f9f1cc4ef924ee6f02eb2085ebb1fccb4b46dab7",
+      "bytes": 64003
+    },
+    {
+      "href": "/run-analysis-schema.json",
+      "contentHash": "sha256:c846dc470521222d184b16be5a7a28356e11713232bd835785189319662f6461",
+      "bytes": 1366
+    },
+    {
+      "href": "/agents.json",
+      "contentHash": "sha256:9e0b0c22a3cc992da78ecb245832d2f024c07d7bdb344a2bf9d3ff90114c58d2",
+      "bytes": 9511
+    }
+  ],
+  "freshness": {
+    "stableFacts": "Reuse only while the canonical resource content hash matches.",
+    "renderedEvidence": "Key by verified deploy revision, source digest, route, setup, input method, viewport, theme and state.",
+    "volatileFacts": "Recheck service status and live leaderboards for each requested verification; never treat this pack as live service evidence.",
+    "failures": "Never reuse a failing or incomplete capture as passing evidence.",
+    "buildIdentity": "Read recorded build provenance from a player-provided run export. Content hashes do not attest the deployed source commit."
+  },
+  "contentHash": "sha256:b8a79a895559a8382b05e1a6a7c374d233623f8a2fcc481b9f9ae5ebdc3066d0"
+}

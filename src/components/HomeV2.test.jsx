@@ -62,6 +62,21 @@ function saveVerifiedInput() {
 }
 
 describe("HomeV2", () => {
+  it("hydrates a combined seeded mode link and exposes the same run-code inputs on mobile", async () => {
+    window.history.pushState({}, "", "/?mode=zombies&seed=42&diff=hard");
+    const host = document.createElement("div"); document.body.appendChild(host);
+    const tree = createRoot(host), setDifficulty = vi.fn(), onSetZombiesMode = vi.fn();
+    try {
+      await act(async () => tree.render(<HomeV2 {...baseProps} isMobile setDifficulty={setDifficulty} onSetZombiesMode={onSetZombiesMode} />));
+      expect(setDifficulty).toHaveBeenCalledWith("hard");
+      expect(onSetZombiesMode).toHaveBeenCalledWith(true);
+      expect(host.querySelector('#run-seed').value).toBe("42");
+      expect(host.querySelector('label[for="run-seed"]').textContent).toBe("SEED");
+      expect(host.querySelector('#run-replay')).toBeTruthy();
+      expect(host.querySelector('[aria-label="Scenario Cartridge code"]')).toBeTruthy();
+      expect(host.textContent).toContain("SEWER RELAY");
+    } finally { await act(async () => tree.unmount()); host.remove(); window.history.replaceState({}, "", "/"); }
+  });
   it("identifies a selected new mode and lets the player choose an operation", async () => {
     const host=document.createElement("div");document.body.appendChild(host);const tree=createRoot(host);
     await act(async()=>tree.render(<HomeV2 {...baseProps} gameModeId="boss_gauntlet" />));

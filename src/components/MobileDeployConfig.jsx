@@ -1,3 +1,4 @@
+import { describeModeDifficulty } from "../config/difficultyPolicy.js";
 import { useEffect, useState } from "react";
 import ModePicker from "./ModePicker.jsx";
 
@@ -98,6 +99,7 @@ export default function MobileDeployConfig({
           })}
         </div>
       </div>
+      <p data-testid="mode-difficulty" style={{ color: palette?.muted || "var(--cod-muted)", fontSize: 12, margin: 0 }}>{describeModeDifficulty(acknowledgedModeId, acknowledgedDifficulty)}</p>
       <div role="status" aria-live="polite" style={{ color: palette?.cyan || "#B9F3FF", fontSize: 14 }}>
         Selected: {selectedMode?.label || acknowledgedModeId} · {selectedDifficulty?.label || acknowledgedDifficulty}
       </div>

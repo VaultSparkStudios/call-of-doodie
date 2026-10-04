@@ -43,6 +43,7 @@ export function setBusVolume(...args) { return call("setBusVolume", args, undefi
 export function setDangerIntensity(...args) { return call("setDangerIntensity", args, undefined); }
 export function setMusicIntensity(...args) { return call("setMusicIntensity", args, undefined); }
 export function setMusicMode(...args) { return call("setMusicMode", args, undefined); }
+export function setMusicObjective(...args) { return call("setMusicObjective", args, undefined); }
 export function setMusicPaused(...args) { return call("setMusicPaused", args, undefined); }
 export function setMusicLowpass(...args) { return call("setMusicLowpass", args, undefined); }
 export function setMusicTier(...args) { return call("setMusicTier", args, undefined); }

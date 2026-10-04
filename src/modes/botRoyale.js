@@ -6,7 +6,7 @@
 // here from the enemy bullet stream. Outside the flood ring everyone takes
 // damage. Last one flushing wins. No netcode, no wave spawns.
 
-import { ENEMY_TYPES } from "../constants.js";
+import { DIFFICULTIES, ENEMY_TYPES } from "../constants.js";
 import { getRunRng } from "../systems/runRng.js";
 import { retireEnemyWithoutDefeat } from "../systems/enemyDefeatLifecycle.js";
 import { applyObservedPlayerDamage } from "../systems/damageSequence.js";
@@ -27,14 +27,15 @@ function spawnBot(gs, index, ctx) {
   const W = ctx.W || gs._W || 1280, H = ctx.H || gs._H || 720;
   const typeIndex = BOT_TYPES[Math.floor(rng() * BOT_TYPES.length)];
   const type = ENEMY_TYPES[typeIndex];
+  const diff = DIFFICULTIES[gs.runDifficulty] || DIFFICULTIES.normal;
   const angle = (index / BOT_COUNT) * Math.PI * 2 + rng() * 0.3;
   const radius = Math.min(W, H) * 0.42;
   const bot = {
     id: `bot-${index}`,
     isBot: true,
     x: W / 2 + Math.cos(angle) * radius, y: H / 2 + Math.sin(angle) * radius,
-    health: 140, maxHealth: 140,
-    speed: 1.9 + rng() * 0.6, size: 36, color: type.color, name: HANDLES[index % HANDLES.length], points: 250,
+    health: 140 * diff.healthMult, maxHealth: 140 * diff.healthMult,
+    speed: (1.9 + rng() * 0.6) * diff.speedMult, size: 36, color: type.color, name: HANDLES[index % HANDLES.length], points: 250,
     deathQuotes: ["gg ez", "lag", "my controller died", "reported", "this is rigged", "brb mom"],
     emoji: type.emoji, typeIndex,
     wobble: rng() * Math.PI * 2, hitFlash: 0,
@@ -66,6 +67,7 @@ export const BOT_ROYALE = Object.freeze({
   botCount: BOT_COUNT,
 
   init(gs, ctx) {
+    gs.runDifficulty = ctx.difficulty || gs.runDifficulty || "normal";
     const W = ctx.W || gs._W || 1280, H = ctx.H || gs._H || 720;
     for (let i = 0; i < BOT_COUNT; i += 1) spawnBot(gs, i, ctx);
     gs.flood = { cx: W / 2, cy: H / 2, r: Math.hypot(W, H) / 2, targetR: Math.hypot(W, H) / 2, phase: 0, nextShrinkFrame: FLOOD_PHASE_FRAMES };

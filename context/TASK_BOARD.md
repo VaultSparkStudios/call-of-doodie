@@ -1,3 +1,15 @@
+## Session 183 gameplay audit follow-through
+
+- [x] Repair lossless setup sharing, named settings and mobile controls; verify catalog-generated regressions.
+- [x] Repair mode difficulty factors, compact mobile combat, local score affordances and run-export provenance.
+- [x] Implement optional creature practice, pump-pacing experiment and objective music without adding mandatory combat interruptions.
+- [x] Fix reload/pause, starting kit and terminal export defects discovered by actual playthroughs.
+- [ ] Finish exact-main CI, final staging and canonical production verification for this increment.
+- [ ] Measure matched human/agent play outcomes and creature/music comprehension with actual participants.
+- [ ] Measure isolated production timing on target hardware and model-token usage before claiming comparative improvements.
+
+Human-versus-agent comparative outcomes, humor/listening judgments, physical devices, model-token savings and isolated production performance remain unmeasured. Automation proves integration and observations, not enjoyment, balance or retention. All twenty audit items retain their detailed acceptance status in the private audit artifact; source implementation is not blanket acceptance.
+
 ## End-game follow-up — 2026-10-03
 
 - [x] Make death/victory results fully scrollable, including short mobile screens; keep Back to Command outside optional disclosures.

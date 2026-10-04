@@ -66,6 +66,14 @@ export function getRunIntegrityReceipt(source = null) {
   const integrity = source?.runIntegrity || source;
   const faults = Array.isArray(integrity?.faults) ? integrity.faults : [];
   const degraded = integrity?.status === "degraded" || faults.length > 0;
+  if (!degraded && (source?.replayEligible === false || (integrity?.status === "local-mode" && integrity?.onlineEligible === false))) {
+    return {
+      status: "local-mode", onlineEligible: false, faultCount: 0, occurrenceCount: 0,
+      label: "LOCAL RUN · UNRANKED MODE",
+      detail: "This mode saves results on this device. Global score submission is unavailable; you can share or export your result below.",
+      claim: "mode-policy-local-only",
+    };
+  }
   if (!degraded) {
     return {
       status: "clean",
@@ -104,4 +112,3 @@ export function buildIntegrityLocalSubmissionResult(receipt, board = []) {
     integrityReceipt: resolved,
   };
 }
-

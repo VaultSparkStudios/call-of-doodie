@@ -1,3 +1,19 @@
+## S183 final staging evidence
+
+Final staging ce356fde passes shell 7/7 and all eight ending cases with actual death/victory pack downloads, bottom controls, keyboard/touch scroll and menu return. Setup 4/4 and creature practice 20/20 passed the same source implementation before the terminal-only synchronization fix. CANON-053 passes 144 directly reviewed hash-bound captures. Strict lint, configured build, public/security/supply-chain gates and all corrected targeted regressions pass. Exact-main hosted suite and production follow-through remain pending.
+
+## Session 183 gameplay audit follow-through
+
+Where We Left Off: Setup links and version-2 cartridges preserve all twelve modes and four difficulties. Settings have accessible names and states; mobile run-code controls match desktop. Zombies and Bot Royale honor difficulty factors. Mobile combat removes duplicate weapon/ammo panels. Objective music gains distinct mission/pump phrases. Optional creature practice and pump-paced Zombies remain local experiments. Run exports record bounded build, kit, mutation, pacing and objective provenance.
+
+Session Intent: Complete the authorized gameplay audit plan, /closeout, direct-main push and deployment.
+Intent outcome: Source implementation and automated acceptance advanced; participant/hardware/token acceptance remains partial.
+Real playthroughs exposed paused wall-clock reload completion, stale starting-kit initialization, and terminal score/wave mismatch that disabled victory exports. These are repaired with simulation-clock reloads, kit selection before initialization, and final-state synchronization.
+Local full suite: 1,929/1,930 initially passed; the one stale mode-wiring assertion was corrected and its suite passed. Subsequent setup/export/terminal regressions pass. Strict lint, configured build, public contracts and security gate pass. Sixty fixed-seed setup observations and twenty-four all-mode pause/resume follow-ups cover twelve modes/four difficulties plus mobile Normal. Real audio/control probes pass Classic, Zombies and Operations. Staging setup and creature checks pass in both themes at 390/1440; eight ending cases pass including 390×360 scrolling. Final staging/CI/production evidence follows the terminal fix.
+Deploy: staged at https://2c127d0c.call-of-doodie.pages.dev/ before final terminal sync; replacement staging and production verification pending.
+Rollback: retain production source 5d13141813939e9e3efa7eb2a05cd7cee492c49a; use documented normal revert path.
+Next: finish delivery checks, then the remaining measured acceptance. Human-versus-agent comparative outcomes, humor/listening judgments, physical devices, model-token savings and isolated production performance remain unmeasured. Automation proves integration and observations, not enjoyment, balance or retention. All twenty audit items retain their detailed acceptance status in the private audit artifact; source implementation is not blanket acceptance.
+
 ## End-game follow-up — 2026-10-03
 
 Requested outcome: reach the main menu from the bottom of the end-game screen and show submission/sharing without expanding panels. Implemented in DeathScreen.jsx using a bounded block scroll region, always-rendered score/share sections and independent footer navigation with 44px touch targets. Staging https://fc2ca612.call-of-doodie.pages.dev passes all eight death/victory, theme and width cases, plus short mobile, keyboard End, touch swipe and return-to-menu checks. Directly reviewed 52 before/after screenshots; receipt hashes bind the final source. Lint, build and 19 focused tests pass. No online score submission or external sharing was performed. This bounded follow-up does not reopen the completed rebuild or paused goal. Exact-main CI and production verification follow this commit.

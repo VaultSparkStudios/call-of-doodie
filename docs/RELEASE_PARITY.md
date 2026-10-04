@@ -1,3 +1,9 @@
+## 2026-10-04 — S183 gameplay audit increment
+
+Final staging ce356fde passes shell 7/7 and all eight ending cases with actual death/victory pack downloads, bottom controls, keyboard/touch scroll and menu return. Setup 4/4 and creature practice 20/20 passed the same source implementation before the terminal-only synchronization fix. CANON-053 passes 144 directly reviewed hash-bound captures. Strict lint, configured build, public/security/supply-chain gates and all corrected targeted regressions pass. Exact-main hosted suite and production follow-through remain pending.
+
+Staging and production use the same project Supabase configuration resolver; the configured build validates the game-project reference. Desktop/mobile browsers cover both themes; no native app ships. Previous production source 5d13141813939e9e3efa7eb2a05cd7cee492c49a is the rollback target through the documented normal revert path. Founder explicitly authorized commit/push main and deploy. FORGE/public-unlaunched remains unchanged; five-green-run launch history, stable owned staging, participant, physical-device, Core Web Vitals, identity and reply-email evidence remain unproven.
+
 # Release Parity — Call of Doodie
 
 ## 2026-10-03 — End-game follow-up staging

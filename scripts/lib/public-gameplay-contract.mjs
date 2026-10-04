@@ -18,6 +18,8 @@ import { OPERATION_ENCOUNTER_SCORE } from "../../src/systems/operationAudioDirec
 import { FIELD_MANUAL_SECTIONS } from "../../src/content/fieldManual.js";
 import { CAPABILITY_EVIDENCE } from "../../src/content/capabilities.js";
 import { createHash } from "node:crypto";
+import { getModeDifficultyFacts } from "../../src/config/difficultyPolicy.js";
+import { SCENARIO_SCHEMA_VERSION } from "../../src/utils/scenarioCartridge.js";
 
 function label(id) {
   return String(id).split("_").map((part) => part.charAt(0).toUpperCase() + part.slice(1)).join(" ");
@@ -103,6 +105,10 @@ export function buildPublicGameplayContract() {
       label: difficulty.label || label(id),
       playerHp: Number(difficulty.playerHP) || null,
       spawnMultiplier: Number(difficulty.spawnMult) || null,
+      enemyHealthMultiplier: difficulty.healthMult,
+      enemySpeedMultiplier: difficulty.speedMult,
+      incomingDamageMultiplier: 1,
+      modePolicies: [...MODE_CATALOG, ...NEW_MODE_CATALOG].map(mode => getModeDifficultyFacts(mode.id, id)),
     })),
     replayCodeDifficultySlots: REPLAY_DIFFICULTIES.length,
     starterLoadouts: REPLAY_STARTERS.map((id) => {
@@ -157,7 +163,10 @@ export function buildPublicGameplayContract() {
         opponent: "saved-player-run-not-bot-or-live-person", launch: "preview-first-guest-accept-no-auto-start" },
       legacySeedLink: { route: "/", queryParameters: ["seed", "diff", "vs", "vsName"], note: "Direct legacy seed setup remains supported; it is not a verified score receipt." },
       scenarioCartridge: {
-        schemaVersion: "sewer-scenario-v1",
+        schemaVersion: SCENARIO_SCHEMA_VERSION,
+        supportedModes: [...MODE_CATALOG, ...NEW_MODE_CATALOG].map(mode => mode.id),
+        supportedDifficulties: Object.keys(DIFFICULTIES),
+        acceptsLegacy: "sewer-scenario-v1; authenticated nightmare slots migrate to insane",
         queryParameter: "scenario",
         captures: ["seed", "mode", "difficulty", "starter_loadout", "optional_target_score", "optional_rival"],
         integrity: "FNV-1a checksum rejects accidental or opportunistic field tampering; it is not a cryptographic signature.",

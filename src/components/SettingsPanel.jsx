@@ -219,12 +219,12 @@ export default function SettingsPanel({ settings, onSave, onClose }) {
               return (
                 <div key={key} style={{ ...(isFocused ? { borderRadius: 6, background: "rgba(255,107,53,0.06)", padding: "6px 8px", margin: "-6px -8px" } : {}) }}>
                   <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4, fontSize: 12, color: isFocused ? "#FF6B35" : "#CCC" }}>
-                    <span>{meta.label}</span>
+                    <span id={`setting-${key}-label`}>{meta.label}</span>
                     {meta.type === "slider" && <span style={{ color: "var(--cod-orange)", fontWeight: 700, minWidth: 60, textAlign: "right", fontFamily: "monospace", fontSize: 11 }}>{meta.fmt(val(key))}</span>}
                   </div>
                   {meta.desc && <div style={{ fontSize: 10, color: "#aaa", marginBottom: 7, lineHeight: 1.3 }}>{meta.desc}</div>}
                   {meta.type === "slider" && (
-                    <input type="range" min={meta.min} max={meta.max} step={meta.step} value={val(key)}
+                    <input type="range" min={meta.min} max={meta.max} step={meta.step} value={val(key)} aria-labelledby={`setting-${key}-label`} aria-valuetext={meta.fmt(val(key))}
                       onChange={e => set(key, parseFloat(e.target.value))}
                       style={{ width: "100%", accentColor: "var(--cod-orange)", cursor: "pointer", height: 4 }} />
                   )}
@@ -232,7 +232,7 @@ export default function SettingsPanel({ settings, onSave, onClose }) {
                     <div>
                       <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
                         {meta.options.map(opt => (
-                          <button key={opt.v} onClick={() => set(key, opt.v)}
+                          <button key={opt.v} onClick={() => set(key, opt.v)} aria-label={`${meta.label}: ${opt.l}`} aria-pressed={val(key) === opt.v}
                             style={{ ...base, fontSize: 11, padding: "6px 12px", background: val(key) === opt.v ? "rgba(255,107,53,0.2)" : "rgba(255,255,255,0.04)", border: val(key) === opt.v ? "1px solid rgba(255,107,53,0.55)" : "1px solid rgba(255,255,255,0.1)", color: val(key) === opt.v ? "#FF6B35" : "#bbb" }}>
                             {opt.l}
                           </button>
@@ -266,7 +266,7 @@ export default function SettingsPanel({ settings, onSave, onClose }) {
                     </div>
                   )}
                   {meta.type === "toggle" && (
-                    <button onClick={() => set(key, !val(key))}
+                    <button onClick={() => set(key, !val(key))} aria-labelledby={`setting-${key}-label`} aria-pressed={Boolean(val(key))}
                       style={{ ...base, fontSize: 11, padding: "8px 18px", background: val(key) ? "rgba(0,255,136,0.12)" : "rgba(255,255,255,0.04)", border: val(key) ? "1px solid rgba(0,255,136,0.4)" : "1px solid rgba(255,255,255,0.1)", color: val(key) ? "#00FF88" : "#aaa" }}>
                       {val(key) ? "✓ ON" : "OFF"}
                     </button>
@@ -285,7 +285,7 @@ export default function SettingsPanel({ settings, onSave, onClose }) {
                 <div style={{ fontSize: 10, color: "#aaa", marginBottom: 7, lineHeight: 1.3 }}>
                   Opt-in local playtest evidence — records anonymous run milestones on this device to help tune the game. Nothing leaves your browser without a submitted run.
                 </div>
-                <button onClick={() => setPulseOn(prev => { setPlaytestPulseEnabled(!prev); return !prev; })}
+                <button aria-label="Playtest Pulse" aria-pressed={pulseOn} onClick={() => setPulseOn(prev => { setPlaytestPulseEnabled(!prev); return !prev; })}
                   style={{ ...base, fontSize: 11, padding: "8px 18px", background: pulseOn ? "rgba(0,255,136,0.12)" : "rgba(255,255,255,0.04)", border: pulseOn ? "1px solid rgba(0,255,136,0.4)" : "1px solid rgba(255,255,255,0.1)", color: pulseOn ? "#00FF88" : "#aaa" }}>
                   {pulseOn ? "✓ ON" : "OFF"}
                 </button>

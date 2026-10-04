@@ -1,3 +1,14 @@
+## S183 final staging evidence
+
+Final staging ce356fde passes shell 7/7 and all eight ending cases with actual death/victory pack downloads, bottom controls, keyboard/touch scroll and menu return. Setup 4/4 and creature practice 20/20 passed the same source implementation before the terminal-only synchronization fix. CANON-053 passes 144 directly reviewed hash-bound captures. Strict lint, configured build, public/security/supply-chain gates and all corrected targeted regressions pass. Exact-main hosted suite and production follow-through remain pending.
+
+## Session 183 gameplay audit follow-through
+
+Local full suite: 1,929/1,930 initially passed; the one stale mode-wiring assertion was corrected and its suite passed. Subsequent setup/export/terminal regressions pass. Strict lint, configured build, public contracts and security gate pass. Sixty fixed-seed setup observations and twenty-four all-mode pause/resume follow-ups cover twelve modes/four difficulties plus mobile Normal. Real audio/control probes pass Classic, Zombies and Operations. Staging setup and creature checks pass in both themes at 390/1440; eight ending cases pass including 390×360 scrolling. Final staging/CI/production evidence follows the terminal fix.
+
+Human-versus-agent comparative outcomes, humor/listening judgments, physical devices, model-token savings and isolated production performance remain unmeasured. Automation proves integration and observations, not enjoyment, balance or retention. All twenty audit items retain their detailed acceptance status in the private audit artifact; source implementation is not blanket acceptance.
+Run pack hashes are advisory content integrity, not score attestation. Evidence pack saves measured reads/bytes for a declared subset of questions; tokens remain unknown. Runtime samples have ~16.7ms medians but include long tasks on a shared development host, so no speedup claim. Generic responsive-audit skipped for its missing alternate Playwright package; actual installed project browser harness supplied the touched-state matrix.
+
 ## Session 182 explicit founder closeout
 
 Records seal 2d0bdf9d5306 passed GitHub Actions 37158694453 (quality and deployment). Canonical production health reports that revision and the live shell passes 7/7. Gameplay acceptance remains bound to 9f508f9eda50; subsequent commits change records and QA tooling only.

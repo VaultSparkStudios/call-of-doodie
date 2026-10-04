@@ -1,3 +1,4 @@
+import { describeModeDifficulty } from "../config/difficultyPolicy.js";
 import { useState, useEffect, useMemo, useCallback, useRef, lazy, startTransition } from "react";
 import AsyncPanelBoundary from "./AsyncPanelBoundary.jsx";
 import DialogShell from "./DialogShell.jsx";
@@ -22,7 +23,7 @@ import { buildMenuIntelligence, buildStudioGameEvent } from "../utils/runIntelli
 import { getAnalyticsStatus, track } from "../utils/analytics.js";
 import { summarizeStudioEvents } from "../utils/studioEventOps.js";
 import { isSupporter } from "../utils/supporter.js";
-import { encodeReplayCode, decodeReplayCode, isValidReplayCode } from "../utils/replayCode.js";
+import { decodeReplayCode, isValidReplayCode } from "../utils/replayCode.js";
 import { getDifficultyBriefing, getMutationDifficultyBrief, suggestDifficulty } from "../utils/runBrain.js";
 import { loadControllerProfile } from "../utils/gamepad.js";
 import { AIM_CALIBRATION_BUCKETS, aimBucketFromKey, aimBucketFromVector, buildInputCalibrationNudge, buildInputCalibrationRecord, buildInputQaReceipt, loadInputCalibration, mergeAimCalibrationEvidence, resolveAimCalibrationSource, saveInputCalibration } from "../utils/inputCalibration.js";
@@ -58,6 +59,7 @@ const AchievementsPanel = lazy(() => import("./AchievementsPanel.jsx"));
 const ProfilePanel = lazy(() => import("./ProfilePanel.jsx"));
 const BuildPanel = lazy(() => import("./BuildPanel.jsx"));
 const SettingsPanel = lazy(() => import("./SettingsPanel.jsx"));
+const ZombiePractice = lazy(() => import("./ZombiePractice.jsx"));
 const MetaTreePanel = lazy(() => import("./MetaTreePanel.jsx"));
 const SupporterModal = lazy(() => import("./SupporterModal.jsx"));
 const MP_Rules          = lazy(() => import("./MenuPanels.jsx").then(m => ({ default: m.RulesPanel })));
@@ -160,6 +162,7 @@ export default function HomeV2(props) {
   const [returnToRecord, setReturnToRecord] = useState(null);
   const [returnToBuild, setReturnToBuild] = useState(null);
   const [showSettings, setShowSettings] = useState(false);
+  const [showZombiePractice, setShowZombiePractice] = useState(false);
   const [showMetaTree, setShowMetaTree] = useState(false);
   const [showSupporter, setShowSupporter] = useState(false);
   const [showAimCheck, setShowAimCheck] = useState(false);
@@ -256,6 +259,10 @@ export default function HomeV2(props) {
       }
     }
     const launchIntent = parseLaunchIntent(window.location.search);
+    if (!inviteAttempt && launchIntent) {
+      if (launchIntent.seed !== undefined) setCustomSeed(String(launchIntent.seed));
+      if (launchIntent.difficulty) setDifficulty(launchIntent.difficulty);
+    }
     if (!inviteAttempt && launchIntent?.kind === "mode") selectMode(launchIntent.id);
     if (!inviteAttempt && launchIntent?.kind === "operation") {
       const launch = getOperationLaunch(launchIntent.id, launchIntent.route);
@@ -285,7 +292,7 @@ export default function HomeV2(props) {
         selectMode(r.mode);
         setDeployPanelOpen(true);
       }
-    } else if (!inviteAttempt) {
+    } else if (!inviteAttempt && !scenario && !urlReplay && !params.has("scenario")) {
       const urlSeed = params.get("seed");
       if (urlSeed && /^[1-9]\d{0,8}$/.test(urlSeed)) {
         setCustomSeed(urlSeed);
@@ -786,13 +793,14 @@ export default function HomeV2(props) {
               ].map(([id, label, hint]) => <button key={id} type="button" aria-pressed={playIntent === id} onClick={() => choosePlayIntent(id)} style={{ borderColor: playIntent === id ? themePalette.accent : themePalette.line, background: playIntent === id ? `${themePalette.accent}22` : themePalette.panel, color: themePalette.ink }}><strong>{label}</strong><span>{hint}</span></button>)}
             </div>
             <p className="play-console__summary" role="status">
-              {playIntent === "classic" ? "Fight endless waves, choose perks, and upgrade your weapons. Start with the original game." : playIntent === "operations" ? `${operationLaunch?.title || "Choose an operation"} · ${operationLaunch?.routeLabel || "Verified route"} · ${operationLaunch?.duration || "12–18 MIN"}` : `${selectedMode.label} · ${selectedMode.blurb}`}
+              {playIntent === "classic" ? "Fight endless waves. One optional build choice every four waves keeps the action moving." : playIntent === "operations" ? `${operationLaunch?.title || "Choose an operation"} · ${operationLaunch?.routeLabel || "Verified route"} · ${operationLaunch?.duration || "12–18 MIN"}` : `${selectedMode.label} · ${selectedMode.blurb}`}
             </p>
             {inviteState !== "none" && <div className={`play-console__invite play-console__invite--${inviteState}`} role="status" data-testid="challenge-invite-status">
               <strong>{inviteState === "ready" ? "FRIENDLY INVITE READY" : inviteState === "validating" ? "CHECKING SAVED INVITE" : "INVITE REJECTED"}</strong>
               <span>{inviteState === "validating" ? "Checking the saved run before you can start." : scenarioNotice}</span>
               {inviteState === "rejected" && <button type="button" onClick={() => { window.history.replaceState(null, "", `${window.location.pathname}${window.location.hash}`); setInviteState("none"); setScenarioNotice(""); setChallengeMode(null); setCustomSeed(""); }}>Continue without challenge</button>}
             </div>}
+            {playIntent === "operations" && <p data-testid="operation-difficulty" style={{ color: "var(--cod-muted)", fontSize: 12, margin: "6px 0" }}>{describeModeDifficulty("operation", difficulty)}</p>}
             {playIntent === "operations" && <details className="play-console__choice-details"><summary>Choose mission and route</summary><OperationCommandDeck selectionOnly selectedOperationId={operationLaunch?.challenge.operationId} selectedRouteId={operationLaunch?.challenge.operationRoute} onSelect={setOperationLaunch} palette={themePalette} /></details>}
             <button type="button" data-testid="front-door-deploy" className="arcade-home__deploy-button play-console__start" onClick={startSelectedPlay} disabled={inviteState === "validating" || inviteState === "rejected" || (playIntent === "operations" && !operationLaunch) || (playIntent !== "operations" && modeSwitching)} aria-busy={inviteState === "validating" || (playIntent !== "operations" && modeSwitching)} aria-label={`Start ${playIntent === "operations" ? operationLaunch?.title || "operation" : playIntent === "classic" ? "Classic Survival" : selectedMode.label}`} style={deployBtn}>
               ▶ START {playIntent === "operations" ? operationLaunch?.title || "OPERATION" : playIntent === "classic" ? "CLASSIC SURVIVAL" : selectedMode.label.toUpperCase()}
@@ -860,14 +868,17 @@ export default function HomeV2(props) {
             {(() => { const brief = getDifficultyBriefing(difficulty, runHistory); return brief ? <div style={{ fontSize: 10, color: "#999", marginTop: 5, textAlign: "center", letterSpacing: 0.5 }}>{brief}</div> : null; })()}
             {(() => { const s = suggestDifficulty(runHistory, difficulty); return s ? <div style={{ fontSize: 10, color: s.direction === "up" ? "#00FF88" : "#FFBB44", marginTop: 3, textAlign: "center", fontStyle: "italic", letterSpacing: 0.3 }}>{s.reason}</div> : null; })()}
             {(() => { const mb = getMutationDifficultyBrief(weeklyMutation, difficulty, runHistory); return mb ? <div style={{ fontSize: 10, color: "#FFBB44", marginTop: 3, textAlign: "center", fontStyle: "italic", letterSpacing: 0.3 }}>⚠ {mb}</div> : null; })()}
+            </>}
+            {!isMobile && <p data-testid="mode-difficulty" style={{ color: "var(--cod-muted)", fontSize: 11 }}>{describeModeDifficulty(modeId, difficulty)}</p>}
             <div style={{ marginTop: 10, display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
-              <label style={{ fontSize: 10, color: "#888", letterSpacing: 1 }}>SEED</label>
+              <label htmlFor="run-seed" style={{ fontSize: 10, color: "var(--cod-muted)", letterSpacing: 1 }}>SEED</label>
               <input
+                id="run-seed"
                 value={customSeed}
                 onChange={e => setCustomSeed(e.target.value.replace(/\D/g, ""))}
                 placeholder="optional"
-                maxLength={6}
-                style={{ width: 120, padding: "5px 8px", fontSize: 11, fontFamily: "monospace", background: "rgba(0,0,0,0.4)", border: "1px solid rgba(255,255,255,0.14)", borderRadius: 6, color: "#EEE", outline: "none", textAlign: "center" }}
+                maxLength={9}
+                style={{ width: 120, padding: "5px 8px", fontSize: 11, fontFamily: "monospace", background: "var(--cod-panel-soft)", border: "1px solid var(--cod-line)", borderRadius: 6, color: "var(--cod-ink)", outline: "none", textAlign: "center" }}
               />
               <span style={{ fontSize: 10, color: "#666", marginLeft: "auto" }}>Loadout: <strong style={{ color: selectedLoadout.color }}>{selectedLoadout.emoji} {selectedLoadout.name}</strong></span>
             </div>
@@ -875,13 +886,14 @@ export default function HomeV2(props) {
             <details style={{ marginTop: 9, paddingTop: 8, borderTop: "1px solid rgba(255,255,255,0.06)" }}>
               <summary style={{ cursor: "pointer", color: "var(--cod-cyan)", fontSize: 10, fontWeight: 900, letterSpacing: 1.2 }}>ADVANCED RUN CODES &amp; RELAYS</summary>
             <div style={{ marginTop: 10, display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap", paddingTop: 8, borderTop: "1px solid rgba(255,255,255,0.06)" }}>
-              <label style={{ fontSize: 10, color: "#888", letterSpacing: 1 }}>REPLAY</label>
+              <label htmlFor="run-replay" style={{ fontSize: 10, color: "var(--cod-muted)", letterSpacing: 1 }}>REPLAY</label>
               <input
+                id="run-replay"
                 value={replayInput}
                 onChange={e => setReplayInput(e.target.value.toUpperCase().replace(/[^0-9A-F]/g, "").slice(0, 12))}
                 placeholder="paste 12-char code"
                 maxLength={12}
-                style={{ width: 140, padding: "5px 8px", fontSize: 11, fontFamily: "monospace", background: "rgba(0,0,0,0.4)", border: `1px solid ${isValidReplayCode(replayInput) ? "rgba(0,255,136,0.5)" : "rgba(255,255,255,0.14)"}`, borderRadius: 6, color: "#EEE", outline: "none", textAlign: "center", letterSpacing: 1.5 }}
+                style={{ width: 140, padding: "5px 8px", fontSize: 11, fontFamily: "monospace", background: "var(--cod-panel-soft)", border: `1px solid ${isValidReplayCode(replayInput) ? "var(--cod-cyan)" : "var(--cod-line)"}`, borderRadius: 6, color: "var(--cod-ink)", outline: "none", textAlign: "center", letterSpacing: 1.5 }}
               />
               <button
                 disabled={!isValidReplayCode(replayInput)}
@@ -898,27 +910,25 @@ export default function HomeV2(props) {
               >LOAD</button>
               <button
                 onClick={() => {
-                  const code = encodeReplayCode({
-                    seed: parseInt(customSeed || todaySeedStr, 10) || 0,
-                    mode: modeId, difficulty, weaponIdx: 0, starterLoadout: selectedLoadout.id,
-                  });
-                  const url = `${location.origin}${location.pathname}?replay=${code}`;
+                  const cartridge = buildScenarioCartridge({ seed: Number(customSeed || todaySeedStr), mode: modeId, difficulty, loadout: selectedLoadout.id });
+                  const url = buildSewerRelayUrl(cartridge);
+                  if (!url) { setScenarioNotice("Run link rejected: unsupported setup."); return; }
                   navigator.clipboard?.writeText?.(url);
                   setReplayCopied(true);
                   setTimeout(() => setReplayCopied(false), 1500);
-                  track("front_door_action", { actionId: "replay_code_share", surface: "home_v2", code });
+                  track("front_door_action", { actionId: "scenario_share", surface: "home_v2" });
                 }}
                 title="Copy a shareable link that auto-loads this run configuration"
-                style={{ marginLeft: "auto", padding: "5px 10px", fontSize: 10, fontWeight: 800, letterSpacing: 1, color: replayCopied ? "#00FF88" : "#FFD700", background: "rgba(255,215,0,0.08)", border: "1px solid rgba(255,215,0,0.4)", borderRadius: 6, cursor: "pointer" }}
+                style={{ marginLeft: "auto", padding: "5px 10px", fontSize: 10, fontWeight: 800, letterSpacing: 1, color: "var(--cod-gold)", background: "rgba(255,215,0,0.08)", border: "1px solid var(--cod-line)", borderRadius: 6, cursor: "pointer" }}
               >{replayCopied ? "✓ LINK COPIED" : "🔗 SHARE LINK"}</button>
             </div>
             <div data-testid="scenario-cartridge" style={{ marginTop: 10, display: "grid", gap: 7, paddingTop: 9, borderTop: "1px solid rgba(127,230,255,0.18)" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 7, flexWrap: "wrap" }}>
                 <strong style={{ color: "var(--cod-cyan)", fontSize: 10, letterSpacing: 1.4 }}>SCENARIO CARTRIDGE</strong>
-                <span style={{ color: "#888", fontSize: 9 }}>seed + mode + difficulty + loadout + optional rival</span>
+                <span style={{ color: "var(--cod-muted)", fontSize: 9 }}>seed + mode + difficulty + loadout + optional rival</span>
               </div>
               <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-                <input value={scenarioInput} onChange={(event) => setScenarioInput(event.target.value.trim())} placeholder="paste cartridge code" aria-label="Scenario Cartridge code" style={{ flex: "1 1 190px", minWidth: 0, padding: "6px 8px", fontSize: 10, fontFamily: "monospace", background: "rgba(0,0,0,0.4)", border: "1px solid rgba(127,230,255,0.25)", borderRadius: 6, color: "#EEE" }} />
+                <input value={scenarioInput} onChange={(event) => setScenarioInput(event.target.value.trim())} placeholder="paste cartridge code" aria-label="Scenario Cartridge code" style={{ flex: "1 1 190px", minWidth: 0, padding: "6px 8px", fontSize: 10, fontFamily: "monospace", background: "var(--cod-panel-soft)", border: "1px solid var(--cod-line)", borderRadius: 6, color: "var(--cod-ink)" }} />
                 <button type="button" style={quickBtn} onClick={() => {
                   const cartridge = decodeScenarioCartridge(scenarioInput);
                   if (!cartridge) { setScenarioNotice("Cartridge rejected: schema or integrity check failed."); return; }
@@ -929,14 +939,14 @@ export default function HomeV2(props) {
                 <button type="button" style={{ ...quickBtn, color: "var(--cod-cyan)", borderColor: "rgba(127,230,255,0.4)" }} onClick={async () => {
                   const cartridge = buildScenarioCartridge({ seed: Number(customSeed || todaySeedStr), mode: modeId, difficulty, loadout: selectedLoadout.id, targetScore: challengeMode?.vs, rival: challengeMode?.vsName });
                   const url = buildSewerRelayUrl(cartridge);
+                  if (!url) { setScenarioNotice("Relay rejected: unsupported setup."); return; }
                   try { await navigator.clipboard?.writeText?.(url); setScenarioNotice("Sewer Relay copied — asynchronous, deterministic, and account-free."); }
                   catch { setScenarioNotice("Relay built; clipboard access was unavailable."); }
                 }}>SEWER RELAY</button>
               </div>
-              {scenarioNotice && <div role="status" style={{ color: scenarioNotice.includes("rejected") ? "#FF9C88" : "#9BFFBD", fontSize: 9 }}>{scenarioNotice}</div>}
+              {scenarioNotice && <div role="status" style={{ color: "var(--cod-ink)", fontSize: 10 }}>{scenarioNotice}</div>}
             </div>
             </details>
-            </>}
           </div>
         </div>
 
@@ -1089,7 +1099,7 @@ export default function HomeV2(props) {
               ["Progress", [["👤 YOUR RECORD", CMD_ACTIONS[0], 0]]],
               ["Build", [["⚙️ YOUR BUILD", CMD_ACTIONS[1], 1]]],
               ["Community", [["⚔️ LEADERBOARD", CMD_ACTIONS[2], 2], ["📊 COMMUNITY STATS", CMD_ACTIONS[3], 3]]],
-              ["Learn", [["📜 RULES", CMD_ACTIONS[4], 4], ["⌨ CONTROLS", CMD_ACTIONS[5], 5], ["👾 MOST WANTED", CMD_ACTIONS[6], 6], ["✦ WHAT'S NEW", CMD_ACTIONS[7], 7]]],
+              ["Learn", [["📜 RULES", CMD_ACTIONS[4], 4], ["⌨ CONTROLS", CMD_ACTIONS[5], 5], ["👾 MOST WANTED", CMD_ACTIONS[6], 6], ["✦ WHAT'S NEW", CMD_ACTIONS[7], 7], ["CREATURE PRACTICE", () => setShowZombiePractice(true), null]]],
             ].map(([group, items]) => (
               <section key={group} className="home-tool-group">
                 <h3>{group}</h3>
@@ -1113,7 +1123,7 @@ export default function HomeV2(props) {
 
         {/* Challenge link banner */}
         {challengeMode && (
-          <div style={{ ...tickerCard, marginTop: 8, background: "rgba(255,107,53,0.08)", borderColor: "rgba(255,107,53,0.45)", color: "#FFD7B8" }}>
+          <div style={{ ...tickerCard, marginTop: 8, background: "rgba(255,107,53,0.08)", borderColor: "rgba(255,107,53,0.45)", color: "var(--cod-ink)" }}>
             <span style={{ fontSize: 14 }}>⚔️</span>
             <span style={{ flex: 1 }}>
               <strong style={{ color: "var(--cod-orange)" }}>{challengeMode.duelId ? "DUEL:" : "CHALLENGE:"}</strong> Seed #{challengeMode.seed}
@@ -1128,10 +1138,10 @@ export default function HomeV2(props) {
 
         {/* Weekly mutation banner */}
         {weeklyMutation && !mutationDismissed && (
-          <div style={{ ...tickerCard, marginTop: 8, background: "rgba(255,180,0,0.06)", borderColor: "rgba(255,180,0,0.3)", color: "#FFE8B3" }}>
+          <div style={{ ...tickerCard, marginTop: 8, background: "rgba(255,180,0,0.06)", borderColor: "rgba(255,180,0,0.3)", color: "var(--cod-ink)" }}>
             <span style={{ fontSize: 14 }}>⚡</span>
             <span style={{ flex: 1 }}>
-              <strong style={{ color: "#FFB300" }}>THIS WEEK'S MUTATION:</strong> {weeklyMutation.emoji} {weeklyMutation.name} — <span style={{ color: "#CCC" }}>{weeklyMutation.desc}</span>
+              <strong style={{ color: "var(--cod-orange)" }}>THIS WEEK'S MUTATION:</strong> {weeklyMutation.emoji} {weeklyMutation.name} — <span style={{ color: "var(--cod-ink)" }}>{weeklyMutation.desc}</span>
             </span>
             <button onClick={() => { writePreference("cod-mutation-dismissed", "1", "session", "home"); setMutationDismissed(true); }} aria-label="Dismiss mutation banner" style={{ background: "none", border: "none", color: "#888", cursor: "pointer", fontSize: 14 }}>✕</button>
           </div>
@@ -1233,6 +1243,7 @@ export default function HomeV2(props) {
           <SettingsPanel settings={gameSettings} onSave={onSaveSettings} onClose={() => { setShowSettings(false); clearHash(); }} />
         </AsyncPanelBoundary>
       )}
+      {showZombiePractice && <AsyncPanelBoundary><ZombiePractice reducedMotion={gameSettings?.reducedMotion === true || window.matchMedia?.("(prefers-reduced-motion: reduce)").matches} onClose={() => setShowZombiePractice(false)} /></AsyncPanelBoundary>}
       {showMetaTree && (
         <AsyncPanelBoundary>
           <MetaTreePanel onClose={() => finishBuildDetail(() => setShowMetaTree(false))} />
@@ -1384,10 +1395,10 @@ function AimCheckPanel({ controllerType, onVerify, onDiagnostics, onClose }) {
   const remaining = AIM_CALIBRATION_BUCKETS.length - evidence.buckets.length;
   return (
     <DialogShell titleId="aim-check-title" onClose={onClose}>
-      <div style={{ width: "min(460px, 100%)", margin: "auto 0", padding: 18, borderRadius: 10, background: "rgba(8,12,18,0.98)", border: "1px solid rgba(0,229,255,0.32)", color: "#EEE", textAlign: "center", boxShadow: "0 14px 40px rgba(0,0,0,0.65)" }}>
+      <div style={{ width: "min(460px, 100%)", margin: "auto 0", padding: 18, borderRadius: 10, background: "var(--cod-panel-strong)", border: "1px solid rgba(0,229,255,0.32)", color: "var(--cod-ink)", textAlign: "center", boxShadow: "0 14px 40px rgba(0,0,0,0.65)" }}>
         <div style={{ color: "var(--cod-cyan)", fontSize: 10, fontWeight: 900, letterSpacing: 2 }}>EVIDENCE-BACKED AIM CHECK</div>
-        <h2 id="aim-check-title" style={{ margin: "8px 0 6px", fontSize: 22, color: "#FFF", letterSpacing: 1 }}>Verify Full-Circle Control</h2>
-        <p style={{ margin: "0 auto 14px", maxWidth: 380, color: "#BFC9D8", fontSize: 12, lineHeight: 1.55 }}>
+        <h2 id="aim-check-title" style={{ margin: "8px 0 6px", fontSize: 22, color: "var(--cod-ink)", letterSpacing: 1 }}>Verify Full-Circle Control</h2>
+        <p style={{ margin: "0 auto 14px", maxWidth: 380, color: "var(--cod-muted)", fontSize: 12, lineHeight: 1.55 }}>
           Aim through all four directions inside the target, press W/A/S/D or arrow keys, or sweep a controller stick. A receipt is saved only from observed input for {device}.
         </p>
         <div
@@ -1431,7 +1442,7 @@ function AimCheckPanel({ controllerType, onVerify, onDiagnostics, onClose }) {
 }
 function CodexTab({ truthGraph }) {
   const [section, setSection] = useState("truth");
-  const btn = (active) => ({ padding: "5px 10px", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: "inherit", background: active ? "rgba(255,107,53,0.14)" : "transparent", border: "1px solid " + (active ? "rgba(255,107,53,0.5)" : "rgba(255,255,255,0.12)"), color: active ? "#FF9960" : "#AAA", borderRadius: 6 });
+  const btn = (active) => ({ padding: "5px 10px", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: "inherit", background: active ? "rgba(255,107,53,0.14)" : "transparent", border: "1px solid " + (active ? "rgba(255,107,53,0.5)" : "rgba(255,255,255,0.12)"), color: active ? "var(--cod-orange)" : "var(--cod-muted)", borderRadius: 6 });
   return (
     <div>
       <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 10, flexWrap: "wrap" }}>
@@ -1446,8 +1457,8 @@ function CodexTab({ truthGraph }) {
           {truthGraph.claims.map((claim) => (
             <a key={claim.id} href={claim.source} style={{ display: "block", padding: "10px 11px", borderRadius: 8, border: "1px solid rgba(127,230,255,0.16)", background: "rgba(127,230,255,0.04)", color: "inherit", textDecoration: "none" }}>
               <div style={{ color: "var(--cod-cyan)", fontSize: 9, letterSpacing: 1.4, fontWeight: 900 }}>{claim.label.toUpperCase()} · {claim.effectiveDate}</div>
-              <div style={{ color: "#FFF", fontSize: 13, fontWeight: 900, marginTop: 4 }}>{claim.value}</div>
-              <div style={{ color: "#AAA", fontSize: 10, lineHeight: 1.45, marginTop: 4 }}>{claim.evidence}</div>
+              <div style={{ color: "var(--cod-ink)", fontSize: 13, fontWeight: 900, marginTop: 4 }}>{claim.value}</div>
+              <div style={{ color: "var(--cod-muted)", fontSize: 10, lineHeight: 1.45, marginTop: 4 }}>{claim.evidence}</div>
             </a>
           ))}
         </div>
@@ -1457,9 +1468,9 @@ function CodexTab({ truthGraph }) {
           {WEAPONS.map((w, i) => (
             <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, padding: "6px 8px", fontSize: 11, background: "rgba(255,255,255,0.03)", borderRadius: 6 }}>
               <span style={{ width: 20, textAlign: "center" }}>{w.emoji}</span>
-              <span style={{ fontWeight: 800, color: w.color, minWidth: 80 }}>{w.name}</span>
-              <span style={{ color: "#888", fontSize: 9 }}>[{i + 1}]</span>
-              <span style={{ color: "#AAA", fontSize: 10, fontStyle: "italic", marginLeft: "auto", textAlign: "right" }}>{w.desc}</span>
+              <span style={{ fontWeight: 800, color: "var(--cod-ink)", minWidth: 80 }}>{w.name}</span>
+              <span style={{ color: "var(--cod-muted)", fontSize: 9 }}>[{i + 1}]</span>
+              <span style={{ color: "var(--cod-muted)", fontSize: 10, fontStyle: "italic", marginLeft: "auto", textAlign: "right" }}>{w.desc}</span>
             </div>
           ))}
         </div>
@@ -1469,14 +1480,14 @@ function CodexTab({ truthGraph }) {
           {ENEMY_TYPES.map((e, i) => (
             <div key={i} style={{ padding: "6px 8px", fontSize: 11, background: "rgba(255,255,255,0.03)", borderRadius: 6, textAlign: "center" }}>
               <div style={{ fontSize: 18 }}>{e.emoji}</div>
-              <div style={{ fontWeight: 800, color: e.color, fontSize: 11 }}>{e.name}</div>
-              <div style={{ color: "#888", fontSize: 9 }}>HP {e.health} · SPD {e.speed}</div>
+              <div style={{ fontWeight: 800, color: "var(--cod-ink)", fontSize: 11 }}>{e.name}</div>
+              <div style={{ color: "var(--cod-muted)", fontSize: 9 }}>HP {e.health} · SPD {e.speed}</div>
             </div>
           ))}
         </div>
       )}
       {section === "rules" && (
-        <div style={{ fontSize: 12, color: "#CCC", lineHeight: 1.7, maxWidth: 560, margin: "0 auto" }}>
+        <div style={{ fontSize: 12, color: "var(--cod-muted)", lineHeight: 1.7, maxWidth: 560, margin: "0 auto" }}>
           {QUICK_RULES.map(([emoji, strong1, mid, strong2, tail], i) => (
             <p key={i}>{emoji} <strong>{strong1}</strong>{mid}{strong2 && <strong>{strong2}</strong>}{tail}</p>
           ))}
@@ -1490,8 +1501,8 @@ function CodexTab({ truthGraph }) {
             const rest = parts.slice(1);
             return (
               <div key={i} style={{ padding: "8px 10px", fontSize: 11, background: "rgba(255,107,53,0.06)", border: "1px solid rgba(255,107,53,0.2)", borderRadius: 6 }}>
-                <strong style={{ color: "#FF9960" }}>{head}</strong>
-                {rest.length > 0 && <span style={{ color: "#BBB" }}> — {rest.join(" — ")}</span>}
+                <strong style={{ color: "var(--cod-orange)" }}>{head}</strong>
+                {rest.length > 0 && <span style={{ color: "var(--cod-muted)" }}> — {rest.join(" — ")}</span>}
               </div>
             );
           })}
@@ -1503,11 +1514,11 @@ function CodexTab({ truthGraph }) {
 
 function SupportTab({ onOpen }) {
   return (
-    <div style={{ textAlign: "center", fontSize: 12, color: "#CCC", lineHeight: 1.7 }}>
+    <div style={{ textAlign: "center", fontSize: 12, color: "var(--cod-muted)", lineHeight: 1.7 }}>
       <div style={{ fontSize: 32 }}>❤️</div>
       <p>Call of Doodie is free. Always will be.</p>
-      <p style={{ fontSize: 11, color: "#AAA" }}>If you want to see more — a cosmetic ⭐ badge on the leaderboard helps keep the servers running.</p>
-      <button onClick={onOpen} style={{ marginTop: 8, padding: "10px 22px", fontSize: 12, fontWeight: 900, fontFamily: "inherit", cursor: "pointer", background: "linear-gradient(180deg,var(--cod-orange),#CC4400)", color: "#FFF", border: "none", borderRadius: 8, letterSpacing: 1 }}>
+      <p style={{ fontSize: 11, color: "var(--cod-muted)" }}>If you want to see more — a cosmetic ⭐ badge on the leaderboard helps keep the servers running.</p>
+      <button onClick={onOpen} style={{ marginTop: 8, padding: "10px 22px", fontSize: 12, fontWeight: 900, fontFamily: "inherit", cursor: "pointer", background: "var(--cod-orange)", color: "var(--cod-orange-ink)", border: "none", borderRadius: 8, letterSpacing: 1 }}>
         ☕ KO-FI · SUPPORT
       </button>
     </div>

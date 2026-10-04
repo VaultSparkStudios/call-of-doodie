@@ -1,8 +1,19 @@
 import { describe, it, expect } from "vitest";
-import { composeScoreStep, normalizeScoreMode, normalizeScoreVibe, scoreBPM, SCORE_PROFILES } from "./scoreComposer.js";
+import { composeScoreStep, normalizeScoreMode, normalizeScoreVibe, normalizeScoreObjective, OBJECTIVE_PHRASES, scoreBPM, SCORE_PROFILES } from "./scoreComposer.js";
 
 const phrase = (mode, tier = 0, start = 0) => Array.from({ length: 128 }, (_, step) => composeScoreStep(step + start, { mode, tier }));
 describe("original mode scores", () => {
+  it("gives objective verbs and pump milestones distinct phrases without changing player tempo", () => {
+    for (const mode of ["operations", "zombies"]) {
+      const signatures = Object.keys(OBJECTIVE_PHRASES).map(objective => JSON.stringify(Array.from({ length: 16 }, (_, step) => composeScoreStep(step, { mode, objective, vibe: "chill" }))));
+      expect(new Set(signatures).size).toBe(Object.keys(OBJECTIVE_PHRASES).length);
+      for (const objective of Object.keys(OBJECTIVE_PHRASES)) {
+        expect(composeScoreStep(0, { mode, objective, vibe: "chill" }).bpm).toBe(scoreBPM({ mode, vibe: "chill" }));
+      }
+    }
+    expect(normalizeScoreObjective("constructor")).toBe("none");
+    expect(composeScoreStep(0, { mode: "classic", objective: "HOLD" })).toEqual(composeScoreStep(0, { mode: "classic" }));
+  });
   it("gives each mode its own tempo, harmonic and rhythmic identity", () => {
     const signatures = Object.keys(SCORE_PROFILES).map(mode => JSON.stringify(phrase(mode)));
     expect(new Set(signatures).size).toBe(3);

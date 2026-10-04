@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { buildIntegrityLocalSubmissionResult, getRunIntegrityReceipt, recordRunIntegrityFault } from "./runIntegrity.js";
 
+it("marks a clean local-only mode ineligible before rendering competitive actions", () => {
+  expect(getRunIntegrityReceipt({ replayEligible: false })).toMatchObject({ onlineEligible: false, status: "local-mode", label: "LOCAL RUN · UNRANKED MODE" });
+  expect(getRunIntegrityReceipt({ replayEligible: true })).toMatchObject({ onlineEligible: true, status: "clean" });
+});
+
 describe("run integrity fault boundary", () => {
   it("keeps a clean run globally eligible", () => {
     expect(getRunIntegrityReceipt(null)).toMatchObject({
@@ -61,4 +66,3 @@ describe("run integrity fault boundary", () => {
     expect(result.rejectionReasons.join(" ")).toContain("not presented as globally verified");
   });
 });
-

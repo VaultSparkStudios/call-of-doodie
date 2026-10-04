@@ -16,7 +16,10 @@ describe("Node runtime contract", () => {
       requiredDependencyMinimum: 22,
     });
     expect(receipt.workflowRows.length).toBeGreaterThan(0);
-    expect(receipt.workflowRows.every((row) => row.major >= 22)).toBe(true);
+    // The checker explicitly permits the externally propagated brief workflow
+    // at Node 20; project-owned build/deploy workflows retain the Node 22 floor.
+    expect(receipt.workflowRows.every((row) => row.major >= 22 ||
+      (row.file === '.github/workflows/brief-format-check.yml' && row.major >= 20))).toBe(true);
     expect(receipt.dependencyFloorPackages.some((row) => row.package === "@supabase/supabase-js")).toBe(true);
   });
 });

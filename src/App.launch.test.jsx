@@ -47,6 +47,7 @@ vi.mock("./audio/soundFacade.js", () => ({
   stopMusic: vi.fn(),
   setMusicIntensity: vi.fn(),
   setMusicMode: vi.fn(),
+  setMusicObjective: vi.fn(),
   setMusicPaused: vi.fn(),
   getMuted: vi.fn(() => false),
   setMuted: vi.fn(),
@@ -145,10 +146,11 @@ vi.mock("./storage.js", () => ({
 }));
 
 vi.mock("./components/HomeV2.jsx", () => ({
-  default: function HomeV2Mock({ onStart, onSetGauntletMode }) {
+  default: function HomeV2Mock({ onStart, onSetGauntletMode, setStarterLoadout }) {
     return <>
       <button onClick={() => onStart()}>start</button>
       <button data-testid="gauntlet-start" onClick={() => { onSetGauntletMode(true); onStart(999, { gauntletWeek: -1 }); }}>gauntlet</button>
+      <button data-testid="select-cannon" onClick={() => setStarterLoadout('cannon')}>cannon</button>
     </>;
   },
 }));
@@ -160,8 +162,8 @@ vi.mock("./components/DraftScreen.jsx", () => ({
 }));
 
 vi.mock("./components/DeathScreen.jsx", () => ({
-  default: function DeathScreenMock({ onStartGame }) {
-    return <button data-testid="retry-run" onClick={() => onStartGame()}>death-screen</button>;
+  default: function DeathScreenMock({ onStartGame, score, wave }) {
+    return <button data-testid="retry-run" data-score={score} data-wave={wave} onClick={() => onStartGame()}>death-screen</button>;
   },
 }));
 
@@ -251,6 +253,28 @@ afterEach(async () => {
 });
 
 describe("CallOfDoodie launch smoke", () => {
+  it("applies the newly selected starting kit on the first launch", async () => {
+    const { default: App } = await import("./App.jsx");
+    container = document.createElement("div"); document.body.appendChild(container); root = createRoot(container);
+    await act(async () => { root.render(<App />); }); await flush();
+    await act(async () => { container.querySelector('[data-testid="select-cannon"]').click(); }); await flush();
+    await act(async () => { container.querySelector('button').click(); }); await flush();
+    const canvas = container.querySelector('#game-canvas');
+    let fiber = canvas[Object.keys(canvas).find(key => key.startsWith('__reactFiber'))], state;
+    while (fiber && !state) {
+      let hook = fiber.memoizedState;
+      while (hook) { const value = hook.memoizedState?.current; if (value?.player && value?.enemies) { state = value; break; } hook = hook.next; }
+      fiber = fiber.return;
+    }
+    expect(state?.runStarterLoadout).toBe('cannon');
+    expect(state.player.health).toBe(Math.max(20, Math.floor(state.player.maxHealth * .6)));
+    state.score = 12345; state.currentWave = 9;
+    const { useGameLoop } = await import('./hooks/useGameLoop.js');
+    const report = vi.spyOn(console, 'error').mockImplementation(() => {});
+    await act(async () => { useGameLoop.mock.calls.at(-1)[3].onError(new Error('terminal fixture')); }); await flush();
+    expect(container.querySelector('[data-testid="retry-run"]').dataset).toMatchObject({ score: '12345', wave: '9' });
+    report.mockRestore();
+  }, 60000);
   it("deploys and rematches directly without a draft and requests one run token each", async () => {
     const { default: App } = await import("./App.jsx");
 
