@@ -4,12 +4,17 @@
 
 ## Current Session
 
+## End-game follow-up — 2026-10-03
+
+Death and victory results now scroll fully, including short mobile viewports. Score submission and sharing remain expanded; leaderboard and Back to Command controls sit outside optional disclosures. Final staging fc2ca612 passes eight theme/width/ending cases, keyboard End, mobile touch scrolling and actual return-to-menu navigation. Strict lint, deployable build and 19 focused tests pass; 52 before/after captures are hash-bound in docs/visual-qa/LATEST.json. Production verification follows the direct-main deployment.
+
 ## Session 182 explicit founder closeout
 
 Requested rebuild and engineering deployment are complete. Records seal 2d0bdf9d5306 passed GitHub Actions 37158694453 (quality and deployment). Canonical production health reports that revision and the live shell passes 7/7. Gameplay acceptance remains bound to 9f508f9eda50; subsequent commits change records and QA tooling only. This explicit closeout reconciles the existing S182 records rather than inventing a second implementation session.
 
 ## Open Work
 
+## End-game follow-up — 2026-10-03
 ## Session 181 — Full-site audit and implementation
 ## Session 180 — Toolchain currency and stale-PR hygiene
 ## Session 179 — Public stats truth and follow-through
@@ -64,7 +69,6 @@ Requested rebuild and engineering deployment are complete. Records seal 2d0bdf9d
 ## Session 152 — Closed-loop coaching and mastery command
 ## Now
 - [ ] [SIL:2] **S181 release follow-through** Complete release gates, stage, close out, commit, push, and verify the exact hosted production revision.
-- [ ] [SIL:2] [BLOCKER S61] [S60 follow-up · narrowed S112] Update PostHog/Sentry/Ko-fi dashboard URL allowlists for `https://callofdoodie.wtf/` — the Supabase half is CLOSED with evidence (all five edge functions ship `Access-Control-Allow-Origin: *` in code; live OPTIONS on `sync-studio-events` with `Origin: https://callofdoodie.wtf` returns 200, verified S112). Remaining half stays credential-gated: `node scripts/check-secrets.mjs --for analytics` MISSING, and PostHog/Sentry aren't wired until `VITE_POSTHOG_KEY`/`VITE_SENTRY_DSN` exist.
 
 ## Recent Decisions
 
@@ -99,7 +103,7 @@ Close the existing S182 delivery rather than count an extra implementation sessi
 
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 248,610 bytes · SHA-256 `87226ddf7d0e…`
-- `context/TASK_BOARD.md` · 173,200 bytes · SHA-256 `185bd536660c…`
+- `context/CURRENT_STATE.md` · 249,173 bytes · SHA-256 `c5a0d5ece4a8…`
+- `context/TASK_BOARD.md` · 173,560 bytes · SHA-256 `26cf88a49626…`
 - `context/DECISIONS.md` · 167,478 bytes · SHA-256 `55723ae6ec27…`
 - `docs/AUDIT_2026-09-29_2.json` · 7,385 bytes · SHA-256 `cc01a284e112…`
