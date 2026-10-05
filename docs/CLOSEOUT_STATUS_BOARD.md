@@ -1,32 +1,32 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.1 -->
-<!-- generated-at: 2026-10-03 (Session 182 closeout) -->
+<!-- generated-at: 2026-10-05 (Session 183 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S182 ════════════════════╗
-║  Date: 2026-10-03  ·  SIL: 951/1000  ·  Velocity: 4 flat         ║
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S183 ════════════════════╗
+║  Date: 2026-10-05  ·  SIL: 922/1000  ·  Velocity: 12 flat        ║
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ║  Live:  preview  →  https://callofdoodie.wtf/                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED · last 5 commits ═══════════════════════════════╗
-║  ✓ chore: close out S182 rebuild and deployment records          ║
-║  ✓ docs: seal verified S182 gameplay production release          ║
-║  ✓ Seal rebuild visual evidence and refresh public contracts     ║
-║  ✓ Rebuild music, tactical Operations and Sewer Zombies; stream  ║
-║  ✓ fix: restore project Node floor after template sync           ║
+║  ✓ docs: closeout S183 with verified production evidence         ║
+║  ✓ fix: refresh generated public content date after release com  ║
+║  ✓ feat: refine game setup, mode feedback and creature practice  ║
+║  ✓ docs: sync Studio OS 3 files [ci, protocol, skills]           ║
+║  ✓ docs: regenerate hot context after end-game follow-up         ║
 ╚════════════════════════════════════════════════════════════════╝
-╔══ SCORES · SIL 951/1000 ═══════════════════════════════════════╗
-║    Dev Health         96   ██████████                            ║
-║    Alignment          98   ██████████                            ║
-║    Momentum           95   ██████████                            ║
-║    Engagement         90   █████████░                            ║
-║    Process Qual       94   █████████░                            ║
+╔══ SCORES · SIL 922/1000 ═══════════════════════════════════════╗
+║    Dev Health         94   █████████░                            ║
+║    Alignment          96   ██████████                            ║
+║    Momentum           90   █████████░                            ║
+║    Engagement         88   █████████░                            ║
+║    Process Qual       88   █████████░                            ║
 ║    Coherence          90   █████████░                            ║
 ║    Security           98   ██████████                            ║
-║    Ecosystem          94   █████████░                            ║
-║    Capital            100  ██████████                            ║
-║    Automation         96   ██████████                            ║
+║    Ecosystem          92   █████████░                            ║
+║    Capital            98   ██████████                            ║
+║    Automation         88   █████████░                            ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WRITE-BACK STATUS ═══════════════════════════════════════════╗
 ║  ✓ context/CURRENT_STATE.md                                      ║
@@ -41,23 +41,23 @@
 ║  · agent memory (Claude/Codex project memory)                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 15 files  ·  M:15 A:0 D:0 ?:0                          ║
+║  Changes: 3 files  ·  M:3 A:0 D:0 ?:0                            ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ DEPLOYMENT ══════════════════════════════════════════════════╗
-║  Staging:  https://7ae2d65c.call-of-doodie.pages.dev/  ·  cloud  ║
+║  Staging:  https://ce356fde.call-of-doodie.pages.dev/  ·  cloud  ║
 ║  Live:     https://callofdoodie.wtf/  ·  preview/FORGE (not yet  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
-║  Doctor:        150/233                                          ║
+║  Doctor:        157/233                                          ║
 ║  Compliance:    —                                                ║
-║  Tests:         285/285                                          ║
+║  Tests:         291/291                                          ║
 ║  Validation:    full-fresh                                       ║
-║  IGNIS:         4d ago                                           ║
-║  Truth:         engineering-ready-sparked-no-go                  ║
+║  IGNIS:         5d ago                                           ║
+║  Truth:         engineering-production-verified-measured-accept  ║
 ║  Sanitization:  1d ago                                           ║
-║  shells:        26 started · 26 closed · 0 running               ║
+║  shells:        1 started · 1 closed · 0 running                 ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ NEXT SESSION ════════════════════════════════════════════════╗
 ║  (no genius cache — run `node scripts/cache-genius-list.mjs`)    ║

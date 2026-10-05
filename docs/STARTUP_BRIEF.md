@@ -26,7 +26,7 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ WHERE TO TEST · Call-Of-Doodie ══════════════════════════════╗
-║  Unit tests    → npm test — 285/285 passing ✓                    ║
+║  Unit tests    → npm test — 291/291 passing ✓                    ║
 ║  hosted-visual-proof → session-169-staging · route/theme/wid ✓   ║
 ║  production-verification → source ca1324136f8c · workflow 34 ✓   ║
 ║  hosted-staging → session-170-staging · immutable 520a56d6 · ✓   ║
@@ -64,7 +64,7 @@
 
 ╔══ WHERE WE LEFT OFF  ·  Session 183 ═══════════════════════════╗
 ║  Shipped:  see LATEST_HANDOFF.md                                 ║
-║  Tests:    285/285 passing  ·  Deploy: N/A                       ║
+║  Tests:    291/291 passing  ·  Deploy: N/A                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
@@ -74,7 +74,7 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         285/285 passing (2026-10-03T21:40:58.701Z)     ║
+║  ✓  Tests         291/291 passing (2026-10-05T01:22:09Z)         ║
 ║  ✓  Velocity      12   ·  Debt: →                                ║
 ║  ✓  Runway        S183 production verified; eight measured…      ║
 ║  ⛔  Context age   ?d                                             ║
@@ -88,7 +88,7 @@
 ║  ✓  Templates     v3.3 aligned                                   ║
 ║  ⛔  Revenue sig.  not found  ⚠ stale                             ║
 ║  ✓  Deploy gaps   no gaps (run: ops deploy-gaps)                 ║
-║  ⛔  Doctor        150/233 (65%)  ·  3 failing                    ║
+║  ⛔  Doctor        157/233 (68%)  ·  3 failing                    ║
 ║  ✓  Codex trust   trusted project active                         ║
 ║  ✓  Canon adopt.  0/54 pending review                            ║
 ║  ✓  Cost          flat-rate Max Plan · usage ledger…             ║
