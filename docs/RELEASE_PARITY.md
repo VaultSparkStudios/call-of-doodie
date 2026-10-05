@@ -1,3 +1,9 @@
+## S183 verified production follow-through
+
+Source e6b72c770cd83a70847f74b390e28aa9f50b4622 passed exact-main workflow 37245074608: 291/291 files, 1,931/1,931 tests, strict lint, build and Cloudflare deployment. Canonical callofdoodie.wtf reports e6b72c770cd8; canonical and immutable https://ea7fba17.call-of-doodie.pages.dev/ pass shell 7/7 each, domain routing 5/5 and replay trust 3/3. Actual canonical browser checks pass 24/24 mode advancement/pause/resume cases, 8/8 death/victory ending cases with expanded sections, short-screen scrolling, menu return and hashed downloads, 4/4 setup/settings cases and 20/20 creature practice cases. Actual Classic/Zombies/Operations audio output, pause/mute/resume, single context and movement pass.
+
+Same game Supabase configuration was validated for staging and production. Rollback retains prior source 5d13141813939e9e3efa7eb2a05cd7cee492c49a through an ordinary revert; no force push. Twelve technical audit outcomes are verified and shipped. Eight comparative acceptance outcomes remain pending: participant pump pacing, objective-music listening, creature comprehension/humor, matched human/agent comparison, human interpretation of outcomes, isolated target-device timing, evidence-cache token usage and evidence-pack token usage. No human rating, natural all-mode completion, physical-device result, speedup or model-token saving is claimed.
+
 ## 2026-10-04 — S183 gameplay audit increment
 
 Final staging ce356fde passes shell 7/7 and all eight ending cases with actual death/victory pack downloads, bottom controls, keyboard/touch scroll and menu return. Setup 4/4 and creature practice 20/20 passed the same source implementation before the terminal-only synchronization fix. CANON-053 passes 144 directly reviewed hash-bound captures. Strict lint, configured build, public/security/supply-chain gates and all corrected targeted regressions pass. Exact-main hosted suite and production follow-through remain pending.

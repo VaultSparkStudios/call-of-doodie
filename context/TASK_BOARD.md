@@ -1,10 +1,18 @@
+## S183 verified production follow-through
+
+Source e6b72c770cd83a70847f74b390e28aa9f50b4622 passed exact-main workflow 37245074608: 291/291 files, 1,931/1,931 tests, strict lint, build and Cloudflare deployment. Canonical callofdoodie.wtf reports e6b72c770cd8; canonical and immutable https://ea7fba17.call-of-doodie.pages.dev/ pass shell 7/7 each, domain routing 5/5 and replay trust 3/3. Actual canonical browser checks pass 24/24 mode advancement/pause/resume cases, 8/8 death/victory ending cases with expanded sections, short-screen scrolling, menu return and hashed downloads, 4/4 setup/settings cases and 20/20 creature practice cases. Actual Classic/Zombies/Operations audio output, pause/mute/resume, single context and movement pass.
+
+Scaffold: 20 audit outcomes; 12 verified/shipped; 8 pending measured acceptance.
+
+Twelve technical audit outcomes are verified and shipped. Eight comparative acceptance outcomes remain pending: participant pump pacing, objective-music listening, creature comprehension/humor, matched human/agent comparison, human interpretation of outcomes, isolated target-device timing, evidence-cache token usage and evidence-pack token usage. No human rating, natural all-mode completion, physical-device result, speedup or model-token saving is claimed.
+
 ## Session 183 gameplay audit follow-through
 
 - [x] Repair lossless setup sharing, named settings and mobile controls; verify catalog-generated regressions.
 - [x] Repair mode difficulty factors, compact mobile combat, local score affordances and run-export provenance.
 - [x] Implement optional creature practice, pump-pacing experiment and objective music without adding mandatory combat interruptions.
 - [x] Fix reload/pause, starting kit and terminal export defects discovered by actual playthroughs.
-- [ ] Finish exact-main CI, final staging and canonical production verification for this increment.
+- [x] Finish exact-main CI, final staging and canonical production verification for this increment.
 - [ ] Measure matched human/agent play outcomes and creature/music comprehension with actual participants.
 - [ ] Measure isolated production timing on target hardware and model-token usage before claiming comparative improvements.
 
@@ -360,7 +368,9 @@ First checkpoint the bounded post-S159 propagation/CI/deploy recovery. Then begi
 
 ## Now
 
-- [ ] [SIL:2] **S181 release follow-through** Complete release gates, stage, close out, commit, push, and verify the exact hosted production revision.
+- [ ] [SIL:2] **S183 measured comparisons** Complete matched human/agent, music/creature, target-device timing and model-token acceptance for the eight remaining audit outcomes.
+
+- [x] [SIL:2] **DONE S181 release follow-through** Complete release gates, stage, close out, commit, push, and verify the exact hosted production revision.
 
 - [x] [SIL:1] **DONE S169** Surface flood and lockdown in MOST WANTED as typed environmental case files; stable IDs, event-specific counts, countermeasures, migration, and hosted rendered proof shipped.
 - [x] [SIL:1] **DONE S169** Open every lazy death-analysis subsection through a natural public run; seven semantic landmarks, lazy-load/error checks, both themes, and mobile/desktop hosted proof pass.

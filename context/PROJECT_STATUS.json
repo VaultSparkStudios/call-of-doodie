@@ -4,14 +4,14 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "S183 candidate verified on final staging; closeout main push and exact-revision production verification next.",
-  "nextMilestone": "Verify exact-main CI/production, then finish actual participant/hardware/token acceptance for the twenty-item audit.",
+  "currentFocus": "S183 gameplay audit increment deployed and verified; measured comparative acceptance remains pending.",
+  "nextMilestone": "Run matched participant, hardware and token comparisons for the eight remaining audit outcomes.",
   "testingSurfaces": [
     {
       "session": 183,
-      "status": "final-staging-green-production-pending",
+      "status": "green",
       "type": "gameplay-audit-increment",
-      "command": "Final staging ce356fde passes shell 7/7 and all eight ending cases with actual death/victory pack downloads, bottom controls, keyboard/touch scroll and menu return. Setup 4/4 and creature practice 20/20 passed the same source implementation before the terminal-only synchronization fix. CANON-053 passes 144 directly reviewed hash-bound captures. Strict lint, configured build, public/security/supply-chain gates and all corrected targeted regressions pass. Exact-main hosted suite and production follow-through remain pending."
+      "command": "Source e6b72c770cd83a70847f74b390e28aa9f50b4622 passed exact-main workflow 37245074608: 291/291 files, 1,931/1,931 tests, strict lint, build and Cloudflare deployment. Canonical callofdoodie.wtf reports e6b72c770cd8; canonical and immutable https://ea7fba17.call-of-doodie.pages.dev/ pass shell 7/7 each, domain routing 5/5 and replay trust 3/3. Actual canonical browser checks pass 24/24 mode advancement/pause/resume cases, 8/8 death/victory ending cases with expanded sections, short-screen scrolling, menu return and hashed downloads, 4/4 setup/settings cases and 20/20 creature practice cases. Actual Classic/Zombies/Operations audio output, pause/mute/resume, single context and movement pass."
     },
     {
       "session": 182,
@@ -136,10 +136,10 @@
     "Broad Cloudflare studio-access token should be rotated or narrowed after domain stabilization.",
     "CANON-045 remains an external Obelisk integration gap. CANON-054's absent /stats route is closed by the verified public page; no ABSOLUTE canon gap is present."
   ],
-  "lastUpdated": "2026-10-04",
+  "lastUpdated": "2026-10-05",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
-  "truthAuditStatus": "engineering-staging-ready-measured-acceptance-partial",
+  "truthAuditStatus": "engineering-production-verified-measured-acceptance-partial",
   "truthAuditLastRun": "2026-10-04",
   "ignisScore": 44206,
   "ignisGrade": "FORGE",
@@ -147,7 +147,7 @@
   "silSession": 183,
   "silScore": 922,
   "silAvg3": 942.7,
-  "silVelocity": 0,
+  "silVelocity": 12,
   "silDebt": "flat",
   "silLastSession": 183,
   "currentSession": 183,
@@ -207,7 +207,7 @@
     "advisoryFailing": 1,
     "note": "Studio-wide (not project-only): orphan-producers and remedy-drift are central Studio Ops findings; advisory foundation-reconciliation mirror drift. Project schema, tests, rendered visuals and production evidence pass."
   },
-  "lastSessionSummary": "S183: catalog setup/difficulty/control/export improvements and three real playthrough defects repaired; optional creature practice/pump pacing and objective phrases implemented. Automated acceptance staged; comparative participant/hardware/token evidence unmeasured.",
+  "lastSessionSummary": "S183: twelve technical outcomes deployed; reload/pause, first-kit and victory-export defects repaired. Eight measured comparison outcomes remain pending.",
   "testsAssertionsPassing": 1762,
   "testsAssertionsTotal": 1762,
   "testsAssertionsFiles": 285,
@@ -219,8 +219,8 @@
   "silAvg5": 947.8,
   "testsAssertionsDeferred": [],
   "testsAssertionsLastRun": "2026-10-03T21:40:58.703Z",
-  "lastShipped": "S183 source candidate staged; production pending exact-main verification.",
-  "truthStatus": "Staged automated evidence; partial measured acceptance; no SPARKED transition.",
+  "lastShipped": "S183 gameplay audit follow-through, source e6b72c770cd83a70847f74b390e28aa9f50b4622, workflow 37245074608.",
+  "truthStatus": "Twelve technical audit outcomes are verified and shipped. Eight comparative acceptance outcomes remain pending: participant pump pacing, objective-music listening, creature comprehension/humor, matched human/agent comparison, human interpretation of outcomes, isolated target-device timing, evidence-cache token usage and evidence-pack token usage. No human rating, natural all-mode completion, physical-device result, speedup or model-token saving is claimed.",
   "testsFocusedSupplement": "Final App, MobileHUD and Operations overlay checks pass: 3 files / 9 tests, after mode-label and clipped-cue corrections.",
   "lastDeployCommit": "5e3537d18386b181f0940650a16a15be8f821fcd",
   "lastDeployAt": "2026-10-03T23:25:58Z",

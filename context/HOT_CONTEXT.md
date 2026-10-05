@@ -4,6 +4,12 @@
 
 ## Current Session
 
+## S183 verified production follow-through
+
+Source e6b72c770cd83a70847f74b390e28aa9f50b4622 passed exact-main workflow 37245074608: 291/291 files, 1,931/1,931 tests, strict lint, build and Cloudflare deployment. Canonical callofdoodie.wtf reports e6b72c770cd8; canonical and immutable https://ea7fba17.call-of-doodie.pages.dev/ pass shell 7/7 each, domain routing 5/5 and replay trust 3/3. Actual canonical browser checks pass 24/24 mode advancement/pause/resume cases, 8/8 death/victory ending cases with expanded sections, short-screen scrolling, menu return and hashed downloads, 4/4 setup/settings cases and 20/20 creature practice cases. Actual Classic/Zombies/Operations audio output, pause/mute/resume, single context and movement pass.
+
+Twelve technical audit outcomes are verified and shipped. Eight comparative acceptance outcomes remain pending: participant pump pacing, objective-music listening, creature comprehension/humor, matched human/agent comparison, human interpretation of outcomes, isolated target-device timing, evidence-cache token usage and evidence-pack token usage. No human rating, natural all-mode completion, physical-device result, speedup or model-token saving is claimed.
+
 ## S183 final staging evidence
 
 Final staging ce356fde passes shell 7/7 and all eight ending cases with actual death/victory pack downloads, bottom controls, keyboard/touch scroll and menu return. Setup 4/4 and creature practice 20/20 passed the same source implementation before the terminal-only synchronization fix. CANON-053 passes 144 directly reviewed hash-bound captures. Strict lint, configured build, public/security/supply-chain gates and all corrected targeted regressions pass. Exact-main hosted suite and production follow-through remain pending.
@@ -28,8 +34,8 @@ Requested rebuild and engineering deployment are complete. Records seal 2d0bdf9d
 
 ## Open Work
 
+## S183 verified production follow-through
 ## Session 183 gameplay audit follow-through
-- [ ] Finish exact-main CI, final staging and canonical production verification for this increment.
 - [ ] Measure matched human/agent play outcomes and creature/music comprehension with actual participants.
 - [ ] Measure isolated production timing on target hardware and model-token usage before claiming comparative improvements.
 ## End-game follow-up — 2026-10-03
@@ -86,13 +92,6 @@ Requested rebuild and engineering deployment are complete. Records seal 2d0bdf9d
 
 ## Recent Decisions
 
-## 2026-10-02 — S181 full-site audit release boundary
-
-Decision: consolidate duplicated play/profile/Board content and keep public copy tied to shipped capabilities. Field Lab's Living Plumbing, Complaint Cascade and Forked Fate are disclosed local, unranked prototypes; do not wire them into competitive runs or claim learning/balance outcomes before formative playtests. The feedback surface reads only a 90-day aggregate RPC; raw report comments remain private and client consent controls sync. The game Supabase project lacked the repository's older studio event table, so apply that additive prerequisite before the aggregate function to the explicit game ref, never the gateway's default studio ref. A current development-dependency advisory justified the trust-reviewed patch to brace-expansion 5.0.12. Engineering staging/push/deploy authority remains distinct from SPARKED or launch-announcement approval.
-
-S181 merge follow-through: upstream main added `sharp` 0.35.5 while this session was in flight. Package trust approved that release (86); npm registry identity, repository, license and integrity were checked, and the merged build uses it successfully. The upstream Studio OS brief-format workflow also pinned Node 20 while this project requires Node 22; set the local workflow to Node 22 and send the source-template mismatch through Ark so propagation can retain the fix. Regenerate the dated route contract, sitemap and field manual on the merged revision before release.
-
-
 ## 2026-10-03 — Distinct mode loops and sparse rewards
 
 Classic retains survival with four-wave checkpoints and at most one pending doctrine; checkpoints may be skipped. Operations advances on field tasks rather than enemy clearance. Sewer Zombies uses direct pump supplies and extraction rather than build screens. Each mode owns a musical arrangement. Existing guest access and local/verified score boundaries remain explicit.
@@ -114,9 +113,15 @@ Keep depth-paced Zombies as the default; pump-paced introductions require the ex
 
 Final staging is ce356fde. Studio doctor ran 230 of 233 checks: 155 passing, 4 failing, 2 blocking and 2 advisory failures; this is a central Studio health result, not a passing project-wide zero-blocker claim. Local project release/security/visual checks are recorded separately. No protocol hook is bypassed. Generic responsive tooling skipped; actual touched-state browser checks supply parity evidence. No SPARKED launch is authorized or declared.
 
+
+
+## S183 verified production follow-through
+
+Retain FORGE/public-unlaunched and all public-launch requirements. The central doctor completed with 157/233 passing, 3 failing (1 blocking, 2 advisory), 70 warnings and 3 skips; this is portfolio evidence, not a zero-findings project claim. No dependency installation or paid inference was introduced. Twelve technical audit outcomes are verified and shipped. Eight comparative acceptance outcomes remain pending: participant pump pacing, objective-music listening, creature comprehension/humor, matched human/agent comparison, human interpretation of outcomes, isolated target-device timing, evidence-cache token usage and evidence-pack token usage. No human rating, natural all-mode completion, physical-device result, speedup or model-token saving is claimed.
+
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 251,657 bytes · SHA-256 `75daa9e66d59…`
-- `context/TASK_BOARD.md` · 174,785 bytes · SHA-256 `98e6ce4064d2…`
-- `context/DECISIONS.md` · 168,582 bytes · SHA-256 `7e9463567fe7…`
+- `context/CURRENT_STATE.md` · 252,864 bytes · SHA-256 `588451a39573…`
+- `context/TASK_BOARD.md` · 176,258 bytes · SHA-256 `8620ed0fbe75…`
+- `context/DECISIONS.md` · 169,392 bytes · SHA-256 `54e448da8ef2…`
 - `docs/AUDIT_2026-09-29_2.json` · 7,385 bytes · SHA-256 `cc01a284e112…`

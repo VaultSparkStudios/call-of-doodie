@@ -1913,3 +1913,15 @@ Real playthroughs exposed paused wall-clock reload completion, stale starting-ki
 Local full suite: 1,929/1,930 initially passed; the one stale mode-wiring assertion was corrected and its suite passed. Subsequent setup/export/terminal regressions pass. Strict lint, configured build, public contracts and security gate pass. Sixty fixed-seed setup observations and twenty-four all-mode pause/resume follow-ups cover twelve modes/four difficulties plus mobile Normal. Real audio/control probes pass Classic, Zombies and Operations. Staging setup and creature checks pass in both themes at 390/1440; eight ending cases pass including 390×360 scrolling. Final staging/CI/production evidence follows the terminal fix.
 Human-versus-agent comparative outcomes, humor/listening judgments, physical devices, model-token savings and isolated production performance remain unmeasured. Automation proves integration and observations, not enjoyment, balance or retention. All twenty audit items retain their detailed acceptance status in the private audit artifact; source implementation is not blanket acceptance.
 Existing founder authorization covers closeout, commit/push main and deploy. No online score submission, participant fabrication, paid inference or dependency installation was performed.
+
+
+## S183 verified production follow-through
+
+Source e6b72c770cd83a70847f74b390e28aa9f50b4622 passed exact-main workflow 37245074608: 291/291 files, 1,931/1,931 tests, strict lint, build and Cloudflare deployment. Canonical callofdoodie.wtf reports e6b72c770cd8; canonical and immutable https://ea7fba17.call-of-doodie.pages.dev/ pass shell 7/7 each, domain routing 5/5 and replay trust 3/3. Actual canonical browser checks pass 24/24 mode advancement/pause/resume cases, 8/8 death/victory ending cases with expanded sections, short-screen scrolling, menu return and hashed downloads, 4/4 setup/settings cases and 20/20 creature practice cases. Actual Classic/Zombies/Operations audio output, pause/mute/resume, single context and movement pass.
+
+Twelve technical audit outcomes are verified and shipped. Eight comparative acceptance outcomes remain pending: participant pump pacing, objective-music listening, creature comprehension/humor, matched human/agent comparison, human interpretation of outcomes, isolated target-device timing, evidence-cache token usage and evidence-pack token usage. No human rating, natural all-mode completion, physical-device result, speedup or model-token saving is claimed.
+
+CI initially rejected stale generated content dates after the source commit; regeneration repaired the exact clean-checkout contract, and all 1,931 assertions then passed.
+
+
+S183 Ark delivery: 01K44PVNIJ03049EA3CAD7D8B2; closeout impact summary delivered. Central IGNIS refresh requested, application not observed.

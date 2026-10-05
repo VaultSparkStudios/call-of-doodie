@@ -1262,11 +1262,10 @@ SIL +10: Closed five founder-visible defects and all four fresh audit items: Ene
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): █████
-Avgs — 3: 952.3 | 5: 970.8 | 10: 983.2
-Velocity trend: ↑ | Debt: ↓
-Momentum runway: S179 stats arc and production complete; external launch evidence next | Intent rate: not recomputed
-Last session: 2026-09-29 | Session 179 | Total: 957/1000 | Velocity: 3 | protocolVelocity: 3
+Avgs — 3: 942.7 | 5: 947.8
+Velocity trend: technical acceptance advanced | Debt: flat
+Momentum runway: S183 production verified; eight measured comparisons pending | Intent rate: partial comparative acceptance
+Last session: 2026-10-04 | Session 183 | Total: 922/1000 | Velocity: 12 | protocolVelocity: 12
 <!-- rolling-status-end -->
 
 ## 2026-06-05 — Session 81 | Total: 1000/1000 | Velocity: 1 | Debt: ↓
@@ -3474,3 +3473,8 @@ Explicit S182 closeout completed: autopilot exit 0 committed and pushed 5e3537d1
 
 SIL v3 total: 922/1000; velocity 0 production outcomes at this pre-push record; debt unchanged. Categories: Dev Health 94; Creative Alignment 96; Momentum 90; Engagement 88; Process Quality 88; Cross-Repo Coherence 90; Security Posture 98; Ecosystem Integration 92; Capital Efficiency 98; Automation Coverage 88.
 The strongest result was correcting three real lifecycle/setup defects found by browser play and pixel review. Weakness: initial worker startup and harness imports delayed verification; participant, hardware and token metrics remain missing. Local full suite: 1,929/1,930 initially passed; the one stale mode-wiring assertion was corrected and its suite passed. Subsequent setup/export/terminal regressions pass. Strict lint, configured build, public contracts and security gate pass. Sixty fixed-seed setup observations and twenty-four all-mode pause/resume follow-ups cover twelve modes/four difficulties plus mobile Normal. Real audio/control probes pass Classic, Zombies and Operations. Staging setup and creature checks pass in both themes at 390/1440; eight ending cases pass including 390×360 scrolling. Final staging/CI/production evidence follows the terminal fix.
+
+
+## S183 verified production follow-through
+
+SIL remains 922/1000. Twelve technical audit outcomes now have deployed acceptance evidence; eight measured comparison outcomes remain pending. Source e6b72c770cd83a70847f74b390e28aa9f50b4622 passed exact-main workflow 37245074608: 291/291 files, 1,931/1,931 tests, strict lint, build and Cloudflare deployment. Canonical callofdoodie.wtf reports e6b72c770cd8; canonical and immutable https://ea7fba17.call-of-doodie.pages.dev/ pass shell 7/7 each, domain routing 5/5 and replay trust 3/3. Actual canonical browser checks pass 24/24 mode advancement/pause/resume cases, 8/8 death/victory ending cases with expanded sections, short-screen scrolling, menu return and hashed downloads, 4/4 setup/settings cases and 20/20 creature practice cases. Actual Classic/Zombies/Operations audio output, pause/mute/resume, single context and movement pass.
