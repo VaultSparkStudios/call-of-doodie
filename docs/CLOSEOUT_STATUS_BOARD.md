@@ -10,11 +10,11 @@
 ║  Live:  preview  →  https://callofdoodie.wtf/                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED · last 5 commits ═══════════════════════════════╗
+║  ✓ docs: seal S184 end-run production verification               ║
 ║  ✓ fix: simplify end-run submission, replay and sharing          ║
 ║  ✓ docs: synchronize final closeout board and validation counte  ║
 ║  ✓ docs: closeout S183 with verified production evidence         ║
 ║  ✓ fix: refresh generated public content date after release com  ║
-║  ✓ feat: refine game setup, mode feedback and creature practice  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 930/1000 ═══════════════════════════════════════╗
 ║    Dev Health         94   █████████░                            ║
@@ -41,7 +41,7 @@
 ║  · agent memory (Claude/Codex project memory)                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 17 files  ·  M:17 A:0 D:0 ?:0                          ║
+║  Changes: 19 files  ·  M:17 A:0 D:0 ?:2                          ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -54,10 +54,10 @@
 ║  Compliance:    —                                                ║
 ║  Tests:         293/293                                          ║
 ║  Validation:    full-fresh                                       ║
-║  IGNIS:         6d ago                                           ║
+║  IGNIS:         7d ago                                           ║
 ║  Truth:         S184 end-run production verified; S183 comparat  ║
-║  Sanitization:  2d ago                                           ║
-║  shells:        unknown · missing/stale enumeration              ║
+║  Sanitization:  1d ago                                           ║
+║  shells:        1 started · 1 closed · 0 running                 ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ NEXT SESSION ════════════════════════════════════════════════╗
 ║  (no genius cache — run `node scripts/cache-genius-list.mjs`)    ║

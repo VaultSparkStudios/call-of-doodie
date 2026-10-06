@@ -20,7 +20,7 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ LAST SESSION (S184) - WHAT SHIPPED ══════════════════════════╗
-║  S184 end-run submission, replay and sharing deployed and verif  ║
+║  S184 end-run deployed and verified; explicit founder closeout   ║
 ║  Tests  -                                                        ║
 ║  Deploy -                                                        ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -69,7 +69,7 @@
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
 ║  ⚠  ░░░░░░░░░░░░░░░░░░░░░░░░    2% used                          ║
-║     322,620 / 200,000 tok  ·  unknown  ·  heuristic-stale        ║
+║     323,546 / 200,000 tok  ·  unknown  ·  heuristic-stale        ║
 ║     Verdict: CONSIDER_CLOSEOUT  ← act now                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -79,10 +79,10 @@
 ║  ✓  Runway        S184 end-run production verified               ║
 ║  ⛔  Context age   ?d                                             ║
 ║  ✓  IGNIS         44206 FORGE  ·  6d old                         ║
-║  ⛔  Truth         S183 engineering delivery verified on…         ║
+║  ⛔  Truth         S184 end-run gameplay and records seal…        ║
 ║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs…        ║
 ║  ✓  Genome dims   all stable  (24/25)                            ║
-║  ✓  Entropy       0.190  (healthy)                               ║
+║  ✓  Entropy       0.197  (healthy)                               ║
 ║  ✓  CDR           no gap detected                                ║
 ║  ✓  Patterns      no recurring pressure detected                 ║
 ║  ✓  Templates     v3.3 aligned                                   ║
@@ -138,10 +138,16 @@
 ║  4. [Human/Data] [SIL:1] HomeV2 analytics funnel — compare       ║
 ║  `home_v2_deploy` vs legacy `front_door_action` completion       ║
 ║  rates after 48h of traffic [data-blocked]                       ║
-║  5. [SIL:1] [DATA-BLOCKED S147] Theme-prop atlas L2 expansion —  ║
+║  5. [S183 acceptance] Measure matched human/agent play outcomes  ║
+║  and creature/music comprehension with actual participants.      ║
+║  Owner: project; dependency: matched participant observation...  ║
+║  6. [S183 acceptance] Measure isolated production timing on      ║
+║  target hardware and model-token usage before claiming           ║
+║  comparative improvements. Owner: project; dependency: isola...  ║
+║  7. [SIL:1] [DATA-BLOCKED S147] Theme-prop atlas L2 expansion —  ║
 ║  extend `theme-prop-atlas-v1.webp` from 16 to ~32 cells only     ║
 ║  after production feedback confirms the current...               ║
-║  6. Discord invite/community link when the community entry       ║
+║  8. Discord invite/community link when the community entry       ║
 ║  point is ready [community-blocked]                              ║
 ╚════════════════════════════════════════════════════════════════╝
 

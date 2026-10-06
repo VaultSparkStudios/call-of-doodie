@@ -4,7 +4,7 @@ End-run results now show the score and Submit to leaderboard before optional con
 
 Keep native URL sharing inside user activation; await clipboard work and expose selectable fallback links. Use scenario v2 for catalog setup. Operations shares use the game home. Eligibility matches App. Submission tokens are consumed; no retry claim.
 
-Assisted terminal states prove UI integration, not natural playthroughs or participant enjoyment. Native share/clipboard are browser API fixtures; no external message or online leaderboard row was sent. Operations links open the game home rather than claiming mission preservation. Existing eight S183 comparative outcomes remain pending and are outside this request. FORGE/public-unlaunched remains unchanged.
+Assisted terminal states prove UI integration, not natural playthroughs or participant enjoyment. Native share outcomes use API fixtures; production clipboard copy/readback and image downloads are real. No external message was sent. Backend health used its existing valid/rejected QA submission contract. Operations links open the game home rather than claiming mission preservation. Existing eight S183 comparative outcomes remain pending and are outside this request. FORGE/public-unlaunched remains unchanged.
 
 ## End-game follow-up — 2026-10-03
 
@@ -106,3 +106,8 @@ S183 Ark delivery: 01K44PVNIJ03049EA3CAD7D8B2; closeout impact summary delivered
 Gameplay source 9e6304be12f8979a59e6684c448c07e6808949b1 passed exact-main workflow 37421044480: 293/293 files, 1,954/1,954 tests, strict lint, configured build and Cloudflare deployment. Canonical callofdoodie.wtf reports 9e6304be12f8; immutable deployment https://000027d0.call-of-doodie.pages.dev/. Canonical browser checks pass all eight defeat/victory, theme and width cases, including actual clipboard writes/readback, share success/manual fallback, score-image downloads, expanded sections, short screens, keyboard/touch scroll and menu return. Canonical/immutable shell 7/7 each, domain routing 5/5, backend health 5/5, replay trust 3/3 and shared-leaderboard isolation pass.
 
 End states are assisted browser fixtures, and native share-sheet outcomes are API fixtures. No external message was sent; clipboard access and image downloads were real. Backend health exercised its existing valid/rejected submission contract. Existing S183 comparative work remains separate; no launch/lifecycle transition is claimed.
+
+
+## S184 explicit founder closeout — 2026-10-06
+
+Records seal 6e473e676ea1252cb531efd6fa400d33fa4ae228 passed exact-main workflow 37421746017: 293 test files / 1,954 assertions, strict lint, build and deploy. Canonical /_health reported 6e473e676ea1 and live shell checks passed 7/7. Gameplay source is unchanged from 9e6304b and its eight canonical end-run browser cases. Keep active handoff and deploy fields synchronized after records-only deliveries; do not leave older pending text under a verified headline.

@@ -1,5 +1,7 @@
 ## S184 verified end-run deployment
 
+Overall status: S184 end-run gameplay and records seal 6e473e6 are verified on canonical production; final explicit-closeout records receive exact-main delivery checks after push. S183 comparative acceptance remains partial; FORGE/public-unlaunched.
+
 Gameplay source 9e6304be12f8979a59e6684c448c07e6808949b1 passed exact-main workflow 37421044480: 293/293 files, 1,954/1,954 tests, strict lint, configured build and Cloudflare deployment. Canonical callofdoodie.wtf reports 9e6304be12f8; immutable deployment https://000027d0.call-of-doodie.pages.dev/. Canonical browser checks pass all eight defeat/victory, theme and width cases, including actual clipboard writes/readback, share success/manual fallback, score-image downloads, expanded sections, short screens, keyboard/touch scroll and menu return. Canonical/immutable shell 7/7 each, domain routing 5/5, backend health 5/5, replay trust 3/3 and shared-leaderboard isolation pass.
 
 End states are assisted browser fixtures, and native share-sheet outcomes are API fixtures. No external message was sent; clipboard access and image downloads were real. Backend health exercised its existing valid/rejected submission contract. Existing S183 comparative work remains separate; no launch/lifecycle transition is claimed.
@@ -1724,3 +1726,8 @@ Formal S182 closeout gates: schema/context/architecture/genome checks pass; memo
 
 
 Explicit S182 closeout completed: autopilot exit 0 committed and pushed 5e3537d18386 to main, cleared the lock, and finalized the skill trace. GitHub Actions 37161648350 passed quality and deployment; production health reported 5e3537d18386 and shell assertions passed 7/7. All ten write-back records are reconciled; CDR remains updated locally under its intentional gitignore rule. A final records-only seal follows, with exact-revision deployment verification reported at handback.
+
+
+## S184 explicit founder closeout — 2026-10-06
+
+Records seal 6e473e676ea1252cb531efd6fa400d33fa4ae228 passed exact-main workflow 37421746017: 293 test files / 1,954 assertions, strict lint, build and deploy. Canonical /_health reported 6e473e676ea1 and live shell checks passed 7/7. Gameplay source is unchanged from 9e6304b and its eight canonical end-run browser cases. Active stale pending statements are reconciled. Historical S183 comparative work and central scoring are not upgraded to verified. Deployment currency for the final records follow-up is checked after push.

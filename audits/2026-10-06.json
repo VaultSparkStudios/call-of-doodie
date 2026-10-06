@@ -34,5 +34,36 @@
   "independentReview": {
     "verdict": "pass",
     "fixed": "Optional highlight converted to explicit download; incompatible propagation restored."
+  },
+  "explicitCloseout": {
+    "requestedAt": "2026-10-06T15:13:14.299Z",
+    "recordsSeal": "6e473e676ea1252cb531efd6fa400d33fa4ae228",
+    "workflow": 37421746017,
+    "validation": "Records seal 6e473e676ea1252cb531efd6fa400d33fa4ae228 passed exact-main workflow 37421746017: 293 test files / 1,954 assertions, strict lint, build and deploy. Canonical /_health reported 6e473e676ea1 and live shell checks passed 7/7. Gameplay source is unchanged from 9e6304b and its eight canonical end-run browser cases.",
+    "finalFollowup": "Records reconciled and ready; exact-main CI/deployment verified at handback after push.",
+    "independentReview": {
+      "at": "2026-10-06T15:16:31.513Z",
+      "session": "S184",
+      "subject": "Explicit closeout records after 6e473e6",
+      "reviewer": "studio-reviewer",
+      "round": 2,
+      "verdict": "pass",
+      "findings": 0,
+      "fixed": 0,
+      "judged": {
+        "craft": 94,
+        "judgement": 95,
+        "honesty": 96,
+        "efficiency": 94,
+        "learning": 94
+      },
+      "note": "Both round-one findings corrected; S183 acceptance remains deferred. Final exact-main delivery follows commit."
+    },
+    "arkCargo": "01K48SJAL1F672ACC9DEFF3EC8",
+    "intelligence": {
+      "entropy": 0.197,
+      "scorecard": "read-only measured; central write requested",
+      "ignis": "central rescore requested, not observed applied"
+    }
   }
 }

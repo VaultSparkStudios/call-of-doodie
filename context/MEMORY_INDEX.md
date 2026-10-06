@@ -1,5 +1,9 @@
 # Memory Index
 
+## Latest verified session
+
+- S184 end-run flow: [runtime notes](AGENT_MEMORY.md), [handoff](LATEST_HANDOFF.md), [visual receipt](../docs/visual-qa/LATEST.json) and [audit](../audits/2026-10-06.json). Gameplay source 9e6304b; verified records seal 6e473e6 / workflow 37421746017. Four requested outcomes complete; S183 comparative evidence remains pending.
+
 ## Read first
 
 1. `context/PROJECT_BRIEF.md`
@@ -39,7 +43,7 @@
 - Preserve comedy-first tone while respecting the live deployed build
 - Use `docs/IMPROVEMENT_PLAN.md` when deciding whether a feature is polish, depth, trust, pacing, or architecture work
 
-- [Runtime maintenance notes](AGENT_MEMORY.md) — S178 Developer obstacle timing, ordinary perk facts, release recovery, plus S177 upgrade, mutation and boss contracts.
+- [Runtime maintenance notes](AGENT_MEMORY.md) — S184 end-run sharing/submission and release evidence, plus earlier gameplay contracts.
 
 
 - S177 final Operation/replay knowledge: context/AGENT_MEMORY.md; complete test scope and limits: docs/PLAYTEST_FOLLOWUP_2026-09-14.md; final release/closeout receipt: audits/2026-09-15.json.

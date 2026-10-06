@@ -9,7 +9,7 @@ Wave scaffold: Wave 1 inspect/capture done; Wave 2 implement/test done; Wave 3 s
 - [x] [SIL:184] Immediate replay controls and optional coaching/feedback/exports.
 - [x] [SIL:184] Verify exact-main CI and production deployment.
 
-Assisted terminal states prove UI integration, not natural playthroughs or participant enjoyment. Native share/clipboard are browser API fixtures; no external message or online leaderboard row was sent. Operations links open the game home rather than claiming mission preservation. Existing eight S183 comparative outcomes remain pending and are outside this request. FORGE/public-unlaunched remains unchanged.
+Assisted terminal states prove UI integration, not natural playthroughs or participant enjoyment. Native share outcomes use API fixtures; production clipboard copy/readback and image downloads are real. No external message was sent. Backend health used its existing valid/rejected QA submission contract. Operations links open the game home rather than claiming mission preservation. Existing eight S183 comparative outcomes remain pending and are outside this request. FORGE/public-unlaunched remains unchanged.
 
 ## S183 verified production follow-through
 
@@ -26,8 +26,8 @@ Twelve technical audit outcomes are verified and shipped. Eight comparative acce
 - [x] Implement optional creature practice, pump-pacing experiment and objective music without adding mandatory combat interruptions.
 - [x] Fix reload/pause, starting kit and terminal export defects discovered by actual playthroughs.
 - [x] Finish exact-main CI, final staging and canonical production verification for this increment.
-- [ ] Measure matched human/agent play outcomes and creature/music comprehension with actual participants.
-- [ ] Measure isolated production timing on target hardware and model-token usage before claiming comparative improvements.
+- Carried to Deferred: Measure matched human/agent play outcomes and creature/music comprehension with actual participants.
+- Carried to Deferred: Measure isolated production timing on target hardware and model-token usage before claiming comparative improvements.
 
 Human-versus-agent comparative outcomes, humor/listening judgments, physical devices, model-token savings and isolated production performance remain unmeasured. Automation proves integration and observations, not enjoyment, balance or retention. All twenty audit items retain their detailed acceptance status in the private audit artifact; source implementation is not blanket acceptance.
 
@@ -828,6 +828,9 @@ First checkpoint the bounded post-S159 propagation/CI/deploy recovery. Then begi
 - [x] [SIL] **DONE S101** Full `/audit` implementation sweep — shipped all 12 items from `docs/AUDIT_2026-06-18_3.md`: visitor-safe ops copy, release security header gate, Obelisk verify endpoint, legacy home retirement gate, Journey card/front-door clarity, Aim Check control rite, DeathScreen next-run drill bridge, local Balance Lab, HUD debug collision overlay, Rival Pace ghost chip, screenshot truth pack with verified captures, and DeathScreen prop extraction. Validation: full suite 540/540, build passing, release security gate with npm audit 0 vulnerabilities, launch media gate passing.
 
 ## Deferred
+
+- [ ] [S183 acceptance] Measure matched human/agent play outcomes and creature/music comprehension with actual participants. Owner: project; dependency: matched participant observations. Not part of S184 closeout.
+- [ ] [S183 acceptance] Measure isolated production timing on target hardware and model-token usage before claiming comparative improvements. Owner: project; dependency: isolated device and model-token measurement. Not part of S184 closeout.
 - [x] [SIL:1] **SUPERSEDED S149** Native-`<select>` hypothesis — the native picker no longer exists on mobile, and hardware-composited timing isolated the actual first-gesture AudioContext tax. Generic physical launch QA remains separately listed under Human Action Required.
 - [ ] [SIL:1] [DATA-BLOCKED S147] Theme-prop atlas L2 expansion — extend `theme-prop-atlas-v1.webp` from 16 to ~32 cells only after production feedback confirms the current highest-visibility coverage reads well; no participant evidence exists yet.
 - [ ] Discord invite/community link when the community entry point is ready
@@ -866,3 +869,8 @@ Requested scope: four tasks, four complete, zero open. Formal closeout reconcile
 
 
 Explicit S182 closeout completed: autopilot exit 0 committed and pushed 5e3537d18386 to main, cleared the lock, and finalized the skill trace. GitHub Actions 37161648350 passed quality and deployment; production health reported 5e3537d18386 and shell assertions passed 7/7. All ten write-back records are reconciled; CDR remains updated locally under its intentional gitignore rule. A final records-only seal follows, with exact-revision deployment verification reported at handback.
+
+
+## S184 explicit founder closeout — 2026-10-06
+
+Explicit closeout follow-through: reconcile all ten records, independent review, exact-main push/deploy. Gameplay outcomes remain four done / zero open; eight historical S183 comparative outcomes remain pending. No additional gameplay work or lifecycle transition is authorized by this closeout.

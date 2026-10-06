@@ -1,9 +1,9 @@
 {
   "vectorVersion": "1.0",
   "generatedAt": "2026-10-06",
-  "generatedAtMs": 1791266594824,
+  "generatedAtMs": 1791299859113,
   "session": 184,
-  "vectorHash": "eca4722a7c7c8cc5",
+  "vectorHash": "a51e8723dc8f9f68",
   "silTotal": 930,
   "silAvg3": 934.3,
   "velocity": 3,
@@ -24,7 +24,7 @@
     "[SIL:1] **S180 carryover** Re-check `@supabase/supabase-js` 2.117.2 after its re"
   ],
   "health": "green",
-  "truthStatus": "S183 engineering delivery verified on production e6b72c770cd8; twelve technical audit outcomes shipped, eight comparative outcomes pending; FORGE/public-unlaunched.",
+  "truthStatus": "S184 end-run gameplay and records seal 6e473e6 are verified on canonical production; final explicit-closeout records receive exact-main delivery checks after push. S183 comparative acceptance remains partial; FORGE/public-unlaunched.",
   "genome": null,
   "ignisScore": 44206,
   "ignisGrade": "FORGE",

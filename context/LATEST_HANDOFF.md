@@ -1,20 +1,22 @@
-## S184 verified end-run deployment
+## Where We Left Off — Session 184 final closeout
 
 Gameplay source 9e6304be12f8979a59e6684c448c07e6808949b1 passed exact-main workflow 37421044480: 293/293 files, 1,954/1,954 tests, strict lint, configured build and Cloudflare deployment. Canonical callofdoodie.wtf reports 9e6304be12f8; immutable deployment https://000027d0.call-of-doodie.pages.dev/. Canonical browser checks pass all eight defeat/victory, theme and width cases, including actual clipboard writes/readback, share success/manual fallback, score-image downloads, expanded sections, short screens, keyboard/touch scroll and menu return. Canonical/immutable shell 7/7 each, domain routing 5/5, backend health 5/5, replay trust 3/3 and shared-leaderboard isolation pass.
 
 End states are assisted browser fixtures, and native share-sheet outcomes are API fixtures. No external message was sent; clipboard access and image downloads were real. Backend health exercised its existing valid/rejected submission contract. Existing S183 comparative work remains separate; no launch/lifecycle transition is claimed.
 
-Requested gameplay changes are complete. This records seal receives its own exact-main delivery check after push.
+Records seal 6e473e676ea1252cb531efd6fa400d33fa4ae228 passed exact-main workflow 37421746017: 293 test files / 1,954 assertions, strict lint, build and deploy. Canonical /_health reported 6e473e676ea1 and live shell checks passed 7/7. Gameplay source is unchanged from 9e6304b and its eight canonical end-run browser cases.
 
-## Where We Left Off — Session 184
+Deploy: verified on canonical production. This explicit closeout makes a records-only follow-up; its own exact-main workflow and edge revision will be checked after push.
+
+## S184 implementation evidence
 
 End-run results now show the score and Submit to leaderboard before optional content. Last words are optional and labelled. Submission is guarded against duplicate clicks and excludes practice, Operations, local-only modes and integrity failures. Play Again precedes optional coaching. Sharing has one run-link action with native/copy/manual feedback; score images and highlights are explicit downloads. Feedback, highlights and exports are optional. Bottom leaderboard/menu controls remain outside disclosures.
 
-Staging https://aa2065a8.call-of-doodie.pages.dev passed shell 7/7 and eight actual-app ending cases across defeat/victory, dark/light and 390/1440px, including short screens, touch, keyboard End and menu return. Eight share checks covered native API fixture success, clipboard success/denial, manual selectable links and real score-image downloads. 92 before/after captures were directly inspected and hash-bound; CANON-053 passed. Submission behavior tests cover pending/double click, online rank, local/rejected states and eligibility. Exact-main CI and production verification remain pending.
+Staging https://aa2065a8.call-of-doodie.pages.dev passed shell 7/7 and eight actual-app ending cases across defeat/victory, dark/light and 390/1440px, including short screens, touch, keyboard End and menu return. Eight share checks covered native API fixture success, clipboard success/denial, manual selectable links and real score-image downloads. 92 before/after captures were directly inspected and hash-bound; CANON-053 passed. Submission behavior tests cover pending/double click, online rank, local/rejected states and eligibility. Exact-main CI and production verification are complete; see the verified receipts above.
 
-Next: authorized commit/push and exact-main deployment verification.
+Next: requested gameplay delivery is complete. Preserve the separate S183 comparative acceptance work.
 
-Assisted terminal states prove UI integration, not natural playthroughs or participant enjoyment. Native share/clipboard are browser API fixtures; no external message or online leaderboard row was sent. Operations links open the game home rather than claiming mission preservation. Existing eight S183 comparative outcomes remain pending and are outside this request. FORGE/public-unlaunched remains unchanged.
+Assisted terminal states prove UI integration, not natural playthroughs or participant enjoyment. Native share outcomes use API fixtures; production clipboard copy/readback and image downloads are real. No external message was sent. Backend health used its existing valid/rejected QA submission contract. Operations links open the game home rather than claiming mission preservation. Existing eight S183 comparative outcomes remain pending and are outside this request. FORGE/public-unlaunched remains unchanged.
 
 ## S183 verified production follow-through
 

@@ -167,8 +167,8 @@
   "lastAgent": "codex",
   "testsPassing": 293,
   "testsTotal": 293,
-  "entropyScore": 0.19,
-  "entropyLastComputed": "2026-10-03",
+  "entropyScore": 0.197,
+  "entropyLastComputed": "2026-10-06",
   "silRubricVersion": "3.0",
   "silMax": 1000,
   "silScoreLegacy500": 478.5,
@@ -198,12 +198,14 @@
   "stagingType": "cloudflare-pages",
   "stagingUrl": "https://aa2065a8.call-of-doodie.pages.dev/",
   "testsLastRun": "2026-10-06T06:03:13.381Z",
-  "sanitizationLastCleared": "2026-10-04",
+  "sanitizationLastCleared": "2026-10-06",
   "sessionShellHygiene": {
+    "session": 184,
+    "enumeratedAt": "2026-10-06T15:13:14.299Z",
     "started": 1,
     "closed": 1,
     "running": 0,
-    "note": "Owned development server stopped at seal; all browser/test commands terminal."
+    "scope": "Owned development server was stopped; previous CI watch and finite checks are terminal. No unrelated host process cleanup."
   },
   "doctorScore": {
     "date": "2026-10-04",
@@ -218,7 +220,7 @@
     "skipped": 3,
     "note": "Studio-wide doctor evidence; not a project-only zero-findings claim. Central follow-up delivered through Ark; application unobserved."
   },
-  "lastSessionSummary": "S184 end-run submission, replay and sharing deployed and verified on canonical production.",
+  "lastSessionSummary": "S184 end-run deployed and verified; explicit founder closeout reconciled memory/context/CDR/task-board records.",
   "testsAssertionsPassing": 1954,
   "testsAssertionsTotal": 1954,
   "testsAssertionsFiles": 293,
@@ -233,46 +235,10 @@
   "lastShipped": "Prominent eligible leaderboard submission; reliable consolidated sharing/downloads; immediate replay and optional details.",
   "truthStatus": "S184 exact-main CI and canonical end-run acceptance pass. FORGE/public-unlaunched unchanged.",
   "testsFocusedSupplement": "Exact-main workflow 37421044480 passed 293 files / 1,954 assertions, strict lint, configured build and deployment; production browser verification passed eight end-run cases.",
-  "lastDeployCommit": "5e3537d18386b181f0940650a16a15be8f821fcd",
-  "lastDeployAt": "2026-10-03T23:25:58Z",
+  "lastDeployCommit": "6e473e676ea1252cb531efd6fa400d33fa4ae228",
+  "lastDeployAt": "2026-10-06T06:06:00Z",
   "closeoutAcceptance": {
-    "session": 182,
-    "requestedAt": "2026-10-03T22:45:18.137Z",
-    "verifiedProductionCommit": "5e3537d18386b181f0940650a16a15be8f821fcd",
-    "workflow": 37161648350,
-    "shellAssertions": 7,
-    "gameplaySource": "9f508f9eda50e9d8e987a2f2eae6e8f2dc0d8980",
-    "recordOnly": true,
-    "centralDoctor": {
-      "scope": "studio-wide",
-      "exitCode": 1,
-      "date": "2026-10-03",
-      "generatedAt": "2026-10-03T23:22:02.856Z",
-      "passing": 150,
-      "total": 233,
-      "score": 65,
-      "blockingFailing": 2,
-      "advisoryFailing": 1,
-      "failures": [
-        {
-          "id": "orphan-producers",
-          "blocking": true,
-          "detail": "1/102 producer(s) have NO executable caller: build-gatus-config.mjs — register a runner in portfolio/MAINTENANCE_REGISTRY.json or allowlist with a reason"
-        },
-        {
-          "id": "remedy-drift",
-          "blocking": true,
-          "detail": "1 remedy decision(s) recorded; warning remains — D-S351.3 (2026-09-20): Detached persistent daemon drains sibling propagation without its own session lock; standing authorization was withheld in D-S351.3. · 4 declared fix(es) run 1/2/39/2x and still red after 6+ sessions — fix the underlying red, not the command: node scripts/check-secrets.mjs --probe ; node scripts/ark-revoke.mjs --reason ; node scripts/refresh-test-count.mjs --full ; node scripts/package-trust-sweep.mjs --apply · 3 ungated fix(es) never run across 6+ sessions — run: node scripts/ark-revoke.mjs --reason ; node scripts/batch-adoption-dispatch.mjs --apply ; node scripts/mirror-gh-secrets.mjs --apply · 3 not actionable here (not-ownable-here/gated): compliance-velocity, analytica-feed-coverage · 64 declare NO fix anywhere (61 ours: 18 rollout, 10 measurement-only, 6 founder-gated, 3 remedy-unwritten, 2 cumulative-by-design) · ⛔ 22 UNDISPOSED — decide the kind: action-bound-receipts, approval-discipline-protocol, ark-inbox-depth"
-        },
-        {
-          "id": "foundation-reconciliation",
-          "blocking": false,
-          "detail": "1 mirror-drift — run --fix to refresh mirrors"
-        }
-      ]
-    },
-    "arkImpactCargo": "01K41VS6GAC47527BC3DC108B3",
-    "ignisStatus": "requested-not-applied",
+    "session": 184,
     "writeback": "all-ten-reconciled",
     "scaffold": {
       "tasks": 4,
@@ -280,20 +246,26 @@
       "inProgress": 0,
       "open": 0
     },
-    "autopilot": "passed-exit-0",
-    "autopilotCommit": "5e3537d18386b181f0940650a16a15be8f821fcd",
-    "verifiedAt": "2026-10-03T23:26:07.122Z",
-    "centralQuestionCargo": "01K421056UE581B4746A170B41",
+    "autopilot": "scoped-equivalent; dry-run inspected; foreign doctor not accepted as project proof",
+    "independentReview": "pass-round2",
+    "ignisStatus": "requested-not-applied",
     "trace": "completed",
-    "hygiene": "zero-running"
+    "hygiene": "zero-running",
+    "verifiedAt": "2026-10-06T15:13:14.299Z",
+    "reviewReceipts": [
+      "audits/reviews/S184-explicit-closeout-round1.json",
+      "audits/reviews/S184-explicit-closeout-round2.json"
+    ],
+    "arkImpactCargo": "01K48SJAL1F672ACC9DEFF3EC8",
+    "ecosystemScorecard": "read-only measurement completed; central write requested via Ark"
   },
   "testsLastRunMode": "full-ci",
   "velocity": 3,
   "silVelocityLastSession": 3,
   "deploy": {
-    "source": "9e6304be12f8979a59e6684c448c07e6808949b1",
-    "workflow": 37421044480,
-    "immutableUrl": "https://000027d0.call-of-doodie.pages.dev/",
+    "source": "6e473e676ea1252cb531efd6fa400d33fa4ae228",
+    "workflow": 37421746017,
+    "immutableUrl": "https://cd31ce94.call-of-doodie.pages.dev/",
     "status": "verified"
   }
 }

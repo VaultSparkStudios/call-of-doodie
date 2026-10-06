@@ -10,15 +10,15 @@ Gameplay source 9e6304be12f8979a59e6684c448c07e6808949b1 passed exact-main workf
 
 End states are assisted browser fixtures, and native share-sheet outcomes are API fixtures. No external message was sent; clipboard access and image downloads were real. Backend health exercised its existing valid/rejected submission contract. Existing S183 comparative work remains separate; no launch/lifecycle transition is claimed.
 
-Requested gameplay changes are complete. This records seal receives its own exact-main delivery check after push.
+Records seal 6e473e676ea1252cb531efd6fa400d33fa4ae228 passed exact-main workflow 37421746017: 293 test files / 1,954 assertions, strict lint, build and deploy. Canonical /_health reported 6e473e676ea1 and live shell checks passed 7/7. Gameplay source is unchanged from 9e6304b and its eight canonical end-run browser cases.
 
-## S184 end-run candidate — 2026-10-06
+## S184 end-run implementation — 2026-10-06
 
 End-run results now show the score and Submit to leaderboard before optional content. Last words are optional and labelled. Submission is guarded against duplicate clicks and excludes practice, Operations, local-only modes and integrity failures. Play Again precedes optional coaching. Sharing has one run-link action with native/copy/manual feedback; score images and highlights are explicit downloads. Feedback, highlights and exports are optional. Bottom leaderboard/menu controls remain outside disclosures.
 
-Staging https://aa2065a8.call-of-doodie.pages.dev passed shell 7/7 and eight actual-app ending cases across defeat/victory, dark/light and 390/1440px, including short screens, touch, keyboard End and menu return. Eight share checks covered native API fixture success, clipboard success/denial, manual selectable links and real score-image downloads. 92 before/after captures were directly inspected and hash-bound; CANON-053 passed. Submission behavior tests cover pending/double click, online rank, local/rejected states and eligibility. Exact-main CI and production verification remain pending.
+Staging https://aa2065a8.call-of-doodie.pages.dev passed shell 7/7 and eight actual-app ending cases across defeat/victory, dark/light and 390/1440px, including short screens, touch, keyboard End and menu return. Eight share checks covered native API fixture success, clipboard success/denial, manual selectable links and real score-image downloads. 92 before/after captures were directly inspected and hash-bound; CANON-053 passed. Submission behavior tests cover pending/double click, online rank, local/rejected states and eligibility. Exact-main CI and production verification are complete; see the verified receipts above.
 
-Assisted terminal states prove UI integration, not natural playthroughs or participant enjoyment. Native share/clipboard are browser API fixtures; no external message or online leaderboard row was sent. Operations links open the game home rather than claiming mission preservation. Existing eight S183 comparative outcomes remain pending and are outside this request. FORGE/public-unlaunched remains unchanged.
+Assisted terminal states prove UI integration, not natural playthroughs or participant enjoyment. Native share outcomes use API fixtures; production clipboard copy/readback and image downloads are real. No external message was sent. Backend health used its existing valid/rejected QA submission contract. Operations links open the game home rather than claiming mission preservation. Existing eight S183 comparative outcomes remain pending and are outside this request. FORGE/public-unlaunched remains unchanged.
 
 ## S183 verified production follow-through
 
@@ -53,8 +53,6 @@ Requested rebuild and engineering deployment are complete. Records seal 2d0bdf9d
 ## Session 184 end-run delivery
 ## S183 verified production follow-through
 ## Session 183 gameplay audit follow-through
-- [ ] Measure matched human/agent play outcomes and creature/music comprehension with actual participants.
-- [ ] Measure isolated production timing on target hardware and model-token usage before claiming comparative improvements.
 ## End-game follow-up — 2026-10-03
 ## Session 181 — Full-site audit and implementation
 ## Session 180 — Toolchain currency and stale-PR hygiene
@@ -105,19 +103,10 @@ Requested rebuild and engineering deployment are complete. Records seal 2d0bdf9d
 - [ ] Real full-run media QA — on desktop verify the DeathScreen best-moment GIF encodes, plays, and shares without freezing; on mobile verify capture is skipped as designed
 - [ ] Create Itch.io listing and publish the prepared launch copy package from `docs/LAUNCH_EXECUTION.md`
 - [ ] Add `VITE_POSTHOG_KEY` to GitHub repo Settings → Secrets → Actions (workflow already wired in deploy.yml)
+- [ ] Add `VITE_SENTRY_DSN` to GitHub repo Settings → Secrets → Actions (workflow already wired in deploy.yml) — S112 probe: the studio-ops `secrets/sentry.env` file does carry a `SENTRY_DSN` key, but the declared `sentry.api` capability in `CAPABILITY_MAP.json` only covers `SENTRY_AUTH_TOKEN` (org/user auth token for releases), not a per-project DSN grant. Wiring an unverified DSN into this public game's error stream risks misattributing errors to the wrong Sentry project. Founder should confirm that DSN is actually scoped to call-of-doodie before it's set as a GitHub secret.
+## Current Session Intent: Session 160 recovery → Session 161 product arc
 
 ## Recent Decisions
-
-## 2026-10-04 — Session 183 gameplay audit follow-through
-
-Keep depth-paced Zombies as the default; pump-paced introductions require the explicit experimental query. Creature practice is optional and lazy-loaded. Preserve player music preference and objective timers. Historical build/setup provenance stays unknown. Match terminal UI score/wave to saved authoritative state. The propagated brief workflow uses the checker’s documented Node 20 exception; project-owned build/deploy stays at Node 22+. Engineering redeployment does not promote FORGE to SPARKED; five-green-run launch history remains nonpassing.
-
-
-### S183 final release evidence
-
-Final staging is ce356fde. Studio doctor ran 230 of 233 checks: 155 passing, 4 failing, 2 blocking and 2 advisory failures; this is a central Studio health result, not a passing project-wide zero-blocker claim. Local project release/security/visual checks are recorded separately. No protocol hook is bypassed. Generic responsive tooling skipped; actual touched-state browser checks supply parity evidence. No SPARKED launch is authorized or declared.
-
-
 
 ## S183 verified production follow-through
 
@@ -135,9 +124,15 @@ Use native URL sharing directly in the click gesture; image generation runs as a
 
 Exact-source hosted CI and actual canonical runtime acceptance are the final delivery proof. The project-local ops doctor proxies the control-plane root and cannot prove this project; its live probe was stopped without accepting foreign output. Scoped project release/security/contracts and hosted tests supply delivery evidence. Central IGNIS/doctor follow-up and the incompatible propagation batch are transported through Ark, with no claim of recipient application.
 
+
+
+## S184 explicit founder closeout — 2026-10-06
+
+Use a scoped equivalent of autopilot: the inspected local command delegates doctor to the Studio Ops root and only warns on its nonzero exit. It cannot certify this project. Dry-run completed; project-specific coherence/security/contract gates and exact-main hosted CI provide delivery evidence. Central IGNIS, review-loop and ecosystem-scorecard writes remain recipient-owned through Ark. Do not replace historical central measurements with invented current scores.
+
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 255,603 bytes · SHA-256 `a34e0c89eae1…`
-- `context/TASK_BOARD.md` · 177,280 bytes · SHA-256 `e33410622d65…`
-- `context/DECISIONS.md` · 170,791 bytes · SHA-256 `380940c308b0…`
+- `context/CURRENT_STATE.md` · 255,951 bytes · SHA-256 `1202568d2b69…`
+- `context/TASK_BOARD.md` · 178,221 bytes · SHA-256 `f5c919199e10…`
+- `context/DECISIONS.md` · 171,310 bytes · SHA-256 `c90d27695787…`
 - `docs/AUDIT_2026-09-29_2.json` · 7,385 bytes · SHA-256 `cc01a284e112…`

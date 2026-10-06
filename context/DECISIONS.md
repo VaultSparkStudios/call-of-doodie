@@ -1579,3 +1579,8 @@ Use native URL sharing directly in the click gesture; image generation runs as a
 ## S184 verified production follow-through
 
 Exact-source hosted CI and actual canonical runtime acceptance are the final delivery proof. The project-local ops doctor proxies the control-plane root and cannot prove this project; its live probe was stopped without accepting foreign output. Scoped project release/security/contracts and hosted tests supply delivery evidence. Central IGNIS/doctor follow-up and the incompatible propagation batch are transported through Ark, with no claim of recipient application.
+
+
+## S184 explicit founder closeout — 2026-10-06
+
+Use a scoped equivalent of autopilot: the inspected local command delegates doctor to the Studio Ops root and only warns on its nonzero exit. It cannot certify this project. Dry-run completed; project-specific coherence/security/contract gates and exact-main hosted CI provide delivery evidence. Central IGNIS, review-loop and ecosystem-scorecard writes remain recipient-owned through Ark. Do not replace historical central measurements with invented current scores.
