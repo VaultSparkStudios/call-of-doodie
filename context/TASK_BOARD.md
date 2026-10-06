@@ -1,3 +1,16 @@
+## Session 184 end-run delivery
+
+Requested: intuitive end-run screen, reliable sharing, visible leaderboard submission, direct-main commit/push and full deployment.
+
+Wave scaffold: Wave 1 inspect/capture done; Wave 2 implement/test done; Wave 3 staged, exact-main delivery pending.
+
+- [x] [SIL:184] Prominent eligible submission and truthful local-only results.
+- [x] [SIL:184] Reliable consolidated sharing and explicit downloads.
+- [x] [SIL:184] Immediate replay controls and optional coaching/feedback/exports.
+- [ ] [SIL:184] Verify exact-main CI and production deployment.
+
+Assisted terminal states prove UI integration, not natural playthroughs or participant enjoyment. Native share/clipboard are browser API fixtures; no external message or online leaderboard row was sent. Operations links open the game home rather than claiming mission preservation. Existing eight S183 comparative outcomes remain pending and are outside this request. FORGE/public-unlaunched remains unchanged.
+
 ## S183 verified production follow-through
 
 Source e6b72c770cd83a70847f74b390e28aa9f50b4622 passed exact-main workflow 37245074608: 291/291 files, 1,931/1,931 tests, strict lint, build and Cloudflare deployment. Canonical callofdoodie.wtf reports e6b72c770cd8; canonical and immutable https://ea7fba17.call-of-doodie.pages.dev/ pass shell 7/7 each, domain routing 5/5 and replay trust 3/3. Actual canonical browser checks pass 24/24 mode advancement/pause/resume cases, 8/8 death/victory ending cases with expanded sections, short-screen scrolling, menu return and hashed downloads, 4/4 setup/settings cases and 20/20 creature practice cases. Actual Classic/Zombies/Operations audio output, pause/mute/resume, single context and movement pass.

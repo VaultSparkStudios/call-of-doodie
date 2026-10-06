@@ -25,86 +25,58 @@ import { fileURLToPath } from 'node:url';
 
 // S156 #21: canonical list lives in lib/sil-categories.mjs (policy-drift extraction)
 import { V3_CATS as CATS } from './sil-categories.mjs';
+import { parseSilHistory } from './sil-history.mjs';
 import { describeBound } from './test-signal.mjs';
 // S196: SIL v6 dual-axis. Single write path — the Impact-axis invariant runs here
 // too (non-breaking: fires only when silImpactCategories is present), so there is
 // never a second divergent write path for the new fields.
 import { enforceSilV6Invariant } from './sil-v6.mjs';
-import {
-  LEGACY_SESSION_FIELDS,
-  STRUCTURED_SESSION_SCHEMA_VERSION,
-  validateProjectStatusShape,
-} from './project-status-contract.mjs';
+import { validateProjectStatusShape } from './project-status-contract.mjs';
 
-const SESSION_NARRATIVES = ['currentFocus', 'nextMilestone', 'lastSessionSummary'];
-
-function sessionNumber(value) {
-  const parsed = Number(value);
-  return Number.isInteger(parsed) && parsed >= 0 ? parsed : null;
-}
-
-/** Build the structured session truth and compatibility view together. */
-export function applySessionProjection(status, {
-  durableSession,
-  currentFocus,
-  nextMilestone,
-  lastSessionSummary,
-} = {}) {
-  const durable = sessionNumber(durableSession);
-  if (durable == null) throw new Error('session projection requires a non-negative integer durableSession');
-  const narratives = { currentFocus, nextMilestone, lastSessionSummary };
-  for (const [field, value] of Object.entries(narratives)) {
-    if (typeof value !== 'string' || !value.trim()) throw new Error(`session projection requires non-empty ${field}`);
-  }
-
-  const next = {
-    ...status,
-    schemaVersion: STRUCTURED_SESSION_SCHEMA_VERSION,
-    currentSession: durable,
-    lastSession: durable,
-    silLastSession: durable,
-    ...narratives,
-    sessionState: {
-      version: 1,
-      durableSession: durable,
-      ...narratives,
-    },
-  };
-  for (const field of LEGACY_SESSION_FIELDS) delete next[field];
-  return next;
-}
-
-// Existing readers retain the top-level view. Once adopted, every canonical
-// write refreshes the nested projection before the single atomic replacement.
-function refreshSessionProjection(status) {
-  if (!status.sessionState && Number.parseFloat(String(status.schemaVersion ?? '0')) < Number.parseFloat(STRUCTURED_SESSION_SCHEMA_VERSION)) {
-    return status;
-  }
-  const legacy = LEGACY_SESSION_FIELDS.filter((field) => status[field] !== undefined);
-  if (legacy.length) {
-    throw new Error(`PROJECT_STATUS carries forbidden legacy session field(s): ${legacy.join(', ')}; migrate explicitly with applySessionProjection`);
-  }
-  return applySessionProjection(status, {
-    durableSession: sessionNumber(status.currentSession),
-    ...Object.fromEntries(SESSION_NARRATIVES.map((field) => [field, status[field]])),
-  });
-}
-
-function atomicWriteJson(file, value) {
-  const temp = `${file}.${process.pid}.${Date.now()}.tmp`;
+/**
+ * The append-only SIL ledger for a GIVEN repo root, or '' when unreadable (never throws).
+ *
+ * The root matters: `updateProjectStatusFile` writes status files belonging to other
+ * projects and to temp fixtures, and deriving their averages from THIS repo's ledger
+ * would import one project's history into another's status. Caught live by
+ * tests/doctor-score-sync.test.js while this derivation was being added.
+ *
+ * Read defensively — an unreadable ledger must degrade to "leave the averages alone",
+ * never to a crash.
+ */
+function readSilLedger(repoRoot) {
+  if (!repoRoot) return '';
   try {
-    fs.writeFileSync(temp, JSON.stringify(value, null, 2) + '\n');
-    fs.renameSync(temp, file);
-  } finally {
-    if (fs.existsSync(temp)) fs.unlinkSync(temp);
+    return fs.readFileSync(path.join(repoRoot, 'context', 'SELF_IMPROVEMENT_LOOP.md'), 'utf8');
+  } catch {
+    return '';
   }
+}
+
+/**
+ * Mean total of the newest `window` SCORED sessions in the ledger, to one decimal.
+ *
+ * Returns null — meaning "leave the existing value alone" — when the ledger cannot
+ * supply a full window. A 3-session average computed from two sessions is a
+ * different statistic wearing the same field name, and publishing it would be the
+ * lie this invariant exists to prevent.
+ */
+export function deriveSilAverage(silText, window) {
+  const scored = parseSilHistory(silText, Number.POSITIVE_INFINITY)
+    .filter((entry) => Number.isFinite(entry.total));
+  if (scored.length < window) return null;
+  const mean = scored.slice(0, window).reduce((sum, entry) => sum + entry.total, 0) / window;
+  return Math.round(mean * 10) / 10;
 }
 
 /**
  * Pure invariant pass. Returns { status, violations } — status is a new object
  * with invariants applied; violations lists what was wrong (empty = clean).
+ *
+ * `repoRoot` selects whose SIL ledger the averages derive from; `silText` overrides it
+ * outright (tests, imported project paths). With neither, the averages are left alone.
  */
-export function enforceSilInvariant(status) {
+export function enforceSilInvariant(status, { silText = null, repoRoot = null } = {}) {
   const violations = [];
   const out = { ...status };
   const cats = out.silCategoriesV3;
@@ -135,6 +107,32 @@ export function enforceSilInvariant(status) {
       out.silMax = 1000;
     }
   }
+  // ── S174 [audit #3] · the averages were trusted, not derived ────────────────
+  // silScore has been recomputed-never-trusted since S154, but silAvg3/silAvg5 sat
+  // beside it as hand-entered numbers with no authority behind them. Measured live at
+  // S174: PROJECT_STATUS said silAvg3 995 while STATE_VECTOR said 997.7, and neither
+  // was compared to the ledger. The visible symptom was a churn loop in git history —
+  // a closeout hand-writes `995.0`, JSON.stringify below cannot preserve a trailing
+  // `.0`, and the next script write reverts it, forever.
+  //
+  // Both averages are a pure function of the append-only SIL ledger, so derive them
+  // from it under the same rule as silScore. Deliberately a no-op when the ledger is
+  // unreadable or too short: an average over fewer sessions than it claims to cover
+  // would be exactly the invented measurement CANON-031 forbids.
+  const ledgerText = silText ?? readSilLedger(repoRoot);
+  for (const [field, window] of [['silAvg3', 3], ['silAvg5', 5]]) {
+    // Correct an average the status already publishes; never introduce one. A status
+    // that does not track this field is not lying about it, and adding it here would
+    // make the writer a schema author instead of an invariant.
+    if (!(field in out)) continue;
+    const derived = deriveSilAverage(ledgerText, window);
+    if (derived == null) continue;
+    if (out[field] !== derived) {
+      violations.push({ field, value: out[field], fix: `recomputed to ${derived} (mean of the last ${window} scored SIL sessions)` });
+      out[field] = derived;
+    }
+  }
+
   // SIL v6 Impact-axis invariant (non-breaking — no-op unless silImpactCategories present).
   const v6 = enforceSilV6Invariant(out);
   for (const v of v6.violations) violations.push(v);
@@ -158,66 +156,81 @@ export function enforceSilInvariant(status) {
     });
   }
 
-  // ── S321 [audit #4] · the test record must not contradict itself ───────────
-  // Closes [SIL][S315 #2]. The `unexplained` DETECTOR in lib/test-signal.mjs is
-  // real, and it is unreachable in the case that matters: it requires a
-  // CONTRADICTING GREEN HALF, so it only speaks when the assertion run is green.
-  // Live at S321 both halves were red, and the record read
-  //
-  //     testsPassing 565 / testsTotal 566 · testsFailures []  · testsAssertionsFiles 582
-  //
-  // — one failure the record cannot name, and a file-level half measured over 16
-  // FEWER files than the assertion half, so the two numbers printed side by side
-  // came from different runs. Nothing stopped that record being WRITTEN, which is
-  // where the SIL commitment says the assertion belongs.
-  //
-  // Neither is auto-fixed, for the S283 reason directly above: the failing file's
-  // name is knowable only to the run that failed it, and a plausible placeholder
-  // would be the invented measurement CANON-031 exists to forbid. An honest run
-  // clears these; so does one sentence saying what the deficit is.
-  for (const v of testRecordCoherenceViolations(v6.status)) violations.push(v);
-
   return { status: v6.status, violations };
 }
 
-/**
- * The escape hatch is a SENTENCE, not a flag: a human note naming what the deficit
- * is. That keeps the record honest under a genuinely unattributable failure (a host
- * that could not spawn a worker) without letting a boolean wave the check away.
- */
-const COHERENCE_NOTE = 'testsCoherenceNote';
+const LOCK_NAME = '.project-status.lock';
+const waitBuffer = new Int32Array(new SharedArrayBuffer(4));
 
-export function testRecordCoherenceViolations(status = {}) {
-  const out = [];
-  const note = typeof status[COHERENCE_NOTE] === 'string' && status[COHERENCE_NOTE].trim()
-    ? status[COHERENCE_NOTE].trim() : null;
-  const num = (v) => (Number.isFinite(Number(v)) ? Number(v) : null);
-  const passing = num(status.testsPassing);
-  const total = num(status.testsTotal);
-  const files = num(status.testsAssertionsFiles);
-  const named = Array.isArray(status.testsFailures) ? status.testsFailures.length : null;
+function pause(ms) {
+  Atomics.wait(waitBuffer, 0, 0, Math.max(1, ms));
+}
 
-  if (passing != null && total != null && named != null) {
-    const deficit = total - passing;
-    if (deficit > 0 && named === 0 && !note) {
-      out.push({
-        field: 'testsFailures',
-        value: status.testsFailures,
-        fix: `NOT auto-fixed — the record is short by ${deficit} file(s) and names none of them. Re-derive from ONE run (node scripts/run-tests.mjs), or set ${COHERENCE_NOTE} to the sentence that explains the deficit. Never invent a filename to clear this.`,
-        unfixable: true,
-      });
+/** Serialize every status mutation behind one bounded, stale-recovering lock. */
+export function withProjectStatusLock(repoRoot, work, { timeoutMs = 2500, staleMs = 30_000, pollMs = 20 } = {}) {
+  const contextDir = path.join(repoRoot, 'context');
+  const lockPath = path.join(contextDir, LOCK_NAME);
+  fs.mkdirSync(contextDir, { recursive: true });
+  const started = Date.now();
+  const lockOwnerId = `${process.pid}:${started}:${Math.random().toString(36).slice(2)}`;
+  let handle = null;
+  while (handle == null) {
+    try {
+      handle = fs.openSync(lockPath, 'wx');
+      fs.writeFileSync(handle, lockOwnerId, 'utf8');
+    } catch (error) {
+      if (error?.code !== 'EEXIST') throw error;
+      try {
+        if (Date.now() - fs.statSync(lockPath).mtimeMs > staleMs) {
+          fs.unlinkSync(lockPath);
+          continue;
+        }
+      } catch (statError) {
+        if (statError?.code === 'ENOENT') continue;
+        throw statError;
+      }
+      if (Date.now() - started >= timeoutMs) {
+        throw new Error(`PROJECT_STATUS write lock timed out after ${timeoutMs}ms: ${lockPath}`);
+      }
+      pause(pollMs);
     }
   }
-
-  if (files != null && total != null && files > total && !note) {
-    out.push({
-      field: 'testsAssertionsFiles',
-      value: files,
-      fix: `NOT auto-fixed — the assertion half covered ${files} files against testsTotal ${total}, so the file-level half is the narrower, OLDER run and the two numbers beside each other came from different runs. Re-derive from one run, or set ${COHERENCE_NOTE} to say which half is stale.`,
-      unfixable: true,
-    });
+  try {
+    return work();
+  } finally {
+    try { fs.closeSync(handle); } catch { /* already closed */ }
+    try {
+      if (fs.readFileSync(lockPath, 'utf8') === lockOwnerId) fs.unlinkSync(lockPath);
+    } catch { /* lock cleanup is best-effort */ }
   }
-  return out;
+}
+
+function validateStatusShape(status, repoRoot, { requireSchema = true } = {}) {
+  const shape = validateProjectStatusShape(status, repoRoot);
+  if (shape.schemaMissing && !requireSchema) return;
+  if (!shape.ok) {
+    throw new Error(`PROJECT_STATUS contract invalid:\n${shape.errors.map((error) => `  - ${error}`).join('\n')}`);
+  }
+}
+
+function writeProjectStatusUnlocked(repoRoot, status, {
+  touchLastUpdated = true,
+  statusPath = null,
+  requireSchema = true,
+} = {}) {
+  const { status: fixed, violations } = enforceSilInvariant(status, { repoRoot });
+  if (touchLastUpdated) fixed.lastUpdated = new Date().toISOString().slice(0, 10);
+  validateStatusShape(fixed, repoRoot, { requireSchema });
+  const p = statusPath || path.join(repoRoot, 'context', 'PROJECT_STATUS.json');
+  fs.mkdirSync(path.dirname(p), { recursive: true });
+  const temporary = path.join(path.dirname(p), `.PROJECT_STATUS.${process.pid}.${Date.now()}.${Math.random().toString(36).slice(2)}.tmp`);
+  try {
+    fs.writeFileSync(temporary, JSON.stringify(fixed, null, 2) + '\n', 'utf8');
+    fs.renameSync(temporary, p);
+  } finally {
+    try { if (fs.existsSync(temporary)) fs.unlinkSync(temporary); } catch { /* best-effort */ }
+  }
+  return { written: p, violations, status: fixed };
 }
 
 /**
@@ -225,23 +238,38 @@ export function testRecordCoherenceViolations(status = {}) {
  * Returns { written, violations }. Throws on schema-contract or I/O failure.
  */
 export function writeProjectStatus(repoRoot, status, { touchLastUpdated = true } = {}) {
-  const { status: invariantStatus, violations } = enforceSilInvariant(status);
-  const fixed = refreshSessionProjection(invariantStatus);
-  if (touchLastUpdated) fixed.lastUpdated = new Date().toISOString().slice(0, 10);
-  const shape = validateProjectStatusShape(fixed, repoRoot);
-  if (!shape.ok) throw new Error(`PROJECT_STATUS contract invalid:\n${shape.errors.map((error) => `  - ${error}`).join('\n')}`);
-  const p = path.join(repoRoot, 'context', 'PROJECT_STATUS.json');
-  fs.mkdirSync(path.dirname(p), { recursive: true });
-  atomicWriteJson(p, fixed);
-  return { written: p, violations };
+  return withProjectStatusLock(repoRoot, () => writeProjectStatusUnlocked(repoRoot, status, { touchLastUpdated }));
 }
 
 /** Read-modify-write helper: apply a mutator fn under the invariant. */
 export function updateProjectStatus(repoRoot, mutate, opts = {}) {
-  const p = path.join(repoRoot, 'context', 'PROJECT_STATUS.json');
-  const current = JSON.parse(fs.readFileSync(p, 'utf8'));
-  const next = mutate({ ...current }) || current;
-  return writeProjectStatus(repoRoot, next, opts);
+  return withProjectStatusLock(repoRoot, () => {
+    const p = path.join(repoRoot, 'context', 'PROJECT_STATUS.json');
+    const current = JSON.parse(fs.readFileSync(p, 'utf8'));
+    const next = mutate({ ...current }) || current;
+    return writeProjectStatusUnlocked(repoRoot, next, opts);
+  }, opts);
+}
+
+function repoRootForStatusPath(statusPath) {
+  const absolute = path.resolve(statusPath);
+  const parent = path.dirname(absolute);
+  return path.basename(parent).toLowerCase() === 'context' ? path.dirname(parent) : parent;
+}
+
+/** Atomic read-modify-write for status fixtures or imported project paths. */
+export function updateProjectStatusFile(statusPath, mutate, opts = {}) {
+  const repoRoot = repoRootForStatusPath(statusPath);
+  const schemaExists = fs.existsSync(path.join(repoRoot, 'context', 'PROJECT_STATUS.schema.json'));
+  return withProjectStatusLock(repoRoot, () => {
+    const current = JSON.parse(fs.readFileSync(statusPath, 'utf8'));
+    const next = mutate({ ...current }) || current;
+    return writeProjectStatusUnlocked(repoRoot, next, {
+      ...opts,
+      statusPath,
+      requireSchema: opts.requireSchema ?? schemaExists,
+    });
+  }, opts);
 }
 
 // ── CLI ──────────────────────────────────────────────────────────────────────
@@ -255,7 +283,7 @@ if (isMain) {
   const p = path.join(repoRoot, 'context', 'PROJECT_STATUS.json');
   if (!fs.existsSync(p)) { console.error(`⛔ no PROJECT_STATUS.json at ${p}`); process.exit(2); }
   const current = JSON.parse(fs.readFileSync(p, 'utf8'));
-  const { status: fixed, violations } = enforceSilInvariant(current);
+  const { status: fixed, violations } = enforceSilInvariant(current, { repoRoot });
   const shape = validateProjectStatusShape(fixed, repoRoot);
   if (!shape.ok) {
     console.error(`⛔ PROJECT_STATUS contract invalid (${shape.errors.length}):`);
@@ -294,4 +322,4 @@ if (isMain) {
   process.exit(0);
 }
 
-export default { applySessionProjection, enforceSilInvariant, testRecordCoherenceViolations, writeProjectStatus, updateProjectStatus };
+export default { enforceSilInvariant, deriveSilAverage, withProjectStatusLock, writeProjectStatus, updateProjectStatus, updateProjectStatusFile };

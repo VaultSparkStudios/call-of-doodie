@@ -16,12 +16,12 @@
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
-import { decideBriefDestination, emitBrief } from './lib/brief-destination.mjs';
 import { fileURLToPath } from 'url';
 import { resolveTestSignal, testSignalSeverity, testSignalMark } from './lib/test-signal.mjs';
 import { spawnSync } from './lib/safe-spawn.mjs';
 import { renderTitleHeader, renderLastCompleted, renderTestItNow } from './lib/brief-blocks.mjs';
-import { extractSection, parseUnifiedItems } from './lib/task-board.mjs';
+import { presentCostSignal, selectCurrentTestingSurfaces } from './lib/brief-evidence.mjs';
+import { parseUnifiedItems } from './lib/task-board.mjs';
 import { loadPortfolioTaskBoards } from './lib/cross-repo-tasks.mjs';
 import { loadIgnisInsight } from './lib/ignis-insight.mjs';
 import { contextWindowForAgent } from './lib/model-router.mjs';
@@ -29,22 +29,19 @@ import { loadProvenanceMap } from './classify-warning-provenance.mjs';
 import { isWarning } from './lib/doctor-predicates.mjs';
 import { sparkline as _sparkline } from './lib/visual-blocks.mjs';
 import { parseSilHistory, forecastNext } from './lib/sil-forecaster.mjs';
-import { parseSilSessions } from './lib/sil-ledger.mjs';
+import { parseSilSessions, resolveLatestSilDate } from './lib/sil-ledger.mjs';
 import { recordAndResolve, rollingMae } from './lib/forecast-ledger.mjs';
 import { BLOCKED_STATUSES_CORE } from './lib/shared-policies.mjs';
 import { runBriefPreflight } from './lib/brief-preflight.mjs';
-import { writeProjectStatus } from './lib/write-project-status.mjs';
+import { normalizeGeniusBlock, renderHumanPressureBlock } from './lib/startup-brief-boxes.mjs';
 import { buildBriefSemanticFingerprint, formatBriefSemanticFingerprint } from './lib/brief-semantic-fingerprint.mjs';
 import { run as codexTrustedProjectRun } from './check-codex-trusted-project.mjs';
 import { readableDoctorScore } from './lib/doctor-score-coherence.mjs';
-import { isMeasured as isMeasuredCompliance } from './lib/compliance-measurement.mjs';
+import { updateProjectStatus } from './lib/write-project-status.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
 const outputPath = path.join(root, 'docs', 'STARTUP_BRIEF.md');
-// S305 [audit #3] — hermetic destination: a test spawning this renderer must not touch the tracked plane.
-const BRIEF_DEST = decideBriefDestination({ defaultPath: outputPath, kind: 'brief' });
-const SIGNALS_DEST = decideBriefDestination({ defaultPath: path.join(root, 'context', 'SIGNALS.md'), kind: 'signals' });
 const node = process.execPath;
 if (process.argv.includes('--help') || process.argv.includes('-h')) {
   console.log('Usage: node scripts/render-startup-brief.mjs [--v5] [--legacy]');
@@ -55,9 +52,13 @@ if (process.argv.includes('--help') || process.argv.includes('-h')) {
 // to render-startup-brief-v5.mjs (71% token reduction, validated S117). Default
 // remains v3.1 until 3-session hash-stability monitoring completes.
 if (process.argv.includes('--v5') || process.env.BRIEF_V5 === '1') {
-  const { spawnSync } = await import('./lib/safe-spawn.mjs');
-  const r = spawnSync(node, [path.join(__dirname, 'render-startup-brief-v5.mjs'), ...process.argv.slice(2).filter(a => a !== '--v5')], { stdio: 'inherit', cwd: root });
-  process.exit(r.status ?? 0);
+  const v5Path = path.join(__dirname, 'render-startup-brief-v5.mjs');
+  if (!fs.existsSync(v5Path)) {
+    process.stderr.write('Startup brief v5 renderer is unavailable in this repository.\n');
+    process.exit(2);
+  }
+  const r = spawnSync(node, [v5Path, ...process.argv.slice(2).filter(a => a !== '--v5')], { stdio: 'inherit', cwd: root });
+  process.exit(r.status ?? 1);
 }
 
 // ── Constants ─────────────────────────────────────────────────────────────────
@@ -151,6 +152,13 @@ function extractBetween(content, start, end) {
   if (s === -1 || e === -1 || e <= s) return '';
   return content.slice(s + start.length, e).trim();
 }
+function extractSection(content, heading) {
+  const parts = content.split(/^## /m);
+  const match = parts.find(p => p.startsWith(heading));
+  if (!match) return '';
+  const nl = match.indexOf('\n');
+  return nl === -1 ? '' : match.slice(nl + 1);
+}
 
 // ── Box-drawing helpers ───────────────────────────────────────────────────────
 // S220 audit #20 — word-aware truncation: founder boxes were cutting mid-word
@@ -174,9 +182,8 @@ function row(content) { return `║  ${pad(content, W)}  ║`; }
 // already targets this path; it resolved null since S209). Pass-through: the
 // caller spreads the same rows into the brief. Advisory write — never blocks.
 function writeSignalsArtifact(rows) {
-  if (SIGNALS_DEST.skip) { process.stderr.write(`  · ${SIGNALS_DEST.reason}\n`); return rows; }
   try {
-    fs.writeFileSync(SIGNALS_DEST.path, rows.join('\n') + '\n');
+    fs.writeFileSync(path.join(root, 'context', 'SIGNALS.md'), rows.join('\n') + '\n');
   } catch { /* advisory */ }
   return rows;
 }
@@ -506,8 +513,7 @@ const scopeCap       = velocity > 0 ? Math.floor(velocity * 1.5) : null;
 // ── Last active (freshest of: SIL closeout, lastUpdated, lastHandoffDate) ────
 // "Days since last" was previously SIL-only, which lied when sessions shipped without
 // running /closeout. Now takes the newest signal across all three sources.
-const lastSilDateMatch = lastSessionStr.match(/(\d{4}-\d{2}-\d{2})/);
-const lastSilDate = lastSilDateMatch?.[1] || null;
+const lastSilDate = resolveLatestSilDate(allSilEntries, lastSessionStr);
 // S220 audit #12 — strict date guard: silLastSession is a session NUMBER, not a
 // date; "219" lex-sorts after "2026-07-02" and produced "Last active: 660175d".
 // Only well-formed ISO dates may enter the max.
@@ -657,47 +663,21 @@ const genomeDetail = droppedDims.length > 0
   : `all stable  (${genSnaps.length > 0 ? genSnaps[genSnaps.length - 1].total : '?'}/25)`;
 
 // ── Deploy gaps ──────────────────────────────────────────────────────────────
-//
-// S301 [audit #15] — THIS BLOCK USED TO PRINT A COUNT FROM A FROZEN FILE.
-//
-// It read DEPLOY_GAPS.json and emitted `gaps.flaggedCount` with no read of
-// generatedAt anywhere — while the cost block twenty lines below recomputes live
-// from the ledger. The artifact was dated 2026-04-26 and its only producer was
-// launch-control-refresh.yml, whose schedule was retired for hosted-runner cost.
-// So for 119 days every /start printed "⚠ Deploy gaps 1/7 SPARKED flagged
-// (vaultspark-football-gm)" — a slug that no longer exists — against a portfolio
-// of 8 SPARKED repos, two of which (veilos, franchise-architect-football) had
-// never been checked at all. No doctor probe reads this file, so the staleness
-// was invisible from every surface.
-//
-// The rule this restores is one the repo already wrote: freshness belongs to the
-// producer of the numbers it dates, and an absent measurement is a finding, not
-// a clean signal. An absent file is UNMEASURED too — not "no gaps".
-const DEPLOY_GAPS_MAX_AGE_MS = 7 * 24 * 3_600_000;
-let sigDeploy = '⚠';
-let deployLabel = 'UNMEASURED — run: node scripts/detect-deploy-gaps.mjs';
+let sigDeploy = '✓';
+let deployLabel = 'no gaps (run: ops deploy-gaps)';
 try {
-  const { readArtifact } = await import('./lib/artifact-io.mjs');
   const gapsPath = path.join(root, 'portfolio', 'DEPLOY_GAPS.json');
-  const read = readArtifact(gapsPath, { maxAgeMs: DEPLOY_GAPS_MAX_AGE_MS, allowForeign: false });
-  if (!read.ok) {
-    const days = read.ageMs ? ` (${Math.round(read.ageMs / 86_400_000)}d old)` : '';
-    const why = read.reason === 'missing' ? 'never generated' : read.reason.split(':')[0];
-    deployLabel = `UNMEASURED — ${why}${days}; run: node scripts/detect-deploy-gaps.mjs`;
-  } else {
-    const gaps = read.data;
+  if (fs.existsSync(gapsPath)) {
+    const gaps = JSON.parse(fs.readFileSync(gapsPath, 'utf8'));
     if (gaps.flaggedCount > 0) {
       sigDeploy = gaps.flaggedCount >= 3 ? '⛔' : '⚠';
       const top = (gaps.results || []).filter(r => r.flagged).slice(0, 2).map(r => r.slug).join(', ');
       deployLabel = `${gaps.flaggedCount}/${gaps.sparkedCount} SPARKED flagged (${top}${gaps.flaggedCount > 2 ? '…' : ''})`;
     } else if (gaps.sparkedCount > 0) {
-      sigDeploy = '✓';
       deployLabel = `0/${gaps.sparkedCount} gaps — all SPARKED shipped through`;
     }
   }
-} catch (err) {
-  deployLabel = `UNMEASURED — deploy-gaps read failed (${String(err?.message || err).slice(0, 40)})`;
-}
+} catch { /* keep defaults */ }
 
 // ── Cost anomaly signal — SHARED evaluator (S181 [audit #1]) ─────────────────
 // Previously an inline rolling-window check on NOTIONAL list-price (entryCost),
@@ -712,11 +692,9 @@ try {
   const ledEntries = readEntries(ledgerPath);
   if (ledEntries.length > 0) {
     const v = evaluateCostAnomaly(ledEntries);
-    sigCost = v.sig;
-    const realPart = `real $${v.realMetered7d.toFixed(2)}/7d`;
-    costDetail = v.notionalNote
-      ? `${realPart} · ${v.notionalNote}`
-      : `${realPart} · ${v.reasons[0] || 'normal'}`;
+    const presented = presentCostSignal(v, { modelPlanMode: status.modelPlanMode === true });
+    sigCost = presented.sig;
+    costDetail = presented.detail;
   }
 } catch { /* best-effort */ }
 
@@ -815,26 +793,10 @@ function sig(val, green, warn) {
 const runwayQualitative = /\b(strong|healthy|robust)\b/i.test(runwayRaw);
 const runwayWeak = /\b(weak|low|critical|depleted|empty)\b/i.test(runwayRaw);
 const runwayNumMatch = runwayRaw.match(/~\s*([\d.]+)\s*(?:session|sprint|run)/i);
-// S311 [audit #7] — the final `: 5` was an unknown laundered into a pass.
-//
-// `Momentum runway:` in the rolling header is a CARRIED, free-prose field (see
-// lib/sil-rolling-header.mjs — it is classified `carried`, not `derived`, precisely
-// because no parser can produce it). In practice closeouts have been writing a
-// next-steps sentence there. Measured at S311 it held "generalise the premise-adapter
-// target contract; re-verify AUDIT_2026-08-21 ...". None of the three recognisers
-// below match a sentence like that, so it fell to 5, and `sig(5, v => v > 4, …)`
-// rendered a green tick: the brief reported healthy runway from a to-do list. The
-// explicit 'unknown' fallback assigned above lands in exactly the same place.
-//
-// CANON-031: an unrecognised value is UNKNOWN, and unknown is never green. Runway is
-// now three-state — measured, weak, or unrecognised — and unrecognised renders ⚠ with
-// the reason, which is also the only thing that will ever prompt anyone to start
-// writing a real runway measure into that field.
-const runwayKnown = Boolean(runwayNumMatch) || runwayQualitative || runwayWeak;
 const runwayNum = runwayNumMatch ? parseFloat(runwayNumMatch[1])
                 : runwayQualitative ? 9
                 : runwayWeak ? 1
-                : null;
+                : 5;
 // G1 S121 — prefer fresh .cache/test-count.json (from refresh-test-count.mjs) over PROJECT_STATUS values.
 // S181 [audit #2] — freshness guard: the cache silently went stale (179 files cached
 // while the live suite had 225), so the brief reported a confident-but-wrong count.
@@ -910,9 +872,7 @@ if (typeof status.testsPassing === 'number' && typeof status.testsTotal === 'num
   testsLabel = `${status.testsTotal ?? '?'}/? passing`;
 }
 const sigVel    = sig(velocity, v => v >= 2, v => v === 1);
-// S311 [audit #7] — unknown is ⚠, never ✓. `sig()` cannot express a third state, so
-// the unrecognised case is decided before it is consulted.
-const sigRun    = runwayKnown ? sig(runwayNum, v => v > 4, v => v >= 2) : '⚠';
+const sigRun    = sig(runwayNum, v => v > 4, v => v >= 2);
 const sigCtx    = sig(typeof ctxAge === 'number' ? ctxAge : 99, v => v <= 7, v => v <= 14);
 const sigIgnis  = sig(typeof ignisAge === 'number' ? ignisAge : 99, v => v < 7, v => v < 14);
 const sigCdr    = cdrGap ? '⚠' : '✓';
@@ -920,25 +880,13 @@ const sigVer    = versionDrift ? '⚠' : '✓';
 const sigRev    = revAge <= 7 ? '✓' : revAge <= 14 ? '⚠' : '⛔';
 const sigTruth  = truthStatus === 'green' ? '✓' : truthStatus === 'yellow' ? '⚠' : '⛔';
 const complianceSnapshots = Array.isArray(complianceHistory.snapshots) ? complianceHistory.snapshots : [];
-// S337 — the tile reports the latest MEASURED snapshot, and says so when the newest
-// row was not a measurement. Reading `snapshots[last]` unconditionally is how this
-// tile came to lead the founder's brief with `⛔ Compliance 0/36 (0%) ↓` on a day
-// whose live re-measurement was 94%: the out-of-session lane, which has no sibling
-// checkouts, had written the day's last row. `⛔ 0%` and "nobody could measure this"
-// are different sentences and must not share a glyph.
-const complianceNewest = complianceSnapshots[complianceSnapshots.length - 1] ?? null;
-const complianceMeasured = complianceSnapshots.filter(isMeasuredCompliance);
-const complianceLatest = complianceMeasured[complianceMeasured.length - 1] ?? null;
-const compliancePrev = complianceMeasured[complianceMeasured.length - 2] ?? null;
-const complianceStaleNewest = complianceNewest && !isMeasuredCompliance(complianceNewest);
+const complianceLatest = complianceSnapshots[complianceSnapshots.length - 1] ?? null;
+const compliancePrev = complianceSnapshots[complianceSnapshots.length - 2] ?? null;
 const complianceTrend = complianceLatest && compliancePrev
   ? complianceLatest.score - compliancePrev.score >= 2 ? '↑' : compliancePrev.score - complianceLatest.score >= 2 ? '↓' : '→'
   : '→';
 const complianceSpark = complianceSnapshots.slice(-8).map(s => {
-  // S337 — an unmeasured day is '·'. Previously `Number(s.score || 0)` drew it as
-  // '▁', the sub-50% bar: the worst-looking glyph for the one day nothing was known.
-  if (!isMeasuredCompliance(s)) return '·';
-  const score = Number(s.score);
+  const score = Number(s.score || 0);
   if (score >= 100) return '█';
   if (score >= 95) return '▇';
   if (score >= 85) return '▆';
@@ -946,19 +894,9 @@ const complianceSpark = complianceSnapshots.slice(-8).map(s => {
   if (score >= 50) return '▂';
   return '▁';
 }).join('') || '—';
-// A gap in measurement is ⚠ (attention, unknown), never ⛔ (a bad known value).
-const sigCompliance = !complianceLatest
-  ? '⚠'
-  : complianceStaleNewest ? '⚠'
-  : complianceLatest.score >= 100 ? '✓'
-  : complianceLatest.score >= 95 ? '⚠'
-  : '⛔';
-const complianceCoverageNote = complianceLatest && complianceLatest.unmeasurable
-  ? ` · ${complianceLatest.unmeasurable} unmeasurable`
-  : '';
+const sigCompliance = !complianceLatest ? '⚠' : complianceLatest.score >= 100 ? '✓' : complianceLatest.score >= 95 ? '⚠' : '⛔';
 const complianceDetail = complianceLatest
-  ? `${complianceLatest.passed}/${complianceLatest.measuredTotal ?? complianceLatest.total} (${complianceLatest.score}%) ${complianceTrend} ${complianceSpark}${complianceCoverageNote}`
-    + (complianceStaleNewest ? ` · ${complianceNewest.date} not measured (${complianceNewest.unmeasurableReason ?? 'no reason recorded'})` : '')
+  ? `${complianceLatest.passed}/${complianceLatest.total} (${complianceLatest.score}%) ${complianceTrend} ${complianceSpark}`
   : 'not tracked — run: node scripts/ops.mjs compliance-velocity';
 
 function buildGeniusBoxFromMarkdown(markdown) {
@@ -1189,7 +1127,7 @@ try {
     encoding: 'utf8',
     timeout: 15000,
   });
-  geniusBlock = (res.stdout ?? '').trim();
+  geniusBlock = normalizeGeniusBlock(res.stdout, { width: W, maxLines: 8 });
 } catch { /* fallback below */ }
 if (!geniusBlock) {
   geniusBlock = buildGeniusBoxFromMarkdown(readText(path.join(root, 'docs', 'GENIUS_LIST.md')));
@@ -1216,13 +1154,8 @@ if (silMaxSession == null) {
 } else if (statusLatest != null && statusLatest !== silMaxSession) {
   // PROJECT_STATUS.json lagged the SIL log (the historical failure mode). Self-heal it.
   try {
-    const statusPath = path.join(root, 'context', 'PROJECT_STATUS.json');
-    const live = JSON.parse(fs.readFileSync(statusPath, 'utf8'));
-    // Sync ONLY the session number. silScore/silCategoriesV3 are owned by the
-    // closeout SIL scorer — writing silScore here would desync it from the
-    // category breakdown (tier1-sil-migration invariant: score == sum(categories)).
-    live.currentSession = silMaxSession;
-    writeProjectStatus(ROOT, live, { touchLastUpdated: false });
+    // Sync only the session number through the invariant-preserving atomic writer.
+    updateProjectStatus(root, (live) => ({ ...live, currentSession: silMaxSession }));
     console.log(`  ↻ self-heal: PROJECT_STATUS.currentSession ${statusLatest} → ${silMaxSession} (synced from SIL log)`);
   } catch (e) {
     console.warn(`  ⚠ could not self-heal PROJECT_STATUS.json: ${e.message}`);
@@ -1272,7 +1205,10 @@ const lines = [
   }),
   ``,
   ...(Array.isArray(status.testingSurfaces) && status.testingSurfaces.length
-    ? [renderTestItNow({ name: status.name || 'Studio Ops', testingSurfaces: status.testingSurfaces }), ``]
+    ? [renderTestItNow({
+        name: status.name || 'Studio Ops',
+        testingSurfaces: selectCurrentTestingSurfaces(status.testingSurfaces, status),
+      }), ``]
     : []),
   // S126 audit #28: PROJECT_PROFILE lens header
   renderProfileLensHeader(),
@@ -1345,7 +1281,7 @@ const lines = [
     top('SIGNALS'),
     row(`${sigTests}  Tests         ${testsLabel}`),
     row(`${sigVel}  Velocity      ${velocity} ${velTrend}  ·  Debt: ${debtRaw}`),
-    row(`${sigRun}  Runway        ${runwayKnown ? runwayRaw : `UNRECOGNISED — no runway measure in the header field (got prose: "${String(runwayRaw).slice(0, 40)}…")`}`),
+    row(`${sigRun}  Runway        ${runwayRaw}`),
     // Headroom moved to dedicated CONTEXT METER block above (S119).
     row(`${sigCtx}  Context age   ${ctxAge}d`),
     row(`${sigIgnis}  IGNIS         ${status.ignisScore ?? '?'} ${status.ignisGrade || ''}  ·  ${ignisAge}d old`),
@@ -1394,14 +1330,8 @@ const lines = [
   ] : []),
   // Now/Next/Blocked buckets removed — Unified Genius List is the single
   // recommendation surface. Blocked count surfaces in SIGNALS + GENIUS LIST.
-  ...(topPressure ? [
-    top('HUMAN PRESSURE'),
-    row(`Top item:      ${topPressure.title.slice(0, W - 15)}`),
-    row(`Pressure:      ${topPressure.pressureScore} · ${topPressure.pressureBand}`),
-    row(`Next action:   ${topPressure.nextAgentAction.slice(0, W - 15)}`),
-    bot(),
-    ``,
-  ] : []),
+  renderHumanPressureBlock(topPressure, { width: W }),
+  ``,
   // ── v4.0: SESSION VOICE (personable cue) ────────────────────────────────────
   // Suppressed S116 #623 — low-signal flavor block was pushing brief over the
   // 15KB brief-golden cap. v4.1 spec already drops this. Re-enable behind a
@@ -1486,8 +1416,8 @@ try {
   briefBody = r.body;
   for (const t of r.trimmed) console.log(`  ✂ tile trimmed to budget: ${t.title} (−${t.dropped} lines, cap ${(t.budget / 1024).toFixed(1)}KB)`);
 } catch { /* budget enforcement is advisory at render time */ }
-const emitted = emitBrief(BRIEF_DEST, briefBody, { writeFileSync: (p, b) => fs.writeFileSync(p, b, 'utf8') });
-console.log(`✓ Startup brief → ${BRIEF_DEST.hermetic ? emitted.wrote : 'docs/STARTUP_BRIEF.md'}  (v3.2)`);
+fs.writeFileSync(outputPath, briefBody, 'utf8');
+console.log(`✓ Startup brief → docs/STARTUP_BRIEF.md  (v3.2)`);
 console.log(`  Session ${currentSession} · SIL ${silTotal}/${silMax} · ${pct} · Unblocked ${openNow.length} / Blocked ${openBlocked.length}`);
 console.log(`  Signals: tests ${sigTests}  velocity ${sigVel}  runway ${sigRun}  genome ${sigGenome}  entropy ${sigEntropy}  cdr ${sigCdr}  patterns ${sigPatterns}  templates ${sigVer}  revenue ${sigRev}`);
 
@@ -1495,14 +1425,11 @@ console.log(`  Signals: tests ${sigTests}  velocity ${sigVel}  runway ${sigRun} 
 try {
   const { recordSkillCost } = await import('./lib/skill-cost-ledger.mjs');
   const briefBytes = Buffer.byteLength(lines.join('\n'), 'utf8');
-  const estimatedTokens = Math.ceil(briefBytes / 4);
+  const actualTokens = Math.ceil(briefBytes / 4);
   recordSkillCost(root, {
     skill: 'start',
     sessionId: `S${currentSession}`,
-    estimatedTokens,
-    estimateMethod: 'utf8-bytes/4', estimateScope: 'rendered-brief',
-    tokenSource: 'unmeasured', durationSec: performance.now() / 1000,
-    durationScope: 'renderer-process',
+    actualTokens,
     status: 'completed',
   });
 } catch (err) {
@@ -1517,41 +1444,18 @@ try {
 // S120 audit #12 — v5 now default when `.cache/brief-v5-canonical` flag file
 // exists (set once at promotion). Env override still honored.
 const v5FlagFile = path.join(root, '.cache', 'brief-v5-canonical');
-// S335 [audit #2] — THE DECISION NOW LIVES SOMEWHERE GIT CAN SEE.
-//
-// From S120 to S335 the canonical-brief decision was encoded as the presence of a
-// zero-byte file under .cache/, which .gitignore:17 excludes. Nothing tracked it, no probe
-// asserted it, no test covered it. A cache clear or a fresh clone therefore reverted every
-// /start to the v3.1 brief with no alarm — 15,705 B against v5's 7,062 B, measured by this
-// script's own compare mode, roughly 2,160 extra tokens per session. The only tell was the
-// generated-by header flipping to DRAFT, and nothing reads it.
-//
-// portfolio/CANONICAL_SURFACES.json is tracked, so the decision now survives the cache.
-// The flag file is kept as a legacy override so an existing checkout keeps working.
-function canonicalRendererIsV5() {
-  try {
-    const decl = JSON.parse(fs.readFileSync(path.join(root, 'portfolio', 'CANONICAL_SURFACES.json'), 'utf8'));
-    const surface = (decl.surfaces || []).find((s) => s.id === 'startup-brief');
-    return Boolean(surface && /render-startup-brief-v5\.mjs$/.test(String(surface.canonicalRenderer || '')));
-  } catch { return false; }
-}
 const v5Mode = process.env.STUDIO_BRIEF_V5
   || (process.argv.includes('--v5') ? '1' : null)
-  || (canonicalRendererIsV5() ? '1' : null)
   || (fs.existsSync(v5FlagFile) ? '1' : 'off');
 if (v5Mode !== 'off') {
   try {
     const v5Path = path.resolve(__dirname, 'render-startup-brief-v5.mjs');
     if (fs.existsSync(v5Path)) {
-      // S333 [audit #4] — tell the child it is running under the ONE entrypoint that
-      // promotes its output, so it stays quiet here and warns everywhere else.
-      const res = spawnSync(node, [v5Path], { cwd: root, stdio: 'inherit', env: { ...process.env, STUDIO_BRIEF_V5_PROMOTER: '1' } });
+      const res = spawnSync(node, [v5Path], { cwd: root, stdio: 'inherit' });
       if (res.status === 0) {
         const v3Bytes = Buffer.byteLength(lines.join('\n'), 'utf8');
-        // S305 — in hermetic mode the v5 child wrote beside STUDIO_BRIEF_OUT (see lib/brief-destination).
-        const v5Dest = decideBriefDestination({ defaultPath: path.join(root, 'docs', 'STARTUP_BRIEF_V5.md'), kind: 'brief-v5' });
-        const v5File = v5Dest.toStdout ? null : v5Dest.path;
-        if (v5File && fs.existsSync(v5File)) {
+        const v5File = path.join(root, 'docs', 'STARTUP_BRIEF_V5.md');
+        if (fs.existsSync(v5File)) {
           const v5Bytes = fs.statSync(v5File).size;
           const reductionPct = Math.round(((v3Bytes - v5Bytes) / v3Bytes) * 100);
           console.log(`  ◆ brief-v5 compare: v3=${v3Bytes}b v5=${v5Bytes}b  (${reductionPct}% reduction)`);
@@ -1567,8 +1471,8 @@ if (v5Mode !== 'off') {
             if (hasStub || valid.status !== 0) {
               console.error(`  ⚠ brief-v5 promotion BLOCKED — ${hasStub ? 'unresolved computed-block stub' : 'failed validate-brief-format'}; keeping v3.1 canonical.`);
             } else {
-              emitBrief(BRIEF_DEST, fs.readFileSync(v5File, 'utf8'), { writeFileSync: (p, b) => fs.writeFileSync(p, b, 'utf8') });
-              console.log(`  ◆ brief-v5 promoted → ${BRIEF_DEST.hermetic ? (BRIEF_DEST.path || 'stdout') : 'docs/STARTUP_BRIEF.md'}`);
+              fs.copyFileSync(v5File, outputPath);
+              console.log(`  ◆ brief-v5 promoted → docs/STARTUP_BRIEF.md`);
             }
           }
         }

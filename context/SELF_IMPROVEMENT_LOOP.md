@@ -3478,3 +3478,25 @@ The strongest result was correcting three real lifecycle/setup defects found by 
 ## S183 verified production follow-through
 
 SIL remains 922/1000. Twelve technical audit outcomes now have deployed acceptance evidence; eight measured comparison outcomes remain pending. Source e6b72c770cd83a70847f74b390e28aa9f50b4622 passed exact-main workflow 37245074608: 291/291 files, 1,931/1,931 tests, strict lint, build and Cloudflare deployment. Canonical callofdoodie.wtf reports e6b72c770cd8; canonical and immutable https://ea7fba17.call-of-doodie.pages.dev/ pass shell 7/7 each, domain routing 5/5 and replay trust 3/3. Actual canonical browser checks pass 24/24 mode advancement/pause/resume cases, 8/8 death/victory ending cases with expanded sections, short-screen scrolling, menu return and hashed downloads, 4/4 setup/settings cases and 20/20 creature practice cases. Actual Classic/Zombies/Operations audio output, pause/mute/resume, single context and movement pass.
+
+
+## 2026-10-06 — Session 184 | Total: 930/1000 | Velocity: 3 | Debt: →
+
+| Category | Score | Notes |
+|---|---:|---|
+| Dev Health | 94 | End-run acceptance staged; final delivery pending |
+| Creative Alignment | 96 | End-run acceptance staged; final delivery pending |
+| Momentum | 92 | End-run acceptance staged; final delivery pending |
+| Engagement | 90 | End-run acceptance staged; final delivery pending |
+| Process Quality | 90 | End-run acceptance staged; final delivery pending |
+| Cross-Repo Coherence | 90 | End-run acceptance staged; final delivery pending |
+| Security Posture | 98 | End-run acceptance staged; final delivery pending |
+| Ecosystem Integration | 92 | End-run acceptance staged; final delivery pending |
+| Capital Efficiency | 98 | End-run acceptance staged; final delivery pending |
+| Automation Coverage | 90 | End-run acceptance staged; final delivery pending |
+
+End-run results now show the score and Submit to leaderboard before optional content. Last words are optional and labelled. Submission is guarded against duplicate clicks and excludes practice, Operations, local-only modes and integrity failures. Play Again precedes optional coaching. Sharing has one run-link action with native/copy/manual feedback; score images and highlights are explicit downloads. Feedback, highlights and exports are optional. Bottom leaderboard/menu controls remain outside disclosures.
+
+Staging https://aa2065a8.call-of-doodie.pages.dev passed shell 7/7 and eight actual-app ending cases across defeat/victory, dark/light and 390/1440px, including short screens, touch, keyboard End and menu return. Eight share checks covered native API fixture success, clipboard success/denial, manual selectable links and real score-image downloads. 92 before/after captures were directly inspected and hash-bound; CANON-053 passed. Submission behavior tests cover pending/double click, online rank, local/rejected states and eligibility. Exact-main CI and production verification remain pending.
+
+Learning: brief coaching should not displace immediate replay or submission. Sharing needs observable outcomes for unavailable browser APIs. A propagated utility batch must retain the project's public-compatible caller contracts.

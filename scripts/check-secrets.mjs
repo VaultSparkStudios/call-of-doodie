@@ -8,6 +8,7 @@
  * Usage:
  *   node scripts/check-secrets.mjs                        # list all capabilities
  *   node scripts/check-secrets.mjs --for <capability>     # check one
+ *   node scripts/check-secrets.mjs --audit                # list all with map provenance; fail closed on 0 capabilities
  *   node scripts/check-secrets.mjs --json                 # machine output
  *   node scripts/check-secrets.mjs --for claude.api --json
  *   node scripts/check-secrets.mjs --for cloudflare --probe [--refresh]
@@ -18,7 +19,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { listCapabilities, resolveCapability, describeCapability } from './lib/secrets.mjs';
+import { listCapabilities, resolveCapability } from './lib/secrets.mjs';
 import { gradeCapability, probeableCapabilities } from './lib/capability-action-probes.mjs';
 
 const args = process.argv.slice(2);
@@ -26,6 +27,7 @@ const capArg = args.includes('--for') ? args[args.indexOf('--for') + 1] : null;
 const json = args.includes('--json');
 const probe = args.includes('--probe');
 const refresh = args.includes('--refresh');
+const auditMode = args.includes('--audit');
 // S271: --emit writes a machine-readable capability STATUS artifact for the
 // Studio Ops Console. It records capability names, readiness grade, and WHICH
 // env var names are absent — never a value, never a partial value. The console
@@ -38,16 +40,7 @@ function emitCapabilityStatus(rows) {
   const capabilities = rows.map((r) => ({
     capability: r.capability,
     ok: Boolean(r.ok),
-    // S313 [audit #1] — the console tile inherits the gateway's reason rather than
-    // re-deriving status from found.length, which cannot see the difference between a
-    // credential-free capability, an unknown name, and a genuinely empty credential set.
-    status: r.ok
-      ? 'READY'
-      : r.reason === 'unknown-capability' ? 'UNKNOWN'
-        : r.reason === 'map-absent' || r.reason === 'map-unreadable' ? 'NO-MAP'
-          : (r.found || []).length > 0 ? 'PARTIAL' : 'MISSING',
-    reason: r.reason,
-    cause: describeCapability(r),
+    status: r.ok ? 'READY' : (r.found || []).length > 0 ? 'PARTIAL' : 'MISSING',
     requiredCount: (r.required || []).length,
     presentCount: (r.found || []).length,
     missingKeys: r.missing || [],   // NAMES only — no values, ever
@@ -61,8 +54,6 @@ function emitCapabilityStatus(rows) {
     ready: capabilities.filter((c) => c.status === 'READY').length,
     partial: capabilities.filter((c) => c.status === 'PARTIAL').length,
     missing: capabilities.filter((c) => c.status === 'MISSING').length,
-    unknown: capabilities.filter((c) => c.status === 'UNKNOWN').length,
-    noMap: capabilities.filter((c) => c.status === 'NO-MAP').length,
     capabilities,
   };
   const out = new URL('../portfolio/CAPABILITY_STATUS.json', import.meta.url);
@@ -86,15 +77,12 @@ function render(rows) {
   console.log('\n' + line);
   console.log(sep);
   for (const r of rows) {
-    // S313 [audit #1] — status and cause both derive from the gateway's `reason`, never
-    // from `missing.length`. A credential-free capability is READY, an unknown name is a
-    // spelling defect, and neither may render as `⛔ MISSING  missing:` with an empty cause.
-    const status = r.ok
-      ? '✓ READY   '
-      : r.reason === 'unknown-capability' ? '? UNKNOWN '
-        : r.reason === 'map-absent' || r.reason === 'map-unreadable' ? '· NO MAP  '
-          : (r.found.length ? '⚠ PARTIAL ' : '⛔ MISSING ');
-    const keys = describeCapability(r);
+    const status = r.ok ? '✓ READY   ' : (r.found.length ? '⚠ PARTIAL ' : '⛔ MISSING ');
+    const keys = r.ok
+      ? `${r.found.length}/${r.required.length} all present`
+      : r.missing.length > 3
+        ? `missing ${r.missing.length}: ${r.missing.slice(0, 2).join(', ')}…`
+        : `missing: ${r.missing.join(', ')}`;
     console.log(
       r.capability.padEnd(32) + ' ' +
       status.padEnd(10) + ' ' +
@@ -104,13 +92,15 @@ function render(rows) {
   console.log('');
   const ready = rows.filter(r => r.ok).length;
   console.log(`${ready}/${rows.length} capabilities ready. Missing → see docs/STUDIO_CANON.md + TASK_BOARD Human Action Required.`);
+  const sources = [...new Set(rows.map((row) => row.mapSource).filter(Boolean))];
+  console.log(`Capability map: ${sources.join(', ') || 'none'} (definitions only; secret values never printed).`);
   console.log('');
 }
 
 if (probe) {
   // Action-scoped grading: one capability, or every capability with a probe.
   const caps = capArg ? [capArg] : probeableCapabilities();
-  const graded = await Promise.all(caps.map((c) => gradeCapability(c, { refresh })));
+  const graded = caps.map((c) => gradeCapability(c, { refresh }));
   if (json) {
     process.stdout.write(JSON.stringify(graded, null, 2) + '\n');
   } else {
@@ -132,5 +122,9 @@ if (probe) {
   const rows = listCapabilities();
   if (emit) emitCapabilityStatus(rows);
   else render(rows);
+  if (auditMode && rows.length === 0 && !/^(1|true)$/i.test(process.env.CI || '')) {
+    process.stderr.write('⛔ capability audit resolved 0 capabilities outside isolated public CI; capability-map discovery is broken or unavailable.\n');
+    process.exit(2);
+  }
   process.exit(0);
 }

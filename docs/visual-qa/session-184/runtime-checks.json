@@ -1,0 +1,867 @@
+{
+  "phase": "after",
+  "url": "https://aa2065a8.call-of-doodie.pages.dev",
+  "fixture": "Actual app end-game component reached via assisted loss/victory state; no online submission performed.",
+  "cases": [
+    {
+      "victory": false,
+      "theme": "sewer-night",
+      "width": 390,
+      "height": 844,
+      "title": "YOU DIED",
+      "initial": {
+        "scoreOpen": false,
+        "shareOpen": false,
+        "scoreRendered": true,
+        "shareRendered": true,
+        "menuRendered": true
+      },
+      "reachable": true,
+      "overflow": false,
+      "bounds": {
+        "x": 71.484375,
+        "y": 741.34375,
+        "width": 247.03125,
+        "height": 47
+      },
+      "errors": [],
+      "returnedToMenu": true
+    },
+    {
+      "victory": false,
+      "theme": "sewer-night",
+      "width": 1440,
+      "height": 900,
+      "title": "YOU DIED",
+      "initial": {
+        "scoreOpen": false,
+        "shareOpen": false,
+        "scoreRendered": true,
+        "shareRendered": true,
+        "menuRendered": true
+      },
+      "reachable": true,
+      "overflow": false,
+      "bounds": {
+        "x": 702,
+        "y": 797,
+        "width": 247.03125,
+        "height": 47
+      },
+      "errors": [],
+      "returnedToMenu": true
+    },
+    {
+      "victory": false,
+      "theme": "porcelain-day",
+      "width": 390,
+      "height": 844,
+      "title": "YOU DIED",
+      "initial": {
+        "scoreOpen": false,
+        "shareOpen": false,
+        "scoreRendered": true,
+        "shareRendered": true,
+        "menuRendered": true
+      },
+      "reachable": true,
+      "overflow": false,
+      "bounds": {
+        "x": 71.484375,
+        "y": 741.34375,
+        "width": 247.03125,
+        "height": 47
+      },
+      "errors": [],
+      "returnedToMenu": true
+    },
+    {
+      "victory": false,
+      "theme": "porcelain-day",
+      "width": 1440,
+      "height": 900,
+      "title": "YOU DIED",
+      "initial": {
+        "scoreOpen": false,
+        "shareOpen": false,
+        "scoreRendered": true,
+        "shareRendered": true,
+        "menuRendered": true
+      },
+      "reachable": true,
+      "overflow": false,
+      "bounds": {
+        "x": 702,
+        "y": 797,
+        "width": 247.03125,
+        "height": 47
+      },
+      "errors": [],
+      "returnedToMenu": true
+    },
+    {
+      "victory": true,
+      "theme": "sewer-night",
+      "width": 390,
+      "height": 844,
+      "title": "VICTORY",
+      "initial": {
+        "scoreOpen": false,
+        "shareOpen": false,
+        "scoreRendered": true,
+        "shareRendered": true,
+        "menuRendered": true
+      },
+      "reachable": true,
+      "overflow": false,
+      "bounds": {
+        "x": 71.484375,
+        "y": 740.84375,
+        "width": 247.03125,
+        "height": 47
+      },
+      "errors": [],
+      "returnedToMenu": true
+    },
+    {
+      "victory": true,
+      "theme": "sewer-night",
+      "width": 1440,
+      "height": 900,
+      "title": "VICTORY",
+      "initial": {
+        "scoreOpen": false,
+        "shareOpen": false,
+        "scoreRendered": true,
+        "shareRendered": true,
+        "menuRendered": true
+      },
+      "reachable": true,
+      "overflow": false,
+      "bounds": {
+        "x": 702,
+        "y": 796.5,
+        "width": 247.03125,
+        "height": 47
+      },
+      "errors": [],
+      "returnedToMenu": true
+    },
+    {
+      "victory": true,
+      "theme": "porcelain-day",
+      "width": 390,
+      "height": 844,
+      "title": "VICTORY",
+      "initial": {
+        "scoreOpen": false,
+        "shareOpen": false,
+        "scoreRendered": true,
+        "shareRendered": true,
+        "menuRendered": true
+      },
+      "reachable": true,
+      "overflow": false,
+      "bounds": {
+        "x": 71.484375,
+        "y": 740.84375,
+        "width": 247.03125,
+        "height": 47
+      },
+      "errors": [],
+      "returnedToMenu": true
+    },
+    {
+      "victory": true,
+      "theme": "porcelain-day",
+      "width": 1440,
+      "height": 900,
+      "title": "VICTORY",
+      "initial": {
+        "scoreOpen": false,
+        "shareOpen": false,
+        "scoreRendered": true,
+        "shareRendered": true,
+        "menuRendered": true
+      },
+      "reachable": true,
+      "overflow": false,
+      "bounds": {
+        "x": 702,
+        "y": 796.5,
+        "width": 247.03125,
+        "height": 47
+      },
+      "errors": [],
+      "returnedToMenu": true
+    }
+  ],
+  "captures": [
+    {
+      "file": "defeat-sewer-night-390-top.png",
+      "theme": "sewer-night",
+      "width": 390,
+      "height": 844,
+      "state": "top",
+      "victory": false
+    },
+    {
+      "file": "defeat-sewer-night-390-submission.png",
+      "theme": "sewer-night",
+      "width": 390,
+      "height": 844,
+      "state": "submission",
+      "victory": false
+    },
+    {
+      "file": "defeat-sewer-night-390-share.png",
+      "theme": "sewer-night",
+      "width": 390,
+      "height": 844,
+      "state": "share",
+      "victory": false
+    },
+    {
+      "file": "defeat-sewer-night-390-native-share-success.png",
+      "theme": "sewer-night",
+      "width": 390,
+      "height": 844,
+      "state": "native-share-success",
+      "victory": false
+    },
+    {
+      "file": "defeat-sewer-night-390-manual-share-fallback.png",
+      "theme": "sewer-night",
+      "width": 390,
+      "height": 844,
+      "state": "manual-share-fallback",
+      "victory": false
+    },
+    {
+      "file": "defeat-sewer-night-390-clipboard-success.png",
+      "theme": "sewer-night",
+      "width": 390,
+      "height": 844,
+      "state": "clipboard-success",
+      "victory": false
+    },
+    {
+      "file": "defeat-sewer-night-390-score-image-downloaded.png",
+      "theme": "sewer-night",
+      "width": 390,
+      "height": 844,
+      "state": "score-image-downloaded",
+      "victory": false
+    },
+    {
+      "file": "defeat-sewer-night-390-bottom.png",
+      "theme": "sewer-night",
+      "width": 390,
+      "height": 844,
+      "state": "bottom",
+      "victory": false
+    },
+    {
+      "file": "defeat-sewer-night-390-short-bottom.png",
+      "theme": "sewer-night",
+      "width": 390,
+      "height": 360,
+      "state": "short-bottom",
+      "victory": false
+    },
+    {
+      "file": "defeat-sewer-night-1440-top.png",
+      "theme": "sewer-night",
+      "width": 1440,
+      "height": 900,
+      "state": "top",
+      "victory": false
+    },
+    {
+      "file": "defeat-sewer-night-1440-submission.png",
+      "theme": "sewer-night",
+      "width": 1440,
+      "height": 900,
+      "state": "submission",
+      "victory": false
+    },
+    {
+      "file": "defeat-sewer-night-1440-share.png",
+      "theme": "sewer-night",
+      "width": 1440,
+      "height": 900,
+      "state": "share",
+      "victory": false
+    },
+    {
+      "file": "defeat-sewer-night-1440-native-share-success.png",
+      "theme": "sewer-night",
+      "width": 1440,
+      "height": 900,
+      "state": "native-share-success",
+      "victory": false
+    },
+    {
+      "file": "defeat-sewer-night-1440-manual-share-fallback.png",
+      "theme": "sewer-night",
+      "width": 1440,
+      "height": 900,
+      "state": "manual-share-fallback",
+      "victory": false
+    },
+    {
+      "file": "defeat-sewer-night-1440-clipboard-success.png",
+      "theme": "sewer-night",
+      "width": 1440,
+      "height": 900,
+      "state": "clipboard-success",
+      "victory": false
+    },
+    {
+      "file": "defeat-sewer-night-1440-score-image-downloaded.png",
+      "theme": "sewer-night",
+      "width": 1440,
+      "height": 900,
+      "state": "score-image-downloaded",
+      "victory": false
+    },
+    {
+      "file": "defeat-sewer-night-1440-bottom.png",
+      "theme": "sewer-night",
+      "width": 1440,
+      "height": 900,
+      "state": "bottom",
+      "victory": false
+    },
+    {
+      "file": "defeat-porcelain-day-390-top.png",
+      "theme": "porcelain-day",
+      "width": 390,
+      "height": 844,
+      "state": "top",
+      "victory": false
+    },
+    {
+      "file": "defeat-porcelain-day-390-submission.png",
+      "theme": "porcelain-day",
+      "width": 390,
+      "height": 844,
+      "state": "submission",
+      "victory": false
+    },
+    {
+      "file": "defeat-porcelain-day-390-share.png",
+      "theme": "porcelain-day",
+      "width": 390,
+      "height": 844,
+      "state": "share",
+      "victory": false
+    },
+    {
+      "file": "defeat-porcelain-day-390-native-share-success.png",
+      "theme": "porcelain-day",
+      "width": 390,
+      "height": 844,
+      "state": "native-share-success",
+      "victory": false
+    },
+    {
+      "file": "defeat-porcelain-day-390-manual-share-fallback.png",
+      "theme": "porcelain-day",
+      "width": 390,
+      "height": 844,
+      "state": "manual-share-fallback",
+      "victory": false
+    },
+    {
+      "file": "defeat-porcelain-day-390-clipboard-success.png",
+      "theme": "porcelain-day",
+      "width": 390,
+      "height": 844,
+      "state": "clipboard-success",
+      "victory": false
+    },
+    {
+      "file": "defeat-porcelain-day-390-score-image-downloaded.png",
+      "theme": "porcelain-day",
+      "width": 390,
+      "height": 844,
+      "state": "score-image-downloaded",
+      "victory": false
+    },
+    {
+      "file": "defeat-porcelain-day-390-bottom.png",
+      "theme": "porcelain-day",
+      "width": 390,
+      "height": 844,
+      "state": "bottom",
+      "victory": false
+    },
+    {
+      "file": "defeat-porcelain-day-390-short-bottom.png",
+      "theme": "porcelain-day",
+      "width": 390,
+      "height": 360,
+      "state": "short-bottom",
+      "victory": false
+    },
+    {
+      "file": "defeat-porcelain-day-1440-top.png",
+      "theme": "porcelain-day",
+      "width": 1440,
+      "height": 900,
+      "state": "top",
+      "victory": false
+    },
+    {
+      "file": "defeat-porcelain-day-1440-submission.png",
+      "theme": "porcelain-day",
+      "width": 1440,
+      "height": 900,
+      "state": "submission",
+      "victory": false
+    },
+    {
+      "file": "defeat-porcelain-day-1440-share.png",
+      "theme": "porcelain-day",
+      "width": 1440,
+      "height": 900,
+      "state": "share",
+      "victory": false
+    },
+    {
+      "file": "defeat-porcelain-day-1440-native-share-success.png",
+      "theme": "porcelain-day",
+      "width": 1440,
+      "height": 900,
+      "state": "native-share-success",
+      "victory": false
+    },
+    {
+      "file": "defeat-porcelain-day-1440-manual-share-fallback.png",
+      "theme": "porcelain-day",
+      "width": 1440,
+      "height": 900,
+      "state": "manual-share-fallback",
+      "victory": false
+    },
+    {
+      "file": "defeat-porcelain-day-1440-clipboard-success.png",
+      "theme": "porcelain-day",
+      "width": 1440,
+      "height": 900,
+      "state": "clipboard-success",
+      "victory": false
+    },
+    {
+      "file": "defeat-porcelain-day-1440-score-image-downloaded.png",
+      "theme": "porcelain-day",
+      "width": 1440,
+      "height": 900,
+      "state": "score-image-downloaded",
+      "victory": false
+    },
+    {
+      "file": "defeat-porcelain-day-1440-bottom.png",
+      "theme": "porcelain-day",
+      "width": 1440,
+      "height": 900,
+      "state": "bottom",
+      "victory": false
+    },
+    {
+      "file": "victory-sewer-night-390-top.png",
+      "theme": "sewer-night",
+      "width": 390,
+      "height": 844,
+      "state": "top",
+      "victory": true
+    },
+    {
+      "file": "victory-sewer-night-390-submission.png",
+      "theme": "sewer-night",
+      "width": 390,
+      "height": 844,
+      "state": "submission",
+      "victory": true
+    },
+    {
+      "file": "victory-sewer-night-390-share.png",
+      "theme": "sewer-night",
+      "width": 390,
+      "height": 844,
+      "state": "share",
+      "victory": true
+    },
+    {
+      "file": "victory-sewer-night-390-native-share-success.png",
+      "theme": "sewer-night",
+      "width": 390,
+      "height": 844,
+      "state": "native-share-success",
+      "victory": true
+    },
+    {
+      "file": "victory-sewer-night-390-manual-share-fallback.png",
+      "theme": "sewer-night",
+      "width": 390,
+      "height": 844,
+      "state": "manual-share-fallback",
+      "victory": true
+    },
+    {
+      "file": "victory-sewer-night-390-clipboard-success.png",
+      "theme": "sewer-night",
+      "width": 390,
+      "height": 844,
+      "state": "clipboard-success",
+      "victory": true
+    },
+    {
+      "file": "victory-sewer-night-390-score-image-downloaded.png",
+      "theme": "sewer-night",
+      "width": 390,
+      "height": 844,
+      "state": "score-image-downloaded",
+      "victory": true
+    },
+    {
+      "file": "victory-sewer-night-390-bottom.png",
+      "theme": "sewer-night",
+      "width": 390,
+      "height": 844,
+      "state": "bottom",
+      "victory": true
+    },
+    {
+      "file": "victory-sewer-night-390-short-bottom.png",
+      "theme": "sewer-night",
+      "width": 390,
+      "height": 360,
+      "state": "short-bottom",
+      "victory": true
+    },
+    {
+      "file": "victory-sewer-night-1440-top.png",
+      "theme": "sewer-night",
+      "width": 1440,
+      "height": 900,
+      "state": "top",
+      "victory": true
+    },
+    {
+      "file": "victory-sewer-night-1440-submission.png",
+      "theme": "sewer-night",
+      "width": 1440,
+      "height": 900,
+      "state": "submission",
+      "victory": true
+    },
+    {
+      "file": "victory-sewer-night-1440-share.png",
+      "theme": "sewer-night",
+      "width": 1440,
+      "height": 900,
+      "state": "share",
+      "victory": true
+    },
+    {
+      "file": "victory-sewer-night-1440-native-share-success.png",
+      "theme": "sewer-night",
+      "width": 1440,
+      "height": 900,
+      "state": "native-share-success",
+      "victory": true
+    },
+    {
+      "file": "victory-sewer-night-1440-manual-share-fallback.png",
+      "theme": "sewer-night",
+      "width": 1440,
+      "height": 900,
+      "state": "manual-share-fallback",
+      "victory": true
+    },
+    {
+      "file": "victory-sewer-night-1440-clipboard-success.png",
+      "theme": "sewer-night",
+      "width": 1440,
+      "height": 900,
+      "state": "clipboard-success",
+      "victory": true
+    },
+    {
+      "file": "victory-sewer-night-1440-score-image-downloaded.png",
+      "theme": "sewer-night",
+      "width": 1440,
+      "height": 900,
+      "state": "score-image-downloaded",
+      "victory": true
+    },
+    {
+      "file": "victory-sewer-night-1440-bottom.png",
+      "theme": "sewer-night",
+      "width": 1440,
+      "height": 900,
+      "state": "bottom",
+      "victory": true
+    },
+    {
+      "file": "victory-porcelain-day-390-top.png",
+      "theme": "porcelain-day",
+      "width": 390,
+      "height": 844,
+      "state": "top",
+      "victory": true
+    },
+    {
+      "file": "victory-porcelain-day-390-submission.png",
+      "theme": "porcelain-day",
+      "width": 390,
+      "height": 844,
+      "state": "submission",
+      "victory": true
+    },
+    {
+      "file": "victory-porcelain-day-390-share.png",
+      "theme": "porcelain-day",
+      "width": 390,
+      "height": 844,
+      "state": "share",
+      "victory": true
+    },
+    {
+      "file": "victory-porcelain-day-390-native-share-success.png",
+      "theme": "porcelain-day",
+      "width": 390,
+      "height": 844,
+      "state": "native-share-success",
+      "victory": true
+    },
+    {
+      "file": "victory-porcelain-day-390-manual-share-fallback.png",
+      "theme": "porcelain-day",
+      "width": 390,
+      "height": 844,
+      "state": "manual-share-fallback",
+      "victory": true
+    },
+    {
+      "file": "victory-porcelain-day-390-clipboard-success.png",
+      "theme": "porcelain-day",
+      "width": 390,
+      "height": 844,
+      "state": "clipboard-success",
+      "victory": true
+    },
+    {
+      "file": "victory-porcelain-day-390-score-image-downloaded.png",
+      "theme": "porcelain-day",
+      "width": 390,
+      "height": 844,
+      "state": "score-image-downloaded",
+      "victory": true
+    },
+    {
+      "file": "victory-porcelain-day-390-bottom.png",
+      "theme": "porcelain-day",
+      "width": 390,
+      "height": 844,
+      "state": "bottom",
+      "victory": true
+    },
+    {
+      "file": "victory-porcelain-day-390-short-bottom.png",
+      "theme": "porcelain-day",
+      "width": 390,
+      "height": 360,
+      "state": "short-bottom",
+      "victory": true
+    },
+    {
+      "file": "victory-porcelain-day-1440-top.png",
+      "theme": "porcelain-day",
+      "width": 1440,
+      "height": 900,
+      "state": "top",
+      "victory": true
+    },
+    {
+      "file": "victory-porcelain-day-1440-submission.png",
+      "theme": "porcelain-day",
+      "width": 1440,
+      "height": 900,
+      "state": "submission",
+      "victory": true
+    },
+    {
+      "file": "victory-porcelain-day-1440-share.png",
+      "theme": "porcelain-day",
+      "width": 1440,
+      "height": 900,
+      "state": "share",
+      "victory": true
+    },
+    {
+      "file": "victory-porcelain-day-1440-native-share-success.png",
+      "theme": "porcelain-day",
+      "width": 1440,
+      "height": 900,
+      "state": "native-share-success",
+      "victory": true
+    },
+    {
+      "file": "victory-porcelain-day-1440-manual-share-fallback.png",
+      "theme": "porcelain-day",
+      "width": 1440,
+      "height": 900,
+      "state": "manual-share-fallback",
+      "victory": true
+    },
+    {
+      "file": "victory-porcelain-day-1440-clipboard-success.png",
+      "theme": "porcelain-day",
+      "width": 1440,
+      "height": 900,
+      "state": "clipboard-success",
+      "victory": true
+    },
+    {
+      "file": "victory-porcelain-day-1440-score-image-downloaded.png",
+      "theme": "porcelain-day",
+      "width": 1440,
+      "height": 900,
+      "state": "score-image-downloaded",
+      "victory": true
+    },
+    {
+      "file": "victory-porcelain-day-1440-bottom.png",
+      "theme": "porcelain-day",
+      "width": 1440,
+      "height": 900,
+      "state": "bottom",
+      "victory": true
+    }
+  ],
+  "shareChecks": [
+    {
+      "victory": false,
+      "theme": "sewer-night",
+      "width": 390,
+      "nativePayload": {
+        "title": "Call of Doodie run",
+        "text": "I scored 0 pts and reached Wave 1 in Call of Doodie! Can you beat me?",
+        "origin": "https://callofdoodie.wtf",
+        "pathname": "/play/",
+        "scenarioPresent": true
+      },
+      "clipboard": true,
+      "manualFallback": true,
+      "scoreImage": true
+    },
+    {
+      "victory": false,
+      "theme": "sewer-night",
+      "width": 1440,
+      "nativePayload": {
+        "title": "Call of Doodie run",
+        "text": "I scored 0 pts and reached Wave 1 in Call of Doodie! Can you beat me?",
+        "origin": "https://callofdoodie.wtf",
+        "pathname": "/play/",
+        "scenarioPresent": true
+      },
+      "clipboard": true,
+      "manualFallback": true,
+      "scoreImage": true
+    },
+    {
+      "victory": false,
+      "theme": "porcelain-day",
+      "width": 390,
+      "nativePayload": {
+        "title": "Call of Doodie run",
+        "text": "I scored 0 pts and reached Wave 1 in Call of Doodie! Can you beat me?",
+        "origin": "https://callofdoodie.wtf",
+        "pathname": "/play/",
+        "scenarioPresent": true
+      },
+      "clipboard": true,
+      "manualFallback": true,
+      "scoreImage": true
+    },
+    {
+      "victory": false,
+      "theme": "porcelain-day",
+      "width": 1440,
+      "nativePayload": {
+        "title": "Call of Doodie run",
+        "text": "I scored 0 pts and reached Wave 1 in Call of Doodie! Can you beat me?",
+        "origin": "https://callofdoodie.wtf",
+        "pathname": "/play/",
+        "scenarioPresent": true
+      },
+      "clipboard": true,
+      "manualFallback": true,
+      "scoreImage": true
+    },
+    {
+      "victory": true,
+      "theme": "sewer-night",
+      "width": 390,
+      "nativePayload": {
+        "title": "Call of Doodie run",
+        "text": "I scored 13,500 pts and reached Wave 1 in Call of Doodie! Can you beat me?",
+        "origin": "https://callofdoodie.wtf",
+        "pathname": "/play/",
+        "scenarioPresent": true
+      },
+      "clipboard": true,
+      "manualFallback": true,
+      "scoreImage": true
+    },
+    {
+      "victory": true,
+      "theme": "sewer-night",
+      "width": 1440,
+      "nativePayload": {
+        "title": "Call of Doodie run",
+        "text": "I scored 13,500 pts and reached Wave 1 in Call of Doodie! Can you beat me?",
+        "origin": "https://callofdoodie.wtf",
+        "pathname": "/play/",
+        "scenarioPresent": true
+      },
+      "clipboard": true,
+      "manualFallback": true,
+      "scoreImage": true
+    },
+    {
+      "victory": true,
+      "theme": "porcelain-day",
+      "width": 390,
+      "nativePayload": {
+        "title": "Call of Doodie run",
+        "text": "I scored 13,500 pts and reached Wave 1 in Call of Doodie! Can you beat me?",
+        "origin": "https://callofdoodie.wtf",
+        "pathname": "/play/",
+        "scenarioPresent": true
+      },
+      "clipboard": true,
+      "manualFallback": true,
+      "scoreImage": true
+    },
+    {
+      "victory": true,
+      "theme": "porcelain-day",
+      "width": 1440,
+      "nativePayload": {
+        "title": "Call of Doodie run",
+        "text": "I scored 13,500 pts and reached Wave 1 in Call of Doodie! Can you beat me?",
+        "origin": "https://callofdoodie.wtf",
+        "pathname": "/play/",
+        "scenarioPresent": true
+      },
+      "clipboard": true,
+      "manualFallback": true,
+      "scoreImage": true
+    }
+  ]
+}

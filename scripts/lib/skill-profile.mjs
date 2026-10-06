@@ -1,58 +1,88 @@
-// skill-profile.mjs — resolve per-medium skill overlays (audit item #12 · S125)
-// Pairs with ~/.claude/skills/PROFILES/<medium>.json
+#!/usr/bin/env node
+/**
+ * skill-profile.mjs
+ *
+ * Small public-repo resolver for Studio OS skill overlays. The canonical
+ * profile catalog lives in private Studio Ops, but project skills call this
+ * file before /start, /audit, /implement, and /closeout. Keep the local shim
+ * deterministic so public sessions stay executable without private imports.
+ */
 
-import { readFileSync, existsSync } from 'node:fs';
-import { join } from 'node:path';
-import { homedir } from 'node:os';
-import { getProjectProfile } from './project-profile.mjs';
-import { MEDIA_SKILL_PROFILES, projectMedium } from './media-profile.mjs';
-import { lifecycleSkillOverlay } from './lifecycle-skill-profile.mjs';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const PROFILES_DIR = join(homedir(), '.claude', 'skills', 'PROFILES');
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 
-const EMPTY = { extraSignals: [], successBarAdditions: [], axisWeightDeltas: {}, preHooks: [], postHooks: [], promptOverlay: '' };
-
-export function getSkillProfile(skill, medium) {
-  if (!skill || !medium) return EMPTY;
-  if (projectMedium({ medium }) === 'media') return { ...EMPTY, ...(MEDIA_SKILL_PROFILES[skill] || {}) };
-  const p = join(PROFILES_DIR, `${medium}.json`);
-  if (!existsSync(p)) return EMPTY;
+function readJson(filePath, fallback = {}) {
   try {
-    const overlay = JSON.parse(readFileSync(p, 'utf8'));
-    return { ...EMPTY, ...(overlay.skills?.[skill] || {}) };
-  } catch { return EMPTY; }
+    return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  } catch {
+    return fallback;
+  }
 }
 
-export function applySkillProfile(skill, baseConfig = {}) {
-  const profile = getProjectProfile();
-  const overlay = getSkillProfile(skill, profile.medium);
-  const lifecycle = lifecycleSkillOverlay(skill, profile.lifecycleFocus);
-  const axisWeights = { ...(baseConfig.axisWeights || {}), ...overlay.axisWeightDeltas };
-  for (const [axis, weight] of Object.entries(lifecycle.axisWeightDeltas)) axisWeights[axis] = Math.max(axisWeights[axis] || 0, weight);
+function detectMedium(repoRoot = ROOT) {
+  const status = readJson(path.join(repoRoot, 'context', 'PROJECT_STATUS.json'), {});
+  const manifest = readJson(path.join(repoRoot, 'context', 'STUDIO_MANIFEST.json'), {});
+  return (
+    status.type
+    || manifest.identity?.type
+    || (status.slug === 'call-of-doodie' ? 'game' : 'unknown')
+  );
+}
+
+const GAME_PROFILE = {
+  medium: 'game',
+  extraSignals: [
+    'Browser build/test parity is launch-critical for this public game.',
+    'Prioritize playable-loop trust, input reliability, run feedback, and replay integrity.',
+  ],
+  successBar: [
+    'Core game loop remains playable on keyboard/mouse and controller paths.',
+    'Any player-facing copy follows acronym expansion rules on first use.',
+    'No free-tier feature introduces studio-paid variable per-user cost.',
+    'Protocol changes must keep /start, /audit, /implement, and /closeout executable from this repo.',
+  ],
+  preHooks: [],
+  promptOverlay: [
+    'Call-Of-Doodie is a deployed public-unlaunched browser game. Favor improvements that protect launch confidence, input fairness, comedic combat readability, and replay/leaderboard trust.',
+    'When protocol automation breaks, repair it before adding larger gameplay scope because this repo depends on repeatable Studio OS sessions for launch hygiene.',
+  ].join(' '),
+  axisWeightDeltas: {
+    gamification: 3,
+    'gamification / engagement / immersion': 3,
+    'ui / ux / user-experience': 2,
+    'feature depth & refinement': 1.5,
+    'ai / intelligence integration': 1.5,
+  },
+};
+
+const EMPTY_PROFILE = {
+  medium: 'unknown',
+  extraSignals: [],
+  successBar: [],
+  preHooks: [],
+  promptOverlay: '',
+  axisWeightDeltas: {},
+};
+
+export function resolveSkillProfile(skill = 'unknown', repoRoot = ROOT) {
+  const medium = detectMedium(repoRoot);
+  const base = medium === 'game' ? GAME_PROFILE : EMPTY_PROFILE;
   return {
-    ...baseConfig,
-    profile,
-    overlay,
-    signals: [...(baseConfig.signals || []), ...overlay.extraSignals, ...lifecycle.extraSignals],
-    successBar: [...(baseConfig.successBar || []), ...overlay.successBarAdditions, ...lifecycle.successBarAdditions],
-    axisWeights,
-    preHooks: [...(baseConfig.preHooks || []), ...overlay.preHooks],
-    postHooks: [...(baseConfig.postHooks || []), ...overlay.postHooks],
-    lifecycleFocus: profile.lifecycleFocus,
-    promptOverlay: [baseConfig.promptOverlay, overlay.promptOverlay, lifecycle.promptOverlay].filter(Boolean).join(' '),
+    skill,
+    repoRoot,
+    ...base,
+    medium,
   };
 }
 
-// CLI: `node scripts/lib/skill-profile.mjs <skill>` → prints resolved overlay
-const __isMain = (() => {
-  try {
-    const u = new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '').replace(/\\/g, '/');
-    const a = (process.argv[1] || '').replace(/\\/g, '/');
-    return u === a || u.endsWith(a) || a.endsWith(u);
-  } catch { return false; }
-})();
-if (__isMain) {
-  const skill = process.argv[2] || 'start';
-  const cfg = applySkillProfile(skill);
-  console.log(JSON.stringify({ skill, medium: cfg.profile.medium, lifecycleFocus: cfg.lifecycleFocus, signals: cfg.signals, successBar: cfg.successBar, axisWeights: cfg.axisWeights, promptOverlay: cfg.promptOverlay }, null, 2));
+const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+if (isMain) {
+  const skill = process.argv[2] || 'unknown';
+  const profile = resolveSkillProfile(skill);
+  console.log(JSON.stringify(profile, null, 2));
 }
+
+export default { resolveSkillProfile };

@@ -6,8 +6,6 @@ import { readFileSync, writeFileSync, existsSync, mkdirSync, statSync } from 'no
 import { join, dirname } from 'node:path';
 import { execSync } from './safe-spawn.mjs';
 import { projectMedium } from './media-profile.mjs';
-import { createHash } from 'node:crypto';
-import { deriveLifecycleFocus } from './lifecycle-skill-profile.mjs';
 
 const TTL_MS = 30 * 60 * 1000;
 const CACHE_PATH = '.cache/project-profile.json';
@@ -75,33 +73,26 @@ function ignisTopAxes() {
 }
 
 export function getProjectProfile({ force = false } = {}) {
-  const slug = detectSlug();
-  const status = safeJSON('context/PROJECT_STATUS.json') || {};
-  const registryEntry = loadRegistryEntry(slug);
-  const reg = registryEntry || status;
-  const lifecycleFocus = deriveLifecycleFocus(registryEntry || {}, status);
-  const sourceHash = createHash('sha256').update(JSON.stringify({ slug, reg, status, lifecycleFocus })).digest('hex');
   if (!force && existsSync(CACHE_PATH)) {
     try {
       const st = statSync(CACHE_PATH);
       if (Date.now() - st.mtimeMs < TTL_MS) {
         const cached = JSON.parse(readFileSync(CACHE_PATH, 'utf8'));
-        if (cached.profileSchemaVersion === 3 && cached.sourceHash === sourceHash) return cached;
+        if (cached.profileSchemaVersion === 2) return cached;
       }
     } catch { /* fall through */ }
   }
+  const slug = detectSlug();
+  const reg = loadRegistryEntry(slug) || safeJSON('context/PROJECT_STATUS.json') || {};
   const profile = {
-    profileSchemaVersion: 3,
-    sourceHash,
+    profileSchemaVersion: 2,
     slug,
     medium: projectMedium(reg),
-    stage: lifecycleFocus.stage || 'unknown',
-    developmentPhase: status.developmentPhase || reg.developmentPhase || null,
-    lifecycleFocus,
+    stage: reg.developmentPhase || reg.lifecycle || 'unknown',
     vaultStatus: reg.vaultStatus || 'UNKNOWN',
     archetype: reg.archetype || reg.stackArchetype || null,
     audience: reg.audience || 'unknown',
-    health: lifecycleFocus.health,
+    health: reg.health || 'unknown',
     soulNonNegs: soulNonNegs(),
     lastDecisions: lastDecisions(),
     ignisTopAxes: ignisTopAxes(),

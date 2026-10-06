@@ -454,8 +454,6 @@ An explicitly requested token budget is a ceiling, not a minimum to consume. The
 
 **Mission:** one combined ranked improvement plan across 9 axes; genius-level, premise-verified, ready for `/implement`.
 
-**Stage-directed work (S363 founder direction):** resolve the live `lifecycleFocus` through `skill-profile.mjs audit` and apply [STAGE_DIRECTED_WORK.md](STAGE_DIRECTED_WORK.md). Public F2/FB/F3 and legacy SB/S0 audits assess applicable launch-hardening/readiness areas before selecting improvements. Record stage/status provenance, readiness evidence and per-item stage rationale in the audit sidecar. Project type/medium still determines specialist checks; stage changes priorities, not authorization or release gates. Missing/stale proof is not ready.
-
 1. `node scripts/set-active-skill.mjs audit`; resolve overlay via `node scripts/lib/skill-profile.mjs audit` — `axisWeightDeltas` merge over type weights, `successBar` entries are mandatory per-item quality gates, `promptOverlay` shapes scoring.
 2. **Context:** PROJECT_BRIEF · SOUL · CURRENT_STATE · bounded TASK_BOARD audit projection (`node scripts/task-slice.mjs --audit-context --max-chars 8000 --json`; find PATTERNS, don't re-list) · last 5 DECISIONS (constrain, never silently reverse) · registry `type` → axis weights. Never load the full board when this projection is available.
 3. **Survey fast:** `node scripts/sample-codebase.mjs --max-tokens 30000 --json` (fallback: manual glob, hard cap 20 files). IGNIS portfolio signals: `portfolio/IGNIS_CORE.md` (top risk → weighting) + `portfolio/IGNIS_PATTERNS.md` (dedup list — a candidate already crystallized there or shipped by a sibling caps Innovation at 4, reframed "adopt <pattern> from <repo>").
@@ -472,8 +470,6 @@ An explicitly requested token budget is a ceiling, not a minimum to consume. The
 ## §2C — `/implement` protocol  *(canonical — the SKILL.md is a pointer; S219)*
 
 **Mission:** execute the latest audit in optimal-efficiency order, complete-all-means-complete-all.
-
-**Stage-directed planning:** re-read `skill-profile.mjs implement`; compare current stage/status with the selected audit. Apply [STAGE_DIRECTED_WORK.md](STAGE_DIRECTED_WORK.md), name readiness areas and acceptance evidence in the plan, and sequence demonstrated launch blockers/dependencies before optional breadth. Changed lifecycle evidence requires a plan review within the existing authorized scope. Completing implementation does not authorize a public-beta transition or launch.
 
 1. `node scripts/set-active-skill.mjs implement`; overlay via `skill-profile.mjs implement` (successBar = mandatory gates; `runMediumGate(profile.medium, item)` from `scripts/lib/medium-quality-gates.mjs` after each item — failure → BLOCKED with fixHint).
 2. **Source:** latest audit JSON sidecar (`scripts/lib/audit-sidecar.mjs` → `findLatestAuditSidecar`, `appendExecution`); md-parse only if sidecar absent; neither → route to `/audit`. Iterate `audit.items` via `scripts/lib/sprint-runner.mjs` `runSprint()` where applicable.
@@ -571,8 +567,6 @@ Create `audits/YYYY-MM-DD.json` with schemaVersion 1.3.
 ### 3.9 Closeout autopilot (mandatory)
 
 `node scripts/closeout-autopilot.mjs`.
-
-**Studio Ops full-suite default (S363):** before outward closeout push, use `node scripts/run-tests.mjs --shards=64 --resume-shards --proof-dir=.cache/test-shards/S<session> --proof-after=<session-start-ISO> --force-slow`. Bound checkpoints with `--max-shards-per-run=N`; an incomplete checkpoint, flaky/deferred/blocked file or re-dated old aggregate is not complete-suite acceptance. The push gate requires every shard to have executed after the previous closeout and checks current source bytes again before a retry push following rebase. Other projects retain their own suite/acceptance contract.
 
 Runs: doctor → refresh brief → stamp PROJECT_STATUS → sanitize `.claude/settings.local.json` → coherence commit gate (Step 4b — hard-aborts on incoherence/flake) → secret scan → git status + diff preview → commit (conventional message) → push → clear lock + beacon → print status board.
 

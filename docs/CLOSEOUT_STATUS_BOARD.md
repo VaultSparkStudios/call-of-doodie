@@ -1,32 +1,32 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.1 -->
-<!-- generated-at: 2026-10-05 (Session 183 closeout) -->
+<!-- generated-at: 2026-10-06 (Session 184 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S183 ════════════════════╗
-║  Date: 2026-10-05  ·  SIL: 922/1000  ·  Velocity: 12 flat        ║
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S184 ════════════════════╗
+║  Date: 2026-10-06  ·  SIL: 930/1000  ·  Velocity: 3 flat         ║
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ║  Live:  preview  →  https://callofdoodie.wtf/                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED · last 5 commits ═══════════════════════════════╗
+║  ✓ docs: synchronize final closeout board and validation counte  ║
 ║  ✓ docs: closeout S183 with verified production evidence         ║
 ║  ✓ fix: refresh generated public content date after release com  ║
 ║  ✓ feat: refine game setup, mode feedback and creature practice  ║
 ║  ✓ docs: sync Studio OS 3 files [ci, protocol, skills]           ║
-║  ✓ docs: regenerate hot context after end-game follow-up         ║
 ╚════════════════════════════════════════════════════════════════╝
-╔══ SCORES · SIL 922/1000 ═══════════════════════════════════════╗
+╔══ SCORES · SIL 930/1000 ═══════════════════════════════════════╗
 ║    Dev Health         94   █████████░                            ║
 ║    Alignment          96   ██████████                            ║
-║    Momentum           90   █████████░                            ║
-║    Engagement         88   █████████░                            ║
-║    Process Qual       88   █████████░                            ║
+║    Momentum           92   █████████░                            ║
+║    Engagement         90   █████████░                            ║
+║    Process Qual       90   █████████░                            ║
 ║    Coherence          90   █████████░                            ║
 ║    Security           98   ██████████                            ║
 ║    Ecosystem          92   █████████░                            ║
 ║    Capital            98   ██████████                            ║
-║    Automation         88   █████████░                            ║
+║    Automation         90   █████████░                            ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WRITE-BACK STATUS ═══════════════════════════════════════════╗
 ║  ✓ context/CURRENT_STATE.md                                      ║
@@ -41,12 +41,12 @@
 ║  · agent memory (Claude/Codex project memory)                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 3 files  ·  M:3 A:0 D:0 ?:0                            ║
-║  Ahead: 0  ·  Behind: 0                                          ║
+║  Changes: 98 files  ·  M:76 A:0 D:16 ?:6                         ║
+║  Ahead: 1  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ DEPLOYMENT ══════════════════════════════════════════════════╗
-║  Staging:  https://ce356fde.call-of-doodie.pages.dev/  ·  cloud  ║
+║  Staging:  https://aa2065a8.call-of-doodie.pages.dev/  ·  cloud  ║
 ║  Live:     https://callofdoodie.wtf/  ·  preview/FORGE (not yet  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
@@ -54,10 +54,10 @@
 ║  Compliance:    —                                                ║
 ║  Tests:         291/291                                          ║
 ║  Validation:    full-fresh                                       ║
-║  IGNIS:         5d ago                                           ║
+║  IGNIS:         6d ago                                           ║
 ║  Truth:         engineering-production-verified-measured-accept  ║
-║  Sanitization:  1d ago                                           ║
-║  shells:        1 started · 1 closed · 0 running                 ║
+║  Sanitization:  2d ago                                           ║
+║  shells:        unknown · missing/stale enumeration              ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ NEXT SESSION ════════════════════════════════════════════════╗
 ║  (no genius cache — run `node scripts/cache-genius-list.mjs`)    ║

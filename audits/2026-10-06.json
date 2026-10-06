@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "1.3",
+  "session": 184,
+  "date": "2026-10-06",
+  "headline": "Simpler end-run submission, replay and sharing",
+  "shipped": [],
+  "candidateChanges": [
+    "End-run results now show the score and Submit to leaderboard before optional content. Last words are optional and labelled. Submission is guarded against duplicate clicks and excludes practice, Operations, local-only modes and integrity failures. Play Again precedes optional coaching. Sharing has one run-link action with native/copy/manual feedback; score images and highlights are explicit downloads. Feedback, highlights and exports are optional. Bottom leaderboard/menu controls remain outside disclosures."
+  ],
+  "validation": "Staging https://aa2065a8.call-of-doodie.pages.dev passed shell 7/7 and eight actual-app ending cases across defeat/victory, dark/light and 390/1440px, including short screens, touch, keyboard End and menu return. Eight share checks covered native API fixture success, clipboard success/denial, manual selectable links and real score-image downloads. 92 before/after captures were directly inspected and hash-bound; CANON-053 passed. Submission behavior tests cover pending/double click, online rank, local/rejected states and eligibility. Exact-main CI and production verification remain pending.",
+  "limits": "Assisted terminal states prove UI integration, not natural playthroughs or participant enjoyment. Native share/clipboard are browser API fixtures; no external message or online leaderboard row was sent. Operations links open the game home rather than claiming mission preservation. Existing eight S183 comparative outcomes remain pending and are outside this request. FORGE/public-unlaunched remains unchanged.",
+  "production": {
+    "status": "pending-exact-main-ci",
+    "previousSource": "e6b72c770cd83a70847f74b390e28aa9f50b4622",
+    "staging": "https://aa2065a8.call-of-doodie.pages.dev/"
+  },
+  "closeout": {
+    "state": "delivery-in-progress",
+    "silScore": 930,
+    "scaffold": {
+      "tasks": 4,
+      "done": 3,
+      "inProgress": 1,
+      "open": 0
+    }
+  }
+}

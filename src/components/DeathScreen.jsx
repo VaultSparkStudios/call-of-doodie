@@ -12,7 +12,7 @@ import { buildInsightGraph } from "../utils/insightGraph.js";
 import { track } from "../utils/analytics.js";
 import { buildChallengeUrl, copyChallengeUrl } from "../utils/challengeLinks.js";
 import { createDuel } from "../utils/duels.js";
-import { encodeReplayCode } from "../utils/replayCode.js";
+import { buildRunShareUrl, shareRunLink } from "../utils/runSharing.js";
 import { buildReplayProofPresenter } from "../utils/replayProofPresenter.js";
 import { resolveRematchStartWave } from "../systems/rematchDrill.js";
 import { buildDrillEvidenceLedger, buildDrillLaunchPayload, buildRunDrillOutcomeReceipt } from "../systems/runDrill.js";
@@ -21,7 +21,7 @@ import { buildWeeklyContract, buildWeeklyContractProgressPayload } from "../util
 import { computeBuildGrade } from "../utils/buildReport.js";
 import { buildGhostDeathReadout, buildGhostKillerMarker } from "../utils/ghostPath.js";
 import { buildNextRunDrill } from "../utils/drillDirector.js";
-import { CANONICAL_SITE_HOST, CANONICAL_SITE_URL } from "../config/site.js";
+import { CANONICAL_SITE_HOST } from "../config/site.js";
 import { buildDeathCoachTelemetry, buildDebriefStudioEventPlan, buildRunTheFixContract, buildScoreSubmitFallbackStudioEvent } from "../systems/deathFlow.js";
 import { buildCollapseCoaching } from "../systems/collapseCoaching.js";
 import { recordActivePlaytestContinuation } from "../utils/playtestFlightRecorder.js";
@@ -86,6 +86,10 @@ export default function DeathScreen({
   const [threatRecommendation, setThreatRecommendation] = useState(null);
   const [globalRank, setGlobalRank] = useState(null);
   const [sharing, setSharing] = useState(false);
+  const [shareStatus, setShareStatus] = useState("");
+  const [linkSharing, setLinkSharing] = useState(false);
+  const [linkStatus, setLinkStatus] = useState("");
+  const submittingRef = useRef(false);
   const [runPackStatus, setRunPackStatus] = useState("");
   const [activeTooltip, setActiveTooltip] = useState(null);
   const [showLastWordsKeyboard, setShowLastWordsKeyboard] = useState(false);
@@ -298,34 +302,32 @@ export default function DeathScreen({
     });
   };
 
+  const runShareUrl = buildRunShareUrl({ seed: runSeed, mode: gsSnapshot?.operationMode ? "operation" : mode, difficulty, starterLoadout });
+  const shareText = `I scored ${score.toLocaleString()} pts and reached Wave ${wave} in Call of Doodie! Can you beat me?`;
+  const handleShareLink = async () => {
+    if (linkSharing) return;
+    setLinkSharing(true);
+    const result = await shareRunLink({ url: runShareUrl, text: shareText });
+    setLinkStatus(result === "shared" ? "Run shared." : result === "copied" ? "Score and run link copied. Paste them into a message." : result === "cancelled" ? "Sharing cancelled. Your run is still here." : "Clipboard access is unavailable. Select and copy the link below.");
+    setLinkSharing(false);
+    track("debrief_share_replay_link", { seed: runSeed, score, wave, mode, result });
+  };
   const handleShare = async () => {
+    if (sharing) return;
     setSharing(true);
+    setShareStatus("");
     try {
       const { blob } = await generateScoreCard();
-      const file = new File([blob], "call-of-doodie-score.png", { type: "image/png" });
-      // S163 Clip of the Run: attach the highlight GIF when the share sheet accepts it.
-      const files = [file];
-      if (highlightGifUrl) {
-        try { const gif = await (await fetch(highlightGifUrl)).blob(); files.push(new File([gif], "call-of-doodie-clip.gif", { type: "image/gif" })); } catch { /* card only */ }
-      }
-      const _modeTag = bossRushMode ? " [BOSS RUSH]" : cursedRunMode ? " [CURSED]" : scoreAttackMode ? " [SCORE ATTACK]" : dailyChallengeMode ? " [DAILY]" : "";
-      const shareText = `I scored ${score.toLocaleString()} pts and reached Wave ${wave}${_modeTag} in Call of Doodie! 💀 Can you beat me?`;
-      const shareUrl = CANONICAL_SITE_URL;
-      if (navigator.share && navigator.canShare && navigator.canShare({ files })) {
-        await navigator.share({ files, title: "Call of Doodie Score", text: shareText, url: shareUrl });
-      } else if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share({ files: [file], title: "Call of Doodie Score", text: shareText, url: shareUrl });
-      } else {
-        // Fallback: download the image
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url; a.download = "call-of-doodie-score.png"; a.click();
-        setTimeout(() => URL.revokeObjectURL(url), 5000);
-      }
-    } catch (e) {
-      if (e.name !== "AbortError") console.error("Share failed", e);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url; a.download = "call-of-doodie-score.png"; a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 5000);
+      setShareStatus("Score image downloaded. Attach it to your message.");
+    } catch {
+      setShareStatus("Couldn't save the score image. Try again or share the run link.");
+    } finally {
+      setSharing(false);
     }
-    setSharing(false);
   };
 
   const btnP = { padding: "14px 40px", fontSize: 18, fontWeight: 900, fontFamily: "'Courier New',monospace", background: "linear-gradient(180deg,var(--cod-orange),#CC4400)", color: "#FFF", border: "none", borderRadius: 6, cursor: "pointer", letterSpacing: 2 };
@@ -523,6 +525,7 @@ export default function DeathScreen({
   // derived from the death wave (boss waves start one wave early).
   const practiceRun = !!gsSnapshot?.practiceRun;
   const runIntegrityReceipt = getRunIntegrityReceipt(gsSnapshot);
+  const localMode = !!gsSnapshot?.operationMode || gsSnapshot?.replayEligible === false;
   const activeRunDrill = gsSnapshot?.activeRunDrill || null;
   const drillOutcome = useMemo(() => buildRunDrillOutcomeReceipt(activeRunDrill, { wave, score }), [activeRunDrill, score, wave]);
   const drillEvidence = useMemo(() => {
@@ -619,8 +622,10 @@ export default function DeathScreen({
   };
 
   const handleSubmit = async () => {
+    if (submittingRef.current || submitStatus || practiceRun || localMode || !runIntegrityReceipt.onlineEligible) return;
     const words = lastWords.trim().split(/\s+/).filter(Boolean);
     if (words.length > 5) { setLastWords(words.slice(0, 5).join(" ")); return; }
+    submittingRef.current = true;
     setSubmitStatus('pending');
     setSubmitFeedback(null);
     try {
@@ -640,6 +645,8 @@ export default function DeathScreen({
         runSeed,
       }));
       requestStudioEventSync({ limit: 30, force: true }).catch(() => {});
+    } finally {
+      submittingRef.current = false;
     }
   };
 
@@ -683,6 +690,18 @@ export default function DeathScreen({
 
   const revengeBrief = (
     <div data-focus-order="run_the_fix" data-testid="insight-verdict" style={{ ...card, marginBottom: 12, textAlign: "left", border: "1px solid rgba(255,138,61,0.72)", background: "linear-gradient(145deg,rgba(255,107,53,0.24),rgba(12,12,18,0.96))", boxShadow: "0 18px 44px rgba(0,0,0,0.28)" }}>
+      <div data-testid="debrief-next-run" style={{ display: "grid", gap: 8 }}>
+        <button data-testid="debrief-primary-rematch" onClick={debrief.objective ? executeRunTheFix : playAgain} style={{ width: "100%", minHeight: 48, padding: "10px 12px", borderRadius: 8, border: "none", background: "linear-gradient(180deg,#FF9A4D,#D54500)", color: "#FFF", fontSize: 14, fontWeight: 900, letterSpacing: 1.4, cursor: "pointer", fontFamily: "'Courier New',monospace" }}>
+          {debrief.objective ? "RETRY OBJECTIVE" : "PLAY AGAIN"}
+        </button>
+        {!debrief.objective && <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(130px,1fr))", gap: 7 }}>
+          {runSeed > 0 && <button onClick={replaySameSeed} style={{ ...btnS, minHeight: 44, fontSize: 10 }}>REPLAY SAME SEED</button>}
+          {runSeed > 0 && rematchWave != null && <button onClick={practiceThisWave} style={{ ...btnS, minHeight: 44, fontSize: 10, border: "1px solid rgba(0,229,255,0.45)", color: "var(--cod-cyan)" }}>PRACTICE W{rematchWave}</button>}
+        </div>}
+        {!debrief.objective && runSeed > 0 && rematchWave != null && <div style={{ color: "#B9C4D8", fontSize: 9, lineHeight: 1.35 }}>Practice starts near the failed wave and never submits to the leaderboard. Replay starts the same seed from wave one.</div>}
+      </div>
+      <details data-testid="debrief-coaching" style={{ marginTop: 10 }}>
+        <summary style={{ minHeight: 44, display: "flex", alignItems: "center", color: "#FFD7C2", fontSize: 12, cursor: "pointer", fontWeight: 700 }}>RUN COACHING · What to try next</summary>
       <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap", fontSize: 10, color: "#FFB36B", letterSpacing: 2.4, fontWeight: 900 }}>
         <span>RUN EVIDENCE &amp; HYPOTHESIS</span><span>{Math.round(insightGraph.verdict.confidence * 100)}% · {insightGraph.verdict.evidenceLevel.replaceAll("_", " ").toUpperCase()}</span>
       </div>
@@ -703,16 +722,6 @@ export default function DeathScreen({
         <p><strong>Reason:</strong> {runCoach.lesson.why}</p>
         <p>Computed on this device from saved runs. It does not change enemies, scoring or rankings.</p>
       </details>}
-      <div data-testid="debrief-next-run" style={{ display: "grid", gap: 8, marginTop: 10 }}>
-        <button data-testid="debrief-primary-rematch" onClick={debrief.objective ? executeRunTheFix : playAgain} style={{ width: "100%", minHeight: 48, padding: "10px 12px", borderRadius: 8, border: "none", background: "linear-gradient(180deg,#FF9A4D,#D54500)", color: "#FFF", fontSize: 14, fontWeight: 900, letterSpacing: 1.4, cursor: "pointer", fontFamily: "'Courier New',monospace" }}>
-          {debrief.objective ? "RETRY OBJECTIVE" : "PLAY AGAIN"}
-        </button>
-        {!debrief.objective && <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(130px,1fr))", gap: 7 }}>
-          {runSeed > 0 && <button onClick={replaySameSeed} style={{ ...btnS, minHeight: 44, fontSize: 10 }}>REPLAY SAME SEED</button>}
-          {runSeed > 0 && rematchWave != null && <button onClick={practiceThisWave} style={{ ...btnS, minHeight: 44, fontSize: 10, border: "1px solid rgba(0,229,255,0.45)", color: "var(--cod-cyan)" }}>PRACTICE W{rematchWave}</button>}
-        </div>}
-        {!debrief.objective && runSeed > 0 && rematchWave != null && <div style={{ color: "#B9C4D8", fontSize: 9, lineHeight: 1.35 }}>Practice starts near the failed wave and never submits to the leaderboard. Replay starts the same seed from wave one.</div>}
-      </div>
       {!debrief.objective && <button data-testid="run-the-fix" aria-label={`${runTheFix.action.label}: ${runTheFix.target}`} onClick={executeRunTheFix} style={{ ...btnS, width: "100%", minHeight: 44, marginTop: 8, fontSize: 10 }}>TRY SUGGESTED PLAN · {runTheFix.action.label}</button>}
       <details style={{ marginTop: 8 }}>
         <summary style={{ color: "#B9C4D8", fontSize: 9, fontWeight: 900, cursor: "pointer" }}>INSPECT RANKED REASONING · {insightGraph.contradictions.length ? `${insightGraph.contradictions.length} CONFLICT` : "NO CONFLICTS"}</summary>
@@ -723,6 +732,7 @@ export default function DeathScreen({
             </div>
           ))}
         </div>
+      </details>
       </details>
     </div>
   );
@@ -770,6 +780,114 @@ export default function DeathScreen({
           {zombiesMode      && <span style={{ marginLeft: 8, color: "#8DFF67", fontWeight: 900 }}>🧟 SEWER ZOMBIES</span>}
         </div>
 
+        <div data-testid="run-score-summary" style={{ margin: "12px 0", padding: "12px", borderRadius: 10, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.16)" }}>
+          <strong style={{ display: "block", color: "#FFD166", fontSize: 28 }}>{score.toLocaleString()} <span style={{ fontSize: 12 }}>PTS</span></strong>
+          <span style={{ color: "#D5DCE8", fontSize: 12 }}>Wave {wave} · {kills} kills · {fmtTime(timeSurvived)}</span>
+        </div>
+        <section aria-live="polite" data-testid="debrief-score-trust" aria-labelledby="debrief-score-heading" style={{ width: "100%", marginBottom: 10 }}>
+          <h3 id="debrief-score-heading" style={{ margin: "0 0 10px", padding: "10px 12px", borderRadius: 8, border: "1px solid rgba(255,255,255,0.18)", color: "#D5DCE8", fontFamily: "inherit", fontSize: 11, fontWeight: 900, letterSpacing: 1 }}>LEADERBOARD</h3>
+        {practiceRun ? (
+          <div style={{ ...card, marginBottom: 12, border: "1px solid rgba(0,229,255,0.25)" }}>
+            <div style={{ fontSize: 12, color: "var(--cod-cyan)", letterSpacing: 1, fontWeight: 700 }}>🔁 DRILL RUN</div>
+            <div style={{ fontSize: 11, color: "#AAD", marginTop: 4 }}>Practice rematches don't submit to the leaderboard or set career records.</div>
+          </div>
+        ) : localMode ? (
+          <div style={{ ...card, marginBottom: 12, textAlign: "left" }}>
+            <strong style={{ color: "#FFD166", fontSize: 13 }}>LOCAL RESULT</strong>
+            <p style={{ margin: "6px 0 0", color: "#D5DCE8", fontSize: 12, lineHeight: 1.5 }}>This mode has no online leaderboard. Your result stays on this device; you can still share it below.</p>
+          </div>
+        ) : !runIntegrityReceipt.onlineEligible ? (
+          <div data-testid="run-integrity-local-only" style={{ ...card, marginBottom: 12, border: "1px solid rgba(255,150,72,0.5)", background: "rgba(72,18,0,0.16)" }}>
+            <div style={{ fontSize: 12, color: "#FFB06B", letterSpacing: 1, fontWeight: 900 }}>⚠ {runIntegrityReceipt.label}</div>
+            <div style={{ fontSize: 11, color: "#E8D5C7", marginTop: 5, lineHeight: 1.5 }}>{runIntegrityReceipt.detail}</div>
+            <div style={{ fontSize: 9, color: "#AFA09A", marginTop: 6, lineHeight: 1.4 }}>
+              Observed runtime evidence only. The game does not claim the recovered stage caused the final score.
+            </div>
+          </div>
+        ) : !submitStatus || submitStatus === 'pending' ? (
+          <div style={{ ...card, marginBottom: 12, border: "1px solid rgba(255,215,0,0.15)" }}>
+            <div style={{ fontSize: 12, color: "var(--cod-gold)", marginBottom: 8, letterSpacing: 1, fontWeight: 700 }}>HALL OF SHAME · GLOBAL LEADERBOARD</div>
+            <label htmlFor="run-last-words" style={{ display: "block", color: "#D5DCE8", fontSize: 12, marginBottom: 6 }}>Famous last words · optional</label>
+            <input
+              id="run-last-words"
+              disabled={submitStatus === 'pending'}
+              type="text"
+              value={lastWords}
+              maxLength={60}
+              onChange={e => { const w = e.target.value.split(/\s+/).filter(Boolean); if (w.length <= 5) setLastWords(e.target.value); }}
+              placeholder="Add up to 5 words, or leave blank"
+              style={{ width: "100%", padding: "10px 12px", fontSize: 13, fontFamily: "'Courier New',monospace", fontStyle: "italic", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 6, color: "#FFF", textAlign: "center", outline: "none", marginBottom: 6, boxSizing: "border-box" }}
+              onKeyDown={e => { if (e.key === "Enter") handleSubmit(); }}
+            />
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+              <div style={{ fontSize: 10, color: "#CCC" }}>{lastWords.trim().split(/\s+/).filter(Boolean).length}/5 words</div>
+              {gamepadConnected && (
+                <button onClick={() => setShowLastWordsKeyboard(true)} style={{ fontSize: 10, padding: "3px 8px", background: "rgba(255,107,53,0.12)", border: "1px solid rgba(255,107,53,0.3)", borderRadius: 4, color: "var(--cod-orange)", cursor: "pointer", fontFamily: "'Courier New',monospace", fontWeight: 700 }}>
+                  🎮 Keyboard
+                </button>
+              )}
+            </div>
+            <button data-testid="submit-to-leaderboard" onClick={handleSubmit} disabled={submitStatus === 'pending'} style={{ ...btnP, width: "100%", minHeight: 48, fontSize: 14, padding: "12px", opacity: submitStatus === 'pending' ? 0.6 : 1 }}>
+              {submitStatus === 'pending' ? 'SUBMITTING...' : 'SUBMIT TO LEADERBOARD'}
+            </button>
+          </div>
+        ) : submitStatus === 'online' ? (
+          <div style={{ ...card, marginBottom: 12, border: "1px solid rgba(0,255,0,0.2)", background: "rgba(0,255,0,0.03)" }}>
+            <div style={{ color: "#0F0", fontSize: 14, fontWeight: 700 }}>✅ Score submitted!</div>
+            {globalRank && (
+              <div style={{ color: "var(--cod-gold)", fontSize: 13, fontWeight: 900, marginTop: 6, letterSpacing: 1 }}>
+                🌍 Global Rank: <span style={{ color: "#FFF" }}>#{globalRank.toLocaleString()}</span>
+              </div>
+            )}
+            <div style={{ color: "#CCC", fontSize: 11, marginTop: 4 }}>Your score is on the global leaderboard.</div>
+            {submitProofPresenter?.receipt && (
+              <div style={{ color: submitProofPresenter.receipt.color, fontSize: 10, marginTop: 6, letterSpacing: 1, fontFamily: "'Courier New',monospace" }}>
+                {submitProofPresenter.shareStamp}
+              </div>
+            )}
+          </div>
+        ) : submitStatus === "rejected" ? (
+          <div style={{ ...card, marginBottom: 12, border: "1px solid rgba(255,90,90,0.35)", background: "rgba(255,70,70,0.05)" }}>
+            <div style={{ color: "#FF8888", fontSize: 14, fontWeight: 700 }}>Submission rejected</div>
+            <div style={{ color: "#DDD", fontSize: 11, marginTop: 4 }}>
+              {submitFeedback?.rejectionReason || "The server rejected this run."}
+            </div>
+            {submitFeedback?.rejectionReasons?.length > 0 && (
+              <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 4 }}>
+                {submitFeedback.rejectionReasons.map((reason, index) => (
+                  <div key={`reject-${index}`} style={{ color: "#FFB5B5", fontSize: 10, lineHeight: 1.4 }}>
+                    • {reason}
+                  </div>
+                ))}
+              </div>
+            )}
+            <div style={{ color: "#999", fontSize: 10, marginTop: 8, lineHeight: 1.5 }}>
+              This was a server-side validity check, not a network outage — your score did not reach the global leaderboard. Common causes: impossibly high kill/damage ratio for the reported wave, a corrupted run token, or a callsign claimed under a different device/browser. Your run has been saved to your local leaderboard and your career stats are still updated.
+            </div>
+            {submitProofPresenter?.receipt && (
+              <div style={{ color: submitProofPresenter.receipt.color, fontSize: 10, marginTop: 8, lineHeight: 1.4, fontFamily: "'Courier New',monospace" }}>
+                {submitProofPresenter.receipt.label.toUpperCase()} · {submitProofPresenter.receipt.nextAction}
+              </div>
+            )}
+          </div>
+        ) : (
+          <div style={{ ...card, marginBottom: 12, border: "1px solid rgba(255,180,0,0.3)", background: "rgba(255,140,0,0.05)" }}>
+            <div style={{ color: "#FFA500", fontSize: 14, fontWeight: 700 }}>📡 Saved locally</div>
+            <div style={{ color: "#CCC", fontSize: 11, marginTop: 4 }}>Couldn't reach the server — score saved on this device only.</div>
+            <div style={{ color: "#999", fontSize: 10, marginTop: 6, lineHeight: 1.5 }}>
+              This usually means a network blip. Your score will <em>not</em> appear on the global leaderboard, but it counts toward your local career stats. This run is not on the global leaderboard. Check your connection before your next run.
+            </div>
+            {submitProofPresenter?.receipt && (
+              <div style={{ color: submitProofPresenter.receipt.color, fontSize: 10, marginTop: 8, letterSpacing: 1, fontFamily: "'Courier New',monospace" }}>
+                {submitProofPresenter.shareStamp}
+              </div>
+            )}
+          </div>
+        )}
+
+        </section>
+
+
         {/* Challenge result card */}
         {vsScore != null && (
           <div style={{
@@ -808,6 +926,51 @@ export default function DeathScreen({
 
         {drillOutcomeBrief}
         {revengeBrief}
+
+        <section data-testid="debrief-share" aria-labelledby="debrief-share-heading" style={{ width: "100%", marginBottom: 10 }}>
+          <h3 id="debrief-share-heading" style={{ margin: "0 0 10px", padding: "10px 12px", borderRadius: 8, border: "1px solid rgba(255,255,255,0.18)", color: "#D5DCE8", fontFamily: "inherit", fontSize: 11, fontWeight: 900, letterSpacing: 1 }}>SHARE YOUR RUN</h3>
+        <div style={{ marginBottom: 10 }}>
+          <button type="button" onClick={handleShareLink} disabled={linkSharing} style={{ ...btnS, width: "100%", minHeight: 48, fontSize: 14, color: "#B7F6FF", border: "1px solid rgba(51,230,255,0.5)" }}>{linkSharing ? "SHARING…" : "SHARE RUN LINK"}</button>
+          <p style={{ color: "#D5DCE8", fontSize: 11, lineHeight: 1.5 }}>Share your score and a link to play. Sharing does not submit a leaderboard score.</p>
+          {linkStatus && <div role="status" style={{ color: "#B7F6FF", fontSize: 12, lineHeight: 1.5, marginBottom: 8 }}>{linkStatus}</div>}
+          {linkStatus.startsWith("Clipboard") && <input aria-label="Run link to copy" readOnly value={runShareUrl} onFocus={event => event.target.select()} style={{ width: "100%", boxSizing: "border-box", padding: 10, background: "#17171E", color: "#FFF", border: "1px solid #777", borderRadius: 6, fontSize: 12, userSelect: "text" }} />}
+          <button
+            onClick={handleShare}
+            disabled={sharing}
+            style={{ ...btnS, width: "100%", minHeight: 44, fontSize: 13, background: "linear-gradient(180deg,rgba(255,107,53,0.2),rgba(255,107,53,0.1))", border: "1px solid rgba(255,107,53,0.5)", color: sharing ? "#888" : "#FF6B35" }}
+          >
+            {sharing ? "⏳ GENERATING..." : "SAVE SCORE IMAGE"}
+          </button>
+          {shareStatus && <p role="status" style={{ color: "#D5DCE8", fontSize: 12, lineHeight: 1.5 }}>{shareStatus}</p>}
+        </div>
+        {/* Highlight GIF */}
+        {(gifEncoding || highlightGifUrl) && (
+          <details style={{ marginBottom: 12, textAlign: "center" }}>
+            <summary style={{ cursor: "pointer", padding: 12, color: "#FFB36B", fontSize: 12 }}>BEST MOMENT · optional highlight</summary>
+            {gifEncoding ? (
+              <div style={{ width: "100%", maxWidth: 320, height: 90, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,107,53,0.25)", borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, color: "#aaa", margin: "0 auto", fontFamily: "'Courier New',monospace" }}>
+                ⏳ encoding highlight...
+              </div>
+            ) : (
+              <>
+                <img src={highlightGifUrl} alt="Best moment" style={{ maxWidth: "100%", width: 320, borderRadius: 6, border: "1px solid rgba(255,107,53,0.35)", display: "block", margin: "0 auto" }} />
+                <button
+                  onClick={() => {
+                    try {
+                      const a = document.createElement("a"); a.href = highlightGifUrl; a.download = "cod-highlight.gif"; a.click();
+                      setShareStatus("Highlight downloaded. Attach it to your message.");
+                    } catch {
+                      setShareStatus("Couldn't save the highlight. Try again or share the run link.");
+                    }
+                  }}
+                  style={{ marginTop: 7, minHeight: 44, padding: "7px 18px", background: "rgba(255,107,53,0.15)", border: "1px solid rgba(255,107,53,0.45)", color: "var(--cod-orange)", borderRadius: 6, cursor: "pointer", fontSize: 12, fontWeight: 700, fontFamily: "'Courier New',monospace" }}
+                >SAVE HIGHLIGHT</button>
+              </>
+            )}
+          </details>
+        )}
+
+        </section>
 
         <details data-focus-order="secondary_analysis" data-testid="secondary-run-analysis" onToggle={(event) => { if (event.currentTarget.open) setSecondaryAnalysisRequested(true); }} style={{ width: "100%", marginBottom: 12 }}>
           <summary style={{ padding: "9px 11px", marginBottom: 10, borderRadius: 7, border: "1px solid rgba(255,255,255,0.14)", background: "rgba(255,255,255,0.045)", color: "#B8C0D0", fontSize: 10, fontWeight: 900, letterSpacing: 1.5, cursor: "pointer" }}>
@@ -1107,7 +1270,8 @@ export default function DeathScreen({
         </details>
 
         {!practiceRun && (
-          <div data-testid="field-report" style={{ ...card, marginBottom: 12, border: "1px solid rgba(127,230,255,0.22)", background: "rgba(4,24,28,0.58)" }}>
+          <details data-testid="field-report" style={{ ...card, marginBottom: 12, border: "1px solid rgba(127,230,255,0.22)", background: "rgba(4,24,28,0.58)" }}>
+            <summary style={{ cursor: "pointer", minHeight: 44, display: "flex", alignItems: "center", color: "#D5DCE8", fontSize: 12, fontWeight: 700 }}>OPTIONAL FEEDBACK · How did this run feel?</summary>
             <div style={{ color: "var(--cod-cyan)", fontSize: 10, fontWeight: 900, letterSpacing: 2 }}>FIELD REPORT · HOW WAS THE THREAT?</div>
             <div style={{ color: "#B4C5CC", fontSize: 10, marginTop: 4 }}>Optional. Pick a feeling, add one reason, then decide whether to send a category. Your answer never changes difficulty without your approval.</div>
             {!reportSkipped && !reportStatus && <div style={{ display: "grid", gridTemplateColumns: "repeat(3,minmax(0,1fr))", gap: 6, marginTop: 9 }}>
@@ -1142,7 +1306,7 @@ export default function DeathScreen({
                 <button type="button" onClick={() => { onApplyThreatRecommendation?.(threatRecommendation); onStartGame(); }} style={{ ...btnP, width: "100%", marginTop: 7, padding: "8px", fontSize: 11, background: "linear-gradient(180deg,#5B8F35,#315C1F)" }}>{threatRecommendation.label}</button>
               </div>
             )}
-          </div>
+          </details>
         )}
 
         {showLastWordsKeyboard && (
@@ -1157,112 +1321,10 @@ export default function DeathScreen({
           </AsyncPanelBoundary>
         )}
 
-        <section data-testid="debrief-score-trust" aria-labelledby="debrief-score-heading" style={{ width: "100%", marginBottom: 10 }}>
-          <h3 id="debrief-score-heading" style={{ margin: "0 0 10px", padding: "10px 12px", borderRadius: 8, border: "1px solid rgba(255,255,255,0.18)", color: "#D5DCE8", fontFamily: "inherit", fontSize: 11, fontWeight: 900, letterSpacing: 1 }}>SCORE &amp; RUN TRUST</h3>
-        {practiceRun ? (
-          <div style={{ ...card, marginBottom: 12, border: "1px solid rgba(0,229,255,0.25)" }}>
-            <div style={{ fontSize: 12, color: "var(--cod-cyan)", letterSpacing: 1, fontWeight: 700 }}>🔁 DRILL RUN</div>
-            <div style={{ fontSize: 11, color: "#AAD", marginTop: 4 }}>Practice rematches don't submit to the leaderboard or set career records.</div>
-          </div>
-        ) : !runIntegrityReceipt.onlineEligible ? (
-          <div data-testid="run-integrity-local-only" style={{ ...card, marginBottom: 12, border: "1px solid rgba(255,150,72,0.5)", background: "rgba(72,18,0,0.16)" }}>
-            <div style={{ fontSize: 12, color: "#FFB06B", letterSpacing: 1, fontWeight: 900 }}>⚠ {runIntegrityReceipt.label}</div>
-            <div style={{ fontSize: 11, color: "#E8D5C7", marginTop: 5, lineHeight: 1.5 }}>{runIntegrityReceipt.detail}</div>
-            <div style={{ fontSize: 9, color: "#AFA09A", marginTop: 6, lineHeight: 1.4 }}>
-              Observed runtime evidence only. The game does not claim the recovered stage caused the final score.
-            </div>
-          </div>
-        ) : !submitStatus || submitStatus === 'pending' ? (
-          <div style={{ ...card, marginBottom: 12, border: "1px solid rgba(255,215,0,0.15)" }}>
-            <div style={{ fontSize: 12, color: "var(--cod-gold)", marginBottom: 8, letterSpacing: 1, fontWeight: 700 }}>SUBMIT TO HALL OF SHAME</div>
-            <input
-              type="text"
-              value={lastWords}
-              maxLength={60}
-              onChange={e => { const w = e.target.value.split(/\s+/).filter(Boolean); if (w.length <= 5) setLastWords(e.target.value); }}
-              placeholder="Famous last words (5 words max)"
-              style={{ width: "100%", padding: "10px 12px", fontSize: 13, fontFamily: "'Courier New',monospace", fontStyle: "italic", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 6, color: "#FFF", textAlign: "center", outline: "none", marginBottom: 6, boxSizing: "border-box" }}
-              onKeyDown={e => { if (e.key === "Enter") handleSubmit(); }}
-            />
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-              <div style={{ fontSize: 10, color: "#CCC" }}>{lastWords.trim().split(/\s+/).filter(Boolean).length}/5 words</div>
-              {gamepadConnected && (
-                <button onClick={() => setShowLastWordsKeyboard(true)} style={{ fontSize: 10, padding: "3px 8px", background: "rgba(255,107,53,0.12)", border: "1px solid rgba(255,107,53,0.3)", borderRadius: 4, color: "var(--cod-orange)", cursor: "pointer", fontFamily: "'Courier New',monospace", fontWeight: 700 }}>
-                  🎮 Keyboard
-                </button>
-              )}
-            </div>
-            <button onClick={handleSubmit} disabled={submitStatus === 'pending'} style={{ ...btnP, width: "100%", fontSize: 14, padding: "10px", opacity: submitStatus === 'pending' ? 0.6 : 1 }}>
-              {submitStatus === 'pending' ? 'SUBMITTING...' : 'SUBMIT SCORE'}
-            </button>
-          </div>
-        ) : submitStatus === 'online' ? (
-          <div style={{ ...card, marginBottom: 12, border: "1px solid rgba(0,255,0,0.2)", background: "rgba(0,255,0,0.03)" }}>
-            <div style={{ color: "#0F0", fontSize: 14, fontWeight: 700 }}>✅ Score submitted!</div>
-            {globalRank && (
-              <div style={{ color: "var(--cod-gold)", fontSize: 13, fontWeight: 900, marginTop: 6, letterSpacing: 1 }}>
-                🌍 Global Rank: <span style={{ color: "#FFF" }}>#{globalRank.toLocaleString()}</span>
-              </div>
-            )}
-            <div style={{ color: "#CCC", fontSize: 11, marginTop: 4 }}>Your shame is now public knowledge.</div>
-            {submitProofPresenter?.receipt && (
-              <div style={{ color: submitProofPresenter.receipt.color, fontSize: 10, marginTop: 6, letterSpacing: 1, fontFamily: "'Courier New',monospace" }}>
-                {submitProofPresenter.shareStamp}
-              </div>
-            )}
-          </div>
-        ) : submitStatus === "rejected" ? (
-          <div style={{ ...card, marginBottom: 12, border: "1px solid rgba(255,90,90,0.35)", background: "rgba(255,70,70,0.05)" }}>
-            <div style={{ color: "#FF8888", fontSize: 14, fontWeight: 700 }}>Submission rejected</div>
-            <div style={{ color: "#DDD", fontSize: 11, marginTop: 4 }}>
-              {submitFeedback?.rejectionReason || "The server rejected this run."}
-            </div>
-            {submitFeedback?.rejectionReasons?.length > 0 && (
-              <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 4 }}>
-                {submitFeedback.rejectionReasons.map((reason, index) => (
-                  <div key={`reject-${index}`} style={{ color: "#FFB5B5", fontSize: 10, lineHeight: 1.4 }}>
-                    • {reason}
-                  </div>
-                ))}
-              </div>
-            )}
-            <div style={{ color: "#999", fontSize: 10, marginTop: 8, lineHeight: 1.5 }}>
-              This was a server-side validity check, not a network outage — your score did not reach the global leaderboard. Common causes: impossibly high kill/damage ratio for the reported wave, a corrupted run token, or a callsign claimed under a different device/browser. Your run has been saved to your local leaderboard and your career stats are still updated.
-            </div>
-            {submitProofPresenter?.receipt && (
-              <div style={{ color: submitProofPresenter.receipt.color, fontSize: 10, marginTop: 8, lineHeight: 1.4, fontFamily: "'Courier New',monospace" }}>
-                {submitProofPresenter.receipt.label.toUpperCase()} · {submitProofPresenter.receipt.nextAction}
-              </div>
-            )}
-          </div>
-        ) : (
-          <div style={{ ...card, marginBottom: 12, border: "1px solid rgba(255,180,0,0.3)", background: "rgba(255,140,0,0.05)" }}>
-            <div style={{ color: "#FFA500", fontSize: 14, fontWeight: 700 }}>📡 Saved locally</div>
-            <div style={{ color: "#CCC", fontSize: 11, marginTop: 4 }}>Couldn't reach the server — score saved on this device only.</div>
-            <div style={{ color: "#999", fontSize: 10, marginTop: 6, lineHeight: 1.5 }}>
-              This usually means a network blip. Your score will <em>not</em> appear on the global leaderboard, but it counts toward your local career stats. Try submitting again next session — the game keeps your run data.
-            </div>
-            {submitProofPresenter?.receipt && (
-              <div style={{ color: submitProofPresenter.receipt.color, fontSize: 10, marginTop: 8, letterSpacing: 1, fontFamily: "'Courier New',monospace" }}>
-                {submitProofPresenter.shareStamp}
-              </div>
-            )}
-          </div>
-        )}
-
-        </section>
-
-        <section data-testid="debrief-share" aria-labelledby="debrief-share-heading" style={{ width: "100%", marginBottom: 10 }}>
-          <h3 id="debrief-share-heading" style={{ margin: "0 0 10px", padding: "10px 12px", borderRadius: 8, border: "1px solid rgba(255,255,255,0.18)", color: "#D5DCE8", fontFamily: "inherit", fontSize: 11, fontWeight: 900, letterSpacing: 1 }}>SHARE THIS RUN &amp; HIGHLIGHT</h3>
-        <div style={{ marginBottom: 10 }}>
-          <button
-            onClick={handleShare}
-            disabled={sharing}
-            style={{ ...btnS, width: "100%", fontSize: 15, background: "linear-gradient(180deg,rgba(255,107,53,0.2),rgba(255,107,53,0.1))", border: "1px solid rgba(255,107,53,0.5)", color: sharing ? "#888" : "#FF6B35" }}
-          >
-            {sharing ? "⏳ GENERATING..." : "📸 SHARE SCORE"}
-          </button>
-        </div>
+        <details data-focus-order="more_run_actions" style={{ width: "100%", marginTop: 4 }}>
+          <summary style={{ padding: "9px 11px", borderRadius: 7, border: "1px solid rgba(255,255,255,0.12)", background: "rgba(255,255,255,0.035)", color: "#9299A8", fontSize: 10, fontWeight: 900, letterSpacing: 1.5, cursor: "pointer" }}>
+            EXPORTS &amp; CHALLENGE TOOLS
+          </summary>
         <div style={{ marginBottom: 12, padding: "9px 10px", border: "1px solid rgba(51,230,255,0.28)", borderRadius: 8, background: "rgba(51,230,255,0.05)", textAlign: "left" }}>
           <button type="button" data-testid="download-run-pack" onClick={downloadRunPack} disabled={!currentRun} style={{ ...btnS, minHeight: 44, width: "100%", color: "var(--cod-cyan)", border: "1px solid rgba(51,230,255,0.5)" }}>DOWNLOAD REDACTED RUN PACK · JSON</button>
           <p style={{ margin: "7px 0 0", color: "#BFCED4", fontSize: 10, lineHeight: 1.45 }}>Player-owned local summary for an AI agent or your own analysis. No name, account token or full replay. Download only; nothing is uploaded.</p>
@@ -1270,43 +1332,7 @@ export default function DeathScreen({
           {runPackStatus && <p role="status" style={{ color: "#A6F4D2", fontSize: 10 }}>{runPackStatus}</p>}
         </div>
 
-        {/* Highlight GIF */}
-        {(gifEncoding || highlightGifUrl) && (
-          <div style={{ marginBottom: 12, textAlign: "center" }}>
-            <div style={{ fontSize: 10, color: "var(--cod-orange)", fontWeight: 700, letterSpacing: 2, marginBottom: 6 }}>🎬 BEST MOMENT</div>
-            {gifEncoding ? (
-              <div style={{ width: "100%", maxWidth: 320, height: 90, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,107,53,0.25)", borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, color: "#aaa", margin: "0 auto", fontFamily: "'Courier New',monospace" }}>
-                ⏳ encoding highlight...
-              </div>
-            ) : (
-              <>
-                <img src={highlightGifUrl} alt="Best moment" style={{ maxWidth: "100%", width: 320, borderRadius: 6, border: "1px solid rgba(255,107,53,0.35)", display: "block", margin: "0 auto" }} />
-                <button
-                  onClick={async () => {
-                    try {
-                      const res = await fetch(highlightGifUrl);
-                      const blob = await res.blob();
-                      const file = new File([blob], "cod-highlight.gif", { type: "image/gif" });
-                      if (navigator.canShare?.({ files: [file] })) {
-                        await navigator.share({ files: [file], title: "Call of Doodie Best Moment", text: `Check out my highlight — Score: ${score.toLocaleString()} on wave ${wave}! 🎮` });
-                      } else {
-                        const a = document.createElement("a"); a.href = highlightGifUrl; a.download = "cod-highlight.gif"; a.click();
-                      }
-                    } catch {}
-                  }}
-                  style={{ marginTop: 7, padding: "7px 18px", background: "rgba(255,107,53,0.15)", border: "1px solid rgba(255,107,53,0.45)", color: "var(--cod-orange)", borderRadius: 6, cursor: "pointer", fontSize: 12, fontWeight: 700, fontFamily: "'Courier New',monospace" }}
-                >📤 SHARE BEST MOMENT</button>
-              </>
-            )}
-          </div>
-        )}
 
-        </section>
-
-        <details data-focus-order="more_run_actions" style={{ width: "100%", marginTop: 4 }}>
-          <summary style={{ padding: "9px 11px", borderRadius: 7, border: "1px solid rgba(255,255,255,0.12)", background: "rgba(255,255,255,0.035)", color: "#9299A8", fontSize: 10, fontWeight: 900, letterSpacing: 1.5, cursor: "pointer" }}>
-            MORE RUN ACTIONS
-          </summary>
 
         {runSeed > 0 && (
           <div style={{ marginBottom: 10, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, flexWrap: "wrap" }}>
@@ -1351,18 +1377,6 @@ export default function DeathScreen({
         </details>
 
         <nav aria-label="End-game actions" style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap", marginTop: 12 }}>
-          {runSeed > 0 && (
-            <button
-              aria-label="Copy shareable link for this run"
-              onClick={() => {
-                const code = encodeReplayCode({ seed: runSeed, mode, difficulty, weaponIdx: 0, starterLoadout });
-                const url = `${location.origin}${location.pathname}?replay=${code}`;
-                navigator.clipboard?.writeText?.(url);
-                track("debrief_share_replay_link", { seed: runSeed, score, wave, mode });
-              }}
-              style={{ ...btnS, minWidth: 130, minHeight: 44, fontSize: 13 }}
-            >🔗 SHARE RUN</button>
-          )}
           <button aria-label="View leaderboard" onClick={() => { recordPlaytestChoice("leaderboard"); track("debrief_view_leaderboard", { score, wave, intelligenceCause: postRunIntel.cause }); onRefreshLeaderboard(); setShowLeaderboard(true); }} style={{ ...btnS, minWidth: 130, minHeight: 44, fontSize: 15 }}>LEADERBOARD</button>
           <button aria-label="Back to Command" onClick={() => { recordPlaytestChoice("menu"); track("debrief_menu", { score, wave, intelligenceCause: postRunIntel.cause, nextRunContractId: debrief.nextRunContract?.id || null }); onMenu(makeDrillLaunch(runSeed > 0 ? "replay_seed" : "new_run")); }} style={{ ...btnS, minWidth: 110, minHeight: 44, fontSize: 15 }}>BACK TO COMMAND</button>
         </nav>

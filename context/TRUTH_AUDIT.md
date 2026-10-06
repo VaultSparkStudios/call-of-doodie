@@ -1,3 +1,11 @@
+## S184 end-run evidence
+
+Staging https://aa2065a8.call-of-doodie.pages.dev passed shell 7/7 and eight actual-app ending cases across defeat/victory, dark/light and 390/1440px, including short screens, touch, keyboard End and menu return. Eight share checks covered native API fixture success, clipboard success/denial, manual selectable links and real score-image downloads. 92 before/after captures were directly inspected and hash-bound; CANON-053 passed. Submission behavior tests cover pending/double click, online rank, local/rejected states and eligibility. Exact-main CI and production verification remain pending.
+
+Assisted terminal states prove UI integration, not natural playthroughs or participant enjoyment. Native share/clipboard are browser API fixtures; no external message or online leaderboard row was sent. Operations links open the game home rather than claiming mission preservation. Existing eight S183 comparative outcomes remain pending and are outside this request. FORGE/public-unlaunched remains unchanged.
+
+Protocol synchronization initially broke local caller exports. The batch was restored before final verification; first mixed-state suite is nonpassing and is superseded only by a fresh full run.
+
 Overall status: S183 engineering delivery verified on production e6b72c770cd8; twelve technical audit outcomes shipped, eight comparative outcomes pending; FORGE/public-unlaunched.
 
 ## S183 verified production follow-through

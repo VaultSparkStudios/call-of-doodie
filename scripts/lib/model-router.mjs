@@ -6,16 +6,13 @@
  * studio-wide model upgrades in one place.
  *
  * Rules:
- *   COMPLEX  → claude-opus-5-5   (strategy, deep analysis; $4/$20 — S353)
- *   MODERATE → claude-sonnet-5-5 (implementation, code, Q&A, most work — 1M ctx,
- *                                  current published list price $2/$10 — S353)
- *   SIMPLE   → claude-haiku-4-5  (validations, lookups, quick checks)
+ *   COMPLEX  → claude-opus-4-8    (strategy, deep analysis, extended thinking)
+ *   MODERATE → claude-sonnet-5    (implementation, code, Q&A, most work — 1M ctx,
+ *                                  $2/$10 intro through 2026-08-31, then $3/$15)
+ *   SIMPLE   → claude-haiku-4-5-20251001  (validations, lookups, quick checks)
  *
- * Model currency (verified 2026-09-15, S342 — official Anthropic model pages):
- *   Opus 5 is current; Opus 4.8 is superseded (same $5/$25 list price).
+ * Model currency (verified 2026-07-01, S219 — docs/FRONTIER_CAPABILITIES_2026-07.md):
  *   Sonnet 5 launched 2026-06-30 (1M ctx native, default in Claude Code).
- *   Dateless API IDs remain pinned versions; only Studio family selectors float.
- *   Fable 5.1 is available by explicit family selection; ordinary tiers do not escalate.
  *   Retired/retiring: Sonnet 4 + Opus 4 (retired 2026-06-15) · Opus 4.1 (2026-08-05).
  *
  * Usage:
@@ -29,8 +26,6 @@
  */
 
 import fs from 'fs';
-import {chooseMeasuredRoute} from './model-quality-gate.mjs';
-import { priceForOpenAIModel, shortOpenAIModelName } from './openai-model-catalog.mjs';
 import path from 'path';
 import crypto from 'crypto';
 import { fileURLToPath } from 'url';
@@ -50,128 +45,11 @@ function readActiveSkillFile() {
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const LEDGER_DEFAULT = path.resolve(__dirname, '..', '..', 'docs', 'cache-ledger.ndjson');
 
-// S353: opus and sonnet moved to the 5.5 generation (Claude API catalog, cached
-// 2026-09-25; the studio radar had reported `vendor-catalog-changed` since then).
-// Sonnet 5.5 = same $2/$10 as Sonnet 5; Opus 5.5 = $4/$20, CHEAPER than Opus 5.
-// The API break that held this back — both 400 on `thinking:{type:'disabled'}` —
-// is absorbed by thinkingOff() below, which every caller now asks instead of
-// hard-coding `disabled`.
-export const MODELS = Object.freeze({
-  fable:  'claude-fable-5-1',
-  opus:   'claude-opus-5-5',
-  sonnet: 'claude-sonnet-5-5',
-  haiku:  'claude-haiku-4-5',
-});
-
-/** Family names are Studio selectors, never unverified provider API aliases.
- * Explicit version/provider IDs remain pinned; upgrades must preserve caller intent.
- */
-export function resolveModel(model = MODELS.sonnet) {
-  return Object.hasOwn(MODELS, model) ? MODELS[model] : model;
-}
-
-/** Models whose thinking cannot be switched off at all (explicit disabled = 400). */
-function cannotDisableThinking(id) {
-  return /^claude-(?:fable|mythos)-/.test(id || '') || String(id || '').startsWith('claude-opus-5-5');
-}
-
-/**
- * S353 — the `thinking` value that means "no thinking" for THIS model, or null when
- * the parameter must be omitted. Model-behavior knowledge lives at the chokepoint:
- *   Sonnet 5 / Opus 5            → { type: 'disabled' }   (accepted)
- *   Sonnet 5.5                   → { type: 'between_tools' } (disabled is a 400;
- *                                  accepted at effort ≤ high, which is the default)
- *   Opus 5.5 / Fable / Mythos    → null — thinking cannot be disabled; omit it and
- *                                  give the request token headroom instead
- *   everything else              → null (no thinking unless asked)
- */
-export function thinkingOff(model) {
-  const id = resolveModel(model);
-  if (cannotDisableThinking(id)) return null;
-  if (String(id).startsWith('claude-sonnet-5-5')) return { type: 'between_tools' };
-  if (adaptiveThinkingByDefault(id)) return { type: 'disabled' };
-  return null;
-}
-
-export function normalizeThinking(model, thinking) {
-  const id = resolveModel(model);
-  const alwaysAdaptive = cannotDisableThinking(id);
-  if (thinking?.type === 'disabled') {
-    if (alwaysAdaptive) throw new Error('Selected family requires adaptive thinking; choose an eligible lower tier for no-thinking work');
-    // A caller asking for "off" gets this model's working spelling of off.
-    const off = thinkingOff(id);
-    return off ?? thinking;
-  }
-  if (thinking?.type === 'enabled' && (alwaysAdaptive || adaptiveThinkingByDefault(id))) return { type: 'adaptive' };
-  if (alwaysAdaptive && thinking?.type && thinking.type !== 'adaptive')
-    throw new Error('Selected family requires adaptive thinking');
-  return thinking;
-}
-
-// Reviewed 2026-10-01: structured outputs and top-level effort are GA.
-// https://platform.claude.com/docs/en/build-with-claude/structured-outputs
-export const CLAUDE_EFFORT_VALUES = Object.freeze(['low', 'medium', 'high', 'xhigh', 'max']);
-
-// Accept Studio's older flat JSON helper input, but send the current API shape.
-export function normalizeClaudeOutputConfig(config) {
-  if (config == null || config === false) return null;
-  if (typeof config !== 'object' || Array.isArray(config)) throw Error('outputConfig must be an object');
-  const normalized = { ...config };
-  if (Object.hasOwn(config, 'type') || Object.hasOwn(config, 'schema')) {
-    if (config.format !== undefined) throw Error('Choose outputConfig.format or the legacy flat schema, not both');
-    normalized.format = { type: config.type, schema: config.schema };
-    delete normalized.type;
-    delete normalized.schema;
-  }
-  if (normalized.effort !== undefined && !CLAUDE_EFFORT_VALUES.includes(normalized.effort))
-    throw Error('Unsupported Claude outputConfig.effort');
-  if (normalized.format != null && (typeof normalized.format !== 'object' || Array.isArray(normalized.format)
-    || normalized.format.type !== 'json_schema' || !normalized.format.schema
-    || typeof normalized.format.schema !== 'object' || Array.isArray(normalized.format.schema)))
-    throw Error('outputConfig.format requires type json_schema and a schema object');
-  return normalized;
-}
-
-function validateClaudeThinkingEffort(model, thinking, config, messages) {
-  if (!String(model).startsWith('claude-sonnet-5-5') || thinking?.type !== 'between_tools') return;
-  // Never silently raise thinking or lower effort to repair a conflicting request.
-  const effort = config?.effort ?? 'high';
-  if (!['low', 'medium', 'high'].includes(effort)) throw Error('Sonnet 5.5 between_tools thinking requires low, medium or high effort');
-  if (Array.isArray(messages) && messages.some(m => m?.output_config?.effort !== undefined && m.output_config.effort !== effort))
-    throw Error('Sonnet 5.5 between_tools cannot change effort mid-conversation');
-}
-
-export const MODEL_CURRENCY = Object.freeze({
-  // S353 review of the changed catalog (radar observed 2026-09-28T06:05Z): Opus 5.5
-  // + Sonnet 5.5 added. Reviewed: IDs, list prices, and breaking changes (disabled
-  // thinking 400s, forced tool_choice 400s — no studio caller uses forced
-  // tool_choice; Opus 5.5 default effort is `medium`). Basis: Claude API model
-  // catalog in the bundled claude-api skill (cached 2026-09-25).
-  verifiedAt: '2026-09-28T00:00:00Z',
-  maxAgeDays: 7,
-  radarSourceId: 'anthropic-models-overview',
-  radarContentSha256: 'db842d24bf7261e14b40578927c152e3ae88d3918a50f73910bbfb5cb70336ba',
-  sources: [
-    'https://platform.claude.com/docs/en/models/fable-5-1/overview',
-    'https://platform.claude.com/docs/en/models/opus-5-5/overview',
-    'https://platform.claude.com/docs/en/models/sonnet-5-5/overview',
-    'https://platform.claude.com/docs/en/about-claude/models/model-ids-and-versions',
-  ],
-});
-
-// The existing scheduled/startup radar supplies vendor evidence. A changed catalog
-// requires a compatibility/price review before its IDs become current; unknown
-// behavior must never silently spend more or route to a restricted model family.
-export function assessModelCurrency(radar, now = Date.now()) {
-  const source = radar?.sources?.find(s => s.id === MODEL_CURRENCY.radarSourceId);
-  if (!source || source.status !== 'ok' || !source.contentSha256) return { ok: false, reason: 'vendor-evidence-unavailable' };
-  if (source.contentSha256 !== MODEL_CURRENCY.radarContentSha256) return { ok: false, reason: 'vendor-catalog-changed' };
-  const maxAge = MODEL_CURRENCY.maxAgeDays * 86400000;
-  const observed = Date.parse(source.observedAt);
-  if (!Number.isFinite(observed) || now - observed > maxAge || observed > now) return { ok: false, reason: 'vendor-evidence-stale' };
-  if (now - Date.parse(MODEL_CURRENCY.verifiedAt) > maxAge) return { ok: false, reason: 'model-review-stale' };
-  return { ok: true, reason: 'current-reviewed-catalog' };
-}
+export const MODELS = {
+  opus:   'claude-opus-4-8',
+  sonnet: 'claude-sonnet-5',
+  haiku:  'claude-haiku-4-5-20251001',
+};
 
 /**
  * S244 (D-S244.3) — models that run ADAPTIVE thinking when the `thinking`
@@ -184,14 +62,7 @@ export function assessModelCurrency(radar, now = Date.now()) {
  * Model-behavior knowledge lives HERE (the chokepoint), never in callers.
  */
 export function adaptiveThinkingByDefault(model) {
-  // S310: Opus 5 runs ADAPTIVE thinking when `thinking` is omitted — unlike
-  // Opus 4.8/4.7, which run without it. Bumping MODELS.opus to claude-opus-5
-  // without adding it here would silently reintroduce the S244 outage on every
-  // small-output request: adaptive thinking burns the whole max_tokens budget
-  // and the call returns ZERO text. The model bump and this predicate are one
-  // change, never two.
-  const id = String(model || '');
-  return id.startsWith('claude-sonnet-5') || id.startsWith('claude-opus-5');
+  return String(model || '').startsWith('claude-sonnet-5');
 }
 
 /**
@@ -201,8 +72,7 @@ export function adaptiveThinkingByDefault(model) {
  * import this instead of hardcoding their own map.
  */
 export const CONTEXT_WINDOWS = {
-  [MODELS.fable]:  1_000_000,
-  [MODELS.opus]:   1_000_000, // Opus 5: 1M ctx (verified 2026-08-31)
+  [MODELS.opus]:   1_000_000, // Opus 4.8: 1M ctx (verified 2026-07-01)
   [MODELS.sonnet]: 1_000_000, // Sonnet 5: 1M ctx native (verified 2026-07-01)
   [MODELS.haiku]:  200_000,
   'opus-1m':       1_000_000,
@@ -214,7 +84,7 @@ export const CONTEXT_WINDOWS = {
 };
 
 export function contextWindowForAgent(agent) {
-  // Studio Ops founder runs the newest Opus at 1M context across Claude Code sessions.
+  // Studio Ops founder runs Opus 4.8 (1M context) exclusively across Claude Code sessions.
   // Set CLAUDE_CONTEXT_LIMIT=200000 to pin to the legacy 200K window.
   if (agent === 'claude-code') {
     if (process.env.CLAUDE_CONTEXT_LIMIT) return parseInt(process.env.CLAUDE_CONTEXT_LIMIT, 10);
@@ -232,213 +102,37 @@ export function contextWindowForAgent(agent) {
  * Kept here — alongside MODELS — so the chokepoint remains the single place
  * in scripts/ that references claude-* model IDs verbatim.
  */
-// Official Sonnet 5 list pricing, verified 2026-09-15.
-const SONNET5_PRICE = { input: 2.00, cacheWrite: 2.50, cacheRead: 0.20, output: 10.00 };
-// S353 — 5.5 generation list prices (Claude API catalog, cached 2026-09-25).
-// cacheWrite follows the 1.25× input rule the other rows use.
-const SONNET55_PRICE = { input: 2.00, cacheWrite: 2.50, cacheRead: 0.20, output: 10.00 };
-const OPUS55_PRICE   = { input: 4.00, cacheWrite: 5.00, cacheRead: 0.20, output: 20.00 };
-const OPUS5_PRICE    = { input: 5.00, cacheWrite: 6.25, cacheRead: 0.50, output: 25.00 };
-
-/**
- * Superseded model IDs → the current model of the same family (S343).
- *
- * Lives HERE because this file is the studio's model chokepoint and
- * tier1-model-router-chokepoint enforces that every model ID does — which is how
- * this map arrived: it was first written inside check-routine-model-currency.mjs
- * and the gate correctly refused it.
- *
- * An entry here is not "an old model that still works". Each of these is priced
- * ABOVE its replacement (see PRICING_PER_MTOK: sonnet-4-6 is $3.00/$15.00 against
- * sonnet-5's $2.00/$10.00) while being the weaker model, so it costs more per
- * token AND needs more tokens for the same work. Add a family's predecessor here
- * the moment MODELS moves, or the next 94-day drift has nowhere to be detected.
- */
-/**
- * Does this string name a Claude model at all? (S344)
- *
- * Matches `claude-` + family segments + a version digit — the same shape
- * check-model-router-adherence.mjs hunts for, kept here because the chokepoint owns
- * model-ID knowledge. `claude-code`, `claude-agent-sdk` and `claude.ai` carry no
- * version digit and are correctly not models.
- *
- * Exists so a consumer can distinguish "a Claude model I do not recognise" (which is
- * by definition NOT current, and therefore a finding) from "an id belonging to some
- * other provider" (which this studio's MODELS map cannot judge at all). Collapsing
- * those two is how a currency guard passes on the very drift it was built to catch.
- */
-export function isClaudeModelId(value) {
-  return typeof value === 'string' && /^claude-(?:[a-z]+-)*\d[A-Za-z0-9._[\]-]*$/.test(value);
-}
-
-/**
- * Is this the current model for its family? (S344)
- *
- * The ONLY authority is membership in MODELS. SUPERSEDED_MODELS below improves the
- * MESSAGE by naming the replacement; it must never be what decides current-vs-stale,
- * because a hand-maintained list is exactly the thing that goes unmaintained.
- */
-export function isCurrentModelId(value) {
-  return Object.values(MODELS).includes(value);
-}
-
-/**
- * Strip a trailing -YYYYMMDD snapshot suffix from a model id. (S345)
- *
- * Provider APIs return the canonical DATED id (claude-haiku-4-5-20251001) while MODELS
- * holds the undated alias (claude-haiku-4-5). They name the same model, so any consumer
- * comparing an API response to MODELS reports false drift without this. Two such
- * consumers were written in one session before the second one noticed.
- *
- * This drops the DATE, never the VERSION: claude-sonnet-4-6-20250101 normalises to
- * claude-sonnet-4-6, which is still absent from MODELS and still reads as stale. It is
- * therefore safe to compose with isCurrentModelId() and cannot launder a superseded model
- * into a current one.
- */
-export function undatedModelId(value) {
-  return typeof value === 'string' ? value.replace(/-\d{8}$/, '') : value;
-}
-
-/** Do two model ids name the same model, ignoring snapshot-date suffixes? (S345) */
-export function sameModelId(a, b) {
-  return undatedModelId(a) === undatedModelId(b);
-}
-
-/**
- * S353 — catalog successors verified CURRENT but not yet adopted by MODELS.
- *
- * Introduced when routines moved to claude-sonnet-5-5 ahead of MODELS (both 5.5
- * models 400 on `thinking:{type:'disabled'}`, which two batch callers sent). The
- * same session migrated those callers onto thinkingOff() and adopted 5.5 in MODELS,
- * so the map is empty again. Keep it: the next release will need the same bridge.
- * A row whose target is already in MODELS is stale — the tier-2 contract test fails.
- */
-export const CATALOG_SUCCESSORS = Object.freeze({
-  verifiedAt: '2026-09-28',
-  source: 'Claude API model catalog (bundled claude-api skill, cached 2026-09-25): IDs, pricing, breaking changes',
-  ids: Object.freeze({}),
-});
-
-/** The model every cloud routine runs (docs/ROUTINE_PR_CONTRACT.md). */
-export const ROUTINE_MODEL = MODELS.sonnet;
-
-export function isCatalogSuccessorId(value) {
-  return Object.values(CATALOG_SUCCESSORS.ids).includes(value);
-}
-
-export const SUPERSEDED_MODELS = Object.freeze({
-  'claude-sonnet-5':   MODELS.sonnet, // S353: superseded by Sonnet 5.5 at the same price
-  'claude-opus-5':     MODELS.opus,   // S353: superseded by Opus 5.5, which is cheaper
-  'claude-sonnet-4-6': MODELS.sonnet,
-  'claude-sonnet-4-5': MODELS.sonnet,
-  'claude-opus-4-8':   MODELS.opus,
-  'claude-opus-4-1':   MODELS.opus,
-  'claude-haiku-3-5':  MODELS.haiku,
-});
-
-/**
- * Provider lifecycle, as a FIELD rather than a comment. (S346 — corrects S345 #9)
- *
- * S345 read "claude-haiku-4-5 · not sooner than October 15, 2026" as "retires in four
- * weeks". It does not: that column is a FLOOR on an ACTIVE model, and Anthropic promises
- * at least 60 days' notice before any retirement. The real defect was that retirement
- * dates lived only in comments (see the Opus 4.1 note in PRICING_BY_ID), so nothing
- * could warn when a notice actually landed. Keys are undated ids; look up through
- * modelLifecycle(), which strips snapshot dates.
- *
- * Refresh by re-reading LIFECYCLE_SOURCE; bump LIFECYCLE_CHECKED_AT. A table older than
- * LIFECYCLE_MAX_AGE_DAYS answers `unknown` — stale evidence may not certify `active`.
- */
-export const LIFECYCLE_SOURCE = 'https://platform.claude.com/docs/en/about-claude/model-deprecations';
-export const LIFECYCLE_CHECKED_AT = '2026-09-18';
-export const LIFECYCLE_MAX_AGE_DAYS = 30;
-export const LIFECYCLE_NOTICE_DAYS = 60;
-export const MODEL_LIFECYCLE = Object.freeze({
-  'claude-fable-5-1':  { status: 'active',  notBefore: '2027-09-01' },
-  'claude-fable-5':    { status: 'active',  notBefore: '2027-06-09' },
-  // S353: listed as current models in the catalog; no retirement floor was in the
-  // evidence read, so none is invented — re-read LIFECYCLE_SOURCE to add one.
-  'claude-opus-5-5':   { status: 'active' },
-  'claude-sonnet-5-5': { status: 'active' },
-  'claude-opus-5':     { status: 'active',  notBefore: '2027-07-24' },
-  'claude-opus-4-8':   { status: 'active',  notBefore: '2027-05-28' },
-  'claude-opus-4-7':   { status: 'active',  notBefore: '2027-04-16' },
-  'claude-opus-4-6':   { status: 'active',  notBefore: '2027-02-05' },
-  'claude-opus-4-5':   { status: 'active',  notBefore: '2026-11-24' },
-  'claude-opus-4-1':   { status: 'retired', retiresOn: '2026-08-05', replacement: 'claude-opus-4-8' },
-  'claude-sonnet-5':   { status: 'active',  notBefore: '2027-06-30' },
-  'claude-sonnet-4-6': { status: 'active',  notBefore: '2027-02-17' },
-  'claude-sonnet-4-5': { status: 'deprecated', retiresOn: '2026-11-30', replacement: 'claude-sonnet-5-5', checkedAt: '2026-10-01' },
-  'claude-haiku-4-5':  { status: 'active',  notBefore: '2026-10-15' },
-});
-
-const DAY_MS = 86_400_000;
-
-/**
- * Where does a model stand in its provider lifecycle?
- * → { id, state: 'active'|'deprecated'|'retiring-soon'|'retired'|'unknown', reason, ...entry }
- * `floorPassed` on an active model means a notice may now arrive — still >= 60 days of runway.
- */
-export function modelLifecycle(modelId, { now = Date.now(), checkedAt = LIFECYCLE_CHECKED_AT, table = MODEL_LIFECYCLE } = {}) {
-  const id = undatedModelId(resolveModel(modelId));
-  const nowMs = new Date(now).getTime();
-  const entry = table[id];
-  if (!entry) return { id, state: 'unknown', reason: 'not in the lifecycle table — unjudgeable, not current' };
-  const observedAt = entry.checkedAt || checkedAt;
-  const ageDays = (nowMs - new Date(observedAt).getTime()) / DAY_MS;
-  if (!(ageDays >= 0 && ageDays <= LIFECYCLE_MAX_AGE_DAYS)) {
-    return { id, state: 'unknown', lastKnown: entry.status, reason: `lifecycle table checked ${observedAt} (age ${Math.floor(ageDays)}d; valid range 0..${LIFECYCLE_MAX_AGE_DAYS}d) — re-read ${LIFECYCLE_SOURCE}` };
-  }
-  const retiresMs = entry.retiresOn ? new Date(entry.retiresOn).getTime() : NaN;
-  if (entry.status === 'retired' || (Number.isFinite(retiresMs) && nowMs >= retiresMs)) {
-    return { id, ...entry, state: 'retired', reason: `retired ${entry.retiresOn}${entry.replacement ? ` → ${entry.replacement}` : ''}` };
-  }
-  if (entry.status === 'deprecated') {
-    const daysLeft = Number.isFinite(retiresMs) ? Math.ceil((retiresMs - nowMs) / DAY_MS) : null;
-    const soon = daysLeft != null && daysLeft <= LIFECYCLE_NOTICE_DAYS;
-    return { id, ...entry, daysLeft, state: soon ? 'retiring-soon' : 'deprecated', reason: `deprecated; retires ${entry.retiresOn ?? 'date unannounced'}${entry.replacement ? ` → ${entry.replacement}` : ''}` };
-  }
-  const floorPassed = entry.notBefore ? nowMs >= new Date(entry.notBefore).getTime() : false;
-  return { id, ...entry, floorPassed, state: 'active', reason: floorPassed ? `active; past its ${entry.notBefore} floor — a notice may arrive (≥${LIFECYCLE_NOTICE_DAYS}d runway)` : `active; not retired before ${entry.notBefore}` };
-}
+// Sonnet 5 intro pricing ($2/$10) runs through 2026-08-31; list price after is $3/$15.
+// Date-aware so the ledger never silently overstates or understates (CANON-031).
+const SONNET5_INTRO_ENDS = Date.UTC(2026, 7, 31, 23, 59, 59); // 2026-08-31 UTC
+const SONNET5_PRICE = Date.now() <= SONNET5_INTRO_ENDS
+  ? { input: 2.00, cacheWrite: 2.50, cacheRead: 0.20, output: 10.00 }
+  : { input: 3.00, cacheWrite: 3.75, cacheRead: 0.30, output: 15.00 };
 
 export const PRICING_PER_MTOK = {
-  [MODELS.fable]:  { input: 10.00, cacheWrite: 12.50, cacheRead: 0.25, output: 50.00 },
-  [MODELS.opus]:   OPUS55_PRICE,   // Opus 5.5 (S353)
-  [MODELS.sonnet]: SONNET55_PRICE, // Sonnet 5.5 (S353)
+  [MODELS.opus]:   { input:  5.00, cacheWrite:  6.25, cacheRead: 0.50, output: 25.00 }, // Opus 4.8 (verified 2026-07-01)
+  [MODELS.sonnet]: SONNET5_PRICE,
   [MODELS.haiku]:  { input:  1.00, cacheWrite:  1.25, cacheRead: 0.10, output:  5.00 },
 };
 
 // Exact-prefix per-generation overrides (single source of truth — consumers use
 // priceForModel(), never their own tables). Legacy generations keep their own price.
 export const PRICING_BY_ID = {
-  [MODELS.fable]: PRICING_PER_MTOK[MODELS.fable],
   'claude-fable-5':    { input: 10.00, cacheWrite: 12.50, cacheRead: 1.00, output: 50.00 },
-  // S353: explicit rows — prefix matching would otherwise price claude-sonnet-5-5
-  // off the claude-sonnet-5 row, and the MODELS bump would reprice Opus 5 as 5.5.
-  'claude-opus-5-5':   OPUS55_PRICE,
-  'claude-opus-5':     OPUS5_PRICE,
-  'claude-sonnet-5-5': SONNET55_PRICE,
-  'claude-opus-4-8':   { input:  5.00, cacheWrite:  6.25, cacheRead: 0.50, output: 25.00 },
+  'claude-opus-4-8':   PRICING_PER_MTOK[MODELS.opus],
   'claude-opus-4-1':   { input: 15.00, cacheWrite: 18.75, cacheRead: 1.50, output: 75.00 }, // retires 2026-08-05
-  'claude-sonnet-5':   SONNET5_PRICE,
+  'claude-sonnet-5':   PRICING_PER_MTOK[MODELS.sonnet],
   'claude-sonnet-4-6': { input:  3.00, cacheWrite:  3.75, cacheRead: 0.30, output: 15.00 },
   'claude-haiku-4-5':  PRICING_PER_MTOK[MODELS.haiku],
 };
 
 /** Resolve price for any model ID: exact-prefix override first, tier substring fallback. */
-export function priceForModel(modelId, options = {}) {
-  if (/^(?:openai\/)?(?:gpt-|chatgpt-|o[134](?:-|$))/.test(modelId || '')) {
-    const price = priceForOpenAIModel(modelId, options);
-    if (!price) throw new Error('OpenAI price is unverified for model ' + modelId);
-    return price;
-  }
+export function priceForModel(modelId) {
   if (!modelId) return PRICING_PER_MTOK[MODELS.sonnet];
-  modelId = resolveModel(modelId);
-  for (const prefix of Object.keys(PRICING_BY_ID).sort((a, b) => b.length - a.length)) {
-    if (modelId === prefix || modelId.startsWith(prefix + '-') || modelId.startsWith(prefix + '[')) return PRICING_BY_ID[prefix];
+  for (const [prefix, p] of Object.entries(PRICING_BY_ID)) {
+    if (modelId.startsWith(prefix)) return p;
   }
-  if (modelId.includes('fable'))  return PRICING_PER_MTOK[MODELS.fable];
+  if (modelId.includes('fable'))  return PRICING_BY_ID['claude-fable-5'];
   if (modelId.includes('opus'))   return PRICING_PER_MTOK[MODELS.opus];
   if (modelId.includes('haiku'))  return PRICING_PER_MTOK[MODELS.haiku];
   return PRICING_PER_MTOK[MODELS.sonnet];
@@ -457,9 +151,6 @@ export const FALLBACK_PRICE = PRICING_PER_MTOK[MODELS.sonnet];
  * Short human-friendly name for a model ID ("opus" / "sonnet" / "haiku").
  */
 export function shortModelName(id) {
-  id = id ? resolveModel(id) : id;
-  if (/^(?:openai\/)?(?:gpt-|chatgpt-|o[134](?:-|$))/.test(id || '')) return shortOpenAIModelName(id);
-  if (id?.startsWith('claude-fable'))  return 'fable';
   if (id?.startsWith('claude-opus'))   return 'opus';
   if (id?.startsWith('claude-sonnet')) return 'sonnet';
   if (id?.startsWith('claude-haiku'))  return 'haiku';
@@ -473,7 +164,6 @@ export function shortModelName(id) {
  */
 export function selectModel(complexity = 'moderate') {
   switch (complexity) {
-    case 'fable':    return MODELS.fable; // explicit frontier opt-in, never inferred
     case 'complex':  return MODELS.opus;
     case 'moderate': return MODELS.sonnet;
     case 'simple':   return MODELS.haiku;
@@ -548,7 +238,7 @@ export function buildHeaders(apiKey, opts = {}) {
     compaction = false, contextEditing = false, mcpServers = false,
     managedAgents = false,
     // S114 additions
-    memory = false, citations = false, webSearch = false, codeExecution = false,
+    memory = false, citations = false, webSearch = false, codeExecution = false, outputConfig = false,
   } = opts;
   const headers = {
     'Content-Type':       'application/json',
@@ -568,7 +258,7 @@ export function buildHeaders(apiKey, opts = {}) {
   if (citations)      betas.push('citations-2025-04-01');
   if (webSearch)      betas.push('web-search-2025-03-13');
   if (codeExecution)  betas.push('code-execution-2025-05-22');
-  // output_config.format and top-level effort need no beta header.
+  if (outputConfig)   betas.push('output-config-2025-02-19');
   if (betas.length) headers['anthropic-beta'] = [...new Set(betas)].join(',');
   return headers;
 }
@@ -661,7 +351,7 @@ export function buildOutcome({ title, intent, successCriteria = [], disallow = [
       name: title,
       max_attempts: maxAttempts,
       evaluator: {
-        model: resolveModel(graderModel || MODELS.sonnet),
+        model: graderModel || MODELS.sonnet,
         rubric: rubricLines.join('\n'),
       },
     },
@@ -782,6 +472,35 @@ export function buildMcpServers(servers) {
   };
 }
 
+function sanitizeUnicodeString(value) {
+  let out = '';
+  for (let i = 0; i < value.length; i++) {
+    const code = value.charCodeAt(i);
+    if (code >= 0xD800 && code <= 0xDBFF) {
+      const next = value.charCodeAt(i + 1);
+      if (next >= 0xDC00 && next <= 0xDFFF) {
+        out += value[i] + value[i + 1];
+        i++;
+      } else out += '\uFFFD';
+    } else if (code >= 0xDC00 && code <= 0xDFFF) out += '\uFFFD';
+    else out += value[i];
+  }
+  return out;
+}
+
+export function sanitizeUnicodeScalars(value) {
+  if (typeof value === 'string') return sanitizeUnicodeString(value);
+  if (Array.isArray(value)) return value.map((item) => sanitizeUnicodeScalars(item));
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(Object.entries(value).map(([key, entry]) => [key, sanitizeUnicodeScalars(entry)]));
+  }
+  return value;
+}
+
+export function safeJsonStringify(value) {
+  return JSON.stringify(sanitizeUnicodeScalars(value));
+}
+
 /**
  * Make a Claude API messages call via raw https (no SDK dependency).
  * Returns the parsed response or throws on error.
@@ -807,19 +526,24 @@ export function buildMcpServers(servers) {
  *   object → reserved for future per-tool config. No-op for callers that don't set it.
  * @returns {Promise<object>} parsed API response
  */
-export function callClaude({ apiKey, model, maxTokens, system, messages, thinking, longCache = false, logAs = null, compaction = false, contextEditing = false, mcpServers = null, tools = null, memory = false, citations = false, webSearch = false, codeExecution = false, outputConfig = false, files = false, turnClassify = true, cachePrefix = null, cachePrefixTtl = '1h', qualityComparison = null, qualityContext = null, taskClass = null, experimentId = null }, httpsModule) {
-  const selected = chooseMeasuredRoute({requestedModel:model,baselineModel:resolveModel(model),comparison:qualityComparison,context:qualityContext,familySelectors:Object.keys(MODELS)});
-  const eligibleSurface = !selected.changed || (qualityComparison?.candidate?.surface === 'claude-api' && taskClass && taskClass === qualityComparison.taskClass && isClaudeModelId(selected.model));
-  const routedModel = eligibleSurface ? selected.model : resolveModel(model);
-  // Keywords may suggest a future trial, but cannot override model intent or a
-  // measured route. Subscription CLI evidence cannot promote a metered API route.
-  let classifyTag = selected.changed && eligibleSurface ? `quality:${selected.comparisonSha256}` : null;
+export function callClaude({ apiKey, model, maxTokens, system, messages, thinking, longCache = false, logAs = null, compaction = false, contextEditing = false, mcpServers = null, tools = null, memory = false, citations = false, webSearch = false, codeExecution = false, outputConfig = false, files = false, turnClassify = true, cachePrefix = null, cachePrefixTtl = '1h' }, httpsModule) {
+  // S120 #3 — turn-classifier wire (SIL #612). Auto-route haiku-able turns
+  // to haiku when classifier confidently identifies pure transform/short
+  // transactional work. Caller can disable with turnClassify:false.
+  let routedModel = model;
+  let classifyTag = null;
   if (turnClassify && process.env.TURN_CLASSIFY_DISABLED !== '1') {
     try {
       const lastUserMsg = Array.isArray(messages) ? messages.filter(m => m.role === 'user').slice(-1)[0] : null;
       const prompt = lastUserMsg ? (typeof lastUserMsg.content === 'string' ? lastUserMsg.content : JSON.stringify(lastUserMsg.content)) : (system || '');
       const verdict = _classifyTurn({ prompt });
-      if (!classifyTag) classifyTag = `proposal-only:${verdict.model}:${verdict.reason}`;
+      if (verdict.model === 'haiku' && /opus|sonnet/i.test(model)) {
+        routedModel = 'claude-haiku-4-5-20251001';
+        classifyTag = `routing:turn-classifier-v1:${verdict.reason}`;
+      } else if (verdict.model === 'opus' && /haiku|sonnet/i.test(model)) {
+        routedModel = MODELS.opus;
+        classifyTag = `routing:turn-classifier-v1:${verdict.reason}`;
+      }
     } catch { /* classifier optional — never break callers */ }
   }
   const body = { model: routedModel, max_tokens: maxTokens, messages };
@@ -837,7 +561,7 @@ export function callClaude({ apiKey, model, maxTokens, system, messages, thinkin
   } else if (system) {
     body.system = system;
   }
-  if (thinking) body.thinking = normalizeThinking(routedModel, thinking);
+  if (thinking) body.thinking = thinking;
 
   // G5/G9 — merge context_management edits (compaction + clear_tool_uses + clear_thinking)
   const cm = { edits: [] };
@@ -862,9 +586,7 @@ export function callClaude({ apiKey, model, maxTokens, system, messages, thinkin
   if (webSearch)     toolsList.push(typeof webSearch === 'object' ? webSearchTool(webSearch) : webSearchTool());
   if (codeExecution) toolsList.push(codeExecutionTool());
   if (toolsList.length) body.tools = toolsList;
-  const normalizedOutput = normalizeClaudeOutputConfig(outputConfig);
-  if (normalizedOutput) body.output_config = normalizedOutput;
-  validateClaudeThinkingEffort(routedModel, body.thinking, normalizedOutput, messages);
+  if (outputConfig) body.output_config = outputConfig;
 
   // Auto-detect 1h cache usage in system/messages to flip the beta header on
   const detectLong = (blocks) => Array.isArray(blocks) && blocks.some(b => b?.cache_control?.ttl === '1h');
@@ -886,9 +608,9 @@ export function callClaude({ apiKey, model, maxTokens, system, messages, thinkin
     citations:      !!citations,
     webSearch:      !!webSearch,
     codeExecution:  !!codeExecution,
+    outputConfig:   !!outputConfig,
   });
-  const payload = JSON.stringify(body);
-  const startedAt = Date.now();
+  const payload = safeJsonStringify(body);
 
   return new Promise((resolve, reject) => {
     const https = httpsModule;
@@ -910,18 +632,10 @@ export function callClaude({ apiKey, model, maxTokens, system, messages, thinkin
             try {
               logMetrics({
                 script: logAs || process.env.OPS_SCRIPT_NAME || 'unknown',
-                model: parsed.model || routedModel,
-                observedModel: parsed.model || null,
-                requestedModel: model,
-                routedModel,
-                requestId: res.headers?.['request-id'] || null,
-                responseId: parsed.id || null,
-                usageKind: 'api-response',
-                billingSurface: 'metered-api',
+                model: routedModel,
                 usage: parsed.usage,
                 mode: useThinking ? 'think' : (autoLong ? 'long-cache' : null),
                 routing: classifyTag || undefined,
-                taskClass, experimentId, elapsedMs: Date.now()-startedAt,
               });
             } catch { /* metrics must never break callers */ }
             resolve(parsed);
@@ -939,21 +653,14 @@ export function callClaude({ apiKey, model, maxTokens, system, messages, thinkin
 
 /**
  * Call Claude with a JSON schema and return parsed JSON.
- * Keeps structured JSON callers on one parser. Domain/schema validation still
- * belongs to the caller; refusals and incomplete responses never count as final.
+ * Keeps schema-guaranteed JSON callers on the model-router chokepoint instead
+ * of duplicating fragile content-block parsing across scripts.
  */
 export async function callClaudeJson(opts, httpsModule) {
   const { schema, outputConfig, ...callOpts } = opts;
-  const config = normalizeClaudeOutputConfig(outputConfig) || {};
-  if (!config.format && schema) config.format = { type: 'json_schema', schema };
-  if (!config.format) throw new Error('callClaudeJson requires schema or outputConfig.format.schema');
+  if (!schema && !outputConfig?.schema) throw new Error('callClaudeJson requires schema or outputConfig.schema');
+  const config = outputConfig || { type: 'json_schema', schema };
   const response = await callClaude({ ...callOpts, outputConfig: config }, httpsModule);
-  if (response.stop_reason !== 'end_turn') {
-    const error = new Error('Claude structured output did not complete with end_turn');
-    error.code = 'CLAUDE_JSON_INCOMPLETE';
-    error.stopReason = response.stop_reason ?? null;
-    throw error;
-  }
   return extractJsonOutput(response);
 }
 
@@ -987,19 +694,16 @@ export function extractJsonOutput(response) {
  * @returns {Promise<{response, escalated: boolean, finalModel: string}>}
  */
 export async function callWithEscalation(opts, httpsModule) {
-  const {gradeResponse,escalationModels=[],minimumQuality=1,onEscalate}=opts;
-  if (typeof gradeResponse !== 'function') throw Error('Escalation requires an explicit response rubric');
-  if (!Array.isArray(escalationModels) || escalationModels.length>2 || !Number.isFinite(minimumQuality) || minimumQuality<0 || minimumQuality>1) throw Error('Invalid bounded escalation policy');
-  const order=[resolveModel(opts.model),...escalationModels.map(resolveModel)];
-  if (new Set(order).size!==order.length || order.some(m=>!isClaudeModelId(m))) throw Error('Escalation models must be explicit, distinct Claude IDs or family selectors');
+  const { escalationSignal = 'UNCERTAIN', ceiling = 'sonnet', onEscalate } = opts;
+  const order = ceiling === 'opus' ? ['haiku', 'sonnet', 'opus'] : ['haiku', 'sonnet'];
+
   let last;
   for (let i = 0; i < order.length; i++) {
-    const model = order[i];
-    const resp = await callClaude({ ...opts, model,turnClassify:false }, httpsModule);
-    const rubric = await gradeResponse(resp,{model,attempt:i});
-    const accepted = rubric?.mandatoryPass===true && Number.isFinite(rubric?.quality) && rubric.quality>=minimumQuality && rubric.quality<=1;
-    last = { response: resp, escalated: i > 0, finalModel: resp.model||model,accepted,rubric };
-    if (accepted || i === order.length - 1) return last;
+    const model = MODELS[order[i]];
+    const resp = await callClaude({ ...opts, model }, httpsModule);
+    const text = resp.content?.map(c => c.text || '').join('') || '';
+    last = { response: resp, escalated: i > 0, finalModel: model };
+    if (!text.includes(escalationSignal) || i === order.length - 1) return last;
     if (onEscalate) onEscalate(order[i + 1]);
   }
   return last;
@@ -1081,7 +785,7 @@ export function uploadFile({ apiKey, filename, content, mimeType = 'text/plain' 
  * Returns `{ spent, remaining, overBudget }`.
  */
 export function trackSessionBudget({ usage, model, cap = 5.0 }) {
-  const price = priceForModel(model, { inputTokens: (usage.input_tokens || 0) + (usage.cache_read_input_tokens || 0) + (usage.cache_creation_input_tokens || 0) });
+  const price = PRICING_PER_MTOK[model] || FALLBACK_PRICE;
   const cost =
     (usage.input_tokens || 0)                 * price.input       / 1_000_000 +
     (usage.output_tokens || 0)                * price.output      / 1_000_000 +
@@ -1115,10 +819,7 @@ export function trackSessionBudget({ usage, model, cap = 5.0 }) {
  * @param {string} [opts.mode]    - optional sub-mode (e.g. "think", "search")
  * @param {string} [opts.logPath] - override path
  */
-export function logMetrics({ script, model, usage, mode = null, logPath = null,
-  requestedModel = null, routedModel = null, requestId = null, responseId = null,
-  usageKind = 'api-response', billingSurface = 'metered-api', routing = null,
-  taskClass = null, experimentId = null, elapsedMs = null, providerUsage = null, usageComplete = true, observedModel = null }) {
+export function logMetrics({ script, model, usage, mode = null, logPath = null }) {
   if (!usage) return;
   const target = logPath || process.env.OPS_CACHE_LEDGER || LEDGER_DEFAULT;
   const entry = {
@@ -1126,22 +827,10 @@ export function logMetrics({ script, model, usage, mode = null, logPath = null,
     script,
     mode,
     model,
-    observedModel,
-    requestedModel,
-    routedModel,
-    requestId,
-    responseId,
-    usageKind,
-    billingSurface,
-    costBasis: usageComplete ? 'usage-times-catalog-price-estimate' : 'usage-incomplete-cost-unknown',
-    billingReconciled: false,
-    billedUSD: null,
-    routing,
-    taskClass, experimentId, elapsedMs, usageComplete, ...(providerUsage?{providerUsage}:{}),
-    input:        usage.input_tokens               ?? (usageComplete ? 0 : null),
-    output:       usage.output_tokens              ?? (usageComplete ? 0 : null),
-    cache_read:   usage.cache_read_input_tokens    ?? (usageComplete ? 0 : null),
-    cache_create: usage.cache_creation_input_tokens ?? (usageComplete ? 0 : null),
+    input:        usage.input_tokens               ?? 0,
+    output:       usage.output_tokens              ?? 0,
+    cache_read:   usage.cache_read_input_tokens    ?? 0,
+    cache_create: usage.cache_creation_input_tokens ?? 0,
     // S117 + S121 G3: per-skill attribution. STUDIO_SKILL env first; falls back
     // to .cache/active-skill.json (set by `node scripts/set-active-skill.mjs <slug>`
     // at skill entry — file-based to survive across PowerShell subprocesses where

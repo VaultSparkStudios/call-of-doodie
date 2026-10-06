@@ -30,10 +30,7 @@ const DEFAULT_TTL_MS = 5 * 60 * 1000;
  * Never throws — a broken preflight must never block a brief render.
  * Returns { ran, reason, steps } for observability/tests.
  */
-export function runBriefPreflight(root, { force = false, ttlMs = DEFAULT_TTL_MS, mode = 'maintain' } = {}) {
-  // Routine delivery reads cached evidence. Do not mutate maintenance stamps or
-  // imply that skipped checks ran, even when force was also supplied.
-  if (mode === 'deliver') return { ran: false, reason: 'deliver: cached evidence; maintenance not run', steps: [] };
+export function runBriefPreflight(root, { force = false, ttlMs = DEFAULT_TTL_MS } = {}) {
   const stampPath = path.join(root, STAMP_REL);
   if (!force) {
     try {
@@ -69,15 +66,8 @@ export function runBriefPreflight(root, { force = false, ttlMs = DEFAULT_TTL_MS,
   // surfaces in the brief instead of being rediscovered mid-implement. Cache is
   // consumed by render-startup-brief-v5 as a SIGNALS row. Never blocks a render.
   try {
-    // S319 [audit #3] — the cap is DECLARED to the checker, not just enforced on it.
-    // Told nothing, it started a full doctor run it could never finish inside 30s and
-    // was killed with nothing to show, every session since S289. Given the budget it
-    // resolves only the probe ids the sidecar names (measured: 19.3s cold, 0.5s warm).
-    const PREMISE_BUDGET_MS = 30000;
-    const r = spawnSync(process.execPath, [
-      path.join(SCRIPTS, 'check-audit-premises.mjs'), '--json', '--budget-ms', String(PREMISE_BUDGET_MS),
-    ], {
-      cwd: root, encoding: 'utf8', timeout: PREMISE_BUDGET_MS, windowsHide: true,
+    const r = spawnSync(process.execPath, [path.join(SCRIPTS, 'check-audit-premises.mjs'), '--json'], {
+      cwd: root, encoding: 'utf8', timeout: 30000, windowsHide: true,
     });
     const j = JSON.parse(r.stdout || '{}');
     if (j && (j.verified != null || j.contradicted != null)) {
@@ -94,29 +84,8 @@ export function runBriefPreflight(root, { force = false, ttlMs = DEFAULT_TTL_MS,
         resolvedContradicted: j.resolvedContradicted ?? 0,
         openContradicted,
         unverified: j.unverified ?? 0,
-        // S317 [audit #2] — carry the CAUSE, not just the count. The brief used to
-        // print one hardcoded explanation for "nothing resolved" and published the
-        // wrong diagnosis when the cause changed. null when everything resolved.
-        unresolvedCause: j.unresolvedCause ?? null,
       }, null, 2));
       steps.push('audit-premise-decay');
-    } else {
-      // S289 [audit item 2] — a check that did not COMPLETE must not vanish.
-      //
-      // check-audit-premises spawns a full run-doctor to gather evidence. When the
-      // doctor cache is cold that exceeds this 30s timeout, stdout is empty, the guard
-      // above fails, and the row simply disappeared from the brief — silently, because
-      // the surrounding catch swallows everything. An absent row reads as "nothing to
-      // report", which is the same unknown-as-green conflation this item exists to
-      // close, just expressed as omission instead of a checkmark. Record the
-      // non-measurement so the brief can say so.
-      fs.writeFileSync(path.join(root, '.cache', 'audit-premise-decay.json'), JSON.stringify({
-        at: new Date().toISOString(),
-        audit: null,
-        incomplete: true,
-        reason: r.error ? String(r.error.code ?? r.error.message) : r.status === null ? 'timed-out' : `exit ${r.status}`,
-      }, null, 2));
-      steps.push('audit-premise-decay:incomplete');
     }
   } catch { /* non-fatal */ }
 

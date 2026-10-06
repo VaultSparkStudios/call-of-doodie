@@ -22,8 +22,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { updateProjectStatus } from './lib/write-project-status.mjs';
-import { resolveTier } from './lib/model-routing.mjs';
+import { updateProjectStatusFile } from './lib/write-project-status.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -146,22 +145,7 @@ try {
         ? routing.tiers[routing.modeOverrides.founderMode]?.model
         : 'opus';
     } else {
-      // S310: this used to fall back to T1_sonnet whenever PROJECT_STATUS lacked
-      // a modelTierDefault stamp — the same silent-cheapest-default that made the
-      // dead derivation rule invisible. Resolve the repo's ACTUAL tier instead;
-      // T1 is only correct when the rule actually says T1.
-      let derived = null;
-      try {
-        const regPath = path.join(ROOT, 'portfolio', 'PROJECT_REGISTRY.json');
-        const slug = status.slug || path.basename(ROOT);
-        if (fs.existsSync(regPath)) {
-          const reg = JSON.parse(fs.readFileSync(regPath, 'utf8'));
-          const proj = (reg.projects || []).find(p => p.slug === slug);
-          if (proj) derived = routing.tiers?.[resolveTier(proj, routing).tier]?.model || null;
-        }
-      } catch { /* best effort */ }
       recommendedModel = currentTierModel
-        || derived
         || routing.tiers?.T1_sonnet?.model
         || 'sonnet';
     }
@@ -258,7 +242,7 @@ if (shouldFlip) {
   console.log(`   Founder score: ${founderScore}  ·  Builder score: ${builderScore}`);
   if (matchedFounder.length) console.log(`   Founder signals: ${matchedFounder.slice(0, 4).join(', ')}`);
   // Persist the flip
-  updateProjectStatus(ROOT, (current) => ({
+  updateProjectStatusFile(STATUS, (current) => ({
     ...current,
     sessionMode: recommended,
     sessionModeAutoShiftedAt: new Date().toISOString(),

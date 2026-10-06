@@ -1,3 +1,11 @@
+## S184 end-run maintenance
+
+End-run results now show the score and Submit to leaderboard before optional content. Last words are optional and labelled. Submission is guarded against duplicate clicks and excludes practice, Operations, local-only modes and integrity failures. Play Again precedes optional coaching. Sharing has one run-link action with native/copy/manual feedback; score images and highlights are explicit downloads. Feedback, highlights and exports are optional. Bottom leaderboard/menu controls remain outside disclosures.
+
+Keep native URL sharing inside user activation; await clipboard work and expose selectable fallback links. Use scenario v2 for catalog setup. Operations shares use the game home. Eligibility matches App. Submission tokens are consumed; no retry claim.
+
+Assisted terminal states prove UI integration, not natural playthroughs or participant enjoyment. Native share/clipboard are browser API fixtures; no external message or online leaderboard row was sent. Operations links open the game home rather than claiming mission preservation. Existing eight S183 comparative outcomes remain pending and are outside this request. FORGE/public-unlaunched remains unchanged.
+
 ## End-game follow-up — 2026-10-03
 
 - Keep end-game results in normal block flow inside the viewport scroll region; flex compression can hide bottom clearance.

@@ -8,7 +8,6 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { reconcileTaskRecords, TERMINAL_TASK_STATUS } from './task-board.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const STUDIO_ROOT = path.resolve(__dirname, '..', '..');
@@ -16,6 +15,13 @@ const STUDIO_ROOT = path.resolve(__dirname, '..', '..');
 function readText(p) { try { return fs.readFileSync(p, 'utf8'); } catch { return ''; } }
 function readJson(p, fb) { try { return JSON.parse(fs.readFileSync(p, 'utf8')); } catch { return fb; } }
 
+function extractSection(content, heading) {
+  const parts = content.split(/^## /m);
+  const match = parts.find(p => p.startsWith(heading));
+  if (!match) return '';
+  const nl = match.indexOf('\n');
+  return nl === -1 ? '' : match.slice(nl + 1);
+}
 
 function tierFromCell(cell) {
   if (cell.includes('🔥')) return 'critical';
@@ -26,54 +32,67 @@ function tierFromCell(cell) {
 }
 
 export function parseTaskBoard(content) {
-  const { active } = reconcileTaskRecords(content);
-  return active.map((row, index) => ({
-    rank: row.idNumber ?? index + 1, key: row.key, identity: row.identity,
-    tier: tierFromCell(row.tier), cat: (row.category || '').toLowerCase(),
-    status: (row.status || '').toLowerCase(), effort: row.effort,
-    title: row.title.slice(0, 120),
-    source: row.kind === 'table' ? 'unified' : /^Now\b/i.test(row.lane) ? 'legacy-now' : 'legacy-next',
-    line: row.line, section: row.section, done: false,
-  }));
+  const items = [];
+  const unifiedSection = extractSection(content, 'Unified Genius List');
+  if (unifiedSection) {
+    const rows = unifiedSection.split(/\r?\n/).filter(l => /^\|\s*[\d.]+\s*\|/.test(l));
+    for (const row of rows) {
+      const cells = row.split('|').map(c => c.trim());
+      if (cells.length < 7) continue;
+      const [, rank, tierCell, cat, status, effort, item] = cells;
+      const tier = tierFromCell(tierCell);
+      const titleMatch = item.match(/\*\*(.+?)\*\*/);
+      const title = (titleMatch ? titleMatch[1] : item).slice(0, 120);
+      const isDone = /done/i.test(status) || /^done/i.test(status) || /✅/.test(tierCell);
+      items.push({
+        rank: parseFloat(rank),
+        tier,
+        cat: (cat || '').toLowerCase(),
+        status: (status || '').toLowerCase(),
+        effort,
+        title,
+        source: 'unified',
+        done: isDone,
+      });
+    }
+  }
+
+  // Fallback: legacy Now/Next buckets for repos that have not adopted the unified table.
+  if (items.length === 0) {
+    const nowLines = extractSection(content, 'Now').split(/\r?\n/).filter(l => /^- \[ \]/.test(l));
+    const nextLines = extractSection(content, 'Next').split(/\r?\n/).filter(l => /^- \[ \]/.test(l));
+    nowLines.forEach((l, i) => items.push({
+      rank: i + 1,
+      tier: 'critical',
+      cat: 'legacy',
+      status: 'unblocked',
+      effort: '',
+      title: l.replace(/^- \[ \]\s*/, '').replace(/\*\*/g, '').slice(0, 120),
+      source: 'legacy-now',
+      done: false,
+    }));
+    nextLines.forEach((l, i) => items.push({
+      rank: 100 + i,
+      tier: 'high',
+      cat: 'legacy',
+      status: 'unblocked',
+      effort: '',
+      title: l.replace(/^- \[ \]\s*/, '').replace(/\*\*/g, '').slice(0, 120),
+      source: 'legacy-next',
+      done: false,
+    }));
+  }
+
+  return items;
 }
 
-/**
- * Statuses that mean "cannot proceed". Substring matching is deliberate here — the real
- * boards write `blocked-on-hub`, `human-blocked`, `cross-repo-locked`, `awaiting-founder`
- * — but see the negation strip below before changing it.
- */
-const BLOCKING_STATUS = /block|lock|human|external|hub|gated|deferred|waiting|staged|pending|approval/i;
-
-/**
- * S312 — `unblocked` CONTAINS `blocked`.
- *
- * This function is the ONLY producer of the `blocked` bucket, and until S312 it asked
- * `BLOCKING_STATUS.test(status)` against the raw string. The single most common status on
- * every board is the literal word `unblocked`, which contains `block`, so the one value
- * that means "not blocked" was classified as blocked. Measured live at S312: 1126 of the
- * 1144 tasks the blocker DAG called blocked carried `status: "unblocked"` — 98.4%.
- *
- * The consequences were all downstream and all founder-facing. The startup brief's TOP
- * BLOCKER CASCADES tile published "blocked 1135 tasks · founder-gate 270 · credential 81"
- * from this number. S311 read the same number as evidence of 4.6x growth in blocked work
- * and opened `[SIL][S311 #2]` to raise blocker-taxonomy coverage above 75% — a coverage
- * gap that could never close, because no blocker taxonomy can classify tasks that are not
- * blocked. The real blocked population is ~18.
- *
- * Strip the negated form before asking the question. `human-blocked` and `blocked-on-hub`
- * are untouched by the strip (neither contains a standalone `unblocked` token), so every
- * genuinely-blocking status keeps its classification.
- */
 function classifyStatus(s) {
   // Returns 'unblocked' | 'blocked' | 'done'
   if (!s) return 'unblocked';
-  if (TERMINAL_TASK_STATUS.test(String(s).trim())) return 'done';
-  const withoutNegation = String(s).toLowerCase().replace(/\bun-?blocked\b/g, ' ');
-  if (BLOCKING_STATUS.test(withoutNegation)) return 'blocked';
+  if (/done/i.test(s)) return 'done';
+  if (/block|lock|human|external|hub|gated|deferred|waiting|staged|pending|approval/i.test(s)) return 'blocked';
   return 'unblocked';
 }
-
-export { classifyStatus, BLOCKING_STATUS };
 
 export function loadProjectTaskBoard(project) {
   if (!project?.localPath) return null;

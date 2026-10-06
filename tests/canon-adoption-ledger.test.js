@@ -11,11 +11,11 @@ describe("canon adoption ledger", () => {
     expect(JSON.parse(result.stdout)).toMatchObject({
       schemaVersion: "canon-adoption-ledger-v1",
       ok: true,
-      active: 54,
-      rows: 54,
+      active: 55,
+      rows: 55,
       adopted: 52,
       exempt: 2,
-      pending: 0,
+      pending: 1,
       evidenceComplete: true,
     });
   });

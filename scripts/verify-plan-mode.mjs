@@ -29,7 +29,7 @@
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { writeProjectStatus } from './lib/write-project-status.mjs';
+import { updateProjectStatusFile } from './lib/write-project-status.mjs';
 
 const ROOT = process.cwd();
 const args = process.argv.slice(2);
@@ -50,6 +50,31 @@ if (m) sessionStart = new Date(m[1]).getTime();
 
 const planModeRequired = !!status.modelPlanMode;
 const tier = status.modelTier || null;
+const agent = (lockText.match(/^agent:\s*(\S+)/m)?.[1] || status.lastAgent || '').toLowerCase();
+
+function stampPlanModeDetected(value) {
+  try {
+    updateProjectStatusFile(statusPath, (current) => ({
+      ...current,
+      planModeDetected: value,
+      planModeCheckedAt: new Date().toISOString(),
+    }), { touchLastUpdated: false });
+  } catch { /* non-fatal */ }
+  try {
+    if (fs.existsSync(lockPath)) {
+      const updated = lockText.includes('plan_mode_detected:')
+        ? lockText.replace(/plan_mode_detected:\s*\S+/, `plan_mode_detected: ${value}`)
+        : lockText.trimEnd() + `\nplan_mode_detected: ${value}\n`;
+      fs.writeFileSync(lockPath, updated);
+    }
+  } catch { /* non-fatal */ }
+}
+
+if (agent === 'codex') {
+  stampPlanModeDetected('not_required');
+  emit({ status: 'not_required', agent, tier, reason: 'Codex does not support Claude Code plan-mode; slash-mode activation is not required.' });
+  process.exit(0);
+}
 
 if (!planModeRequired) {
   emit({ status: 'not_required', tier, reason: 'tier does not require plan-mode' });
@@ -117,10 +142,13 @@ const result = {
 
 // Stamp status + lock
 try {
-  status.planModeDetected = result.status;
-  status.planModeCheckedAt = new Date().toISOString();
-  if (active) status.planModeLastActivatedAt = status.planModeLastActivatedAt || new Date().toISOString();
-  writeProjectStatus(ROOT, status, { touchLastUpdated: false });
+  const checkedAt = new Date().toISOString();
+  updateProjectStatusFile(statusPath, (current) => ({
+    ...current,
+    planModeDetected: result.status,
+    planModeCheckedAt: checkedAt,
+    ...(active ? { planModeLastActivatedAt: current.planModeLastActivatedAt || checkedAt } : {}),
+  }), { touchLastUpdated: false });
 } catch { /* non-fatal */ }
 try {
   if (fs.existsSync(lockPath)) {
