@@ -10,11 +10,11 @@
 ║  Live:  preview  →  https://callofdoodie.wtf/                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED · last 5 commits ═══════════════════════════════╗
+║  ✓ fix: simplify end-run submission, replay and sharing          ║
 ║  ✓ docs: synchronize final closeout board and validation counte  ║
 ║  ✓ docs: closeout S183 with verified production evidence         ║
 ║  ✓ fix: refresh generated public content date after release com  ║
 ║  ✓ feat: refine game setup, mode feedback and creature practice  ║
-║  ✓ docs: sync Studio OS 3 files [ci, protocol, skills]           ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 930/1000 ═══════════════════════════════════════╗
 ║    Dev Health         94   █████████░                            ║
@@ -41,8 +41,8 @@
 ║  · agent memory (Claude/Codex project memory)                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 98 files  ·  M:76 A:0 D:16 ?:6                         ║
-║  Ahead: 1  ·  Behind: 0                                          ║
+║  Changes: 17 files  ·  M:17 A:0 D:0 ?:0                          ║
+║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ DEPLOYMENT ══════════════════════════════════════════════════╗
@@ -52,10 +52,10 @@
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
 ║  Doctor:        157/233                                          ║
 ║  Compliance:    —                                                ║
-║  Tests:         291/291                                          ║
+║  Tests:         293/293                                          ║
 ║  Validation:    full-fresh                                       ║
 ║  IGNIS:         6d ago                                           ║
-║  Truth:         engineering-production-verified-measured-accept  ║
+║  Truth:         S184 end-run production verified; S183 comparat  ║
 ║  Sanitization:  2d ago                                           ║
 ║  shells:        unknown · missing/stale enumeration              ║
 ╚════════════════════════════════════════════════════════════════╝

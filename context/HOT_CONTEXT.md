@@ -4,6 +4,14 @@
 
 ## Current Session
 
+## S184 verified end-run deployment
+
+Gameplay source 9e6304be12f8979a59e6684c448c07e6808949b1 passed exact-main workflow 37421044480: 293/293 files, 1,954/1,954 tests, strict lint, configured build and Cloudflare deployment. Canonical callofdoodie.wtf reports 9e6304be12f8; immutable deployment https://000027d0.call-of-doodie.pages.dev/. Canonical browser checks pass all eight defeat/victory, theme and width cases, including actual clipboard writes/readback, share success/manual fallback, score-image downloads, expanded sections, short screens, keyboard/touch scroll and menu return. Canonical/immutable shell 7/7 each, domain routing 5/5, backend health 5/5, replay trust 3/3 and shared-leaderboard isolation pass.
+
+End states are assisted browser fixtures, and native share-sheet outcomes are API fixtures. No external message was sent; clipboard access and image downloads were real. Backend health exercised its existing valid/rejected submission contract. Existing S183 comparative work remains separate; no launch/lifecycle transition is claimed.
+
+Requested gameplay changes are complete. This records seal receives its own exact-main delivery check after push.
+
 ## S184 end-run candidate — 2026-10-06
 
 End-run results now show the score and Submit to leaderboard before optional content. Last words are optional and labelled. Submission is guarded against duplicate clicks and excludes practice, Operations, local-only modes and integrity failures. Play Again precedes optional coaching. Sharing has one run-link action with native/copy/manual feedback; score images and highlights are explicit downloads. Feedback, highlights and exports are optional. Bottom leaderboard/menu controls remain outside disclosures.
@@ -43,7 +51,6 @@ Requested rebuild and engineering deployment are complete. Records seal 2d0bdf9d
 ## Open Work
 
 ## Session 184 end-run delivery
-- [ ] [SIL:184] Verify exact-main CI and production deployment.
 ## S183 verified production follow-through
 ## Session 183 gameplay audit follow-through
 - [ ] Measure matched human/agent play outcomes and creature/music comprehension with actual participants.
@@ -97,14 +104,9 @@ Requested rebuild and engineering deployment are complete. Records seal 2d0bdf9d
 - [ ] Physical launch QA — verify one real gamepad/browser combo end-to-end
 - [ ] Real full-run media QA — on desktop verify the DeathScreen best-moment GIF encodes, plays, and shares without freezing; on mobile verify capture is skipped as designed
 - [ ] Create Itch.io listing and publish the prepared launch copy package from `docs/LAUNCH_EXECUTION.md`
+- [ ] Add `VITE_POSTHOG_KEY` to GitHub repo Settings → Secrets → Actions (workflow already wired in deploy.yml)
 
 ## Recent Decisions
-
-## 2026-10-03 — Session 182 explicit founder closeout
-
-Close the existing S182 delivery rather than count an extra implementation session. Preserve append-only historical records and add current acceptance above them. Use Studio Ark for central intelligence requests; a queued or shipped request is not proof that IGNIS applied a rescore. No gameplay, rights, spending or lifecycle decision changed.
-
-
 
 ## 2026-10-04 — Session 183 gameplay audit follow-through
 
@@ -127,9 +129,15 @@ Retain FORGE/public-unlaunched and all public-launch requirements. The central d
 
 Use native URL sharing directly in the click gesture; image generation runs as an explicit download. Await clipboard writes and expose a manual copy fallback. Use the existing version-2 scenario cartridge so all twelve catalog modes retain setup without truncating seeds. Do not offer online submission when App will skip it. Do not retry a consumed submission token. Restore incompatible startup propagation 2645460 as a complete batch to the previously verified public-compatible protocol; no caller assertions or test gates weakened. The writeback-currency warning for d9a04ba was a records-only final board synchronization, not omitted gameplay work. CANON-056 vocabulary audit remains pending with this justification: the bounded request changes end-run interaction, not studio terminology; no superintelligence claim is introduced.
 
+
+
+## S184 verified production follow-through
+
+Exact-source hosted CI and actual canonical runtime acceptance are the final delivery proof. The project-local ops doctor proxies the control-plane root and cannot prove this project; its live probe was stopped without accepting foreign output. Scoped project release/security/contracts and hosted tests supply delivery evidence. Central IGNIS/doctor follow-up and the incompatible propagation batch are transported through Ark, with no claim of recipient application.
+
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 254,429 bytes · SHA-256 `84bd4683c2af…`
-- `context/TASK_BOARD.md` · 177,249 bytes · SHA-256 `a4a49cd28ee3…`
-- `context/DECISIONS.md` · 170,276 bytes · SHA-256 `f4f2917dc485…`
+- `context/CURRENT_STATE.md` · 255,603 bytes · SHA-256 `a34e0c89eae1…`
+- `context/TASK_BOARD.md` · 177,280 bytes · SHA-256 `e33410622d65…`
+- `context/DECISIONS.md` · 170,791 bytes · SHA-256 `380940c308b0…`
 - `docs/AUDIT_2026-09-29_2.json` · 7,385 bytes · SHA-256 `cc01a284e112…`

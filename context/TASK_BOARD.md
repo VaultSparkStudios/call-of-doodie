@@ -2,12 +2,12 @@
 
 Requested: intuitive end-run screen, reliable sharing, visible leaderboard submission, direct-main commit/push and full deployment.
 
-Wave scaffold: Wave 1 inspect/capture done; Wave 2 implement/test done; Wave 3 staged, exact-main delivery pending.
+Wave scaffold: Wave 1 inspect/capture done; Wave 2 implement/test done; Wave 3 source deployed and verified. All four requested outcomes complete.
 
 - [x] [SIL:184] Prominent eligible submission and truthful local-only results.
 - [x] [SIL:184] Reliable consolidated sharing and explicit downloads.
 - [x] [SIL:184] Immediate replay controls and optional coaching/feedback/exports.
-- [ ] [SIL:184] Verify exact-main CI and production deployment.
+- [x] [SIL:184] Verify exact-main CI and production deployment.
 
 Assisted terminal states prove UI integration, not natural playthroughs or participant enjoyment. Native share/clipboard are browser API fixtures; no external message or online leaderboard row was sent. Operations links open the game home rather than claiming mission preservation. Existing eight S183 comparative outcomes remain pending and are outside this request. FORGE/public-unlaunched remains unchanged.
 

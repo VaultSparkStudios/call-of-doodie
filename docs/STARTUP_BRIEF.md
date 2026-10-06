@@ -20,13 +20,13 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ LAST SESSION (S184) - WHAT SHIPPED ══════════════════════════╗
-║  S184 end-run improvements staged; authorized exact-main delive  ║
+║  S184 end-run submission, replay and sharing deployed and verif  ║
 ║  Tests  -                                                        ║
 ║  Deploy -                                                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ WHERE TO TEST · Call-Of-Doodie ══════════════════════════════╗
-║  Unit tests    → npm test — 291/291 passing ✓                    ║
+║  Unit tests    → npm test — 293/293 passing ✓                    ║
 ║  hosted-visual-proof → session-169-staging · route/theme/wid ✓   ║
 ║  production-verification → source ca1324136f8c · workflow 34 ✓   ║
 ║  hosted-staging → session-170-staging · immutable 520a56d6 · ✓   ║
@@ -43,7 +43,7 @@
 ╔══ SCORE ═══════════════════════════════════════════════════════╗
 ║                                                                  ║
 ║    930/1000   ██████████████████████░░   93%                     ║
-║    SIL v3.0  ·  Avg3: 942.7  ·  Velocity 3→                      ║
+║    SIL v3.0  ·  Avg3: 934.3  ·  Velocity 3→                      ║
 ║    Last active: 0d  ·  Last closeout: 0d  ·  (active = newest…   ║
 ║    Trend  ▂▂▂▄▄  →  (last 5 sessions)                            ║
 ║                                                                  ║
@@ -64,19 +64,19 @@
 
 ╔══ WHERE WE LEFT OFF  ·  Session 184 ═══════════════════════════╗
 ║  Shipped:  see LATEST_HANDOFF.md                                 ║
-║  Tests:    291/291 passing  ·  Deploy: N/A                       ║
+║  Tests:    293/293 passing  ·  Deploy: N/A                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ⚠  ░░░░░░░░░░░░░░░░░░░░░░░░    1% used                          ║
-║     321,344 / 272,000 tok  ·  codex  ·  heuristic-stale          ║
+║  ⚠  ░░░░░░░░░░░░░░░░░░░░░░░░    2% used                          ║
+║     322,620 / 200,000 tok  ·  unknown  ·  heuristic-stale        ║
 ║     Verdict: CONSIDER_CLOSEOUT  ← act now                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         291/291 passing (2026-10-05T01:22:09Z)         ║
+║  ✓  Tests         293/293 passing (2026-10-06T06:03:13.381Z)     ║
 ║  ✓  Velocity      3   ·  Debt: →                                 ║
-║  ✓  Runway        S183 production verified; eight measured…      ║
+║  ✓  Runway        S184 end-run production verified               ║
 ║  ⛔  Context age   ?d                                             ║
 ║  ✓  IGNIS         44206 FORGE  ·  6d old                         ║
 ║  ⛔  Truth         S183 engineering delivery verified on…         ║

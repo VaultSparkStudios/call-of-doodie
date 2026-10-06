@@ -1262,10 +1262,10 @@ SIL +10: Closed five founder-visible defects and all four fresh audit items: Ene
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Avgs — 3: 942.7 | 5: 947.8
-Velocity trend: technical acceptance advanced | Debt: flat
-Momentum runway: S183 production verified; eight measured comparisons pending | Intent rate: partial comparative acceptance
-Last session: 2026-10-04 | Session 183 | Total: 922/1000 | Velocity: 12 | protocolVelocity: 12
+Avgs — 3: 934.3 | 5: 942.4
+Velocity trend: end-run flow deployed | Debt: flat
+Momentum runway: S184 end-run production verified | Intent rate: requested end-run outcome complete
+Last session: 2026-10-06 | Session 184 | Total: 930/1000 | Velocity: 3 | protocolVelocity: 3
 <!-- rolling-status-end -->
 
 ## 2026-06-05 — Session 81 | Total: 1000/1000 | Velocity: 1 | Debt: ↓
@@ -3500,3 +3500,10 @@ End-run results now show the score and Submit to leaderboard before optional con
 Staging https://aa2065a8.call-of-doodie.pages.dev passed shell 7/7 and eight actual-app ending cases across defeat/victory, dark/light and 390/1440px, including short screens, touch, keyboard End and menu return. Eight share checks covered native API fixture success, clipboard success/denial, manual selectable links and real score-image downloads. 92 before/after captures were directly inspected and hash-bound; CANON-053 passed. Submission behavior tests cover pending/double click, online rank, local/rejected states and eligibility. Exact-main CI and production verification remain pending.
 
 Learning: brief coaching should not displace immediate replay or submission. Sharing needs observable outcomes for unavailable browser APIs. A propagated utility batch must retain the project's public-compatible caller contracts.
+
+
+## S184 verified production follow-through
+
+Gameplay source 9e6304be12f8979a59e6684c448c07e6808949b1 passed exact-main workflow 37421044480: 293/293 files, 1,954/1,954 tests, strict lint, configured build and Cloudflare deployment. Canonical callofdoodie.wtf reports 9e6304be12f8; immutable deployment https://000027d0.call-of-doodie.pages.dev/. Canonical browser checks pass all eight defeat/victory, theme and width cases, including actual clipboard writes/readback, share success/manual fallback, score-image downloads, expanded sections, short screens, keyboard/touch scroll and menu return. Canonical/immutable shell 7/7 each, domain routing 5/5, backend health 5/5, replay trust 3/3 and shared-leaderboard isolation pass.
+
+End states are assisted browser fixtures, and native share-sheet outcomes are API fixtures. No external message was sent; clipboard access and image downloads were real. Backend health exercised its existing valid/rejected submission contract. Existing S183 comparative work remains separate; no launch/lifecycle transition is claimed.
