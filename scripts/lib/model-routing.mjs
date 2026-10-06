@@ -13,7 +13,7 @@
  *
  * The two hard rules this module enforces:
  *   1. A pin must be a FLOATING alias (`opus`, `opus[1m]`, `sonnet`, …), never a
- *      dated model snapshot. A dated ID reads correct the day
+ *      dated snapshot (`claude-opus-4-8[1m]`). A dated ID reads correct the day
  *      it is written and then silently decays as newer models ship.
  *   2. An unrecognized predicate in a derivation step THROWS. The rule this
  *      replaced failed silently — it tested `developmentPhase === 'active'`
@@ -30,7 +30,7 @@ import path from 'node:path';
  * ONLY values allowed in a `.claude/settings.json` "model" field.
  *
  * Deliberately an allowlist, not a `claude-*` blocklist: a future
- * a future versioned model ID is just as stale-prone as today's versioned IDs,
+ * `claude-opus-6[1m]` is just as stale-prone as today's `claude-opus-4-8[1m]`,
  * and only an allowlist catches the one that hasn't been released yet.
  */
 export const FLOATING_MODEL_RE = /^(default|opus|sonnet|haiku)(\[1m\])?$/;

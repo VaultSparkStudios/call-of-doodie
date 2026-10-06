@@ -53,7 +53,13 @@ export function ensureAges(taskBoardText, opts = {}) {
   const ledger = readLedger(root);
   const items = parseHumanItems(taskBoardText);
   const today = new Date().toISOString().slice(0, 10);
-  const session = opts.currentSession || null;
+  // S337 — resolve the session when the caller does not supply one. Every one of the
+  // four call sites omitted `currentSession`, so `session` was null for all 8 rows in
+  // the ledger: a recorded field that had never once held a value. Read from
+  // PROJECT_STATUS.json (a plain file read, no spawn — this runs in the startup-brief
+  // hot path). Still null if that cannot be resolved, which is honest; the consumers
+  // use `firstSeen` and none of them coerce a null session.
+  const session = opts.currentSession ?? resolveSessionFromStatus(root);
   let dirty = false;
 
   // Add any new items with today's date.
@@ -82,3 +88,14 @@ export function daysSince(isoDate) {
   if (!Number.isFinite(d)) return null;
   return Math.floor((Date.now() - d) / 86400000);
 }
+
+function resolveSessionFromStatus(root) {
+  try {
+    const status = JSON.parse(fs.readFileSync(path.join(root, 'context', 'PROJECT_STATUS.json'), 'utf8'));
+    for (const candidate of [status.currentSession, status.lastSession, status.silLastSession]) {
+      if (typeof candidate === 'number' && Number.isFinite(candidate)) return candidate;
+    }
+  } catch { /* absent or malformed — the session stays unknown */ }
+  return null;
+}
+

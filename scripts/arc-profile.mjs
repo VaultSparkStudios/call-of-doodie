@@ -15,6 +15,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import url from 'node:url';
 import { projectMedium } from './lib/media-profile.mjs';
+import { deriveLifecycleFocus } from './lib/lifecycle-skill-profile.mjs';
 
 const HERE = path.dirname(url.fileURLToPath(import.meta.url));
 const REGISTRY = path.join(HERE, '..', 'portfolio', 'PROJECT_REGISTRY.json');
@@ -101,6 +102,11 @@ export function deriveOutwardActions({ deployableSurfaces = [], hasStaging = fal
 }
 
 export function deriveProfile(entry, basename = '', targetDir = null) {
+  let projectStatus = {};
+  if (targetDir) {
+    try { projectStatus = JSON.parse(fs.readFileSync(path.join(targetDir, 'context', 'PROJECT_STATUS.json'), 'utf8')); } catch {}
+  }
+  const lifecycleFocus = deriveLifecycleFocus(entry || {}, projectStatus);
   const slug = entry?.slug || basename;
   const audience = entry?.audience || 'internal';
   const vaultStatus = String(entry?.vaultStatus || 'forge').toUpperCase();
@@ -160,7 +166,7 @@ export function deriveProfile(entry, basename = '', targetDir = null) {
             : 'none — push straight to main'));
 
   const outwardActions = deriveOutwardActions({ deployableSurfaces, hasStaging, stagingType, sanitizeBeforePush });
-  return { slug, basename, type, medium: projectMedium(entry || {}), audience, vaultStatus, stagingType, hasStaging, deployableSurfaces, hasDeployableSurfaces, sanitizeBeforePush, rubric, gitWorkflow, gitReason, auditLens, stagingGate, outwardActions, registryMatched: !!entry };
+  return { slug, basename, type, medium: projectMedium(entry || {}), audience, vaultStatus, lifecycleFocus, stagingType, hasStaging, deployableSurfaces, hasDeployableSurfaces, sanitizeBeforePush, rubric, gitWorkflow, gitReason, auditLens, stagingGate, outwardActions, registryMatched: !!entry };
 }
 
 // One-call resolver: profile for an arbitrary project directory. Reused by the
@@ -181,7 +187,9 @@ export function profileFor(targetDir = process.cwd()) {
     try { localEntry = JSON.parse(fs.readFileSync(path.join(path.resolve(targetDir), 'context', 'PROJECT_STATUS.json'), 'utf8')); } catch {}
   }
   const sourceEntry = entry || localEntry;
-  return { ...deriveProfile(sourceEntry, basename, targetDir), registryMatched: !!entry, profileSource: entry ? 'registry' : localEntry ? 'project-status' : 'fallback', entry: sourceEntry };
+  const profile = deriveProfile(sourceEntry, basename, targetDir);
+  if (!entry) profile.lifecycleFocus = deriveLifecycleFocus({}, localEntry || {});
+  return { ...profile, registryMatched: !!entry, profileSource: entry ? 'registry' : localEntry ? 'project-status' : 'fallback', entry: sourceEntry };
 }
 
 // CLI guard — only run the human/JSON output when invoked directly, not on import.
@@ -196,6 +204,7 @@ if (process.argv[1] && url.pathToFileURL(process.argv[1]).href === import.meta.u
     console.log(`arc profile · ${profile.slug}${profile.registryMatched ? '' : ' (NOT in registry — inferred)'}`);
     console.log(`  type=${profile.type} · audience=${profile.audience} · vaultStatus=${profile.vaultStatus}`);
     console.log(`  SIL rubric=${profile.rubric} · audit lens=${profile.auditLens}`);
+    console.log(`  lifecycle=${profile.lifecycleFocus.display} · focus=${profile.lifecycleFocus.mode} · health=${profile.lifecycleFocus.health}`);
     console.log(`  git=${profile.gitWorkflow}  (${profile.gitReason})`);
     console.log(`  staging=${profile.stagingGate}`);
     console.log(`  deployable surfaces=${profile.deployableSurfaces.length ? profile.deployableSurfaces.map((surface) => surface.id).join(', ') : 'none'}`);

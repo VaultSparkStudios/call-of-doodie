@@ -18,7 +18,7 @@
  * The repair is not a wider regex. It is one definition, imported by both, plus an
  * `undiscovered` bucket so that any future filter which drops files has to SAY so.
  */
-import { readdirSync } from 'node:fs';
+import { readdirSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 
 /** Files prefixed `_` are shared harness/fixture modules, not tests. */
@@ -40,6 +40,25 @@ export function discoverSuiteFiles(testDir) {
   return entries
     .filter((f) => f.endsWith('.mjs') && !isHarnessModule(f))
     .sort();
+}
+
+/** Complete runner inventory: central suite, legacy scripts and IGNIS. */
+export function discoverSuiteInventory(root, { tier = null } = {}) {
+  const files = [];
+  const testDir = join(root, 'scripts', 'test');
+  for (const name of discoverSuiteFiles(testDir)) {
+    if (tier && !name.startsWith(`tier${tier}-`)) continue;
+    files.push({ tier: tierOf(name), path: join(testDir, name), kind: 'node' });
+  }
+  const scripts = join(root, 'scripts');
+  if (existsSync(scripts) && (!tier || tier === 'legacy')) {
+    for (const name of readdirSync(scripts)) if (/^test-.*\.mjs$/.test(name)) files.push({ tier: 'legacy', path: join(scripts, name), kind: 'node' });
+  }
+  const ignis = join(root, 'ignis', 'src');
+  if (existsSync(ignis) && (!tier || tier === 'ignis')) {
+    for (const name of readdirSync(ignis)) if (/^test-.*\.ts$/.test(name)) files.push({ tier: 'ignis', path: join(ignis, name), kind: 'tsx' });
+  }
+  return files.sort((a, b) => a.tier.localeCompare(b.tier) || a.path.localeCompare(b.path));
 }
 
 /**

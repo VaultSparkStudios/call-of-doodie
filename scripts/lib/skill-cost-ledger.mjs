@@ -16,12 +16,26 @@ import fs from 'fs';
 import os from 'os';
 import path from 'path';
 
-export const LEDGER_RELATIVE_PATH = path.join('.cache', 'skill-costs.jsonl');
-const MANIFEST = path.join(os.homedir(), '.claude', 'skills', 'MANIFEST.json');
+const LEDGER = path.join('.cache', 'skill-costs.jsonl');
+
+/** Resolve the skills manifest at CALL time, never at import time.
+ *
+ * S343: this was a module-level `const` computed from os.homedir() when the
+ * module first loaded. Every caller therefore read the REAL home directory, so
+ * a test that synthesizes a manifest and redirects USERPROFILE/HOME was silently
+ * ignored — lifecycle's SLO-guard case only ever passed because the developer's
+ * own ~/.claude/skills/MANIFEST.json happened to declare studio-start with an
+ * 8000-token budget. It went red the moment that file was absent, having never
+ * once exercised its own fixture. Resolving per call makes the fixture real
+ * (os.homedir() reads USERPROFILE/HOME at call time) and costs one path.join.
+ */
+function manifestPath() {
+  return path.join(os.homedir(), '.claude', 'skills', 'MANIFEST.json');
+}
 
 function readManifestSlo(skill) {
   try {
-    const m = JSON.parse(fs.readFileSync(MANIFEST, 'utf8'));
+    const m = JSON.parse(fs.readFileSync(manifestPath(), 'utf8'));
     return m.skills?.[skill]?.slo || null;
   } catch { return null; }
 }
@@ -31,7 +45,7 @@ function readManifestSlo(skill) {
  * @param {object} info { skill, sessionId, actualTokens, durationSec?, status? }
  */
 export function recordSkillCost(repoRoot, info) {
-  const ledgerPath = path.join(repoRoot, LEDGER_RELATIVE_PATH);
+  const ledgerPath = path.join(repoRoot, LEDGER);
   fs.mkdirSync(path.dirname(ledgerPath), { recursive: true });
   const slo = readManifestSlo(info.skill);
   const entry = {
@@ -39,11 +53,17 @@ export function recordSkillCost(repoRoot, info) {
     skill: info.skill,
     sessionId: info.sessionId || null,
     medium: info.medium || null,
-    phase: info.phase || null,
-    step: info.step || null,
-    model: info.model || null,
     slo: slo ? { tokenBudget: slo.tokenBudget, wallClockMaxSec: slo.wallClockMaxSec } : null,
     actual: { tokens: info.actualTokens ?? null, durationSec: info.durationSec ?? null },
+    measurement: { tokenSource: info.tokenSource || (info.actualTokens == null ? 'unmeasured' : 'caller-reported'), durationScope: info.durationScope || null },
+    provenance: info.provenance ? {
+      taskClass: info.provenance.taskClass ?? null, experimentId: info.provenance.experimentId ?? null,
+      model: info.provenance.model ?? null, runtime: info.provenance.runtime ?? null,
+      requestIds: info.provenance.requestIds ?? [], inputSha256: info.provenance.inputSha256 ?? null,
+      comparisonSha256: info.provenance.comparisonSha256 ?? null,
+    } : null,
+    billing: {basis:info.billing?.basis || 'unmeasured',billedUSD:info.billing?.basis==='metered-api'&&Number.isFinite(info.billing?.billedUSD)&&info.billing.billedUSD>=0&&info.billing?.invoiceRef?info.billing.billedUSD:null,invoiceRef:info.billing?.invoiceRef||null},
+    ...(info.estimatedTokens != null ? { estimate: { tokens: info.estimatedTokens, method: info.estimateMethod || 'unspecified', scope: info.estimateScope || null } } : {}),
     overrun: slo?.tokenBudget && info.actualTokens
       ? { tokens: Math.max(0, info.actualTokens - slo.tokenBudget),
           pct: Math.round(((info.actualTokens - slo.tokenBudget) / slo.tokenBudget) * 100) }
@@ -52,42 +72,29 @@ export function recordSkillCost(repoRoot, info) {
     // S156 #14 — optional §-step decomposition [{id, tokens}] incl. residual
     // "(unattributed)" bucket; sum reconciles with actual.tokens.
     ...(info.steps?.length ? { steps: info.steps } : {}),
+    ...(info.estimatedSteps?.length ? { estimatedSteps: info.estimatedSteps } : {}),
   };
   fs.appendFileSync(ledgerPath, JSON.stringify(entry) + '\n');
   return entry;
 }
 
-export function readSkillCostLedger(repoRoot) {
-  const ledgerPath = path.join(repoRoot, LEDGER_RELATIVE_PATH);
-  if (!fs.existsSync(ledgerPath)) return { path: ledgerPath, entries: [], totalRows: 0, malformedRows: 0 };
-  const rows = fs.readFileSync(ledgerPath, 'utf8').split('\n').filter(Boolean);
-  const entries = [];
-  let malformedRows = 0;
-  for (const row of rows) {
-    try { entries.push(JSON.parse(row)); } catch { malformedRows += 1; }
-  }
-  return { path: ledgerPath, entries, totalRows: rows.length, malformedRows };
-}
-
-export function skillCostLedgerReceipt(repoRoot) {
-  const ledger = readSkillCostLedger(repoRoot);
-  return {
-    schemaVersion: 'execution-budget-ledger-v1',
-    ok: ledger.malformedRows === 0,
-    semantics: 'flat-rate-plan-token-efficiency-not-cash-spend',
-    path: path.relative(repoRoot, ledger.path).replace(/\\/g, '/'),
-    entries: ledger.entries.length,
-    totalRows: ledger.totalRows,
-    malformedRows: ledger.malformedRows,
-    lastEntryAt: ledger.entries.at(-1)?.ts || null,
-  };
+/** Older startup producers recorded brief byte estimates as actual usage.
+ * Normalize on read; retain the original append-only ledger bytes. */
+export function normalizeSkillCost(entry) {
+  if (!entry || !['start', 'start-v5'].includes(entry.skill) || entry.measurement || entry.actual?.tokens == null) return entry;
+  return { ...entry, actual: { ...entry.actual, tokens: null },
+    estimate: { tokens: entry.actual.tokens, method: 'legacy-brief-bytes/4', scope: 'rendered-brief' },
+    measurement: { tokenSource: 'unmeasured', durationScope: null }, overrun: null };
 }
 
 /**
  * Most-recent entries from the ledger, optionally filtered to a skill.
  */
 export function recentSkillCosts(repoRoot, { skill, limit = 10 } = {}) {
-  const parsed = readSkillCostLedger(repoRoot).entries;
+  const p = path.join(repoRoot, LEDGER);
+  if (!fs.existsSync(p)) return [];
+  const lines = fs.readFileSync(p, 'utf8').trim().split('\n').filter(Boolean);
+  const parsed = lines.map(l => { try { return normalizeSkillCost(JSON.parse(l)); } catch { return null; } }).filter(Boolean);
   const filtered = skill ? parsed.filter(e => e.skill === skill) : parsed;
   return filtered.slice(-limit).reverse();
 }
@@ -109,10 +116,10 @@ export function priorOverrun(repoRoot, skill) {
  * for skills with ≥threshold consecutive overruns in their most-recent runs.
  */
 export function detectRegressions(repoRoot, { threshold = 3, lookback = 5 } = {}) {
-  const p = path.join(repoRoot, LEDGER_RELATIVE_PATH);
+  const p = path.join(repoRoot, LEDGER);
   if (!fs.existsSync(p)) return [];
   const lines = fs.readFileSync(p, 'utf8').trim().split('\n').filter(Boolean);
-  const parsed = lines.map(l => { try { return JSON.parse(l); } catch { return null; } }).filter(Boolean);
+  const parsed = lines.map(l => { try { return normalizeSkillCost(JSON.parse(l)); } catch { return null; } }).filter(Boolean);
   const bySkill = new Map();
   for (const e of parsed) {
     if (!e.skill) continue;
@@ -148,10 +155,10 @@ export function detectRegressions(repoRoot, { threshold = 3, lookback = 5 } = {}
  * Returns [{ skill, consecutive, lastPct, budget, lastActual, hint }].
  */
 export function detectSevereOverruns(repoRoot, { pctThreshold = 50, consecutive = 2, lookback = 6 } = {}) {
-  const p = path.join(repoRoot, LEDGER_RELATIVE_PATH);
+  const p = path.join(repoRoot, LEDGER);
   if (!fs.existsSync(p)) return [];
   const lines = fs.readFileSync(p, 'utf8').trim().split('\n').filter(Boolean);
-  const parsed = lines.map(l => { try { return JSON.parse(l); } catch { return null; } }).filter(Boolean);
+  const parsed = lines.map(l => { try { return normalizeSkillCost(JSON.parse(l)); } catch { return null; } }).filter(Boolean);
   const bySkill = new Map();
   for (const e of parsed) {
     if (!e.skill) continue;
@@ -189,9 +196,10 @@ export function detectSevereOverruns(repoRoot, { pctThreshold = 50, consecutive 
  */
 export function flagRegressionsInManifest(repoRoot, opts = {}) {
   const regressions = detectRegressions(repoRoot, opts);
-  if (!fs.existsSync(MANIFEST)) return 0;
+  const manifest = manifestPath();
+  if (!fs.existsSync(manifest)) return 0;
   try {
-    const m = JSON.parse(fs.readFileSync(MANIFEST, 'utf8'));
+    const m = JSON.parse(fs.readFileSync(manifest, 'utf8'));
     if (!m.skills) return 0;
     let flagged = 0;
     for (const [skill, spec] of Object.entries(m.skills)) {
@@ -203,7 +211,7 @@ export function flagRegressionsInManifest(repoRoot, opts = {}) {
         delete spec.regressionFlag;
       }
     }
-    fs.writeFileSync(MANIFEST, JSON.stringify(m, null, 2) + '\n');
+    fs.writeFileSync(manifest, JSON.stringify(m, null, 2) + '\n');
     return flagged;
   } catch { return 0; }
 }
@@ -232,4 +240,4 @@ export function recommendedBudget(repoRoot, skill, medium) {
   return { source: 'default', budget: 5000, medium };
 }
 
-export default { recordSkillCost, readSkillCostLedger, skillCostLedgerReceipt, recentSkillCosts, priorOverrun, detectRegressions, detectSevereOverruns, flagRegressionsInManifest, mediumBucketAvg, recommendedBudget };
+export default { recordSkillCost, recentSkillCosts, priorOverrun, detectRegressions, detectSevereOverruns, flagRegressionsInManifest, mediumBucketAvg, recommendedBudget };

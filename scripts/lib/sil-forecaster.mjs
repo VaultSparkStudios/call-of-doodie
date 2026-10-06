@@ -38,12 +38,9 @@ export function parseSilHistory(silText, maxSessions = 5) {
 export function forecastNext(sessions, signals = {}) {
   // signals: { velocity, blockerPressure, contextAge, unblocked }
   if (!sessions.length) return null;
-  const validSessions = sessions.filter((session) =>
-    CATEGORIES.every((category) => typeof session?.categories?.[category] === 'number'));
-  if (!validSessions.length) return null;
   const forecast = {};
   for (const cat of CATEGORIES) {
-    const series = validSessions.map(s => s.categories[cat]).filter(n => typeof n === 'number');
+    const series = sessions.map(s => s.categories[cat]).filter(n => typeof n === 'number');
     if (!series.length) { forecast[cat] = { predicted: null, confidence: 'none' }; continue; }
     // Simple AR(1): predict = last + alpha * (last - last-1), clamped 0..100
     const last = series[0];
@@ -70,8 +67,7 @@ export function forecastNext(sessions, signals = {}) {
   const totalPred = Object.values(forecast)
     .filter(f => f.predicted != null)
     .reduce((sum, f) => sum + f.predicted, 0);
-  if (totalPred === 0) return null;
-  return { categories: forecast, totalPredicted: totalPred, basis: validSessions.length };
+  return { categories: forecast, totalPredicted: totalPred, basis: sessions.length };
 }
 
 export function renderForecastBlock(forecast, currentTotal = null) {

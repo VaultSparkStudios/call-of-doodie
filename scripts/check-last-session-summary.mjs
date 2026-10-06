@@ -16,7 +16,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { latestSilSession as latestLedgerSession, parseSilSessions } from './lib/sil-ledger.mjs';
-import { updateProjectStatusFile } from './lib/write-project-status.mjs';
+import { writeProjectStatus } from './lib/write-project-status.mjs';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const JSON_OUT = process.argv.includes('--json');
@@ -114,10 +114,7 @@ export function fix(root = ROOT) {
     status.lastSessionSummary = derived;
     healedFrom = 'sil-ledger';
   }
-  updateProjectStatusFile(statusPath, (current) => ({
-    ...current,
-    lastSessionSummary: status.lastSessionSummary,
-  }), { touchLastUpdated: false });
+  writeProjectStatus(root, status, { touchLastUpdated: false });
   const after = evaluateLastSessionSummary({ status, silText });
   return { ...after, healed: true, reason: `healed from ${healedFrom} → S${after.actual}` };
 }

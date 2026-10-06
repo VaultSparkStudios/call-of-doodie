@@ -8,13 +8,34 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { extractSessionId } from './session-reference.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, '..', '..');
 
 const W  = 62;
 const BW = W + 4;
+
+// Parsing contracts shared by brief-diff and brief-delta. Keep these exact:
+// narrow uppercase titles, last duplicate wins, one border stripped before
+// trimming, and null when the SIL score shape is absent.
+export function extractBriefBlocks(text) {
+  const re = /╔══\s*([A-Z][A-Z 0-9·]+?)\s*═+╗\s*\n([\s\S]*?)╚═+╝/g;
+  const blocks = {};
+  for (const match of text.matchAll(re)) blocks[match[1].trim()] = match[2];
+  return blocks;
+}
+
+export function extractBriefSilScore(text) {
+  const match = text.match(/(\d{3,4})\/1000\s+[█░]+\s+(\d+)%/);
+  return match ? { score: parseInt(match[1], 10), pct: parseInt(match[2], 10) } : null;
+}
+
+export function extractBriefRows(block) {
+  return (block || '')
+    .split(/\r?\n/)
+    .map((line) => line.replace(/^║/, '').replace(/║$/, '').trim())
+    .filter(Boolean);
+}
 
 function pad(s, w) { const str = String(s ?? ''); return str.length >= w ? str.slice(0, w) : str + ' '.repeat(w - str.length); }
 function row(content) { return `║  ${pad(content, W)}  ║`; }
@@ -55,7 +76,7 @@ export function renderTitleHeader({ name, type, lifecycle, audience, vaultStatus
  */
 export function renderLastCompleted(summary, opts = {}) {
   if (typeof summary === 'string') {
-    const session = extractSessionId(summary)?.toString() || '?';
+    const session = summary.match(/\bS(\d+)\b/i)?.[1] || '?';
     const expected = opts.expectedSession != null ? String(opts.expectedSession) : null;
     if (expected && session !== '?' && session !== expected) {
       const fallback = opts.fallback || 'Use WHERE WE LEFT OFF and CURRENT_STATE for the live latest-session summary.';

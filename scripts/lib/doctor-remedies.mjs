@@ -35,9 +35,25 @@ export const REMEDIES = {
 // Unannotated entries default to 'remediate' (back-compatible).
 export const HEAL_MAP = {
   'router-catalog-fresh': { script: 'build-skill-catalog.mjs',      args: [],          label: 'rebuild skill router catalog',          kind: 'remediate' },
-  'compliance-velocity': { script: 'track-compliance-velocity.mjs', args: ['--json'], label: 'refresh compliance velocity',           kind: 'remediate' },
+  // S317 [audit #3] — refresh-only, and the fix is not ours to make. The probe is
+  // red because veilos and shadow fail, and CANON-018 forbids writing to a sibling
+  // repo. track-compliance-velocity re-runs fleet validation and rewrites
+  // COMPLIANCE_HISTORY.json — it works, and it changes nothing about those two.
+  // Typed 'remediate' it advertised a fix that no run here can deliver, which is
+  // how it accumulated a five-session drift streak.
+  'compliance-velocity': { script: 'track-compliance-velocity.mjs', args: ['--json'], label: 'refresh compliance velocity',           kind: 'refresh', remediation: 'ship canon-conformance cargo to veilos + shadow (CANON-018) — the failing rows are sibling-owned' },
   'ignis':               { script: 'rescore-ignis.mjs',             args: ['--stale'], label: 'refresh stale IGNIS scores',            kind: 'remediate' },
-  'tests':               { script: 'refresh-test-count.mjs',        args: [],          label: 'refresh test-count cache',              kind: 'remediate' },
+  // S317 [audit #3] — THE REMEDY MUST CARRY --full OR IT CANNOT CLEAR THE PROBE.
+  //
+  // `tests` is non-green solely because the run is BOUNDED: lib/test-signal.mjs
+  // sets bounded when structuredDeferred > 0, and run-doctor gates pass on
+  // sev === 'ok', which a bounded signal never reaches. Counts are otherwise
+  // perfect (545/545 files, 3632/3632 assertions). The two deferred files are the
+  // hardcoded LONG_RUNNING set in refresh-test-count.mjs, and that script excludes
+  // them UNCONDITIONALLY unless --full is passed. So the published remedy
+  // reproduced the identical red every time it ran — five sessions of drift that
+  // looked like "a fix nobody ran" and was actually a fix that could not work.
+  'tests':               { script: 'refresh-test-count.mjs',        args: ['--full'],  label: 'refresh test-count cache (full — a bounded run can never clear this probe)', kind: 'remediate' },
   'test-suite-freshness': { script: 'refresh-test-count.mjs',       args: [],          label: 'refresh test-count cache',              kind: 'remediate' },
   // refresh-only: ark-harbormaster --dry-run recomputes the harbor report but
   // ships nothing and cannot drain a RECEIVING port's inbox (that is the
@@ -55,7 +71,13 @@ export const HEAL_MAP = {
   // remediation is per-project (publish a Feed v1 document), which is a
   // cross-repo write and therefore deliberately not auto-healed.
   'analytica-feed-coverage': { script: 'collect-analytica-feeds.mjs', args: [],        label: 'recollect Analytica feeds',             kind: 'refresh', remediation: 'publish an Analytica Feed v1 document per project (docs/ANALYTICA_FEED_SPEC.md)' },
-  'maintenance-overdue': { script: 'run-maintenance.mjs',          args: ['--apply', '--auto'], label: 'run safe due maintenance jobs', kind: 'remediate' },
+  // S311 measured this remedy's reach and S312 records it: `--apply --auto` cleared 1 of
+  // 11 due jobs. 4 are deferred by the session's OWN lock and 6 require
+  // `--allow-network`/`--allow-destructive`, so the declared fix cannot clear the probe
+  // from inside a session. The lock deferral is invisible to any flag scan, which is why
+  // `gates` is declarable — check-remedy-drift reads it to report CANNOT-RUN-HERE rather
+  // than ranking this beside a one-command fix nobody bothered to run.
+  'maintenance-overdue': { script: 'run-maintenance.mjs',          args: ['--apply', '--auto'], label: 'run safe due maintenance jobs', kind: 'remediate', gates: ['session-lock', 'network', 'destructive'] },
   // S210 — lastSessionSummary had a detector but no writer, so it silently went stale
   // (S208 prose survived the S209 closeout). --fix mirrors the agent-maintained
   // currentFocus into lastSessionSummary when currentFocus names the expected session;
@@ -112,6 +134,32 @@ export function isSelfRemediable(id, { healMap = HEAL_MAP, remedies = REMEDIES, 
 // warn/pass/skip — see run-doctor.mjs).
 export const DRIFT_META = {
   manifest:              { driftClass: 'local-broken', blocking: true },
+  // S288 [audit item 2] — studio-ops genuinely owns the CPX51 disk healer, so
+  // the provenance-derived default would make this blocking. Explicitly NOT:
+  // this probe DIAGNOSES the already-blocking cpx-capacity-admission fault by
+  // reading the healer's own receipt. Two blockers for one live condition
+  // double-count a single outage and make "blockingFailing" stop meaning
+  // "distinct things are broken". It stays local-broken (it IS our breakage
+  // when it fires) and non-blocking (it is the explanation, not the fault).
+  'cpx-reclaim-efficacy': { driftClass: 'local-broken', blocking: false },
+  // Same reasoning: these DIAGNOSE rather than gate. `remediation-efficacy` is
+  // deliberately non-blocking on its first session — a coverage lint promoted to
+  // blocking before it has run a full cycle blocks on evidence that does not
+  // exist yet (the S243 pattern). Promote once it has a clean cycle behind it.
+  'release-retention-efficacy': { driftClass: 'local-broken', blocking: false },
+  'remediation-efficacy':       { driftClass: 'local-broken', blocking: false },
+  // S289 — reports header-vs-ledger drift; the remedy is running the producer, so this
+  // diagnoses rather than gates. Non-blocking until it has clean cycles behind it.
+  'sil-rolling-header-currency': { driftClass: 'local-broken', blocking: false },
+  // S289 — ratchet against recorded debt; diagnoses a growing conflation count.
+  'null-vs-absent-ratchet':     { driftClass: 'local-broken', blocking: false },
+  'falsy-legitimate-contracts': { driftClass: 'local-broken', blocking: false },
+  'ranked-summary-contracts':   { driftClass: 'local-broken', blocking: false },
+  'sibling-adoption-proof':     { driftClass: 'portfolio-outdated', blocking: false },
+  'bound-enforcement':          { driftClass: 'local-broken', blocking: false },
+  'diagnosis-aging':            { driftClass: 'local-broken', blocking: false },
+  // S289 — reads the resume healer's own receipt; diagnoses, never gates.
+  'stalled-resume-efficacy':    { driftClass: 'local-broken', blocking: false },
   validate:              { driftClass: 'portfolio-outdated', blocking: false },
   canon:                 { driftClass: 'portfolio-outdated', blocking: false },
   'compliance-velocity': { driftClass: 'portfolio-outdated', blocking: false },
@@ -126,6 +174,14 @@ export const DRIFT_META = {
   'codex-trusted-project': { driftClass: 'local-broken', blocking: false },
   'registry-drift':      { driftClass: 'portfolio-outdated', blocking: false },
   'launch-truth-drift':  { driftClass: 'portfolio-outdated', blocking: false },
+  // S338 — self-OWNED corpus (WARNING_PROVENANCE owner=self: studio-ops owns the
+  // Analytica Feed v1 ingest), but since S337 [D-S337.5] its remaining red is
+  // sibling feeds publishing invalid documents, delivered back by
+  // `--ship-defects`, and its detail says so ("sibling-owned (feed producers: …)").
+  // With no entry here it defaulted to local-broken, and the emitted-semantics check
+  // correctly flagged the contradiction for the whole session. The drift KIND is
+  // "portfolio copies are behind" — same reasoning as agents-md-drift (S171).
+  'analytica-feed-coverage': { driftClass: 'portfolio-outdated', blocking: false },
 
   'website-products-drift': { driftClass: 'expected-external', blocking: false },
   'studio-os-conformance': { driftClass: 'portfolio-outdated', blocking: false },
