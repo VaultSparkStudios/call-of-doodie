@@ -17,7 +17,7 @@
     "functions/api/obelisk-verify.js": "358e0259839ec07f2fb5cb810f0a62c3d8bd946e7437da1873a2135d634a9114"
   },
   "routes": {
-    "login": "/auth/login",
+    "login": "/login",
     "callback": "/auth/callback",
     "verify": "/api/obelisk-verify"
   },
