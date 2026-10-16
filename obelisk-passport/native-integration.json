@@ -1,0 +1,39 @@
+{
+  "schema": "obelisk-native-passport-v1",
+  "slug": "call-of-doodie",
+  "idp": "https://obeliskgate.com",
+  "origin": "https://callofdoodie.wtf",
+  "stack": "vite-react-cloudflare-pages-functions",
+  "sourceCommit": "7b87c66f3a356d890b6944fb595ffe9e6394bea0",
+  "sources": {
+    "src/main.jsx": "6af0191461240290ee87f4a780c7d21c8c46d7f39909278ca35a99936f28c6ce",
+    "src/ObeliskLogin.jsx": "645ee390c96544bb84829466e83c759e8e0d42ec7be989e00586cb1d8908bfba",
+    "src/ObeliskCallback.jsx": "936b266223b981dd71571bb6f171ca96353702fa55d3e81276a29eb03bd8cfbe",
+    "src/obelisk-callback.js": "848e1b4ec73806ebc8520ff5607ed5cfb19fb624d2a980ff60de93f4a3b57d55",
+    "src/obeliskRoutes.js": "e821694d9b9746eb1e07d69cc8055c44fbdf13f45246610eb0879acac22cdf32",
+    "src/utils/obeliskPassport.js": "d0b25f5a4b8f3a1720f293a23b9142ea950fa8840f6349b822261d841e165923",
+    "src/utils/cloudSession.js": "ad42b41cc2e91ff3827f3b70f31d3b9fce4d84a50e1058efdaa14a72de026f9e",
+    "src/utils/accountSession.js": "b7a97610409e8bf2a41ecc6462054f274e89dc287b10fb3cc43028e8047b472f",
+    "functions/api/obelisk-verify.js": "358e0259839ec07f2fb5cb810f0a62c3d8bd946e7437da1873a2135d634a9114"
+  },
+  "routes": {
+    "login": "/auth/login",
+    "callback": "/auth/callback",
+    "verify": "/api/obelisk-verify"
+  },
+  "verification": {
+    "observedAt": "2026-10-16T05:18:20.723Z",
+    "kind": "hermetic-native-auth-tests",
+    "passed": 18,
+    "failed": 0,
+    "liveIdentityRoundtrip": false,
+    "tests": {
+      "src/obelisk-callback.test.js": "b96688908ac86d30b93dc424a56abdab7f06332cf50b8a79e80a5c89b52aea06",
+      "src/obeliskRoutes.test.js": "b9e01bef67167af882ae6c187d77080e3a9d1cb90f0118ff1bb1007f8eb57bb3",
+      "src/utils/obeliskPassport.test.js": "4b6efb89a2deff52c1e6848a81e58595ec9e66a0f6a2022f1c45a2ddbb7a5d13",
+      "tests/obelisk-verify-function.test.js": "0affd1daabdd1876998a546dfb04bd40c7f73955c35564de282a5f5eddeb74a0",
+      "src/utils/cloudSession.test.js": "51abc720d6c493e36797e486463f053b6f77339dbcd2cb7220597204ba2eb894",
+      "src/utils/accountSession.test.js": "c334a0fa2d81f118348ca9cbaf9b955836ff04a730049eca563c9e18c04a156f"
+    }
+  }
+}
