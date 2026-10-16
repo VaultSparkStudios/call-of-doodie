@@ -23,7 +23,6 @@
   },
   "verification": {
     "observedAt": "2026-10-16T05:18:20.723Z",
-    "kind": "hermetic-native-auth-tests",
     "passed": 18,
     "failed": 0,
     "liveIdentityRoundtrip": false,
@@ -34,6 +33,7 @@
       "tests/obelisk-verify-function.test.js": "0affd1daabdd1876998a546dfb04bd40c7f73955c35564de282a5f5eddeb74a0",
       "src/utils/cloudSession.test.js": "51abc720d6c493e36797e486463f053b6f77339dbcd2cb7220597204ba2eb894",
       "src/utils/accountSession.test.js": "c334a0fa2d81f118348ca9cbaf9b955836ff04a730049eca563c9e18c04a156f"
-    }
+    },
+    "method": "hermetic-native-auth-tests"
   }
 }
