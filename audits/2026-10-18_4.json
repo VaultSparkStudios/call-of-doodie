@@ -7,10 +7,20 @@
     "Ordinary, shield and invulnerable-summoner collisions stop consumed shots before another enemy; finite pierce capacity is respected.",
     "Weak per-projectile target membership prevents repeated damage/rewards during overlap or reentry; independent bullets remain independent and boomerangs can hit once on each pass."
   ],
-  "validation": "S188 full local suite passes 296/296 files and 1,995/1,995 assertions. Strict lint, configured build, security/public contracts, independent review, 16 reviewed captures and four staging browser cases pass. Exact-main CI/deployment and production readback pending.",
+  "validation": "S188 implementation f8b3254c75b90a3542420d6fa83cd3b108f5b1d3 passed exact-main workflow 39149635426: all 296 test files / 1,995 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches f8b3254c75b9. Canonical and immutable https://9024cfb5.call-of-doodie.pages.dev pass shell 7/7 each. Four real-Chrome combat cases pass on canonical production at 390/1440 in both themes.",
   "limits": "FORGE/public-unlaunched unchanged. Assisted combat fixtures are not natural full-run, physical-controller or participant evidence. Existing participant/device/model-token comparisons remain unmeasured. Existing narrow-screen precision text can crop; this combat correction does not change presentation. No identity, spending, licensing or lifecycle change.",
   "production": {
-    "status": "pending"
+    "status": "verified",
+    "source": "f8b3254c75b90a3542420d6fa83cd3b108f5b1d3",
+    "workflow": 39149635426,
+    "immutableUrl": "https://9024cfb5.call-of-doodie.pages.dev",
+    "canonical": "https://callofdoodie.wtf/",
+    "shellAssertions": {
+      "canonical": 7,
+      "immutable": 7
+    },
+    "browserCases": 4,
+    "recordSeal": "Final closeout seal includes a bounded-projection whitespace correction and one added assertion; gameplay remains the verified implementation source."
   },
   "review": {
     "verdict": "approve",
@@ -31,5 +41,30 @@
       "An intermediate full run read the startup brief during closeout generation; all sources then settled before final full rerun."
     ],
     "finalRunAt": "2026-10-18T17:25:58.814Z"
+  },
+  "closeout": {
+    "state": "complete",
+    "silScore": 945,
+    "scaffold": {
+      "tasks": 3,
+      "done": 3,
+      "inProgress": 0,
+      "open": 0
+    }
+  },
+  "releaseGateFix": {
+    "title": "Trim whitespace exposed by bounded projection cutoffs",
+    "files": [
+      "scripts/render-hot-context.mjs",
+      "tests/hot-context.test.js"
+    ],
+    "proof": "Independent review passed; full local seal suite passes 296 files / 1996 assertions, including all three cutoff boundaries.",
+    "runtime": "Gameplay bytes unchanged from f8b3254."
+  },
+  "finalLocalSeal": {
+    "files": 296,
+    "assertions": 1996,
+    "pass": true,
+    "verifiedAt": "2026-10-18T17:35:58.645Z"
   }
 }

@@ -4,9 +4,15 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "S188 combat reliability staged; exact-main delivery pending.",
-  "nextMilestone": "Verify S188 exact-main production deployment.",
+  "currentFocus": "S188 projectile corrections production verified.",
+  "nextMilestone": "Selected S188 outcomes complete; retain participant/device evidence as separate work.",
   "testingSurfaces": [
+    {
+      "session": 188,
+      "type": "production-verification",
+      "status": "verified",
+      "command": "S188 implementation f8b3254c75b90a3542420d6fa83cd3b108f5b1d3 passed exact-main workflow 39149635426: all 296 test files / 1,995 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches f8b3254c75b9. Canonical and immutable https://9024cfb5.call-of-doodie.pages.dev pass shell 7/7 each. Four real-Chrome combat cases pass on canonical production at 390/1440 in both themes."
+    },
     {
       "session": 188,
       "type": "hosted-staging-combat",
@@ -187,7 +193,7 @@
   "lastUpdated": "2026-10-18",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
-  "truthAuditStatus": "S188 full suite and staging verified; exact-main production pending.",
+  "truthAuditStatus": "S188 two selected combat outcomes production verified; comparative participant/device evidence remains unmeasured.",
   "truthAuditLastRun": "2026-10-18",
   "ignisScore": 44193,
   "ignisGrade": "FORGE",
@@ -233,15 +239,14 @@
   "runtimeUrl": "https://callofdoodie.wtf/",
   "stagingType": "cloudflare-pages",
   "stagingUrl": "https://0aa75416.call-of-doodie.pages.dev/",
-  "testsLastRun": "2026-10-18T17:25:58.814Z",
+  "testsLastRun": "2026-10-18T17:35:58.645Z",
   "sanitizationLastCleared": "2026-10-06",
   "sessionShellHygiene": {
-    "session": 187,
-    "enumeratedAt": "2026-10-18T16:26:01.557Z",
-    "started": 2,
-    "closed": 2,
+    "session": 188,
+    "started": 0,
+    "closed": 0,
     "running": 0,
-    "scope": "Owned Vite server stopped; exact-source CI watcher terminal; all finite commands completed."
+    "scope": "Persistent servers only; all owned finite test/browser/deploy/CI handles complete."
   },
   "doctorScore": {
     "date": "2026-10-04",
@@ -256,9 +261,9 @@
     "skipped": 3,
     "note": "Studio-wide doctor evidence; not a project-only zero-findings claim. Central follow-up delivered through Ark; application unobserved."
   },
-  "lastSessionSummary": "S188 fixes consumed-projectile damage and repeated piercing contacts.",
-  "testsAssertionsPassing": 1995,
-  "testsAssertionsTotal": 1995,
+  "lastSessionSummary": "S188 consumed-projectile and piercing corrections production verified; 296 files / 1995 assertions pass.",
+  "testsAssertionsPassing": 1996,
+  "testsAssertionsTotal": 1996,
   "testsAssertionsFiles": 296,
   "testsFlaky": [],
   "testsInconclusive": [],
@@ -267,32 +272,34 @@
   "testsBudgetExhausted": false,
   "silAvg5": 939.4,
   "testsAssertionsDeferred": [],
-  "testsAssertionsLastRun": "2026-10-18T17:25:58.814Z",
-  "lastShipped": "S188 fixes consumed-projectile damage and repeated piercing contacts.",
+  "testsAssertionsLastRun": "2026-10-18T17:35:58.645Z",
+  "lastShipped": "S188 two combat outcomes production verified.",
   "truthStatus": "FORGE/public-unlaunched unchanged. Assisted combat fixtures are not natural full-run, physical-controller or participant evidence. Existing participant/device/model-token comparisons remain unmeasured. Existing narrow-screen precision text can crop; this combat correction does not change presentation. No identity, spending, licensing or lifecycle change.",
-  "testsFocusedSupplement": "S188: 33 focused combat tests and four hosted staging browser cases pass.",
-  "lastDeployCommit": "40e619d78bc72939366613ce754f8689d508ce4f",
-  "lastDeployAt": "2026-10-18T16:24:46Z",
+  "testsFocusedSupplement": "S188: 33 focused combat tests, 19 context/currency tests, four canonical combat cases; new projection cutoff regression included in final local 296-file / 1996-assertion suite.",
+  "lastDeployCommit": "f8b3254c75b90a3542420d6fa83cd3b108f5b1d3",
+  "lastDeployAt": "2026-10-18T17:29:08Z",
   "closeoutAcceptance": {
     "session": 188,
-    "writeback": "ten reconciled; CDR unchanged without creative direction",
+    "writeback": "all ten reconciled; CDR unchanged without creative direction",
     "scaffold": {
       "tasks": 3,
-      "done": 2,
-      "inProgress": 1,
+      "done": 3,
+      "inProgress": 0,
       "open": 0
     },
-    "independentReview": "approve, zero blocking findings",
-    "autopilot": "scoped equivalent; foreign doctor is not project proof",
-    "hygiene": "no owned persistent server; finite test/CI jobs reconciled before completion"
+    "independentReview": "pass; two summary findings fixed and verified",
+    "autopilot": "scoped equivalent plus exact-main full CI; foreign doctor not project proof",
+    "trace": "completed",
+    "hygiene": "no owned persistent server; finite handles terminal",
+    "verifiedAt": "2026-10-18T17:30:26.321Z"
   },
   "testsLastRunMode": "full-local",
   "velocity": 2,
   "silVelocityLastSession": 2,
   "deploy": {
-    "source": "40e619d78bc72939366613ce754f8689d508ce4f",
-    "workflow": 39144720337,
-    "immutableUrl": "https://73a5ea19.call-of-doodie.pages.dev",
+    "source": "f8b3254c75b90a3542420d6fa83cd3b108f5b1d3",
+    "workflow": 39149635426,
+    "immutableUrl": "https://9024cfb5.call-of-doodie.pages.dev",
     "status": "verified"
   },
   "lastSession": 188

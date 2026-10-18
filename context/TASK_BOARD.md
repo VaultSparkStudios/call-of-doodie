@@ -2,11 +2,11 @@
 
 Session Intent: fresh full arc, direct-main push and full deployment.
 
-Wave 1 ✔ startup and nine-axis audit. Wave 2 ✔ both combat fixes and independent review. Wave 3 ◼ full candidate delivery and closeout.
+Wave 1 ✔ startup and nine-axis audit. Wave 2 ✔ both combat fixes and independent review. Wave 3 ✔ full candidate delivery and closeout.
 
 - [x] S188 consumed-projectile stop.
 - [x] S188 piercing per-pass contact memory.
-- [ ] S188 exact-main deployment and final closeout proof.
+- [x] S188 exact-main deployment and final closeout proof.
 - [ ] [SIL:1] S188 reserve: test swept projectile geometry against thin or fast-moving targets before changing collision rules.
 - [ ] [SIL:1] S188 reserve: measure precision reward text legibility at 390px before changing feedback presentation.
 

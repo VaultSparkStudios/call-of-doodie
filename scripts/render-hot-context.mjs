@@ -24,7 +24,7 @@ function hash(value) { return crypto.createHash("sha256").update(value).digest("
 
 function latestSession(text) {
   const next = text.search(/\n- Session \d+/);
-  return (next > 0 ? text.slice(0, next) : text).trim().slice(0, 9000);
+  return (next > 0 ? text.slice(0, next) : text).trim().slice(0, 9000).trimEnd();
 }
 
 function openWork(text) {
@@ -32,12 +32,12 @@ function openWork(text) {
     .filter((line) => /^#{1,3}\s/.test(line) || /\[ \]|\|\s*(?:NOW|OPEN|PENDING|IN PROGRESS)\s*\|/i.test(line))
     .slice(0, 55)
     .join("\n")
-    .slice(0, 9000);
+    .slice(0, 9000).trimEnd();
 }
 
 function recentDecisions(text) {
   const sections = text.split(/(?=^##\s)/m).filter((section) => /^##\s/.test(section));
-  return sections.slice(-4).join("\n").trim().slice(0, 7000);
+  return sections.slice(-4).join("\n").trim().slice(0, 7000).trimEnd();
 }
 
 function auditProjection(text) {

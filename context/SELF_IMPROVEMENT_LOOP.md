@@ -1262,9 +1262,9 @@ SIL +10: Closed five founder-visible defects and all four fresh audit items: Ene
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Avgs — 3: 943.3 | 5: 939.4
+Avgs — 3: 943.3 | 5: 937.8
 Velocity trend: two verified projectile corrections | Debt: flat
-Momentum runway: S188 staging verified; exact-main delivery pending | Intent rate: delivery in progress
+Momentum runway: S188 production verified | Intent rate: selected outcomes complete
 Last session: 2026-10-18 | Session 188 | Total: 945/1000 | Velocity: 2 | protocolVelocity: 2
 <!-- rolling-status-end -->
 
@@ -3626,3 +3626,6 @@ S188 fixes consumed-projectile damage and repeated piercing contacts.
 Focused combat suite passes 2 files / 33 tests; seven new cases expose the old collision behavior. Independent review approves both outcomes. Staging 0aa75416 passes shell 7/7 and four assisted Chrome combat cases across 390/1440 and both themes. Sixteen before/after captures are reviewed and hash-bound. Strict lint, configured build, public contract and security checks pass (zero dependency vulnerabilities). Full-suite rerun and exact-main hosted deployment remain pending.
 
 FORGE/public-unlaunched unchanged. Assisted combat fixtures are not natural full-run, physical-controller or participant evidence. Existing participant/device/model-token comparisons remain unmeasured. Existing narrow-screen precision text can crop; this combat correction does not change presentation. No identity, spending, licensing or lifecycle change.
+
+
+S188 final delivery evidence: S188 implementation f8b3254c75b90a3542420d6fa83cd3b108f5b1d3 passed exact-main workflow 39149635426: all 296 test files / 1,995 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches f8b3254c75b9. Canonical and immutable https://9024cfb5.call-of-doodie.pages.dev pass shell 7/7 each. Four real-Chrome combat cases pass on canonical production at 390/1440 in both themes.

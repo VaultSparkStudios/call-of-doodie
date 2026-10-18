@@ -4,6 +4,12 @@
 
 ## Current Session
 
+## S188 production verified
+
+Consumed shots stop at their final collision. Piercing shots damage each target once per pass; boomerang outbound and return passes stay independent.
+
+S188 implementation f8b3254c75b90a3542420d6fa83cd3b108f5b1d3 passed exact-main workflow 39149635426: all 296 test files / 1,995 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches f8b3254c75b9. Canonical and immutable https://9024cfb5.call-of-doodie.pages.dev pass shell 7/7 each. Four real-Chrome combat cases pass on canonical production at 390/1440 in both themes.
+
 ## S188 candidate verification
 
 S188 full local suite passes 296/296 files and 1,995/1,995 assertions. Strict lint, configured build, security/public contracts, independent review, 16 reviewed captures and four staging browser cases pass. Exact-main CI/deployment and production readback pending.
@@ -70,14 +76,11 @@ Records seal 6e473e676ea1252cb531efd6fa400d33fa4ae228 passed exact-main workflow
 
 End-run results now show the score and Submit to leaderboard before optional content. Last words are optional and labelled. Submission is guarded against duplicate clicks and excludes practice, Operations, local-only modes and integrity failures. Play Again precedes optional coaching. Sharing has one run-link action with native/copy/manual feedback; score images and highlights are explicit downloads. Feedback, highlights and exports are optional. Bottom leaderboard/menu controls remain outside disclosures.
 
-Staging https://aa2065a8.call-of-doodie.pages.dev passed shell 7/7 and eight actual-app ending cases across defeat/victory, dark/light and 390/1440px, including short screens, touch, keyboard End and menu return. Eight share checks covered native API fixture success, clipboard success/denial, manual selectable links and real score-image downloads. 92 before/after captures were directly inspected and hash-bound; CANON-053 passed. Submission behavior tests cover pending/double click, online rank, local/rejected states and eligibility. Exact-main CI and production verification are complete; see the verified receipts above.
-
-Assisted terminal states prove UI integration, not natural playthroughs or participant enjoyment. Native share outcomes use API fixtures; production clipboard copy/readback and image downloads are real. No external message was sent. Backend health used its existing valid/rejected QA submission contract. Operations links open the game h
+Staging https://aa2065a8.call-of-doodie.pages.dev passed shell 7/7 and eight actual-app ending cases across defeat/victory, dark/light and 390/1440px, including short screens, touch, keyboard End and menu return. Eight share checks covered native API fixture success, clipboard success/denial, manual selectable links and real score-image downloads. 92 before/after captures
 
 ## Open Work
 
 ## S188 arc outcomes and waves
-- [ ] S188 exact-main deployment and final closeout proof.
 - [ ] [SIL:1] S188 reserve: test swept projectile geometry against thin or fast-moving targets before changing collision rules.
 - [ ] [SIL:1] S188 reserve: measure precision reward text legibility at 390px before changing feedback presentation.
 ## S187 arc outcomes and waves
@@ -131,6 +134,7 @@ Assisted terminal states prove UI integration, not natural playthroughs or parti
 ## Session 154 — Propagation compatibility and protocol truth
 ## Session 153 — Playtest signal, replay plans, and release trust
 ## Session 151 — Revenge loop, mastery truth, stats twin, and architecture headroom
+## Session 150 — Homepage readability and navigation
 
 ## Recent Decisions
 
@@ -164,9 +168,12 @@ FORGE/public-unlaunched unchanged. Assisted combat fixtures are not natural full
 
 Canonical doctor/autopilot currently delegates to a sibling subject; scoped local evidence and exact-main CI remain the applicable release contract. No foreign doctor result is asserted as project health.
 
+
+S188 delivery acceptance: S188 implementation f8b3254c75b90a3542420d6fa83cd3b108f5b1d3 passed exact-main workflow 39149635426: all 296 test files / 1,995 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches f8b3254c75b9. Canonical and immutable https://9024cfb5.call-of-doodie.pages.dev pass shell 7/7 each. Four real-Chrome combat cases pass on canonical production at 390/1440 in both themes. The final closeout seal retains the same gameplay bytes, also corrects whitespace exposed by summary truncation, and follows through its own exact-main deployment. No launch or lifecycle promotion.
+
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 262,051 bytes · SHA-256 `8f20250b13a5…`
-- `context/TASK_BOARD.md` · 182,558 bytes · SHA-256 `417b3fba06e7…`
-- `context/DECISIONS.md` · 175,714 bytes · SHA-256 `8be63b6f60c0…`
+- `context/CURRENT_STATE.md` · 262,642 bytes · SHA-256 `18a16431ef03…`
+- `context/TASK_BOARD.md` · 182,558 bytes · SHA-256 `caa01123236b…`
+- `context/DECISIONS.md` · 176,350 bytes · SHA-256 `55affb719ee5…`
 - `docs/AUDIT_2026-10-18.json` · 6,892 bytes · SHA-256 `b34b668a7b5a…`

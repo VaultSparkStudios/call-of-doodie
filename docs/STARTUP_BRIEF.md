@@ -20,7 +20,7 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ LAST SESSION (S188) - WHAT SHIPPED ══════════════════════════╗
-║  S188 fixes consumed-projectile damage and repeated piercing co  ║
+║  S188 consumed-projectile and piercing corrections production v  ║
 ║  Tests  -                                                        ║
 ║  Deploy -                                                        ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -69,18 +69,18 @@
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
 ║  ✓  ███████░░░░░░░░░░░░░░░░░   28% used                          ║
-║     74,930 / 272,000 tok  ·  codex/codex-272k  · …               ║
-║     ~37,465 tok/turn  ·  cache 50%  ·  4 turns to compact        ║
+║     76,061 / 272,000 tok  ·  codex/codex-272k  · …               ║
+║     ~38,031 tok/turn  ·  cache 50%  ·  4 turns to compact        ║
 ║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         296/296 passing (2026-10-18T17:25:58.814Z)     ║
+║  ✓  Tests         296/296 passing (2026-10-18T17:35:58.645Z)     ║
 ║  ✓  Velocity      2   ·  Debt: →                                 ║
-║  ✓  Runway        S188 staging verified; exact-main delivery…    ║
+║  ✓  Runway        S188 production verified                       ║
 ║  ⛔  Context age   ?d                                             ║
 ║  ⚠  IGNIS         44193 FORGE  ·  10d old                        ║
-║  ⛔  Truth         S188 selected combat outcomes verified on…     ║
+║  ⛔  Truth         S188 selected combat outcomes production…      ║
 ║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs…        ║
 ║  ✓  Genome dims   all stable  (24/25)                            ║
 ║  ✓  Entropy       0.210  (healthy)                               ║

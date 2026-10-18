@@ -6,6 +6,34 @@ import { spawnSync } from "node:child_process";
 import { findLatestAuditSidecar } from "../scripts/lib/audit-sidecar.mjs";
 
 describe("hot context contract", () => {
+  it("trims whitespace exposed at every projection cutoff", () => {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), "cod-hot-cutoff-"));
+    try {
+      fs.mkdirSync(path.join(root, "context"));
+      const cases = [
+        ["CURRENT_STATE.md", "currentSession", "x".repeat(8999) + " tail"],
+        ["TASK_BOARD.md", "openWork", "## " + "x".repeat(8996) + " tail"],
+        ["DECISIONS.md", "recentDecisions", "## " + "x".repeat(6996) + " tail"],
+      ];
+      for (const [file, key, text] of cases) {
+        for (const [source] of cases) fs.writeFileSync(path.join(root, "context", source), "## Small");
+        fs.writeFileSync(path.join(root, "context", file), text);
+        const result = spawnSync(process.execPath, [path.resolve("scripts/render-hot-context.mjs")], {
+          cwd: root, encoding: "utf8",
+        });
+        expect(result.status, result.stderr || result.stdout).toBe(0);
+        const context = JSON.parse(fs.readFileSync(path.join(root, "context/HOT_CONTEXT.json"), "utf8"));
+        expect(context[key]).not.toMatch(/\s$/);
+        const check = spawnSync(process.execPath, [path.resolve("scripts/render-hot-context.mjs"), "--check"], {
+          cwd: root, encoding: "utf8",
+        });
+        expect(check.status, check.stderr || check.stdout).toBe(0);
+      }
+    } finally {
+      fs.rmSync(root, { recursive: true, force: true });
+    }
+  });
+
   it("is bounded, source-indexed, and keeps authoritative artifacts discoverable", () => {
     const context = JSON.parse(fs.readFileSync("context/HOT_CONTEXT.json", "utf8"));
     expect(context.schemaVersion).toBe("hot-context-v1");
