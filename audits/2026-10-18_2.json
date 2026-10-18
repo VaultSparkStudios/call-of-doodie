@@ -9,27 +9,35 @@
     "A shared live predicate blocks combat through all seven simulation-frozen states and inactive screens, including dock callbacks and delayed bursts. Actual-App tests exercise keyboard, touch, mouse and controller fixtures, then normal resume. Browser checks exercise visible pause/focus-loss states; other modal tests inject their real refs.",
     "One measured rendered-frame sample includes every catch-up simulation step and the final render. Hook/rAF regression first reproduced omitted cost, then passed; zero-step and suspended frames remain unsampled."
   ],
-  "validation": "Independent review passes after one lock-rotation correction. Focused regressions pass. Staging https://298a5f72.call-of-doodie.pages.dev passes shell 7/7 and four actual-app theme/width input cases. Before/after browser checks reproduced and resolved interaction latching. Strict lint, configured build, public contracts, security and scoped supply-chain checks pass. Final full suite and exact-main production verification follow.",
+  "validation": "S186 source 6dc4c4235cf2b263c1c8fef228ece1b3d8eb4b58 passed exact-main workflow 39141994765: 294/294 test files and 1,970/1,970 tests, strict lint, build and Cloudflare deployment. Canonical callofdoodie.wtf reports 6dc4c4235cf2; immutable https://b0ffec69.call-of-doodie.pages.dev/ and canonical shell checks pass 7/7 each. All four canonical browser input cases pass at 390/1440 in both themes, including uppercase release, pause, focus loss, resume and normal movement.",
   "limits": "FORGE/public-unlaunched unchanged. Existing S183 participant/comparative and physical-device evidence remains pending; no balance, retention or hardware claim. Startup used direct clean-tree Git sync because local start-sync/recovery helpers are absent. The lock writer repair necessarily preceded its audit premise gate; all gameplay edits followed the recorded 4/4 gate. The local doctor/autopilot delegates to the control plane and cannot certify this project; scoped repository gates and exact-main hosted CI supply project delivery evidence.",
   "production": {
-    "status": "pending-exact-main",
-    "staging": "https://298a5f72.call-of-doodie.pages.dev/",
-    "rollback": "3e7178d2f9b8055995c1d9474749c026f1d9efe0"
+    "status": "verified",
+    "source": "6dc4c4235cf2b263c1c8fef228ece1b3d8eb4b58",
+    "workflow": 39141994765,
+    "immutableUrl": "https://b0ffec69.call-of-doodie.pages.dev/",
+    "canonical": "https://callofdoodie.wtf/",
+    "shellAssertions": {
+      "canonical": 7,
+      "immutable": 7
+    },
+    "browserCases": 4
   },
   "closeout": {
-    "state": "delivery-in-progress",
+    "state": "complete",
     "silScore": 941,
     "scaffold": {
       "tasks": 5,
-      "done": 4,
-      "inProgress": 1,
+      "done": 5,
+      "inProgress": 0,
       "open": 0
     },
     "shells": {
-      "started": 1,
-      "closed": 1,
+      "started": 2,
+      "closed": 2,
       "running": 0
-    }
+    },
+    "notes": "Final records-only seal receives its own exact-main workflow/live readback; gameplay acceptance remains bound to the source above."
   },
   "review": {
     "rounds": 2,
@@ -45,7 +53,7 @@
       "assertions": 5,
       "passed": 5
     },
-    "requiredHostedSuite": "pending",
+    "requiredHostedSuite": "passed 294 files / 1970 tests",
     "note": "Final local suite: 294 files, 1969/1970 assertions; only the stale CANON-056 pending-count fixture failed. The fixture was updated to the actively verified adoption posture and the corrected adoption/hot-context/native-binding suites pass 5/5. All gameplay assertions passed. Exact-main hosted full suite remains required before deployment completion."
   },
   "ark": {

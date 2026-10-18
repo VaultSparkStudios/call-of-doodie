@@ -4,9 +4,15 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "S186 reliability outcomes staged; exact-main delivery underway.",
-  "nextMilestone": "Verify S186 exact-main production deployment.",
+  "currentFocus": "S186 reliability arc complete and production verified.",
+  "nextMilestone": "Gather the existing participant/physical-device evidence before lifecycle promotion.",
   "testingSurfaces": [
+    {
+      "session": 186,
+      "type": "production-verification",
+      "status": "green",
+      "command": "S186 source 6dc4c4235cf2b263c1c8fef228ece1b3d8eb4b58 passed exact-main workflow 39141994765: 294/294 test files and 1,970/1,970 tests, strict lint, build and Cloudflare deployment. Canonical callofdoodie.wtf reports 6dc4c4235cf2; immutable https://b0ffec69.call-of-doodie.pages.dev/ and canonical shell checks pass 7/7 each. All four canonical browser input cases pass at 390/1440 in both themes, including uppercase release, pause, focus loss, resume and normal movement."
+    },
     {
       "session": 186,
       "type": "local-full-suite-and-corrected-record-fixture",
@@ -163,7 +169,7 @@
   "lastUpdated": "2026-10-18",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
-  "truthAuditStatus": "S186 four reliability outcomes verified on staging; exact-main production pending. Participant and physical-device acceptance remains separate.",
+  "truthAuditStatus": "S186 production verified; S183 participant/comparative and physical-device evidence remain unmeasured.",
   "truthAuditLastRun": "2026-10-18",
   "ignisScore": 44193,
   "ignisGrade": "FORGE",
@@ -177,7 +183,7 @@
   "currentSession": 186,
   "sessionMode": "founder",
   "lastAgent": "codex",
-  "testsPassing": 293,
+  "testsPassing": 294,
   "testsTotal": 294,
   "entropyScore": 0.209,
   "entropyLastComputed": "2026-10-18",
@@ -209,15 +215,15 @@
   "runtimeUrl": "https://callofdoodie.wtf/",
   "stagingType": "cloudflare-pages",
   "stagingUrl": "https://298a5f72.call-of-doodie.pages.dev/",
-  "testsLastRun": "2026-10-18T15:45:47.411Z",
+  "testsLastRun": "2026-10-18T15:50:48.112Z",
   "sanitizationLastCleared": "2026-10-06",
   "sessionShellHygiene": {
     "session": 186,
-    "enumeratedAt": "2026-10-18T15:45:47.411Z",
-    "started": 1,
-    "closed": 1,
+    "enumeratedAt": "2026-10-18T15:50:48.112Z",
+    "started": 2,
+    "closed": 2,
     "running": 0,
-    "scope": "Owned Vite server stopped; all finite tests, renders, browser checks and deployments terminal."
+    "scope": "One owned Vite server stopped, one finite CI watcher completed; other finite commands terminal."
   },
   "doctorScore": {
     "date": "2026-10-04",
@@ -232,8 +238,8 @@
     "skipped": 3,
     "note": "Studio-wide doctor evidence; not a project-only zero-findings claim. Central follow-up delivered through Ark; application unobserved."
   },
-  "lastSessionSummary": "S186 repairs session goal identity, latched interaction after focus loss, combat input during frozen choices, and incomplete catch-up frame timing.",
-  "testsAssertionsPassing": 1969,
+  "lastSessionSummary": "S186 fixed goal/session identity, stuck interaction, frozen-choice combat leakage and incomplete frame timing; all 294 files / 1970 tests pass; production verified.",
+  "testsAssertionsPassing": 1970,
   "testsAssertionsTotal": 1970,
   "testsAssertionsFiles": 293,
   "testsFlaky": [],
@@ -243,33 +249,34 @@
   "testsBudgetExhausted": false,
   "silAvg5": 936.2,
   "testsAssertionsDeferred": [],
-  "testsAssertionsLastRun": "2026-10-18T15:45:47.411Z",
-  "lastShipped": "S186 repairs session goal identity, latched interaction after focus loss, combat input during frozen choices, and incomplete catch-up frame timing.",
-  "truthStatus": "FORGE/public-unlaunched unchanged. Existing S183 participant/comparative and physical-device evidence remains pending; no balance, retention or hardware claim. Startup used direct clean-tree Git sync because local start-sync/recovery helpers are absent. The lock writer repair necessarily preceded its audit premise gate; all gameplay edits followed the recorded 4/4 gate. The local doctor/autopilot delegates to the control plane and cannot certify this project; scoped repository gates and exact-main hosted CI supply project delivery evidence.",
+  "testsAssertionsLastRun": "2026-10-18T15:50:48.112Z",
+  "lastShipped": "S186 four reliability outcomes verified on production.",
+  "truthStatus": "Seven frozen-choice barriers use actual-App ref fixtures for keyboard/mouse/touch/controller actions; visible pause and focus-loss states also pass the real browser. Physical controllers, participant outcomes and the separate S183 comparative evidence remain unmeasured. FORGE/public-unlaunched unchanged.",
   "testsFocusedSupplement": "Exact-main workflow 37421044480 passed 293 files / 1,954 assertions, strict lint, configured build and deployment; production browser verification passed eight end-run cases.",
-  "lastDeployCommit": "b194fa92d945591a2fb8d59c8626c89672148819",
-  "lastDeployAt": "2026-10-18T14:40:00Z",
+  "lastDeployCommit": "6dc4c4235cf2b263c1c8fef228ece1b3d8eb4b58",
+  "lastDeployAt": "2026-10-18T15:48:53Z",
   "closeoutAcceptance": {
     "session": 186,
-    "writeback": "ten surfaces reconciled; CDR unchanged (no new creative direction)",
+    "writeback": "all-ten-reconciled; CDR unchanged without new creative direction",
     "scaffold": {
       "tasks": 5,
-      "done": 4,
-      "inProgress": 1,
+      "done": 5,
+      "inProgress": 0,
       "open": 0
     },
-    "independentReview": "pass after one fixed finding",
-    "autopilot": "scoped-equivalent; foreign doctor not project proof",
+    "independentReview": "pass after one fixed lock-rotation finding",
+    "autopilot": "scoped-equivalent with exact-main full CI; foreign doctor not project proof",
+    "trace": "completed",
     "hygiene": "zero owned shells running",
-    "trace": "closeout in progress; exact-main delivery pending"
+    "verifiedAt": "2026-10-18T15:50:48.112Z"
   },
   "testsLastRunMode": "full-ci",
   "velocity": 4,
   "silVelocityLastSession": 4,
   "deploy": {
-    "source": "b194fa92d945591a2fb8d59c8626c89672148819",
-    "workflow": 39136409352,
-    "immutableUrl": "https://29004093.call-of-doodie.pages.dev/",
+    "source": "6dc4c4235cf2b263c1c8fef228ece1b3d8eb4b58",
+    "workflow": 39141994765,
+    "immutableUrl": "https://b0ffec69.call-of-doodie.pages.dev/",
     "status": "verified"
   }
 }

@@ -1,3 +1,9 @@
+## S186 production verified
+
+S186 source 6dc4c4235cf2b263c1c8fef228ece1b3d8eb4b58 passed exact-main workflow 39141994765: 294/294 test files and 1,970/1,970 tests, strict lint, build and Cloudflare deployment. Canonical callofdoodie.wtf reports 6dc4c4235cf2; immutable https://b0ffec69.call-of-doodie.pages.dev/ and canonical shell checks pass 7/7 each. All four canonical browser input cases pass at 390/1440 in both themes, including uppercase release, pause, focus loss, resume and normal movement.
+
+Four selected reliability outcomes are complete. The final records seal retains the verified gameplay source and receives its own exact-main CI/deploy observation. Seven frozen-choice barriers use actual-App ref fixtures for keyboard/mouse/touch/controller actions; visible pause and focus-loss states also pass the real browser. Physical controllers, participant outcomes and the separate S183 comparative evidence remain unmeasured. FORGE/public-unlaunched unchanged.
+
 ## S186 input reliability and runtime measurement
 
 S186 repairs session goal identity, latched interaction after focus loss, combat input during frozen choices, and incomplete catch-up frame timing.

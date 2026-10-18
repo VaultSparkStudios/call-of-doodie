@@ -2,7 +2,7 @@
 
 ## Latest session
 
-- S186 reliability changes and current delivery evidence: [handoff](LATEST_HANDOFF.md), [runtime notes](AGENT_MEMORY.md), [release audit](../audits/2026-10-18_2.json).
+- S186 production-verified reliability changes (294 files / 1970 tests; source 6dc4c42, workflow 39141994765): [handoff](LATEST_HANDOFF.md), [runtime notes](AGENT_MEMORY.md), [release audit](../audits/2026-10-18_2.json).
 
 ## Earlier verified session
 

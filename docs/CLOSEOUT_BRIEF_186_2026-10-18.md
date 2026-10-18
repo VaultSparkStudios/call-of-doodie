@@ -13,8 +13,9 @@ Headline: S186 repairs session goal identity, latched interaction after focus lo
 
 ## Validation
 
-- Independent review passes after one lock-rotation correction. Focused regressions pass. Staging https://298a5f72.call-of-doodie.pages.dev passes shell 7/7 and four actual-app theme/width input cases. Before/after browser checks reproduced and resolved interaction latching. Strict lint, configured build, public contracts, security and scoped supply-chain checks pass. Final full suite and exact-main production verification follow.
+- S186 source 6dc4c4235cf2b263c1c8fef228ece1b3d8eb4b58 passed exact-main workflow 39141994765: 294/294 test files and 1,970/1,970 tests, strict lint, build and Cloudflare deployment. Canonical callofdoodie.wtf reports 6dc4c4235cf2; immutable https://b0ffec69.call-of-doodie.pages.dev/ and canonical shell checks pass 7/7 each. All four canonical browser input cases pass at 390/1440 in both themes, including uppercase release, pause, focus loss, resume and normal movement.
 
 ## Remaining
 
-- FORGE/public-unlaunched unchanged. Existing S183 participant/comparative and physical-device evidence remains pending; no balance, retention or hardware claim. Startup used direct clean-tree Git sync because local start-sync/recovery helpers are absent. The lock writer repair necessarily preceded its audit premise gate; all gameplay edits followed the recorded 4/4 gate. The local doctor/autopilot delegates to the control plane and cannot certify this project; scoped repository gates and exact-main hosted CI supply project delivery evidence.
+- Seven frozen-choice barriers use actual-App ref fixtures for keyboard/mouse/touch/controller actions; visible pause and focus-loss states also pass the real browser. Physical controllers, participant outcomes and the separate S183 comparative evidence remain unmeasured. FORGE/public-unlaunched unchanged.
+- CDR unchanged (no new creative direction). Central doctor/IGNIS/helper application remains recipient-owned; no application claimed.

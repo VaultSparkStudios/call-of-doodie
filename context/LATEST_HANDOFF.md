@@ -1,3 +1,17 @@
+## Where We Left Off — Session 186 final closeout
+
+Session Intent: Fresh full arc, direct-main commit/push and full deployment. Intent outcome: achieved.
+
+S186 source 6dc4c4235cf2b263c1c8fef228ece1b3d8eb4b58 passed exact-main workflow 39141994765: 294/294 test files and 1,970/1,970 tests, strict lint, build and Cloudflare deployment. Canonical callofdoodie.wtf reports 6dc4c4235cf2; immutable https://b0ffec69.call-of-doodie.pages.dev/ and canonical shell checks pass 7/7 each. All four canonical browser input cases pass at 390/1440 in both themes, including uppercase release, pause, focus loss, resume and normal movement.
+
+Session 186 ran fresh startup and a full nine-axis audit, then implemented four selected reliability outcomes: native goal/session binding, interaction release, shared frozen-gameplay input barrier and complete catch-up/render measurement. Independent review passed after repairing stale/forced lock reuse. Staging preceded the main push; 32 before/after images were inspected and hash-bound.
+
+Seven frozen-choice barriers use actual-App ref fixtures for keyboard/mouse/touch/controller actions; visible pause and focus-loss states also pass the real browser. Physical controllers, participant outcomes and the separate S183 comparative evidence remain unmeasured. FORGE/public-unlaunched unchanged.
+
+All ten write-back records are reconciled; CDR legitimately unchanged because /arc supplied no creative direction. One development server and one CI watcher are stopped/terminal; no owned shell remains. Canonical checklist was rendered with explicit project binding because the local copy is missing. The inspected autopilot delegates doctor to Studio Ops, so scoped project gates and exact-main hosted CI were used; no project-local zero-doctor-finding claim is made. Signed Ark requests central scoring/helper follow-up; delivery is not application.
+
+Next: preserve outstanding participant/physical-device evidence requirements. Rollback: normal revert to 3e7178d, rebuild and redeploy. This final records seal is followed through by exact-main CI and live readback without further gameplay edits.
+
 ## Where We Left Off — Session 186
 
 Session Intent: Complete a fresh /start → /audit → /implement → /closeout arc, commit/push main and fully deploy under existing authorization.

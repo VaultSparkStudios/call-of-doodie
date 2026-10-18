@@ -1597,3 +1597,8 @@ Every gamepad-polling surface selects its pad through getPrimaryGamepad(); no sc
 ## 2026-10-18 — Session 186
 
 Use the canonical lock writer with recipient-verified rotation fixes. Preserve active session identity only while newer than closed surfaces; stale/force rotation cannot reissue a closed ID. Combat input, delayed bursts, simulation and frame sampling share one live barrier. Scope interaction release to its owning device. Measure complete rendered frames, without changing the 60Hz simulation clock. CANON-056 checked against 100 public content files without truncation/findings and explicitly adopted. FORGE/public-unlaunched unchanged. Existing S183 participant/comparative and physical-device evidence remains pending; no balance, retention or hardware claim. Startup used direct clean-tree Git sync because local start-sync/recovery helpers are absent. The lock writer repair necessarily preceded its audit premise gate; all gameplay edits followed the recorded 4/4 gate. The local doctor/autopilot delegates to the control plane and cannot certify this project; scoped repository gates and exact-main hosted CI supply project delivery evidence.
+
+
+## S186 production acceptance — 2026-10-18
+
+Use candidate-specific hosted quality/build/deploy and live behavior as delivery authority. The isolated local CANON-056 expectation correction is now covered by the complete hosted suite. Preserve physical-device and participant evidence boundaries. Final records-only seal uses the same CI/deploy workflow.

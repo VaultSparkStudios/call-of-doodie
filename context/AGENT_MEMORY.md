@@ -1,3 +1,9 @@
+## S186 production acceptance
+
+S186 source 6dc4c4235cf2b263c1c8fef228ece1b3d8eb4b58 passed exact-main workflow 39141994765: 294/294 test files and 1,970/1,970 tests, strict lint, build and Cloudflare deployment. Canonical callofdoodie.wtf reports 6dc4c4235cf2; immutable https://b0ffec69.call-of-doodie.pages.dev/ and canonical shell checks pass 7/7 each. All four canonical browser input cases pass at 390/1440 in both themes, including uppercase release, pause, focus loss, resume and normal movement.
+
+Keep input holds scoped by device, frozen-state action guards shared and complete rendered-frame timing measured. Seven frozen-choice barriers use actual-App ref fixtures for keyboard/mouse/touch/controller actions; visible pause and focus-loss states also pass the real browser. Physical controllers, participant outcomes and the separate S183 comparative evidence remain unmeasured. FORGE/public-unlaunched unchanged.
+
 ## S186 input reliability
 
 Fresh Codex startup binds S186 to this native goal. Isolated real-Git tests cover repeat/help, stale and closed locks, force rotation and native binding. Independent review identified and verified the rotation correction.

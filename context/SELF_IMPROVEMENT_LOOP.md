@@ -1264,7 +1264,7 @@ SIL +10: Closed five founder-visible defects and all four fresh audit items: Ene
 ## Rolling Status (auto-updated each closeout)
 Avgs — 3: 936 | 5: 936.2
 Velocity trend: four reliability outcomes verified | Debt: flat
-Momentum runway: S186 staging verified; production pending | Intent rate: delivery in progress
+Momentum runway: S186 production verified | Intent rate: full arc achieved
 Last session: 2026-10-18 | Session 186 | Total: 941/1000 | Velocity: 4 | protocolVelocity: 4
 <!-- rolling-status-end -->
 
@@ -3569,3 +3569,6 @@ S186 repairs session goal identity, latched interaction after focus loss, combat
 Learning: a cleared keys map does not release a separately consumed objective latch. Timing only the first simulation step loses the render work it is meant to observe. Brainstorm: capture input ownership incidents in the existing receipt; test modal transition fixtures against real visible journeys; retain benchmark claims only with measurements. Commit [SIL] physical-input acceptance and compatible-helper delivery follow-up to TASK_BOARD.
 
 Independent review passes after one lock-rotation correction. Focused regressions pass. Staging https://298a5f72.call-of-doodie.pages.dev passes shell 7/7 and four actual-app theme/width input cases. Before/after browser checks reproduced and resolved interaction latching. Strict lint, configured build, public contracts, security and scoped supply-chain checks pass. Final full suite and exact-main production verification follow.
+
+
+S186 production receipt: S186 source 6dc4c4235cf2b263c1c8fef228ece1b3d8eb4b58 passed exact-main workflow 39141994765: 294/294 test files and 1,970/1,970 tests, strict lint, build and Cloudflare deployment. Canonical callofdoodie.wtf reports 6dc4c4235cf2; immutable https://b0ffec69.call-of-doodie.pages.dev/ and canonical shell checks pass 7/7 each. All four canonical browser input cases pass at 390/1440 in both themes, including uppercase release, pause, focus loss, resume and normal movement. SIL remains 941/1000 (ten-category sum); no additional outcome or session is invented for receipt sealing.

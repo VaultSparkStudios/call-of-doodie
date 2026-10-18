@@ -1,3 +1,12 @@
+## S186 production acceptance
+
+Overall status: S186 four reliability outcomes are implemented, reviewed, staging-verified and production-verified. All 294 files / 1970 tests pass exact-main CI. Separate participant/device evidence remains unmeasured.
+Last reviewed: 2026-10-18
+
+S186 source 6dc4c4235cf2b263c1c8fef228ece1b3d8eb4b58 passed exact-main workflow 39141994765: 294/294 test files and 1,970/1,970 tests, strict lint, build and Cloudflare deployment. Canonical callofdoodie.wtf reports 6dc4c4235cf2; immutable https://b0ffec69.call-of-doodie.pages.dev/ and canonical shell checks pass 7/7 each. All four canonical browser input cases pass at 390/1440 in both themes, including uppercase release, pause, focus loss, resume and normal movement.
+
+Seven frozen-choice barriers use actual-App ref fixtures for keyboard/mouse/touch/controller actions; visible pause and focus-loss states also pass the real browser. Physical controllers, participant outcomes and the separate S183 comparative evidence remain unmeasured. FORGE/public-unlaunched unchanged.
+
 ## S186 verified evidence and limits
 
 Overall status: S186 four reliability outcomes verified on staging; final full suite and exact-main production verification pending. Physical-device and participant acceptance remains unmeasured.

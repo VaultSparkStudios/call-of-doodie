@@ -4,6 +4,12 @@
 
 ## Current Session
 
+## S186 production verified
+
+S186 source 6dc4c4235cf2b263c1c8fef228ece1b3d8eb4b58 passed exact-main workflow 39141994765: 294/294 test files and 1,970/1,970 tests, strict lint, build and Cloudflare deployment. Canonical callofdoodie.wtf reports 6dc4c4235cf2; immutable https://b0ffec69.call-of-doodie.pages.dev/ and canonical shell checks pass 7/7 each. All four canonical browser input cases pass at 390/1440 in both themes, including uppercase release, pause, focus loss, resume and normal movement.
+
+Four selected reliability outcomes are complete. The final records seal retains the verified gameplay source and receives its own exact-main CI/deploy observation. Seven frozen-choice barriers use actual-App ref fixtures for keyboard/mouse/touch/controller actions; visible pause and focus-loss states also pass the real browser. Physical controllers, participant outcomes and the separate S183 comparative evidence remain unmeasured. FORGE/public-unlaunched unchanged.
+
 ## S186 input reliability and runtime measurement
 
 S186 repairs session goal identity, latched interaction after focus loss, combat input during frozen choices, and incomplete catch-up frame timing.
@@ -50,15 +56,7 @@ Assisted terminal states prove UI integration, not natural playthroughs or parti
 
 Source e6b72c770cd83a70847f74b390e28aa9f50b4622 passed exact-main workflow 37245074608: 291/291 files, 1,931/1,931 tests, strict lint, build and Cloudflare deployment. Canonical callofdoodie.wtf reports e6b72c770cd8; canonical and immutable https://ea7fba17.call-of-doodie.pages.dev/ pass shell 7/7 each, domain routing 5/5 and replay trust 3/3. Actual canonical browser checks pass 24/24 mode advancement/pause/resume cases, 8/8 death/victory ending cases with expanded sections, short-screen scrolling, menu return and hashed downloads, 4/4 setup/settings cases and 20/20 creature practice cases. Actual Classic/Zombies/Operations audio output, pause/mute/resume, single context and movement pass.
 
-Twelve technical audit outcomes are verified and shipped. Eight comparative acceptance outcomes remain pending: participant pump pacing, objective-music listening, creature comprehension/humor, matched human/agent comparison, human interpretation of outcomes, isolated target-device timing, evidence-cache token usage and evidence-pack token usage. No human rating, natural all-mode completion, physical-device result, speedup or model-token saving is claimed.
-
-## S183 final staging evidence
-
-Final staging ce356fde passes shell 7/7 and all eight ending cases with actual death/victory pack downloads, bottom controls, keyboard/touch scroll and menu return. Setup 4/4 and creature practice 20/20 passed the same source implementation before the terminal-only synchronization fix. CANON-053 passes 144 directly reviewed hash-bound captures. Strict lint, configured build, public/security/supply-chain gates and all corrected targeted regressions pass. Exact-main hosted suite and production follow-through remain pending.
-
-## Session 183 gameplay audit follow-through
-
-Setup links and version-2 cartridges preserve all twelve modes and four difficulties. Settings have accessible names and states; mobile run-code controls match desktop. Zombies and Bot Royale honor difficulty factors. Mobile combat removes duplicate weapon/ammo panels. Objective music gains distinct missi
+Twelve technical audit outcomes are verified and shipped. Eight comparative acceptance outcomes remain pending: participant pump pacing, objective-music listening, creature comprehension/humor, matched human/agent comparison, human interpretation of outcomes, isolated target-device timing, evidence-cache token usage and evidence-pack token usage. No human rating, natural all-mode completion, physic
 
 ## Open Work
 
@@ -120,11 +118,6 @@ Setup links and version-2 cartridges preserve all twelve modes and four difficul
 
 ## Recent Decisions
 
-## S184 explicit founder closeout — 2026-10-06
-
-Use a scoped equivalent of autopilot: the inspected local command delegates doctor to the Studio Ops root and only warns on its nonzero exit. It cannot certify this project. Dry-run completed; project-specific coherence/security/contract gates and exact-main hosted CI provide delivery evidence. Central IGNIS, review-loop and ecosystem-scorecard writes remain recipient-owned through Ark. Do not replace historical central measurements with invented current scores.
-
-
 ## S185 controller aim — 2026-10-18
 
 Resolve the right stick from the pad's own layout instead of fixed indices: trust `mapping === "standard"`, use the known PlayStation non-standard layout, otherwise skip axes whose first-seen resting value sits near ±1 (triggers). Aim assist is a nudge, not a capture: limit it to a 30° cone. Pointer aim must be re-armed by real mouse movement, never by a historical flag. A red dependency-tree smoke that also fails on pristine main is local freshness; root-fix with `npm ci` from the committed lockfile, never by editing the gate.
@@ -140,9 +133,15 @@ Every gamepad-polling surface selects its pad through getPrimaryGamepad(); no sc
 
 Use the canonical lock writer with recipient-verified rotation fixes. Preserve active session identity only while newer than closed surfaces; stale/force rotation cannot reissue a closed ID. Combat input, delayed bursts, simulation and frame sampling share one live barrier. Scope interaction release to its owning device. Measure complete rendered frames, without changing the 60Hz simulation clock. CANON-056 checked against 100 public content files without truncation/findings and explicitly adopted. FORGE/public-unlaunched unchanged. Existing S183 participant/comparative and physical-device evidence remains pending; no balance, retention or hardware claim. Startup used direct clean-tree Git sync because local start-sync/recovery helpers are absent. The lock writer repair necessarily preceded its audit premise gate; all gameplay edits followed the recorded 4/4 gate. The local doctor/autopilot delegates to the control plane and cannot certify this project; scoped repository gates and exact-main hosted CI supply project delivery evidence.
 
+
+
+## S186 production acceptance — 2026-10-18
+
+Use candidate-specific hosted quality/build/deploy and live behavior as delivery authority. The isolated local CANON-056 expectation correction is now covered by the complete hosted suite. Preserve physical-device and participant evidence boundaries. Final records-only seal uses the same CI/deploy workflow.
+
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 259,754 bytes · SHA-256 `a408570a6ef7…`
-- `context/TASK_BOARD.md` · 181,065 bytes · SHA-256 `ba95ef7622ee…`
-- `context/DECISIONS.md` · 173,383 bytes · SHA-256 `bedbe77df98d…`
+- `context/CURRENT_STATE.md` · 260,728 bytes · SHA-256 `9c14b9710663…`
+- `context/TASK_BOARD.md` · 181,042 bytes · SHA-256 `2f2de79476e6…`
+- `context/DECISIONS.md` · 173,740 bytes · SHA-256 `0ab84e22e27f…`
 - `docs/AUDIT_2026-10-18.json` · 6,892 bytes · SHA-256 `b34b668a7b5a…`

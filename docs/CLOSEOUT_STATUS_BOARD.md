@@ -10,11 +10,11 @@
 ║  Live:  preview  →  https://callofdoodie.wtf/                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED · last 5 commits ═══════════════════════════════╗
+║  ✓ fix: harden gameplay input transitions and session identity   ║
 ║  ✓ docs: S185 arc completion closeout records                    ║
 ║  ✓ fix(input): menus follow the active controller, not gamepad   ║
 ║  ✓ docs: regenerate S185 hot context                             ║
 ║  ✓ docs: S185 closeout — full-range controller aim records       ║
-║  ✓ fix(input): full 360° controller aim on every gamepad layout  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 941/1000 ═══════════════════════════════════════╗
 ║    Dev Health         96   ██████████                            ║
@@ -41,7 +41,7 @@
 ║  ✓ agent memory (Claude/Codex project memory)                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 64 files  ·  M:29 A:35 D:0 ?:0                         ║
+║  Changes: 17 files  ·  M:17 A:0 D:0 ?:0                          ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -52,12 +52,12 @@
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
 ║  Doctor:        157/233                                          ║
 ║  Compliance:    —                                                ║
-║  Tests:         ⛔ suite RED — 293/294 files · 1969/1970 asserti  ║
+║  Tests:         294/294                                          ║
 ║  Validation:    full-fresh                                       ║
 ║  IGNIS:         11d ago                                          ║
-║  Truth:         S186 four reliability outcomes verified on stag  ║
+║  Truth:         S186 production verified; S183 participant/comp  ║
 ║  Sanitization:  13d ago                                          ║
-║  shells:        1 started · 1 closed · 0 running                 ║
+║  shells:        2 started · 2 closed · 0 running                 ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ NEXT SESSION ════════════════════════════════════════════════╗
 ║  (no genius cache — run `node scripts/cache-genius-list.mjs`)    ║
