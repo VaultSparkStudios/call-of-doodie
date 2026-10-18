@@ -1,32 +1,32 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.1 -->
-<!-- generated-at: 2026-10-06 (Session 184 closeout) -->
+<!-- generated-at: 2026-10-18 (Session 185 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S184 ════════════════════╗
-║  Date: 2026-10-06  ·  SIL: 930/1000  ·  Velocity: 3 flat         ║
-║  Mode: FOUNDER  ·  Agent: codex                                  ║
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S185 ════════════════════╗
+║  Date: 2026-10-18  ·  SIL: 937/1000  ·  Velocity: 3 down         ║
+║  Mode: FOUNDER  ·  Agent: claude-code                            ║
 ║  Live:  preview  →  https://callofdoodie.wtf/                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED · last 5 commits ═══════════════════════════════╗
-║  ✓ docs: seal S184 end-run production verification               ║
-║  ✓ fix: simplify end-run submission, replay and sharing          ║
-║  ✓ docs: synchronize final closeout board and validation counte  ║
-║  ✓ docs: closeout S183 with verified production evidence         ║
-║  ✓ fix: refresh generated public content date after release com  ║
+║  ✓ fix(input): full 360° controller aim on every gamepad layout  ║
+║  ✓ docs: distinguish native verification method from receipt ki  ║
+║  ✓ docs: correct native login route                              ║
+║  ✓ docs: bind native Obelisk Passport integration                ║
+║  ✓ chore(deps-dev): bump the dev-dependencies group across 1 di  ║
 ╚════════════════════════════════════════════════════════════════╝
-╔══ SCORES · SIL 930/1000 ═══════════════════════════════════════╗
-║    Dev Health         94   █████████░                            ║
+╔══ SCORES · SIL 937/1000 ═══════════════════════════════════════╗
+║    Dev Health         95   ██████████                            ║
 ║    Alignment          96   ██████████                            ║
-║    Momentum           92   █████████░                            ║
-║    Engagement         90   █████████░                            ║
-║    Process Qual       90   █████████░                            ║
+║    Momentum           93   █████████░                            ║
+║    Engagement         92   █████████░                            ║
+║    Process Qual       92   █████████░                            ║
 ║    Coherence          90   █████████░                            ║
 ║    Security           98   ██████████                            ║
 ║    Ecosystem          92   █████████░                            ║
 ║    Capital            98   ██████████                            ║
-║    Automation         90   █████████░                            ║
+║    Automation         91   █████████░                            ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WRITE-BACK STATUS ═══════════════════════════════════════════╗
 ║  ✓ context/CURRENT_STATE.md                                      ║
@@ -35,13 +35,13 @@
 ║  ✓ logs/WORK_LOG.md                                              ║
 ║  ✓ context/DECISIONS.md                                          ║
 ║  ✓ context/SELF_IMPROVEMENT_LOOP.md                              ║
-║  ✓ docs/CREATIVE_DIRECTION_RECORD.md                             ║
+║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
 ║  ✓ context/TRUTH_AUDIT.md                                        ║
 ║  ✓ context/PROJECT_STATUS.json                                   ║
 ║  · agent memory (Claude/Codex project memory)                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 19 files  ·  M:17 A:0 D:0 ?:2                          ║
+║  Changes: 12 files  ·  M:11 A:0 D:0 ?:1                          ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -54,10 +54,10 @@
 ║  Compliance:    —                                                ║
 ║  Tests:         293/293                                          ║
 ║  Validation:    full-fresh                                       ║
-║  IGNIS:         7d ago                                           ║
+║  IGNIS:         19d ago                                          ║
 ║  Truth:         S184 end-run production verified; S183 comparat  ║
-║  Sanitization:  1d ago                                           ║
-║  shells:        1 started · 1 closed · 0 running                 ║
+║  Sanitization:  13d ago                                          ║
+║  shells:        unknown · missing/stale enumeration              ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ NEXT SESSION ════════════════════════════════════════════════╗
 ║  (no genius cache — run `node scripts/cache-genius-list.mjs`)    ║

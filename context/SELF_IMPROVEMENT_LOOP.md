@@ -3512,3 +3512,28 @@ End states are assisted browser fixtures, and native share-sheet outcomes are AP
 ## S184 explicit founder closeout — 2026-10-06
 
 Records seal 6e473e676ea1252cb531efd6fa400d33fa4ae228 passed exact-main workflow 37421746017: 293 test files / 1,954 assertions, strict lint, build and deploy. Canonical /_health reported 6e473e676ea1 and live shell checks passed 7/7. Gameplay source is unchanged from 9e6304b and its eight canonical end-run browser cases. Score and category values remain unchanged at 930/1000; no additional gameplay velocity is credited for records reconciliation.
+
+## 2026-10-18 — Session 185 | Total: 937/1000 | Velocity: 3 | Debt: ↓
+
+| Category | Score | Notes |
+|---|---:|---|
+| Dev Health | 95 | Input defect root-fixed with layout fixtures; suite 1,961/1,961 |
+| Creative Alignment | 96 | Full range of motion restores core twin-stick feel |
+| Momentum | 93 | Founder-reported bug fixed and deployed same session |
+| Engagement | 92 | Controller players regain 360° aim; assist no longer fights the stick |
+| Process Quality | 92 | Candidate commit → staging → production; red classified before acting |
+| Cross-Repo Coherence | 90 | Obelisk docs write-back gap recorded |
+| Security Posture | 98 | No new dependencies; lockfile-exact reinstall |
+| Ecosystem Integration | 92 | Unchanged |
+| Capital Efficiency | 98 | Single-session fix |
+| Automation Coverage | 91 | 360° sweep tests for controller/touch/mouse and four pad layouts |
+
+Controller right-stick aim now covers a full 360° on every gamepad layout. Aim was hard-wired to axes 2/3; pads without the W3C standard mapping (DualShock/DualSense in Firefox, generic Linux pads) place an analog trigger there that rests at -1, pinning stick Y and limiting aim to one half-plane (180°). `resolveAimAxes` in src/utils/gamepad.js now selects the right stick from the pad mapping, the PlayStation non-standard layout and resting-value trigger detection; the HomeV2 aim probe shares it. Resting triggers no longer count as constant controller activity. Controller aim assist bends aim only within a 30° cone, so a nearby enemy no longer captures the stick in every direction. Stick aim and touch starts retire the never-cleared `mouse.moved` flag, which previously snapped aim back to a stale cursor after stick release.
+
+Source b194fa92d945591a2fb8d59c8626c89672148819: local full suite 293/293 files, 1,961/1,961 tests, strict lint, deployable build. Staging https://session-185-staging.call-of-doodie.pages.dev (immutable https://4fe95987.call-of-doodie.pages.dev) passed shell 7/7 and served the candidate entry and fixed App chunk. Production deploy https://29004093.call-of-doodie.pages.dev; canonical callofdoodie.wtf passes shell 7/7, serves entry index-DtjGNJGX.js and App-ByPVHaqQ.js containing the mapping-aware aim. Exact-main workflow 39136409352 is recorded in the receipt below.
+
+Brainstorm: surface a controller calibration readout (detected layout + live stick vector) in Settings so players can self-diagnose odd pads; record the resolved axis layout in the controller profile for support receipts.
+
+Committed: [SIL] hands-on physical pad check across browsers.
+
+Learning: fixed axis indices are a browser-mapping assumption, not a controller fact; any never-cleared input flag becomes a hidden arbiter between devices.

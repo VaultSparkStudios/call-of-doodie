@@ -1,3 +1,11 @@
+## S185 controller aim deployment
+
+Overall status: S185 full-range controller aim b194fa9 is verified on staging and canonical production; physical-pad coverage is fixture-based. S183 comparative acceptance remains partial; FORGE/public-unlaunched.
+
+Source b194fa92d945591a2fb8d59c8626c89672148819: local full suite 293/293 files, 1,961/1,961 tests, strict lint, deployable build. Staging https://session-185-staging.call-of-doodie.pages.dev (immutable https://4fe95987.call-of-doodie.pages.dev) passed shell 7/7 and served the candidate entry and fixed App chunk. Production deploy https://29004093.call-of-doodie.pages.dev; canonical callofdoodie.wtf passes shell 7/7, serves entry index-DtjGNJGX.js and App-ByPVHaqQ.js containing the mapping-aware aim. Exact-main workflow 39136409352 is recorded in the receipt below.
+
+The S184 closeout never recorded the 2026-10-16 Obelisk Passport docs commits; this entry closes that write-back gap. Layout coverage is proven by axis-layout fixtures of documented browser mappings, not physical pads on every OS/browser. No hands-on controller session was run. A pad first seen with a stick held off-centre can misclassify that axis on non-standard layouts only. FORGE/public-unlaunched unchanged.
+
 ## S184 verified end-run deployment
 
 Overall status: S184 end-run gameplay and records seal 6e473e6 are verified on canonical production; final explicit-closeout records receive exact-main delivery checks after push. S183 comparative acceptance remains partial; FORGE/public-unlaunched.

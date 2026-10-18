@@ -1,3 +1,16 @@
+## Session 185 controller aim delivery
+
+Requested: fix controller aim limited to 180°, check other devices, direct-main commit/push and full deployment.
+
+Wave scaffold: Wave 1 diagnose done; Wave 2 fix/test + device check done; Wave 3 staging → production verified; Wave 4 closeout done. All requested outcomes complete.
+
+- [x] [SIL:185] Mapping-aware right-stick axes: full 360° on standard, PlayStation-Firefox, Linux generic and non-standard Xbox layouts.
+- [x] [SIL:185] Aim-assist cone and stale-mouse reclaim fixes; touch/mouse verified 360°.
+- [x] [SIL:185] Staging, production and exact-main CI verification.
+- Carried to Deferred: Hands-on physical controller check across Chrome/Firefox/Safari (fixtures only so far).
+
+Recovered write-back: three docs-only commits on 2026-10-16 (6a7f68d, 8230b4d, 6ee0cc6) bound the native Obelisk Passport integration record in obelisk-passport/ without a closeout; no runtime change. Local node_modules lagged Dependabot #179/#180, failing the dependency-tree smoke on pristine main; `npm ci` from the committed lockfile root-fixed it.
+
 ## Session 184 end-run delivery
 
 Requested: intuitive end-run screen, reliable sharing, visible leaderboard submission, direct-main commit/push and full deployment.
@@ -829,6 +842,7 @@ First checkpoint the bounded post-S159 propagation/CI/deploy recovery. Then begi
 
 ## Deferred
 
+- [ ] [SIL] [S185 acceptance] Hands-on check of right-stick 360° aim with physical Xbox and PlayStation pads in Chrome, Firefox and Safari. Owner: founder/project; dependency: physical controllers. S185 coverage is browser-layout fixtures.
 - [ ] [S183 acceptance] Measure matched human/agent play outcomes and creature/music comprehension with actual participants. Owner: project; dependency: matched participant observations. Not part of S184 closeout.
 - [ ] [S183 acceptance] Measure isolated production timing on target hardware and model-token usage before claiming comparative improvements. Owner: project; dependency: isolated device and model-token measurement. Not part of S184 closeout.
 - [x] [SIL:1] **SUPERSEDED S149** Native-`<select>` hypothesis — the native picker no longer exists on mobile, and hardware-composited timing isolated the actual first-gesture AudioContext tax. Generic physical launch QA remains separately listed under Human Action Required.

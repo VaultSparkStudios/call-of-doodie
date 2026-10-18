@@ -1,3 +1,17 @@
+## Where We Left Off — Session 185
+
+Controller right-stick aim now covers a full 360° on every gamepad layout. Aim was hard-wired to axes 2/3; pads without the W3C standard mapping (DualShock/DualSense in Firefox, generic Linux pads) place an analog trigger there that rests at -1, pinning stick Y and limiting aim to one half-plane (180°). `resolveAimAxes` in src/utils/gamepad.js now selects the right stick from the pad mapping, the PlayStation non-standard layout and resting-value trigger detection; the HomeV2 aim probe shares it. Resting triggers no longer count as constant controller activity. Controller aim assist bends aim only within a 30° cone, so a nearby enemy no longer captures the stick in every direction. Stick aim and touch starts retire the never-cleared `mouse.moved` flag, which previously snapped aim back to a stale cursor after stick release.
+
+Other devices checked: touch shoot-stick and mouse/pointer aim (DPR-scaled canvas, scrolled S165 camera) already resolved full 360°; new sweep tests pin controller, touch and mouse at 24 directions each. Touch shared the stale-mouse reclaim through emulated mouse events from HUD taps, now closed.
+
+Source b194fa92d945591a2fb8d59c8626c89672148819: local full suite 293/293 files, 1,961/1,961 tests, strict lint, deployable build. Staging https://session-185-staging.call-of-doodie.pages.dev (immutable https://4fe95987.call-of-doodie.pages.dev) passed shell 7/7 and served the candidate entry and fixed App chunk. Production deploy https://29004093.call-of-doodie.pages.dev; canonical callofdoodie.wtf passes shell 7/7, serves entry index-DtjGNJGX.js and App-ByPVHaqQ.js containing the mapping-aware aim. Exact-main workflow 39136409352 is recorded in the receipt below.
+
+Recovered write-back: three docs-only commits on 2026-10-16 (6a7f68d, 8230b4d, 6ee0cc6) bound the native Obelisk Passport integration record in obelisk-passport/ without a closeout; no runtime change. Local node_modules lagged Dependabot #179/#180, failing the dependency-tree smoke on pristine main; `npm ci` from the committed lockfile root-fixed it.
+
+Next: optional hands-on check with physical Xbox/PlayStation pads in Firefox and Chrome. Preserve the separate S183 comparative acceptance work.
+
+Layout coverage is proven by axis-layout fixtures of documented browser mappings, not physical pads on every OS/browser. No hands-on controller session was run. A pad first seen with a stick held off-centre can misclassify that axis on non-standard layouts only. FORGE/public-unlaunched unchanged.
+
 ## Where We Left Off — Session 184 final closeout
 
 Gameplay source 9e6304be12f8979a59e6684c448c07e6808949b1 passed exact-main workflow 37421044480: 293/293 files, 1,954/1,954 tests, strict lint, configured build and Cloudflare deployment. Canonical callofdoodie.wtf reports 9e6304be12f8; immutable deployment https://000027d0.call-of-doodie.pages.dev/. Canonical browser checks pass all eight defeat/victory, theme and width cases, including actual clipboard writes/readback, share success/manual fallback, score-image downloads, expanded sections, short screens, keyboard/touch scroll and menu return. Canonical/immutable shell 7/7 each, domain routing 5/5, backend health 5/5, replay trust 3/3 and shared-leaderboard isolation pass.

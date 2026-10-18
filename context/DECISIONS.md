@@ -1584,3 +1584,7 @@ Exact-source hosted CI and actual canonical runtime acceptance are the final del
 ## S184 explicit founder closeout — 2026-10-06
 
 Use a scoped equivalent of autopilot: the inspected local command delegates doctor to the Studio Ops root and only warns on its nonzero exit. It cannot certify this project. Dry-run completed; project-specific coherence/security/contract gates and exact-main hosted CI provide delivery evidence. Central IGNIS, review-loop and ecosystem-scorecard writes remain recipient-owned through Ark. Do not replace historical central measurements with invented current scores.
+
+## S185 controller aim — 2026-10-18
+
+Resolve the right stick from the pad's own layout instead of fixed indices: trust `mapping === "standard"`, use the known PlayStation non-standard layout, otherwise skip axes whose first-seen resting value sits near ±1 (triggers). Aim assist is a nudge, not a capture: limit it to a 30° cone. Pointer aim must be re-armed by real mouse movement, never by a historical flag. A red dependency-tree smoke that also fails on pristine main is local freshness; root-fix with `npm ci` from the committed lockfile, never by editing the gate.
