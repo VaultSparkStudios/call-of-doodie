@@ -1611,3 +1611,12 @@ Keep run-specific cooldowns and temporary pickup durations on the fixed simulati
 FORGE/public-unlaunched unchanged. Physical controllers, participant comparisons and target-device/model-token measurements remain unmeasured. Existing permanent-speed/Kill Frenzy composition is outside this pickup-expiry repair. Browser input and speed/ammo fixtures are assisted; no natural full-run claim.
 
 S187 delivery follow-through: 40e619d78bc7 is production verified. Keep participant/device and existing speed/frenzy composition evidence separate from the four completed fixes; no lifecycle launch was authorized.
+
+
+## 2026-10-18 — Session 188
+
+A projectile cannot damage after consumption, and one piercing pass damages each distinct target once. Use weak target membership to avoid retaining defeated enemies; reset exactly once at boomerang return. Preserve piercing capacity, separate shots and existing collision geometry. No new package or variable user cost.
+
+FORGE/public-unlaunched unchanged. Assisted combat fixtures are not natural full-run, physical-controller or participant evidence. Existing participant/device/model-token comparisons remain unmeasured. Existing narrow-screen precision text can crop; this combat correction does not change presentation. No identity, spending, licensing or lifecycle change.
+
+Canonical doctor/autopilot currently delegates to a sibling subject; scoped local evidence and exact-main CI remain the applicable release contract. No foreign doctor result is asserted as project health.

@@ -38,6 +38,73 @@ function runtime(overrides = {}) {
 }
 
 describe("stepProjectileFrame", () => {
+  const enemyAt = (extra = {}) => ({ x: 80, y: 60, size: 30, health: 10000, maxHealth: 10000, color: "#fff", ...extra });
+  const shot = (extra = {}) => ({ x: 80, y: 60, vx: 0, vy: 0, life: 100, size: 5, damage: 10, color: "#fff", ...extra });
+
+  it.each(["ordinary", "shield", "summoner"])("stops a consumed %s shot before the next overlapping target", kind => {
+    const first = enemyAt(kind === "shield" ? { shieldPulseActive: true } : kind === "summoner" ? { typeIndex: 18, summonerInvuln: true } : {});
+    const second = enemyAt();
+    const ctx = runtime({ bullets: [shot()], enemies: [first, second] });
+    stepProjectileFrame(ctx);
+    expect(ctx.gs.bullets[0].life).toBe(0);
+    expect(second.health).toBe(10000);
+    expect(ctx.gs.totalDamage > 0).toBe(kind === "ordinary");
+  });
+
+  it("limits a piercing shot to its remaining distinct-target capacity", () => {
+    const targets = [enemyAt(), enemyAt(), enemyAt()];
+    const ctx = runtime({ bullets: [shot({ pierceLeft: 1 })], enemies: targets });
+    stepProjectileFrame(ctx);
+    expect(targets.map(enemy => enemy.health < 10000)).toEqual([true, true, false]);
+  });
+
+  it("does not repeat damage, rewards or pierce spending on overlap or reentry", () => {
+    const first = enemyAt();
+    const second = enemyAt({ x: 160 });
+    const ctx = runtime({ bullets: [shot({ pierceLeft: 3 })], enemies: [first, second] });
+    stepProjectileFrame(ctx);
+    const healthAfterHit = first.health;
+    const damageAfterHit = ctx.gs.totalDamage;
+    const coinsAfterHit = ctx.gs.coins;
+    stepProjectileFrame({ ...ctx, frame: 2 });
+    first.x = 10;
+    stepProjectileFrame({ ...ctx, frame: 3 });
+    first.x = 80;
+    stepProjectileFrame({ ...ctx, frame: 4 });
+    expect(first.health).toBe(healthAfterHit);
+    expect(ctx.gs.totalDamage).toBe(damageAfterHit);
+    expect(ctx.gs.coins).toBe(coinsAfterHit);
+    expect(ctx.gs.bullets[0].pierceLeft).toBe(2);
+    second.x = 80;
+    stepProjectileFrame({ ...ctx, frame: 5 });
+    expect(second.health).toBeLessThan(10000);
+    expect(ctx.gs.bullets[0].pierceLeft).toBe(1);
+  });
+
+  it("lets independent shots hit the same enemy", () => {
+    const target = enemyAt();
+    const ctx = runtime({ bullets: [shot(), shot()], enemies: [target] });
+    stepProjectileFrame(ctx);
+    expect(ctx.gs.bullets.every(bullet => bullet.life === 0)).toBe(true);
+    expect(ctx.gs.totalDamage).toBeGreaterThanOrEqual(20);
+  });
+
+  it("lets a boomerang hit once outbound and once returning", () => {
+    const target = enemyAt();
+    const bullet = shot({ boomerang: true, returning: false, outboundLife: 98, pierceLeft: 99 });
+    const ctx = runtime({ bullets: [bullet], enemies: [target] });
+    stepProjectileFrame(ctx);
+    const outboundHealth = target.health;
+    stepProjectileFrame({ ...ctx, frame: 2 });
+    expect(target.health).toBe(outboundHealth);
+    stepProjectileFrame({ ...ctx, frame: 3 });
+    expect(bullet.returning).toBe(true);
+    expect(target.health).toBeLessThan(outboundHealth);
+    const returnHealth = target.health;
+    stepProjectileFrame({ ...ctx, frame: 4 });
+    expect(target.health).toBe(returnHealth);
+  });
+
   it("advances and compacts player and enemy projectiles", () => {
     const ctx = runtime({
       bullets: [{ x: 10, y: 10, vx: 2, vy: 0, life: 2, color: "#fff" }],

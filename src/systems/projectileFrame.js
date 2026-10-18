@@ -67,7 +67,12 @@ export function stepProjectileFrame({
         const nextVy = bullet.vx * Math.sin(rotation) + bullet.vy * Math.cos(rotation);
         bullet.vx = nextVx;
         bullet.vy = nextVy;
-        if (bullet.life <= bullet.outboundLife) bullet.returning = true;
+        if (bullet.life <= bullet.outboundLife) {
+          bullet.returning = true;
+          // A return pass may hit each target again, without repeated damage
+          // while the projectile remains inside the same target on either leg.
+          bullet.hitTargets = new WeakSet();
+        }
       } else {
         const dx = p.x - bullet.x;
         const dy = p.y - bullet.y;
@@ -235,8 +240,11 @@ export function stepProjectileFrame({
 
   gs.bullets.forEach((bullet) => {
     if (bullet.life <= 0) return;
+    bullet.hitTargets ||= new WeakSet();
     gs.enemies.forEach((enemy) => {
-      if (enemy.health <= 0 || !bulletEnemyCollision(bullet, enemy).hit) return;
+      if (bullet.life <= 0 || enemy.health <= 0 || bullet.hitTargets.has(enemy)
+        || !bulletEnemyCollision(bullet, enemy).hit) return;
+      bullet.hitTargets.add(enemy);
       if (!bullet.statHit) {
         bullet.statHit = true;
         stats.totalHits = (stats.totalHits || 0) + 1;

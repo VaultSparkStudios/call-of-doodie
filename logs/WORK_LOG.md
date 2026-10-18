@@ -1988,3 +1988,13 @@ S186 source 6dc4c4235cf2b263c1c8fef228ece1b3d8eb4b58 passed exact-main workflow 
 S187 fixes paused ability recharge, speed-pickup stat corruption, ignored reload preference and missing startup sync. Full suite/staging evidence: [S187 release audit](../audits/2026-10-18_3.json); exact-main production pending.
 
 S187 final delivery: S187 source 40e619d78bc72939366613ce754f8689d508ce4f passed exact-main workflow 39144720337: 296/296 test files, 1,988/1,988 assertions, strict lint, configured build and Cloudflare deployment. Canonical callofdoodie.wtf reports 40e619d78bc7; canonical and immutable https://73a5ea19.call-of-doodie.pages.dev pass shell 7/7 each. Four real-browser cooldown cases pass at 390/1440 in both themes; two desktop/mobile speed and manual/automatic reload cases also pass. Records-only seal follows through exact-main CI/live readback.
+
+
+## 2026-10-18 — Session 188
+
+S188 fixes consumed-projectile damage and repeated piercing contacts.
+
+Focused combat suite passes 2 files / 33 tests; seven new cases expose the old collision behavior. Independent review approves both outcomes. Staging 0aa75416 passes shell 7/7 and four assisted Chrome combat cases across 390/1440 and both themes. Sixteen before/after captures are reviewed and hash-bound. Strict lint, configured build, public contract and security checks pass (zero dependency vulnerabilities). Full-suite rerun and exact-main hosted deployment remain pending. Public acceptance record: audits/2026-10-18_4.json.
+
+
+S188 final local verification: S188 full local suite passes 296/296 files and 1,995/1,995 assertions. Strict lint, configured build, security/public contracts, independent review, 16 reviewed captures and four staging browser cases pass. Exact-main CI/deployment and production readback pending.

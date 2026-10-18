@@ -1,3 +1,15 @@
+## S188 candidate verification
+
+S188 full local suite passes 296/296 files and 1,995/1,995 assertions. Strict lint, configured build, security/public contracts, independent review, 16 reviewed captures and four staging browser cases pass. Exact-main CI/deployment and production readback pending.
+
+## S188 projectile contact reliability
+
+S188 fixes consumed-projectile damage and repeated piercing contacts.
+
+Ordinary, shield and invulnerable-summoner collisions stop consumed shots before another enemy; finite pierce capacity is respected. Weak per-projectile target membership prevents repeated damage/rewards during overlap or reentry; independent bullets remain independent and boomerangs can hit once on each pass.
+
+Staging verified; exact-main release pending. See LATEST_HANDOFF for current proof.
+
 ## S187 production verified
 
 Four selected fixes are live at 40e619d78bc7. All 296 files / 1988 assertions pass exact-main CI. See [LATEST_HANDOFF](LATEST_HANDOFF.md) for deployment evidence, rollback and limits.

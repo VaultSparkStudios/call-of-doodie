@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "1.3",
+  "session": 188,
+  "date": "2026-10-18",
+  "headline": "S188 fixes consumed-projectile damage and repeated piercing contacts.",
+  "shipped": [
+    "Ordinary, shield and invulnerable-summoner collisions stop consumed shots before another enemy; finite pierce capacity is respected.",
+    "Weak per-projectile target membership prevents repeated damage/rewards during overlap or reentry; independent bullets remain independent and boomerangs can hit once on each pass."
+  ],
+  "validation": "S188 full local suite passes 296/296 files and 1,995/1,995 assertions. Strict lint, configured build, security/public contracts, independent review, 16 reviewed captures and four staging browser cases pass. Exact-main CI/deployment and production readback pending.",
+  "limits": "FORGE/public-unlaunched unchanged. Assisted combat fixtures are not natural full-run, physical-controller or participant evidence. Existing participant/device/model-token comparisons remain unmeasured. Existing narrow-screen precision text can crop; this combat correction does not change presentation. No identity, spending, licensing or lifecycle change.",
+  "production": {
+    "status": "pending"
+  },
+  "review": {
+    "verdict": "approve",
+    "blockingFindings": 0
+  },
+  "staging": {
+    "url": "https://0aa75416.call-of-doodie.pages.dev",
+    "browserCases": 4,
+    "shellAssertions": 7
+  },
+  "initialLocalFailure": "Two stale hot-context source-index failures; final full rerun required.",
+  "localValidation": {
+    "files": 296,
+    "assertions": 1995,
+    "pass": true,
+    "initialFailures": [
+      "Hot-context index changed during initial audit generation; regenerated.",
+      "An intermediate full run read the startup brief during closeout generation; all sources then settled before final full rerun."
+    ],
+    "finalRunAt": "2026-10-18T17:25:58.814Z"
+  }
+}

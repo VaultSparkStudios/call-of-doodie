@@ -4,6 +4,18 @@
 
 ## Current Session
 
+## S188 candidate verification
+
+S188 full local suite passes 296/296 files and 1,995/1,995 assertions. Strict lint, configured build, security/public contracts, independent review, 16 reviewed captures and four staging browser cases pass. Exact-main CI/deployment and production readback pending.
+
+## S188 projectile contact reliability
+
+S188 fixes consumed-projectile damage and repeated piercing contacts.
+
+Ordinary, shield and invulnerable-summoner collisions stop consumed shots before another enemy; finite pierce capacity is respected. Weak per-projectile target membership prevents repeated damage/rewards during overlap or reentry; independent bullets remain independent and boomerangs can hit once on each pass.
+
+Staging verified; exact-main release pending. See LATEST_HANDOFF for current proof.
+
 ## S187 production verified
 
 Four selected fixes are live at 40e619d78bc7. All 296 files / 1988 assertions pass exact-main CI. See [LATEST_HANDOFF](LATEST_HANDOFF.md) for deployment evidence, rollback and limits.
@@ -60,14 +72,14 @@ End-run results now show the score and Submit to leaderboard before optional con
 
 Staging https://aa2065a8.call-of-doodie.pages.dev passed shell 7/7 and eight actual-app ending cases across defeat/victory, dark/light and 390/1440px, including short screens, touch, keyboard End and menu return. Eight share checks covered native API fixture success, clipboard success/denial, manual selectable links and real score-image downloads. 92 before/after captures were directly inspected and hash-bound; CANON-053 passed. Submission behavior tests cover pending/double click, online rank, local/rejected states and eligibility. Exact-main CI and production verification are complete; see the verified receipts above.
 
-Assisted terminal states prove UI integration, not natural playthroughs or participant enjoyment. Native share outcomes use API fixtures; production clipboard copy/readback and image downloads are real. No external message was sent. Backend health used its existing valid/rejected QA submission contract. Operations links open the game home rather than claiming mission preservation. Existing eight S183 comparative outcomes remain pending and are outside this request. FORGE/public-unlaunched remains unchanged.
-
-## S183 verified production follow-through
-
-Source e6b72c770cd83a70847f74b390e28aa9f50b4622 passed exact-main workflow 37245074608: 291/291 files, 1,931/1,931 tests, strict lint, build and Cloudflare deployment. Canonical callofdoodie.wtf reports e6b72c770cd8; canonical and immutable https://ea7fba17.call-of-doodie.pages.dev/ pass shell 7/7 each, domain routing 5/5 and replay trust 3/3. Actual canonical browser checks pass 24/24 mode advancement/pause/resume cases, 8/8 death/victory ending cases with expanded sections, short-screen scrolling, menu return and hashed downloads, 4/4 setup/settings cases and 20/20 creature pra
+Assisted terminal states prove UI integration, not natural playthroughs or participant enjoyment. Native share outcomes use API fixtures; production clipboard copy/readback and image downloads are real. No external message was sent. Backend health used its existing valid/rejected QA submission contract. Operations links open the game h
 
 ## Open Work
 
+## S188 arc outcomes and waves
+- [ ] S188 exact-main deployment and final closeout proof.
+- [ ] [SIL:1] S188 reserve: test swept projectile geometry against thin or fast-moving targets before changing collision rules.
+- [ ] [SIL:1] S188 reserve: measure precision reward text legibility at 390px before changing feedback presentation.
 ## S187 arc outcomes and waves
 - [ ] [SIL:1] S187 follow-up: inspect the existing permanent-speed/Kill Frenzy overwrite before changing progression promises.
 - [ ] [SIL:1] S187 compatibility reserve: verify restricted Gamepad API behavior before broadening browser support claims.
@@ -119,18 +131,8 @@ Source e6b72c770cd83a70847f74b390e28aa9f50b4622 passed exact-main workflow 37245
 ## Session 154 — Propagation compatibility and protocol truth
 ## Session 153 — Playtest signal, replay plans, and release trust
 ## Session 151 — Revenge loop, mastery truth, stats twin, and architecture headroom
-## Session 150 — Homepage readability and navigation
-## Human Action Required
-- [ ] [S60] Rotate or narrow the broad Cloudflare `cloudflare-studio-access.txt` token after domain stabilization — current token has account/user/zone-wide powers and should be replaced by narrower domain-migration tokens
-- [ ] Physical launch QA — verify PWA install prompt/accept flow on a real mobile/browser combination
 
 ## Recent Decisions
-
-## S185 arc completion — 2026-10-18
-
-Every gamepad-polling surface selects its pad through getPrimaryGamepad(); no screen reads a fixed slot. A start-time canon suggestion is not adoption evidence: CANON-056 stays pending until its terminology audit runs. A goal-requested /arc is incomplete without its /start and /audit phases even when the requested fix is already shipped; run them rather than claim them.
-
-
 
 ## 2026-10-18 — Session 186
 
@@ -152,9 +154,19 @@ FORGE/public-unlaunched unchanged. Physical controllers, participant comparisons
 
 S187 delivery follow-through: 40e619d78bc7 is production verified. Keep participant/device and existing speed/frenzy composition evidence separate from the four completed fixes; no lifecycle launch was authorized.
 
+
+
+## 2026-10-18 — Session 188
+
+A projectile cannot damage after consumption, and one piercing pass damages each distinct target once. Use weak target membership to avoid retaining defeated enemies; reset exactly once at boomerang return. Preserve piercing capacity, separate shots and existing collision geometry. No new package or variable user cost.
+
+FORGE/public-unlaunched unchanged. Assisted combat fixtures are not natural full-run, physical-controller or participant evidence. Existing participant/device/model-token comparisons remain unmeasured. Existing narrow-screen precision text can crop; this combat correction does not change presentation. No identity, spending, licensing or lifecycle change.
+
+Canonical doctor/autopilot currently delegates to a sibling subject; scoped local evidence and exact-main CI remain the applicable release contract. No foreign doctor result is asserted as project health.
+
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 261,244 bytes · SHA-256 `2bf6177f6820…`
-- `context/TASK_BOARD.md` · 181,925 bytes · SHA-256 `e61637af4a2a…`
-- `context/DECISIONS.md` · 174,796 bytes · SHA-256 `e9290e9a5dcc…`
+- `context/CURRENT_STATE.md` · 262,051 bytes · SHA-256 `8f20250b13a5…`
+- `context/TASK_BOARD.md` · 182,558 bytes · SHA-256 `417b3fba06e7…`
+- `context/DECISIONS.md` · 175,714 bytes · SHA-256 `8be63b6f60c0…`
 - `docs/AUDIT_2026-10-18.json` · 6,892 bytes · SHA-256 `b34b668a7b5a…`

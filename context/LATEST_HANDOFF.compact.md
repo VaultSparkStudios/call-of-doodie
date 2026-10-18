@@ -1,48 +1,23 @@
-<!-- generated-by: scripts/compact-handoff.mjs deterministic-v1 -->
-<!-- source-hash: bd195718d49c77943512cfc01c7b3a40ae923d2d1a48d3c47d6792961c95ccad -->
+# S188 compact handoff
 
-# LATEST_HANDOFF (source extract)
+Deterministic bounded extract; full LATEST_HANDOFF is authoritative.
 
-## S183 verified production follow-through
+## Where We Left Off — Session 188
 
-Source e6b72c770cd83a70847f74b390e28aa9f50b4622 passed exact-main workflow 37245074608: 291/291 files, 1,931/1,931 tests, strict lint, build and Cloudflare deployment. Canonical callofdoodie.wtf reports e6b72c770cd8; canonical and immutable https://ea7fba17.call-of-doodie.pages.dev/ pass shell 7/7 each, domain routing 5/5 and replay trust 3/3. Actual canonical browser checks pass 24/24 mode advancement/pause/resume cases, 8/8 death/victory ending cases with expanded sections, short-screen scrolling, menu return and hashed downloads, 4/4 setup/settings cases and 20/20 creature practice cases. Actual Classic/Zombies/Operations audio output, pause/mute/resume, single context and movement pass.
+Session Intent: fresh /start → /audit → /implement → /closeout; direct-main push and full deployment. Intent outcome: staging and selected outcomes verified; final delivery pending.
 
-Next: conduct the eight remaining measured comparisons using the private matched-setup protocol. Twelve technical audit outcomes are verified and shipped. Eight comparative acceptance outcomes remain pending: participant pump pacing, objective-music listening, creature comprehension/humor, matched human/agent comparison, human interpretation of outcomes, isolated target-device timing, evidence-cache token usage and evidence-pack token usage. No human rating, natural all-mode completion, physical-device result, speedup or model-token saving is claimed.
+S188 fixes consumed-projectile damage and repeated piercing contacts.
 
-## S183 final staging evidence
+Ordinary, shield and invulnerable-summoner collisions stop consumed shots before another enemy; finite pierce capacity is respected.
 
-Final staging ce356fde passes shell 7/7 and all eight ending cases with actual death/victory pack downloads, bottom controls, keyboard/touch scroll and menu return. Setup 4/4 and creature practice 20/20 passed the same source implementation before the terminal-only synchronization fix. CANON-053 passes 144 directly reviewed hash-bound captures. Strict lint, configured build, public/security/supply-chain gates and all corrected targeted regressions pass. Exact-main hosted suite and production follow-through remain pending.
+Weak per-projectile target membership prevents repeated damage/rewards during overlap or reentry; independent bullets remain independent and boomerangs can hit once on each pass.
 
-## Session 183 gameplay audit follow-through
+Focused combat suite passes 2 files / 33 tests; seven new cases expose the old collision behavior. Independent review approves both outcomes. Staging 0aa75416 passes shell 7/7 and four assisted Chrome combat cases across 390/1440 and both themes. Sixteen before/after captures are reviewed and hash-bound. Strict lint, configured build, public contract and security checks pass (zero dependency vulnerabilities). Full-suite rerun and exact-main hosted deployment remain pending.
 
-Where We Left Off: Setup links and version-2 cartridges preserve all twelve modes and four difficulties. Settings have accessible names and states; mobile run-code controls match desktop. Zombies and Bot Royale honor difficulty factors. Mobile combat removes duplicate weapon/ammo panels. Objective music gains distinct mission/pump phrases. Optional creature practice and pump-paced Zombies remain local experiments. Run exports record bounded build, kit, mutation, pacing and objective provenance.
+FORGE/public-unlaunched unchanged. Assisted combat fixtures are not natural full-run, physical-controller or participant evidence. Existing participant/device/model-token comparisons remain unmeasured. Existing narrow-screen precision text can crop; this combat correction does not change presentation. No identity, spending, licensing or lifecycle change.
 
-Session Intent: Complete the authorized gameplay audit plan, /closeout, direct-main push and deployment.
-Intent outcome: Source implementation and automated acceptance advanced; participant/hardware/token acceptance remains partial.
-Real playthroughs exposed paused wall-clock reload completion, stale starting-kit initialization, and terminal score/wave mismatch that disabled victory exports. These are repaired with simulation-clock reloads, kit selection before initialization, and final-state synchronization.
-Local full suite: 1,929/1,930 initially passed; the one stale mode-wiring assertion was corrected and its suite passed. Subsequent setup/export/terminal regressions pass. Strict lint, configured build, public contracts and security gate pass. Sixty fixed-seed setup observations and twenty-four all-mode pause/resume follow-ups cover twelve modes/four difficulties plus mobile Normal. Real audio/control probes pass Classic, Zombies and Operations. Staging setup and creature checks pass in both themes at 390/1440; eight ending cases pass including 390×360 scrolling. Final staging/CI/production evidence follows the terminal fix.
-Deploy: staged at https://2c127d0c.call-of-doodie.pages.dev/ before final terminal sync; replacement staging and production verification pending.
-Rollback: retain production source 5d13141813939e9e3efa7eb2a05cd7cee492c49a; use documented normal revert path.
-Next: finish delivery checks, then the remaining measured acceptance. Human-versus-agent comparative outcomes, humor/listening judgments, physical devices, model-token savings and isolated production performance remain unmeasured. Automation proves integration and observations, not enjoyment, balance or retention. All twenty audit items retain their detailed acceptance status in the private audit artifact; source implementation is not blanket acceptance.
+Native goal 01a14ff9-6f10-7c80-a119-6066aeba5478 createdAt 1792343124 binds to S188, start 4da398f6eb994ffa91d15ee6117af2ce67cc98be. This invocation has its own fresh audit and implementation evidence. Private audit/plan live in ignored session cache. Both typed premises and a passing pre-implementation timing gate were recorded.
 
-## End-game follow-up — 2026-10-03
+CDR reviewed: no new creative direction. Local doctor/autopilot delegates to foreign Studio Ops state; scoped project checks and exact-main CI serve release proof without claiming a zero-finding project doctor. Missing central/local helper delivery stays explicit. CANON-045 STRONG legacy gap is unchanged; no auth surface changes. Rollback: ordinary revert to 4da398f6, rebuild and redeploy.
 
-
-## Source lookup
-
-Extract is incomplete. Read context/LATEST_HANDOFF.md at the indicated lines before acting on omitted work or approvals. Full file: 124 lines; 6 typed handoff blocks.
-- L1: S183 verified production follow-through
-- L7: S183 final staging evidence
-- L11: Session 183 gameplay audit follow-through
-- L23: End-game follow-up — 2026-10-03
-- L27: Session 182 explicit founder closeout
-- L34: Where We Left Off (Session 182 production seal)
-- L43: Where We Left Off (Session 182)
-- L53: Latest Handoff — Session 181
-- L55: Where We Left Off (Session 181)
-- L70: Where We Left Off (Session 180)
-- L81: Next
-- L88: Where We Left Off (Session 179)
-- L99: Next
-- L104: Where We Left Off (Session 178)
-- L117: Next
+Required candidate workflow: .github/workflows/deploy-cloudflare.yml at this session's exact main commit, including strict lint/full test, configured build and deploy. Other historical runs are advisory.
