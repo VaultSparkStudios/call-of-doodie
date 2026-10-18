@@ -2,13 +2,13 @@
 
 Session Intent: Full fresh arc, direct-main push and full deployment.
 
-Wave 1 ✔ fresh startup and nine-axis audit. Wave 2 ✔ startup sync, cooldowns, speed pickups and reload preference. Wave 3 ◼ exact-main delivery and final closeout.
+Wave 1 ✔ fresh startup and nine-axis audit. Wave 2 ✔ startup sync, cooldowns, speed pickups and reload preference. Wave 3 ✔ exact-main delivery and final closeout.
 
 - [x] S187 audit 1: Restore recipient-local startup synchronization.
 - [x] S187 audit 2: Keep dash and grenade cooldowns on simulation time.
 - [x] S187 audit 3: Expire speed pickups without corrupting permanent speed.
 - [x] S187 audit 4: Honor manual reload preference on an emptied magazine.
-- [ ] S187 exact-main production delivery verification (Wave 3).
+- [x] S187 exact-main production delivery verification (Wave 3).
 - [ ] [SIL:1] S187 follow-up: inspect the existing permanent-speed/Kill Frenzy overwrite before changing progression promises.
 - [ ] [SIL:1] S187 compatibility reserve: verify restricted Gamepad API behavior before broadening browser support claims.
 

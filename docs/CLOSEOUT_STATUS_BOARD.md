@@ -10,11 +10,11 @@
 ║  Live:  preview  →  https://callofdoodie.wtf/                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED · last 5 commits ═══════════════════════════════╗
+║  ✓ fix: keep run timers isolated and honor reload preferences    ║
 ║  ✓ docs: seal S186 verified production closeout                  ║
 ║  ✓ fix: harden gameplay input transitions and session identity   ║
 ║  ✓ docs: S185 arc completion closeout records                    ║
 ║  ✓ fix(input): menus follow the active controller, not gamepad   ║
-║  ✓ docs: regenerate S185 hot context                             ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 944/1000 ═══════════════════════════════════════╗
 ║    Dev Health         97   ██████████                            ║
@@ -41,7 +41,7 @@
 ║  ✓ agent memory (Claude/Codex project memory)                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 31 files  ·  M:19 A:0 D:0 ?:12                         ║
+║  Changes: 17 files  ·  M:17 A:0 D:0 ?:0                          ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -55,9 +55,9 @@
 ║  Tests:         296/296                                          ║
 ║  Validation:    full-fresh                                       ║
 ║  IGNIS:         11d ago                                          ║
-║  Truth:         S187 staging verified; exact-main delivery pend  ║
+║  Truth:         S187 production verified; participant/device ev  ║
 ║  Sanitization:  13d ago                                          ║
-║  shells:        1 started · 1 closed · 0 running                 ║
+║  shells:        2 started · 2 closed · 0 running                 ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ NEXT SESSION ════════════════════════════════════════════════╗
 ║  (no genius cache — run `node scripts/cache-genius-list.mjs`)    ║

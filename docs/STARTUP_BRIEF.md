@@ -20,7 +20,7 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ LAST SESSION (S187) - WHAT SHIPPED ══════════════════════════╗
-║  S187 fixes paused ability recharge, speed-pickup stat corrupti  ║
+║  S187 restored startup sync, froze ability cooldowns with simul  ║
 ║  Tests  -                                                        ║
 ║  Deploy -                                                        ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -68,19 +68,18 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ✓  ████████░░░░░░░░░░░░░░░░   32% used                          ║
-║     87,780 / 272,000 tok  ·  codex/codex-272k  · …               ║
-║     ~43,890 tok/turn  ·  cache 50%  ·  3 turns to compact        ║
-║     Verdict: CONTINUE                                            ║
+║  ⚠  ░░░░░░░░░░░░░░░░░░░░░░░░    2% used                          ║
+║     331,489 / 200,000 tok  ·  unknown  ·  heuristic-stale        ║
+║     Verdict: CONSIDER_CLOSEOUT  ← act now                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         296/296 passing (2026-10-18T16:20:24.519Z)     ║
+║  ✓  Tests         296/296 passing (2026-10-18T16:24:14Z)         ║
 ║  ✓  Velocity      4   ·  Debt: →                                 ║
-║  ✓  Runway        S187 staging verified; production pending      ║
+║  ✓  Runway        S187 production verified                       ║
 ║  ⛔  Context age   ?d                                             ║
 ║  ⚠  IGNIS         44193 FORGE  ·  10d old                        ║
-║  ⛔  Truth         S186 four reliability outcomes are…            ║
+║  ⛔  Truth         S187 four selected outcomes are production…    ║
 ║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs…        ║
 ║  ✓  Genome dims   all stable  (24/25)                            ║
 ║  ✓  Entropy       0.209  (healthy)                               ║

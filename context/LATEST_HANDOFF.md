@@ -1,3 +1,17 @@
+## Where We Left Off — Session 187 final closeout
+
+Session Intent: Full fresh arc, direct-main commit/push and full deployment. Intent outcome: achieved.
+
+S187 source 40e619d78bc72939366613ce754f8689d508ce4f passed exact-main workflow 39144720337: 296/296 test files, 1,988/1,988 assertions, strict lint, configured build and Cloudflare deployment. Canonical callofdoodie.wtf reports 40e619d78bc7; canonical and immutable https://73a5ea19.call-of-doodie.pages.dev pass shell 7/7 each. Four real-browser cooldown cases pass at 390/1440 in both themes; two desktop/mobile speed and manual/automatic reload cases also pass.
+
+Fresh startup and nine-axis audit selected four new failures. Recipient-local startup sync is restored with canonical executable equivalence and real-Git isolation/WIP tests. Dash/grenade and temporary speed pickups use active simulation time; pickup expiry leaves permanent stats intact. Auto Reload honors its setting, while explicit and Overclocked reload remain functional. Independent final review passed with zero blocking findings. Staging preceded main push; 36 before/after images were inspected and hash-bound.
+
+FORGE/public-unlaunched unchanged. Browser inputs and pickup/ammo states are assisted fixtures. Physical-device/participant/model-token comparisons remain unmeasured. Existing permanent-speed/Kill Frenzy composition remains a separate follow-up; pickup expiry no longer mutates base stats.
+
+All ten write-back records reconciled; CDR unchanged because no new creative direction was given. One owned server stopped and the finite CI watcher completed. Missing central scorer/doctor/helper delivery remains explicit and recipient-owned; scoped project gates and exact-main CI prove this release. Signed Ark carries the central refresh request; shipping is not application.
+
+Rollback: ordinary revert to 01fb96add3eeff50a5b7151357c7e40ad67c09e7, rebuild and redeploy. This records-only seal receives its own exact-main workflow and live readback; runtime source remains the verified implementation above.
+
 ## Where We Left Off — Session 187
 
 Session Intent: Full fresh /start → /audit → /implement → /closeout, direct-main commit/push and full deployment. Intent outcome: implementation/staging verified; exact-main delivery in progress.

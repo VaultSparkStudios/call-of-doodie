@@ -1,3 +1,13 @@
+## S187 final delivery
+
+Overall status: S187 four selected outcomes are production verified; 296 files / 1988 assertions pass exact-main CI. Existing participant/device evidence remains unmeasured.
+
+S187 source 40e619d78bc72939366613ce754f8689d508ce4f passed exact-main workflow 39144720337: 296/296 test files, 1,988/1,988 assertions, strict lint, configured build and Cloudflare deployment. Canonical callofdoodie.wtf reports 40e619d78bc7; canonical and immutable https://73a5ea19.call-of-doodie.pages.dev pass shell 7/7 each. Four real-browser cooldown cases pass at 390/1440 in both themes; two desktop/mobile speed and manual/automatic reload cases also pass.
+
+FORGE/public-unlaunched unchanged. Browser inputs and pickup/ammo states are assisted fixtures. Physical-device/participant/model-token comparisons remain unmeasured. Existing permanent-speed/Kill Frenzy composition remains a separate follow-up; pickup expiry no longer mutates base stats.
+
+The initial local suite passed 1987/1988 tests; only the new real-Git fixture hit its 30-second timeout. A per-test 90-second budget with bounded subprocesses passed both isolation and the final full suite. No gameplay failure was suppressed.
+
 ## S187 verified evidence and limits
 
 Overall status: S187 four selected outcomes pass local full suite, independent review and final staging. Exact-main hosted checks and production delivery remain pending; participant/device measurements remain separate.

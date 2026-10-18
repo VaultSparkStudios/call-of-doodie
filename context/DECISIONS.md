@@ -1609,3 +1609,5 @@ Use candidate-specific hosted quality/build/deploy and live behavior as delivery
 Keep run-specific cooldowns and temporary pickup durations on the fixed simulation clock. Temporary movement bonuses stay separate from permanent speed; auto-reload follows the existing player setting. Adopt canonical startup sync with executable equivalence and public-safe comments. No new package, recurring cost, identity policy, rights change or lifecycle transition. Existing CANON-045 STRONG identity gap remains outside unchanged guest-game promotion; no new account surface is introduced.
 
 FORGE/public-unlaunched unchanged. Physical controllers, participant comparisons and target-device/model-token measurements remain unmeasured. Existing permanent-speed/Kill Frenzy composition is outside this pickup-expiry repair. Browser input and speed/ammo fixtures are assisted; no natural full-run claim.
+
+S187 delivery follow-through: 40e619d78bc7 is production verified. Keep participant/device and existing speed/frenzy composition evidence separate from the four completed fixes; no lifecycle launch was authorized.

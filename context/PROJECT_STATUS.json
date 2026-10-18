@@ -4,9 +4,15 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "S187 four outcomes staged; exact-main delivery underway.",
-  "nextMilestone": "Verify S187 exact-main production delivery.",
+  "currentFocus": "S187 four reliability outcomes complete and production verified.",
+  "nextMilestone": "Gather existing participant/device evidence before lifecycle promotion.",
   "testingSurfaces": [
+    {
+      "session": 187,
+      "type": "production-verification",
+      "status": "green",
+      "command": "S187 source 40e619d78bc72939366613ce754f8689d508ce4f passed exact-main workflow 39144720337: 296/296 test files, 1,988/1,988 assertions, strict lint, configured build and Cloudflare deployment. Canonical callofdoodie.wtf reports 40e619d78bc7; canonical and immutable https://73a5ea19.call-of-doodie.pages.dev pass shell 7/7 each. Four real-browser cooldown cases pass at 390/1440 in both themes; two desktop/mobile speed and manual/automatic reload cases also pass."
+    },
     {
       "session": 187,
       "type": "staging-and-local-full-gates",
@@ -175,7 +181,7 @@
   "lastUpdated": "2026-10-18",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
-  "truthAuditStatus": "S187 staging verified; exact-main delivery pending. Existing participant/device evidence remains unmeasured.",
+  "truthAuditStatus": "S187 production verified; participant/device evidence remains unmeasured.",
   "truthAuditLastRun": "2026-10-18",
   "ignisScore": 44193,
   "ignisGrade": "FORGE",
@@ -221,15 +227,15 @@
   "runtimeUrl": "https://callofdoodie.wtf/",
   "stagingType": "cloudflare-pages",
   "stagingUrl": "https://107df7f2.call-of-doodie.pages.dev/",
-  "testsLastRun": "2026-10-18T16:20:24.519Z",
+  "testsLastRun": "2026-10-18T16:24:14Z",
   "sanitizationLastCleared": "2026-10-06",
   "sessionShellHygiene": {
     "session": 187,
-    "enumeratedAt": "2026-10-18T16:21:48.238Z",
-    "started": 1,
-    "closed": 1,
+    "enumeratedAt": "2026-10-18T16:26:01.557Z",
+    "started": 2,
+    "closed": 2,
     "running": 0,
-    "scope": "Owned Vite server PID verified on port 4187 and stopped; finite local test/browser/deploy handles terminal."
+    "scope": "Owned Vite server stopped; exact-source CI watcher terminal; all finite commands completed."
   },
   "doctorScore": {
     "date": "2026-10-04",
@@ -244,7 +250,7 @@
     "skipped": 3,
     "note": "Studio-wide doctor evidence; not a project-only zero-findings claim. Central follow-up delivered through Ark; application unobserved."
   },
-  "lastSessionSummary": "S187 fixes paused ability recharge, speed-pickup stat corruption, ignored reload preference and missing startup sync.",
+  "lastSessionSummary": "S187 restored startup sync, froze ability cooldowns with simulation, isolated speed pickups and honored auto-reload; 296 files / 1988 tests pass; production verified.",
   "testsAssertionsPassing": 1988,
   "testsAssertionsTotal": 1988,
   "testsAssertionsFiles": 293,
@@ -255,32 +261,34 @@
   "testsBudgetExhausted": false,
   "silAvg5": 934.8,
   "testsAssertionsDeferred": [],
-  "testsAssertionsLastRun": "2026-10-18T16:20:24.519Z",
-  "lastShipped": "S187 fixes paused ability recharge, speed-pickup stat corruption, ignored reload preference and missing startup sync.",
-  "truthStatus": "FORGE/public-unlaunched unchanged. Physical controllers, participant comparisons and target-device/model-token measurements remain unmeasured. Existing permanent-speed/Kill Frenzy composition is outside this pickup-expiry repair. Browser input and speed/ammo fixtures are assisted; no natural full-run claim.",
+  "testsAssertionsLastRun": "2026-10-18T16:24:14Z",
+  "lastShipped": "S187 four reliability fixes production verified.",
+  "truthStatus": "FORGE/public-unlaunched unchanged. Browser inputs and pickup/ammo states are assisted fixtures. Physical-device/participant/model-token comparisons remain unmeasured. Existing permanent-speed/Kill Frenzy composition remains a separate follow-up; pickup expiry no longer mutates base stats.",
   "testsFocusedSupplement": "Exact-main workflow 37421044480 passed 293 files / 1,954 assertions, strict lint, configured build and deployment; production browser verification passed eight end-run cases.",
-  "lastDeployCommit": "6dc4c4235cf2b263c1c8fef228ece1b3d8eb4b58",
-  "lastDeployAt": "2026-10-18T15:48:53Z",
+  "lastDeployCommit": "40e619d78bc72939366613ce754f8689d508ce4f",
+  "lastDeployAt": "2026-10-18T16:24:46Z",
   "closeoutAcceptance": {
     "session": 187,
     "writeback": "all ten reconciled; CDR unchanged without creative direction",
     "scaffold": {
       "tasks": 3,
-      "done": 2,
-      "inProgress": 1,
+      "done": 3,
+      "inProgress": 0,
       "open": 0
     },
     "independentReview": "pass; zero blocking findings",
-    "autopilot": "scoped-equivalent: foreign doctor not project proof",
-    "hygiene": "zero owned servers running; hosted CI watcher starts after push"
+    "autopilot": "scoped equivalent with exact-main full CI; foreign doctor not project proof",
+    "trace": "completed",
+    "hygiene": "zero owned shells running",
+    "verifiedAt": "2026-10-18T16:26:01.557Z"
   },
   "testsLastRunMode": "full-ci",
   "velocity": 4,
   "silVelocityLastSession": 4,
   "deploy": {
-    "source": "6dc4c4235cf2b263c1c8fef228ece1b3d8eb4b58",
-    "workflow": 39141994765,
-    "immutableUrl": "https://b0ffec69.call-of-doodie.pages.dev/",
+    "source": "40e619d78bc72939366613ce754f8689d508ce4f",
+    "workflow": 39144720337,
+    "immutableUrl": "https://73a5ea19.call-of-doodie.pages.dev",
     "status": "verified"
   },
   "lastSession": 187

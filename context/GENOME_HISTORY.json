@@ -1061,7 +1061,7 @@
       "session": 187,
       "total": 24,
       "maxTotal": 25,
-      "overallStatus": "S187 four selected outcomes pass local full suite, independent review and final staging. Exact-main hosted checks and production delivery remain pending; participant/device measurements remain separate.",
+      "overallStatus": "S187 four selected outcomes are production verified; 296 files / 1988 assertions pass exact-main CI. Existing participant/device evidence remains unmeasured.",
       "lastReviewed": "2026-10-18",
       "dimensions": {
         "schema_alignment": 5,
@@ -1071,7 +1071,7 @@
         "contradiction_density": 5
       },
       "delta": 0,
-      "cause": "S187 four outcomes staged; exact-main delivery underway."
+      "cause": "S187 four reliability outcomes complete and production verified."
     }
   ]
 }

@@ -4,6 +4,10 @@
 
 ## Current Session
 
+## S187 production verified
+
+Four selected fixes are live at 40e619d78bc7. All 296 files / 1988 assertions pass exact-main CI. See [LATEST_HANDOFF](LATEST_HANDOFF.md) for deployment evidence, rollback and limits.
+
 ## S187 timing and preference reliability
 
 S187 fixes paused ability recharge, speed-pickup stat corruption, ignored reload preference and missing startup sync.
@@ -60,14 +64,11 @@ Assisted terminal states prove UI integration, not natural playthroughs or parti
 
 ## S183 verified production follow-through
 
-Source e6b72c770cd83a70847f74b390e28aa9f50b4622 passed exact-main workflow 37245074608: 291/291 files, 1,931/1,931 tests, strict lint, build and Cloudflare deployment. Canonical callofdoodie.wtf reports e6b72c770cd8; canonical and immutable https://ea7fba17.call-of-doodie.pages.dev/ pass shell 7/7 each, domain routing 5/5 and replay trust 3/3. Actual canonical browser checks pass 24/24 mode advancement/pause/resume cases, 8/8 death/victory ending cases with expanded sections, short-screen scrolling, menu return and hashed downloads, 4/4 setup/settings cases and 20/20 creature practice cases. Actual Classic/Zombies/Operations audio output, pause/mute/resume, single context and movement pass.
-
-Twelve technical audit outcomes are verified and shipped. Eight comparative acceptance outcomes rem
+Source e6b72c770cd83a70847f74b390e28aa9f50b4622 passed exact-main workflow 37245074608: 291/291 files, 1,931/1,931 tests, strict lint, build and Cloudflare deployment. Canonical callofdoodie.wtf reports e6b72c770cd8; canonical and immutable https://ea7fba17.call-of-doodie.pages.dev/ pass shell 7/7 each, domain routing 5/5 and replay trust 3/3. Actual canonical browser checks pass 24/24 mode advancement/pause/resume cases, 8/8 death/victory ending cases with expanded sections, short-screen scrolling, menu return and hashed downloads, 4/4 setup/settings cases and 20/20 creature pra
 
 ## Open Work
 
 ## S187 arc outcomes and waves
-- [ ] S187 exact-main production delivery verification (Wave 3).
 - [ ] [SIL:1] S187 follow-up: inspect the existing permanent-speed/Kill Frenzy overwrite before changing progression promises.
 - [ ] [SIL:1] S187 compatibility reserve: verify restricted Gamepad API behavior before broadening browser support claims.
 ## Session 186 arc
@@ -121,6 +122,7 @@ Twelve technical audit outcomes are verified and shipped. Eight comparative acce
 ## Session 150 — Homepage readability and navigation
 ## Human Action Required
 - [ ] [S60] Rotate or narrow the broad Cloudflare `cloudflare-studio-access.txt` token after domain stabilization — current token has account/user/zone-wide powers and should be replaced by narrower domain-migration tokens
+- [ ] Physical launch QA — verify PWA install prompt/accept flow on a real mobile/browser combination
 
 ## Recent Decisions
 
@@ -148,9 +150,11 @@ Keep run-specific cooldowns and temporary pickup durations on the fixed simulati
 
 FORGE/public-unlaunched unchanged. Physical controllers, participant comparisons and target-device/model-token measurements remain unmeasured. Existing permanent-speed/Kill Frenzy composition is outside this pickup-expiry repair. Browser input and speed/ammo fixtures are assisted; no natural full-run claim.
 
+S187 delivery follow-through: 40e619d78bc7 is production verified. Keep participant/device and existing speed/frenzy composition evidence separate from the four completed fixes; no lifecycle launch was authorized.
+
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 261,030 bytes · SHA-256 `6cdf7b7b8cc4…`
-- `context/TASK_BOARD.md` · 181,925 bytes · SHA-256 `ce0e7fd27f4d…`
-- `context/DECISIONS.md` · 174,581 bytes · SHA-256 `a9f19c25fa63…`
+- `context/CURRENT_STATE.md` · 261,244 bytes · SHA-256 `2bf6177f6820…`
+- `context/TASK_BOARD.md` · 181,925 bytes · SHA-256 `e61637af4a2a…`
+- `context/DECISIONS.md` · 174,796 bytes · SHA-256 `e9290e9a5dcc…`
 - `docs/AUDIT_2026-10-18.json` · 6,892 bytes · SHA-256 `b34b668a7b5a…`

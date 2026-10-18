@@ -1,3 +1,7 @@
+## S187 production verified
+
+Four selected fixes are live at 40e619d78bc7. All 296 files / 1988 assertions pass exact-main CI. See [LATEST_HANDOFF](LATEST_HANDOFF.md) for deployment evidence, rollback and limits.
+
 ## S187 timing and preference reliability
 
 S187 fixes paused ability recharge, speed-pickup stat corruption, ignored reload preference and missing startup sync.

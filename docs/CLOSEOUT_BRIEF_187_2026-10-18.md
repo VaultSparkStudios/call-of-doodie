@@ -13,9 +13,9 @@ Headline: S187 fixes paused ability recharge, speed-pickup stat corruption, igno
 
 ## Validation
 
-- Local full suite: 296/296 files and 1988/1988 tests pass. Strict lint, configured build, public contracts, dependency security (zero vulnerabilities), scoped supply-chain scan and independent review pass. Final staging https://107df7f2.call-of-doodie.pages.dev passes shell 7/7, four cooldown theme/width cases and two speed/reload browser cases. Exact-main hosted checks and production verification follow the push.
+- S187 source 40e619d78bc72939366613ce754f8689d508ce4f passed exact-main workflow 39144720337: 296/296 test files, 1,988/1,988 assertions, strict lint, configured build and Cloudflare deployment. Canonical callofdoodie.wtf reports 40e619d78bc7; canonical and immutable https://73a5ea19.call-of-doodie.pages.dev pass shell 7/7 each. Four real-browser cooldown cases pass at 390/1440 in both themes; two desktop/mobile speed and manual/automatic reload cases also pass.
 
 ## Remaining
 
-- FORGE/public-unlaunched unchanged. Physical controllers, participant comparisons and target-device/model-token measurements remain unmeasured. Existing permanent-speed/Kill Frenzy composition is outside this pickup-expiry repair. Browser input and speed/ammo fixtures are assisted; no natural full-run claim.
-- Exact-main CI and production verification pending. CDR unchanged without new creative direction.
+- FORGE/public-unlaunched unchanged. Browser inputs and pickup/ammo states are assisted fixtures. Physical-device/participant/model-token comparisons remain unmeasured. Existing permanent-speed/Kill Frenzy composition remains a separate follow-up; pickup expiry no longer mutates base stats.
+- CDR unchanged; no new creative direction. Central scoring/application remains recipient-owned.

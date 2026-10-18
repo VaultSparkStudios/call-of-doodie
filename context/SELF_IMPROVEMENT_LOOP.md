@@ -1263,7 +1263,7 @@ SIL +10: Closed five founder-visible defects and all four fresh audit items: Ene
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
 Velocity trend: four verified reliability outcomes | Debt: flat
-Momentum runway: S187 staging verified; production pending | Intent rate: delivery in progress
+Momentum runway: S187 production verified | Intent rate: full arc achieved
 Last session: 2026-10-18 | Session 187 | Total: 944/1000 | Velocity: 4 | protocolVelocity: 4
 <!-- rolling-status-end -->
 
@@ -3597,3 +3597,5 @@ Local full suite: 296/296 files and 1988/1988 tests pass. Strict lint, configure
 Learning: a timer tied to the browser clock can violate pause and replacement-run ownership. Separate transient bonuses from permanent stats, and verify preferences at the action that consumes them. Brainstorm: timing incident receipts can reuse the command trace; keep controller compatibility and permanent-speed composition as explicit future evidence tasks. Committed two [SIL] follow-ups on TASK_BOARD.
 
 FORGE/public-unlaunched unchanged. Physical controllers, participant comparisons and target-device/model-token measurements remain unmeasured. Existing permanent-speed/Kill Frenzy composition is outside this pickup-expiry repair. Browser input and speed/ammo fixtures are assisted; no natural full-run claim.
+
+S187 final acceptance: S187 source 40e619d78bc72939366613ce754f8689d508ce4f passed exact-main workflow 39144720337: 296/296 test files, 1,988/1,988 assertions, strict lint, configured build and Cloudflare deployment. Canonical callofdoodie.wtf reports 40e619d78bc7; canonical and immutable https://73a5ea19.call-of-doodie.pages.dev pass shell 7/7 each. Four real-browser cooldown cases pass at 390/1440 in both themes; two desktop/mobile speed and manual/automatic reload cases also pass. SIL remains 944/1000; four selected outcomes achieved, two future [SIL] follow-ups remain unselected.
