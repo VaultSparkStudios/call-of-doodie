@@ -1623,3 +1623,12 @@ Canonical doctor/autopilot currently delegates to a sibling subject; scoped loca
 
 
 S188 delivery acceptance: S188 implementation f8b3254c75b90a3542420d6fa83cd3b108f5b1d3 passed exact-main workflow 39149635426: all 296 test files / 1,995 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches f8b3254c75b9. Canonical and immutable https://9024cfb5.call-of-doodie.pages.dev pass shell 7/7 each. Four real-Chrome combat cases pass on canonical production at 390/1440 in both themes. The final closeout seal retains the same gameplay bytes, also corrects whitespace exposed by summary truncation, and follows through its own exact-main deployment. No launch or lifecycle promotion.
+
+
+## 2026-10-18 — Session 189
+
+Use one trigger-time damage snapshot for rail and ordinary projectiles. Count geometric rail contacts once per beam, including invulnerable summoner contact, matching ordinary hit accounting. Run-owned burst data replaces asynchronous timers; preserve current muzzle and trigger aim/build, sample spread at trigger. Context meter byte estimates cannot represent live context; valid closeout-routing exits retain their measurements.
+
+FORGE/public-unlaunched unchanged. Browser cases use assisted game-state fixtures and synthetic inputs; physical-controller and participant outcomes remain unmeasured. Existing S183 comparisons and narrow-screen precision-feedback reserve remain separate. No new identity, licensing, spending or launch decision.
+
+Routine promotion uses the exact candidate workflow and current staging. Foreign doctor output is excluded from project health; existing central delivery gap remains documented. No new dependency.

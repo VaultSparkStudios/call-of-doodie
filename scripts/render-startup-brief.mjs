@@ -25,6 +25,7 @@ import { parseUnifiedItems } from './lib/task-board.mjs';
 import { loadPortfolioTaskBoards } from './lib/cross-repo-tasks.mjs';
 import { loadIgnisInsight } from './lib/ignis-insight.mjs';
 import { contextWindowForAgent } from './lib/model-router.mjs';
+import { normalizeContextMeterView, parseContextMeterResult } from './lib/context-meter-view.mjs';
 import { loadProvenanceMap } from './classify-warning-provenance.mjs';
 import { isWarning } from './lib/doctor-predicates.mjs';
 import { sparkline as _sparkline } from './lib/visual-blocks.mjs';
@@ -100,7 +101,6 @@ function renderProfileLensHeader() {
 function readText(p) { try { return fs.readFileSync(p, 'utf8'); } catch { return ''; } }
 function readJson(p, fb) { try { return JSON.parse(fs.readFileSync(p, 'utf8')); } catch { return fb; } }
 function daysBetween(a, b) { try { return Math.floor((new Date(b) - new Date(a)) / 86400000); } catch { return 999; } }
-function bytesOf(rel) { try { return fs.statSync(path.join(root, rel)).size; } catch { return 0; } }
 function lockValue(key) {
   const lock = readText(path.join(root, 'context', '.session-lock'));
   return lock.match(new RegExp(`^${key}:\\s*(\\S+)`, 'm'))?.[1] ?? '';
@@ -240,10 +240,11 @@ function loadLiveContextMeter() {
     const res = spawnSync(node, [path.join(__dirname, 'context-meter.mjs'), '--json'], {
       cwd: root, encoding: 'utf8', timeout: 5000,
     });
-    if (res.status === 0 && res.stdout) {
-      const meter = JSON.parse(res.stdout);
+    const meter = parseContextMeterResult(res);
+    if (meter) {
       return {
         live: true,
+        measured_ok: meter.measured_ok,
         usedTokens: meter.usedTokens,
         limit: meter.limit,
         pctUsed: meter.pctUsed,
@@ -257,44 +258,25 @@ function loadLiveContextMeter() {
       };
     }
   } catch { /* fall through */ }
-  // Heuristic fallback — old behavior
-  const bytes = [
-    'AGENTS.md', 'CLAUDE.md', 'context/PROJECT_BRIEF.md', 'context/SOUL.md',
-    'context/BRAIN.md', 'context/CURRENT_STATE.md', 'context/DECISIONS.md',
-    'context/TASK_BOARD.md', 'context/LATEST_HANDOFF.md',
-    'context/SELF_IMPROVEMENT_LOOP.md', 'context/TRUTH_AUDIT.md',
-  ].reduce((sum, file) => sum + bytesOf(file), 0);
-  const usedTokens = Math.round(bytes / 4);
+  // Repository bytes cannot measure an agent's active context window.
   return {
     live: false,
-    usedTokens,
+    measured_ok: false,
+    usedTokens: null,
     limit: meterLimit,
-    pctUsed: usedTokens / meterLimit,
+    pctUsed: null,
     turnsToCompact: null,
     continueCostPerTurn: null,
     cacheHitRate: null,
-    recommendation: usedTokens / meterLimit > 0.75 ? 'CONSIDER_CLOSEOUT' : 'CONTINUE',
-    confidence: 'heuristic-stale',
+    recommendation: 'UNMEASURED',
+    confidence: 'unmeasured',
     agent: meterAgent,
     model: '',
   };
 }
 
 const meter = loadLiveContextMeter();
-const meterUsed = meter.usedTokens;
-const meterRemaining = Math.max(0, meter.limit - meterUsed);
-const meterRemainingPct = Math.round((meterRemaining / meter.limit) * 100);
-// context-meter returns pctUsed in percentage form (0-100), not 0-1. Normalize.
-const meterUsedPctRaw = meter.pctUsed == null ? null : (meter.pctUsed > 1 ? meter.pctUsed : meter.pctUsed * 100);
-// S262 — the `Math.min(100, …)` here clamped the DISPLAY while the brief's own
-// token figure said 154%, and that internal disagreement is what tripped
-// check-startup-meter-freshness. An overrun is the single most important thing
-// this line can say, and clipping it hides the magnitude. The number is now
-// unclamped; only the bar fill (below) is bounded, because it is a fixed width.
-const meterUsedPct = meterUsedPctRaw == null ? null : Math.max(0, Math.round(meterUsedPctRaw));
-// pctUsedFraction is 0-1 for bar rendering math
-const meterUsedFrac = (meterUsedPctRaw ?? 0) / 100;
-const estimatedItemsFit = Math.max(0, Math.floor(meterRemaining / 100000));
+const meterView = normalizeContextMeterView(meter, { fallbackLimit: meterLimit });
 
 // ── Parse Rolling Status ──────────────────────────────────────────────────────
 const silHeader = extractBetween(sil, '<!-- rolling-status-start -->', '<!-- rolling-status-end -->');
@@ -1251,16 +1233,16 @@ const lines = [
   top('CONTEXT METER'),
   ...(() => {
     // Progress bar — 24 chars filled per used%.
-    const fillN = Math.min(24, Math.max(0, Math.round(meterUsedFrac * 24)));
+    const fillN = Math.round((meterView.fraction ?? 0) * 24);
     const bar = '█'.repeat(fillN) + '░'.repeat(24 - fillN);
     const tagIcon = meter.recommendation === 'CLOSEOUT' ? '⛔'
       : meter.recommendation === 'CONSIDER_CLOSEOUT' ? '⚠'
-      : '✓';
+      : meterView.pctUsed == null ? '?' : '✓';
     const liveTag = meter.confidence || (meter.live ? 'live' : 'heuristic');
-    const usedStr = meterUsed.toLocaleString();
+    const usedStr = meterView.usedTokens == null ? 'unknown' : meterView.usedTokens.toLocaleString();
     const limitStr = meter.limit.toLocaleString();
     const lines = [
-      row(`${tagIcon}  ${bar}  ${String(meterUsedPct).padStart(3)}% used`),
+      row(`${tagIcon}  ${bar}  ${meterView.pctUsed == null ? 'usage unknown' : meterView.displayPercent + '% used'}`),
       row(`   ${usedStr} / ${limitStr} tok  ·  ${meter.agent}${meter.model ? '/' + meter.model : ''}  ·  ${liveTag}`),
     ];
     if (meter.continueCostPerTurn != null) {
@@ -1268,7 +1250,8 @@ const lines = [
       const turnsLabel = meter.turnsToCompact != null && meter.turnsToCompact < 999 ? `${meter.turnsToCompact} turns to compact` : 'compact distant';
       lines.push(row(`   ~${meter.continueCostPerTurn.toLocaleString()} tok/turn  ·  ${cacheLabel}  ·  ${turnsLabel}`));
     }
-    lines.push(row(`   Verdict: ${meter.recommendation}${meter.recommendation === 'CONTINUE' ? '' : '  ← act now'}`));
+    const verdict = meterView.pctUsed == null ? 'UNMEASURED' : meter.recommendation;
+    lines.push(row(`   Verdict: ${verdict}${['CLOSEOUT', 'CONSIDER_CLOSEOUT'].includes(verdict) ? '  ← act now' : ''}`));
     return lines;
   })(),
   bot(),

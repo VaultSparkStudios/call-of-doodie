@@ -133,6 +133,7 @@ import { applyThreatRecommendationChoice, queueCompletedRunFact, recordPostRunFi
 import { applyModeRules, getModeRewardFlow, getModeRules, isBossWaveForMode, resolveModeId } from "./systems/modeRules.js";
 import { getModeMeta } from "./systems/modeRegistry.js";
 import { beginWeaponReload, advanceWeaponReload } from "./systems/weaponReload.js";
+import { queueBurstShots, advanceBurstShots } from "./systems/burstShots.js";
 import { resolveRunLaunch, prepareRunDependencies } from "./systems/runLaunch.js";
 
 // Combat systems chunk (enemy AI, projectiles). Preloaded at mount so a run start
@@ -632,6 +633,7 @@ export default function CallOfDoodie() {
       });
     }
     const career = loadCareerStats();
+    if (gsRef.current) gsRef.current.pendingBurstShots = [];
     gsRef.current = {
       runPhase: RUN_PHASE.PLAYING,
       runEndCause: null,
@@ -1452,15 +1454,13 @@ export default function CallOfDoodie() {
         gs.bullets.push(makeBullet(pa));
       }
     } else if (weapon.burst) {
-      // Burst fire — first shot immediate, rest scheduled
+      // Burst fire — first shot immediate, continuations use active run time.
       gs.bullets.push(makeBullet(a));
+      const continuations = [];
       for (let bi = 1; bi < weapon.burst; bi++) {
-        setTimeout(() => {
-          if (gsRef.current !== gs || isGameplayBlocked()) return;
-          const ba = angle + (combatRng() - 0.5) * weapon.spread;
-          gsRef.current.bullets.push(makeBullet(ba));
-        }, bi * (weapon.burstDelay || 90));
+        continuations.push(makeBullet(angle + (combatRng() - 0.5) * weapon.spread));
       }
+      queueBurstShots(gs, continuations, weapon.burstDelay || 90);
     } else if (weapon.boomerang) {
       // Boomerang — curves, returns to player, pierces all enemies
       const bul = makeBullet(a);
@@ -1473,7 +1473,7 @@ export default function CallOfDoodie() {
       const cos = Math.cos(a), sin = Math.sin(a);
       const ox = p.x + cos * 25, oy = p.y + sin * 25;
       const maxT = Math.hypot(GW(), GH()) * 1.2;
-      gs.pendingBeam = { ox, oy, cos, sin, maxT, weaponIdx, color: weapon.color };
+      gs.pendingBeam = { ox, oy, cos, sin, maxT, weaponIdx, damage: weapon.damage * damageMult, color: weapon.color };
       gs.beams = gs.beams || [];
       gs.beams.push({ x1: ox, y1: oy, x2: ox + cos * maxT, y2: oy + sin * maxT, life: 14, maxLife: 14, color: weapon.color });
     } else {
@@ -1601,6 +1601,7 @@ export default function CallOfDoodie() {
 
     // Claim the terminal transition before any storage, audio, analytics, or rendering finalizer.
     gs.runPhase = RUN_PHASE.ENDING;
+    gs.pendingBurstShots = [];
     gs.runEndCause = endAttempt.cause;
     gs.runEndReceipt = endAttempt;
     releaseAllInputs(`run-ending:${endAttempt.cause}`);
@@ -2499,6 +2500,7 @@ export default function CallOfDoodie() {
       if (ability === "grenade") { grenadeRef.current.ready = true; setGrenadeReady(true); }
       if (ability === "dash") { dashRef.current.ready = true; setDashReady(true); }
     }
+    advanceBurstShots(gs);
     // ── Dash movement ──
     const reloadedWeapon = advanceWeaponReload(gs);
     if (reloadedWeapon !== null) {

@@ -1,3 +1,13 @@
+## S189 candidate verification
+
+S189 full local suite passes 297/297 files and 2020/2020 assertions. Strict lint, configured build, schema/startup/public/security checks, zero dependency vulnerabilities, independent review, 32 hash-bound before/after captures and 24 staging browser assertions pass. Exact-main CI/deployment and production readback pending.
+
+## S189 combat and startup reliability
+
+S189 preserves burst rounds through pause and applies full railgun build damage.
+
+Staging verified; exact-main release pending. See LATEST_HANDOFF for acceptance evidence.
+
 ## S188 production verified
 
 Consumed shots stop at their final collision. Piercing shots damage each target once per pass; boomerang outbound and return passes stay independent.

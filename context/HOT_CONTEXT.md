@@ -4,6 +4,16 @@
 
 ## Current Session
 
+## S189 candidate verification
+
+S189 full local suite passes 297/297 files and 2020/2020 assertions. Strict lint, configured build, schema/startup/public/security checks, zero dependency vulnerabilities, independent review, 32 hash-bound before/after captures and 24 staging browser assertions pass. Exact-main CI/deployment and production readback pending.
+
+## S189 combat and startup reliability
+
+S189 preserves burst rounds through pause and applies full railgun build damage.
+
+Staging verified; exact-main release pending. See LATEST_HANDOFF for acceptance evidence.
+
 ## S188 production verified
 
 Consumed shots stop at their final collision. Piercing shots damage each target once per pass; boomerang outbound and return passes stay independent.
@@ -74,12 +84,14 @@ Records seal 6e473e676ea1252cb531efd6fa400d33fa4ae228 passed exact-main workflow
 
 ## S184 end-run implementation — 2026-10-06
 
-End-run results now show the score and Submit to leaderboard before optional content. Last words are optional and labelled. Submission is guarded against duplicate clicks and excludes practice, Operations, local-only modes and integrity failures. Play Again precedes optional coaching. Sharing has one run-link action with native/copy/manual feedback; score images and highlights are explicit downloads. Feedback, highlights and exports are optional. Bottom leaderboard/menu controls remain outside disclosures.
-
-Staging https://aa2065a8.call-of-doodie.pages.dev passed shell 7/7 and eight actual-app ending cases across defeat/victory, dark/light and 390/1440px, including short screens, touch, keyboard End and menu return. Eight share checks covered native API fixture success, clipboard success/denial, manual selectable links and real score-image downloads. 92 before/after captures
+End-run results now show the score and Submit to leaderboard before optional content. Last words are optional and labelled. Submission is guarded against duplicate clicks and excludes practice, Operations, local-only modes and integrity failures. Play Again precedes optional coaching. Sharing has one run-link actio
 
 ## Open Work
 
+## S189 arc outcomes and waves
+- [ ] S189 exact-main production and final closeout proof.
+- [ ] [SIL:1] S189 reserve: measure beam and burst weapon accuracy on physical controllers before claiming device parity.
+- [ ] [SIL:1] S189 reserve: central owner delivers subject-correct local doctor and closeout helpers; existing Ark handoff remains owner-scoped.
 ## S188 arc outcomes and waves
 - [ ] [SIL:1] S188 reserve: test swept projectile geometry against thin or fast-moving targets before changing collision rules.
 - [ ] [SIL:1] S188 reserve: measure precision reward text legibility at 390px before changing feedback presentation.
@@ -131,18 +143,8 @@ Staging https://aa2065a8.call-of-doodie.pages.dev passed shell 7/7 and eight act
 ## Session 157 - Objective-authoritative Operations and evidence truth
 ## Session 156 - Production-evidence recovery
 ## Session 155 — Operation mode, authored missions, and evidence-gated expansion
-## Session 154 — Propagation compatibility and protocol truth
-## Session 153 — Playtest signal, replay plans, and release trust
-## Session 151 — Revenge loop, mastery truth, stats twin, and architecture headroom
-## Session 150 — Homepage readability and navigation
 
 ## Recent Decisions
-
-## 2026-10-18 — Session 186
-
-Use the canonical lock writer with recipient-verified rotation fixes. Preserve active session identity only while newer than closed surfaces; stale/force rotation cannot reissue a closed ID. Combat input, delayed bursts, simulation and frame sampling share one live barrier. Scope interaction release to its owning device. Measure complete rendered frames, without changing the 60Hz simulation clock. CANON-056 checked against 100 public content files without truncation/findings and explicitly adopted. FORGE/public-unlaunched unchanged. Existing S183 participant/comparative and physical-device evidence remains pending; no balance, retention or hardware claim. Startup used direct clean-tree Git sync because local start-sync/recovery helpers are absent. The lock writer repair necessarily preceded its audit premise gate; all gameplay edits followed the recorded 4/4 gate. The local doctor/autopilot delegates to the control plane and cannot certify this project; scoped repository gates and exact-main hosted CI supply project delivery evidence.
-
-
 
 ## S186 production acceptance — 2026-10-18
 
@@ -171,9 +173,19 @@ Canonical doctor/autopilot currently delegates to a sibling subject; scoped loca
 
 S188 delivery acceptance: S188 implementation f8b3254c75b90a3542420d6fa83cd3b108f5b1d3 passed exact-main workflow 39149635426: all 296 test files / 1,995 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches f8b3254c75b9. Canonical and immutable https://9024cfb5.call-of-doodie.pages.dev pass shell 7/7 each. Four real-Chrome combat cases pass on canonical production at 390/1440 in both themes. The final closeout seal retains the same gameplay bytes, also corrects whitespace exposed by summary truncation, and follows through its own exact-main deployment. No launch or lifecycle promotion.
 
+
+
+## 2026-10-18 — Session 189
+
+Use one trigger-time damage snapshot for rail and ordinary projectiles. Count geometric rail contacts once per beam, including invulnerable summoner contact, matching ordinary hit accounting. Run-owned burst data replaces asynchronous timers; preserve current muzzle and trigger aim/build, sample spread at trigger. Context meter byte estimates cannot represent live context; valid closeout-routing exits retain their measurements.
+
+FORGE/public-unlaunched unchanged. Browser cases use assisted game-state fixtures and synthetic inputs; physical-controller and participant outcomes remain unmeasured. Existing S183 comparisons and narrow-screen precision-feedback reserve remain separate. No new identity, licensing, spending or launch decision.
+
+Routine promotion uses the exact candidate workflow and current staging. Foreign doctor output is excluded from project health; existing central delivery gap remains documented. No new dependency.
+
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 262,642 bytes · SHA-256 `18a16431ef03…`
-- `context/TASK_BOARD.md` · 182,558 bytes · SHA-256 `caa01123236b…`
-- `context/DECISIONS.md` · 176,350 bytes · SHA-256 `55affb719ee5…`
+- `context/CURRENT_STATE.md` · 263,214 bytes · SHA-256 `c69440e04764…`
+- `context/TASK_BOARD.md` · 183,305 bytes · SHA-256 `13a6a03f70c9…`
+- `context/DECISIONS.md` · 177,327 bytes · SHA-256 `bc37587c3ff2…`
 - `docs/AUDIT_2026-10-18.json` · 6,892 bytes · SHA-256 `b34b668a7b5a…`

@@ -1,3 +1,17 @@
+## S189 candidate verification
+
+S189 full local suite passes 297/297 files and 2020/2020 assertions. Strict lint, configured build, schema/startup/public/security checks, zero dependency vulnerabilities, independent review, 32 hash-bound before/after captures and 24 staging browser assertions pass. Exact-main CI/deployment and production readback pending.
+
+## S189 truth reconciliation
+
+Overall status: three selected outcomes verified on staging; full suite/exact-main production pending.
+
+All 51 focused tests pass, including actual-App fixtures for every gameplay barrier, rail damage products and one hit per beam. Independent review passes after fixing closeout-routing exit handling in the meter. Staging shell 7/7 and four real-Chrome cases pass at 390/1440 in both themes. Full candidate suite and exact-main production delivery remain pending.
+
+Renderer previously reported 334,908/272,000 context tokens as 1% through an invalid byte fallback; it now reports usage unknown with no invented action. Independent review caught valid closeout-routing exits being rejected; status 2/3 now preserve measured JSON.
+
+FORGE/public-unlaunched unchanged. Browser cases use assisted game-state fixtures and synthetic inputs; physical-controller and participant outcomes remain unmeasured. Existing S183 comparisons and narrow-screen precision-feedback reserve remain separate. No new identity, licensing, spending or launch decision.
+
 ## S188 final delivery
 
 Overall status: S188 selected combat outcomes production verified; 296 files / 1995 assertions pass exact-main CI.

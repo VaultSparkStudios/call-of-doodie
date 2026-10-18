@@ -1,3 +1,9 @@
+## S189 run-owned shots and truthful context
+
+Rail shots snapshot perk, upgrade, build-combination, weapon-modification and evolution damage at trigger; one penetrating beam contributes at most one accuracy hit. Burst continuations use run-owned active simulation frames, freeze behind all gameplay barriers, and clear when a run ends or resets. Startup uses the native percentage contract, accepts measured routing exits 2/3, preserves overruns, and leaves unavailable usage unknown without byte-derived advice.
+
+All 51 focused tests pass, including actual-App fixtures for every gameplay barrier, rail damage products and one hit per beam. Independent review passes after fixing closeout-routing exit handling in the meter. Staging shell 7/7 and four real-Chrome cases pass at 390/1440 in both themes. Full candidate suite and exact-main production delivery remain pending.
+
 ## S188 projectile contact memory
 
 Stop consumed bullets inside the inner enemy loop. Weak per-projectile membership prevents overlap/reentry damage; reset once on boomerang return. Independent shots remain independent. Full handoff owns current delivery proof.

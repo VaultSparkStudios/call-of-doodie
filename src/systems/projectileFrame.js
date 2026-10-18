@@ -191,11 +191,13 @@ export function stepProjectileFrame({
   drainEnemyDefeats(gs);
 
   if (gs.pendingBeam) {
-    const { ox, oy, cos, sin, maxT, weaponIdx: beamWeaponIndex } = gs.pendingBeam;
+    const { ox, oy, cos, sin, maxT, weaponIdx: beamWeaponIndex, damage: shotDamage } = gs.pendingBeam;
     gs.pendingBeam = null;
     const weapon = WEAPONS[beamWeaponIndex];
     const damageMultiplier = (perkMods.damageMult || 1) * (1 + (gs.weaponUpgrades?.[beamWeaponIndex] || 0) * 0.25);
+    const baseDamage = Number.isFinite(shotDamage) ? shotDamage : weapon.damage * damageMultiplier;
     const comboMultiplier = 1 + Math.max(0, combo.count) * 0.1;
+    let hitRecorded = false;
     gs.enemies.forEach((enemy) => {
       if (enemy.health <= 0) return;
       const dx = enemy.x - ox;
@@ -203,6 +205,10 @@ export function stepProjectileFrame({
       const projection = dx * cos + dy * sin;
       const perpendicular = Math.abs(dx * sin - dy * cos);
       if (!(projection > 0 && projection < maxT && perpendicular < enemy.size / 2 + 7)) return;
+      if (!hitRecorded) {
+        stats.totalHits = (stats.totalHits || 0) + 1;
+        hitRecorded = true;
+      }
       if (enemy.typeIndex === 18 && enemy.summonerInvuln) {
         addParticles(gs, enemy.x, enemy.y, "#8844FF", 3);
         return;
@@ -210,7 +216,7 @@ export function stepProjectileFrame({
       const isCrit = getRunRng(gs, "combat")() < CRIT_CHANCE + (perkMods.critBonus || 0) + (gs.critBonus || 0);
       const rageMultiplier = (gs.rageTimer || 0) > 0 ? 1.75 : 1;
       const shieldMultiplier = enemy.typeIndex === 17 && (enemy.jugShield || 0) > 0 ? 0.15 : 1;
-      const damage = weapon.damage * damageMultiplier * comboMultiplier
+      const damage = baseDamage * comboMultiplier
         * (isCrit ? CRIT_MULT + (gs.critMultBonus || 0) : 1)
         * (enemy.dmgMult || 1) * rageMultiplier * shieldMultiplier;
       const result = applyEnemyDamage(enemy, damage, {

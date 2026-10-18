@@ -28,6 +28,8 @@ vi.mock("./components/WeaponDock.jsx", () => {
       <button data-testid="combat-dash" onClick={onDash}>dash</button>
       <button data-testid="combat-grenade" onClick={onGrenade}>grenade</button>
       <button data-testid="combat-swap" onClick={() => onSwitchWeapon(1)}>swap</button>
+      <button data-testid="combat-burst" onClick={() => onSwitchWeapon(7)}>burst</button>
+      <button data-testid="combat-rail" onClick={() => onSwitchWeapon(9)}>rail</button>
     </div>;
   }
   return { DesktopWeaponDock: Dock, MobileWeaponDock: Dock };
@@ -280,6 +282,69 @@ afterEach(async () => {
 });
 
 describe("CallOfDoodie launch smoke", () => {
+  it("preserves burst continuations through every gameplay barrier and snapshots rail builds", async () => {
+    const { default: App } = await import("./App.jsx");
+    const { useGameLoop } = await import("./hooks/useGameLoop.js");
+    container = document.createElement("div"); document.body.appendChild(container); root = createRoot(container);
+    await act(async () => { root.render(<App />); }); await flush();
+    await act(async () => { container.querySelector("button").click(); }); await flush();
+    const canvas = container.querySelector("#game-canvas");
+    let fiber = canvas[Object.keys(canvas).find(key => key.startsWith("__reactFiber"))];
+    const refs = [];
+    while (fiber) {
+      let hook = fiber.memoizedState;
+      while (hook) { if (hook.memoizedState && Object.hasOwn(hook.memoizedState, "current")) refs.push(hook.memoizedState); hook = hook.next; }
+      fiber = fiber.return;
+    }
+    const gs = refs.find(ref => ref.current?.player && ref.current?.enemies).current;
+    const evolutions = refs.find(ref => Array.isArray(ref.current) && ref.current.length === 12 && ref.current[9]?.damageMult);
+    const context = vi.spyOn(canvas, "getContext").mockReturnValue({});
+    const clock = vi.spyOn(Date, "now").mockReturnValue(Date.now() + 10000);
+    const tick = () => act(async () => { useGameLoop.mock.calls.at(-1)[0]({ render: false }); });
+    for (const ref of Object.values(barrierFixture.refs)) ref.current = false;
+    gs.spawnTimer = 1e9; gs.maxEnemiesThisWave = 1e9; gs.enemies = []; gs.obstacles = []; gs.hazards = [];
+    gs.player.health = 1e9; gs.player.maxHealth = 1e9; gs.settHighlightCapture = false;
+    try {
+      await act(async () => { container.querySelector('[data-testid="combat-burst"]').click(); });
+      barrierFixture.input.mouseRef.current.down = true;
+      const ammoBefore = gs.ammoCount;
+      await tick();
+      barrierFixture.input.mouseRef.current.down = false;
+      expect(gs.ammoCount).toBe(ammoBefore - 1);
+      expect(gs.bullets).toHaveLength(1);
+      expect(gs.pendingBurstShots.map(shot => shot.remainingFrames)).toEqual([6, 11]);
+      for (const [name, ref] of Object.entries(barrierFixture.refs)) {
+        ref.current = true;
+        clock.mockReturnValue(Date.now() + 10000);
+        await tick();
+        expect(gs.pendingBurstShots.map(shot => shot.remainingFrames), name).toEqual([6, 11]);
+        expect(gs.bullets, name).toHaveLength(1);
+        ref.current = false;
+      }
+      for (let frame = 1; frame <= 11; frame++) {
+        await tick();
+        expect(gs.bullets).toHaveLength(frame < 6 ? 1 : frame < 11 ? 2 : 3);
+      }
+      expect(gs.ammoCount).toBe(ammoBefore - 1);
+      await act(async () => { container.querySelector('[data-testid="combat-rail"]').click(); });
+      for (const [synergy, weaponMod, evolution, upgrade] of [[1, 1, 1, 0], [3, 1, 1, 0], [1, 0.5, 1, 0], [1, 1, 1.5, 0], [3, 0.5, 1.5, 2]]) {
+        gs.ammoCount = 100; gs.weaponAmmos[9] = 100;
+        gs.synergyDamageMult = synergy; gs.weaponMods[9] = { damageMult: weaponMod };
+        gs.weaponUpgrades[9] = upgrade; evolutions.current[9].damageMult = evolution;
+        clock.mockReturnValue(Date.now() + 10000);
+        barrierFixture.input.mouseRef.current.down = true;
+        await tick();
+        barrierFixture.input.mouseRef.current.down = false;
+        expect(gs.pendingBeam.damage).toBeCloseTo(160 * synergy * weaponMod * evolution * (1 + upgrade * 0.25));
+      }
+      // Terminal transitions discard delayed projectiles before any rematch.
+      gs.pendingBurstShots = [{ remainingFrames: 1 }];
+      const report = vi.spyOn(console, "error").mockImplementation(() => {});
+      try { await act(async () => { useGameLoop.mock.calls.at(-1)[3].onError(new Error("burst terminal fixture")); }); }
+      finally { report.mockRestore(); }
+      expect(gs.pendingBurstShots).toEqual([]);
+    } finally { clock.mockRestore(); context.mockRestore(); }
+  }, 60000);
   it("freezes ability readiness and pickup duration, preserves base speed, and respects manual reload", async () => {
     const { default: App } = await import("./App.jsx");
     const { useGameLoop } = await import("./hooks/useGameLoop.js");

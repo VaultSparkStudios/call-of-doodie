@@ -137,6 +137,34 @@ describe("stepProjectileFrame", () => {
     expect(ctx.gs.pendingBeam).toBeNull();
     expect(ctx.gs.enemies[0].health).toBeLessThan(100);
   });
+
+  it("uses the trigger's damage snapshot with rail combo, crit, rage and shield rules", () => {
+    const ctx = runtime({
+      pendingBeam: { ox: 0, oy: 50, cos: 1, sin: 0, maxT: 180, weaponIdx: 9, damage: 480 },
+      enemies: [enemyAt({ y: 50, typeIndex: 17, jugShield: 100, dmgMult: 0.5 })],
+      rageTimer: 10,
+      critBonus: 1,
+      critMultBonus: 0.5,
+      weaponUpgrades: { 9: 3 },
+    });
+    ctx.perkMods.damageMult = 9; // Must not apply the current build a second time.
+    ctx.combo.count = 4;
+    stepProjectileFrame(ctx);
+    expect(ctx.gs.totalDamage).toBeCloseTo(480 * 1.4 * 2.5 * 0.5 * 1.75 * 0.15);
+    expect(ctx.stats.totalHits).toBe(1);
+  });
+
+  it.each(["miss", "dead", "summoner", "multiple"])("counts rail %s contacts once per fired beam", kind => {
+    const enemies = kind === "miss" ? [enemyAt({ y: 100 })]
+      : kind === "dead" ? [enemyAt({ y: 50, health: 0 })]
+        : kind === "summoner" ? [enemyAt({ y: 50, typeIndex: 18, summonerInvuln: true })]
+          : [enemyAt({ y: 50 }), enemyAt({ x: 130, y: 50 })];
+    const ctx = runtime({ pendingBeam: { ox: 0, oy: 50, cos: 1, sin: 0, maxT: 180, weaponIdx: 9, damage: 160 }, enemies });
+    stepProjectileFrame(ctx);
+    expect(ctx.stats.totalHits).toBe(["summoner", "multiple"].includes(kind) ? 1 : 0);
+    stepProjectileFrame(ctx);
+    expect(ctx.stats.totalHits).toBe(["summoner", "multiple"].includes(kind) ? 1 : 0);
+  });
 });
 
 describe("enemy bullet boss lifesteal integration", () => {

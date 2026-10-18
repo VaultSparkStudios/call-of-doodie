@@ -1,4 +1,5 @@
 function finiteNumber(value) {
+  if (value == null || value === '') return null;
   const number = Number(value);
   return Number.isFinite(number) ? number : null;
 }
@@ -16,8 +17,20 @@ function declaredPercent(meter) {
   return meter?.live === false && raw <= 1 ? raw * 100 : raw;
 }
 
+// context-meter uses 2/3 to route closeout, while still emitting measured JSON.
+export function parseContextMeterResult(result = {}) {
+  if (![0, 2, 3].includes(result.status) || !result.stdout) return null;
+  try {
+    const value = JSON.parse(result.stdout);
+    if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
+    return value;
+  } catch { return null; }
+}
+
 export function formatContextPercent(percent) {
-  const value = clamp(finiteNumber(percent) ?? 0, 0, 100);
+  const numeric = finiteNumber(percent);
+  if (numeric == null) return 'unknown';
+  const value = Math.max(0, numeric);
   if (value > 0 && value < 10) {
     return value.toFixed(1).replace(/\.0$/, '');
   }
@@ -33,19 +46,20 @@ export function formatContextPercent(percent) {
  */
 export function normalizeContextMeterView(meter = {}, { fallbackLimit = 200000 } = {}) {
   const limit = Math.max(1, finiteNumber(meter.limit) ?? finiteNumber(fallbackLimit) ?? 200000);
-  const usedTokens = clamp(finiteNumber(meter.usedTokens) ?? 0, 0, limit);
-  const ratioPercent = (usedTokens / limit) * 100;
-  const declared = declaredPercent(meter);
-  const hasTokenRatio = finiteNumber(meter.usedTokens) != null && finiteNumber(meter.limit) != null;
-  const pctUsed = clamp(hasTokenRatio ? ratioPercent : (declared ?? ratioPercent), 0, 100);
-  const declaredDelta = declared == null ? null : Math.abs(clamp(declared, 0, 100) - pctUsed);
+  const measured = meter.measured_ok !== false && meter.live !== false;
+  const rawUsed = finiteNumber(meter.usedTokens);
+  const usedTokens = measured && rawUsed != null ? Math.max(0, rawUsed) : null;
+  const declared = measured ? declaredPercent(meter) : null;
+  const hasTokenRatio = usedTokens != null && finiteNumber(meter.limit) > 0;
+  const pctUsed = hasTokenRatio ? (usedTokens / limit) * 100 : declared == null ? null : Math.max(0, declared);
+  const declaredDelta = declared == null || pctUsed == null ? null : Math.abs(declared - pctUsed);
 
   return {
     usedTokens,
     limit,
-    remainingTokens: Math.max(0, limit - usedTokens),
+    remainingTokens: usedTokens == null ? null : Math.max(0, limit - usedTokens),
     pctUsed,
-    fraction: pctUsed / 100,
+    fraction: pctUsed == null ? null : clamp(pctUsed / 100, 0, 1),
     displayPercent: formatContextPercent(pctUsed),
     declaredPercent: declared,
     declaredDelta,
