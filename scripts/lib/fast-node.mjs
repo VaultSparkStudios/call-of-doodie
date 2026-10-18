@@ -41,11 +41,42 @@
 // it never throws into a spawn path.
 //
 // Opt out for a session:  VAULTSPARK_FAST_NODE=0
+//
+// ON BY DEFAULT ONLY WHERE IT WAS VERIFIED (S372 [audit #10])
+// ----------------------------------------------------------
+// The clone has no neighbours: no npm/, no npx-cli.js, no corepack beside it. That is
+// harmless only while nothing resolves a path relative to process.execPath, and that was
+// checked in Studio Ops alone. This file propagates, so the unchecked half of the claim
+// shipped to every recipient: in Seamline a script resolved npm/bin/npx-cli.js beside
+// process.execPath, a child spawned through safe-spawn could not find npx, and a
+// post-deploy finalizer exited 1 after production had deployed.
+//
+// So substitution is default-on in the control plane only. A recipient resolves to
+// process.execPath (state `not-opted-in`) until it says otherwise, having checked its own
+// tree for execPath-relative resolution:
+//
+// Opt in (recipient repo): VAULTSPARK_FAST_NODE=1
 
 import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
 import crypto from 'node:crypto';
+import { fileURLToPath } from 'node:url';
+
+const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
+
+/** "Is this repo the control plane" — the same two-witness rule as lib/control-plane.mjs,
+ *  written out here ON PURPOSE (S373). This file sits under safe-spawn.mjs, which is
+ *  copied standalone into test fixtures and listed by hand in the production host's deploy
+ *  manifest (lib/shared-server-deploy-manifest.mjs); an import here would have to be added
+ *  to every one of those lists, and a missed one breaks spawning on the host. So this
+ *  module imports nothing local, and scripts/test/tier2-s373-control-plane-identity.mjs
+ *  fails if this copy and the shared helper ever disagree. */
+export function isControlPlane(root = REPO_ROOT) {
+  if (typeof root !== 'string' || root === '') return false;
+  try { if (fs.statSync(path.join(root, 'plugins', 'studio-os', 'skills')).isDirectory()) return true; } catch { /* second witness */ }
+  try { return JSON.parse(fs.readFileSync(path.join(root, 'context', 'PROJECT_STATUS.json'), 'utf8')).slug === 'studio-ops'; } catch { return false; }
+}
 
 /** Root of the machine-local store. Outside any repo on purpose: it is a cache of
  *  a machine-global binary, not project state, and must never be committed. */
@@ -94,6 +125,7 @@ export function resolveFastNode({
   version = process.version,
   platform = process.platform,
   env = process.env,
+  controlPlane = null, // null → detected from this file's own repo, and only when it decides
 } = {}) {
   const fallback = (state, reason) => ({ path: execPath, fast: false, state, reason });
 
@@ -101,6 +133,13 @@ export function resolveFastNode({
   // The tax is a Windows path-specific effect. Elsewhere there is nothing measured
   // to mitigate, and substituting would add risk for no evidence of benefit.
   if (platform !== 'win32') return fallback('not-applicable', `platform ${platform} — tax measured only on win32`);
+  // S372 — default-on only in the control plane (see the header). Anywhere else the
+  // caller's own node runs, neighbours and all, until the repo opts in.
+  if (env.VAULTSPARK_FAST_NODE !== '1' && !(controlPlane ?? isControlPlane())) {
+    return fallback('not-opted-in',
+      'recipient repo — argv0 substitution is opt-in outside Studio Ops (the clone has no npm/npx beside it); '
+      + 'set VAULTSPARK_FAST_NODE=1 once nothing here resolves paths relative to process.execPath');
+  }
 
   const sc = sidecarPath(version);
   let meta;
@@ -163,4 +202,4 @@ export function fastNodePath(execPath = process.execPath) {
 /** Test seam — drop the per-process memo. */
 export function _resetFastNodeCache() { _cached = null; }
 
-export default { fastNodeRoot, fastNodeDir, sidecarPath, sha256File, fileStamp, resolveFastNode, fastNodePath, _resetFastNodeCache };
+export default { fastNodeRoot, fastNodeDir, sidecarPath, sha256File, fileStamp, isControlPlane, resolveFastNode, fastNodePath, _resetFastNodeCache };

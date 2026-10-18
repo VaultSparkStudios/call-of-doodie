@@ -58,7 +58,18 @@ export function committedSessionFromGit(root, { maxLead = 50, floor = null, run 
   const out = typeof run === 'function' ? run() : text;
   if (typeof out !== 'string') return null;
   const values = [];
-  for (const match of out.matchAll(/\bS([0-9]{2,4})\b/g)) values.push(Number(match[1]));
+  // S367 (VEILOS 01K4E39Q) — a FORWARD reference is not a spent session. VEILOS's subject
+  // "renew obligations to S360" made the allocator hand S355 the number 361. Only tokens
+  // after a deadline preposition are skipped; every other label still counts, because a
+  // missed spent label REUSES a number (permanent ledger corruption) while an over-count
+  // merely skips one (cheap) — so restricting to scope-position labels would be the
+  // expensive error (census: many real labels sit outside the scope, e.g. "finalize S364").
+  const FORWARD = /\b(?:to|until|till|by|before|due|through|thru)\s+$/i;
+  for (const match of out.matchAll(/\bS([0-9]{2,4})\b/g)) {
+    const lineStart = out.lastIndexOf('\n', match.index) + 1;
+    if (FORWARD.test(out.slice(lineStart, match.index))) continue;
+    values.push(Number(match[1]));
+  }
   if (!values.length) return null;
   const bound = Number.isFinite(floor) ? floor + maxLead : Infinity;
   const plausible = values.filter(v => Number.isFinite(v) && v <= bound);

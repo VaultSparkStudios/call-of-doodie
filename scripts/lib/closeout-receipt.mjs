@@ -65,6 +65,7 @@
 // to be amended.
 
 import { strictNumber } from './strict-number.mjs';
+import { strandedDelta } from './stranded-closeout.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -99,7 +100,15 @@ export function openCloseoutReceipt({
   write = defaultAppend,
   upsert = defaultUpsert,
   receiptId = null,
+  // S365 [audit #2] — optional () => Map<path, blob> of the PROJECT tree's dirty paths.
+  // Snapshotted at open; on a non-dry abort the delta is recorded as `stranded`, so the
+  // next /start can prove residue is this run's output by content hash (lib/stranded-closeout).
+  observeTree = null,
+  // S366 [audit #4] — optional (record) => void, called once with an ABORTED record after
+  // `stranded` is attached, so the run can tell the founder what it left behind right now.
+  announce = null,
 } = {}) {
+  const treeBefore = (() => { try { return observeTree ? observeTree() : null; } catch { return null; } })();
   const startedAt = now();
   const startMs = Date.parse(startedAt);
   const steps = [];
@@ -159,7 +168,16 @@ export function openCloseoutReceipt({
     if (flushed) return null;              // exit can fire more than once
     flushed = true;
     const record = build(exitCode, dry ? 'dry' : (exitCode ? 'aborted' : 'completed'));
+    if (record.outcome === 'aborted' && observeTree) {
+      let after = null;
+      try { after = observeTree(); } catch { after = null; }
+      // The ledger this function is about to rewrite is excluded: it changes on every run.
+      record.stranded = strandedDelta(treeBefore, after, { exclude: [RECEIPT_REL] });
+    }
     try { upsert(repoRoot, record); } catch { /* a receipt must never break a closeout */ }
+    if (record.outcome === 'aborted' && announce) {
+      try { announce(record); } catch { /* an announcement must never break a closeout */ }
+    }
     return record;
   };
 
