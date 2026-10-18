@@ -18,6 +18,7 @@ docs/RIGHTS_PROVENANCE.md
 .test-out.txt
 .cache/
 .ops-cache/
+.wrangler/
 docs/cache-ledger.ndjson
 test-results/
 output/playwright/

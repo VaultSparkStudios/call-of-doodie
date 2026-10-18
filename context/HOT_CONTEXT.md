@@ -4,6 +4,14 @@
 
 ## Current Session
 
+## S186 input reliability and runtime measurement
+
+S186 repairs session goal identity, latched interaction after focus loss, combat input during frozen choices, and incomplete catch-up frame timing.
+
+Independent review passes after one lock-rotation correction. Focused regressions pass. Staging https://298a5f72.call-of-doodie.pages.dev passes shell 7/7 and four actual-app theme/width input cases. Before/after browser checks reproduced and resolved interaction latching. Strict lint, configured build, public contracts, security and scoped supply-chain checks pass. Final full suite and exact-main production verification follow.
+
+See LATEST_HANDOFF for acceptance limits.
+
 ## S185 arc completion — menus follow the active controller
 
 Implemented audit item 2 (1221846): SettingsPanel and VirtualKeyboard polled navigator.getGamepads()[0], so a pad in slot 1+ (common after a Chrome reconnect) could not navigate those screens. Both now use getPrimaryGamepad(); slot-1 selection and a menu source contract are tested.
@@ -50,14 +58,11 @@ Final staging ce356fde passes shell 7/7 and all eight ending cases with actual d
 
 ## Session 183 gameplay audit follow-through
 
-Setup links and version-2 cartridges preserve all twelve modes and four difficulties. Settings have accessible names and states; mobile run-code controls match desktop. Zombies and Bot Royale honor difficulty factors. Mobile combat removes duplicate weapon/ammo panels. Objective music gains distinct mission/pump phrases. Optional creature practice and pump-paced Zombies remain local experiments. Run exports record bounded build, kit, mutation, pacing and objective provenance.
-
-Real playthroughs exposed paused wall-clock reload completion, stale starting-kit initialization, and terminal score/wave mismatch that disabled victory exports. These are repaired with simulation-clock reloads, kit selection before initialization, and final-state synchronization.
-
-Local full suite: 1,929/1,930 initially passed; the one stale mode-wiring assertion was corrected and its suite passed. Subsequent setup/export/terminal regressions pass. Strict lint, configured build, public contracts
+Setup links and version-2 cartridges preserve all twelve modes and four difficulties. Settings have accessible names and states; mobile run-code controls match desktop. Zombies and Bot Royale honor difficulty factors. Mobile combat removes duplicate weapon/ammo panels. Objective music gains distinct missi
 
 ## Open Work
 
+## Session 186 arc
 ## Session 185 arc completion
 ## Session 185 controller aim delivery
 ## Session 184 end-run delivery
@@ -112,15 +117,8 @@ Local full suite: 1,929/1,930 initially passed; the one stale mode-wiring assert
 - [ ] Physical launch QA — verify one real gamepad/browser combo end-to-end
 - [ ] Real full-run media QA — on desktop verify the DeathScreen best-moment GIF encodes, plays, and shares without freezing; on mobile verify capture is skipped as designed
 - [ ] Create Itch.io listing and publish the prepared launch copy package from `docs/LAUNCH_EXECUTION.md`
-- [ ] Add `VITE_POSTHOG_KEY` to GitHub repo Settings → Secrets → Actions (workflow already wired in deploy.yml)
 
 ## Recent Decisions
-
-## S184 verified production follow-through
-
-Exact-source hosted CI and actual canonical runtime acceptance are the final delivery proof. The project-local ops doctor proxies the control-plane root and cannot prove this project; its live probe was stopped without accepting foreign output. Scoped project release/security/contracts and hosted tests supply delivery evidence. Central IGNIS/doctor follow-up and the incompatible propagation batch are transported through Ark, with no claim of recipient application.
-
-
 
 ## S184 explicit founder closeout — 2026-10-06
 
@@ -136,9 +134,15 @@ Resolve the right stick from the pad's own layout instead of fixed indices: trus
 
 Every gamepad-polling surface selects its pad through getPrimaryGamepad(); no screen reads a fixed slot. A start-time canon suggestion is not adoption evidence: CANON-056 stays pending until its terminology audit runs. A goal-requested /arc is incomplete without its /start and /audit phases even when the requested fix is already shipped; run them rather than claim them.
 
+
+
+## 2026-10-18 — Session 186
+
+Use the canonical lock writer with recipient-verified rotation fixes. Preserve active session identity only while newer than closed surfaces; stale/force rotation cannot reissue a closed ID. Combat input, delayed bursts, simulation and frame sampling share one live barrier. Scope interaction release to its owning device. Measure complete rendered frames, without changing the 60Hz simulation clock. CANON-056 checked against 100 public content files without truncation/findings and explicitly adopted. FORGE/public-unlaunched unchanged. Existing S183 participant/comparative and physical-device evidence remains pending; no balance, retention or hardware claim. Startup used direct clean-tree Git sync because local start-sync/recovery helpers are absent. The lock writer repair necessarily preceded its audit premise gate; all gameplay edits followed the recorded 4/4 gate. The local doctor/autopilot delegates to the control plane and cannot certify this project; scoped repository gates and exact-main hosted CI supply project delivery evidence.
+
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 259,077 bytes · SHA-256 `e1515a3d9a0a…`
-- `context/TASK_BOARD.md` · 180,372 bytes · SHA-256 `a9578e54af7b…`
-- `context/DECISIONS.md` · 172,299 bytes · SHA-256 `0c9127ccc605…`
+- `context/CURRENT_STATE.md` · 259,754 bytes · SHA-256 `a408570a6ef7…`
+- `context/TASK_BOARD.md` · 181,065 bytes · SHA-256 `ba95ef7622ee…`
+- `context/DECISIONS.md` · 173,383 bytes · SHA-256 `bedbe77df98d…`
 - `docs/AUDIT_2026-10-18.json` · 6,892 bytes · SHA-256 `b34b668a7b5a…`

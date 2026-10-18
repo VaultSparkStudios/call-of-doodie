@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "1.3",
+  "session": 186,
+  "date": "2026-10-18",
+  "headline": "S186 repairs session goal identity, latched interaction after focus loss, combat input during frozen choices, and incomplete catch-up frame timing.",
+  "shipped": [
+    "Fresh Codex startup binds S186 to this native goal. Isolated real-Git tests cover repeat/help, stale and closed locks, force rotation and native binding. Independent review identified and verified the rotation correction.",
+    "Keyboard interaction and source-specific Operation holds release on blur/pause/run-ending; modified E keyup clears the latch. Sabotage regression proves channel progress decays after release. Actual browser checks reproduce the old defect and pass the repaired behavior.",
+    "A shared live predicate blocks combat through all seven simulation-frozen states and inactive screens, including dock callbacks and delayed bursts. Actual-App tests exercise keyboard, touch, mouse and controller fixtures, then normal resume. Browser checks exercise visible pause/focus-loss states; other modal tests inject their real refs.",
+    "One measured rendered-frame sample includes every catch-up simulation step and the final render. Hook/rAF regression first reproduced omitted cost, then passed; zero-step and suspended frames remain unsampled."
+  ],
+  "validation": "Independent review passes after one lock-rotation correction. Focused regressions pass. Staging https://298a5f72.call-of-doodie.pages.dev passes shell 7/7 and four actual-app theme/width input cases. Before/after browser checks reproduced and resolved interaction latching. Strict lint, configured build, public contracts, security and scoped supply-chain checks pass. Final full suite and exact-main production verification follow.",
+  "limits": "FORGE/public-unlaunched unchanged. Existing S183 participant/comparative and physical-device evidence remains pending; no balance, retention or hardware claim. Startup used direct clean-tree Git sync because local start-sync/recovery helpers are absent. The lock writer repair necessarily preceded its audit premise gate; all gameplay edits followed the recorded 4/4 gate. The local doctor/autopilot delegates to the control plane and cannot certify this project; scoped repository gates and exact-main hosted CI supply project delivery evidence.",
+  "production": {
+    "status": "pending-exact-main",
+    "staging": "https://298a5f72.call-of-doodie.pages.dev/",
+    "rollback": "3e7178d2f9b8055995c1d9474749c026f1d9efe0"
+  },
+  "closeout": {
+    "state": "delivery-in-progress",
+    "silScore": 941,
+    "scaffold": {
+      "tasks": 5,
+      "done": 4,
+      "inProgress": 1,
+      "open": 0
+    },
+    "shells": {
+      "started": 1,
+      "closed": 1,
+      "running": 0
+    }
+  },
+  "review": {
+    "rounds": 2,
+    "verdict": "pass",
+    "findingsFixed": 1
+  },
+  "localValidation": {
+    "files": 294,
+    "assertions": 1970,
+    "passingBeforeFixtureCorrection": 1969,
+    "correctedFixtureSuites": {
+      "files": 3,
+      "assertions": 5,
+      "passed": 5
+    },
+    "requiredHostedSuite": "pending",
+    "note": "Final local suite: 294 files, 1969/1970 assertions; only the stale CANON-056 pending-count fixture failed. The fixture was updated to the actively verified adoption posture and the corrected adoption/hot-context/native-binding suites pass 5/5. All gameplay assertions passed. Exact-main hosted full suite remains required before deployment completion."
+  },
+  "ark": {
+    "status": "shipped-not-applied",
+    "id": "01K57QT1QS13348B8AE0E6C96D",
+    "type": "session-impact-summary",
+    "to": "*"
+  }
+}

@@ -27,6 +27,13 @@ export function releaseInputState(input = {}, {
   now = Date.now(),
 } = {}) {
   const releasedScopes = normalizeScopes(scopes);
+  const gs = safeRefValue(input.gsRef);
+  if (gs?._operationInteractHeld) {
+    for (const scope of releasedScopes) {
+      const source = scope === "gamepad" ? "controller" : scope;
+      gs._operationInteractHeld[source] = false;
+    }
+  }
   let keyboardCount = 0;
   let mouseDown = false;
   let touchActive = false;
@@ -38,6 +45,9 @@ export function releaseInputState(input = {}, {
       if (keys[key]) keyboardCount += 1;
       keys[key] = false;
     }
+    // Interaction is consumed directly by sabotage, independently of keys.
+    // It must follow the same blur/pause/run-ending release as keyboard input.
+    if (gs) gs._interactHeld = false;
   }
 
   if (releasedScopes.includes("mouse")) {

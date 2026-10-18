@@ -1,3 +1,15 @@
+## Session 186 arc
+
+Wave 1 ✔ startup and fresh nine-axis audit. Wave 2 ✔ four selected reliability fixes. Wave 3 ◼ final suite, closeout, main push and deployment.
+
+- [x] S186 Bind fresh goals to a numbered session
+- [x] S186 Release interaction on focus loss and modified keyup
+- [x] S186 Protect frozen choices from combat input
+- [x] S186 Measure complete rendered catch-up frames
+Delivery acceptance pending: S186 exact-main production delivery verification (Wave 3).
+
+[SIL] Carry forward physical controller/participant acceptance with actual observations. [SIL] Verify compatible startup helper delivery through Studio Ops; do not run sibling-rooted state readers as local proof.
+
 ## Session 185 arc completion
 
 Requested: complete the /arc phases (start → audit → implement → closeout) for full range of motion on every device.

@@ -1,32 +1,32 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.1 -->
-<!-- generated-at: 2026-10-18 (Session 185 closeout) -->
+<!-- generated-at: 2026-10-18 (Session 186 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S185 ════════════════════╗
-║  Date: 2026-10-18  ·  SIL: 937/1000  ·  Velocity: 3 down         ║
-║  Mode: FOUNDER  ·  Agent: claude-code                            ║
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S186 ════════════════════╗
+║  Date: 2026-10-18  ·  SIL: 941/1000  ·  Velocity: 4 flat         ║
+║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ║  Live:  preview  →  https://callofdoodie.wtf/                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED · last 5 commits ═══════════════════════════════╗
+║  ✓ docs: S185 arc completion closeout records                    ║
 ║  ✓ fix(input): menus follow the active controller, not gamepad   ║
 ║  ✓ docs: regenerate S185 hot context                             ║
 ║  ✓ docs: S185 closeout — full-range controller aim records       ║
 ║  ✓ fix(input): full 360° controller aim on every gamepad layout  ║
-║  ✓ docs: distinguish native verification method from receipt ki  ║
 ╚════════════════════════════════════════════════════════════════╝
-╔══ SCORES · SIL 937/1000 ═══════════════════════════════════════╗
-║    Dev Health         95   ██████████                            ║
+╔══ SCORES · SIL 941/1000 ═══════════════════════════════════════╗
+║    Dev Health         96   ██████████                            ║
 ║    Alignment          96   ██████████                            ║
-║    Momentum           93   █████████░                            ║
+║    Momentum           94   █████████░                            ║
 ║    Engagement         92   █████████░                            ║
-║    Process Qual       92   █████████░                            ║
+║    Process Qual       91   █████████░                            ║
 ║    Coherence          90   █████████░                            ║
 ║    Security           98   ██████████                            ║
 ║    Ecosystem          92   █████████░                            ║
 ║    Capital            98   ██████████                            ║
-║    Automation         91   █████████░                            ║
+║    Automation         94   █████████░                            ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WRITE-BACK STATUS ═══════════════════════════════════════════╗
 ║  ✓ context/CURRENT_STATE.md                                      ║
@@ -38,26 +38,26 @@
 ║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
 ║  ✓ context/TRUTH_AUDIT.md                                        ║
 ║  ✓ context/PROJECT_STATUS.json                                   ║
-║  · agent memory (Claude/Codex project memory)                    ║
+║  ✓ agent memory (Claude/Codex project memory)                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 11 files  ·  M:11 A:0 D:0 ?:0                          ║
-║  Ahead: 2  ·  Behind: 0                                          ║
+║  Changes: 64 files  ·  M:29 A:35 D:0 ?:0                         ║
+║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ DEPLOYMENT ══════════════════════════════════════════════════╗
-║  Staging:  https://aa2065a8.call-of-doodie.pages.dev/  ·  cloud  ║
+║  Staging:  https://298a5f72.call-of-doodie.pages.dev/  ·  cloud  ║
 ║  Live:     https://callofdoodie.wtf/  ·  preview/FORGE (not yet  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
 ║  Doctor:        157/233                                          ║
 ║  Compliance:    —                                                ║
-║  Tests:         293/293                                          ║
+║  Tests:         ⛔ suite RED — 293/294 files · 1969/1970 asserti  ║
 ║  Validation:    full-fresh                                       ║
 ║  IGNIS:         11d ago                                          ║
-║  Truth:         S184 end-run production verified; S183 comparat  ║
+║  Truth:         S186 four reliability outcomes verified on stag  ║
 ║  Sanitization:  13d ago                                          ║
-║  shells:        unknown · missing/stale enumeration              ║
+║  shells:        1 started · 1 closed · 0 running                 ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ NEXT SESSION ════════════════════════════════════════════════╗
 ║  (no genius cache — run `node scripts/cache-genius-list.mjs`)    ║

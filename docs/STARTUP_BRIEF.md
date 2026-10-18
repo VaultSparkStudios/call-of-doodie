@@ -1,12 +1,12 @@
 <!-- generated-by: scripts/render-startup-brief.mjs v3.1 -->
-<!-- generated-at: 2026-10-18 (Session 185 closeout) -->
-<!-- semantic-freshness: hash=6919aef3990c7a85 next=186 silSession=185 silScore=937 handoff=182 tests=- -->
+<!-- generated-at: 2026-10-18 (Session 186 closeout) -->
+<!-- semantic-freshness: hash=871e24eab6e6708a next=187 silSession=186 silScore=941 handoff=182 tests=- -->
 <!-- fast-boot-valid-until: next session if within 24h -->
 <!-- brief-coherent: true -->
 
 # Startup Brief — Call-Of-Doodie
 
-> **Fast-boot brief** — generated at Session 185 closeout · 2026-10-18.
+> **Fast-boot brief** — generated at Session 186 closeout · 2026-10-18.
 > Valid for next session if started within 24h. For sessions >24h later, load context files fresh (start.md §3).
 
 ---
@@ -15,18 +15,18 @@
 ╔════════════════════════════════════════════════════════════════╗
 ║  🚀 CALL-OF-DOODIE                                               ║
 ║  project · deployed/public-unlaunched · FORGE                    ║
-║  Session 186 · 2026-10-18 · FOUNDER MODE                         ║
+║  Session 187 · 2026-10-18 · FOUNDER MODE                         ║
 ║  Owner: VaultSpark Studios                                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ LAST SESSION (S185) - WHAT SHIPPED ══════════════════════════╗
-║  S185 fixed 180°-limited controller aim and fixed-slot menu pol  ║
+╔══ LAST SESSION (S186) - WHAT SHIPPED ══════════════════════════╗
+║  S186 repairs session goal identity, latched interaction after   ║
 ║  Tests  -                                                        ║
 ║  Deploy -                                                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ WHERE TO TEST · Call-Of-Doodie ══════════════════════════════╗
-║  Unit tests    → npm test — 293/293 passing ✓                    ║
+║  Unit tests    → npm test — 292/294 passing ⛔                    ║
 ║  hosted-visual-proof → session-169-staging · route/theme/wid ✓   ║
 ║  production-verification → source ca1324136f8c · workflow 34 ✓   ║
 ║  hosted-staging → session-170-staging · immutable 520a56d6 · ✓   ║
@@ -42,48 +42,48 @@
 
 ╔══ SCORE ═══════════════════════════════════════════════════════╗
 ║                                                                  ║
-║    937/1000   ██████████████████████░░   94%                     ║
-║    SIL v3.0  ·  Avg3: 934.3  ·  Velocity 3→                      ║
+║    941/1000   ██████████████████████░░   94%                     ║
+║    SIL v3.0  ·  Avg3: 936  ·  Velocity 4→                        ║
 ║    Last active: 0d  ·  Last closeout: 0d  ·  (active = newest…   ║
 ║    Trend  ▂▂▂▄▄  →  (last 5 sessions)                            ║
 ║                                                                  ║
 ║    Category         Score  Bar        Spark   Δ                  ║
 ║    ─────────────── ────── ────────── ──────── ─                  ║
-║    Dev Health        95    ██████████  ▇▇▇▇▇▇▇▇ →                ║
+║    Dev Health        96    ██████████  ▇▇▇▇▇▇▇▇ →                ║
 ║    Alignment         96    ██████████  ▇▇▇▇▇▇▇▇ →                ║
-║    Momentum          93    █████████░  ▇▇▇▇▇▇▇▇ →                ║
+║    Momentum          94    █████████░  ▇▇▇▇▇▇▇▇ →                ║
 ║    Engagement        92    █████████░  ▇▇▇▇▇▇▇▇ →                ║
-║    Process Qual      92    █████████░  ▇▇▇▇▇▇▇▇ →                ║
+║    Process Qual      91    █████████░  ▇▇▇▇▇▇▇▇ →                ║
 ║    Coherence         90    █████████░  ········ →                ║
 ║    Security          98    ██████████  ········ →                ║
 ║    Ecosystem         92    █████████░  ········ →                ║
 ║    Capital           98    ██████████  ········ →                ║
-║    Automation        91    █████████░  ········ →                ║
+║    Automation        94    █████████░  ········ →                ║
 ║                                                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ WHERE WE LEFT OFF  ·  Session 185 ═══════════════════════════╗
+╔══ WHERE WE LEFT OFF  ·  Session 186 ═══════════════════════════╗
 ║  Shipped:  see LATEST_HANDOFF.md                                 ║
-║  Tests:    293/293 passing  ·  Deploy: N/A                       ║
+║  Tests:    292/294 passing  ·  Deploy: N/A                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ✓  ██████████████████████░░   91% used                          ║
-║     907,783 / 1,000,000 tok  ·  claude-code/opus-4-8-1m  · …     ║
-║     ~453,892 tok/turn  ·  cache 50%  ·  0 turns to compact       ║
+║  ✓  ██████████░░░░░░░░░░░░░░   40% used                          ║
+║     109,385 / 272,000 tok  ·  codex/codex-272k  · …              ║
+║     ~54,693 tok/turn  ·  cache 50%  ·  2 turns to compact        ║
 ║     Verdict: WARN_COMPACT_SOON  ← act now                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         293/293 passing (2026-10-18T14:28:36Z)         ║
-║  ✓  Velocity      3   ·  Debt: →                                 ║
-║  ✓  Runway        S184 end-run production verified               ║
+║  ⛔  Tests         suite RED — 292/294 files · 1967/1970…         ║
+║  ✓  Velocity      4   ·  Debt: →                                 ║
+║  ✓  Runway        S186 staging verified; production pending      ║
 ║  ⛔  Context age   ?d                                             ║
 ║  ⚠  IGNIS         44193 FORGE  ·  10d old                        ║
 ║  ⛔  Truth         S185 controller aim (b194fa9) and menu…        ║
 ║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs…        ║
 ║  ✓  Genome dims   all stable  (24/25)                            ║
-║  ✓  Entropy       0.197  (healthy)                               ║
+║  ✓  Entropy       0.209  (healthy)                               ║
 ║  ✓  CDR           no gap detected                                ║
 ║  ✓  Patterns      no recurring pressure detected                 ║
 ║  ✓  Templates     v3.3 aligned                                   ║
@@ -91,7 +91,7 @@
 ║  ✓  Deploy gaps   no gaps (run: ops deploy-gaps)                 ║
 ║  ⛔  Doctor        157/233 (68%)  ·  3 failing                    ║
 ║  ✓  Codex trust   trusted project active                         ║
-║  ⚠  Canon adopt.  1/55 pending review                            ║
+║  ✓  Canon adopt.  0/55 pending review                            ║
 ║  ✓  Cost          flat-rate Max Plan · usage ledger…             ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -115,15 +115,15 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ MOMENTUM METER ══════════════════════════════════════════════╗
-║  Velocity:   ▂▂▂▄▄  3→  (last 5 sessions)                        ║
+║  Velocity:   ▂▂▂▄▄  4→  (last 5 sessions)                        ║
 ║  Intent:     ?% achieved last 5                                  ║
 ║  Streak:     — (last intent not achieved)                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIL FORECAST (next session) ═════════════════════════════════╗
-║  Projected:  941/1000  (↑4 vs current 937)                       ║
+║  Projected:  943/1000  (↑2 vs current 941)                       ║
 ║  All categories forecast stable or rising.                       ║
-║  Calibration: MAE 18 over last 10 forecasts                      ║
+║  Calibration: MAE 16.7 over last 10 forecasts                    ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ GENIUS HIT LIST ═════════════════════════════════════════════╗
@@ -157,5 +157,5 @@
 
 ---
 
-*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 185 closeout · 2026-10-18*
+*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 186 closeout · 2026-10-18*
 *Run `node scripts/ops.mjs doctor` for live health check · `node scripts/ops.mjs genius-list` to refresh hit list*

@@ -1,3 +1,14 @@
+## S186 verified evidence and limits
+
+Overall status: S186 four reliability outcomes verified on staging; final full suite and exact-main production verification pending. Physical-device and participant acceptance remains unmeasured.
+Last reviewed: 2026-10-18
+
+Independent review passes after one lock-rotation correction. Focused regressions pass. Staging https://298a5f72.call-of-doodie.pages.dev passes shell 7/7 and four actual-app theme/width input cases. Before/after browser checks reproduced and resolved interaction latching. Strict lint, configured build, public contracts, security and scoped supply-chain checks pass. Final full suite and exact-main production verification follow.
+
+FORGE/public-unlaunched unchanged. Existing S183 participant/comparative and physical-device evidence remains pending; no balance, retention or hardware claim. Startup used direct clean-tree Git sync because local start-sync/recovery helpers are absent. The lock writer repair necessarily preceded its audit premise gate; all gameplay edits followed the recorded 4/4 gate. The local doctor/autopilot delegates to the control plane and cannot certify this project; scoped repository gates and exact-main hosted CI supply project delivery evidence.
+
+Initial full suite: 1967/1970 assertions; three record-freshness failures (unchecked canon suggestion and stale hot context). No gameplay assertion failed. Corrected records before final suite; do not present initial run as passing.
+
 ## S185 arc completion
 
 Overall status: S185 controller aim (b194fa9) and menu controller-slot fix (1221846) verified on staging; production follows exact-main CI. Physical-pad coverage is fixture-based. S183 comparative acceptance remains partial; FORGE/public-unlaunched.
@@ -1745,3 +1756,6 @@ Explicit S182 closeout completed: autopilot exit 0 committed and pushed 5e3537d1
 ## S184 explicit founder closeout — 2026-10-06
 
 Records seal 6e473e676ea1252cb531efd6fa400d33fa4ae228 passed exact-main workflow 37421746017: 293 test files / 1,954 assertions, strict lint, build and deploy. Canonical /_health reported 6e473e676ea1 and live shell checks passed 7/7. Gameplay source is unchanged from 9e6304b and its eight canonical end-run browser cases. Active stale pending statements are reconciled. Historical S183 comparative work and central scoring are not upgraded to verified. Deployment currency for the final records follow-up is checked after push.
+
+
+S186 validation follow-through: Final local suite: 294 files, 1969/1970 assertions; only the stale CANON-056 pending-count fixture failed. The fixture was updated to the actively verified adoption posture and the corrected adoption/hot-context/native-binding suites pass 5/5. All gameplay assertions passed. Exact-main hosted full suite remains required before deployment completion.

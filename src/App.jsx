@@ -51,6 +51,7 @@ import { applyCanvasScale, watchCanvasScale, measureGameViewport, MOBILE_DOCK_HE
 import { captureGifFrame } from "./utils/gifCapture.js";
 import { getRouteOptions } from "./utils/routeOptions.js";
 import { useGameLoop } from "./hooks/useGameLoop.js";
+import { createGameplayBarrier } from "./systems/gameplayBarrier.js";
 import { useShellLifecycle } from "./hooks/useShellLifecycle.js";
 const HUD = lazy(() => import("./components/HUD.jsx"));
 import { buildOperationReceipt, getCurrentEncounter } from "./systems/operationDirector.js";
@@ -236,6 +237,13 @@ export default function CallOfDoodie() {
   const bossCutsceneRef  = useRef(false); // blocks game loop during boss intro card
   const waveAnnouncePendingRef = useRef(false);
   const mutationPendingRef      = useRef(false); // blocks game loop during mutation offer
+  const inactiveGameplayRef = useRef(true);
+  const isGameplayBlocked = useMemo(() => createGameplayBarrier({
+    inactive: inactiveGameplayRef,
+    paused: pausedRef, perk: perkPendingRef, shop: shopPendingRef,
+    route: routePendingRef, boss: bossCutsceneRef,
+    wave: waveAnnouncePendingRef, mutation: mutationPendingRef,
+  }), []);
   const postMutationShopRef     = useRef(false); // whether to show shop after mutation resolves
   const bankedPerkChoicesRef    = useRef(0);
   const perksThisWaveRef        = useRef(0); // cap perk screens per wave
@@ -399,6 +407,7 @@ export default function CallOfDoodie() {
   useEffect(() => { currentWeaponRef.current = currentWeapon; }, [currentWeapon]);
   useEffect(() => { isReloadingRef.current = isReloading; }, [isReloading]);
   useEffect(() => { pausedRef.current = paused; }, [paused]);
+  useEffect(() => { inactiveGameplayRef.current = screen !== "game"; }, [screen]);
   useEffect(() => {
     setMusicPaused(screen !== "game" || paused || perkPending || shopPending || routePending || mutationPending || Boolean(bossCutscene));
   }, [screen, paused, perkPending, shopPending, routePending, mutationPending, bossCutscene]);
@@ -939,6 +948,7 @@ export default function CallOfDoodie() {
   }, []);
   const releaseAllInputs = useCallback((reason = "explicit", scopes) => {
     return releaseBridgeInputs({
+      gsRef,
       keysRef,
       mouseRef,
       joystickRef,
@@ -948,6 +958,11 @@ export default function CallOfDoodie() {
       gamepadAngleRef,
     }, inputReleaseReceiptRef, reason, scopes);
   }, []);
+  useEffect(() => {
+    if (screen !== "game" || paused || perkPending || shopPending || routePending || bossCutscene || waveAnnounce || mutationPending) {
+      releaseAllInputs("gameplay-barrier");
+    }
+  }, [screen, paused, perkPending, shopPending, routePending, bossCutscene, waveAnnounce, mutationPending, releaseAllInputs]);
   const transitionPause = useCallback((nextPaused, reason = "explicit") => {
     const transition = planPauseTransition({
       paused: pausedRef.current,
@@ -1134,6 +1149,7 @@ export default function CallOfDoodie() {
 
   // ── Synergy charge burst ──────────────────────────────────────────────────
   const fireSynergyCharge = useCallback(() => {
+    if (isGameplayBlocked()) return;
     const gs = gsRef.current;
     if (!gs?.synergyChargeReady) return;
     synergyChargeCooldownRef.current = 300; // 5s cooldown at 60fps
@@ -1152,7 +1168,7 @@ export default function CallOfDoodie() {
     }
     addText(gs, p.x, p.y - 40, "⚡ SYNERGY BURST!", "#FF88FF", true);
     gs.screenShake = 12;
-  }, []);
+  }, [isGameplayBlocked]);
 
   // ── Wave shop apply ───────────────────────────────────────────────────────
   const applyShopOption = useCallback((optionId) => {
@@ -1339,7 +1355,7 @@ export default function CallOfDoodie() {
 
   // ── Reload ────────────────────────────────────────────────────────────────
   const doReload = useCallback((wpnIdx) => {
-    if (isReloadingRef.current || pausedRef.current) return;
+    if (isReloadingRef.current || isGameplayBlocked()) return;
     setIsReloading(true); isReloadingRef.current = true;
     recordCommandTrace("reload", `w${wpnIdx}`);
     const gs = gsRef.current;
@@ -1352,11 +1368,11 @@ export default function CallOfDoodie() {
     }
     soundReload();
     beginWeaponReload(gs, wpnIdx, WEAPONS[wpnIdx].reloadTime);
-  }, [recordCommandTrace]);
+  }, [recordCommandTrace, isGameplayBlocked]);
 
   // ── Shoot ─────────────────────────────────────────────────────────────────
   const shoot = useCallback((gs, weaponIdx, angle) => {
-    if (pausedRef.current || perkPendingRef.current) return;
+    if (isGameplayBlocked()) return;
     const weapon = WEAPONS[weaponIdx];
     const combatRng = getRunRng(gs, "combat");
     const lootRng = getRunRng(gs, "loot");
@@ -1437,7 +1453,7 @@ export default function CallOfDoodie() {
       gs.bullets.push(makeBullet(a));
       for (let bi = 1; bi < weapon.burst; bi++) {
         setTimeout(() => {
-          if (!gsRef.current || pausedRef.current) return;
+          if (gsRef.current !== gs || isGameplayBlocked()) return;
           const ba = angle + (combatRng() - 0.5) * weapon.spread;
           gsRef.current.bullets.push(makeBullet(ba));
         }, bi * (weapon.burstDelay || 90));
@@ -1475,12 +1491,12 @@ export default function CallOfDoodie() {
       gs.shakeDirY = -Math.sin(angle);
     }
     if (gs.ammoCount <= 0) doReload(weaponIdx);
-  }, [doReload, recordCommandTrace]);
+  }, [doReload, recordCommandTrace, isGameplayBlocked]);
 
   // ── Grenade ───────────────────────────────────────────────────────────────
   const throwGrenade = useCallback(() => {
     const gs = gsRef.current;
-    if (!gs || !grenadeRef.current.ready || pausedRef.current || perkPendingRef.current) return;
+    if (!gs || !grenadeRef.current.ready || isGameplayBlocked()) return;
     grenadeRef.current.ready = false; setGrenadeReady(false);
     const p = gs.player;
     soundGrenadeAt(p.x, GW());
@@ -1489,12 +1505,12 @@ export default function CallOfDoodie() {
     recordCommandTrace("grenade", directionBucket(Math.cos(p.angle), Math.sin(p.angle)));
     const cd = GRENADE_COOLDOWN * (perkModsRef.current.grenadeCDMult || 1);
     setTimeout(() => { grenadeRef.current.ready = true; setGrenadeReady(true); }, cd);
-  }, [recordCommandTrace]);
+  }, [recordCommandTrace, isGameplayBlocked]);
 
   // ── Dash ──────────────────────────────────────────────────────────────────
   const doDash = useCallback(() => {
     const gs = gsRef.current;
-    if (!gs || !dashRef.current.ready || pausedRef.current || perkPendingRef.current) return;
+    if (!gs || !dashRef.current.ready || isGameplayBlocked()) return;
     dashRef.current.ready = false; setDashReady(false);
     soundDash();
     const keys = keysRef.current, js = joystickRef.current;
@@ -1515,7 +1531,7 @@ export default function CallOfDoodie() {
     addParticles(gs, gs.player.x, gs.player.y, "#00FFFF", 12);
     const cd = DASH_COOLDOWN * (perkModsRef.current.dashCDMult || 1);
     setTimeout(() => { dashRef.current.ready = true; setDashReady(true); }, cd);
-  }, [recordCommandTrace]);
+  }, [recordCommandTrace, isGameplayBlocked]);
 
   // ── Player death ──────────────────────────────────────────────────────────
   const handlePlayerDeath = useCallback((gs, {
@@ -2238,7 +2254,7 @@ export default function CallOfDoodie() {
     runSummarySigRef.current = "";
     currentWeaponRef.current = starterWeapon; isReloadingRef.current = false;
     if (timerRef.current) clearInterval(timerRef.current);
-    timerRef.current = setInterval(() => { if (!pausedRef.current && !perkPendingRef.current && !shopPendingRef.current && !routePendingRef.current && !bossCutsceneRef.current && !waveAnnouncePendingRef.current && !mutationPendingRef.current) setTimeSurvived(t => t + 1); }, 1000);
+    timerRef.current = setInterval(() => { if (!isGameplayBlocked()) setTimeSurvived(t => t + 1); }, 1000);
     setMusicLowpass(false); // clear any lingering last-stand muffle from the previous run
     setMusicMode(requestedOperation ? "operations" : zombiesRef.current ? "zombies" : "classic");
     setMusicObjective(requestedOperation ? gsRef.current.operationEncounterVerb : zombiesRef.current ? "pump-0" : "none");
@@ -2293,7 +2309,7 @@ export default function CallOfDoodie() {
         track("arsenal_milestone_snapshot", { accountLevel: _acctLevel, milestonesReached: _milestonesReached, totalWeapons: WEAPONS.length, availability: "all-open" });
       }
     } catch {}
-  }, [applyPerk, initGame, openQueuedPerkSelection, operationStateRef, releaseAllInputs, resetOperation, startOperation, starterLoadout]);
+  }, [applyPerk, initGame, openQueuedPerkSelection, operationStateRef, releaseAllInputs, resetOperation, startOperation, starterLoadout, isGameplayBlocked]);
 
   // ── Draft perk selection ───────────────────────────────────────────────────
   const applyDraftPerk = useCallback((perk) => {
@@ -2314,6 +2330,7 @@ export default function CallOfDoodie() {
 
   // ── Weapon switch ─────────────────────────────────────────────────────────
   const switchWeapon = useCallback((idx) => {
+    if (isGameplayBlocked()) return;
     const gs = gsRef.current;
     if (gs) {
       // Save current ammo for the weapon being left
@@ -2337,7 +2354,7 @@ export default function CallOfDoodie() {
       weaponSwitchTrackRef.current = _now;
       track("weapon_switch", { from: WEAPONS[prevIdx]?.name, to: WEAPONS[idx]?.name, wave: gsRef.current?.currentWave, mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current, zombiesRef.current) });
     }
-  }, [recordCommandTrace]);
+  }, [recordCommandTrace, isGameplayBlocked]);
 
   // ── Mode victory (S163): a mode win condition ends the run as a win ──────
   const handleModeVictory = useCallback((gs) => {
@@ -2471,7 +2488,7 @@ export default function CallOfDoodie() {
     const AW = gs.arenaW || W, AH = gs.arenaH || H;
     const cam = gs.camera || (gs.camera = createCamera({ arenaW: AW, arenaH: AH, viewW: W, viewH: H }));
 
-    if (pausedRef.current || perkPendingRef.current || shopPendingRef.current || routePendingRef.current || bossCutsceneRef.current || waveAnnouncePendingRef.current || mutationPendingRef.current) {
+    if (isGameplayBlocked()) {
       return;
     }
 
@@ -3458,20 +3475,14 @@ export default function CallOfDoodie() {
     // S163 fixed step: catch-up steps simulate only; the last step of the frame renders.
     if (render) drawGameRef.current(ctx, canvas, W, H, gs, { dashRef, mouseRef, joystickRef, shootStickRef, startTimeRef, frameCountRef, isMobile, tip, wpnIdx });
 
-  }, [handleModeVictory, shoot, spawnEnemy, spawnBoss, doReload, isMobile, checkAchievements, checkDailyMissions, tip, handlePlayerDeath, addXp, openQueuedPerkSelection, operationStateRef, resolveOperationWave, sampleCommandTrace, inputDebugEnabled, dashReady, grenadeReady, _modeAnnounce]);
+  }, [handleModeVictory, shoot, spawnEnemy, spawnBoss, doReload, isMobile, checkAchievements, checkDailyMissions, tip, handlePlayerDeath, addXp, openQueuedPerkSelection, operationStateRef, resolveOperationWave, sampleCommandTrace, inputDebugEnabled, dashReady, grenadeReady, _modeAnnounce, isGameplayBlocked]);
 
   // ── Start / stop animation ─────────────────────────────────────────────────
   useGameLoop(gameLoop, screen === "game", frameRef, {
     monitorRef: frameMonitorRef,
     shouldMeasure: () => Boolean(
       gsRef.current?.player
-      && !pausedRef.current
-      && !perkPendingRef.current
-      && !shopPendingRef.current
-      && !routePendingRef.current
-      && !bossCutsceneRef.current
-      && !waveAnnouncePendingRef.current
-      && !mutationPendingRef.current
+      && !isGameplayBlocked()
     ),
     onError: (error) => {
       console.error("[GAME LOOP] Frame fault closed the run instead of freezing the canvas:", error);
@@ -3511,16 +3522,16 @@ export default function CallOfDoodie() {
         return;
       }
       if (e.key === "Escape" && screen === "game") { transitionPause(!pausedRef.current, "keyboard"); e.preventDefault(); return; }
-      if (pausedRef.current || perkPendingRef.current) return;
+      if (screen !== "game" || isGameplayBlocked()) return;
       inputDeviceRef.current = "keyboard";
       markInputActivity("keyboard");
       keysRef.current[e.key.toLowerCase()] = true;
-      if (e.key === "r") doReload(currentWeaponRef.current);
-      if (e.key === "q" || e.key === "g") throwGrenade();
+      if (e.key.toLowerCase() === "r") doReload(currentWeaponRef.current);
+      if (e.key.toLowerCase() === "q" || e.key.toLowerCase() === "g") throwGrenade();
       if (e.key === " " || e.key === "Shift") doDash();
-      if (e.key === "e") { fireSynergyCharge(); if (gsRef.current) gsRef.current._interactHeld = true; }
+      if (e.key.toLowerCase() === "e") { fireSynergyCharge(); if (gsRef.current) gsRef.current._interactHeld = true; }
       if (gsRef.current?.allies?.length) {
-        const _order = e.key === "z" ? "follow" : e.key === "x" ? "hold" : e.key === "c" ? "attack" : null;
+        const _order = e.key.toLowerCase() === "z" ? "follow" : e.key.toLowerCase() === "x" ? "hold" : e.key.toLowerCase() === "c" ? "attack" : null;
         if (_order) { gsRef.current._pendingAllyOrder = _order; recordCommandTrace("order", _order); addText(gsRef.current, gsRef.current.player.x, gsRef.current.player.y - 70, "📣 SQUAD: " + _order.toUpperCase(), "#9CFF8A"); }
       }
       if (e.key.toLowerCase() === "m") toggleMusicMuted();
@@ -3545,13 +3556,13 @@ export default function CallOfDoodie() {
     const mm = updateMouseAim;
     const md = (e) => {
       updateMouseAim(e);
-      if (e.button === 0 && !pausedRef.current && !perkPendingRef.current) mouseRef.current.down = true;
+      if (e.button === 0 && screen === "game" && !isGameplayBlocked()) mouseRef.current.down = true;
     };
     const mu = (e) => {
       markInputActivity("mouse");
       if (e.button === 0) mouseRef.current.down = false;
     };
-    const kuInteract = (e) => { if (e.key === "e" && gsRef.current) gsRef.current._interactHeld = false; };
+    const kuInteract = (e) => { if (e.key.toLowerCase() === "e" && gsRef.current) gsRef.current._interactHeld = false; };
     window.addEventListener("keydown", kd); window.addEventListener("keyup", ku); window.addEventListener("keyup", kuInteract);
     window.addEventListener("mousemove", mm); window.addEventListener("mousedown", md); window.addEventListener("mouseup", mu);
     return () => {
@@ -3559,7 +3570,7 @@ export default function CallOfDoodie() {
       window.removeEventListener("mousemove", mm); window.removeEventListener("mousedown", md); window.removeEventListener("mouseup", mu);
       releaseAllInputs("keyboard-listener-cleanup", ["keyboard", "mouse"]);
     };
-  }, [doReload, throwGrenade, doDash, switchWeapon, fireSynergyCharge, markInputActivity, releaseAllInputs, screen, transitionPause, toggleMusicMuted, recordCommandTrace]);
+  }, [doReload, throwGrenade, doDash, switchWeapon, fireSynergyCharge, markInputActivity, releaseAllInputs, screen, transitionPause, toggleMusicMuted, recordCommandTrace, isGameplayBlocked]);
 
   // ── Touch controls ────────────────────────────────────────────────────────
   useEffect(() => {
@@ -3569,7 +3580,7 @@ export default function CallOfDoodie() {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ts = (e) => {
-      if (pausedRef.current || perkPendingRef.current) return;
+      if (isGameplayBlocked()) return;
       e.preventDefault();
       inputDeviceRef.current = "mobile";
       markInputActivity("touch");
@@ -3583,7 +3594,7 @@ export default function CallOfDoodie() {
       }
     };
     const tm = (e) => {
-      if (pausedRef.current || perkPendingRef.current) return;
+      if (isGameplayBlocked()) return;
       e.preventDefault();
       markInputActivity("touch");
       for (const t of e.changedTouches) {
@@ -3606,7 +3617,7 @@ export default function CallOfDoodie() {
       canvas.removeEventListener("touchend", te); canvas.removeEventListener("touchcancel", te);
       releaseAllInputs("touch-listener-cleanup", ["touch"]);
     };
-  }, [markInputActivity, releaseAllInputs, screen, gameSettings.controlHandedness]);
+  }, [markInputActivity, releaseAllInputs, screen, gameSettings.controlHandedness, isGameplayBlocked]);
 
   // ── Gamepad polling ───────────────────────────────────────────────────────
   useEffect(() => {
@@ -3645,10 +3656,10 @@ export default function CallOfDoodie() {
       };
       inputDeviceRef.current = cType;
 
-      if (pausedRef.current || perkPendingRef.current || shopPendingRef.current || routePendingRef.current || bossCutsceneRef.current) {
+      if (screen !== "game" || isGameplayBlocked()) {
         // While paused still handle Start button to unpause
         const start = gp.buttons[9]?.pressed;
-        if (start && !lastStart) transitionPause(!pausedRef.current, "controller");
+        if (screen === "game" && start && !lastStart) transitionPause(!pausedRef.current, "controller");
         lastStart = !!start;
         // Clear controller movement so player doesn't keep moving when unpaused.
         // Keyboard state is owned by keyboard events and must not be overwritten here.
@@ -3718,7 +3729,7 @@ export default function CallOfDoodie() {
       window.removeEventListener("gamepaddisconnected", handleGamepadDisconnected);
       releaseAllInputs("gamepad-listener-cleanup", ["gamepad"]);
     };
-  }, [doDash, doReload, markInputActivity, releaseAllInputs, throwGrenade, switchWeapon, transitionPause]);
+  }, [doDash, doReload, markInputActivity, releaseAllInputs, throwGrenade, switchWeapon, transitionPause, screen, isGameplayBlocked]);
 
   // ── Respawn (from death screen) ───────────────────────────────────────────
   const _respawn = useCallback(() => {
@@ -3734,9 +3745,9 @@ export default function CallOfDoodie() {
     }
     startTimeRef.current = Date.now(); setTimeSurvived(0);
     if (timerRef.current) clearInterval(timerRef.current);
-    timerRef.current = setInterval(() => { if (!pausedRef.current && !perkPendingRef.current && !shopPendingRef.current && !routePendingRef.current && !bossCutsceneRef.current && !waveAnnouncePendingRef.current && !mutationPendingRef.current) setTimeSurvived(t => t + 1); }, 1000);
+    timerRef.current = setInterval(() => { if (!isGameplayBlocked()) setTimeSurvived(t => t + 1); }, 1000);
     setScreen("game");
-  }, [releaseAllInputs]);
+  }, [releaseAllInputs, isGameplayBlocked]);
 
   const selectPrimaryWeapon = useCallback((idx) => {
     const next = Math.max(0, Math.min(WEAPONS.length - 1, Math.floor(Number(idx) || 0)));

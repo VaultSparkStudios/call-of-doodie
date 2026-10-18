@@ -1,3 +1,25 @@
+## Where We Left Off — Session 186
+
+Session Intent: Complete a fresh /start → /audit → /implement → /closeout arc, commit/push main and fully deploy under existing authorization.
+
+S186 repairs session goal identity, latched interaction after focus loss, combat input during frozen choices, and incomplete catch-up frame timing.
+
+Fresh Codex startup binds S186 to this native goal. Isolated real-Git tests cover repeat/help, stale and closed locks, force rotation and native binding. Independent review identified and verified the rotation correction.
+
+Keyboard interaction and source-specific Operation holds release on blur/pause/run-ending; modified E keyup clears the latch. Sabotage regression proves channel progress decays after release. Actual browser checks reproduce the old defect and pass the repaired behavior.
+
+A shared live predicate blocks combat through all seven simulation-frozen states and inactive screens, including dock callbacks and delayed bursts. Actual-App tests exercise keyboard, touch, mouse and controller fixtures, then normal resume. Browser checks exercise visible pause/focus-loss states; other modal tests inject their real refs.
+
+One measured rendered-frame sample includes every catch-up simulation step and the final render. Hook/rAF regression first reproduced omitted cost, then passed; zero-step and suspended frames remain unsampled.
+
+Independent review passes after one lock-rotation correction. Focused regressions pass. Staging https://298a5f72.call-of-doodie.pages.dev passes shell 7/7 and four actual-app theme/width input cases. Before/after browser checks reproduced and resolved interaction latching. Strict lint, configured build, public contracts, security and scoped supply-chain checks pass. Final full suite and exact-main production verification follow.
+
+FORGE/public-unlaunched unchanged. Existing S183 participant/comparative and physical-device evidence remains pending; no balance, retention or hardware claim. Startup used direct clean-tree Git sync because local start-sync/recovery helpers are absent. The lock writer repair necessarily preceded its audit premise gate; all gameplay edits followed the recorded 4/4 gate. The local doctor/autopilot delegates to the control plane and cannot certify this project; scoped repository gates and exact-main hosted CI supply project delivery evidence.
+
+Native goal association: current goal began 2026-10-18T15:23:00Z, bound to S186 starting at 3e7178d. The ignored binding identifies this invocation; prior S185 completion is not borrowed. Detailed audit/plan retained privately in .cache/audit-S186/docs.
+
+Rollback: normal revert of this release to 3e7178d; rebuild/deploy through the same workflow. Next: finish exact-main delivery verification.
+
 ## Where We Left Off — Session 185 arc completion
 
 Implemented audit item 2 (1221846): SettingsPanel and VirtualKeyboard polled navigator.getGamepads()[0], so a pad in slot 1+ (common after a Chrome reconnect) could not navigate those screens. Both now use getPrimaryGamepad(); slot-1 selection and a menu source contract are tested.
@@ -165,3 +187,6 @@ Deploy: exact source `237003e8884148b44ecee10c30dd0da7066f3f57` passed GitHub Ac
 
 
 Explicit S182 closeout completed: autopilot exit 0 committed and pushed 5e3537d18386 to main, cleared the lock, and finalized the skill trace. GitHub Actions 37161648350 passed quality and deployment; production health reported 5e3537d18386 and shell assertions passed 7/7. All ten write-back records are reconciled; CDR remains updated locally under its intentional gitignore rule. A final records-only seal follows, with exact-revision deployment verification reported at handback.
+
+
+S186 validation follow-through: Final local suite: 294 files, 1969/1970 assertions; only the stale CANON-056 pending-count fixture failed. The fixture was updated to the actively verified adoption posture and the corrected adoption/hot-context/native-binding suites pass 5/5. All gameplay assertions passed. Exact-main hosted full suite remains required before deployment completion.

@@ -1592,3 +1592,8 @@ Resolve the right stick from the pad's own layout instead of fixed indices: trus
 ## S185 arc completion — 2026-10-18
 
 Every gamepad-polling surface selects its pad through getPrimaryGamepad(); no screen reads a fixed slot. A start-time canon suggestion is not adoption evidence: CANON-056 stays pending until its terminology audit runs. A goal-requested /arc is incomplete without its /start and /audit phases even when the requested fix is already shipped; run them rather than claim them.
+
+
+## 2026-10-18 — Session 186
+
+Use the canonical lock writer with recipient-verified rotation fixes. Preserve active session identity only while newer than closed surfaces; stale/force rotation cannot reissue a closed ID. Combat input, delayed bursts, simulation and frame sampling share one live barrier. Scope interaction release to its owning device. Measure complete rendered frames, without changing the 60Hz simulation clock. CANON-056 checked against 100 public content files without truncation/findings and explicitly adopted. FORGE/public-unlaunched unchanged. Existing S183 participant/comparative and physical-device evidence remains pending; no balance, retention or hardware claim. Startup used direct clean-tree Git sync because local start-sync/recovery helpers are absent. The lock writer repair necessarily preceded its audit premise gate; all gameplay edits followed the recorded 4/4 gate. The local doctor/autopilot delegates to the control plane and cannot certify this project; scoped repository gates and exact-main hosted CI supply project delivery evidence.

@@ -240,12 +240,18 @@ export function useGameLoop(callback, active, rafRef, {
       // regardless of display refresh rate (120Hz screens no longer run the
       // game at double speed; a hitch catches up with at most MAX_CATCHUP steps).
       const steps = clock.advance(timestamp);
-      for (let i = 0; i < steps; i += 1) {
-        const result = runFrameSafely(
-          () => runMeasuredFrame(() => cbRef.current({ render: i === steps - 1 }), monRef.current, { shouldMeasure: sample && i === 0 }),
-          (error) => errorRef.current?.(error),
-        );
-        if (!result.ok) break;
+      if (steps > 0) {
+        // One sample represents the complete rendered frame, including every
+        // catch-up step and the final render. Zero-step ticks add no sample.
+        runMeasuredFrame(() => {
+          for (let i = 0; i < steps; i += 1) {
+            const result = runFrameSafely(
+              () => cbRef.current({ render: i === steps - 1 }),
+              (error) => errorRef.current?.(error),
+            );
+            if (!result.ok) break;
+          }
+        }, monRef.current, { shouldMeasure: sample });
       }
       handle = requestAnimationFrame(loop);
       if (rafRef) rafRef.current = handle;

@@ -1,3 +1,15 @@
+## S186 input reliability
+
+Fresh Codex startup binds S186 to this native goal. Isolated real-Git tests cover repeat/help, stale and closed locks, force rotation and native binding. Independent review identified and verified the rotation correction.
+
+Keyboard interaction and source-specific Operation holds release on blur/pause/run-ending; modified E keyup clears the latch. Sabotage regression proves channel progress decays after release. Actual browser checks reproduce the old defect and pass the repaired behavior.
+
+A shared live predicate blocks combat through all seven simulation-frozen states and inactive screens, including dock callbacks and delayed bursts. Actual-App tests exercise keyboard, touch, mouse and controller fixtures, then normal resume. Browser checks exercise visible pause/focus-loss states; other modal tests inject their real refs.
+
+One measured rendered-frame sample includes every catch-up simulation step and the final render. Hook/rAF regression first reproduced omitted cost, then passed; zero-step and suspended frames remain unsampled.
+
+FORGE/public-unlaunched unchanged. Existing S183 participant/comparative and physical-device evidence remains pending; no balance, retention or hardware claim. Startup used direct clean-tree Git sync because local start-sync/recovery helpers are absent. The lock writer repair necessarily preceded its audit premise gate; all gameplay edits followed the recorded 4/4 gate. The local doctor/autopilot delegates to the control plane and cannot certify this project; scoped repository gates and exact-main hosted CI supply project delivery evidence.
+
 ## S184 end-run maintenance
 
 End-run results now show the score and Submit to leaderboard before optional content. Last words are optional and labelled. Submission is guarded against duplicate clicks and excludes practice, Operations, local-only modes and integrity failures. Play Again precedes optional coaching. Sharing has one run-link action with native/copy/manual feedback; score images and highlights are explicit downloads. Feedback, highlights and exports are optional. Bottom leaderboard/menu controls remain outside disclosures.

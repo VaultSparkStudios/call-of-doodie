@@ -1,3 +1,11 @@
+## S186 input reliability and runtime measurement
+
+S186 repairs session goal identity, latched interaction after focus loss, combat input during frozen choices, and incomplete catch-up frame timing.
+
+Independent review passes after one lock-rotation correction. Focused regressions pass. Staging https://298a5f72.call-of-doodie.pages.dev passes shell 7/7 and four actual-app theme/width input cases. Before/after browser checks reproduced and resolved interaction latching. Strict lint, configured build, public contracts, security and scoped supply-chain checks pass. Final full suite and exact-main production verification follow.
+
+See LATEST_HANDOFF for acceptance limits.
+
 ## S185 arc completion — menus follow the active controller
 
 Implemented audit item 2 (1221846): SettingsPanel and VirtualKeyboard polled navigator.getGamepads()[0], so a pad in slot 1+ (common after a Chrome reconnect) could not navigate those screens. Both now use getPrimaryGamepad(); slot-1 selection and a menu source contract are tested.

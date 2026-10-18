@@ -1,1152 +1,435 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-10-06T05:55:47.098Z",
-  "uiBaseRef": "d9a04ba96703932ec89cfa2308bf2a6de8b951bf",
-  "stagingUrl": "https://aa2065a8.call-of-doodie.pages.dev",
+  "capturedAt": "2026-10-18T15:40:12.490Z",
+  "uiBaseRef": "3e7178d2f9b8055995c1d9474749c026f1d9efe0",
+  "stagingUrl": "https://298a5f72.call-of-doodie.pages.dev/",
   "themes": [
     "dark",
     "light"
   ],
   "sourceFiles": [
     {
-      "file": "src/components/DeathScreen.jsx",
-      "sha256": "ec8ff8caba318e1e537da3a517dc1f85fff2de9c50a5b0abf2e5244d30c16477"
+      "file": "src/App.jsx",
+      "sha256": "ef7469a3c043c28d77d59ba29807fdd52916a4eba71ab280e059c4c6e1803032"
     },
     {
-      "file": "src/utils/runSharing.js",
-      "sha256": "de80dd15bf65ee56f507ce8c08742c2019ae7bfde0bf82d087450bb0ee7678d6"
+      "file": "src/systems/inputLifecycle.js",
+      "sha256": "68d69f9e33e8f8194f0311fd916db82ecf8aec57d22befb906608d0905e8fb93"
+    },
+    {
+      "file": "src/systems/gameplayBarrier.js",
+      "sha256": "9b42e7d4df4d35d4f5796867d81bdef462d4568e718f823edbcb80dac0376ee5"
+    },
+    {
+      "file": "src/hooks/useGameLoop.js",
+      "sha256": "2cff6e5c42de6b008517781930f5100cfbf7db1aef2924fed276fb4802b0a038"
     }
   ],
   "captures": [
     {
-      "file": "session-184/before-defeat-sewer-night-390-top.png",
-      "sha256": "95376607b0798bdfa2aaaa0a95d36c998b1093a3f2885b76da0266274744f79f",
+      "file": "session-186/before-sewer-night-390-playing.png",
+      "sha256": "a1a9ddcefc3bbfff2f960c0b35bda1cc02b73f9681e7495b409e1d257a496960",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
-        "height": 844
+        "height": 900
       },
-      "page": "Defeat results · top",
+      "page": "Gameplay playing",
       "phase": "before"
     },
     {
-      "file": "session-184/before-defeat-sewer-night-390-submission.png",
-      "sha256": "00a7f0af6c3bc06683b367f6daed27d3a8f90a2c98eccc76892fda1d771ee2d3",
+      "file": "session-186/before-sewer-night-390-paused.png",
+      "sha256": "967b1e8bd3bdb8ad75ececa3273fa76170f30f6b3f9f5f90da51fd96abd86128",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
-        "height": 844
+        "height": 900
       },
-      "page": "Defeat results · submission",
+      "page": "Gameplay paused",
       "phase": "before"
     },
     {
-      "file": "session-184/before-defeat-sewer-night-390-bottom.png",
-      "sha256": "b05fd70c84e1ef593b9e27b5edfb8cdcefcdd36c10dff4b03efc76be7e87a050",
+      "file": "session-186/before-sewer-night-390-focus-lost.png",
+      "sha256": "51066d21808c03f6b341d588b146f29fd3cc951dc4d58d437fd867c2a91add5d",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
-        "height": 844
+        "height": 900
       },
-      "page": "Defeat results · bottom",
+      "page": "Gameplay focus-lost",
       "phase": "before"
     },
     {
-      "file": "session-184/before-defeat-sewer-night-1440-top.png",
-      "sha256": "8a9d3904486daf1be070775b23903d43ec2349d69c8a6d8032dd5462fad85c96",
+      "file": "session-186/before-sewer-night-390-resumed.png",
+      "sha256": "6a91837e5989d69d7b5e6a423d9ba40a91c9c512243df8f2fc5c9c79c13315e2",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
-        "width": 1440,
+        "width": 390,
         "height": 900
       },
-      "page": "Defeat results · top",
+      "page": "Gameplay resumed",
       "phase": "before"
     },
     {
-      "file": "session-184/before-defeat-sewer-night-1440-submission.png",
-      "sha256": "8d59caafc3b7e292af4fd94c54c70c6f30e0794daa6589ea8d37f0215b6b3752",
+      "file": "session-186/before-sewer-night-1440-playing.png",
+      "sha256": "f2d86f5c99799f4fcffa99cdd439315728a444fedbf5d3aadd3eb2b401b47b00",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "Defeat results · submission",
+      "page": "Gameplay playing",
       "phase": "before"
     },
     {
-      "file": "session-184/before-defeat-sewer-night-1440-bottom.png",
-      "sha256": "c76e0cb2a696b4cbe2795e554ec8778b5c82067e164ab31e5840996265d38122",
+      "file": "session-186/before-sewer-night-1440-paused.png",
+      "sha256": "0eb45357bfc28440c7ff62927a34b7f047d1087410651c983355644c1f20524b",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "Defeat results · bottom",
+      "page": "Gameplay paused",
       "phase": "before"
     },
     {
-      "file": "session-184/before-defeat-porcelain-day-390-top.png",
-      "sha256": "b8bdc4d2f3b3200adb129cef26922ce2e89b05a1c984b98efa977c1a0087209d",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
+      "file": "session-186/before-sewer-night-1440-focus-lost.png",
+      "sha256": "47a0e4f32b9c8203fb6c2e41e338a040bca4b2a22a357671103a75a11a6e2ec7",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
       "viewport": {
-        "width": 390,
-        "height": 844
+        "width": 1440,
+        "height": 900
       },
-      "page": "Defeat results · top",
+      "page": "Gameplay focus-lost",
       "phase": "before"
     },
     {
-      "file": "session-184/before-defeat-porcelain-day-390-submission.png",
-      "sha256": "00a7f0af6c3bc06683b367f6daed27d3a8f90a2c98eccc76892fda1d771ee2d3",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
+      "file": "session-186/before-sewer-night-1440-resumed.png",
+      "sha256": "244eed2de53ccfc58054cdf9eafe1440e30ed970c82b2b68a04034bdb0e594cc",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
       "viewport": {
-        "width": 390,
-        "height": 844
+        "width": 1440,
+        "height": 900
       },
-      "page": "Defeat results · submission",
+      "page": "Gameplay resumed",
       "phase": "before"
     },
     {
-      "file": "session-184/before-defeat-porcelain-day-390-bottom.png",
-      "sha256": "66240bcb8ebea0f2b0bccecb5fca5d768888134855db18145a13c4747befe3d7",
+      "file": "session-186/before-porcelain-day-390-playing.png",
+      "sha256": "17e7f3152d407f3d7e251c049fd74a99db7a97cf222c66b18a2a092f643fea7b",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
-        "height": 844
+        "height": 900
       },
-      "page": "Defeat results · bottom",
+      "page": "Gameplay playing",
       "phase": "before"
     },
     {
-      "file": "session-184/before-defeat-porcelain-day-1440-top.png",
-      "sha256": "1d1fa9178678ea8914f11627c260d53ea860466982041306e0fbeee090cdfe74",
+      "file": "session-186/before-porcelain-day-390-paused.png",
+      "sha256": "b22324d29a948e585772acbd1a28e88963ce6068378ea8914e7178d43ff40b61",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
-        "width": 1440,
+        "width": 390,
         "height": 900
       },
-      "page": "Defeat results · top",
+      "page": "Gameplay paused",
       "phase": "before"
     },
     {
-      "file": "session-184/before-defeat-porcelain-day-1440-submission.png",
-      "sha256": "e2731b18c625819f17324356a8c84500cdf11e41e7458bf33256e63a91a65810",
+      "file": "session-186/before-porcelain-day-390-focus-lost.png",
+      "sha256": "2b36ebf1604d2a5b50e796acb432c19c59755d649440296d45d6d1e2a6e4b641",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
-        "width": 1440,
+        "width": 390,
         "height": 900
       },
-      "page": "Defeat results · submission",
+      "page": "Gameplay focus-lost",
       "phase": "before"
     },
     {
-      "file": "session-184/before-defeat-porcelain-day-1440-bottom.png",
-      "sha256": "21bcd144fc5c4ef92a4c7ea42c201fed9143027b89ec1c380168013a380071c3",
+      "file": "session-186/before-porcelain-day-390-resumed.png",
+      "sha256": "902f4ad9ab2735d8c37b2b3dc82e6320a51f76ee9a3955b4b907872e1a2e2984",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
-        "width": 1440,
+        "width": 390,
         "height": 900
       },
-      "page": "Defeat results · bottom",
+      "page": "Gameplay resumed",
       "phase": "before"
     },
     {
-      "file": "session-184/before-victory-sewer-night-390-top.png",
-      "sha256": "99d553f00d9ca09c5c6d7522c33498b79adfb43fec0d88153a388202573ff73e",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
+      "file": "session-186/before-porcelain-day-1440-playing.png",
+      "sha256": "2b87879046f4ef27d838f9a9d4ac37fcb224102068913f2a60cea502ad2f04a8",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
       "viewport": {
-        "width": 390,
-        "height": 844
+        "width": 1440,
+        "height": 900
       },
-      "page": "Victory results · top",
+      "page": "Gameplay playing",
       "phase": "before"
     },
     {
-      "file": "session-184/before-victory-sewer-night-390-submission.png",
-      "sha256": "de2ff0479f4991a2438517a469efaa1b3683fe5c4fecba050c0e87efca6bda82",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
+      "file": "session-186/before-porcelain-day-1440-paused.png",
+      "sha256": "622983f6dfe62586941e7bc71033b1d967637a1daed4823614b5d779dedee3fe",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
       "viewport": {
-        "width": 390,
-        "height": 844
+        "width": 1440,
+        "height": 900
       },
-      "page": "Victory results · submission",
+      "page": "Gameplay paused",
       "phase": "before"
     },
     {
-      "file": "session-184/before-victory-sewer-night-390-bottom.png",
-      "sha256": "b45706037a4a73eb7e7b9ae1284c1bb936322c372cace52425122134565d17c7",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
+      "file": "session-186/before-porcelain-day-1440-focus-lost.png",
+      "sha256": "6bc78e0156874008140aa1cc0d711fe400f271c988c5230697ef98e8bd7fe5c9",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
       "viewport": {
-        "width": 390,
-        "height": 844
+        "width": 1440,
+        "height": 900
       },
-      "page": "Victory results · bottom",
+      "page": "Gameplay focus-lost",
       "phase": "before"
     },
     {
-      "file": "session-184/before-victory-sewer-night-1440-top.png",
-      "sha256": "5adae46df97c3fba154f4dae444bffb47102237458e31c7e1af53428274a8954",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
+      "file": "session-186/before-porcelain-day-1440-resumed.png",
+      "sha256": "5a56feaf687c8acf0cf935ac64dd2eef521d00e602cc6e1b80676f384accaa4b",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "Victory results · top",
+      "page": "Gameplay resumed",
       "phase": "before"
     },
     {
-      "file": "session-184/before-victory-sewer-night-1440-submission.png",
-      "sha256": "3bb62ebf649937138f2ba003284da44b2a30309bde753b1abc72274323614649",
+      "file": "session-186/after-sewer-night-390-playing.png",
+      "sha256": "beccc9b0b164ac6a7292e1386c4127b6271debe1755b672a02ed3f4c05f09ff9",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "Gameplay playing",
+      "phase": "after"
+    },
+    {
+      "file": "session-186/after-sewer-night-390-paused.png",
+      "sha256": "1b0e31fd45578df8e2b96913adec095e0ce4399c60eb2d45c7311a20839a34f6",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "Gameplay paused",
+      "phase": "after"
+    },
+    {
+      "file": "session-186/after-sewer-night-390-focus-lost.png",
+      "sha256": "ce9742749b3cbf9e117508410d75d4e9da966ab171c6d1806866ea2515e0a431",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "Gameplay focus-lost",
+      "phase": "after"
+    },
+    {
+      "file": "session-186/after-sewer-night-390-resumed.png",
+      "sha256": "5e420f8dcbb5a9c22f90cceeb1eaace6c6d956b0b32339ed7c6f213e2d018bea",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "Gameplay resumed",
+      "phase": "after"
+    },
+    {
+      "file": "session-186/after-sewer-night-1440-playing.png",
+      "sha256": "e876b24f9bf5ae42dc302a7153d64836581f94c3a2dd634f62bbf0d27f6b46ec",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "Victory results · submission",
-      "phase": "before"
+      "page": "Gameplay playing",
+      "phase": "after"
     },
     {
-      "file": "session-184/before-victory-sewer-night-1440-bottom.png",
-      "sha256": "0b4b2408b3e85168838dd162b8df27477cbb8ab917a816a583fb1ab4112732f8",
+      "file": "session-186/after-sewer-night-1440-paused.png",
+      "sha256": "8e703e5bb65b986e96b52ed371d4750c5f361eb9c4f4092bec4a2f2beb67c1c8",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "Victory results · bottom",
-      "phase": "before"
-    },
-    {
-      "file": "session-184/before-victory-porcelain-day-390-top.png",
-      "sha256": "99d553f00d9ca09c5c6d7522c33498b79adfb43fec0d88153a388202573ff73e",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "page": "Victory results · top",
-      "phase": "before"
-    },
-    {
-      "file": "session-184/before-victory-porcelain-day-390-submission.png",
-      "sha256": "de2ff0479f4991a2438517a469efaa1b3683fe5c4fecba050c0e87efca6bda82",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "page": "Victory results · submission",
-      "phase": "before"
-    },
-    {
-      "file": "session-184/before-victory-porcelain-day-390-bottom.png",
-      "sha256": "378c869ac5e6cfb2a534a115c98623f3061791035266041255ef9ea610e358be",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "page": "Victory results · bottom",
-      "phase": "before"
-    },
-    {
-      "file": "session-184/before-victory-porcelain-day-1440-top.png",
-      "sha256": "5adae46df97c3fba154f4dae444bffb47102237458e31c7e1af53428274a8954",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "Victory results · top",
-      "phase": "before"
-    },
-    {
-      "file": "session-184/before-victory-porcelain-day-1440-submission.png",
-      "sha256": "4e92856bcabf3bc21a29776eb761735cf61b9a231abf36e96678216ef9c92750",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "Victory results · submission",
-      "phase": "before"
-    },
-    {
-      "file": "session-184/before-victory-porcelain-day-1440-bottom.png",
-      "sha256": "839537b9857a2aa6899d52f3f92d14419b11b00f198557b65d8b72257e9328c2",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "Victory results · bottom",
-      "phase": "before"
-    },
-    {
-      "file": "session-184/after-defeat-sewer-night-390-top.png",
-      "sha256": "8f7c9f8c2b5b6a385a22d869a89c36c2ad7dccd8bde3cb671aea70b4b72e06fb",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "page": "Defeat results · top",
+      "page": "Gameplay paused",
       "phase": "after"
     },
     {
-      "file": "session-184/after-defeat-sewer-night-390-submission.png",
-      "sha256": "8f7c9f8c2b5b6a385a22d869a89c36c2ad7dccd8bde3cb671aea70b4b72e06fb",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "page": "Defeat results · submission",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-defeat-sewer-night-390-share.png",
-      "sha256": "427449a1be5ba0ef5bb89a210720d4e384f9e0c34154303c5fe6f9f243838583",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "page": "Defeat results · share",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-defeat-sewer-night-390-native-share-success.png",
-      "sha256": "427449a1be5ba0ef5bb89a210720d4e384f9e0c34154303c5fe6f9f243838583",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "page": "Defeat results · native-share-success",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-defeat-sewer-night-390-manual-share-fallback.png",
-      "sha256": "512ce74e224848ee0b9e4c2381a441f977900363c03a4187a0a5275a42fa6fa3",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "page": "Defeat results · manual-share-fallback",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-defeat-sewer-night-390-clipboard-success.png",
-      "sha256": "c9e9b272650ec9f1e2e0e87fd8d9a563d4ef4ff7c8e3d1ec6d96892f0e64e080",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "page": "Defeat results · clipboard-success",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-defeat-sewer-night-390-score-image-downloaded.png",
-      "sha256": "9035bdfcb3f02124ab1f3a57472c859cad4ac43ac9669043386a3a2cc7fee9ae",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "page": "Defeat results · score-image-downloaded",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-defeat-sewer-night-390-bottom.png",
-      "sha256": "7acb227e0c639d56a9e3d99584a18dacbb4daf7242e50baf5d7c1f956608cb58",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "page": "Defeat results · bottom",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-defeat-sewer-night-390-short-bottom.png",
-      "sha256": "77654fb3698fa542bd732a5b9f975b9012860167a156ea1d47d126c81cbb4813",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 360
-      },
-      "page": "Defeat results · short-bottom",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-defeat-sewer-night-1440-top.png",
-      "sha256": "8439fe2eaaffd11950339f463166183b1a2f965dd4c60052b33c799ceada1195",
+      "file": "session-186/after-sewer-night-1440-focus-lost.png",
+      "sha256": "b7b1bf095cfc7c7fcc095bbdc2a470d56ebd11e08f1769e658bb04c5dc9fa95c",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "Defeat results · top",
+      "page": "Gameplay focus-lost",
       "phase": "after"
     },
     {
-      "file": "session-184/after-defeat-sewer-night-1440-submission.png",
-      "sha256": "8439fe2eaaffd11950339f463166183b1a2f965dd4c60052b33c799ceada1195",
+      "file": "session-186/after-sewer-night-1440-resumed.png",
+      "sha256": "d038c34c0d22c1c073e5ebcc4113c756595e1527a1b3d759ef1ebbe055d4e194",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "Defeat results · submission",
+      "page": "Gameplay resumed",
       "phase": "after"
     },
     {
-      "file": "session-184/after-defeat-sewer-night-1440-share.png",
-      "sha256": "8439fe2eaaffd11950339f463166183b1a2f965dd4c60052b33c799ceada1195",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "Defeat results · share",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-defeat-sewer-night-1440-native-share-success.png",
-      "sha256": "b5b5559251b174ea01997d2e81452ba335bfca48bcc063b5a18d7f4873a296ed",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "Defeat results · native-share-success",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-defeat-sewer-night-1440-manual-share-fallback.png",
-      "sha256": "0519ba60f9af44cfa078b6f2cf93cddc8a05a702f2788ec67109c06279d3420f",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "Defeat results · manual-share-fallback",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-defeat-sewer-night-1440-clipboard-success.png",
-      "sha256": "cef6729b58201ab42fec90b0e54f55b2531d0f357c18e07a1928be953404577c",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "Defeat results · clipboard-success",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-defeat-sewer-night-1440-score-image-downloaded.png",
-      "sha256": "4e83f58bb85d43df5fbe0d9205a95bf50835bfca52d9a1c43724a4e192c0bd21",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "Defeat results · score-image-downloaded",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-defeat-sewer-night-1440-bottom.png",
-      "sha256": "6c72828815662dae5bc8d3a5e9930cca6221fa3d8b2947fc789fd63898ca5f67",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "Defeat results · bottom",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-defeat-porcelain-day-390-top.png",
-      "sha256": "8ab1123f655036ea6585237453f856b3ff80f3315a4bf27acace5749d2547f7e",
+      "file": "session-186/after-porcelain-day-390-playing.png",
+      "sha256": "133035324c1252048bedd9b16eeacbb265579896eb1ac193c1069496e62b0619",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
-        "height": 844
+        "height": 900
       },
-      "page": "Defeat results · top",
+      "page": "Gameplay playing",
       "phase": "after"
     },
     {
-      "file": "session-184/after-defeat-porcelain-day-390-submission.png",
-      "sha256": "8ab1123f655036ea6585237453f856b3ff80f3315a4bf27acace5749d2547f7e",
+      "file": "session-186/after-porcelain-day-390-paused.png",
+      "sha256": "e2253157448ed01772df01c2265df83134230dfffa860392117e38ca4fcdfee5",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
-        "height": 844
+        "height": 900
       },
-      "page": "Defeat results · submission",
+      "page": "Gameplay paused",
       "phase": "after"
     },
     {
-      "file": "session-184/after-defeat-porcelain-day-390-share.png",
-      "sha256": "8ab1123f655036ea6585237453f856b3ff80f3315a4bf27acace5749d2547f7e",
+      "file": "session-186/after-porcelain-day-390-focus-lost.png",
+      "sha256": "4bd60c0508735c54f14603ec6d470e358090535cf058be0e18a3bdb026d1a7b6",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
-        "height": 844
+        "height": 900
       },
-      "page": "Defeat results · share",
+      "page": "Gameplay focus-lost",
       "phase": "after"
     },
     {
-      "file": "session-184/after-defeat-porcelain-day-390-native-share-success.png",
-      "sha256": "8ab1123f655036ea6585237453f856b3ff80f3315a4bf27acace5749d2547f7e",
+      "file": "session-186/after-porcelain-day-390-resumed.png",
+      "sha256": "787e0cb392f402dc61dafe26d48e6f7b53093872a0fd71136ef6e98e2e8063f1",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
-        "height": 844
+        "height": 900
       },
-      "page": "Defeat results · native-share-success",
+      "page": "Gameplay resumed",
       "phase": "after"
     },
     {
-      "file": "session-184/after-defeat-porcelain-day-390-manual-share-fallback.png",
-      "sha256": "ac03f55da3d0fe026793a8c0c8b5641e9b7bf0d21fd41e5412c6ea1b4131b27d",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "page": "Defeat results · manual-share-fallback",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-defeat-porcelain-day-390-clipboard-success.png",
-      "sha256": "f21bb873d1a00bc582e901a754b3ab9e686a1065ab80a78ac43c70407db49d8e",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "page": "Defeat results · clipboard-success",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-defeat-porcelain-day-390-score-image-downloaded.png",
-      "sha256": "16bee15ec6ed87f95da35e2d2ff545a03e23ae6d213b1113105c5c2c547c893d",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "page": "Defeat results · score-image-downloaded",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-defeat-porcelain-day-390-bottom.png",
-      "sha256": "c6f93e61fa1c4ef904a2edb89d98dd0a19826d2bb0d1cd1f2166ea2f59e00cef",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "page": "Defeat results · bottom",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-defeat-porcelain-day-390-short-bottom.png",
-      "sha256": "a70194a27dd3cd3942b31c945393724ae4eb55548720a7af11d917b607bce037",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 360
-      },
-      "page": "Defeat results · short-bottom",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-defeat-porcelain-day-1440-top.png",
-      "sha256": "217981d558c372eae1aed8cf198b9c68adb3a32f3bc02be23c0cbef16e8c8e96",
+      "file": "session-186/after-porcelain-day-1440-playing.png",
+      "sha256": "0e285114ebcc2f57018feed31051b982b2695edb0fc81bdf3e3bdfe345aec6c2",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "Defeat results · top",
+      "page": "Gameplay playing",
       "phase": "after"
     },
     {
-      "file": "session-184/after-defeat-porcelain-day-1440-submission.png",
-      "sha256": "217981d558c372eae1aed8cf198b9c68adb3a32f3bc02be23c0cbef16e8c8e96",
+      "file": "session-186/after-porcelain-day-1440-paused.png",
+      "sha256": "86e6bf49e80f072969c204a422a3daaad146320e3e439b9196cbfd65442c8180",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "Defeat results · submission",
+      "page": "Gameplay paused",
       "phase": "after"
     },
     {
-      "file": "session-184/after-defeat-porcelain-day-1440-share.png",
-      "sha256": "217981d558c372eae1aed8cf198b9c68adb3a32f3bc02be23c0cbef16e8c8e96",
+      "file": "session-186/after-porcelain-day-1440-focus-lost.png",
+      "sha256": "718eef330938ca771ba80a9594e2dc7303bccdddc39ff1cafbe63db05453908d",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "Defeat results · share",
+      "page": "Gameplay focus-lost",
       "phase": "after"
     },
     {
-      "file": "session-184/after-defeat-porcelain-day-1440-native-share-success.png",
-      "sha256": "80b40a308776ed5fc51b0230fb2a2651f25f190c0e3dfa4a4543b1d45b2be8f5",
+      "file": "session-186/after-porcelain-day-1440-resumed.png",
+      "sha256": "03d9e24101060614d4b04f9b6a5f7f86917b385b26a5372e9060ca51b6461505",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "Defeat results · native-share-success",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-defeat-porcelain-day-1440-manual-share-fallback.png",
-      "sha256": "0519ba60f9af44cfa078b6f2cf93cddc8a05a702f2788ec67109c06279d3420f",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "Defeat results · manual-share-fallback",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-defeat-porcelain-day-1440-clipboard-success.png",
-      "sha256": "cef6729b58201ab42fec90b0e54f55b2531d0f357c18e07a1928be953404577c",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "Defeat results · clipboard-success",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-defeat-porcelain-day-1440-score-image-downloaded.png",
-      "sha256": "4e83f58bb85d43df5fbe0d9205a95bf50835bfca52d9a1c43724a4e192c0bd21",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "Defeat results · score-image-downloaded",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-defeat-porcelain-day-1440-bottom.png",
-      "sha256": "fdba8e082ddaea2761e594e192bbd56706c0eb8ed8574793be6df5caea866749",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "Defeat results · bottom",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-victory-sewer-night-390-top.png",
-      "sha256": "4360440a3e3912e4a765dabccc423983fb8ec89ff01fac96d0c0a0afaaf2e0f7",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "page": "Victory results · top",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-victory-sewer-night-390-submission.png",
-      "sha256": "4360440a3e3912e4a765dabccc423983fb8ec89ff01fac96d0c0a0afaaf2e0f7",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "page": "Victory results · submission",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-victory-sewer-night-390-share.png",
-      "sha256": "c5a012f478373d0506fdf17bb9066f44f933d75f52d75b64b0443e829420bd63",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "page": "Victory results · share",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-victory-sewer-night-390-native-share-success.png",
-      "sha256": "c5a012f478373d0506fdf17bb9066f44f933d75f52d75b64b0443e829420bd63",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "page": "Victory results · native-share-success",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-victory-sewer-night-390-manual-share-fallback.png",
-      "sha256": "d94233ea954fcf7c338e37be3c418e282efa5c9d982a9790cef2241dead36b4b",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "page": "Victory results · manual-share-fallback",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-victory-sewer-night-390-clipboard-success.png",
-      "sha256": "486d16d03f5114bf41d0b03fe2361f1d6f7248561525b8ce0d23d68951fedd44",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "page": "Victory results · clipboard-success",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-victory-sewer-night-390-score-image-downloaded.png",
-      "sha256": "ffce66eaef8bc78c3f34807a1127ae66bad0e7d6a021d3255bd6c8753b3844c8",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "page": "Victory results · score-image-downloaded",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-victory-sewer-night-390-bottom.png",
-      "sha256": "65dc55dc552db5280efab7efcec2252e48cec0e88e94c97819f1adb7f92efc98",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "page": "Victory results · bottom",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-victory-sewer-night-390-short-bottom.png",
-      "sha256": "278e76139e8e40f8fd30b959bf453177b76707b82b954779d70488b4cdf91679",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 360
-      },
-      "page": "Victory results · short-bottom",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-victory-sewer-night-1440-top.png",
-      "sha256": "84352e01145e49dba68ea4e141c47224aa0cc717175050008f6b97eed4c16f8f",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "Victory results · top",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-victory-sewer-night-1440-submission.png",
-      "sha256": "84352e01145e49dba68ea4e141c47224aa0cc717175050008f6b97eed4c16f8f",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "Victory results · submission",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-victory-sewer-night-1440-share.png",
-      "sha256": "84352e01145e49dba68ea4e141c47224aa0cc717175050008f6b97eed4c16f8f",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "Victory results · share",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-victory-sewer-night-1440-native-share-success.png",
-      "sha256": "0047bf96dbc30b881e8de5e180cb3f0d532479e7ecf75d2081141386ea271098",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "Victory results · native-share-success",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-victory-sewer-night-1440-manual-share-fallback.png",
-      "sha256": "feac8fd8151b6b0daff8cd4d17dc1e8fe85e7f984edede5216e712054d92a5f9",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "Victory results · manual-share-fallback",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-victory-sewer-night-1440-clipboard-success.png",
-      "sha256": "371f2e256a6da23745b6af775163280699a3635dec967640ec10e2093db7f230",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "Victory results · clipboard-success",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-victory-sewer-night-1440-score-image-downloaded.png",
-      "sha256": "9d8f2ffd403fc2e26d5b1a5948deaf8bf54ae38a0daba8c6ba538a2ee2e4f754",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "Victory results · score-image-downloaded",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-victory-sewer-night-1440-bottom.png",
-      "sha256": "efcbf54dcba8e063ab751b4d73ea009ed433eb00f9e4047b8a38378ea8eca4fa",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "Victory results · bottom",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-victory-porcelain-day-390-top.png",
-      "sha256": "4360440a3e3912e4a765dabccc423983fb8ec89ff01fac96d0c0a0afaaf2e0f7",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "page": "Victory results · top",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-victory-porcelain-day-390-submission.png",
-      "sha256": "4360440a3e3912e4a765dabccc423983fb8ec89ff01fac96d0c0a0afaaf2e0f7",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "page": "Victory results · submission",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-victory-porcelain-day-390-share.png",
-      "sha256": "c5a012f478373d0506fdf17bb9066f44f933d75f52d75b64b0443e829420bd63",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "page": "Victory results · share",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-victory-porcelain-day-390-native-share-success.png",
-      "sha256": "c5a012f478373d0506fdf17bb9066f44f933d75f52d75b64b0443e829420bd63",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "page": "Victory results · native-share-success",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-victory-porcelain-day-390-manual-share-fallback.png",
-      "sha256": "d94233ea954fcf7c338e37be3c418e282efa5c9d982a9790cef2241dead36b4b",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "page": "Victory results · manual-share-fallback",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-victory-porcelain-day-390-clipboard-success.png",
-      "sha256": "486d16d03f5114bf41d0b03fe2361f1d6f7248561525b8ce0d23d68951fedd44",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "page": "Victory results · clipboard-success",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-victory-porcelain-day-390-score-image-downloaded.png",
-      "sha256": "ffce66eaef8bc78c3f34807a1127ae66bad0e7d6a021d3255bd6c8753b3844c8",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "page": "Victory results · score-image-downloaded",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-victory-porcelain-day-390-bottom.png",
-      "sha256": "ab27499b2c98245594dab3d37dc6c31f5675ac47b2a17f05d55aba632696698a",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "page": "Victory results · bottom",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-victory-porcelain-day-390-short-bottom.png",
-      "sha256": "480fc59740f828b6d5ed522f7cd98a0d0fbab8ce6d789ccdb3b5d24a4fd09be1",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 360
-      },
-      "page": "Victory results · short-bottom",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-victory-porcelain-day-1440-top.png",
-      "sha256": "84352e01145e49dba68ea4e141c47224aa0cc717175050008f6b97eed4c16f8f",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "Victory results · top",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-victory-porcelain-day-1440-submission.png",
-      "sha256": "84352e01145e49dba68ea4e141c47224aa0cc717175050008f6b97eed4c16f8f",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "Victory results · submission",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-victory-porcelain-day-1440-share.png",
-      "sha256": "84352e01145e49dba68ea4e141c47224aa0cc717175050008f6b97eed4c16f8f",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "Victory results · share",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-victory-porcelain-day-1440-native-share-success.png",
-      "sha256": "0047bf96dbc30b881e8de5e180cb3f0d532479e7ecf75d2081141386ea271098",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "Victory results · native-share-success",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-victory-porcelain-day-1440-manual-share-fallback.png",
-      "sha256": "feac8fd8151b6b0daff8cd4d17dc1e8fe85e7f984edede5216e712054d92a5f9",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "Victory results · manual-share-fallback",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-victory-porcelain-day-1440-clipboard-success.png",
-      "sha256": "371f2e256a6da23745b6af775163280699a3635dec967640ec10e2093db7f230",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "Victory results · clipboard-success",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-victory-porcelain-day-1440-score-image-downloaded.png",
-      "sha256": "9d8f2ffd403fc2e26d5b1a5948deaf8bf54ae38a0daba8c6ba538a2ee2e4f754",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "Victory results · score-image-downloaded",
-      "phase": "after"
-    },
-    {
-      "file": "session-184/after-victory-porcelain-day-1440-bottom.png",
-      "sha256": "a1b66d45908b7de2703b3c2334d774b4018056e4eb14a67ba73392314451d833",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "Victory results · bottom",
+      "page": "Gameplay resumed",
       "phase": "after"
     }
   ],
   "inspection": {
     "renderedPixelsReviewed": true,
-    "reviewer": "Codex direct rendered image review",
-    "reviewedAt": "2026-10-06T05:55:47.099Z",
-    "scope": "Defeat/victory, dark/light,390/1440, initial submission, share success/fallback/download, expanded bottom,360px short viewport",
+    "reviewer": "Codex direct image review",
+    "reviewedAt": "2026-10-18T15:40:12.493Z",
+    "scope": "32 before/after captures; gameplay, pause, focus loss and resume; 390/1440; both interface themes.",
     "findings": [
-      "Submission is visible below the score without opening a section.",
-      "Play Again precedes optional coaching.",
-      "One run-link action confirms native share/copy and offers a selectable manual fallback.",
-      "Local-only victory clearly excludes online rankings.",
-      "Expanded details retain reachable menu controls without horizontal overflow."
+      "Pause/focus-loss controls remain legible and reachable.",
+      "Gameplay and ability dock remain usable after resume.",
+      "Gameplay retains its authored arena palette across surrounding interface themes."
     ],
     "fixesApplied": [
-      "Move submission and score summary above optional content.",
-      "Remove duplicate bottom Share Run.",
-      "Use synchronous native link sharing and explicit image/highlight downloads.",
-      "Collapse coaching, feedback, highlights and exports."
+      "Release latched interaction on lifecycle transitions.",
+      "Unify frozen-gameplay input guards."
     ],
     "blockingDefectsOpen": 0
   },
   "methodLimits": [
-    "Browser runs use assisted terminal states, not natural full playthroughs.",
-    "Native share and clipboard outcomes are browser API fixtures; no external message was sent.",
-    "Actual image downloads, keyboard/touch scrolling and menu return were exercised.",
-    "End-run authored dark/red game palette remains the same in both surrounding interface themes."
+    "Synthetic browser inputs and read-only state observation; physical devices and participant outcomes unmeasured.",
+    "Seven modal barriers tested via actual-App ref fixtures; visible pause/focus-loss states exercised in browser.",
+    "No visual layout redesign; arena seed/mutation can differ between captures."
   ]
 }

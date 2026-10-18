@@ -1,6 +1,10 @@
 # Memory Index
 
-## Latest verified session
+## Latest session
+
+- S186 reliability changes and current delivery evidence: [handoff](LATEST_HANDOFF.md), [runtime notes](AGENT_MEMORY.md), [release audit](../audits/2026-10-18_2.json).
+
+## Earlier verified session
 
 - S184 end-run flow: [runtime notes](AGENT_MEMORY.md), [handoff](LATEST_HANDOFF.md), [visual receipt](../docs/visual-qa/LATEST.json) and [audit](../audits/2026-10-06.json). Gameplay source 9e6304b; verified records seal 6e473e6 / workflow 37421746017. Four requested outcomes complete; S183 comparative evidence remains pending.
 

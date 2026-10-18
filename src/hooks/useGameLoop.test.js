@@ -1,5 +1,50 @@
-import { describe, it, expect, beforeEach } from "vitest";
-import { makeFrameMonitor, resolvePerfStep, runFrameSafely, runMeasuredFrame, PERF_STEP_MAX } from "./useGameLoop.js";
+import { act, createElement } from "react";
+import { createRoot } from "react-dom/client";
+import { describe, it, expect, beforeEach, vi } from "vitest";
+import { makeFrameMonitor, resolvePerfStep, runFrameSafely, runMeasuredFrame, useGameLoop, PERF_STEP_MAX } from "./useGameLoop.js";
+
+globalThis.IS_REACT_ACT_ENVIRONMENT = true;
+
+describe("rendered-frame measurement", () => {
+  it("includes every catch-up step and the final render in one sample", () => {
+    let queuedFrame;
+    let elapsed = 0;
+    let measure = true;
+    const renders = [];
+    const monitorRef = { current: null };
+    const rafRef = { current: null };
+    const root = createRoot(document.createElement("div"));
+    vi.stubGlobal("requestAnimationFrame", vi.fn(callback => { queuedFrame = callback; return 1; }));
+    vi.stubGlobal("cancelAnimationFrame", vi.fn());
+    vi.spyOn(performance, "now").mockImplementation(() => elapsed);
+    function Harness() {
+      useGameLoop(({ render }) => {
+        renders.push(render);
+        elapsed += 2; // Every simulation step costs 2ms.
+        if (render) elapsed += 20;
+      }, true, rafRef, { monitorRef, shouldMeasure: () => measure });
+      return null;
+    }
+    try {
+      act(() => root.render(createElement(Harness)));
+      act(() => queuedFrame(0));
+      expect(monitorRef.current.snapshot()).toMatchObject({ totalFrames: 1, worstMs: 22 });
+      act(() => queuedFrame(50)); // Three simulation steps, one final render.
+      expect(renders).toEqual([true, false, false, true]);
+      expect(monitorRef.current.snapshot()).toMatchObject({ totalFrames: 2, slowFrames: 2, worstMs: 26 });
+      act(() => queuedFrame(51)); // No simulation or render on this high-refresh tick.
+      expect(monitorRef.current.snapshot().totalFrames).toBe(2);
+      measure = false;
+      act(() => queuedFrame(100));
+      expect(renders).toEqual([true, false, false, true, false, false, true]);
+      expect(monitorRef.current.snapshot().totalFrames).toBe(2);
+    } finally {
+      act(() => root.unmount());
+      vi.restoreAllMocks();
+      vi.unstubAllGlobals();
+    }
+  });
+});
 
 describe("degradation ladder resolver (S145)", () => {
   it("escalates one step per sustained-drop window and caps at max", () => {

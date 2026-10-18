@@ -6,6 +6,7 @@ describe("canon adoption ledger", () => {
     const result = spawnSync(process.execPath, ["scripts/check-canon-adoption-ledger.mjs", "--json"], {
       cwd: process.cwd(),
       encoding: "utf8",
+      windowsHide: true,
     });
     expect(result.status, result.stderr || result.stdout).toBe(0);
     expect(JSON.parse(result.stdout)).toMatchObject({
@@ -13,9 +14,9 @@ describe("canon adoption ledger", () => {
       ok: true,
       active: 55,
       rows: 55,
-      adopted: 52,
+      adopted: 53,
       exempt: 2,
-      pending: 1,
+      pending: 0,
       evidenceComplete: true,
     });
   });

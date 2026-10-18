@@ -4,6 +4,7 @@ import { markInputActivity, releaseAllInputs, sampleCommandTrace } from "./input
 describe("input bridge", () => {
   it("releases only requested device scopes and keeps a diagnostic receipt", () => {
     const refs = {
+      gsRef: { current: { _interactHeld: true } },
       keysRef: { current: { w: true } },
       mouseRef: { current: { down: true } },
       joystickRef: { current: { active: true } },
@@ -15,6 +16,7 @@ describe("input bridge", () => {
     const receiptRef = { current: null };
     const receipt = releaseAllInputs(refs, receiptRef, "keyboard-blur", ["keyboard", "mouse"]);
     expect(refs.keysRef.current.w).toBe(false);
+    expect(refs.gsRef.current._interactHeld).toBe(false);
     expect(refs.mouseRef.current.down).toBe(false);
     expect(refs.joystickRef.current.active).toBe(true);
     expect(refs.gamepadShootRef.current).toBe(true);

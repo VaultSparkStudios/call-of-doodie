@@ -9,6 +9,7 @@ import {
   getVerbObjectiveHud,
 } from "./objectiveHandlers.js";
 import { ZONE_STATE } from "./zones.js";
+import { releaseInputState } from "./inputLifecycle.js";
 
 function baseGs(overrides = {}) {
   return {
@@ -192,6 +193,27 @@ describe("objectiveHandlers", () => {
   });
 
   describe("SABOTAGE", () => {
+    it.each(["blur", "pause:keyboard", "run-ending:defeat"])("releases a held channel on %s before simulation resumes", (reason) => {
+      const gs = baseGs();
+      startVerbObjective(gs, "SABOTAGE", { seconds: 3 });
+      const pump = gs.structures[0];
+      Object.assign(gs.player, { x: pump.x, y: pump.y });
+      gs._interactHeld = true;
+      tickVerbObjective(gs);
+      expect(pump.channel).toBe(1);
+      releaseInputState({ gsRef: { current: gs }, keysRef: { current: { e: true } } }, { reason });
+      tickVerbObjective(gs);
+      expect(pump.channel).toBe(0);
+      expect(gs._interactHeld).toBe(false);
+    });
+
+    it("keeps keyboard interaction when only another device is released", () => {
+      const gs = baseGs({ _interactHeld: true, _operationInteractHeld: { keyboard: true, touch: true, controller: true } });
+      releaseInputState({ gsRef: { current: gs } }, { scopes: ["gamepad", "touch"] });
+      expect(gs._interactHeld).toBe(true);
+      expect(gs._operationInteractHeld).toEqual({ keyboard: true, touch: false, controller: false });
+    });
+
     it("completes once channel time is held near the pump", () => {
       const gs = baseGs();
       startVerbObjective(gs, "SABOTAGE", { seconds: 0.05 }); // 3 frames

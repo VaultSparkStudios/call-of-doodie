@@ -5,6 +5,33 @@ import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 
 const issueRunTokenMock = vi.fn(() => Promise.resolve("token-123"));
+const barrierFixture = vi.hoisted(() => ({ refs: null, input: null }));
+vi.mock("./systems/inputBridge.js", async (importOriginal) => {
+  const actual = await importOriginal();
+  return { ...actual, releaseAllInputs: (refs, ...args) => {
+    barrierFixture.input = refs;
+    return actual.releaseAllInputs(refs, ...args);
+  } };
+});
+vi.mock("./systems/gameplayBarrier.js", async (importOriginal) => {
+  const actual = await importOriginal();
+  return { createGameplayBarrier: (refs) => {
+    barrierFixture.refs = refs;
+    return actual.createGameplayBarrier(refs);
+  } };
+});
+
+vi.mock("./components/WeaponDock.jsx", () => {
+  function Dock({ onReload, onDash, onGrenade, onSwitchWeapon }) {
+    return <div>
+      <button data-testid="combat-reload" onClick={onReload}>reload</button>
+      <button data-testid="combat-dash" onClick={onDash}>dash</button>
+      <button data-testid="combat-grenade" onClick={onGrenade}>grenade</button>
+      <button data-testid="combat-swap" onClick={() => onSwitchWeapon(1)}>swap</button>
+    </div>;
+  }
+  return { DesktopWeaponDock: Dock, MobileWeaponDock: Dock };
+});
 
 vi.mock("./drawGame.js", () => ({
   drawGame: vi.fn(),
@@ -253,6 +280,95 @@ afterEach(async () => {
 });
 
 describe("CallOfDoodie launch smoke", () => {
+  it("blocks combat through keyboard, pointer, touch, controller and dock during every frozen state, then resumes", async () => {
+    const { default: App } = await import("./App.jsx");
+    const { useGameLoop } = await import("./hooks/useGameLoop.js");
+    const { soundDash, soundGrenadeAt, soundReload, soundWeaponSwap } = await import("./audio/soundFacade.js");
+    container = document.createElement("div"); document.body.appendChild(container); root = createRoot(container);
+    await act(async () => { root.render(<App />); }); await flush();
+    await act(async () => { container.querySelector("button").click(); }); await flush();
+    const canvas = container.querySelector("#game-canvas");
+    let fiber = canvas[Object.keys(canvas).find(key => key.startsWith("__reactFiber"))];
+    const refs = [];
+    while (fiber) {
+      let hook = fiber.memoizedState;
+      while (hook) { if (hook.memoizedState && Object.hasOwn(hook.memoizedState, "current")) refs.push(hook.memoizedState); hook = hook.next; }
+      fiber = fiber.return;
+    }
+    const gs = refs.find(ref => ref.current?.player && ref.current?.enemies).current;
+    const mouse = refs.find(ref => ref.current && Object.hasOwn(ref.current, "down") && Object.hasOwn(ref.current, "moved"));
+    const moveStick = refs.find(ref => ref.current && Object.hasOwn(ref.current, "startX") && !Object.hasOwn(ref.current, "shooting"));
+    const keyState = barrierFixture.input.keysRef;
+    const context = vi.spyOn(canvas, "getContext").mockReturnValue({});
+    const buttons = Array.from({ length: 17 }, () => ({ pressed: false, value: 0 }));
+    const gamepad = { index: 0, id: "Xbox test", connected: true, axes: [1, 0, 1, 0], buttons };
+    const priorGamepads = Object.getOwnPropertyDescriptor(navigator, "getGamepads");
+    Object.defineProperty(navigator, "getGamepads", { configurable: true, value: () => [gamepad] });
+    const sounds = [soundDash, soundGrenadeAt, soundReload, soundWeaponSwap];
+    for (const sound of sounds) sound.mockClear();
+    try {
+      for (const [name, ref] of Object.entries(barrierFixture.refs)) {
+        ref.current = true;
+        gs.synergyChargeReady = true;
+        const before = { bullets: gs.bullets.length, grenades: gs.grenades.length, ammo: gs.ammoCount, pendingReload: gs.pendingReload, x: gs.player.x, y: gs.player.y };
+        await act(async () => {
+          for (const key of ["w", "q", "r", " ", "e", "2", "z"]) window.dispatchEvent(new KeyboardEvent("keydown", { key, bubbles: true }));
+          window.dispatchEvent(new MouseEvent("mousedown", { button: 0, bubbles: true }));
+          const touch = new Event("touchstart", { bubbles: true, cancelable: true });
+          Object.defineProperty(touch, "changedTouches", { value: [{ clientX: 30, clientY: 80, identifier: 1 }] });
+          canvas.dispatchEvent(touch);
+          for (const action of ["reload", "dash", "grenade", "swap"]) container.querySelector(`[data-testid="combat-${action}"]`).click();
+          for (const index of [0, 1, 2, 4, 5, 7]) buttons[index] = { pressed: true, value: 1 };
+          await new Promise(resolve => setTimeout(resolve, 25));
+          useGameLoop.mock.calls.at(-1)[0]({ render: false });
+        });
+        expect(gs.bullets.length, name).toBe(before.bullets);
+        expect(gs.grenades.length, name).toBe(before.grenades);
+        expect(gs.ammoCount, name).toBe(before.ammo);
+        expect(gs.pendingReload, name).toBe(before.pendingReload);
+        expect(gs.player.x, name).toBe(before.x);
+        expect(gs.player.y, name).toBe(before.y);
+        expect(gs.synergyChargeReady, name).toBe(true);
+        expect(mouse.current.down, name).toBe(false);
+        expect(moveStick.current.active, name).toBe(false);
+        expect(Boolean(keyState.current.w), name).toBe(false);
+        expect(barrierFixture.input.gamepadMoveRef.current.active, name).toBe(false);
+        expect(barrierFixture.input.gamepadShootRef.current, name).toBe(false);
+        expect(useGameLoop.mock.calls.at(-1)[3].shouldMeasure(), name).toBe(false);
+        for (const sound of sounds) expect(sound, name).not.toHaveBeenCalled();
+        ref.current = false;
+        for (const button of buttons) { button.pressed = false; button.value = 0; }
+      }
+      gamepad.axes = [0, 0, 0, 0];
+      await act(async () => {
+        window.dispatchEvent(new KeyboardEvent("keydown", { key: "q", bubbles: true }));
+        window.dispatchEvent(new KeyboardEvent("keydown", { key: " ", bubbles: true }));
+        window.dispatchEvent(new KeyboardEvent("keydown", { key: "r", bubbles: true }));
+        container.querySelector('[data-testid="combat-swap"]').click();
+      });
+      expect(soundGrenadeAt).toHaveBeenCalledOnce();
+      expect(soundDash).toHaveBeenCalledOnce();
+      expect(soundReload).toHaveBeenCalledOnce();
+      expect(soundWeaponSwap).toHaveBeenCalledOnce();
+      expect(gs.grenades).toHaveLength(1);
+      expect(useGameLoop.mock.calls.at(-1)[3].shouldMeasure()).toBe(true);
+      await act(async () => { window.dispatchEvent(new KeyboardEvent("keydown", { key: "E", bubbles: true })); });
+      expect(gs._interactHeld).toBe(true);
+      await act(async () => { window.dispatchEvent(new KeyboardEvent("keyup", { key: "E", bubbles: true })); });
+      expect(gs._interactHeld).toBe(false);
+      await act(async () => { window.dispatchEvent(new KeyboardEvent("keydown", { key: "E", bubbles: true })); });
+      gs._operationInteractHeld = { keyboard: true, touch: true, controller: true };
+      await act(async () => { window.dispatchEvent(new Event("blur")); });
+      expect(gs._interactHeld).toBe(false);
+      expect(gs._operationInteractHeld).toEqual({ keyboard: false, mouse: false, touch: false, controller: false });
+      expect(Boolean(keyState.current.e)).toBe(false);
+      expect(barrierFixture.refs.paused.current).toBe(true);
+    } finally {
+      context.mockRestore();
+      if (priorGamepads) Object.defineProperty(navigator, "getGamepads", priorGamepads);
+      else delete navigator.getGamepads;
+    }
+  }, 60000);
   it("applies the newly selected starting kit on the first launch", async () => {
     const { default: App } = await import("./App.jsx");
     container = document.createElement("div"); document.body.appendChild(container); root = createRoot(container);

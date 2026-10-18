@@ -1262,10 +1262,10 @@ SIL +10: Closed five founder-visible defects and all four fresh audit items: Ene
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Avgs — 3: 934.3 | 5: 942.4
-Velocity trend: end-run flow deployed | Debt: flat
-Momentum runway: S184 end-run production verified | Intent rate: requested end-run outcome complete
-Last session: 2026-10-06 | Session 184 | Total: 930/1000 | Velocity: 3 | protocolVelocity: 3
+Avgs — 3: 936 | 5: 936.2
+Velocity trend: four reliability outcomes verified | Debt: flat
+Momentum runway: S186 staging verified; production pending | Intent rate: delivery in progress
+Last session: 2026-10-18 | Session 186 | Total: 941/1000 | Velocity: 4 | protocolVelocity: 4
 <!-- rolling-status-end -->
 
 ## 2026-06-05 — Session 81 | Total: 1000/1000 | Velocity: 1 | Debt: ↓
@@ -3545,3 +3545,27 @@ S185 arc completion: /start ran (session lock, canon sync 55 canons / 0 pending,
 Implemented audit item 2 (1221846): SettingsPanel and VirtualKeyboard polled navigator.getGamepads()[0], so a pad in slot 1+ (common after a Chrome reconnect) could not navigate those screens. Both now use getPrimaryGamepad(); slot-1 selection and a menu source contract are tested.
 
 Learning: closeout before /start and /audit inverted the arc; the scoped audit still found a real device defect (fixed-slot menu polling), so the skipped phases were not ceremony.
+
+
+## 2026-10-18 — Session 186
+
+Total: 941/1000 | Velocity: 4 | Debt: →
+
+| Category | Score | Rationale |
+|---|---:|---|
+| Dev Health | 96 | Reliability regressions verified; participant evidence not inferred |
+| Creative Alignment | 96 | Reliability regressions verified; participant evidence not inferred |
+| Momentum | 94 | Reliability regressions verified; participant evidence not inferred |
+| Engagement | 92 | Reliability regressions verified; participant evidence not inferred |
+| Process Quality | 91 | Startup bootstrap repair preceded premise gate; recorded honestly |
+| Cross-Repo Coherence | 90 | Reliability regressions verified; participant evidence not inferred |
+| Security Posture | 98 | Reliability regressions verified; participant evidence not inferred |
+| Ecosystem Integration | 92 | Reliability regressions verified; participant evidence not inferred |
+| Capital Efficiency | 98 | Reliability regressions verified; participant evidence not inferred |
+| Automation Coverage | 94 | Reliability regressions verified; participant evidence not inferred |
+
+S186 repairs session goal identity, latched interaction after focus loss, combat input during frozen choices, and incomplete catch-up frame timing.
+
+Learning: a cleared keys map does not release a separately consumed objective latch. Timing only the first simulation step loses the render work it is meant to observe. Brainstorm: capture input ownership incidents in the existing receipt; test modal transition fixtures against real visible journeys; retain benchmark claims only with measurements. Commit [SIL] physical-input acceptance and compatible-helper delivery follow-up to TASK_BOARD.
+
+Independent review passes after one lock-rotation correction. Focused regressions pass. Staging https://298a5f72.call-of-doodie.pages.dev passes shell 7/7 and four actual-app theme/width input cases. Before/after browser checks reproduced and resolved interaction latching. Strict lint, configured build, public contracts, security and scoped supply-chain checks pass. Final full suite and exact-main production verification follow.
