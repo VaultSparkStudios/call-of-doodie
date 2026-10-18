@@ -3,6 +3,7 @@ import { SETTINGS_DEFAULTS, saveSettings, loadPresets, savePresets } from "../se
 import { soundUIClose } from "../audio/soundFacade.js";
 import { isPlaytestMode, setPlaytestPulseEnabled } from "../utils/playtestFlightRecorder.js";
 import DialogShell from "./DialogShell.jsx";
+import { getPrimaryGamepad } from "../utils/gamepad.js";
 
 const TABS = ["Quick", "Advanced"];
 
@@ -134,7 +135,7 @@ export default function SettingsPanel({ settings, onSave, onClose }) {
     const stopDir = () => { clearTimeout(repeatTimeout); activeDir = null; };
 
     const id = setInterval(() => {
-      const gp = navigator.getGamepads?.()[0];
+      const gp = getPrimaryGamepad();
       if (!gp) return;
 
       const dUp    = gp.buttons[12]?.pressed;

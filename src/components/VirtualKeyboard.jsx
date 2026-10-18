@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { getPrimaryGamepad } from "../utils/gamepad.js";
 
 const ROWS = [
   ["1","2","3","4","5","6","7","8","9","0","-","_"],
@@ -86,7 +87,7 @@ export default function VirtualKeyboard({
     };
 
     const id = setInterval(() => {
-      const gp = navigator.getGamepads?.()[0];
+      const gp = getPrimaryGamepad();
       if (!gp) return;
 
       const dUp    = gp.buttons[12]?.pressed;

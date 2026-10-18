@@ -1,3 +1,5 @@
+import fs from "node:fs";
+import path from "node:path";
 import { describe, expect, it } from "vitest";
 import {
   buildControllerProfile,
@@ -35,6 +37,19 @@ describe("gamepad helpers", () => {
     };
 
     expect(getPrimaryGamepad(nav)?.index).toBe(1);
+  });
+
+  it("finds a pad that connected in a later slot while slot zero is empty", () => {
+    const nav = { getGamepads: () => [null, pad({ index: 1, id: "Wireless Controller" })] };
+    expect(getPrimaryGamepad(nav)?.index).toBe(1);
+  });
+
+  it("is the only gamepad selector used by menu screens", () => {
+    for (const file of ["SettingsPanel.jsx", "VirtualKeyboard.jsx"]) {
+      const source = fs.readFileSync(path.resolve(process.cwd(), "src/components", file), "utf8");
+      expect(source, file).not.toMatch(/getGamepads\?\.\(\)\[0\]/);
+      expect(source, file).toContain("getPrimaryGamepad()");
+    }
   });
 
   it("maps the restored controller layout", () => {

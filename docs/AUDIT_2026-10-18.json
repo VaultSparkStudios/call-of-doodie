@@ -1,0 +1,168 @@
+{
+  "schemaVersion": "2.1",
+  "session": 185,
+  "project": {
+    "slug": "call-of-doodie",
+    "type": "game",
+    "name": "Call-Of-Doodie"
+  },
+  "totals": {
+    "count": 2,
+    "priority": 33.9,
+    "top3": [
+      "controller-aim-full-range",
+      "menu-controller-any-slot"
+    ]
+  },
+  "meta": {
+    "generatedAt": "2026-10-18",
+    "project": "call-of-doodie",
+    "type": "game",
+    "scope": "Founder request: full character range of motion/aim on every input device (controller layouts, mouse, touch, keyboard). Scoped audit — not a whole-project sweep.",
+    "baseline": "b194fa9 on main and canonical production (/_health b194fa92d945, later 2531b3c records); 293/293 files and 1,961/1,961 tests, strict lint, deployable build green",
+    "combinedPriority": 33.9,
+    "gameLoopReview": {
+      "loopTightness": "Twin-stick aim is the core verb; a half-plane cap on controllers broke the loop for those players. Restored in b194fa9.",
+      "progression": "Unaffected.",
+      "sessionEngagement": "Controller players can now play every mode; menu navigation on non-zero pad slots is the remaining controller dead end.",
+      "retention": "No retention claim is made.",
+      "soulFidelity": "Proof over posture: each device's range is pinned by sweep tests, and the physical-pad gap is stated rather than implied.",
+      "nextMoves": [
+        "Hands-on physical pad check across Chrome/Firefox/Safari (hardware-gated)."
+      ]
+    }
+  },
+  "items": [
+    {
+      "id": 1,
+      "slug": "controller-aim-full-range",
+      "axis": "ux-and-feedback",
+      "tier": "🔥",
+      "title": "Full 360° controller aim on every gamepad layout",
+      "impact": 9,
+      "innovation": 5,
+      "effortHours": 2,
+      "priority": 22.5,
+      "status": "implemented",
+      "executionLog": [
+        "b194fa9: resolveAimAxes (standard → 2/3, PlayStation non-standard → 2/5, resting-trigger detection, Xbox non-standard → 3/4); hasInput baseline; 30° assist cone; stale mouse.moved retired on stick aim and touchstart. Staging session-185-staging 7/7, production 7/7, exact-main workflow 39136409352 success."
+      ],
+      "why": "Right-stick aim read fixed axes 2/3. Non-standard mappings put a trigger resting at -1 there, pinning Y and capping aim at 180°.",
+      "recipe": "Select right-stick axes from the pad mapping and resting baseline; add 360° sweep tests for each layout and for controller/touch/mouse arbitration.",
+      "premises": [
+        {
+          "claim": "Right-stick axes are resolved per pad, not hard-coded",
+          "adapter": "grep",
+          "target": "../Call-Of-Doodie/src/utils/gamepad.js",
+          "pattern": "export function resolveAimAxes",
+          "operator": "eq",
+          "expected": true
+        },
+        {
+          "claim": "Aim assist is limited to a cone",
+          "adapter": "grep",
+          "target": "../Call-Of-Doodie/src/systems/gameStep.js",
+          "pattern": "difference > assistCone",
+          "operator": "eq",
+          "expected": true
+        }
+      ],
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Special-case PlayStation non-standard axes only."
+        },
+        "L2": {
+          "effortHours": 2,
+          "recipe": "Mapping-aware resolver with trigger-rest detection, assist cone, stale pointer fix, sweep tests."
+        },
+        "L3": {
+          "effortHours": 6,
+          "recipe": "Add an in-Settings live stick calibration readout and manual axis remap."
+        }
+      }
+    },
+    {
+      "id": 2,
+      "slug": "menu-controller-any-slot",
+      "axis": "ux-and-feedback",
+      "tier": "⚡",
+      "title": "Settings and on-screen keyboard follow the active controller, not slot 0",
+      "impact": 6,
+      "innovation": 3,
+      "effortHours": 1,
+      "priority": 11.4,
+      "status": "implemented",
+      "executionLog": [
+        "SettingsPanel and VirtualKeyboard now poll getPrimaryGamepad(); slot-1 selection and menu source-contract tests added in gamepad.test.js."
+      ],
+      "why": "SettingsPanel and VirtualKeyboard poll navigator.getGamepads()[0]. A pad that connects in slot 1+ (common after a reconnect in Chrome, or alongside a virtual device) cannot navigate those screens even though gameplay — which uses getPrimaryGamepad — works.",
+      "recipe": "Replace both getGamepads()[0] reads with getPrimaryGamepad(); add a test that a pad in slot 1 drives each screen.",
+      "premises": [
+        {
+          "claim": "SettingsPanel polls only gamepad slot 0",
+          "adapter": "grep",
+          "target": "../Call-Of-Doodie/src/components/SettingsPanel.jsx",
+          "pattern": "getGamepads\\?\\.\\(\\)\\[0\\]",
+          "operator": "eq",
+          "expected": true
+        },
+        {
+          "claim": "VirtualKeyboard polls only gamepad slot 0",
+          "adapter": "grep",
+          "target": "../Call-Of-Doodie/src/components/VirtualKeyboard.jsx",
+          "pattern": "getGamepads\\?\\.\\(\\)\\[0\\]",
+          "operator": "eq",
+          "expected": true
+        }
+      ],
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Swap to getPrimaryGamepad() in both components."
+        },
+        "L2": {
+          "effortHours": 1,
+          "recipe": "L1 plus slot-1 regression tests for both screens."
+        },
+        "L3": {
+          "effortHours": 3,
+          "recipe": "Extract one shared menu-gamepad hook for every polling screen."
+        }
+      }
+    }
+  ],
+  "skipped": [
+    {
+      "slug": "mouse-aim-range",
+      "reason": "Verified clean: computePointerAimAngle maps DPR-scaled canvas + S165 camera to world space; 24-direction sweep passes."
+    },
+    {
+      "slug": "touch-aim-range",
+      "reason": "Verified clean: shoot-stick atan2 covers 360°; 24-direction sweep passes. Stale-mouse reclaim from HUD taps fixed in item 1."
+    },
+    {
+      "slug": "ads-zoom-aim-skew",
+      "reason": "Verified clean: drawGame scales 1.28× centred on the player, so the aim direction from the player is preserved."
+    },
+    {
+      "slug": "arena-movement-clamp",
+      "reason": "Verified clean: App passes arena AW/AH (not canvas W/H) to applyPlayerMovement, so scrolled 2× arenas allow full travel."
+    },
+    {
+      "slug": "movement-direction-range",
+      "reason": "Verified clean: keyboard (8-way by design), touch joystick and left stick all resolve to a normalised 360° vector."
+    },
+    {
+      "slug": "keyboard-only-aim",
+      "reason": "Design question, not a defect: desktop aim is mouse-owned; adding keyboard aim is new scope outside this request."
+    },
+    {
+      "slug": "physical-pad-check",
+      "reason": "Hardware-gated: needs physical Xbox/PlayStation pads across browsers. Carried to TASK_BOARD Deferred."
+    }
+  ],
+  "executionLog": [
+    "Both items implemented and verified 2026-10-18 (S185)."
+  ]
+}
