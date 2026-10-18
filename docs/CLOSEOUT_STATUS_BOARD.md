@@ -10,11 +10,11 @@
 ║  Live:  preview  →  https://callofdoodie.wtf/                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED · last 5 commits ═══════════════════════════════╗
+║  ✓ fix(input): menus follow the active controller, not gamepad   ║
+║  ✓ docs: regenerate S185 hot context                             ║
+║  ✓ docs: S185 closeout — full-range controller aim records       ║
 ║  ✓ fix(input): full 360° controller aim on every gamepad layout  ║
 ║  ✓ docs: distinguish native verification method from receipt ki  ║
-║  ✓ docs: correct native login route                              ║
-║  ✓ docs: bind native Obelisk Passport integration                ║
-║  ✓ chore(deps-dev): bump the dev-dependencies group across 1 di  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 937/1000 ═══════════════════════════════════════╗
 ║    Dev Health         95   ██████████                            ║
@@ -41,8 +41,8 @@
 ║  · agent memory (Claude/Codex project memory)                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 12 files  ·  M:11 A:0 D:0 ?:1                          ║
-║  Ahead: 0  ·  Behind: 0                                          ║
+║  Changes: 11 files  ·  M:11 A:0 D:0 ?:0                          ║
+║  Ahead: 2  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ DEPLOYMENT ══════════════════════════════════════════════════╗
@@ -54,7 +54,7 @@
 ║  Compliance:    —                                                ║
 ║  Tests:         293/293                                          ║
 ║  Validation:    full-fresh                                       ║
-║  IGNIS:         19d ago                                          ║
+║  IGNIS:         11d ago                                          ║
 ║  Truth:         S184 end-run production verified; S183 comparat  ║
 ║  Sanitization:  13d ago                                          ║
 ║  shells:        unknown · missing/stale enumeration              ║

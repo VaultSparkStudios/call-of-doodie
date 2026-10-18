@@ -1588,3 +1588,7 @@ Use a scoped equivalent of autopilot: the inspected local command delegates doct
 ## S185 controller aim — 2026-10-18
 
 Resolve the right stick from the pad's own layout instead of fixed indices: trust `mapping === "standard"`, use the known PlayStation non-standard layout, otherwise skip axes whose first-seen resting value sits near ±1 (triggers). Aim assist is a nudge, not a capture: limit it to a 30° cone. Pointer aim must be re-armed by real mouse movement, never by a historical flag. A red dependency-tree smoke that also fails on pristine main is local freshness; root-fix with `npm ci` from the committed lockfile, never by editing the gate.
+
+## S185 arc completion — 2026-10-18
+
+Every gamepad-polling surface selects its pad through getPrimaryGamepad(); no screen reads a fixed slot. A start-time canon suggestion is not adoption evidence: CANON-056 stays pending until its terminology audit runs. A goal-requested /arc is incomplete without its /start and /audit phases even when the requested fix is already shipped; run them rather than claim them.

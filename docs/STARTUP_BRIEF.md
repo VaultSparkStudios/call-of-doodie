@@ -20,7 +20,7 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ LAST SESSION (S185) - WHAT SHIPPED ══════════════════════════╗
-║  S185 fixed 180°-limited controller aim (non-standard axis layo  ║
+║  S185 fixed 180°-limited controller aim and fixed-slot menu pol  ║
 ║  Tests  -                                                        ║
 ║  Deploy -                                                        ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -68,9 +68,10 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ⚠  ░░░░░░░░░░░░░░░░░░░░░░░░    2% used                          ║
-║     326,170 / 200,000 tok  ·  unknown  ·  heuristic-stale        ║
-║     Verdict: CONSIDER_CLOSEOUT  ← act now                        ║
+║  ✓  ██████████████████████░░   91% used                          ║
+║     907,783 / 1,000,000 tok  ·  claude-code/opus-4-8-1m  · …     ║
+║     ~453,892 tok/turn  ·  cache 50%  ·  0 turns to compact       ║
+║     Verdict: WARN_COMPACT_SOON  ← act now                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
@@ -78,8 +79,8 @@
 ║  ✓  Velocity      3   ·  Debt: →                                 ║
 ║  ✓  Runway        S184 end-run production verified               ║
 ║  ⛔  Context age   ?d                                             ║
-║  ⛔  IGNIS         44206 FORGE  ·  18d old                        ║
-║  ⛔  Truth         S185 full-range controller aim b194fa9 is…     ║
+║  ⚠  IGNIS         44193 FORGE  ·  10d old                        ║
+║  ⛔  Truth         S185 controller aim (b194fa9) and menu…        ║
 ║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs…        ║
 ║  ✓  Genome dims   all stable  (24/25)                            ║
 ║  ✓  Entropy       0.197  (healthy)                               ║

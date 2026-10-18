@@ -1,3 +1,11 @@
+## S185 arc completion — menus follow the active controller
+
+Implemented audit item 2 (1221846): SettingsPanel and VirtualKeyboard polled navigator.getGamepads()[0], so a pad in slot 1+ (common after a Chrome reconnect) could not navigate those screens. Both now use getPrimaryGamepad(); slot-1 selection and a menu source contract are tested.
+
+S185 arc completion: /start ran (session lock, canon sync 55 canons / 0 pending, CANON-049 radar current, fresh brief), then a scoped /audit of full range of motion on every input device (docs/AUDIT_2026-10-18.md, 4/4 premises verified). Verified clean with evidence: mouse aim (DPR + camera), touch aim, ADS zoom (scaled around the player), arena movement clamp (AW/AH) and movement direction on keyboard/touch/left stick.
+
+Staging https://1982e652.call-of-doodie.pages.dev passed shell 7/7, served the candidate entry index-DCEIi-al.js and a SettingsPanel chunk without slot-0 polling. Local full suite, strict lint and deployable build are recorded in the closeout brief; production follows exact-main CI on push.
+
 ## S185 full-range controller aim — 2026-10-18
 
 Controller right-stick aim now covers a full 360° on every gamepad layout. Aim was hard-wired to axes 2/3; pads without the W3C standard mapping (DualShock/DualSense in Firefox, generic Linux pads) place an analog trigger there that rests at -1, pinning stick Y and limiting aim to one half-plane (180°). `resolveAimAxes` in src/utils/gamepad.js now selects the right stick from the pad mapping, the PlayStation non-standard layout and resting-value trigger detection; the HomeV2 aim probe shares it. Resting triggers no longer count as constant controller activity. Controller aim assist bends aim only within a 30° cone, so a nearby enemy no longer captures the stick in every direction. Stick aim and touch starts retire the never-cleared `mouse.moved` flag, which previously snapped aim back to a stale cursor after stick release.

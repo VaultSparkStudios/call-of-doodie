@@ -3537,3 +3537,11 @@ Brainstorm: surface a controller calibration readout (detected layout + live sti
 Committed: [SIL] hands-on physical pad check across browsers.
 
 Learning: fixed axis indices are a browser-mapping assumption, not a controller fact; any never-cleared input flag becomes a hidden arbiter between devices.
+
+### 2026-10-18 — Session 185 arc-completion addendum | score unchanged (937/1000)
+
+S185 arc completion: /start ran (session lock, canon sync 55 canons / 0 pending, CANON-049 radar current, fresh brief), then a scoped /audit of full range of motion on every input device (docs/AUDIT_2026-10-18.md, 4/4 premises verified). Verified clean with evidence: mouse aim (DPR + camera), touch aim, ADS zoom (scaled around the player), arena movement clamp (AW/AH) and movement direction on keyboard/touch/left stick.
+
+Implemented audit item 2 (1221846): SettingsPanel and VirtualKeyboard polled navigator.getGamepads()[0], so a pad in slot 1+ (common after a Chrome reconnect) could not navigate those screens. Both now use getPrimaryGamepad(); slot-1 selection and a menu source contract are tested.
+
+Learning: closeout before /start and /audit inverted the arc; the scoped audit still found a real device defect (fixed-slot menu polling), so the skipped phases were not ceremony.

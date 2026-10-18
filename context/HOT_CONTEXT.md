@@ -4,6 +4,14 @@
 
 ## Current Session
 
+## S185 arc completion — menus follow the active controller
+
+Implemented audit item 2 (1221846): SettingsPanel and VirtualKeyboard polled navigator.getGamepads()[0], so a pad in slot 1+ (common after a Chrome reconnect) could not navigate those screens. Both now use getPrimaryGamepad(); slot-1 selection and a menu source contract are tested.
+
+S185 arc completion: /start ran (session lock, canon sync 55 canons / 0 pending, CANON-049 radar current, fresh brief), then a scoped /audit of full range of motion on every input device (docs/AUDIT_2026-10-18.md, 4/4 premises verified). Verified clean with evidence: mouse aim (DPR + camera), touch aim, ADS zoom (scaled around the player), arena movement clamp (AW/AH) and movement direction on keyboard/touch/left stick.
+
+Staging https://1982e652.call-of-doodie.pages.dev passed shell 7/7, served the candidate entry index-DCEIi-al.js and a SettingsPanel chunk without slot-0 polling. Local full suite, strict lint and deployable build are recorded in the closeout brief; production follows exact-main CI on push.
+
 ## S185 full-range controller aim — 2026-10-18
 
 Controller right-stick aim now covers a full 360° on every gamepad layout. Aim was hard-wired to axes 2/3; pads without the W3C standard mapping (DualShock/DualSense in Firefox, generic Linux pads) place an analog trigger there that rests at -1, pinning stick Y and limiting aim to one half-plane (180°). `resolveAimAxes` in src/utils/gamepad.js now selects the right stick from the pad mapping, the PlayStation non-standard layout and resting-value trigger detection; the HomeV2 aim probe shares it. Resting triggers no longer count as constant controller activity. Controller aim assist bends aim only within a 30° cone, so a nearby enemy no longer captures the stick in every direction. Stick aim and touch starts retire the never-cleared `mouse.moved` flag, which previously snapped aim back to a stale cursor after stick release.
@@ -46,16 +54,11 @@ Setup links and version-2 cartridges preserve all twelve modes and four difficul
 
 Real playthroughs exposed paused wall-clock reload completion, stale starting-kit initialization, and terminal score/wave mismatch that disabled victory exports. These are repaired with simulation-clock reloads, kit selection before initialization, and final-state synchronization.
 
-Local full suite: 1,929/1,930 initially passed; the one stale mode-wiring assertion was corrected and its suite passed. Subsequent setup/export/terminal regressions pass. Strict lint, configured build, public contracts and security gate pass. Sixty fixed-seed setup observations and twenty-four all-mode pause/resume follow-ups cover twelve modes/four difficulties plus mobile Normal. Real audio/control probes pass Classic, Zombies and Operations. Staging setup and creature checks pass in both themes at 390/1440; eight ending cases pass including 390×360 scrolling. Final staging/CI/production evidence follows the terminal fix.
-
-Human-versus-agent comparative outcomes, humor/listening judgments, physical devices, model-token savings and isolated production performance remain unmeasured. Automation proves integration and observations, not enjoyment, balance or retention. All twenty audit items retain their detailed acceptance status in the private audit artifact; source implementation is not blanket acceptance. Production deployment pending exact-main CI; FORGE/public-unlaunched remains unchanged.
-
-## End-game follow-up — 2026-10-03
-
-Death and victory results now scroll fully, including short mobile viewports. Score submission and sharing remain expanded; leaderboar
+Local full suite: 1,929/1,930 initially passed; the one stale mode-wiring assertion was corrected and its suite passed. Subsequent setup/export/terminal regressions pass. Strict lint, configured build, public contracts
 
 ## Open Work
 
+## Session 185 arc completion
 ## Session 185 controller aim delivery
 ## Session 184 end-run delivery
 ## S183 verified production follow-through
@@ -110,15 +113,8 @@ Death and victory results now scroll fully, including short mobile viewports. Sc
 - [ ] Real full-run media QA — on desktop verify the DeathScreen best-moment GIF encodes, plays, and shares without freezing; on mobile verify capture is skipped as designed
 - [ ] Create Itch.io listing and publish the prepared launch copy package from `docs/LAUNCH_EXECUTION.md`
 - [ ] Add `VITE_POSTHOG_KEY` to GitHub repo Settings → Secrets → Actions (workflow already wired in deploy.yml)
-- [ ] Add `VITE_SENTRY_DSN` to GitHub repo Settings → Secrets → Actions (workflow already wired in deploy.yml) — S112 probe: the studio-ops `secrets/sentry.env` file does carry a `SENTRY_DSN` key, but the declared `sentry.api` capability in `CAPABILITY_MAP.json` only covers `SENTRY_AUTH_TOKEN` (org/user auth token for releases), not a per-project DSN grant. Wiring an unverified DSN into this public game's error stream risks misattributing errors to the wrong Sentry project. Founder should confirm that DSN is actually scoped to call-of-doodie before it's set as a GitHub secret.
 
 ## Recent Decisions
-
-## 2026-10-06 — Session 184 end-run flow
-
-Use native URL sharing directly in the click gesture; image generation runs as an explicit download. Await clipboard writes and expose a manual copy fallback. Use the existing version-2 scenario cartridge so all twelve catalog modes retain setup without truncating seeds. Do not offer online submission when App will skip it. Do not retry a consumed submission token. Restore incompatible startup propagation 2645460 as a complete batch to the previously verified public-compatible protocol; no caller assertions or test gates weakened. The writeback-currency warning for d9a04ba was a records-only final board synchronization, not omitted gameplay work. CANON-056 vocabulary audit remains pending with this justification: the bounded request changes end-run interaction, not studio terminology; no superintelligence claim is introduced.
-
-
 
 ## S184 verified production follow-through
 
@@ -135,9 +131,14 @@ Use a scoped equivalent of autopilot: the inspected local command delegates doct
 
 Resolve the right stick from the pad's own layout instead of fixed indices: trust `mapping === "standard"`, use the known PlayStation non-standard layout, otherwise skip axes whose first-seen resting value sits near ±1 (triggers). Aim assist is a nudge, not a capture: limit it to a 30° cone. Pointer aim must be re-armed by real mouse movement, never by a historical flag. A red dependency-tree smoke that also fails on pristine main is local freshness; root-fix with `npm ci` from the committed lockfile, never by editing the gate.
 
+
+## S185 arc completion — 2026-10-18
+
+Every gamepad-polling surface selects its pad through getPrimaryGamepad(); no screen reads a fixed slot. A start-time canon suggestion is not adoption evidence: CANON-056 stays pending until its terminology audit runs. A goal-requested /arc is incomplete without its /start and /audit phases even when the requested fix is already shipped; run them rather than claim them.
+
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 258,012 bytes · SHA-256 `cd481198986e…`
-- `context/TASK_BOARD.md` · 179,550 bytes · SHA-256 `5e842dac3323…`
-- `context/DECISIONS.md` · 171,886 bytes · SHA-256 `f2aac1329896…`
-- `docs/AUDIT_2026-09-29_2.json` · 7,385 bytes · SHA-256 `cc01a284e112…`
+- `context/CURRENT_STATE.md` · 259,077 bytes · SHA-256 `e1515a3d9a0a…`
+- `context/TASK_BOARD.md` · 180,372 bytes · SHA-256 `a9578e54af7b…`
+- `context/DECISIONS.md` · 172,299 bytes · SHA-256 `0c9127ccc605…`
+- `docs/AUDIT_2026-10-18.json` · 6,892 bytes · SHA-256 `b34b668a7b5a…`
