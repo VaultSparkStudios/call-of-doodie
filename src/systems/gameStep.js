@@ -142,6 +142,10 @@ export function resolveAimFrame({
   joystickActive = false,
   autoAim = false,
   assistRadius = 160,
+  // Assist only bends aim toward enemies near where the stick points. Without
+  // a cone any enemy inside the radius captured the stick, so a controller
+  // player could not turn away from a nearby enemy at all.
+  assistCone = Math.PI / 6,
 } = {}) {
   let angle = Number.isFinite(Number(player.angle)) ? Number(player.angle) : 0;
   let source = "unchanged";
@@ -171,6 +175,7 @@ export function resolveAimFrame({
         const enemyAngle = Math.atan2(ey - py, ex - px);
         let difference = Math.abs(enemyAngle - controllerAngle);
         if (difference > Math.PI) difference = (2 * Math.PI) - difference;
+        if (difference > assistCone) continue;
         const score = (distance * 0.5) + (difference * 80);
         if (score < nearestScore) {
           nearestScore = score;

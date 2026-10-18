@@ -7,6 +7,8 @@ import {
   loadControllerProfile,
   readGamepadControls,
   rememberControllerProfile,
+  resetGamepadCalibration,
+  resolveAimAxes,
 } from "./gamepad.js";
 
 function pad({ index = 0, id = "Generic", buttons = [], axes = [] } = {}) {
@@ -56,6 +58,53 @@ describe("gamepad helpers", () => {
     expect(controls.pause).toBe(true);
     expect(controls.left).toMatchObject({ x: 0.8, y: -0.9, active: true });
     expect(controls.right).toMatchObject({ x: 0.5, y: 0.1, active: true });
+  });
+
+  describe("right-stick aim covers a full 360°", () => {
+    const DIRECTIONS = Array.from({ length: 16 }, (_, i) => (i / 16) * Math.PI * 2 - Math.PI);
+
+    function sweep(layout, { id, mapping, axisCount, xIdx, yIdx, rest = {} }) {
+      resetGamepadCalibration();
+      const resting = Array.from({ length: axisCount }, (_, i) => rest[i] ?? 0);
+      const make = (axes) => ({ index: 0, id, mapping, buttons: [], axes });
+      readGamepadControls(make(resting), 0.2); // first sight: pad at rest
+      return DIRECTIONS.map((angle) => {
+        const axes = [...resting];
+        axes[xIdx] = Math.cos(angle);
+        axes[yIdx] = Math.sin(angle);
+        const { right } = readGamepadControls(make(axes), 0.2);
+        expect(right.active, `${layout} @ ${angle}`).toBe(true);
+        return Math.atan2(right.y, right.x);
+      }).forEach((aimed, i) => {
+        const diff = Math.atan2(Math.sin(aimed - DIRECTIONS[i]), Math.cos(aimed - DIRECTIONS[i]));
+        expect(Math.abs(diff), `${layout} direction ${i}`).toBeLessThan(1e-9);
+      });
+    }
+
+    it("standard mapping (Chrome/Edge/Safari, Xbox + PlayStation)", () => {
+      sweep("standard", { id: "Xbox Wireless Controller (STANDARD GAMEPAD)", mapping: "standard", axisCount: 4, xIdx: 2, yIdx: 3 });
+    });
+
+    it("DualShock/DualSense with Firefox's non-standard layout", () => {
+      // [LX, LY, RX, L2, R2, RY] — L2/R2 rest at -1. Reading axes 2/3 pinned Y to -1 (upper half only).
+      sweep("ps-firefox", { id: "054c-09cc-Wireless Controller", mapping: "", axisCount: 6, xIdx: 2, yIdx: 5, rest: { 3: -1, 4: -1 } });
+    });
+
+    it("generic Linux pad with triggers interleaved before the right stick", () => {
+      // [LX, LY, LT, RX, RY, RT] — triggers rest at -1.
+      sweep("linux-generic", { id: "Generic USB Joystick", mapping: "", axisCount: 6, xIdx: 3, yIdx: 4, rest: { 2: -1, 5: -1 } });
+    });
+
+    it("non-standard Xbox pad whose triggers rest at 0", () => {
+      sweep("xbox-linux", { id: "045e-028e-Microsoft X-Box 360 pad", mapping: "", axisCount: 8, xIdx: 3, yIdx: 4 });
+    });
+
+    it("never treats a resting trigger as a held stick", () => {
+      resetGamepadCalibration();
+      const gp = { index: 0, id: "054c-0ce6-DualSense", mapping: "", buttons: [], axes: [0, 0, 0, -1, -1, 0] };
+      expect(resolveAimAxes(gp)).toEqual([2, 5]);
+      expect(readGamepadControls(gp, 0.2).right.active).toBe(false);
+    });
   });
 
   it("returns device-specific controller labels with a generic fallback", () => {

@@ -208,6 +208,36 @@ describe("resolveAimFrame", () => {
     expect(result.angle).toBeCloseTo(0, 5);
   });
 
+  it("keeps a full 360° for every aim device", () => {
+    const directions = Array.from({ length: 24 }, (_, i) => (i / 24) * Math.PI * 2 - Math.PI + 0.01);
+    const close = (a, b) => Math.abs(Math.atan2(Math.sin(a - b), Math.cos(a - b))) < 1e-9;
+    for (const angle of directions) {
+      const controller = resolveAimFrame({ player, gamepadAngle: angle });
+      expect(close(controller.angle, angle), `controller ${angle}`).toBe(true);
+      const touch = resolveAimFrame({ player, shootStick: { active: true, dx: Math.cos(angle) * 40, dy: Math.sin(angle) * 40 } });
+      expect(close(touch.angle, angle), `touch ${angle}`).toBe(true);
+      // Mouse on a DPR-scaled canvas with a scrolled world camera.
+      const cam = { x: 300, y: 200 };
+      const me = { x: 500, y: 400 };
+      const rect = { left: 10, top: 20, width: 400, height: 300 };
+      const pointer = { x: 10 + (me.x - cam.x + Math.cos(angle) * 100) / 2, y: 20 + (me.y - cam.y + Math.sin(angle) * 100) / 2 };
+      const mouseAngle = computePointerAimAngle(pointer, rect, { w: 800, h: 600 }, me, cam);
+      expect(close(mouseAngle, angle), `mouse ${angle}`).toBe(true);
+      expect(resolveAimFrame({ player, pointerActive: true, pointerAngle: mouseAngle }).angle).toBeCloseTo(mouseAngle, 9);
+    }
+  });
+
+  it("limits controller aim assist to a cone so the stick can turn away from a nearby enemy", () => {
+    const enemies = [{ x: 140, y: 100 }]; // close, due east
+    expect(resolveAimFrame({ player, gamepadAngle: Math.PI, aimAssist: true, enemies }))
+      .toMatchObject({ angle: Math.PI, source: "controller" });
+    expect(resolveAimFrame({ player, gamepadAngle: -Math.PI / 2, aimAssist: true, enemies }))
+      .toMatchObject({ angle: -Math.PI / 2, source: "controller" });
+    const nudged = resolveAimFrame({ player, gamepadAngle: 0.3, aimAssist: true, enemies });
+    expect(nudged.source).toBe("controller-assist");
+    expect(nudged.angle).toBeCloseTo(0, 5);
+  });
+
   it("keeps controller precedence over pointer input", () => {
     expect(resolveAimFrame({
       player,

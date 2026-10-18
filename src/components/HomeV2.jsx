@@ -25,7 +25,7 @@ import { summarizeStudioEvents } from "../utils/studioEventOps.js";
 import { isSupporter } from "../utils/supporter.js";
 import { decodeReplayCode, isValidReplayCode } from "../utils/replayCode.js";
 import { getDifficultyBriefing, getMutationDifficultyBrief, suggestDifficulty } from "../utils/runBrain.js";
-import { loadControllerProfile } from "../utils/gamepad.js";
+import { loadControllerProfile, resolveAimAxes } from "../utils/gamepad.js";
 import { AIM_CALIBRATION_BUCKETS, aimBucketFromKey, aimBucketFromVector, buildInputCalibrationNudge, buildInputCalibrationRecord, buildInputQaReceipt, loadInputCalibration, mergeAimCalibrationEvidence, resolveAimCalibrationSource, saveInputCalibration } from "../utils/inputCalibration.js";
 import { buildPwaInstallReceipt, detectStandaloneDisplay, loadPwaInstallAttempt, readServiceWorkerLifecycle, SERVICE_WORKER_LIFECYCLE_EVENT } from "../utils/pwaInstallReadiness.js";
 import { buildWeaponMasteryProjection } from "../utils/arsenalMastery.js";
@@ -1349,9 +1349,8 @@ function AimCheckPanel({ controllerType, onVerify, onDiagnostics, onClose }) {
       const pads = navigator.getGamepads?.() || [];
       const pad = [...pads].find(Boolean);
       if (pad) {
-        const aimX = pad.axes?.length >= 4 ? pad.axes[2] : pad.axes?.[0];
-        const aimY = pad.axes?.length >= 4 ? pad.axes[3] : pad.axes?.[1];
-        capture(aimBucketFromVector(aimX, aimY, 0.55), "gamepad");
+        const [xIdx, yIdx] = pad.axes?.length >= 4 ? resolveAimAxes(pad) : [0, 1];
+        capture(aimBucketFromVector(pad.axes?.[xIdx], pad.axes?.[yIdx], 0.55), "gamepad");
       }
       frame = requestAnimationFrame(pollGamepad);
     };

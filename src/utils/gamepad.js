@@ -68,9 +68,51 @@ function connectedGamepads(nav = globalThis.navigator) {
   return Array.from(pads || []).filter(Boolean);
 }
 
+// Resting axis values per pad, captured the first time the pad is read (a pad
+// only becomes visible after a button press, so its sticks are almost always
+// centred then). Analog triggers on non-standard layouts rest near -1; that
+// baseline is how they are told apart from stick axes.
+const restingAxes = new Map();
+const TRIGGER_REST = 0.5;
+
+function restingAxesFor(gp) {
+  const axes = gp?.axes || [];
+  const key = `${gp?.index ?? 0}:${gp?.id || ""}`;
+  let rest = restingAxes.get(key);
+  if (!rest || rest.length !== axes.length) {
+    rest = Array.from(axes, v => Number(v) || 0);
+    restingAxes.set(key, rest);
+  }
+  return rest;
+}
+
+export function resetGamepadCalibration() {
+  restingAxes.clear();
+}
+
+// Right-stick axis indices. The W3C "standard" mapping puts the right stick on
+// axes 2/3, but non-standard pads interleave analog triggers there — e.g. a
+// DualShock/DualSense in Firefox reports [LX, LY, RX, L2, R2, RY] and generic
+// Linux pads report [LX, LY, LT, RX, RY, RT]. Reading a resting trigger (-1) as
+// stick Y pinned aim to a single half-plane: only 180° of rotation.
+export function resolveAimAxes(gp) {
+  const count = gp?.axes?.length || 0;
+  if (gp?.mapping === "standard" || count <= 4) return [2, 3];
+  const type = detectControllerType(gp);
+  if (type === "ps") return [2, 5];
+  const rest = restingAxesFor(gp);
+  const sticks = [];
+  for (let i = 2; i < count && sticks.length < 2; i++) {
+    if (Math.abs(rest[i]) < TRIGGER_REST) sticks.push(i);
+  }
+  if (sticks.length === 2 && !(type === "xbox" && sticks[0] === 2)) return sticks;
+  return type === "xbox" ? [3, 4] : [2, 3];
+}
+
 function hasInput(gp, deadZone = DEFAULT_DEAD_ZONE) {
+  const rest = restingAxesFor(gp);
   return (gp.buttons || []).some(b => b?.pressed || (b?.value || 0) > 0.15)
-    || (gp.axes || []).some(v => Math.abs(v || 0) > deadZone);
+    || (gp.axes || []).some((v, i) => Math.abs((v || 0) - (rest[i] || 0)) > deadZone);
 }
 
 export function getPrimaryGamepad(nav = globalThis.navigator) {
@@ -146,7 +188,8 @@ export function readStick(gp, xIdx, yIdx, deadZone = DEFAULT_DEAD_ZONE) {
 
 export function readGamepadControls(gp, deadZone = DEFAULT_DEAD_ZONE) {
   const left = readStick(gp, 0, 1, deadZone);
-  const right = readStick(gp, 2, 3, deadZone);
+  const [aimX, aimY] = resolveAimAxes(gp);
+  const right = readStick(gp, aimX, aimY, deadZone);
 
   return {
     left,

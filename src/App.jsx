@@ -3573,6 +3573,8 @@ export default function CallOfDoodie() {
       e.preventDefault();
       inputDeviceRef.current = "mobile";
       markInputActivity("touch");
+      // Emulated mouse events from HUD taps must not reclaim aim later.
+      mouseRef.current.moved = false;
       const rect = canvas.getBoundingClientRect(), midX = rect.left + rect.width / 2;
       for (const t of e.changedTouches) {
         const wantsMove = resolveTouchStick(t.clientX, midX, gameSettings.controlHandedness) === "move";
@@ -3670,6 +3672,10 @@ export default function CallOfDoodie() {
       // Right stick → aim ONLY (no shooting from stick)
       if (controls.right.active) {
         gamepadAngleRef.current = Math.atan2(controls.right.y, controls.right.x);
+        // Stick aim retires the last mouse position; otherwise releasing the
+        // stick snaps aim back toward a stale cursor. Real mouse movement
+        // re-arms pointer aim.
+        mouseRef.current.moved = false;
       } else {
         gamepadAngleRef.current = null;
       }
