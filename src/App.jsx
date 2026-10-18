@@ -52,6 +52,7 @@ import { captureGifFrame } from "./utils/gifCapture.js";
 import { getRouteOptions } from "./utils/routeOptions.js";
 import { useGameLoop } from "./hooks/useGameLoop.js";
 import { createGameplayBarrier } from "./systems/gameplayBarrier.js";
+import { beginAbilityCooldown, grantAbilityReady, advanceAbilityCooldowns, addSpeedPickup, speedPickupBonus, advanceSpeedPickups } from "./systems/runTiming.js";
 import { useShellLifecycle } from "./hooks/useShellLifecycle.js";
 const HUD = lazy(() => import("./components/HUD.jsx"));
 import { buildOperationReceipt, getCurrentEncounter } from "./systems/operationDirector.js";
@@ -1230,6 +1231,7 @@ export default function CallOfDoodie() {
     if (resolution.ammo != null) setAmmo(resolution.ammo);
     if (resolution.score != null) setScore(resolution.score);
     if (resolution.grenadeReady) {
+      grantAbilityReady(gs, "grenade");
       grenadeRef.current.ready = true;
       setGrenadeReady(true);
     }
@@ -1407,6 +1409,7 @@ export default function CallOfDoodie() {
         }
         // Synergy: Grenade Chain + Overclocked → forced reload readies grenade
         if (perkModsRef.current.reloadFreesGrenade) {
+          grantAbilityReady(gs, "grenade");
           grenadeRef.current.ready = true;
           setGrenadeReady(true);
           addText(gs, gs.player.x, gs.player.y - 90, "💥 GRENADE READY!", "#FF4500");
@@ -1490,7 +1493,7 @@ export default function CallOfDoodie() {
       gs.shakeDirX = -Math.cos(angle);
       gs.shakeDirY = -Math.sin(angle);
     }
-    if (gs.ammoCount <= 0) doReload(weaponIdx);
+    if (gs.ammoCount <= 0 && gs.settAutoReload) doReload(weaponIdx);
   }, [doReload, recordCommandTrace, isGameplayBlocked]);
 
   // ── Grenade ───────────────────────────────────────────────────────────────
@@ -1504,7 +1507,7 @@ export default function CallOfDoodie() {
     statsRef.current.grenades++;
     recordCommandTrace("grenade", directionBucket(Math.cos(p.angle), Math.sin(p.angle)));
     const cd = GRENADE_COOLDOWN * (perkModsRef.current.grenadeCDMult || 1);
-    setTimeout(() => { grenadeRef.current.ready = true; setGrenadeReady(true); }, cd);
+    beginAbilityCooldown(gs, "grenade", cd);
   }, [recordCommandTrace, isGameplayBlocked]);
 
   // ── Dash ──────────────────────────────────────────────────────────────────
@@ -1530,7 +1533,7 @@ export default function CallOfDoodie() {
     statsRef.current.dashes++;
     addParticles(gs, gs.player.x, gs.player.y, "#00FFFF", 12);
     const cd = DASH_COOLDOWN * (perkModsRef.current.dashCDMult || 1);
-    setTimeout(() => { dashRef.current.ready = true; setDashReady(true); }, cd);
+    beginAbilityCooldown(gs, "dash", cd);
   }, [recordCommandTrace, isGameplayBlocked]);
 
   // ── Player death ──────────────────────────────────────────────────────────
@@ -2492,6 +2495,10 @@ export default function CallOfDoodie() {
       return;
     }
 
+    for (const ability of advanceAbilityCooldowns(gs)) {
+      if (ability === "grenade") { grenadeRef.current.ready = true; setGrenadeReady(true); }
+      if (ability === "dash") { dashRef.current.ready = true; setDashReady(true); }
+    }
     // ── Dash movement ──
     const reloadedWeapon = advanceWeaponReload(gs);
     if (reloadedWeapon !== null) {
@@ -2519,12 +2526,14 @@ export default function CallOfDoodie() {
     gs._movementReceipt = movement;
     combatRuntimeRef.current.applyPlayerMovement(p, movement, {
       dashActive: dashRef.current.active > 0,
+      speedBonus: speedPickupBonus(gs),
       adrenalineRushTimer: gs.adrenalineRushTimer || 0,
       rubbleSlowed: !!gs._rubbleSlowed,
       W: AW,
       H: AH,
       obstacles: gs.obstacles || [],
     });
+    advanceSpeedPickups(gs);
     // Frame the player before anything reads the camera this frame.
     updateCamera(cam, p, { viewW: W, viewH: H });
     const _vc = viewCenter(cam, W, H);
@@ -3371,8 +3380,7 @@ export default function CallOfDoodie() {
           gs.ammoCount = gs.weaponAmmos[wpnIdx]; setAmmo(gs.ammoCount);
           addText(gs, pk.x, pk.y, ammoRestoreMult > 1 ? "MAX AMMO + RESUPPLY!" : "MAX AMMO", "#00BFFF");
         } else if (pk.type === "speed") {
-          p.speed = Math.min(8, p.speed + 0.5); addText(gs, pk.x, pk.y, "SPEED!", "#FFFF00");
-          setTimeout(() => { if (gsRef.current) gsRef.current.player.speed = Math.max(4, gsRef.current.player.speed - 0.5); }, 5000);
+          addSpeedPickup(gs); addText(gs, pk.x, pk.y, "SPEED!", "#FFFF00");
         } else if (pk.type === "nuke") {
           statsRef.current.nukes++;
           addScreenText(gs, SX, SY, "TACTICAL NUKE!", "#FF0000", true);

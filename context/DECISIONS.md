@@ -1602,3 +1602,10 @@ Use the canonical lock writer with recipient-verified rotation fixes. Preserve a
 ## S186 production acceptance — 2026-10-18
 
 Use candidate-specific hosted quality/build/deploy and live behavior as delivery authority. The isolated local CANON-056 expectation correction is now covered by the complete hosted suite. Preserve physical-device and participant evidence boundaries. Final records-only seal uses the same CI/deploy workflow.
+
+
+## 2026-10-18 — Session 187
+
+Keep run-specific cooldowns and temporary pickup durations on the fixed simulation clock. Temporary movement bonuses stay separate from permanent speed; auto-reload follows the existing player setting. Adopt canonical startup sync with executable equivalence and public-safe comments. No new package, recurring cost, identity policy, rights change or lifecycle transition. Existing CANON-045 STRONG identity gap remains outside unchanged guest-game promotion; no new account surface is introduced.
+
+FORGE/public-unlaunched unchanged. Physical controllers, participant comparisons and target-device/model-token measurements remain unmeasured. Existing permanent-speed/Kill Frenzy composition is outside this pickup-expiry repair. Browser input and speed/ammo fixtures are assisted; no natural full-run claim.

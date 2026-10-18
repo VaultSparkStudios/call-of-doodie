@@ -218,6 +218,7 @@ export function resolveAimFrame({
  * @param {{ dx: number, dy: number }} dir - normalized movement vector from computeMovementVector
  * @param {object} opts
  * @param {boolean} opts.dashActive - if true, skip movement (dash handles it externally)
+ * @param {number}  opts.speedBonus - temporary additive speed, without changing base stats
  * @param {number}  opts.adrenalineRushTimer - >0 → 2× speed
  * @param {boolean} opts.rubbleSlowed - true → 60% speed
  * @param {number}  opts.W - canvas width (for clamping)
@@ -226,6 +227,7 @@ export function resolveAimFrame({
  */
 export function applyPlayerMovement(player, dir, {
   dashActive = false,
+  speedBonus = 0,
   adrenalineRushTimer = 0,
   rubbleSlowed = false,
   W = 800,
@@ -234,7 +236,8 @@ export function applyPlayerMovement(player, dir, {
 } = {}) {
   const safeDx = finiteAxis(dir?.dx);
   const safeDy = finiteAxis(dir?.dy);
-  const safeSpeed = Math.max(0, Number.isFinite(Number(player?.speed)) ? Number(player.speed) : 0);
+  const safeSpeed = Math.max(0, Number.isFinite(Number(player?.speed)) ? Number(player.speed) : 0)
+    + Math.max(0, Number.isFinite(Number(speedBonus)) ? Number(speedBonus) : 0);
   const safeW = Math.max(40, Number.isFinite(Number(W)) ? Number(W) : 800);
   const safeH = Math.max(40, Number.isFinite(Number(H)) ? Number(H) : 600);
   player.x = Number.isFinite(Number(player.x)) ? Number(player.x) : safeW / 2;

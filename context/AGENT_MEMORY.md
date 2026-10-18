@@ -1,3 +1,15 @@
+## S187 simulation ownership
+
+Recipient startup sync and five compatible libraries are restored. Four tests prove local remote pull, script-root identity, WIP preservation and conflict detection; executable ASTs match the canonical source.
+
+Dash and grenade recharge on active simulation frames. Frozen-state tests, exact durations, modifiers, instant readiness grants and run isolation pass; wall-clock callbacks are removed.
+
+Speed pickups use independent 300-active-frame durations and an additive movement bonus. Expiry preserves permanent base stats, stacked pickups and speed caps without mutating a rematch.
+
+Empty-magazine automatic reload honors the saved preference. Actual-App tests and desktop/mobile browser checks preserve manual reload and automatic reload; the forced Overclocked reload test also passes.
+
+FORGE/public-unlaunched unchanged. Physical controllers, participant comparisons and target-device/model-token measurements remain unmeasured. Existing permanent-speed/Kill Frenzy composition is outside this pickup-expiry repair. Browser input and speed/ammo fixtures are assisted; no natural full-run claim.
+
 ## S186 production acceptance
 
 S186 source 6dc4c4235cf2b263c1c8fef228ece1b3d8eb4b58 passed exact-main workflow 39141994765: 294/294 test files and 1,970/1,970 tests, strict lint, build and Cloudflare deployment. Canonical callofdoodie.wtf reports 6dc4c4235cf2; immutable https://b0ffec69.call-of-doodie.pages.dev/ and canonical shell checks pass 7/7 each. All four canonical browser input cases pass at 390/1440 in both themes, including uppercase release, pause, focus loss, resume and normal movement.

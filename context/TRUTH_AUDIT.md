@@ -1,3 +1,13 @@
+## S187 verified evidence and limits
+
+Overall status: S187 four selected outcomes pass local full suite, independent review and final staging. Exact-main hosted checks and production delivery remain pending; participant/device measurements remain separate.
+
+Local full suite: 296/296 files and 1988/1988 tests pass. Strict lint, configured build, public contracts, dependency security (zero vulnerabilities), scoped supply-chain scan and independent review pass. Final staging https://107df7f2.call-of-doodie.pages.dev passes shell 7/7, four cooldown theme/width cases and two speed/reload browser cases. Exact-main hosted checks and production verification follow the push.
+
+FORGE/public-unlaunched unchanged. Physical controllers, participant comparisons and target-device/model-token measurements remain unmeasured. Existing permanent-speed/Kill Frenzy composition is outside this pickup-expiry repair. Browser input and speed/ammo fixtures are assisted; no natural full-run claim.
+
+An initial browser probe took screenshots before pausing and allowed the short dash to expire. The corrected probe pauses in the same input task and compares positive remaining-frame counts. A first staging build preceded the final in-place TTL compaction; replacement 107df7f2 contains the final code. Neither discarded run is represented as final acceptance.
+
 ## S186 production acceptance
 
 Overall status: S186 four reliability outcomes are implemented, reviewed, staging-verified and production-verified. All 294 files / 1970 tests pass exact-main CI. Separate participant/device evidence remains unmeasured.

@@ -1,3 +1,27 @@
+## Where We Left Off — Session 187
+
+Session Intent: Full fresh /start → /audit → /implement → /closeout, direct-main commit/push and full deployment. Intent outcome: implementation/staging verified; exact-main delivery in progress.
+
+S187 fixes paused ability recharge, speed-pickup stat corruption, ignored reload preference and missing startup sync.
+
+Recipient startup sync and five compatible libraries are restored. Four tests prove local remote pull, script-root identity, WIP preservation and conflict detection; executable ASTs match the canonical source.
+
+Dash and grenade recharge on active simulation frames. Frozen-state tests, exact durations, modifiers, instant readiness grants and run isolation pass; wall-clock callbacks are removed.
+
+Speed pickups use independent 300-active-frame durations and an additive movement bonus. Expiry preserves permanent base stats, stacked pickups and speed caps without mutating a rematch.
+
+Empty-magazine automatic reload honors the saved preference. Actual-App tests and desktop/mobile browser checks preserve manual reload and automatic reload; the forced Overclocked reload test also passes.
+
+Local full suite: 296/296 files and 1988/1988 tests pass. Strict lint, configured build, public contracts, dependency security (zero vulnerabilities), scoped supply-chain scan and independent review pass. Final staging https://107df7f2.call-of-doodie.pages.dev passes shell 7/7, four cooldown theme/width cases and two speed/reload browser cases. Exact-main hosted checks and production verification follow the push.
+
+FORGE/public-unlaunched unchanged. Physical controllers, participant comparisons and target-device/model-token measurements remain unmeasured. Existing permanent-speed/Kill Frenzy composition is outside this pickup-expiry repair. Browser input and speed/ammo fixtures are assisted; no natural full-run claim.
+
+Native goal 01a14fc0-1ef5-7513-92aa-f49d8319f8f1, createdAt 1792339358, binds to S187/start 01fb96add3eeff50a5b7151357c7e40ad67c09e7. Prior S186 completion is not this goal’s evidence. Detailed nine-axis audit and implementation plan are retained privately. Four verified premises were recorded before any implementation path changed.
+
+CDR reviewed: no new creative direction. Local doctor/autopilot delegates to Studio Ops; subject-correct project gates and exact-main hosted CI are the release evidence, with no claim of a local zero-finding doctor. Missing optional recovery/checklist/review helpers remain explicit delivery gaps; central scoring/application requires Ark recipient ownership.
+
+Rollback: ordinary revert to 01fb96add3eeff50a5b7151357c7e40ad67c09e7, rebuild and redeploy. Next: exact-main CI/deployment/live readback.
+
 ## Where We Left Off — Session 186 final closeout
 
 Session Intent: Fresh full arc, direct-main commit/push and full deployment. Intent outcome: achieved.

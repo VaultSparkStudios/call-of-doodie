@@ -1,12 +1,12 @@
 <!-- generated-by: scripts/render-startup-brief.mjs v3.1 -->
-<!-- generated-at: 2026-10-18 (Session 186 closeout) -->
-<!-- semantic-freshness: hash=871e24eab6e6708a next=187 silSession=186 silScore=941 handoff=182 tests=- -->
+<!-- generated-at: 2026-10-18 (Session 187 closeout) -->
+<!-- semantic-freshness: hash=539a00cb79d81bec next=188 silSession=187 silScore=944 handoff=182 tests=- -->
 <!-- fast-boot-valid-until: next session if within 24h -->
 <!-- brief-coherent: true -->
 
 # Startup Brief — Call-Of-Doodie
 
-> **Fast-boot brief** — generated at Session 186 closeout · 2026-10-18.
+> **Fast-boot brief** — generated at Session 187 closeout · 2026-10-18.
 > Valid for next session if started within 24h. For sessions >24h later, load context files fresh (start.md §3).
 
 ---
@@ -15,18 +15,18 @@
 ╔════════════════════════════════════════════════════════════════╗
 ║  🚀 CALL-OF-DOODIE                                               ║
 ║  project · deployed/public-unlaunched · FORGE                    ║
-║  Session 187 · 2026-10-18 · FOUNDER MODE                         ║
+║  Session 188 · 2026-10-18 · FOUNDER MODE                         ║
 ║  Owner: VaultSpark Studios                                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ LAST SESSION (S186) - WHAT SHIPPED ══════════════════════════╗
-║  S186 fixed goal/session identity, stuck interaction, frozen-ch  ║
+╔══ LAST SESSION (S187) - WHAT SHIPPED ══════════════════════════╗
+║  S187 fixes paused ability recharge, speed-pickup stat corrupti  ║
 ║  Tests  -                                                        ║
 ║  Deploy -                                                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ WHERE TO TEST · Call-Of-Doodie ══════════════════════════════╗
-║  Unit tests    → npm test — 294/294 passing ✓                    ║
+║  Unit tests    → npm test — 296/296 passing ✓                    ║
 ║  hosted-visual-proof → session-169-staging · route/theme/wid ✓   ║
 ║  production-verification → source ca1324136f8c · workflow 34 ✓   ║
 ║  hosted-staging → session-170-staging · immutable 520a56d6 · ✓   ║
@@ -42,42 +42,42 @@
 
 ╔══ SCORE ═══════════════════════════════════════════════════════╗
 ║                                                                  ║
-║    941/1000   ██████████████████████░░   94%                     ║
-║    SIL v3.0  ·  Avg3: 936  ·  Velocity 4→                        ║
+║    944/1000   ██████████████████████░░   94%                     ║
+║    SIL v3.0  ·  Avg3: ?  ·  Velocity 4→                          ║
 ║    Last active: 0d  ·  Last closeout: 0d  ·  (active = newest…   ║
 ║    Trend  ▂▂▂▄▄  →  (last 5 sessions)                            ║
 ║                                                                  ║
 ║    Category         Score  Bar        Spark   Δ                  ║
 ║    ─────────────── ────── ────────── ──────── ─                  ║
-║    Dev Health        96    ██████████  ▇▇▇▇▇▇▇▇ →                ║
+║    Dev Health        97    ██████████  ▇▇▇▇▇▇▇▇ →                ║
 ║    Alignment         96    ██████████  ▇▇▇▇▇▇▇▇ →                ║
 ║    Momentum          94    █████████░  ▇▇▇▇▇▇▇▇ →                ║
 ║    Engagement        92    █████████░  ▇▇▇▇▇▇▇▇ →                ║
-║    Process Qual      91    █████████░  ▇▇▇▇▇▇▇▇ →                ║
+║    Process Qual      92    █████████░  ▇▇▇▇▇▇▇▇ →                ║
 ║    Coherence         90    █████████░  ········ →                ║
 ║    Security          98    ██████████  ········ →                ║
 ║    Ecosystem         92    █████████░  ········ →                ║
 ║    Capital           98    ██████████  ········ →                ║
-║    Automation        94    █████████░  ········ →                ║
+║    Automation        95    ██████████  ········ →                ║
 ║                                                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ WHERE WE LEFT OFF  ·  Session 186 ═══════════════════════════╗
+╔══ WHERE WE LEFT OFF  ·  Session 187 ═══════════════════════════╗
 ║  Shipped:  see LATEST_HANDOFF.md                                 ║
-║  Tests:    294/294 passing  ·  Deploy: N/A                       ║
+║  Tests:    296/296 passing  ·  Deploy: N/A                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ✓  ███████░░░░░░░░░░░░░░░░░   29% used                          ║
-║     77,625 / 272,000 tok  ·  codex/codex-272k  · …               ║
-║     ~38,813 tok/turn  ·  cache 50%  ·  4 turns to compact        ║
+║  ✓  ████████░░░░░░░░░░░░░░░░   32% used                          ║
+║     87,780 / 272,000 tok  ·  codex/codex-272k  · …               ║
+║     ~43,890 tok/turn  ·  cache 50%  ·  3 turns to compact        ║
 ║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         294/294 passing (2026-10-18T15:50:48.112Z)     ║
+║  ✓  Tests         296/296 passing (2026-10-18T16:20:24.519Z)     ║
 ║  ✓  Velocity      4   ·  Debt: →                                 ║
-║  ✓  Runway        S186 production verified                       ║
+║  ✓  Runway        S187 staging verified; production pending      ║
 ║  ⛔  Context age   ?d                                             ║
 ║  ⚠  IGNIS         44193 FORGE  ·  10d old                        ║
 ║  ⛔  Truth         S186 four reliability outcomes are…            ║
@@ -121,9 +121,9 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIL FORECAST (next session) ═════════════════════════════════╗
-║  Projected:  943/1000  (↑2 vs current 941)                       ║
+║  Projected:  946/1000  (↑2 vs current 944)                       ║
 ║  All categories forecast stable or rising.                       ║
-║  Calibration: MAE 16.7 over last 10 forecasts                    ║
+║  Calibration: MAE 12.1 over last 10 forecasts                    ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ GENIUS HIT LIST ═════════════════════════════════════════════╗
@@ -157,5 +157,5 @@
 
 ---
 
-*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 186 closeout · 2026-10-18*
+*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 187 closeout · 2026-10-18*
 *Run `node scripts/ops.mjs doctor` for live health check · `node scripts/ops.mjs genius-list` to refresh hit list*

@@ -1262,10 +1262,9 @@ SIL +10: Closed five founder-visible defects and all four fresh audit items: Ene
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Avgs — 3: 936 | 5: 936.2
-Velocity trend: four reliability outcomes verified | Debt: flat
-Momentum runway: S186 production verified | Intent rate: full arc achieved
-Last session: 2026-10-18 | Session 186 | Total: 941/1000 | Velocity: 4 | protocolVelocity: 4
+Velocity trend: four verified reliability outcomes | Debt: flat
+Momentum runway: S187 staging verified; production pending | Intent rate: delivery in progress
+Last session: 2026-10-18 | Session 187 | Total: 944/1000 | Velocity: 4 | protocolVelocity: 4
 <!-- rolling-status-end -->
 
 ## 2026-06-05 — Session 81 | Total: 1000/1000 | Velocity: 1 | Debt: ↓
@@ -3572,3 +3571,29 @@ Independent review passes after one lock-rotation correction. Focused regression
 
 
 S186 production receipt: S186 source 6dc4c4235cf2b263c1c8fef228ece1b3d8eb4b58 passed exact-main workflow 39141994765: 294/294 test files and 1,970/1,970 tests, strict lint, build and Cloudflare deployment. Canonical callofdoodie.wtf reports 6dc4c4235cf2; immutable https://b0ffec69.call-of-doodie.pages.dev/ and canonical shell checks pass 7/7 each. All four canonical browser input cases pass at 390/1440 in both themes, including uppercase release, pause, focus loss, resume and normal movement. SIL remains 941/1000 (ten-category sum); no additional outcome or session is invented for receipt sealing.
+
+
+## 2026-10-18 — Session 187
+
+Total: 944/1000 | Velocity: 4 | Debt: →
+
+| Category | Score | Rationale |
+|---|---:|---|
+| Dev Health | 97 | Automated runtime evidence; participant/device evidence remains separate |
+| Creative Alignment | 96 | Automated runtime evidence; participant/device evidence remains separate |
+| Momentum | 94 | Automated runtime evidence; participant/device evidence remains separate |
+| Engagement | 92 | Automated runtime evidence; participant/device evidence remains separate |
+| Process Quality | 92 | Recorded pre-implementation gate; independent final review passed |
+| Cross-Repo Coherence | 90 | Automated runtime evidence; participant/device evidence remains separate |
+| Security Posture | 98 | Automated runtime evidence; participant/device evidence remains separate |
+| Ecosystem Integration | 92 | Automated runtime evidence; participant/device evidence remains separate |
+| Capital Efficiency | 98 | Automated runtime evidence; participant/device evidence remains separate |
+| Automation Coverage | 95 | Automated runtime evidence; participant/device evidence remains separate |
+
+S187 fixes paused ability recharge, speed-pickup stat corruption, ignored reload preference and missing startup sync.
+
+Local full suite: 296/296 files and 1988/1988 tests pass. Strict lint, configured build, public contracts, dependency security (zero vulnerabilities), scoped supply-chain scan and independent review pass. Final staging https://107df7f2.call-of-doodie.pages.dev passes shell 7/7, four cooldown theme/width cases and two speed/reload browser cases. Exact-main hosted checks and production verification follow the push.
+
+Learning: a timer tied to the browser clock can violate pause and replacement-run ownership. Separate transient bonuses from permanent stats, and verify preferences at the action that consumes them. Brainstorm: timing incident receipts can reuse the command trace; keep controller compatibility and permanent-speed composition as explicit future evidence tasks. Committed two [SIL] follow-ups on TASK_BOARD.
+
+FORGE/public-unlaunched unchanged. Physical controllers, participant comparisons and target-device/model-token measurements remain unmeasured. Existing permanent-speed/Kill Frenzy composition is outside this pickup-expiry repair. Browser input and speed/ammo fixtures are assisted; no natural full-run claim.

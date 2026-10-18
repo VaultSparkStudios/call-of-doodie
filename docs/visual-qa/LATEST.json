@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-10-18T15:40:12.490Z",
-  "uiBaseRef": "3e7178d2f9b8055995c1d9474749c026f1d9efe0",
-  "stagingUrl": "https://298a5f72.call-of-doodie.pages.dev/",
+  "capturedAt": "2026-10-18T16:17:56.477Z",
+  "uiBaseRef": "01fb96add3eeff50a5b7151357c7e40ad67c09e7",
+  "stagingUrl": "https://107df7f2.call-of-doodie.pages.dev/",
   "themes": [
     "dark",
     "light"
@@ -10,37 +10,153 @@
   "sourceFiles": [
     {
       "file": "src/App.jsx",
-      "sha256": "ef7469a3c043c28d77d59ba29807fdd52916a4eba71ab280e059c4c6e1803032"
+      "sha256": "44b0c2778d3cd517ecc4508d65db3196f564f89a9af4d189ca2b0e8b76d6374d"
     },
     {
-      "file": "src/systems/inputLifecycle.js",
-      "sha256": "68d69f9e33e8f8194f0311fd916db82ecf8aec57d22befb906608d0905e8fb93"
+      "file": "src/systems/gameStep.js",
+      "sha256": "74d6caf92e422df3ffb11957fef3a1a0bfdf5a7cb00fb2bc95d2adb27495187b"
     },
     {
-      "file": "src/systems/gameplayBarrier.js",
-      "sha256": "9b42e7d4df4d35d4f5796867d81bdef462d4568e718f823edbcb80dac0376ee5"
-    },
-    {
-      "file": "src/hooks/useGameLoop.js",
-      "sha256": "2cff6e5c42de6b008517781930f5100cfbf7db1aef2924fed276fb4802b0a038"
+      "file": "src/systems/runTiming.js",
+      "sha256": "b1868435834d423e3c10ba3497319ab115b3dd67bdf7df63ed833aab3938f610"
     }
   ],
   "captures": [
     {
-      "file": "session-186/before-sewer-night-390-playing.png",
-      "sha256": "a1a9ddcefc3bbfff2f960c0b35bda1cc02b73f9681e7495b409e1d257a496960",
+      "file": "session-187/before-porcelain-day-390-ready.png",
+      "sha256": "8a96e4e15b45fbf40d8a31c904444dd0ae0b21d9e7d4650b9df8db258e391a4a",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "Gameplay ready",
+      "phase": "before"
+    },
+    {
+      "file": "session-187/before-sewer-night-1440-ready.png",
+      "sha256": "30f91d8a3aad6d33d656e5e7e987c680d9cd1b7a85100560c7daeb7ee5b00166",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Gameplay ready",
+      "phase": "before"
+    },
+    {
+      "file": "session-187/before-porcelain-day-1440-ready.png",
+      "sha256": "e5519990c933333e13ebfbcade69251b4dcef53e19add20eb73955c318a4d6af",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Gameplay ready",
+      "phase": "before"
+    },
+    {
+      "file": "session-187/before-sewer-night-390-ready.png",
+      "sha256": "8659af84f76671598aa22d636e9011438646dfe232dc896c59ffe98ceaba2b16",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "Gameplay playing",
+      "page": "Gameplay ready",
       "phase": "before"
     },
     {
-      "file": "session-186/before-sewer-night-390-paused.png",
-      "sha256": "967b1e8bd3bdb8ad75ececa3273fa76170f30f6b3f9f5f90da51fd96abd86128",
+      "file": "session-187/before-porcelain-day-390-spent.png",
+      "sha256": "354009bf7462fe0f6bb7e5efead5ea512215a12d0228b2a70f88d14bb7876699",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "Gameplay spent",
+      "phase": "before"
+    },
+    {
+      "file": "session-187/before-sewer-night-1440-spent.png",
+      "sha256": "887728dbd33dcd221e31fc5be73af7bea772750afcb6e3fd77b5b36c1d711169",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Gameplay spent",
+      "phase": "before"
+    },
+    {
+      "file": "session-187/before-porcelain-day-1440-spent.png",
+      "sha256": "e68e63680b33bbf39a0b0d3abd685794758ddbd36fd7661a2dc7da43a80d21ac",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Gameplay spent",
+      "phase": "before"
+    },
+    {
+      "file": "session-187/before-sewer-night-390-spent.png",
+      "sha256": "5575726233c8c11af26a9bdd1534b4f46ff4d2ce04023e428993faf576e1c361",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "Gameplay spent",
+      "phase": "before"
+    },
+    {
+      "file": "session-187/before-porcelain-day-390-paused.png",
+      "sha256": "ba854e6c3a1830e1112a4eeeb2bfe4ce35d8c69f40b2e9b4a40450c4863bd918",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "Gameplay paused",
+      "phase": "before"
+    },
+    {
+      "file": "session-187/before-porcelain-day-1440-paused.png",
+      "sha256": "683bcb07faa65bbcb3aeae4bb875b61942119eb95605f53558cfe585d01096e0",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Gameplay paused",
+      "phase": "before"
+    },
+    {
+      "file": "session-187/before-sewer-night-1440-paused.png",
+      "sha256": "ef2d566c58a36735bd7125423c52ac9adc62128c186679cf5e28b08de96cacdd",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Gameplay paused",
+      "phase": "before"
+    },
+    {
+      "file": "session-187/before-sewer-night-390-paused.png",
+      "sha256": "9e28e4cd8b6e41e0e7d6f5f165521f22c4a38adbcf98bd34e51875ef4e0f4610",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -51,20 +167,92 @@
       "phase": "before"
     },
     {
-      "file": "session-186/before-sewer-night-390-focus-lost.png",
-      "sha256": "51066d21808c03f6b341d588b146f29fd3cc951dc4d58d437fd867c2a91add5d",
+      "file": "session-187/before-porcelain-day-390-paused-wait.png",
+      "sha256": "957e5b6e58e5cee137a6fd870cd0c8e16a8f06631c07cab47397f94683c41eb5",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "Gameplay paused-wait",
+      "phase": "before"
+    },
+    {
+      "file": "session-187/before-sewer-night-1440-paused-wait.png",
+      "sha256": "3ab48a936957d86f047c23e056e66e35cb12e70f392075f65e9e8e9a9746946c",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Gameplay paused-wait",
+      "phase": "before"
+    },
+    {
+      "file": "session-187/before-porcelain-day-1440-paused-wait.png",
+      "sha256": "f9f3d27f878822f5d8ccaab249db0b5074ff985cf7b1e3e80cb9e00a16f4831d",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Gameplay paused-wait",
+      "phase": "before"
+    },
+    {
+      "file": "session-187/before-porcelain-day-390-resumed.png",
+      "sha256": "a687ad2d22718cc589336cbd35d148c53deb655a8b969600b35eef728a70b1ae",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "Gameplay resumed",
+      "phase": "before"
+    },
+    {
+      "file": "session-187/before-sewer-night-390-paused-wait.png",
+      "sha256": "6ebd99c5045c18b55d16e18048d8d657968ff4319a6f2a2765218ea702b65240",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "Gameplay focus-lost",
+      "page": "Gameplay paused-wait",
       "phase": "before"
     },
     {
-      "file": "session-186/before-sewer-night-390-resumed.png",
-      "sha256": "6a91837e5989d69d7b5e6a423d9ba40a91c9c512243df8f2fc5c9c79c13315e2",
+      "file": "session-187/before-sewer-night-1440-resumed.png",
+      "sha256": "65abb4bd67767baae6755fb94daf59f9f6e49cf78a46973101ade822510cbb22",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Gameplay resumed",
+      "phase": "before"
+    },
+    {
+      "file": "session-187/before-porcelain-day-1440-resumed.png",
+      "sha256": "af59690414070b0bc3d32218c74646d7499590432dfacca1c1b9f683f80a6b56",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Gameplay resumed",
+      "phase": "before"
+    },
+    {
+      "file": "session-187/before-sewer-night-390-resumed.png",
+      "sha256": "ba7e8a66d0eb98b9e160b92e73bad7668add3774e590ef907c9b2301ac205331",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -75,260 +263,56 @@
       "phase": "before"
     },
     {
-      "file": "session-186/before-sewer-night-1440-playing.png",
-      "sha256": "f2d86f5c99799f4fcffa99cdd439315728a444fedbf5d3aadd3eb2b401b47b00",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "Gameplay playing",
-      "phase": "before"
-    },
-    {
-      "file": "session-186/before-sewer-night-1440-paused.png",
-      "sha256": "0eb45357bfc28440c7ff62927a34b7f047d1087410651c983355644c1f20524b",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "Gameplay paused",
-      "phase": "before"
-    },
-    {
-      "file": "session-186/before-sewer-night-1440-focus-lost.png",
-      "sha256": "47a0e4f32b9c8203fb6c2e41e338a040bca4b2a22a357671103a75a11a6e2ec7",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "Gameplay focus-lost",
-      "phase": "before"
-    },
-    {
-      "file": "session-186/before-sewer-night-1440-resumed.png",
-      "sha256": "244eed2de53ccfc58054cdf9eafe1440e30ed970c82b2b68a04034bdb0e594cc",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "Gameplay resumed",
-      "phase": "before"
-    },
-    {
-      "file": "session-186/before-porcelain-day-390-playing.png",
-      "sha256": "17e7f3152d407f3d7e251c049fd74a99db7a97cf222c66b18a2a092f643fea7b",
+      "file": "session-187/staging-final-porcelain-day-390-ready.png",
+      "sha256": "dfc7736961aa42601054454f69847693e80468b3dc356d1813829de0494a2715",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "Gameplay playing",
-      "phase": "before"
-    },
-    {
-      "file": "session-186/before-porcelain-day-390-paused.png",
-      "sha256": "b22324d29a948e585772acbd1a28e88963ce6068378ea8914e7178d43ff40b61",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "page": "Gameplay paused",
-      "phase": "before"
-    },
-    {
-      "file": "session-186/before-porcelain-day-390-focus-lost.png",
-      "sha256": "2b36ebf1604d2a5b50e796acb432c19c59755d649440296d45d6d1e2a6e4b641",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "page": "Gameplay focus-lost",
-      "phase": "before"
-    },
-    {
-      "file": "session-186/before-porcelain-day-390-resumed.png",
-      "sha256": "902f4ad9ab2735d8c37b2b3dc82e6320a51f76ee9a3955b4b907872e1a2e2984",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "page": "Gameplay resumed",
-      "phase": "before"
-    },
-    {
-      "file": "session-186/before-porcelain-day-1440-playing.png",
-      "sha256": "2b87879046f4ef27d838f9a9d4ac37fcb224102068913f2a60cea502ad2f04a8",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "Gameplay playing",
-      "phase": "before"
-    },
-    {
-      "file": "session-186/before-porcelain-day-1440-paused.png",
-      "sha256": "622983f6dfe62586941e7bc71033b1d967637a1daed4823614b5d779dedee3fe",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "Gameplay paused",
-      "phase": "before"
-    },
-    {
-      "file": "session-186/before-porcelain-day-1440-focus-lost.png",
-      "sha256": "6bc78e0156874008140aa1cc0d711fe400f271c988c5230697ef98e8bd7fe5c9",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "Gameplay focus-lost",
-      "phase": "before"
-    },
-    {
-      "file": "session-186/before-porcelain-day-1440-resumed.png",
-      "sha256": "5a56feaf687c8acf0cf935ac64dd2eef521d00e602cc6e1b80676f384accaa4b",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "Gameplay resumed",
-      "phase": "before"
-    },
-    {
-      "file": "session-186/after-sewer-night-390-playing.png",
-      "sha256": "beccc9b0b164ac6a7292e1386c4127b6271debe1755b672a02ed3f4c05f09ff9",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "page": "Gameplay playing",
+      "page": "Gameplay ready",
       "phase": "after"
     },
     {
-      "file": "session-186/after-sewer-night-390-paused.png",
-      "sha256": "1b0e31fd45578df8e2b96913adec095e0ce4399c60eb2d45c7311a20839a34f6",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "page": "Gameplay paused",
-      "phase": "after"
-    },
-    {
-      "file": "session-186/after-sewer-night-390-focus-lost.png",
-      "sha256": "ce9742749b3cbf9e117508410d75d4e9da966ab171c6d1806866ea2515e0a431",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "page": "Gameplay focus-lost",
-      "phase": "after"
-    },
-    {
-      "file": "session-186/after-sewer-night-390-resumed.png",
-      "sha256": "5e420f8dcbb5a9c22f90cceeb1eaace6c6d956b0b32339ed7c6f213e2d018bea",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "page": "Gameplay resumed",
-      "phase": "after"
-    },
-    {
-      "file": "session-186/after-sewer-night-1440-playing.png",
-      "sha256": "e876b24f9bf5ae42dc302a7153d64836581f94c3a2dd634f62bbf0d27f6b46ec",
+      "file": "session-187/staging-final-sewer-night-1440-ready.png",
+      "sha256": "2438d20b577a31aa66f0a456558fe5afd9ff33660fcb21392f09edfc800b28b1",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "Gameplay playing",
+      "page": "Gameplay ready",
       "phase": "after"
     },
     {
-      "file": "session-186/after-sewer-night-1440-paused.png",
-      "sha256": "8e703e5bb65b986e96b52ed371d4750c5f361eb9c4f4092bec4a2f2beb67c1c8",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "Gameplay paused",
-      "phase": "after"
-    },
-    {
-      "file": "session-186/after-sewer-night-1440-focus-lost.png",
-      "sha256": "b7b1bf095cfc7c7fcc095bbdc2a470d56ebd11e08f1769e658bb04c5dc9fa95c",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "Gameplay focus-lost",
-      "phase": "after"
-    },
-    {
-      "file": "session-186/after-sewer-night-1440-resumed.png",
-      "sha256": "d038c34c0d22c1c073e5ebcc4113c756595e1527a1b3d759ef1ebbe055d4e194",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "Gameplay resumed",
-      "phase": "after"
-    },
-    {
-      "file": "session-186/after-porcelain-day-390-playing.png",
-      "sha256": "133035324c1252048bedd9b16eeacbb265579896eb1ac193c1069496e62b0619",
+      "file": "session-187/staging-final-porcelain-day-1440-ready.png",
+      "sha256": "66af627c0464f90eaeda5f630c82ae45acaa9f65eda01b391a5f67db538d7f44",
       "theme": "light",
       "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Gameplay ready",
+      "phase": "after"
+    },
+    {
+      "file": "session-187/staging-final-sewer-night-390-ready.png",
+      "sha256": "ede64ffae53556c7f9e7053c0022ae6c94cca196605f01e2cfb41e8521c83834",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "Gameplay playing",
+      "page": "Gameplay ready",
       "phase": "after"
     },
     {
-      "file": "session-186/after-porcelain-day-390-paused.png",
-      "sha256": "e2253157448ed01772df01c2265df83134230dfffa860392117e38ca4fcdfee5",
+      "file": "session-187/staging-final-porcelain-day-390-paused.png",
+      "sha256": "2496a9bec6a3910f78ac6ad95935645494b1e4f42858073d2158ad532e5d4dd3",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -339,20 +323,56 @@
       "phase": "after"
     },
     {
-      "file": "session-186/after-porcelain-day-390-focus-lost.png",
-      "sha256": "4bd60c0508735c54f14603ec6d470e358090535cf058be0e18a3bdb026d1a7b6",
+      "file": "session-187/staging-final-sewer-night-1440-paused.png",
+      "sha256": "b0efe18b449b087a93d7cd818390fc2ead252ad0b5976c906bc3368b40e1434b",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Gameplay paused",
+      "phase": "after"
+    },
+    {
+      "file": "session-187/staging-final-sewer-night-390-paused.png",
+      "sha256": "7227425c7a5af1b96523238f37a66936c5bf02e146c46ea5765165e704f7b90d",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "Gameplay paused",
+      "phase": "after"
+    },
+    {
+      "file": "session-187/staging-final-porcelain-day-1440-paused.png",
+      "sha256": "9e69470ad42c0ee4b5d65dc079d68f076ceea6d8853de11882cc18bc7fc2e9d0",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Gameplay paused",
+      "phase": "after"
+    },
+    {
+      "file": "session-187/staging-final-porcelain-day-390-paused-wait.png",
+      "sha256": "2496a9bec6a3910f78ac6ad95935645494b1e4f42858073d2158ad532e5d4dd3",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "Gameplay focus-lost",
+      "page": "Gameplay paused-wait",
       "phase": "after"
     },
     {
-      "file": "session-186/after-porcelain-day-390-resumed.png",
-      "sha256": "787e0cb392f402dc61dafe26d48e6f7b53093872a0fd71136ef6e98e2e8063f1",
+      "file": "session-187/staging-final-porcelain-day-390-resumed.png",
+      "sha256": "b7329c38755a875fd9fcfb065bc52c5c763929a2435e9598c4d4763e4bcfe014",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -363,46 +383,70 @@
       "phase": "after"
     },
     {
-      "file": "session-186/after-porcelain-day-1440-playing.png",
-      "sha256": "0e285114ebcc2f57018feed31051b982b2695edb0fc81bdf3e3bdfe345aec6c2",
+      "file": "session-187/staging-final-sewer-night-390-paused-wait.png",
+      "sha256": "7227425c7a5af1b96523238f37a66936c5bf02e146c46ea5765165e704f7b90d",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "Gameplay paused-wait",
+      "phase": "after"
+    },
+    {
+      "file": "session-187/staging-final-sewer-night-1440-paused-wait.png",
+      "sha256": "b0efe18b449b087a93d7cd818390fc2ead252ad0b5976c906bc3368b40e1434b",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "Gameplay paused-wait",
+      "phase": "after"
+    },
+    {
+      "file": "session-187/staging-final-porcelain-day-1440-paused-wait.png",
+      "sha256": "9e69470ad42c0ee4b5d65dc079d68f076ceea6d8853de11882cc18bc7fc2e9d0",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "Gameplay playing",
+      "page": "Gameplay paused-wait",
       "phase": "after"
     },
     {
-      "file": "session-186/after-porcelain-day-1440-paused.png",
-      "sha256": "86e6bf49e80f072969c204a422a3daaad146320e3e439b9196cbfd65442c8180",
+      "file": "session-187/staging-final-sewer-night-390-resumed.png",
+      "sha256": "1f4d1d34aa8cc8877340122bfbccd5c691d3e02baea0c61d0f087602ff41fc5a",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "Gameplay resumed",
+      "phase": "after"
+    },
+    {
+      "file": "session-187/staging-final-porcelain-day-1440-resumed.png",
+      "sha256": "7b4966417bbd9a62da0b08b70d147ef99462c67796045a6db9cfdc40482ca97e",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "Gameplay paused",
+      "page": "Gameplay resumed",
       "phase": "after"
     },
     {
-      "file": "session-186/after-porcelain-day-1440-focus-lost.png",
-      "sha256": "718eef330938ca771ba80a9594e2dc7303bccdddc39ff1cafbe63db05453908d",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "Gameplay focus-lost",
-      "phase": "after"
-    },
-    {
-      "file": "session-186/after-porcelain-day-1440-resumed.png",
-      "sha256": "03d9e24101060614d4b04f9b6a5f7f86917b385b26a5372e9060ca51b6461505",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
+      "file": "session-187/staging-final-sewer-night-1440-resumed.png",
+      "sha256": "ab9591362e694ca27964fae85f1570110401dc3517e72505309de0e89c414034",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 900
@@ -413,23 +457,24 @@
   ],
   "inspection": {
     "renderedPixelsReviewed": true,
-    "reviewer": "Codex direct image review",
-    "reviewedAt": "2026-10-18T15:40:12.493Z",
-    "scope": "32 before/after captures; gameplay, pause, focus loss and resume; 390/1440; both interface themes.",
+    "reviewer": "Codex direct original-image and contact-sheet review",
+    "reviewedAt": "2026-10-18T16:17:56.480Z",
+    "scope": "36 before/final-staging images: ready, spent, pause, paused-wait and resumed ability states across 390/1440 and both themes.",
     "findings": [
-      "Pause/focus-loss controls remain legible and reachable.",
-      "Gameplay and ability dock remain usable after resume.",
-      "Gameplay retains its authored arena palette across surrounding interface themes."
+      "Ability dock and health/cooldown states remain readable at both widths.",
+      "Pause menu actions remain legible and reachable; resume returns to gameplay.",
+      "Resumed dock correctly remains in cooldown after a long pause; authored arena palettes remain independent of interface theme."
     ],
     "fixesApplied": [
-      "Release latched interaction on lifecycle transitions.",
-      "Unify frozen-gameplay input guards."
+      "Keep ability recharge on active simulation frames.",
+      "Preserve permanent speed when temporary pickups expire.",
+      "Honor manual reload preference."
     ],
     "blockingDefectsOpen": 0
   },
   "methodLimits": [
-    "Synthetic browser inputs and read-only state observation; physical devices and participant outcomes unmeasured.",
-    "Seven modal barriers tested via actual-App ref fixtures; visible pause/focus-loss states exercised in browser.",
-    "No visual layout redesign; arena seed/mutation can differ between captures."
+    "Synthetic browser input and assisted pickup/ammo fixtures; no physical-controller or participant outcome claim.",
+    "No layout redesign; baseline and final runs can have different seeds/mutations.",
+    "An initial capture-order probe was corrected before final acceptance; only final 107df7f2 captures serve as after evidence."
   ]
 }

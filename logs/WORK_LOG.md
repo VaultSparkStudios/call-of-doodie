@@ -1981,3 +1981,8 @@ S186 validation follow-through: Final local suite: 294 files, 1969/1970 assertio
 ## 2026-10-18 — S186 production verification
 
 S186 source 6dc4c4235cf2b263c1c8fef228ece1b3d8eb4b58 passed exact-main workflow 39141994765: 294/294 test files and 1,970/1,970 tests, strict lint, build and Cloudflare deployment. Canonical callofdoodie.wtf reports 6dc4c4235cf2; immutable https://b0ffec69.call-of-doodie.pages.dev/ and canonical shell checks pass 7/7 each. All four canonical browser input cases pass at 390/1440 in both themes, including uppercase release, pause, focus loss, resume and normal movement.
+
+
+## 2026-10-18 — Session 187
+
+S187 fixes paused ability recharge, speed-pickup stat corruption, ignored reload preference and missing startup sync. Full suite/staging evidence: [S187 release audit](../audits/2026-10-18_3.json); exact-main production pending.

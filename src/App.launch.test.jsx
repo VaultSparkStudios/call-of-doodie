@@ -280,6 +280,84 @@ afterEach(async () => {
 });
 
 describe("CallOfDoodie launch smoke", () => {
+  it("freezes ability readiness and pickup duration, preserves base speed, and respects manual reload", async () => {
+    const { default: App } = await import("./App.jsx");
+    const { useGameLoop } = await import("./hooks/useGameLoop.js");
+    container = document.createElement("div"); document.body.appendChild(container); root = createRoot(container);
+    await act(async () => { root.render(<App />); }); await flush();
+    await act(async () => { container.querySelector("button").click(); }); await flush();
+    const canvas = container.querySelector("#game-canvas");
+    let fiber = canvas[Object.keys(canvas).find(key => key.startsWith("__reactFiber"))];
+    const refs = [];
+    while (fiber) {
+      let hook = fiber.memoizedState;
+      while (hook) { if (hook.memoizedState && Object.hasOwn(hook.memoizedState, "current")) refs.push(hook.memoizedState); hook = hook.next; }
+      fiber = fiber.return;
+    }
+    const gs = refs.find(ref => ref.current?.player && ref.current?.enemies).current;
+    const grenade = refs.find(ref => ref.current && Object.hasOwn(ref.current, "ready") && !Object.hasOwn(ref.current, "active"));
+    const dash = refs.find(ref => ref.current && Object.hasOwn(ref.current, "ready") && Object.hasOwn(ref.current, "active"));
+    const context = vi.spyOn(canvas, "getContext").mockReturnValue({});
+    for (const ref of Object.values(barrierFixture.refs)) ref.current = false;
+    gs.spawnTimer = 1e9; gs.maxEnemiesThisWave = 1e9; gs.enemies = []; gs.obstacles = []; gs.hazards = [];
+    gs.player.health = 1e9; gs.player.maxHealth = 1e9; gs.settHighlightCapture = false;
+    try {
+      vi.useFakeTimers();
+      await act(async () => {
+        container.querySelector('[data-testid="combat-grenade"]').click();
+        container.querySelector('[data-testid="combat-dash"]').click();
+      });
+      expect(grenade.current.ready).toBe(false); expect(dash.current.ready).toBe(false);
+      barrierFixture.refs.paused.current = true;
+      await act(async () => { await vi.advanceTimersByTimeAsync(9000); });
+      expect(grenade.current.ready).toBe(false); expect(dash.current.ready).toBe(false);
+      vi.useRealTimers();
+      barrierFixture.refs.paused.current = false;
+      gs.player.speed = 3.2;
+      gs.pickups = [{ type: "speed", x: gs.player.x, y: gs.player.y, life: 100 }];
+      await act(async () => { useGameLoop.mock.calls.at(-1)[0]({ render: false }); });
+      expect(gs.player.speed).toBe(3.2);
+      expect(gs.speedPickupFrames).toEqual([300]);
+      for (const [name, ref] of Object.entries(barrierFixture.refs)) {
+        ref.current = true;
+        const before = { ...gs.abilityCooldowns };
+        await act(async () => { useGameLoop.mock.calls.at(-1)[0]({ render: false }); });
+        expect(gs.abilityCooldowns, name).toEqual(before);
+        expect(gs.speedPickupFrames, name).toEqual([300]);
+        ref.current = false;
+      }
+      const before = { ...gs.abilityCooldowns };
+      await act(async () => { useGameLoop.mock.calls.at(-1)[0]({ render: false }); });
+      expect(gs.abilityCooldowns.dash).toBe(before.dash - 1);
+      expect(gs.abilityCooldowns.grenade).toBe(before.grenade - 1);
+      expect(gs.speedPickupFrames).toEqual([299]);
+      gs.settAutoReload = false; gs.ammoCount = 1; gs.weaponAmmos[0] = 1;
+      barrierFixture.input.mouseRef.current.down = true;
+      await act(async () => { useGameLoop.mock.calls.at(-1)[0]({ render: false }); });
+      expect(gs.ammoCount).toBe(0); expect(gs.pendingReload).toBeFalsy();
+      await act(async () => { container.querySelector('[data-testid="combat-reload"]').click(); });
+      expect(gs.pendingReload?.weaponIndex).toBe(0);
+      barrierFixture.input.mouseRef.current.down = false;
+      gs.pendingReload.remainingFrames = 1;
+      await act(async () => { useGameLoop.mock.calls.at(-1)[0]({ render: false }); });
+      gs.settAutoReload = true; gs.ammoCount = 1; gs.weaponAmmos[0] = 1;
+      const clock = vi.spyOn(Date, "now").mockReturnValue(Date.now() + 10000);
+      try {
+        barrierFixture.input.mouseRef.current.down = true;
+        await act(async () => { useGameLoop.mock.calls.at(-1)[0]({ render: false }); });
+        expect(gs.ammoCount).toBe(0); expect(gs.pendingReload?.weaponIndex).toBe(0);
+        barrierFixture.input.mouseRef.current.down = false;
+        gs.pendingReload.remainingFrames = 1;
+        await act(async () => { useGameLoop.mock.calls.at(-1)[0]({ render: false }); });
+        const { PERK_FACTS } = await import("./config/perkFacts.js");
+        gs.settAutoReload = false; gs.overclocked = true; gs.overclockedShots = PERK_FACTS.overclocked.forcedReloadShots - 1;
+        barrierFixture.input.mouseRef.current.down = true;
+        clock.mockReturnValue(Date.now() + 10000);
+        await act(async () => { useGameLoop.mock.calls.at(-1)[0]({ render: false }); });
+        expect(gs.pendingReload?.weaponIndex).toBe(0);
+      } finally { clock.mockRestore(); }
+    } finally { vi.useRealTimers(); context.mockRestore(); }
+  }, 60000);
   it("blocks combat through keyboard, pointer, touch, controller and dock during every frozen state, then resumes", async () => {
     const { default: App } = await import("./App.jsx");
     const { useGameLoop } = await import("./hooks/useGameLoop.js");

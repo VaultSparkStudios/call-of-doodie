@@ -4,6 +4,12 @@
 
 ## Current Session
 
+## S187 timing and preference reliability
+
+S187 fixes paused ability recharge, speed-pickup stat corruption, ignored reload preference and missing startup sync.
+
+Local suite and staging verified; exact-main delivery pending. See [LATEST_HANDOFF](LATEST_HANDOFF.md) for acceptance evidence and limits.
+
 ## S186 production verified
 
 S186 source 6dc4c4235cf2b263c1c8fef228ece1b3d8eb4b58 passed exact-main workflow 39141994765: 294/294 test files and 1,970/1,970 tests, strict lint, build and Cloudflare deployment. Canonical callofdoodie.wtf reports 6dc4c4235cf2; immutable https://b0ffec69.call-of-doodie.pages.dev/ and canonical shell checks pass 7/7 each. All four canonical browser input cases pass at 390/1440 in both themes, including uppercase release, pause, focus loss, resume and normal movement.
@@ -56,10 +62,14 @@ Assisted terminal states prove UI integration, not natural playthroughs or parti
 
 Source e6b72c770cd83a70847f74b390e28aa9f50b4622 passed exact-main workflow 37245074608: 291/291 files, 1,931/1,931 tests, strict lint, build and Cloudflare deployment. Canonical callofdoodie.wtf reports e6b72c770cd8; canonical and immutable https://ea7fba17.call-of-doodie.pages.dev/ pass shell 7/7 each, domain routing 5/5 and replay trust 3/3. Actual canonical browser checks pass 24/24 mode advancement/pause/resume cases, 8/8 death/victory ending cases with expanded sections, short-screen scrolling, menu return and hashed downloads, 4/4 setup/settings cases and 20/20 creature practice cases. Actual Classic/Zombies/Operations audio output, pause/mute/resume, single context and movement pass.
 
-Twelve technical audit outcomes are verified and shipped. Eight comparative acceptance outcomes remain pending: participant pump pacing, objective-music listening, creature comprehension/humor, matched human/agent comparison, human interpretation of outcomes, isolated target-device timing, evidence-cache token usage and evidence-pack token usage. No human rating, natural all-mode completion, physic
+Twelve technical audit outcomes are verified and shipped. Eight comparative acceptance outcomes rem
 
 ## Open Work
 
+## S187 arc outcomes and waves
+- [ ] S187 exact-main production delivery verification (Wave 3).
+- [ ] [SIL:1] S187 follow-up: inspect the existing permanent-speed/Kill Frenzy overwrite before changing progression promises.
+- [ ] [SIL:1] S187 compatibility reserve: verify restricted Gamepad API behavior before broadening browser support claims.
 ## Session 186 arc
 ## Session 185 arc completion
 ## Session 185 controller aim delivery
@@ -111,17 +121,8 @@ Twelve technical audit outcomes are verified and shipped. Eight comparative acce
 ## Session 150 — Homepage readability and navigation
 ## Human Action Required
 - [ ] [S60] Rotate or narrow the broad Cloudflare `cloudflare-studio-access.txt` token after domain stabilization — current token has account/user/zone-wide powers and should be replaced by narrower domain-migration tokens
-- [ ] Physical launch QA — verify PWA install prompt/accept flow on a real mobile/browser combination
-- [ ] Physical launch QA — verify one real gamepad/browser combo end-to-end
-- [ ] Real full-run media QA — on desktop verify the DeathScreen best-moment GIF encodes, plays, and shares without freezing; on mobile verify capture is skipped as designed
-- [ ] Create Itch.io listing and publish the prepared launch copy package from `docs/LAUNCH_EXECUTION.md`
 
 ## Recent Decisions
-
-## S185 controller aim — 2026-10-18
-
-Resolve the right stick from the pad's own layout instead of fixed indices: trust `mapping === "standard"`, use the known PlayStation non-standard layout, otherwise skip axes whose first-seen resting value sits near ±1 (triggers). Aim assist is a nudge, not a capture: limit it to a 30° cone. Pointer aim must be re-armed by real mouse movement, never by a historical flag. A red dependency-tree smoke that also fails on pristine main is local freshness; root-fix with `npm ci` from the committed lockfile, never by editing the gate.
-
 
 ## S185 arc completion — 2026-10-18
 
@@ -139,9 +140,17 @@ Use the canonical lock writer with recipient-verified rotation fixes. Preserve a
 
 Use candidate-specific hosted quality/build/deploy and live behavior as delivery authority. The isolated local CANON-056 expectation correction is now covered by the complete hosted suite. Preserve physical-device and participant evidence boundaries. Final records-only seal uses the same CI/deploy workflow.
 
+
+
+## 2026-10-18 — Session 187
+
+Keep run-specific cooldowns and temporary pickup durations on the fixed simulation clock. Temporary movement bonuses stay separate from permanent speed; auto-reload follows the existing player setting. Adopt canonical startup sync with executable equivalence and public-safe comments. No new package, recurring cost, identity policy, rights change or lifecycle transition. Existing CANON-045 STRONG identity gap remains outside unchanged guest-game promotion; no new account surface is introduced.
+
+FORGE/public-unlaunched unchanged. Physical controllers, participant comparisons and target-device/model-token measurements remain unmeasured. Existing permanent-speed/Kill Frenzy composition is outside this pickup-expiry repair. Browser input and speed/ammo fixtures are assisted; no natural full-run claim.
+
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 260,728 bytes · SHA-256 `9c14b9710663…`
-- `context/TASK_BOARD.md` · 181,042 bytes · SHA-256 `2f2de79476e6…`
-- `context/DECISIONS.md` · 173,740 bytes · SHA-256 `0ab84e22e27f…`
+- `context/CURRENT_STATE.md` · 261,030 bytes · SHA-256 `6cdf7b7b8cc4…`
+- `context/TASK_BOARD.md` · 181,925 bytes · SHA-256 `ce0e7fd27f4d…`
+- `context/DECISIONS.md` · 174,581 bytes · SHA-256 `a9f19c25fa63…`
 - `docs/AUDIT_2026-10-18.json` · 6,892 bytes · SHA-256 `b34b668a7b5a…`

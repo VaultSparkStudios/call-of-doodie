@@ -1,3 +1,7 @@
+## Latest session S187
+
+- Timing, pickup and reload behavior: [handoff](LATEST_HANDOFF.md), [runtime notes](AGENT_MEMORY.md), [release audit](../audits/2026-10-18_3.json).
+
 # Memory Index
 
 ## Latest session
