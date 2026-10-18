@@ -2,12 +2,12 @@
 
 Session Intent: fresh full arc, direct-main push and full deployment.
 
-Wave 1 ✔ startup and fresh nine-axis audit. Wave 2 ✔ three selected L2 outcomes and independent review. Wave 3 ◼ full suite, production delivery and closeout.
+Wave 1 ✔ startup and fresh nine-axis audit. Wave 2 ✔ three selected L2 outcomes and independent review. Wave 3 ✔ full suite, production delivery and closeout.
 
 - [x] S189 rail damage snapshot and one-hit beam accounting.
 - [x] S189 active-time run-owned bursts.
 - [x] S189 truthful startup context measurement.
-- [ ] S189 exact-main production and final closeout proof.
+- [x] S189 exact-main production and final closeout proof.
 - [ ] [SIL:1] S189 reserve: measure beam and burst weapon accuracy on physical controllers before claiming device parity.
 - [ ] [SIL:1] S189 reserve: central owner delivers subject-correct local doctor and closeout helpers; existing Ark handoff remains owner-scoped.
 

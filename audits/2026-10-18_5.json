@@ -8,7 +8,7 @@
     "Burst continuations use run-owned active simulation frames, freeze behind all gameplay barriers, and clear when a run ends or resets.",
     "Startup uses the native percentage contract, accepts measured routing exits 2/3, preserves overruns, and leaves unavailable usage unknown without byte-derived advice."
   ],
-  "validation": "S189 full local suite passes 297/297 files and 2020/2020 assertions. Strict lint, configured build, schema/startup/public/security checks, zero dependency vulnerabilities, independent review, 32 hash-bound before/after captures and 24 staging browser assertions pass. Exact-main CI/deployment and production readback pending.",
+  "validation": "S189 implementation 34e3ec0950990185af9027adad1bac238ace8ee4 passed exact-main workflow 39152134303: all 297 test files / 2,020 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 34e3ec095099. Canonical and immutable https://8a11a8ae.call-of-doodie.pages.dev pass shell7/7 each. Four real-Chrome cases pass all24 checks across 390/1440 and both themes, including full rail build damage, one-hit beam accounting and retained burst rounds.",
   "limits": "FORGE/public-unlaunched unchanged. Browser cases use assisted game-state fixtures and synthetic inputs; physical-controller and participant outcomes remain unmeasured. Existing S183 comparisons and narrow-screen precision-feedback reserve remain separate. No new identity, licensing, spending or launch decision.",
   "review": {
     "verdict": "pass",
@@ -20,15 +20,26 @@
     "shellAssertions": 7
   },
   "production": {
-    "status": "pending"
+    "status": "verified",
+    "source": "34e3ec0950990185af9027adad1bac238ace8ee4",
+    "workflow": 39152134303,
+    "immutableUrl": "https://8a11a8ae.call-of-doodie.pages.dev",
+    "canonical": "https://callofdoodie.wtf/",
+    "shellAssertions": {
+      "canonical": 7,
+      "immutable": 7
+    },
+    "browserCases": 4,
+    "browserAssertions": 24,
+    "recordSeal": "Records-only seal retains verified gameplay; its own exact-main deployment/readback is verified in ignored completion receipt."
   },
   "closeout": {
-    "state": "delivery-pending",
+    "state": "complete",
     "silScore": 945,
     "scaffold": {
       "tasks": 3,
-      "done": 2,
-      "inProgress": 1,
+      "done": 3,
+      "inProgress": 0,
       "open": 0
     }
   },

@@ -4,6 +4,12 @@
 
 ## Current Session
 
+## S189 production verified
+
+Rail builds apply full damage and record one hit per penetrating beam. Paused bursts retain paid rounds; startup context remains unknown when unmeasured.
+
+S189 implementation 34e3ec0950990185af9027adad1bac238ace8ee4 passed exact-main workflow 39152134303: all 297 test files / 2,020 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 34e3ec095099. Canonical and immutable https://8a11a8ae.call-of-doodie.pages.dev pass shell7/7 each. Four real-Chrome cases pass all24 checks across 390/1440 and both themes, including full rail build damage, one-hit beam accounting and retained burst rounds.
+
 ## S189 candidate verification
 
 S189 full local suite passes 297/297 files and 2020/2020 assertions. Strict lint, configured build, schema/startup/public/security checks, zero dependency vulnerabilities, independent review, 32 hash-bound before/after captures and 24 staging browser assertions pass. Exact-main CI/deployment and production readback pending.
@@ -80,16 +86,11 @@ Gameplay source 9e6304be12f8979a59e6684c448c07e6808949b1 passed exact-main workf
 
 End states are assisted browser fixtures, and native share-sheet outcomes are API fixtures. No external message was sent; clipboard access and image downloads were real. Backend health exercised its existing valid/rejected submission contract. Existing S183 comparative work remains separate; no launch/lifecycle transition is claimed.
 
-Records seal 6e473e676ea1252cb531efd6fa400d33fa4ae228 passed exact-main workflow 37421746017: 293 test files / 1,954 assertions, strict lint, build and deploy. Canonical /_health reported 6e473e676ea1 and live shell checks passed 7/7. Gameplay source is unchanged from 9e6304b and its eight canonical end-run browser cases.
-
-## S184 end-run implementation — 2026-10-06
-
-End-run results now show the score and Submit to leaderboard before optional content. Last words are optional and labelled. Submission is guarded against duplicate clicks and excludes practice, Operations, local-only modes and integrity failures. Play Again precedes optional coaching. Sharing has one run-link actio
+Records seal 6e473e6
 
 ## Open Work
 
 ## S189 arc outcomes and waves
-- [ ] S189 exact-main production and final closeout proof.
 - [ ] [SIL:1] S189 reserve: measure beam and burst weapon accuracy on physical controllers before claiming device parity.
 - [ ] [SIL:1] S189 reserve: central owner delivers subject-correct local doctor and closeout helpers; existing Ark handoff remains owner-scoped.
 ## S188 arc outcomes and waves
@@ -143,6 +144,7 @@ End-run results now show the score and Submit to leaderboard before optional con
 ## Session 157 - Objective-authoritative Operations and evidence truth
 ## Session 156 - Production-evidence recovery
 ## Session 155 — Operation mode, authored missions, and evidence-gated expansion
+## Session 154 — Propagation compatibility and protocol truth
 
 ## Recent Decisions
 
@@ -183,9 +185,14 @@ FORGE/public-unlaunched unchanged. Browser cases use assisted game-state fixture
 
 Routine promotion uses the exact candidate workflow and current staging. Foreign doctor output is excluded from project health; existing central delivery gap remains documented. No new dependency.
 
+
+S189 release acceptance — S189 implementation 34e3ec0950990185af9027adad1bac238ace8ee4 passed exact-main workflow 39152134303: all 297 test files / 2,020 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 34e3ec095099. Canonical and immutable https://8a11a8ae.call-of-doodie.pages.dev pass shell7/7 each. Four real-Chrome cases pass all24 checks across 390/1440 and both themes, including full rail build damage, one-hit beam accounting and retained burst rounds.
+
+Existing bounded founder authorization covers staging/main/promotion. Lifecycle remains FORGE/public-unlaunched. Records-only seal retains implementation bytes and follows through exact-main CI/readback.
+
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 263,214 bytes · SHA-256 `c69440e04764…`
-- `context/TASK_BOARD.md` · 183,305 bytes · SHA-256 `13a6a03f70c9…`
-- `context/DECISIONS.md` · 177,327 bytes · SHA-256 `bc37587c3ff2…`
+- `context/CURRENT_STATE.md` · 263,880 bytes · SHA-256 `765520d7fc0d…`
+- `context/TASK_BOARD.md` · 183,305 bytes · SHA-256 `f07e502727b9…`
+- `context/DECISIONS.md` · 178,043 bytes · SHA-256 `8f5ac619bbff…`
 - `docs/AUDIT_2026-10-18.json` · 6,892 bytes · SHA-256 `b34b668a7b5a…`

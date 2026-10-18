@@ -1095,7 +1095,7 @@
       "session": 189,
       "total": 24,
       "maxTotal": 25,
-      "overallStatus": "three selected outcomes verified on staging; full suite/exact-main production pending.",
+      "overallStatus": "S189 selected outcomes production verified.",
       "lastReviewed": "2026-10-18",
       "dimensions": {
         "schema_alignment": 5,
@@ -1105,7 +1105,7 @@
         "contradiction_density": 5
       },
       "delta": 0,
-      "cause": "S189 combat reliability staged; exact-main production pending."
+      "cause": "S189 burst/rail reliability and truthful context production verified."
     }
   ]
 }

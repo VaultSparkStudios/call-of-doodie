@@ -1632,3 +1632,8 @@ Use one trigger-time damage snapshot for rail and ordinary projectiles. Count ge
 FORGE/public-unlaunched unchanged. Browser cases use assisted game-state fixtures and synthetic inputs; physical-controller and participant outcomes remain unmeasured. Existing S183 comparisons and narrow-screen precision-feedback reserve remain separate. No new identity, licensing, spending or launch decision.
 
 Routine promotion uses the exact candidate workflow and current staging. Foreign doctor output is excluded from project health; existing central delivery gap remains documented. No new dependency.
+
+
+S189 release acceptance — S189 implementation 34e3ec0950990185af9027adad1bac238ace8ee4 passed exact-main workflow 39152134303: all 297 test files / 2,020 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 34e3ec095099. Canonical and immutable https://8a11a8ae.call-of-doodie.pages.dev pass shell7/7 each. Four real-Chrome cases pass all24 checks across 390/1440 and both themes, including full rail build damage, one-hit beam accounting and retained burst rounds.
+
+Existing bounded founder authorization covers staging/main/promotion. Lifecycle remains FORGE/public-unlaunched. Records-only seal retains implementation bytes and follows through exact-main CI/readback.

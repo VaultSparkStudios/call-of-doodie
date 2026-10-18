@@ -20,7 +20,7 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ LAST SESSION (S189) - WHAT SHIPPED ══════════════════════════╗
-║  S189 preserves burst rounds through pause and applies full rai  ║
+║  S189 three selected reliability outcomes verified on productio  ║
 ║  Tests  -                                                        ║
 ║  Deploy -                                                        ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -68,19 +68,19 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ✓  ████████░░░░░░░░░░░░░░░░  34% used                           ║
-║     93,431 / 272,000 tok  ·  codex/codex-272k  · …               ║
-║     ~46,716 tok/turn  ·  cache 50%  ·  3 turns to compact        ║
+║  ✓  ███████░░░░░░░░░░░░░░░░░  29% used                           ║
+║     79,445 / 272,000 tok  ·  codex/codex-272k  · …               ║
+║     ~39,723 tok/turn  ·  cache 50%  ·  4 turns to compact        ║
 ║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
 ║  ✓  Tests         297/297 passing (2026-10-18T17:59:42.152Z)     ║
 ║  ✓  Velocity      3   ·  Debt: →                                 ║
-║  ✓  Runway        S189 staging verified; exact-main delivery…    ║
+║  ✓  Runway        S189 production verified                       ║
 ║  ⛔  Context age   ?d                                             ║
 ║  ⚠  IGNIS         44193 FORGE  ·  10d old                        ║
-║  ⛔  Truth         three selected outcomes verified on…           ║
+║  ⛔  Truth         S189 selected outcomes production verified.…   ║
 ║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs…        ║
 ║  ✓  Genome dims   all stable  (24/25)                            ║
 ║  ✓  Entropy       0.210  (healthy)                               ║

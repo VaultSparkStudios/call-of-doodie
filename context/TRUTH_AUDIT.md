@@ -1,3 +1,11 @@
+## S189 final truth
+
+Overall status: S189 selected outcomes production verified.
+
+S189 implementation 34e3ec0950990185af9027adad1bac238ace8ee4 passed exact-main workflow 39152134303: all 297 test files / 2,020 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 34e3ec095099. Canonical and immutable https://8a11a8ae.call-of-doodie.pages.dev pass shell7/7 each. Four real-Chrome cases pass all24 checks across 390/1440 and both themes, including full rail build damage, one-hit beam accounting and retained burst rounds.
+
+FORGE/public-unlaunched unchanged. Assisted actual-App refs and synthetic input do not prove participant or physical-controller outcomes. Existing S183 comparisons and narrow-screen precision reserve remain unmeasured/separate. CDR unchanged without creative direction.
+
 ## S189 candidate verification
 
 S189 full local suite passes 297/297 files and 2020/2020 assertions. Strict lint, configured build, schema/startup/public/security checks, zero dependency vulnerabilities, independent review, 32 hash-bound before/after captures and 24 staging browser assertions pass. Exact-main CI/deployment and production readback pending.

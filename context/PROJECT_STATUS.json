@@ -4,9 +4,15 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "S189 combat reliability staged; exact-main production pending.",
-  "nextMilestone": "Verify S189 final suite and exact-main deployment.",
+  "currentFocus": "S189 burst/rail reliability and truthful context production verified.",
+  "nextMilestone": "Gather existing participant/device evidence without treating assisted fixtures as physical acceptance.",
   "testingSurfaces": [
+    {
+      "session": 189,
+      "type": "production-verification",
+      "status": "verified",
+      "command": "S189 implementation 34e3ec0950990185af9027adad1bac238ace8ee4 passed exact-main workflow 39152134303: all 297 test files / 2,020 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 34e3ec095099. Canonical and immutable https://8a11a8ae.call-of-doodie.pages.dev pass shell7/7 each. Four real-Chrome cases pass all24 checks across 390/1440 and both themes, including full rail build damage, one-hit beam accounting and retained burst rounds."
+    },
     {
       "session": 189,
       "type": "hosted-staging-combat",
@@ -199,7 +205,7 @@
   "lastUpdated": "2026-10-18",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
-  "truthAuditStatus": "S189 full suite and staging verified; exact-main production pending.",
+  "truthAuditStatus": "S189 selected outcomes production verified.",
   "truthAuditLastRun": "2026-10-18",
   "ignisScore": 44193,
   "ignisGrade": "FORGE",
@@ -267,7 +273,7 @@
     "skipped": 3,
     "note": "Studio-wide doctor evidence; not a project-only zero-findings claim. Central follow-up delivered through Ark; application unobserved."
   },
-  "lastSessionSummary": "S189 preserves burst rounds through pause and applies full railgun build damage.",
+  "lastSessionSummary": "S189 three selected reliability outcomes verified on production.",
   "testsAssertionsPassing": 2020,
   "testsAssertionsTotal": 2020,
   "testsAssertionsFiles": 297,
@@ -280,31 +286,43 @@
   "testsAssertionsDeferred": [],
   "testsAssertionsLastRun": "2026-10-18T17:59:42.152Z",
   "lastShipped": "S189 preserves burst rounds through pause and applies full railgun build damage.",
-  "truthStatus": "FORGE/public-unlaunched unchanged. Browser cases use assisted game-state fixtures and synthetic inputs; physical-controller and participant outcomes remain unmeasured. Existing S183 comparisons and narrow-screen precision-feedback reserve remain separate. No new identity, licensing, spending or launch decision.",
+  "truthStatus": "FORGE/public-unlaunched unchanged. Assisted actual-App refs and synthetic input do not prove participant or physical-controller outcomes. Existing S183 comparisons and narrow-screen precision reserve remain unmeasured/separate. CDR unchanged without creative direction.",
   "testsFocusedSupplement": "S189: 51 focused meter/combat/App tests, four current staging browser cases (24 assertions), backend5/5 and replay trust3/3.",
-  "lastDeployCommit": "f8b3254c75b90a3542420d6fa83cd3b108f5b1d3",
-  "lastDeployAt": "2026-10-18T17:29:08Z",
+  "lastDeployCommit": "34e3ec0950990185af9027adad1bac238ace8ee4",
+  "lastDeployAt": "2026-10-18T18:02:03Z",
   "closeoutAcceptance": {
     "session": 189,
-    "writeback": "ten reconciled; CDR unchanged without creative direction",
+    "writeback": "all ten reconciled; CDR legitimately unchanged",
     "scaffold": {
       "tasks": 3,
-      "done": 2,
-      "inProgress": 1,
+      "done": 3,
+      "inProgress": 0,
       "open": 0
     },
     "independentReview": "pass after one fixed routing-status finding",
     "autopilot": "scoped equivalent; sibling doctor is not recipient evidence",
-    "hygiene": "no owned persistent server; finite tests/browser/CI reconciled before completion"
+    "hygiene": "no owned persistent server; finite tests/browser/CI reconciled before completion",
+    "state": "complete",
+    "production": {
+      "source": "34e3ec0950990185af9027adad1bac238ace8ee4",
+      "workflow": 39152134303,
+      "immutableUrl": "https://8a11a8ae.call-of-doodie.pages.dev",
+      "canonical": "https://callofdoodie.wtf/",
+      "browserCases": 4,
+      "browserAssertions": 24
+    }
   },
   "testsLastRunMode": "full-local",
   "velocity": 3,
   "silVelocityLastSession": 3,
   "deploy": {
-    "source": "f8b3254c75b90a3542420d6fa83cd3b108f5b1d3",
-    "workflow": 39149635426,
-    "immutableUrl": "https://9024cfb5.call-of-doodie.pages.dev",
-    "status": "verified"
+    "source": "34e3ec0950990185af9027adad1bac238ace8ee4",
+    "workflow": 39152134303,
+    "immutableUrl": "https://8a11a8ae.call-of-doodie.pages.dev",
+    "status": "verified",
+    "commit": "34e3ec0950990185af9027adad1bac238ace8ee4",
+    "url": "https://callofdoodie.wtf/",
+    "deployedAt": "2026-10-18T18:02:03Z"
   },
   "lastSession": 189
 }

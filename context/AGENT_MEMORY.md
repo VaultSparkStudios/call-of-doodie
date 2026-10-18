@@ -160,3 +160,6 @@ Records seal 6e473e676ea1252cb531efd6fa400d33fa4ae228 passed exact-main workflow
 
 
 S188 final: S188 implementation f8b3254c75b90a3542420d6fa83cd3b108f5b1d3 passed exact-main workflow 39149635426: all 296 test files / 1,995 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches f8b3254c75b9. Canonical and immutable https://9024cfb5.call-of-doodie.pages.dev pass shell 7/7 each. Four real-Chrome combat cases pass on canonical production at 390/1440 in both themes.
+
+
+S189 final production: S189 implementation 34e3ec0950990185af9027adad1bac238ace8ee4 passed exact-main workflow 39152134303: all 297 test files / 2,020 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 34e3ec095099. Canonical and immutable https://8a11a8ae.call-of-doodie.pages.dev pass shell7/7 each. Four real-Chrome cases pass all24 checks across 390/1440 and both themes, including full rail build damage, one-hit beam accounting and retained burst rounds.
