@@ -1,3 +1,11 @@
+## S190 final truth
+
+Overall status: S190 selected timing outcomes production verified.
+
+S190 implementation 3548fb5b4445a01a2e5d58ae8ecefe9cc1d924cc passed exact-main workflow 39344132347: all 298 test files / 2,024 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 3548fb5b4445. Canonical and immutable https://55bb853c.call-of-doodie.pages.dev pass shell 7/7 each. All 16 actual-App browser assertions pass across 390/1440 and both themes: equal 21/21 shot counts, no wall-jump extra shot, and active 0:02 terminal time for 120 frames.
+
+FORGE/public-unlaunched unchanged. Browser checks use assisted actual-App state/callback fixtures and synthetic input. Physical controllers, participant outcomes and the existing S183 comparisons remain unmeasured. CDR unchanged without creative direction.
+
 ## S190 candidate verified
 
 S190 full local suite passes 298/298 files and 2,024/2,024 assertions with zero failed/pending tests. Strict lint, configured build, schema/startup/public/security/runtime checks, zero dependency vulnerabilities, backend5/5, replay3/3, independent reviews and32 hash-bound before/after captures pass. Current staging passes shell7/7 and16 browser assertions. Exact-main deployment/readback pending.

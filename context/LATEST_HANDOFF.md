@@ -1,26 +1,15 @@
-## Where We Left Off — Session 190
+## Where We Left Off — Session 190 final closeout
 
-Session Intent: fresh /arc, direct-main commit/push and full deployment. Intent outcome: implementation and staging verified; full suite verified; exact-main production pending.
+Session Intent: fresh full /arc, direct-main commit/push and full deployment. Intent outcome: achieved for the two selected L2 outcomes; final records-seal CI/readback must be verified separately before native completion.
 
-S190 makes weapon cadence independent of render batching and keeps run durations faithful to active play.
+S190 implementation 3548fb5b4445a01a2e5d58ae8ecefe9cc1d924cc passed exact-main workflow 39344132347: all 298 test files / 2,024 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 3548fb5b4445. Canonical and immutable https://55bb853c.call-of-doodie.pages.dev pass shell 7/7 each. All 16 actual-App browser assertions pass across 390/1440 and both themes: equal 21/21 shot counts, no wall-jump extra shot, and active 0:02 terminal time for 120 frames.
 
-Primary fire uses active 60 Hz steps; first shot and rematch remain immediate, pause cannot recharge, and upgrades retain their cadence multipliers.
+Fresh startup and nine-axis audit belong to goal 01a15684-ad6f-77c3-9e73-7962a39657dc createdAt1792452906, bound to S190/start ac298d1a254d31c53326f0f035b2eb8de3f96250. Audit and plan live in ignored .cache/audit-S190/docs. Typed premise gate2/2 preceded runtime edits with implementationDirty empty. Timing checker flags canonical startup hook/trailer propagation18cbf19 before the gate; deviation retained. Durable implementation plan rendered after runtime edits; audit recipes and scope preceded them.
 
-One active clock supplies HUD, endings, career/history, coaching, achievements, missions, analytics, damage-per-second display and Operations duration receipts.
+Active60Hz steps drive firing and all player-duration consumers. Operations uses active start marker; legacy/headless state retains frame fallback. Wall timestamps remain for event ordering. Historical replay equivalence is not claimed. Independent implementation review fixed Operations counter divergence; closeout review fixed rolling averages and a truncated compact handoff. All ten write-back records reconciled and32 before/after captures source/hash bound.
 
-Focused App, clock, Operations, HUD, public-contract and session-lock checks pass. Staging https://642e9b4e.call-of-doodie.pages.dev passes shell7/7 and four real-Chrome cases (16 assertions) at390/1440 in both themes. Before checks reproduced21/16 shots, wall-jump extra shot and1:05 terminal time; staging yields21/21, zero extra shot and0:02. Independent review passes after Operations clock correction. All32 before/after captures reviewed and hash-bound. Full local suite and exact-main delivery pending.
+FORGE/public-unlaunched unchanged. Browser checks use assisted actual-App state/callback fixtures and synthetic input. Physical controllers, participant outcomes and the existing S183 comparisons remain unmeasured. CDR unchanged without creative direction.
 
-FORGE/public-unlaunched unchanged. Assisted App fixtures and synthetic inputs do not prove physical-controller or participant outcomes. Existing S183 comparisons remain separate and unmeasured. No new identity, backend, dependency, licensing, spending or launch change. CDR unchanged without creative direction.
+Canon sync55, no absolute gap. Existing CANON-045 STRONG legacy gap retained; timing changes do not alter trust. Doctor/autopilot still delegate foreign Studio Ops health, so scoped project schema, startup, security, public/runtime checks and exact-main workflow own release acceptance; no zero-finding doctor claim. State-vector, entropy and genome wrappers were inspected and honor explicit --project, then refreshed for S190. Signed Ark cargo requests central visibility refresh; sent is not applied.
 
-Goal01a15684-ad6f-77c3-9e73-7962a39657dc createdAt1792452906 binds to fresh S190/start ac298d1a254d31c53326f0f035b2eb8de3f96250. Fresh nine-axis sidecar and plan: .cache/audit-S190/docs. Typed gate2/2 ran before runtime edits with empty implementationDirty. Timing verifier flags startup propagation18cbf19 hook/trailer paths committed after start_head; it is not reported as a passing timing check. Audit recipes preceded edits; durable implementation plan rendered afterward.
-
-Required workflow .github/workflows/deploy-cloudflare.yml at exact main SHA covers strict lint, full tests, configured build and Cloudflare production deploy. Staging uses unchanged backend/auth configuration. Existing founder authorization covers normal promotion. Rollback: ordinary revert of S190 implementation, rebuild and deploy prior gameplay ac298d1a.
-
-Source timing now quantizes fire intervals to active60Hz steps, minimum1frame; all input paths share shoot. Wall timestamps remain for ordering and external event metadata. Headless Operations fixtures without activeRunFrames retain frame-based fallback; live Operations set an active start marker. Historical replay-equivalence is not claimed.
-
-Canon sync55 entries, no absolute gaps; existing CANON-045 STRONG legacy integration gap retained. CANON-055 addressed by deploying runtime changes. Doctor/autopilot resolve the Studio Ops root, so their foreign measurements are excluded; scoped recipient schema/security/public/runtime checks and exact-main CI are release evidence. Owner-scoped Ark handoff requests central refresh; delivery is not adoption. No persistent local server started.
-
-
-## S190 final candidate evidence
-
-S190 full local suite passes 298/298 files and 2,024/2,024 assertions with zero failed/pending tests. Strict lint, configured build, schema/startup/public/security/runtime checks, zero dependency vulnerabilities, backend5/5, replay3/3, independent reviews and32 hash-bound before/after captures pass. Current staging passes shell7/7 and16 browser assertions. Exact-main deployment/readback pending.
+Rollback: ordinary revert of implementation 3548fb5, rebuild and redeploy prior gameplay ac298d1a. Existing founder authorization covers routine main/promotion; no lifecycle launch. No persistent server. This records-only seal preserves browser-verified src/functions/public bytes and receives its own exact-main CI and canonical readback before native completion.

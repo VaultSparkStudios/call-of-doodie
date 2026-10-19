@@ -1112,7 +1112,7 @@
       "session": 190,
       "total": 24,
       "maxTotal": 25,
-      "overallStatus": "two outcomes staging verified; final suite/exact-main delivery pending.",
+      "overallStatus": "S190 selected timing outcomes production verified.",
       "lastReviewed": "2026-10-18",
       "dimensions": {
         "schema_alignment": 5,
@@ -1122,7 +1122,7 @@
         "contradiction_density": 5
       },
       "delta": 0,
-      "cause": "S190 active timing staged; final production pending."
+      "cause": "S190 active firing and truthful run duration production verified."
     }
   ]
 }

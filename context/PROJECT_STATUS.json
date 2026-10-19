@@ -4,9 +4,15 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "S190 active timing staged; final production pending.",
-  "nextMilestone": "Verify S190 full suite and exact-main deployment.",
+  "currentFocus": "S190 active firing and truthful run duration production verified.",
+  "nextMilestone": "Gather existing participant/device evidence without treating assisted fixtures as physical acceptance.",
   "testingSurfaces": [
+    {
+      "session": 190,
+      "type": "production-verification",
+      "status": "verified",
+      "command": "S190 implementation 3548fb5b4445a01a2e5d58ae8ecefe9cc1d924cc passed exact-main workflow 39344132347: all 298 test files / 2,024 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 3548fb5b4445. Canonical and immutable https://55bb853c.call-of-doodie.pages.dev pass shell 7/7 each. All 16 actual-App browser assertions pass across 390/1440 and both themes: equal 21/21 shot counts, no wall-jump extra shot, and active 0:02 terminal time for 120 frames."
+    },
     {
       "session": 190,
       "type": "hosted-staging-timing",
@@ -211,7 +217,7 @@
   "lastUpdated": "2026-10-19",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
-  "truthAuditStatus": "S190 full suite and staging verified; exact-main production pending.",
+  "truthAuditStatus": "S190 selected timing outcomes production verified.",
   "truthAuditLastRun": "2026-10-19",
   "ignisScore": 44193,
   "ignisGrade": "FORGE",
@@ -279,7 +285,7 @@
     "skipped": 3,
     "note": "Studio-wide doctor evidence; not a project-only zero-findings claim. Central follow-up delivered through Ark; application unobserved."
   },
-  "lastSessionSummary": "S190 makes weapon cadence independent of render batching and keeps run durations faithful to active play.",
+  "lastSessionSummary": "S190 two timing outcomes verified on production.",
   "testsAssertionsPassing": 2024,
   "testsAssertionsTotal": 2024,
   "testsAssertionsFiles": 298,
@@ -291,35 +297,43 @@
   "silAvg5": 944,
   "testsAssertionsDeferred": [],
   "testsAssertionsLastRun": "2026-10-19T23:50:47.504Z",
-  "lastShipped": "S190 makes weapon cadence independent of render batching and keeps run durations faithful to active play.",
-  "truthStatus": "FORGE/public-unlaunched unchanged. Assisted App fixtures and synthetic inputs do not prove physical-controller or participant outcomes. Existing S183 comparisons remain separate and unmeasured. No new identity, backend, dependency, licensing, spending or launch change. CDR unchanged without creative direction.",
+  "lastShipped": "S190 active-step firing and consistent run duration.",
+  "truthStatus": "FORGE/public-unlaunched unchanged. Browser checks use assisted actual-App state/callback fixtures and synthetic input. Physical controllers, participant outcomes and the existing S183 comparisons remain unmeasured. CDR unchanged without creative direction.",
   "testsFocusedSupplement": "S190 actual-App active firing, all barriers, duration, rematch reset; divergent Operations clocks; compact/expanded HUD; four real-Chrome staging cases.",
-  "lastDeployCommit": "34e3ec0950990185af9027adad1bac238ace8ee4",
-  "lastDeployAt": "2026-10-18T18:02:03Z",
+  "lastDeployCommit": "3548fb5b4445a01a2e5d58ae8ecefe9cc1d924cc",
+  "lastDeployAt": "2026-10-19T23:53:30Z",
   "closeoutAcceptance": {
     "session": 190,
-    "state": "delivery-pending",
-    "writeback": "ten reconciled; CDR unchanged without creative direction",
+    "state": "complete",
+    "writeback": "all ten reconciled; CDR legitimately unchanged",
     "scaffold": {
       "tasks": 3,
-      "done": 2,
-      "inProgress": 1,
+      "done": 3,
+      "inProgress": 0,
       "open": 0
     },
     "independentReview": "pass after Operations duration correction",
-    "autopilot": "scoped recipient equivalent; foreign doctor excluded"
+    "autopilot": "scoped recipient equivalent; foreign doctor excluded",
+    "production": {
+      "source": "3548fb5b4445a01a2e5d58ae8ecefe9cc1d924cc",
+      "workflow": 39344132347,
+      "immutableUrl": "https://55bb853c.call-of-doodie.pages.dev",
+      "canonical": "https://callofdoodie.wtf/",
+      "browserCases": 4,
+      "browserAssertions": 16
+    }
   },
   "testsLastRunMode": "full-local",
   "velocity": 2,
   "silVelocityLastSession": 2,
   "deploy": {
-    "source": "34e3ec0950990185af9027adad1bac238ace8ee4",
-    "workflow": 39152134303,
-    "immutableUrl": "https://8a11a8ae.call-of-doodie.pages.dev",
+    "source": "3548fb5b4445a01a2e5d58ae8ecefe9cc1d924cc",
+    "workflow": 39344132347,
+    "immutableUrl": "https://55bb853c.call-of-doodie.pages.dev",
     "status": "verified",
-    "commit": "34e3ec0950990185af9027adad1bac238ace8ee4",
+    "commit": "3548fb5b4445a01a2e5d58ae8ecefe9cc1d924cc",
     "url": "https://callofdoodie.wtf/",
-    "deployedAt": "2026-10-18T18:02:03Z"
+    "deployedAt": "2026-10-19T23:53:30Z"
   },
   "lastSession": 190
 }

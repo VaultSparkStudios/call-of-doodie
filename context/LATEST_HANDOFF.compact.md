@@ -1,7 +1,5 @@
 # S190 compact handoff
 
-Two timing outcomes verified on staging; full suite and exact-main production pending.
+Timing fixes production verified at 3548fb5b4445, workflow 39344132347. Full hosted/local suite 298 files / 2024 assertions; staging and canonical browser16/16, shell7/7. Main handoff owns evidence and limits. Records-only seal receives exact-main CI/readback before native completion.
 
-Active-step primary fire yields21/21 shots across render batching, zero wall-jump extra shot. Active run duration yields0:02 for120 frames across endings and Operations. Four real-Chrome cases,16 checks and32 reviewed captures pass on staging642e9b4e.
-
-Full LATEST_HANDOFF owns evidence and known limits. Physical-controller/participant outcomes remain unmeasured; FORGE/public-unlaunched unchanged.
+Physical controllers/participants remain unmeasured; FORGE/public-unlaunched unchanged.

@@ -2,11 +2,11 @@
 
 Session Intent: fresh full arc, direct-main push and full deployment.
 
-Wave 1 ✔ fresh startup/audit. Wave 2 ✔ active firing and consistent run duration, independent review. Wave 3 ◼ full-suite, production delivery and closeout.
+Wave 1 ✔ fresh startup/audit. Wave 2 ✔ active firing and consistent run duration, independent review. Wave 3 ✔ full-suite, production delivery and closeout.
 
 - [x] S190 active-step firing cadence.
 - [x] S190 active run duration including Operations.
-- [ ] S190 exact-main production and final closeout proof.
+- [x] S190 exact-main production and final closeout proof.
 - [ ] [SIL:1] S190 reserve: measure target-device weapon pacing with physical controllers before claiming physical parity.
 - [ ] [SIL:1] S190 reserve: compare natural participant duration comprehension before claiming player-outcome gains.
 

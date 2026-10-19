@@ -4,6 +4,12 @@
 
 ## Current Session
 
+## S190 production verified
+
+Weapon cadence and run-duration fixes are live.
+
+S190 implementation 3548fb5b4445a01a2e5d58ae8ecefe9cc1d924cc passed exact-main workflow 39344132347: all 298 test files / 2,024 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 3548fb5b4445. Canonical and immutable https://55bb853c.call-of-doodie.pages.dev pass shell 7/7 each. All 16 actual-App browser assertions pass across 390/1440 and both themes: equal 21/21 shot counts, no wall-jump extra shot, and active 0:02 terminal time for 120 frames.
+
 ## S190 candidate verified
 
 S190 full local suite passes 298/298 files and 2,024/2,024 assertions with zero failed/pending tests. Strict lint, configured build, schema/startup/public/security/runtime checks, zero dependency vulnerabilities, backend5/5, replay3/3, independent reviews and32 hash-bound before/after captures pass. Current staging passes shell7/7 and16 browser assertions. Exact-main deployment/readback pending.
@@ -88,16 +94,11 @@ Other devices checked: touch shoot-stick and mouse/pointer aim (DPR-scaled canva
 
 Source b194fa92d945591a2fb8d59c8626c89672148819: local full suite 293/293 files, 1,961/1,961 tests, strict lint, deployable build. Staging https://session-185-staging.call-of-doodie.pages.dev (immutable https://4fe95987.call-of-doodie.pages.dev) passed shell 7/7 and served the candidate entry and fixed App chunk. Production deploy https://29004093.call-of-doodie.pages.dev; canonical callofdoodie.wtf passes shell 7/7, serves entry index-DtjGNJGX.js and App-ByPVHaqQ.js containing the mapping-aware aim. Exact-main workflow 39136409352 is recorded in the receipt below.
 
-Layout coverage is proven by axis-layout fixtures of documented browser mappings, not physical pads on every OS/browser. No hands-on controller session was run. A pad first seen with a stick held off-centre can misclassify that axis on non-standard layouts only. FORGE/public-unlaunched unchanged.
-
-## S184 verified end-run deployment
-
-Gameplay source 9e6304be12f8979a59e6684c448c07e6808949b1 passed exact-main workflow 37421044480: 293/293 files, 1,954/1,954 tests, strict lint, configured build and Cloudflare deployment. Canonical callofdoodie.wtf reports 9e6304be12f8; immutable deployment https://000027d0.call-of-doodie.pages.dev/. Canonical browser checks pass all eight defeat/victory, theme and width cases, including actua
+Layout coverage is proven by axis-layout fixtures of documented browser mappings, not physical pads on every OS/browser. No hands-on controller session was run
 
 ## Open Work
 
 ## S190 arc outcomes and waves
-- [ ] S190 exact-main production and final closeout proof.
 - [ ] [SIL:1] S190 reserve: measure target-device weapon pacing with physical controllers before claiming physical parity.
 - [ ] [SIL:1] S190 reserve: compare natural participant duration comprehension before claiming player-outcome gains.
 ## S189 arc outcomes and waves
@@ -151,6 +152,7 @@ Gameplay source 9e6304be12f8979a59e6684c448c07e6808949b1 passed exact-main workf
 ## Session 160 - Propagation and release-evidence recovery
 ## Session 159 - Spatial Operations and evidence-bearing score
 ## Session 158 - Preference-safe Operation audio direction
+## Session 157 - Objective-authoritative Operations and evidence truth
 
 ## Recent Decisions
 
@@ -198,9 +200,14 @@ Use active60Hz simulation for primary fire and duration. Minimum1frame cooldown 
 
 Existing CANON-045 STRONG integration gap is retained because guest timing changes do not alter identity/trust. Foreign doctor outputs do not certify this project; state-vector, entropy and genome wrappers bind this project explicitly. Scoped recipient gates and exact-candidate CI own release acceptance. FORGE/public-unlaunched unchanged. Assisted App fixtures and synthetic inputs do not prove physical-controller or participant outcomes. Existing S183 comparisons remain separate and unmeasured. No new identity, backend, dependency, licensing, spending or launch change. CDR unchanged without creative direction.
 
+
+S190 release acceptance — S190 implementation 3548fb5b4445a01a2e5d58ae8ecefe9cc1d924cc passed exact-main workflow 39344132347: all 298 test files / 2,024 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 3548fb5b4445. Canonical and immutable https://55bb853c.call-of-doodie.pages.dev pass shell 7/7 each. All 16 actual-App browser assertions pass across 390/1440 and both themes: equal 21/21 shot counts, no wall-jump extra shot, and active 0:02 terminal time for 120 frames.
+
+Routine staging/main/promotion uses existing founder authorization. Records-only seal preserves tested runtime and receives exact-main CI/readback. FORGE/public-unlaunched unchanged. Browser checks use assisted actual-App state/callback fixtures and synthetic input. Physical controllers, participant outcomes and the existing S183 comparisons remain unmeasured. CDR unchanged without creative direction.
+
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 264,526 bytes · SHA-256 `37e695fb2ac4…`
-- `context/TASK_BOARD.md` · 183,964 bytes · SHA-256 `b4232a91ee90…`
-- `context/DECISIONS.md` · 179,277 bytes · SHA-256 `76c472547d67…`
+- `context/CURRENT_STATE.md` · 265,099 bytes · SHA-256 `068983e86ab3…`
+- `context/TASK_BOARD.md` · 183,964 bytes · SHA-256 `f5c9504ec32d…`
+- `context/DECISIONS.md` · 180,207 bytes · SHA-256 `8ba908c84868…`
 - `docs/AUDIT_2026-10-18.json` · 6,892 bytes · SHA-256 `b34b668a7b5a…`
