@@ -1,3 +1,17 @@
+## S190 candidate verified
+
+S190 full local suite passes 298/298 files and 2,024/2,024 assertions with zero failed/pending tests. Strict lint, configured build, schema/startup/public/security/runtime checks, zero dependency vulnerabilities, backend5/5, replay3/3, independent reviews and32 hash-bound before/after captures pass. Current staging passes shell7/7 and16 browser assertions. Exact-main deployment/readback pending.
+
+## S190 timing reconciliation
+
+Overall status: two outcomes staging verified; final suite/exact-main delivery pending.
+
+Focused App, clock, Operations, HUD, public-contract and session-lock checks pass. Staging https://642e9b4e.call-of-doodie.pages.dev passes shell7/7 and four real-Chrome cases (16 assertions) at390/1440 in both themes. Before checks reproduced21/16 shots, wall-jump extra shot and1:05 terminal time; staging yields21/21, zero extra shot and0:02. Independent review passes after Operations clock correction. All32 before/after captures reviewed and hash-bound. Full local suite and exact-main delivery pending.
+
+FORGE/public-unlaunched unchanged. Assisted App fixtures and synthetic inputs do not prove physical-controller or participant outcomes. Existing S183 comparisons remain separate and unmeasured. No new identity, backend, dependency, licensing, spending or launch change. CDR unchanged without creative direction.
+
+Timing verifier deviation documented in handoff; no passing timing-gate claim. Foreign doctor measurements remain excluded.
+
 ## S189 final truth
 
 Overall status: S189 selected outcomes production verified.

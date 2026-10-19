@@ -29,6 +29,7 @@ vi.mock("./components/WeaponDock.jsx", () => {
       <button data-testid="combat-grenade" onClick={onGrenade}>grenade</button>
       <button data-testid="combat-swap" onClick={() => onSwitchWeapon(1)}>swap</button>
       <button data-testid="combat-burst" onClick={() => onSwitchWeapon(7)}>burst</button>
+      <button data-testid="combat-minigun" onClick={() => onSwitchWeapon(2)}>minigun</button>
       <button data-testid="combat-rail" onClick={() => onSwitchWeapon(9)}>rail</button>
     </div>;
   }
@@ -191,8 +192,8 @@ vi.mock("./components/DraftScreen.jsx", () => ({
 }));
 
 vi.mock("./components/DeathScreen.jsx", () => ({
-  default: function DeathScreenMock({ onStartGame, score, wave }) {
-    return <button data-testid="retry-run" data-score={score} data-wave={wave} onClick={() => onStartGame()}>death-screen</button>;
+  default: function DeathScreenMock({ onStartGame, score, wave, timeSurvived }) {
+    return <button data-testid="retry-run" data-score={score} data-wave={wave} data-time={timeSurvived} onClick={() => onStartGame()}>death-screen</button>;
   },
 }));
 
@@ -282,6 +283,54 @@ afterEach(async () => {
 });
 
 describe("CallOfDoodie launch smoke", () => {
+  it("uses active steps for firing and terminal time across wall jumps, barriers and rematches", async () => {
+    const { default: App } = await import("./App.jsx");
+    const { useGameLoop } = await import("./hooks/useGameLoop.js");
+    container = document.createElement("div"); document.body.appendChild(container); root = createRoot(container);
+    await act(async () => { root.render(<App />); }); await flush();
+    await act(async () => { container.querySelector("button").click(); }); await flush();
+    const canvas = container.querySelector("#game-canvas");
+    let fiber = canvas[Object.keys(canvas).find(key => key.startsWith("__reactFiber"))];
+    const refs = [];
+    while (fiber) { let h = fiber.memoizedState; while (h) { if (h.memoizedState && Object.hasOwn(h.memoizedState, "current")) refs.push(h.memoizedState); h = h.next; } fiber = fiber.return; }
+    const gs = refs.find(r => r.current?.player && r.current?.enemies).current;
+    const context = vi.spyOn(HTMLCanvasElement.prototype, "getContext").mockReturnValue({});
+    const clock = vi.spyOn(Date, "now").mockReturnValue(100000);
+    const tick = () => useGameLoop.mock.calls.at(-1)[0]({ render: false });
+    for (const ref of Object.values(barrierFixture.refs)) ref.current = false;
+    gs.spawnTimer = 1e9; gs.maxEnemiesThisWave = 1e9; gs.enemies = []; gs.obstacles = []; gs.hazards = [];
+    gs.player.health = 1e9; gs.player.maxHealth = 1e9; gs.settHighlightCapture = false;
+    try {
+      await act(async () => { container.querySelector('[data-testid="combat-minigun"]').click(); });
+      gs.ammoCount = 1000; barrierFixture.input.mouseRef.current.down = true;
+      await act(async () => { for (let i = 0; i < 61; i++) tick(); });
+      expect(gs.ammoCount).toBe(979); expect(gs.activeRunFrames).toBe(61);
+      for (const [name, ref] of Object.entries(barrierFixture.refs)) {
+        ref.current = true; clock.mockReturnValue(Date.now() + 60000);
+        await act(async () => { tick(); });
+        expect(gs.ammoCount, name).toBe(979); expect(gs.activeRunFrames, name).toBe(61);
+        ref.current = false;
+      }
+      await act(async () => { tick(); });
+      expect(gs.ammoCount).toBe(979); // Wall time did not mature the cooldown.
+      barrierFixture.input.mouseRef.current.down = false;
+      await act(async () => { for (let i = 62; i < 120; i++) tick(); });
+      expect(gs.activeRunFrames).toBe(120);
+      const report = vi.spyOn(console, "error").mockImplementation(() => {});
+      try { await act(async () => { useGameLoop.mock.calls.at(-1)[3].onError(new Error("clock terminal fixture")); }); }
+      finally { report.mockRestore(); }
+      await flush();
+      expect(container.querySelector('[data-testid="retry-run"]').dataset.time).toBe("2");
+      await act(async () => { container.querySelector('[data-testid="retry-run"]').click(); }); await flush();
+      const next = refs.find(r => r.current?.player && r.current?.enemies).current;
+      expect(next).not.toBe(gs); expect(next.activeRunFrames).toBe(0);
+      next.settHighlightCapture = false;
+      barrierFixture.input.mouseRef.current.down = true;
+      const before = next.ammoCount;
+      await act(async () => { tick(); });
+      expect(next.ammoCount).toBe(before - 1);
+    } finally { clock.mockRestore(); context.mockRestore(); }
+  }, 60000);
   it("preserves burst continuations through every gameplay barrier and snapshots rail builds", async () => {
     const { default: App } = await import("./App.jsx");
     const { useGameLoop } = await import("./hooks/useGameLoop.js");
@@ -332,6 +381,7 @@ describe("CallOfDoodie launch smoke", () => {
         gs.synergyDamageMult = synergy; gs.weaponMods[9] = { damageMult: weaponMod };
         gs.weaponUpgrades[9] = upgrade; evolutions.current[9].damageMult = evolution;
         clock.mockReturnValue(Date.now() + 10000);
+        gs.activeRunFrames += 600;
         barrierFixture.input.mouseRef.current.down = true;
         await tick();
         barrierFixture.input.mouseRef.current.down = false;
@@ -408,6 +458,7 @@ describe("CallOfDoodie launch smoke", () => {
       gs.settAutoReload = true; gs.ammoCount = 1; gs.weaponAmmos[0] = 1;
       const clock = vi.spyOn(Date, "now").mockReturnValue(Date.now() + 10000);
       try {
+        gs.activeRunFrames += 600;
         barrierFixture.input.mouseRef.current.down = true;
         await act(async () => { useGameLoop.mock.calls.at(-1)[0]({ render: false }); });
         expect(gs.ammoCount).toBe(0); expect(gs.pendingReload?.weaponIndex).toBe(0);
@@ -418,6 +469,7 @@ describe("CallOfDoodie launch smoke", () => {
         gs.settAutoReload = false; gs.overclocked = true; gs.overclockedShots = PERK_FACTS.overclocked.forcedReloadShots - 1;
         barrierFixture.input.mouseRef.current.down = true;
         clock.mockReturnValue(Date.now() + 10000);
+        gs.activeRunFrames += 600;
         await act(async () => { useGameLoop.mock.calls.at(-1)[0]({ render: false }); });
         expect(gs.pendingReload?.weaponIndex).toBe(0);
       } finally { clock.mockRestore(); }

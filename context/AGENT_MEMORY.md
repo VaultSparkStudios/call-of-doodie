@@ -1,3 +1,9 @@
+## S190 active timing
+
+Primary fire uses active 60 Hz steps; first shot and rematch remain immediate, pause cannot recharge, and upgrades retain their cadence multipliers. One active clock supplies HUD, endings, career/history, coaching, achievements, missions, analytics, damage-per-second display and Operations duration receipts.
+
+Focused App, clock, Operations, HUD, public-contract and session-lock checks pass. Staging https://642e9b4e.call-of-doodie.pages.dev passes shell7/7 and four real-Chrome cases (16 assertions) at390/1440 in both themes. Before checks reproduced21/16 shots, wall-jump extra shot and1:05 terminal time; staging yields21/21, zero extra shot and0:02. Independent review passes after Operations clock correction. All32 before/after captures reviewed and hash-bound. Full local suite and exact-main delivery pending.
+
 ## S189 run-owned shots and truthful context
 
 Rail shots snapshot perk, upgrade, build-combination, weapon-modification and evolution damage at trigger; one penetrating beam contributes at most one accuracy hit. Burst continuations use run-owned active simulation frames, freeze behind all gameplay barriers, and clear when a run ends or resets. Startup uses the native percentage contract, accepts measured routing exits 2/3, preserves overruns, and leaves unavailable usage unknown without byte-derived advice.

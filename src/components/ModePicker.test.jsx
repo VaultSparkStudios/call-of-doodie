@@ -25,4 +25,8 @@ describe("mode clarity and clocks",()=>{
     const boss=renderToStaticMarkup(<HUD {...props} modeHud={{banner:"2/6 DOWN",progress:{label:"PAR",value:301,pct:.1}}}/>);
     expect(boss).toContain("Target time left: 5:01");
   });
+  it("uses active time for the expanded desktop timer too",()=>{
+    const html=renderToStaticMarkup(<HUD {...props} killFeed={[]} activePerks={[]} missions={[]} missionDoneSet={new Set()} weaponUpgrades={[]} weaponEvolutions={[]} hud={{useCompactDesktop:false}} speedrunMode runElapsedSeconds={75.5}/>);
+    expect(html).toMatch(/⏱.*01.*:.*15/);
+  });
 });

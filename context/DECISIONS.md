@@ -1637,3 +1637,10 @@ Routine promotion uses the exact candidate workflow and current staging. Foreign
 S189 release acceptance — S189 implementation 34e3ec0950990185af9027adad1bac238ace8ee4 passed exact-main workflow 39152134303: all 297 test files / 2,020 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 34e3ec095099. Canonical and immutable https://8a11a8ae.call-of-doodie.pages.dev pass shell7/7 each. Four real-Chrome cases pass all24 checks across 390/1440 and both themes, including full rail build damage, one-hit beam accounting and retained burst rounds.
 
 Existing bounded founder authorization covers staging/main/promotion. Lifecycle remains FORGE/public-unlaunched. Records-only seal retains implementation bytes and follows through exact-main CI/readback.
+
+
+## 2026-10-19 — Session 190
+
+Use active60Hz simulation for primary fire and duration. Minimum1frame cooldown preserves bounded firing; interval modifiers remain effective. Operations records active start marker; legacy/headless fixtures retain frame fallback. Separate wall timestamps continue to order external events. Typed gate2/2 ran before runtime edits with empty implementationDirty. Timing verifier flags startup propagation18cbf19 hook/trailer paths committed after start_head; it is not reported as a passing timing check. Audit recipes preceded edits; durable implementation plan rendered afterward.
+
+Existing CANON-045 STRONG integration gap is retained because guest timing changes do not alter identity/trust. Foreign doctor outputs do not certify this project; state-vector, entropy and genome wrappers bind this project explicitly. Scoped recipient gates and exact-candidate CI own release acceptance. FORGE/public-unlaunched unchanged. Assisted App fixtures and synthetic inputs do not prove physical-controller or participant outcomes. Existing S183 comparisons remain separate and unmeasured. No new identity, backend, dependency, licensing, spending or launch change. CDR unchanged without creative direction.

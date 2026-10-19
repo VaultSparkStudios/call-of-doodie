@@ -1,3 +1,13 @@
+## S190 candidate verified
+
+S190 full local suite passes 298/298 files and 2,024/2,024 assertions with zero failed/pending tests. Strict lint, configured build, schema/startup/public/security/runtime checks, zero dependency vulnerabilities, backend5/5, replay3/3, independent reviews and32 hash-bound before/after captures pass. Current staging passes shell7/7 and16 browser assertions. Exact-main deployment/readback pending.
+
+## S190 active timing
+
+S190 makes weapon cadence independent of render batching and keeps run durations faithful to active play.
+
+Staging verified; final suite and production pending. See LATEST_HANDOFF for evidence.
+
 ## S189 production verified
 
 Rail builds apply full damage and record one hit per penetrating beam. Paused bursts retain paid rounds; startup context remains unknown when unmeasured.

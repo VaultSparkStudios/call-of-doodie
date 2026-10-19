@@ -125,6 +125,7 @@ export function useOperationMode({
     queueMicrotask(() => { const g = gsRef.current; const rt = modeRuntimeRef.current; if (g?.operationMode && encounter?.verb && rt) { rt.clearVerbObjective(g); rt.startVerbObjective(g, encounter.verb, buildOperationFieldSpec(encounter, battlefield, nextArena, sizeRef.current), { W: sizeRef.current.w, H: sizeRef.current.h }); } });
     return {
       _operationStartFrame: gsRef.current?.frame || 0,
+      _operationStartActiveFrame: gsRef.current?.activeRunFrames || 0,
       operationMode: true, operationId: operation.id, operationRoute: route, operationRouteSource: routeSource,
       operationEncounterIndex: 0, operationEncounterVerb: encounter?.verb || null,
       _operationInteractionKeys: new Set(), _operationInteractionBonuses: {}, _operationInteractionTotal: 0,

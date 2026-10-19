@@ -31,7 +31,7 @@ export default function HUD({
   vsScore, vsName,
   synergyChargeReady, onSynergyCharge,
   cursedHideScore,
-  speedrunMode, startTime, scoreAttackTimeLeft = null, runElapsedSeconds = 0,
+  speedrunMode, scoreAttackTimeLeft = null, runElapsedSeconds = 0,
   missions, missionDoneSet,
   hud, heat, topGhosts, weeklyRival,
   modeHud = null,
@@ -278,8 +278,8 @@ export default function HUD({
       )}
 
       {/* Speedrun timer */}
-      {speedrunMode && startTime != null && (() => {
-        const elapsed = Math.floor((Date.now() - startTime) / 1000);
+      {speedrunMode && (() => {
+        const elapsed = Math.floor(runElapsedSeconds);
         const mm = String(Math.floor(elapsed / 60)).padStart(2, "0");
         const ss = String(elapsed % 60).padStart(2, "0");
         return (

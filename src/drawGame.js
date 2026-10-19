@@ -1,3 +1,4 @@
+import { runElapsedSeconds } from "./systems/runClock.js";
 import { drawZombieCreature, drawSewerObjectives } from "./systems/zombieRenderer.js";
 import { WEAPONS } from "./constants.js";
 import { getMusicBPM } from "./audio/soundFacade.js";
@@ -210,7 +211,7 @@ function drawRangedAimTelegraph(ctx, enemy, player, radius, timeNow) {
 }
 
 export function drawGame(ctx, canvas, W, H, gs, refs) {
-  const { dashRef, mouseRef, joystickRef, shootStickRef, startTimeRef, frameCountRef, isMobile, tip, wpnIdx } = refs;
+  const { dashRef, mouseRef, joystickRef, shootStickRef, frameCountRef, isMobile, tip, wpnIdx } = refs;
   const p = gs.player;
   const dn = Date.now();
   const retroCharacters = gs.visualPack === VISUAL_PACKS.RETRO;
@@ -1840,7 +1841,7 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
 
   // DPS counter (settings)
   if (gs.settShowDPS) {
-    const elapsed = (Date.now() - startTimeRef.current) / 1000;
+    const elapsed = runElapsedSeconds(gs);
     const dps = elapsed > 1 ? Math.round(gs.totalDamage / elapsed) : 0;
     ctx.font = "bold 11px monospace"; ctx.textAlign = "left"; ctx.fillStyle = "#FF6B35"; ctx.globalAlpha = 0.85;
     ctx.fillText("DPS " + dps.toLocaleString(), 12, H - 22); ctx.globalAlpha = 1;

@@ -133,6 +133,7 @@ import { applyThreatRecommendationChoice, queueCompletedRunFact, recordPostRunFi
 import { applyModeRules, getModeRewardFlow, getModeRules, isBossWaveForMode, resolveModeId } from "./systems/modeRules.js";
 import { getModeMeta } from "./systems/modeRegistry.js";
 import { beginWeaponReload, advanceWeaponReload } from "./systems/weaponReload.js";
+import { runElapsedSeconds } from "./systems/runClock.js";
 import { queueBurstShots, advanceBurstShots } from "./systems/burstShots.js";
 import { resolveRunLaunch, prepareRunDependencies } from "./systems/runLaunch.js";
 
@@ -162,7 +163,7 @@ export default function CallOfDoodie() {
   const gsRef          = useRef(null);
   const keysRef        = useRef({});
   const mouseRef       = useRef({ x: 0, y: 0, down: false, moved: false });
-  const lastShotRef    = useRef(0);
+  const lastShotRef    = useRef(-Infinity);
   const frameRef       = useRef(null);
   const frameMonitorRef = useRef(null);
   const drainEnemyDefeatsRef = useRef(() => 0);
@@ -541,7 +542,7 @@ export default function CallOfDoodie() {
       totalDamage: gs.totalDamage || 0, level: xpRef.current.level,
       crits: statsRef.current.crits, landlordKills: statsRef.current.landlordKills,
       cryptoKills: statsRef.current.cryptoKills,
-      timeSurvived: Math.floor((Date.now() - startTimeRef.current) / 1000),
+      timeSurvived: Math.floor(runElapsedSeconds(gsRef.current)),
       guardianAngels: statsRef.current.guardianAngels, difficulty: difficultyRef.current,
       perksSelected: statsRef.current.perksSelected,
       weaponUpgradesCollected: statsRef.current.weaponUpgradesCollected,
@@ -580,7 +581,7 @@ export default function CallOfDoodie() {
     const s = {
       kills: gs.kills, wave: gs.currentWave, maxCombo: comboRef.current.max,
       totalDamage: gs.totalDamage, dashes: statsRef.current.dashes,
-      timeSurvived: Math.floor((Date.now() - startTimeRef.current) / 1000),
+      timeSurvived: Math.floor(runElapsedSeconds(gsRef.current)),
       crits: statsRef.current.crits, grenadeKills: statsRef.current.grenadeKills || 0,
       bossKills: statsRef.current.bossKills || 0,
       totalCrits: statsRef.current.crits || 0,
@@ -616,6 +617,7 @@ export default function CallOfDoodie() {
   // ── Init game ─────────────────────────────────────────────────────────────
   const initGame = useCallback((forceSeed, startWave, practiceDrill = null) => {
     frameCountRef.current = 0;
+    lastShotRef.current = -Infinity;
     const mobile = window.innerWidth <= 900 || window.matchMedia?.("(pointer: coarse)")?.matches === true;
     const { w, h } = measureGameViewport(containerRef.current, mobile);
     sizeRef.current = { w, h };
@@ -635,6 +637,7 @@ export default function CallOfDoodie() {
     const career = loadCareerStats();
     if (gsRef.current) gsRef.current.pendingBurstShots = [];
     gsRef.current = {
+      activeRunFrames: 0,
       runPhase: RUN_PHASE.PLAYING,
       runEndCause: null,
       visualPack: normalizeVisualPack(settingsRef.current.visualPack),
@@ -1380,14 +1383,15 @@ export default function CallOfDoodie() {
     const weapon = WEAPONS[weaponIdx];
     const combatRng = getRunRng(gs, "combat");
     const lootRng = getRunRng(gs, "loot");
-    const now = Date.now();
+    const now = gs.activeRunFrames || 0;
     const upgLevel = gs.weaponUpgrades?.[weaponIdx] || 0;
     const _wpnMod = gs.weaponMods?.[weaponIdx] || {};
     const fireRateMult = (1 - upgLevel * 0.10) * (perkModsRef.current.fireRateMult || 1) * (gs.synergyFireRateMult || 1) * (_wpnMod.fireRateMult || 1);
-    if (now - lastShotRef.current < weapon.fireRate * fireRateMult) return;
+    const cooldownFrames = Math.max(1, Math.ceil(weapon.fireRate * fireRateMult * 60 / 1000 - 1e-9));
+    if (now - lastShotRef.current < cooldownFrames) return;
     if (gs.ammoCount <= 0 || isReloadingRef.current) {
       // Dry-fire click on a truly empty mag (not while a reload is running)
-      if (gs.ammoCount <= 0 && !isReloadingRef.current && now - (gs._emptyClickAt || 0) > 250) {
+      if (gs.ammoCount <= 0 && !isReloadingRef.current && now - (gs._emptyClickAt ?? -Infinity) > 15) {
         gs._emptyClickAt = now;
         soundEmptyMag();
       }
@@ -1661,7 +1665,7 @@ export default function CallOfDoodie() {
     setTotalDamage(Math.floor(gs.totalDamage));
     setWeaponKillsSnapshot([...(statsRef.current.weaponKills || [])]);
     setBestStreak(statsRef.current.bestStreak);
-    setTimeSurvived(Math.floor((Date.now() - startTimeRef.current) / 1000));
+    setTimeSurvived(Math.floor(runElapsedSeconds(gsRef.current)));
     // S163 seed duel: record the response once; the debrief shows the outcome.
     if (gs?._duelId && !gs.practiceRun) {
       const duelId = gs._duelId; gs._duelId = null;
@@ -1675,7 +1679,7 @@ export default function CallOfDoodie() {
     const _careerResult = updateCareerStats({
       kills: gs.kills, deaths: _victory ? 0 : 1, score: _isPracticeRun ? 0 : gs.score, wave: _isPracticeRun ? 0 : gs.currentWave,
       streak: _isPracticeRun ? 0 : statsRef.current.bestStreak, damage: gs.totalDamage,
-      playTime: (Date.now() - startTimeRef.current) / 1000,
+      playTime: runElapsedSeconds(gsRef.current),
       achievementIds: [...achievedRef.current],
       crits: statsRef.current.crits,
       grenades: statsRef.current.grenades,
@@ -1776,7 +1780,7 @@ export default function CallOfDoodie() {
       score: gs.score,
       kills: gs.kills,
       wave: gs.currentWave,
-      timeSeconds: Math.floor((Date.now() - startTimeRef.current) / 1000),
+      timeSeconds: Math.floor(runElapsedSeconds(gsRef.current)),
       difficulty,
       flags: runFlags,
       runSeed,
@@ -1822,7 +1826,7 @@ export default function CallOfDoodie() {
         runToken: runTokenRef.current, summarySig: runSummarySigRef.current, name: username,
         runFlags, difficulty: difficultyRef.current, seed: gs.runSeed, starterLoadout,
         score: gs.score, kills: gs.kills, wave: gs.currentWave,
-        durationSeconds: Math.floor((Date.now() - startTimeRef.current) / 1000),
+        durationSeconds: Math.floor(runElapsedSeconds(gsRef.current)),
         totalDamage: gs.totalDamage, stats: statsRef.current, practiceRun: _isPracticeRun,
       });
     }
@@ -1837,7 +1841,7 @@ export default function CallOfDoodie() {
     const deathRoast = getRoastCallout("death", roastCooldowns.current, gs.currentWave, 1);
     if (deathRoast) setTip(deathRoast);
     // ── Analytics: death ──
-    track("death", { ...gameCtx({ difficulty: difficultyRef.current, mode: gs?.operationMode ? "operation" : resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current, zombiesRef.current), wave: gs?.currentWave, score: gs?.score }), kills: gs?.kills, timeSurvived: Math.floor((Date.now() - startTimeRef.current) / 1000), bossKills: statsRef.current.bossKills, perksSelected: statsRef.current.perksSelected, ...(gs?.operationMode ? { operationId: gs.operationId, operationRoute: gs.operationRoute, operationEncounterIndex: gs.operationEncounterIndex } : {}) });
+    track("death", { ...gameCtx({ difficulty: difficultyRef.current, mode: gs?.operationMode ? "operation" : resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current, zombiesRef.current), wave: gs?.currentWave, score: gs?.score }), kills: gs?.kills, timeSurvived: Math.floor(runElapsedSeconds(gsRef.current)), bossKills: statsRef.current.bossKills, perksSelected: statsRef.current.perksSelected, ...(gs?.operationMode ? { operationId: gs.operationId, operationRoute: gs.operationRoute, operationEncounterIndex: gs.operationEncounterIndex } : {}) });
     gs.killstreakCount = 0; setKillstreak(0);
     } catch (error) {
       console.error("[RUN END] Non-critical finalizer failed after terminal transition:", error);
@@ -2258,7 +2262,7 @@ export default function CallOfDoodie() {
     runSummarySigRef.current = "";
     currentWeaponRef.current = starterWeapon; isReloadingRef.current = false;
     if (timerRef.current) clearInterval(timerRef.current);
-    timerRef.current = setInterval(() => { if (!isGameplayBlocked()) setTimeSurvived(t => t + 1); }, 1000);
+    timerRef.current = setInterval(() => { if (!isGameplayBlocked()) setTimeSurvived(Math.floor(runElapsedSeconds(gsRef.current))); }, 1000);
     setMusicLowpass(false); // clear any lingering last-stand muffle from the previous run
     setMusicMode(requestedOperation ? "operations" : zombiesRef.current ? "zombies" : "classic");
     setMusicObjective(requestedOperation ? gsRef.current.operationEncounterVerb : zombiesRef.current ? "pump-0" : "none");
@@ -2496,6 +2500,7 @@ export default function CallOfDoodie() {
       return;
     }
 
+    gs.activeRunFrames = (gs.activeRunFrames || 0) + 1;
     for (const ability of advanceAbilityCooldowns(gs)) {
       if (ability === "grenade") { grenadeRef.current.ready = true; setGrenadeReady(true); }
       if (ability === "dash") { dashRef.current.ready = true; setDashReady(true); }
@@ -3746,6 +3751,8 @@ export default function CallOfDoodie() {
     releaseAllInputs("respawn");
     const gs = gsRef.current, W = GW(), H = GH();
     if (gs) {
+      gs.activeRunFrames = 0;
+      lastShotRef.current = -Infinity;
       gs.player.health = 100; gs.player.x = W / 2; gs.player.y = H / 2; gs.player.invincible = 60;
       const upgLevel = gs.weaponUpgrades?.[currentWeaponRef.current] || 0;
       gs.ammoCount = Math.floor(WEAPONS[currentWeaponRef.current].maxAmmo * (1 + upgLevel * 0.25));
@@ -3755,7 +3762,7 @@ export default function CallOfDoodie() {
     }
     startTimeRef.current = Date.now(); setTimeSurvived(0);
     if (timerRef.current) clearInterval(timerRef.current);
-    timerRef.current = setInterval(() => { if (!isGameplayBlocked()) setTimeSurvived(t => t + 1); }, 1000);
+    timerRef.current = setInterval(() => { if (!isGameplayBlocked()) setTimeSurvived(Math.floor(runElapsedSeconds(gsRef.current))); }, 1000);
     setScreen("game");
   }, [releaseAllInputs, isGameplayBlocked]);
 
@@ -3993,7 +4000,7 @@ export default function CallOfDoodie() {
           onResume={() => transitionPause(false, "resume")}
           onLeave={() => {
             const mode = resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current, zombiesRef.current);
-            const abandonPayload = { wave, score, mode, difficulty: difficultyRef.current, timeSurvived: Math.floor((Date.now() - startTimeRef.current) / 1000) };
+            const abandonPayload = { wave, score, mode, difficulty: difficultyRef.current, timeSurvived: Math.floor(runElapsedSeconds(gsRef.current)) };
             track("mode_abandon", abandonPayload);
             saveStudioGameEvent(buildStudioGameEvent("mode_abandon", { surface: "pause_menu", ...abandonPayload }));
             stopMusic(); stopAmbient(); stopDangerDrone(); setDangerIntensity(0); transitionPause(false, "leave"); setScreen("menu");
@@ -4293,7 +4300,7 @@ export default function CallOfDoodie() {
       <AsyncPanelBoundary>
       <HUD
         scoreAttackTimeLeft={gsRef.current?.scoreAttackMode ? gsRef.current.scoreAttackTimeLeft : null}
-        runElapsedSeconds={frameCountRef.current / 60}
+        runElapsedSeconds={runElapsedSeconds(gsRef.current)}
         modeHud={modeRuntimeRef.current ? modeRuntimeRef.current.getModeHudModel(gsRef.current, modeDefRef.current) : null}
         wave={wave} timeSurvived={timeSurvived} score={score} kills={kills} deaths={deaths}
         waveLabel={gsRef.current?.operationMode ? "TASK" : gsRef.current?.zombiesMode ? "DEPTH" : "WAVE"}
@@ -4332,7 +4339,7 @@ export default function CallOfDoodie() {
             maxCombo: comboRef.current?.max || 0,
             totalDamage: gs.totalDamage || 0,
             dashes: statsRef.current?.dashes || 0,
-            timeSurvived: startTimeRef.current ? Math.floor((Date.now() - startTimeRef.current) / 1000) : 0,
+            timeSurvived: startTimeRef.current ? Math.floor(runElapsedSeconds(gsRef.current)) : 0,
             crits: statsRef.current?.crits || 0,
             grenadeKills: statsRef.current?.grenadeKills || 0,
             bossKills: statsRef.current?.bossKills || 0,

@@ -4,6 +4,14 @@ import { ENEMY_TYPES } from "../constants.js";
 import { spawnBoss } from "../gameHelpers.js";
 import { startVerbObjective, tickVerbObjective } from "./objectiveHandlers.js";
 describe("Operation runtime rules", () => {
+  it("uses the active run clock even when the mode frame lags or wall time jumps", () => {
+    const g = { activeRunFrames: 180, _operationStartActiveFrame: 60, frame: 119, _operationStartFrame: 60 };
+    expect(operationElapsedMs(g)).toBe(2000);
+    g.frame = 10000;
+    expect(operationElapsedMs(g)).toBe(2000);
+    g.activeRunFrames += 60;
+    expect(operationElapsedMs(g)).toBe(3000);
+  });
   it("ignores wall time while simulation is paused", () => {
     const g = { frame: 660, _operationStartFrame: 60 };
     expect(operationElapsedMs(g)).toBe(10000); const spy=vi.spyOn(Date,"now").mockReturnValue(999999999);

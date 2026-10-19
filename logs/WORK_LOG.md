@@ -2012,3 +2012,11 @@ S189 preserves burst rounds through pause and applies full railgun build damage.
 
 
 S189 final production: S189 implementation 34e3ec0950990185af9027adad1bac238ace8ee4 passed exact-main workflow 39152134303: all 297 test files / 2,020 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 34e3ec095099. Canonical and immutable https://8a11a8ae.call-of-doodie.pages.dev pass shell7/7 each. Four real-Chrome cases pass all24 checks across 390/1440 and both themes, including full rail build damage, one-hit beam accounting and retained burst rounds.
+
+
+## 2026-10-19 — Session 190
+
+S190 makes weapon cadence independent of render batching and keeps run durations faithful to active play. Two L2 outcomes and staging verified; final suite/production pending. Public acceptance: audits/2026-10-19.json.
+
+
+S190 candidate: S190 full local suite passes 298/298 files and 2,024/2,024 assertions with zero failed/pending tests. Strict lint, configured build, schema/startup/public/security/runtime checks, zero dependency vulnerabilities, backend5/5, replay3/3, independent reviews and32 hash-bound before/after captures pass. Current staging passes shell7/7 and16 browser assertions. Exact-main deployment/readback pending.

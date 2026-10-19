@@ -16,6 +16,9 @@ export function operationReinforcementPlan(gs) {
   return { cap, interval, spawn:due && alive < cap };
 }
 export function operationElapsedMs(gs) {
+  if (Number.isFinite(gs?.activeRunFrames)) {
+    return Math.max(0, gs.activeRunFrames - (gs._operationStartActiveFrame || 0)) * 1000 / 60;
+  }
   return Math.max(0, (Number(gs?.frame) || 0) - (Number(gs?._operationStartFrame) || 0)) * 1000 / 60;
 }
 export function createOperationBossPlan(gs, enemyTypes) {
