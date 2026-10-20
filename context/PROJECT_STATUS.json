@@ -4,9 +4,15 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Reliable controller ownership and consistent Summoner protection.",
-  "nextMilestone": "Verify exact-main production.",
+  "currentFocus": "S196 controller ownership and Summoner protection production verified.",
+  "nextMilestone": "Collect existing participant/device acceptance evidence.",
   "testingSurfaces": [
+    {
+      "session": 196,
+      "type": "production",
+      "status": "green",
+      "url": "https://callofdoodie.wtf/"
+    },
     {
       "session": 196,
       "type": "staging",
@@ -15,9 +21,15 @@
     },
     {
       "session": 196,
+      "type": "production-smoke",
+      "status": "green",
+      "command": "S196 controller selection,keyboard and protected combat40/40"
+    },
+    {
+      "session": 196,
       "type": "local-browser-capture",
       "status": "green",
-      "command": "S19624 before/after captures inspected;390/1440,both themes"
+      "command": "S19624 before/after images inspected;390/1440,both themes"
     }
   ],
   "blockers": [
@@ -31,7 +43,7 @@
   "lastUpdated": "2026-10-20",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
-  "truthAuditStatus": "S196 both selected outcomes local/staging verified; production pending.",
+  "truthAuditStatus": "S196 both selected L2 outcomes production verified.",
   "truthAuditLastRun": "2026-10-20",
   "ignisScore": 44193,
   "ignisGrade": "FORGE",
@@ -77,7 +89,7 @@
   "runtimeUrl": "https://callofdoodie.wtf/",
   "stagingType": "cloudflare-pages",
   "stagingUrl": "https://4e070130.call-of-doodie.pages.dev/",
-  "testsLastRun": "2026-10-20T17:59:50.794Z",
+  "testsLastRun": "2026-10-20T18:05:35Z",
   "sanitizationLastCleared": "2026-10-06",
   "sessionShellHygiene": {
     "session": 191,
@@ -135,11 +147,11 @@
   "lastSessionSummary": {
     "session": 196,
     "shipped": [
-      "Reliable controller selection",
+      "Reliable controller ownership",
       "Consistent Summoner protection"
     ],
-    "tests": "299 files/2075 assertions passing",
-    "deploy": "pending exact-main production"
+    "tests": "299 files /2075 assertions passing",
+    "deploy": "729870fb560e production verified"
   },
   "testsAssertionsPassing": 2075,
   "testsAssertionsTotal": 2075,
@@ -151,36 +163,43 @@
   "testsBudgetExhausted": false,
   "silAvg5": 945,
   "testsAssertionsDeferred": [],
-  "testsAssertionsLastRun": "2026-10-20T17:59:50.795Z",
-  "lastShipped": "S196 controller ownership and protected boss damage consistency.",
+  "testsAssertionsLastRun": "2026-10-20T18:05:35Z",
+  "lastShipped": "S196 controller ownership and protected damage consistency.",
   "truthStatus": "FORGE/public-unlaunched unchanged. Synthetic controller/keyboard and assisted App ticks do not prove physical-device or participant results. Unknown nonstandard layouts first seen at a stick endpoint retain calibration ambiguity. Existing S183 comparisons remain unmeasured. No dependency, backend, identity/trust-policy, variable cost, rights, licensing or launch change. CDR unchanged without creative direction.",
   "testsFocusedSupplement": "S19683 focused passing; initial10 pre-fix regressions and reviewer edge covered.",
-  "lastDeployCommit": "18285e4cc1c0d582eeffeab3a8ae3cee43c93ee5",
-  "lastDeployAt": "2026-10-20T15:11:38Z",
+  "lastDeployCommit": "729870fb560e776f947f84957c83db6fea1ba2d3",
+  "lastDeployAt": "2026-10-20T18:05:35Z",
   "closeoutAcceptance": {
     "session": 196,
-    "state": "delivery-pending",
+    "state": "complete",
     "writeback": "ten surfaces reconciled; CDR legitimately unchanged",
     "scaffold": {
       "tasks": 3,
-      "done": 2,
-      "inProgress": 1,
+      "done": 3,
+      "inProgress": 0,
       "open": 0
     },
-    "independentReview": "source pass after one fix round",
-    "localSuite": "S196 local full 299 files/2075 assertions passed in one final run;83 focused pass. Ten new initial failing-before cases plus independent-review trigger regression covered. Staging https://4e070130.call-of-doodie.pages.dev shell7/7 and browser40/40 across390/1440,both themes. Real production-before probes reproduced wrong controller ownership and protected grenade/chain damage; after protection holds, vulnerable grenade damage remains70,chain falls back. Twenty-four before/after images inspected and source-hash-bound. Strict lint,configured build,public/security/runtime/schema/startup gates are recorded separately. Exact-main production pending."
+    "independentReview": "Source pass after1 correction; final records review pass after3 record fixes.",
+    "localSuite": "Final full local299/2075 passed;83 focused pass. Initial10 failing-before cases; independent review trigger regression corrected,second review passes. Staging40/40 and shell7/7;24 before/after images inspected and hash-bound. Native schema/startup/public/security/runtime checks pass;dependency audit0 vulnerabilities. Earlier full run caught the reviewer edge before its final correction; final full run green.",
+    "production": {
+      "source": "729870fb560e776f947f84957c83db6fea1ba2d3",
+      "workflow": 39471382673,
+      "immutableUrl": "https://f3b3056d.call-of-doodie.pages.dev",
+      "canonical": "https://callofdoodie.wtf/",
+      "browserAssertions": 40
+    }
   },
-  "testsLastRunMode": "full-local",
+  "testsLastRunMode": "full-hosted-exact-main",
   "velocity": 2,
   "silVelocityLastSession": 2,
   "deploy": {
-    "source": "18285e4cc1c0d582eeffeab3a8ae3cee43c93ee5",
-    "workflow": 39445821523,
-    "immutableUrl": "https://0d08b70e.call-of-doodie.pages.dev",
+    "source": "729870fb560e776f947f84957c83db6fea1ba2d3",
+    "workflow": 39471382673,
+    "immutableUrl": "https://f3b3056d.call-of-doodie.pages.dev",
     "status": "verified",
-    "commit": "18285e4cc1c0d582eeffeab3a8ae3cee43c93ee5",
+    "commit": "729870fb560e776f947f84957c83db6fea1ba2d3",
     "url": "https://callofdoodie.wtf/",
-    "deployedAt": "2026-10-20T15:11:38Z"
+    "deployedAt": "2026-10-20T18:05:35Z"
   },
   "lastSession": 196,
   "silAvg10": 940.5,

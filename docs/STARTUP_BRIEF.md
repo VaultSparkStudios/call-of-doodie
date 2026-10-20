@@ -20,16 +20,18 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ LAST SESSION (S196) · WHAT SHIPPED ══════════════════════════╗
-║  ✓ Reliable controller selection                                 ║
+║  ✓ Reliable controller ownership                                 ║
 ║  ✓ Consistent Summoner protection                                ║
-║  Tests  299 files/2075 assertions passing                        ║
-║  Deploy pending exact-main production                            ║
+║  Tests  299 files /2075 assertions passing                       ║
+║  Deploy 729870fb560e production verified                         ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ WHERE TO TEST · Call-Of-Doodie ══════════════════════════════╗
+║  Production    → https://callofdoodie.wtf/ ✓                     ║
 ║  Staging       → https://4e070130.call-of-doodie.pages.dev/ ✓    ║
 ║  Unit tests    → npm test — 299/299 passing ✓                    ║
-║  local-browser-capture → S19624 before/after captures inspec ✓   ║
+║  local-browser-capture → S19624 before/after images inspecte ✓   ║
+║  production-smoke → S196 controller selection,keyboard and p ✓   ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ PROJECT PROFILE ═════════════════════════════════════════════╗
@@ -70,12 +72,12 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         299/299 passing (2026-10-20T17:59:50.794Z)     ║
+║  ✓  Tests         299/299 passing (2026-10-20T18:05:35Z)         ║
 ║  ✓  Velocity      2   ·  Debt: →                                 ║
-║  ✓  Runway        S196 production pending                        ║
+║  ✓  Runway        S196 production verified                       ║
 ║  ⛔  Context age   ?d                                             ║
 ║  ⚠  IGNIS         44193 FORGE  ·  12d old                        ║
-║  ⛔  Truth         local/staging accepted; exact-main…            ║
+║  ⛔  Truth         both selected outcomes production verified.…   ║
 ║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs…        ║
 ║  ✓  Genome dims   all stable  (24/25)                            ║
 ║  ✓  Entropy       0.214  (healthy)                               ║

@@ -1214,7 +1214,7 @@
       "session": 196,
       "total": 24,
       "maxTotal": 25,
-      "overallStatus": "local/staging accepted; exact-main production pending.",
+      "overallStatus": "both selected outcomes production verified.",
       "lastReviewed": "2026-10-18",
       "dimensions": {
         "schema_alignment": 5,
@@ -1224,7 +1224,7 @@
         "contradiction_density": 5
       },
       "delta": 0,
-      "cause": "Reliable controller ownership and consistent Summoner protection."
+      "cause": "S196 controller ownership and Summoner protection production verified."
     }
   ]
 }

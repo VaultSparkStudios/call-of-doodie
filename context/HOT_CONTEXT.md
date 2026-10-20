@@ -4,6 +4,12 @@
 
 ## Current Session
 
+## S196 production verified
+
+Reliable controller ownership and consistent Summoner protection.
+
+S196 implementation 729870fb560e776f947f84957c83db6fea1ba2d3 passed exact-main workflow 39471382673:299 files/2075 assertions,strict lint,configured build and Cloudflare deployment. Canonical health matches729870fb560e. Canonical and immutable https://f3b3056d.call-of-doodie.pages.dev shell7/7 each; production browser40/40 across390/1440,both themes. Held controller selected/moves,button handoff preserved,neutral does not steal ownership;protected grenade/chain HP10000,vulnerable grenade70,chain fallback5.
+
 ## S196 candidate acceptance
 
 Reliable controller ownership and consistent Summoner protection.
@@ -88,24 +94,11 @@ S191 implementation 40d7b319072d7d4067d403c861bf6de804594de2 passed exact-main w
 
 ## S191 candidate verified
 
-S191 full local suite passes 299/299 files and 2032/2032 assertions, no failed or pending tests. Strict lint, configured build, schema/startup/public/security/runtime checks pass; zero dependency vulnerabilities; backend5/5 and replay3/3. Staging7e4d9a14 shell7/7 and actual-App24/24 pass across390/1440 and both themes. All40 real before/after captures inspected and hash-bound. Independent implementation/closeout review passes. Exact-main production pending.
-
-## S191 build integrity
-
-S191 preserves earned movement speed through Kill Frenzy and keeps cursed magazines usable.
-
-Staging verified; final full-suite and production pending. See LATEST_HANDOFF.
-
-## S190 production verified
-
-Weapon cadence and run-duration fixes are live.
-
-S190 implementation 3548fb5b4445a01a2e5d58ae8ecefe9cc1d924cc passed exact-main workflow 39344132347: all 298 test
+S191 full local suite passes 299/299 files and 2032/2032 assertions, no failed or pending tests. Strict lint, configured build, schema/startup/public/security/runtime checks pass; zero dependency vulnerabilities; backend5/5 and replay3/3. Stagi
 
 ## Open Work
 
 ## S196 arc outcomes and waves
-- [ ] S196 exact-main production and full closeout.
 ## S195 arc outcomes and waves
 ## S194 arc outcomes and waves
 ## S193 arc outcomes and waves
@@ -159,6 +152,7 @@ S190 implementation 3548fb5b4445a01a2e5d58ae8ecefe9cc1d924cc passed exact-main w
 ## Session 166 - Extraction distance, pressure, radar objectives, and death-beat split
 - [ ] [SIL:1] Collect consented extraction telemetry before changing the 1.25× pressure slope or 1.5× arena scale; synthetic distance and enemy-count math are not balance evidence.
 - [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET on the Pages project so Porcelain Passport verification and cloud backup stop answering 503.
+## Session 165 - Scrolling camera, live royale bots, death-beat diet, record recovery
 
 ## Recent Decisions
 
@@ -193,9 +187,12 @@ S195 final acceptance: S195 implementation 18285e4cc1c0d582eeffeab3a8ae3cee43c93
 
 Use zero-centered known stick axes for input arbitration independently of first sighting; preserve unknown nonstandard endpoint calibration rather than invent universal mapping. Reject protected Summoners before grenade damage and lightning target choice, preserving vulnerable accounting. Reviewer caught trigger starvation; corrected before release. Existing CANON-045 STRONG gap retained for unchanged guest-game promotion. FORGE/public-unlaunched unchanged. Synthetic controller/keyboard and assisted App ticks do not prove physical-device or participant results. Unknown nonstandard layouts first seen at a stick endpoint retain calibration ambiguity. Existing S183 comparisons remain unmeasured. No dependency, backend, identity/trust-policy, variable cost, rights, licensing or launch change. CDR unchanged without creative direction.
 
+
+S196 final acceptance: S196 implementation 729870fb560e776f947f84957c83db6fea1ba2d3 passed exact-main workflow 39471382673:299 files/2075 assertions,strict lint,configured build and Cloudflare deployment. Canonical health matches729870fb560e. Canonical and immutable https://f3b3056d.call-of-doodie.pages.dev shell7/7 each; production browser40/40 across390/1440,both themes. Held controller selected/moves,button handoff preserved,neutral does not steal ownership;protected grenade/chain HP10000,vulnerable grenade70,chain fallback5. Final full local299/2075 passed;83 focused pass. Initial10 failing-before cases; independent review trigger regression corrected,second review passes. Staging40/40 and shell7/7;24 before/after images inspected and hash-bound. Native schema/startup/public/security/runtime checks pass;dependency audit0 vulnerabilities. Earlier full run caught the reviewer edge before its final correction; final full run green.
+
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 273,909 bytes · SHA-256 `f53a000d014d…`
-- `context/TASK_BOARD.md` · 187,846 bytes · SHA-256 `231a3e24cf05…`
-- `context/DECISIONS.md` · 188,971 bytes · SHA-256 `8140309b3815…`
+- `context/CURRENT_STATE.md` · 274,518 bytes · SHA-256 `97eeacc38430…`
+- `context/TASK_BOARD.md` · 187,846 bytes · SHA-256 `34995ada6093…`
+- `context/DECISIONS.md` · 189,920 bytes · SHA-256 `696271b61274…`
 - `docs/AUDIT_2026-10-18.json` · 6,892 bytes · SHA-256 `b34b668a7b5a…`

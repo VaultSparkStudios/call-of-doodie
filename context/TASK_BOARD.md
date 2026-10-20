@@ -2,11 +2,11 @@
 
 Session Intent: fresh full arc, authorized direct-main commit/push and full deployment.
 
-Wave 1 ✔ startup and fresh nine-axis/game-loop audit. Wave 2 ✔ controller ownership and Summoner protections. Wave 3 ◼ staging,production and full closeout.
+Wave 1 ✔ startup and fresh nine-axis/game-loop audit. Wave 2 ✔ controller ownership and Summoner protections. Wave 3 ✔ staging,production and full closeout.
 
 - [x] S196 controller-selection-neutral L2 accepted on staging.
 - [x] S196 summoner-blast-chain-protection L2 accepted on staging.
-- [ ] S196 exact-main production and full closeout.
+- [x] S196 exact-main production and full closeout.
 
 
 ## S195 arc outcomes and waves

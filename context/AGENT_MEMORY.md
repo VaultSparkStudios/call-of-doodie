@@ -1,3 +1,11 @@
+## S196 production acceptance
+
+S196 implementation 729870fb560e776f947f84957c83db6fea1ba2d3 passed exact-main workflow 39471382673:299 files/2075 assertions,strict lint,configured build and Cloudflare deployment. Canonical health matches729870fb560e. Canonical and immutable https://f3b3056d.call-of-doodie.pages.dev shell7/7 each; production browser40/40 across390/1440,both themes. Held controller selected/moves,button handoff preserved,neutral does not steal ownership;protected grenade/chain HP10000,vulnerable grenade70,chain fallback5.
+
+Final full local299/2075 passed;83 focused pass. Initial10 failing-before cases; independent review trigger regression corrected,second review passes. Staging40/40 and shell7/7;24 before/after images inspected and hash-bound. Native schema/startup/public/security/runtime checks pass;dependency audit0 vulnerabilities. Earlier full run caught the reviewer edge before its final correction; final full run green.
+
+FORGE/public-unlaunched unchanged. Synthetic controller/keyboard and assisted App ticks do not prove physical-device or participant results. Unknown nonstandard layouts first seen at a stick endpoint retain calibration ambiguity. Existing S183 comparisons remain unmeasured. No dependency, backend, identity/trust-policy, variable cost, rights, licensing or launch change. CDR unchanged without creative direction.
+
 ## S196 controller arbitration and protected damage
 
 S196 local full 299 files/2075 assertions passed in one final run;83 focused pass. Ten new initial failing-before cases plus independent-review trigger regression covered. Staging https://4e070130.call-of-doodie.pages.dev shell7/7 and browser40/40 across390/1440,both themes. Real production-before probes reproduced wrong controller ownership and protected grenade/chain damage; after protection holds, vulnerable grenade damage remains70,chain falls back. Twenty-four before/after images inspected and source-hash-bound. Strict lint,configured build,public/security/runtime/schema/startup gates are recorded separately. Exact-main production pending.
