@@ -4,6 +4,16 @@
 
 ## Current Session
 
+## S195 candidate acceptance
+
+S195 full local suite299files/2063assertions passing. Focused49/49 after3 failing-before regressions. Strict lint, configured build, schema/startup/public/security/runtime and dependency audit pass. Staging6c05b5e9 shell7/7 and browser28/28 across390/1440,both themes; rail480/480,health33.6,unchanged profile writes0/second.16 real before/after captures inspected and hash-bound; independent source review pass0 blocking findings. Exact-main production pending.
+
+## S195 candidate
+
+S195 consistent Railgun health bonus and bounded controller persistence.
+
+Fresh startup and nine-axis/game-loop audit completed for this invocation. Both selected L2 outcomes implemented; failing-before3 regressions, fixed-after49/49 focused assertions. Real pre-change Chrome reproduced480/160 beam damage and62–63 profile writes/second across390/1440 and both themes. Independent source review passes0 blocking findings. Full suite, staging and production acceptance pending.
+
 ## S194 production verified
 
 Controller menu inputs stay consumed and Railgun Last Resort matches its damage promise.
@@ -94,24 +104,12 @@ Staging verified; final suite and production pending. See LATEST_HANDOFF for evi
 
 Rail builds apply full damage and record one hit per penetrating beam. Paused bursts retain paid rounds; startup context remains unknown when unmeasured.
 
-S189 implementation 34e3ec0950990185af9027adad1bac238ace8ee4 passed exact-main workflow 39152134303: all 297 test files / 2,020 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 34e3ec095099. Canonical and immutable https://8a11a8ae.call-of-doodie.pages.dev pass shell7/7 each. Four real-Chrome cases pass all24 checks across 390/1440 and both themes, including full rail build damage, one-hit beam accounting and retained burst rounds.
-
-## S189 candidate verification
-
-S189 full local suite passes 297/297 files and 2020/2020 assertions. Strict lint, configured build, schema/startup/public/security checks, zero dependency vulnerabilities, independent review, 32 hash-bound before/after captures and 24 staging browser assertions pass. Exact-main CI/deployment and production readback pending.
-
-## S189 combat and startup reliability
-
-S189 preserves burst rounds through pause and applies full railgun build damage.
-
-Staging verified; exact-main release pending. See LATEST_HANDOFF for acceptance evidence.
-
-## S188 production verified
-
-Consumed shots stop a
+S189 implementation 34e3ec0950990185af9027adad1bac238ace8ee4 passed exact-main workflow 39152134303: all 297 tes
 
 ## Open Work
 
+## S195 arc outcomes and waves
+- [ ] S195 production and full closeout acceptance.
 ## S194 arc outcomes and waves
 ## S193 arc outcomes and waves
 - [ ] [SIL:1] S193 reserve: matched shield/flanking comprehension study with representative participants.
@@ -165,24 +163,8 @@ Consumed shots stop a
 - [ ] [SIL:1] Collect consented extraction telemetry before changing the 1.25× pressure slope or 1.5× arena scale; synthetic distance and enemy-count math are not balance evidence.
 - [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET on the Pages project so Porcelain Passport verification and cloud backup stop answering 503.
 ## Session 165 - Scrolling camera, live royale bots, death-beat diet, record recovery
-- [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET on the Pages project: neither is in the secrets gateway, so Porcelain Passport verification (and therefore cloud backup) answers 503 in production until they exist.
-- [ ] [SIL:2] Never continue work under a sealed session number — open the next number instead. Carried from the S164 SIL brainstorm.
 
 ## Recent Decisions
-
-## 2026-10-20 — Session 191
-
-Resolve temporary Frenzy speed at movement instead of rewriting base stats. Consume its duration after the movement it boosts; preserve current pickup cap and multiplicative adrenaline/rubble behavior. Remove obsolete start-speed snapshot. Share capacity rounding across runtime, shops, HUD and docks with minimum one round; Scavenger fractions restore at least one round within capacity. Previously loaded rounds are preserved when a capacity penalty is selected. FORGE/public-unlaunched unchanged. Assisted actual-App state/callback fixtures and synthetic input do not prove physical-controller or participant outcomes. Existing S183 comparisons remain unmeasured. No new backend, dependency, cost, identity, licensing or launch change. CDR unchanged without creative direction.
-
-Existing bounded founder authorization covers routine promotion. CANON-045 STRONG legacy gap is unchanged; scoped recipient acceptance excludes foreign doctor health.
-
-
-S191 final release acceptance: S191 implementation 40d7b319072d7d4067d403c861bf6de804594de2 passed exact-main workflow 39357464497: all299 test files /2032 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 40d7b319072d. Canonical and immutable https://40b2a0c6.call-of-doodie.pages.dev pass shell7/7 each. All24 actual-App browser assertions pass across390/1440 and both themes: earned base5 preserved; all90 Frenzy movement frames6 then5; pause frozen; Haste RPG reload1/1 and arsenal capacity labels correct.
-
-
-S191 receipt scan correction: a chained PowerShell invocation advanced to commit/push after the staged entropy scan flagged public CI job URLs. Required workflow results were valid; trim redundant provider job URL metadata from the public audit, retain exact-SHA detailed proof in ignored cache, and verify the scanner in a separate successful invocation before the correction push. No hook-disable or force-push flag was used.
-
-
 
 ## 2026-10-20 — Session 192
 
@@ -209,9 +191,15 @@ Persist controller button history across listener/screen transitions and sample 
 
 S194 final acceptance: S194 implementation 51fc42bf1510f6a4b625f3fb250140472f04862d passed exact-main workflow 39377541819:299 files/2056 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 51fc42bf1510. Canonical and immutable https://8e3a9bb5.call-of-doodie.pages.dev shell7/7 each; production browser24/24 across390/1440/both themes proves held menu Reload consumed, fresh Reload usable, rail480 at24HP/160 at25HP, and held/released keyboard movement. Local full run2055/2056 with one startup-fixture timeout at43.6s under load; unchanged isolated fixture passed1/1 in25.8s. Hosted exact-main full run299/2056 passed. Both histories retained; local first run is not rewritten green. Unchanged backend diagnostics remain degraded: leaderboard504/timeouts; replay valid/weak cases passed before provider546, subsequent valid replay504. No backend/configuration change or backend-green claim. This routine client promotion passed its scoped hosted quality/build/deploy and changed-input/combat checks; no launch-readiness claim.
 
+
+
+## 2026-10-20 — Session 195
+
+Snapshot the health factor once per instantaneous rail beam, retaining per-target lifesteal and crit/armor/shield/nominal-damage policies. This resolves a newly demonstrated S194 interaction: healing on target1 caused target2 to lose the same beam's bonus; no wider projectile balance policy changes. Bound controller profile IO to metadata changes or60s per storage, including failed attempts. Existing CANON-045 STRONG gap retained for unchanged guest-game promotion. FORGE/public-unlaunched unchanged. Synthetic controller/keyboard and assisted App ticks do not prove physical-pad or participant outcomes. Existing S183 comparisons remain unmeasured. No dependency, backend, identity/trust-policy, cost, licensing or public-launch change. CDR legitimately unchanged without creative direction.
+
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 271,592 bytes · SHA-256 `6ffc69fa1a06…`
-- `context/TASK_BOARD.md` · 186,423 bytes · SHA-256 `6ed867f72596…`
-- `context/DECISIONS.md` · 186,368 bytes · SHA-256 `a4158e48b178…`
+- `context/CURRENT_STATE.md` · 272,586 bytes · SHA-256 `a4cf92615fc1…`
+- `context/TASK_BOARD.md` · 187,104 bytes · SHA-256 `39f27fc6af16…`
+- `context/DECISIONS.md` · 187,198 bytes · SHA-256 `cbd8ff5770b4…`
 - `docs/AUDIT_2026-10-18.json` · 6,892 bytes · SHA-256 `b34b668a7b5a…`

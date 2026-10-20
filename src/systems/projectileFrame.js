@@ -198,6 +198,9 @@ export function stepProjectileFrame({
     const damageMultiplier = (perkMods.damageMult || 1) * (1 + (gs.weaponUpgrades?.[beamWeaponIndex] || 0) * 0.25);
     const baseDamage = Number.isFinite(shotDamage) ? shotDamage : weapon.damage * damageMultiplier;
     const comboMultiplier = 1 + Math.max(0, combo.count) * 0.1;
+    // One instantaneous beam has one health state. Per-target lifesteal must
+    // not remove its low-health bonus from later targets in the same shot.
+    const lastResortMultiplier = getLastResortMultiplier(p, perkMods.lastResort);
     let hitRecorded = false;
     gs.enemies.forEach((enemy) => {
       if (enemy.health <= 0) return;
@@ -219,7 +222,7 @@ export function stepProjectileFrame({
       const shieldMultiplier = enemy.typeIndex === 17 && (enemy.jugShield || 0) > 0 ? 0.15 : 1;
       const damage = baseDamage * comboMultiplier
         * (isCrit ? CRIT_MULT + (gs.critMultBonus || 0) : 1)
-        * getLastResortMultiplier(p, perkMods.lastResort)
+        * lastResortMultiplier
         * (enemy.dmgMult || 1) * rageMultiplier * shieldMultiplier;
       const result = applyEnemyDamage(enemy, damage, {
         source: "rail",

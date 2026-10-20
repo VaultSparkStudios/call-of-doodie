@@ -1,3 +1,15 @@
+## S195 candidate acceptance
+
+S195 full local suite299files/2063assertions passing. Focused49/49 after3 failing-before regressions. Strict lint, configured build, schema/startup/public/security/runtime and dependency audit pass. Staging6c05b5e9 shell7/7 and browser28/28 across390/1440,both themes; rail480/480,health33.6,unchanged profile writes0/second.16 real before/after captures inspected and hash-bound; independent source review pass0 blocking findings. Exact-main production pending.
+
+## S195 truth reconciliation
+
+Overall status: acceptance in progress.
+
+Fresh startup and nine-axis/game-loop audit completed for this invocation. Both selected L2 outcomes implemented; failing-before3 regressions, fixed-after49/49 focused assertions. Real pre-change Chrome reproduced480/160 beam damage and62–63 profile writes/second across390/1440 and both themes. Independent source review passes0 blocking findings. Full suite, staging and production acceptance pending.
+
+FORGE/public-unlaunched unchanged. Synthetic controller/keyboard and assisted App ticks do not prove physical-pad or participant outcomes. Existing S183 comparisons remain unmeasured. No dependency, backend, identity/trust-policy, cost, licensing or public-launch change. CDR legitimately unchanged without creative direction.
+
 ## S194 final truth
 
 Overall status: both selected correctness outcomes production verified; unchanged remote backend diagnostic remains degraded.

@@ -1,17 +1,17 @@
 {
   "vectorVersion": "1.0",
   "generatedAt": "2026-10-20",
-  "generatedAtMs": 1792475997510,
-  "session": 194,
-  "vectorHash": "ab09cb799961c89c",
+  "generatedAtMs": 1792508905022,
+  "session": 195,
+  "vectorHash": "c1151a5e6f7db4e1",
   "silTotal": 945,
   "silAvg3": 945,
   "velocity": 2,
   "debt": "flat",
-  "runway": "S194 production verified",
-  "intentRate": "achieved",
+  "runway": "S195 acceptance in progress",
+  "intentRate": "in progress",
   "openNow": 4,
-  "openNext": 13,
+  "openNext": 15,
   "openBlocked": 0,
   "topNow": [
     "[SIL:2] **S183 measured comparisons** Complete matched human/agent, music/creatu",
@@ -19,12 +19,12 @@
     "[SIL:2] [S60] Supabase Auth / Studio membership implementation decision — if pai"
   ],
   "topNext": [
-    "[SIL:1] [S194 reserve] Match input-edge interruption timelines on representative",
-    "[SIL:1] [S194 reserve] Extend cross-weapon policy matrix only when a new adverti",
-    "[SIL:2] **S181 evidence gate** Test Field Lab valve consequences, complaint cues"
+    "[SIL:1] [S195 reserve] Observe low-health multi-target build confidence with par",
+    "[SIL:1] [S195 reserve] Measure controller storage/frame timing on representative",
+    "[SIL:1] [S194 reserve] Match input-edge interruption timelines on representative"
   ],
   "health": "green",
-  "truthStatus": "both selected correctness outcomes production verified; unchanged remote backend diagnostic remains degraded.",
+  "truthStatus": "acceptance in progress.",
   "genome": null,
   "ignisScore": 44193,
   "ignisGrade": "FORGE",
@@ -33,8 +33,8 @@
   "slug": "call-of-doodie",
   "type": null,
   "lifecycle": "deployed",
-  "nextMilestone": "Recheck unchanged remote backend diagnostics; collect existing participant/device evidence.",
-  "currentFocus": "S194 controller menu-edge and rail Last Resort correctness production verified.",
+  "nextMilestone": "Verify both outcomes on exact-main production.",
+  "currentFocus": "S195 consistent Railgun health bonus and bounded controller persistence.",
   "lastShipped": "see LATEST_HANDOFF.md",
   "blockers": [
     "PostHog and project-scoped Sentry evidence remain unavailable; provider readiness is not represented as verified telemetry.",

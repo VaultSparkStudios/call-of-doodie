@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   buildControllerProfile,
   detectControllerType,
@@ -23,6 +23,60 @@ function pad({ index = 0, id = "Generic", buttons = [], axes = [] } = {}) {
 }
 
 describe("gamepad helpers", () => {
+  afterEach(() => vi.restoreAllMocks());
+
+  it("persists an unchanged profile once across 600 polls and refreshes at one minute", () => {
+    const clock = vi.spyOn(Date, "now").mockReturnValue(100000);
+    const storage = { setItem: vi.fn() };
+    for (let i = 0; i < 600; i++) {
+      clock.mockReturnValue(100000 + i * 16);
+      expect(rememberControllerProfile(pad(), storage).lastSeen).toBe(100000 + i * 16);
+    }
+    expect(storage.setItem).toHaveBeenCalledTimes(1);
+    clock.mockReturnValue(159999);
+    rememberControllerProfile(pad(), storage);
+    expect(storage.setItem).toHaveBeenCalledTimes(1);
+    clock.mockReturnValue(160000);
+    rememberControllerProfile(pad(), storage);
+    expect(storage.setItem).toHaveBeenCalledTimes(2);
+    expect(JSON.parse(storage.setItem.mock.calls[1][1]).lastSeen).toBe(160000);
+  });
+
+  it("writes immediately for device, layout and storage changes", () => {
+    const storage = { setItem: vi.fn() };
+    const otherStorage = { setItem: vi.fn() };
+    const gp = pad();
+    rememberControllerProfile(gp, storage);
+    rememberControllerProfile({ ...gp, index: 1 }, storage);
+    rememberControllerProfile({ ...gp, index: 1, id: "Xbox" }, storage);
+    rememberControllerProfile({ ...gp, index: 1, id: "Xbox", axes: [0, 0, 0, 0, 0, 0] }, storage);
+    rememberControllerProfile({ ...gp, buttons: [] }, storage);
+    rememberControllerProfile(gp, otherStorage);
+    expect(storage.setItem).toHaveBeenCalledTimes(5);
+    expect(otherStorage.setItem).toHaveBeenCalledTimes(1);
+  });
+
+  it("bounds failed storage attempts and retries after the refresh interval", () => {
+    const clock = vi.spyOn(Date, "now").mockReturnValue(100000);
+    const storage = { setItem: vi.fn(() => { throw new Error("denied"); }) };
+    for (let i = 0; i < 600; i++) expect(rememberControllerProfile(pad(), storage)).not.toBeNull();
+    expect(storage.setItem).toHaveBeenCalledTimes(1);
+    storage.setItem.mockImplementation(() => {});
+    clock.mockReturnValue(160000);
+    rememberControllerProfile(pad(), storage);
+    expect(storage.setItem).toHaveBeenCalledTimes(2);
+  });
+
+  it("recovers from a clock rollback and tolerates unavailable storage", () => {
+    const clock = vi.spyOn(Date, "now").mockReturnValue(100000);
+    const storage = { setItem: vi.fn() };
+    rememberControllerProfile(pad(), storage);
+    clock.mockReturnValue(90000);
+    rememberControllerProfile(pad(), storage);
+    expect(storage.setItem).toHaveBeenCalledTimes(2);
+    expect(rememberControllerProfile(pad(), null)).toMatchObject({ version: 1 });
+    expect(rememberControllerProfile(null, storage)).toBeNull();
+  });
   it("detects Xbox controllers from common browser ids", () => {
     expect(detectControllerType(pad({ id: "Xbox Wireless Controller (STANDARD GAMEPAD Vendor: 045e Product: 0b13)" }))).toBe("xbox");
     expect(detectControllerType(pad({ id: "xinput compatible gamepad" }))).toBe("xbox");

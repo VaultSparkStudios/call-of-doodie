@@ -1,5 +1,7 @@
 const DEFAULT_DEAD_ZONE = 0.2;
 const PROFILE_KEY = "cod-controller-profile";
+const PROFILE_REFRESH_MS = 60_000;
+const profileAttempts = new WeakMap();
 
 let activeGamepadIndex = null;
 
@@ -150,11 +152,21 @@ export function buildControllerProfile(gp) {
   };
 }
 
-export function rememberControllerProfile(gp, storage = globalThis.localStorage) {
+export function rememberControllerProfile(gp, storage) {
   const profile = buildControllerProfile(gp);
-  if (!profile || !storage?.setItem) return profile;
+  if (!profile) return profile;
   try {
-    storage.setItem(PROFILE_KEY, JSON.stringify(profile));
+    // Accessing localStorage itself can throw in restricted browser contexts.
+    const target = storage === undefined ? globalThis.localStorage : storage;
+    if (!target?.setItem) return profile;
+    const previous = profileAttempts.get(target);
+    const sameDevice = previous && ["index", "id", "type", "axes", "buttons"]
+      .every(key => previous[key] === profile[key]);
+    const elapsed = profile.lastSeen - (previous?.lastSeen ?? 0);
+    if (sameDevice && elapsed >= 0 && elapsed < PROFILE_REFRESH_MS) return profile;
+    // Bound failed writes too; a denied storage API must not throw every poll.
+    profileAttempts.set(target, profile);
+    target.setItem(PROFILE_KEY, JSON.stringify(profile));
   } catch (_) {
     // Storage can be unavailable in privacy-restricted browsers.
   }

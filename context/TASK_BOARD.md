@@ -1,3 +1,14 @@
+## S195 arc outcomes and waves
+
+Session Intent: fresh full arc, authorized direct-main commit/push and full deployment.
+
+Wave 1 ✔ startup and fresh audit. Wave 2 ✔ implementation acceptance. Wave 3 ◼ production and closeout.
+
+- [x] S195 rail-health-snapshot L2 acceptance.
+- [x] S195 controller-profile-write-budget L2 acceptance.
+- [ ] S195 production and full closeout acceptance.
+
+
 ## S194 arc outcomes and waves
 
 Session Intent: fresh full arc, authorized direct main push and full deployment.
@@ -824,6 +835,9 @@ First checkpoint the bounded post-S159 propagation/CI/deploy recovery. Then begi
 - [ ] [Human/Data] [SIL:1] HomeV2 analytics funnel — compare `home_v2_deploy` vs legacy `front_door_action` completion rates after 48h of traffic
 
 ## Next
+
+- [ ] [SIL:1] [S195 reserve] Observe low-health multi-target build confidence with participants; owner project, dependency matched observations.
+- [ ] [SIL:1] [S195 reserve] Measure controller storage/frame timing on representative devices; owner project, dependency hardware observation.
 
 - [ ] [SIL:1] [S194 reserve] Match input-edge interruption timelines on representative physical pads; dependency device observation, owner project.
 - [ ] [SIL:1] [S194 reserve] Extend cross-weapon policy matrix only when a new advertised damage behavior needs acceptance; owner project.

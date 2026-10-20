@@ -195,6 +195,24 @@ describe("stepProjectileFrame", () => {
     expect(ctx.player.health).toBeCloseTo(24 + damage * 0.01);
   });
 
+  it.each([[24, true, 480], [25, true, 160], [24, false, 160]])("keeps one beam's health bonus stable while healing from %iHP (perk %s)", (health, lastResort, damage) => {
+    for (const reverse of [false, true]) {
+      const targets = [enemyAt({ x: 80, y: 50 }), enemyAt({ x: 130, y: 50, dmgMult: 0.5 })];
+      const ctx = runtime({
+        player: { x: 0, y: 50, health, maxHealth: 100 },
+        pendingBeam: { ox: 0, oy: 50, cos: 1, sin: 0, maxT: 180, weaponIdx: 9, damage: 160 },
+        enemies: reverse ? [...targets].reverse() : targets,
+        critBonus: -1,
+      });
+      ctx.perkMods = { lastResort, lifesteal: 0.01 };
+      stepProjectileFrame(ctx);
+      expect(targets.map(e => 10000 - e.health)).toEqual([damage, damage * 0.5]);
+      expect(ctx.player.health).toBeCloseTo(health + damage * 1.5 * 0.01);
+      expect(ctx.gs.totalDamage).toBe(damage * 1.5);
+      expect(ctx.setHealth).toHaveBeenCalledTimes(2);
+    }
+  });
+
   it.each(["miss", "dead", "summoner", "multiple"])("counts rail %s contacts once per fired beam", kind => {
     const enemies = kind === "miss" ? [enemyAt({ y: 100 })]
       : kind === "dead" ? [enemyAt({ y: 50, health: 0 })]

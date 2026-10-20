@@ -1,334 +1,233 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-10-20T05:47:25.023Z",
-  "uiBaseRef": "0d4ef8f7ffe217e7e4a756c8902a8a40748e2ed5",
-  "stagingUrl": "https://48c2ee6d.call-of-doodie.pages.dev/",
+  "capturedAt": "2026-10-20T15:07:06.031Z",
+  "uiBaseRef": "6e802b4d596477538caa3751f7b31589c2bf7aaa",
+  "stagingUrl": "https://6c05b5e9.call-of-doodie.pages.dev/",
   "themes": [
     "dark",
     "light"
   ],
   "sourceFiles": [
     {
-      "file": "src/App.jsx",
-      "sha256": "96c3223dcd8af9b035bfd5c29eada61204caec9db422c9914e3a2db50984360b"
-    },
-    {
       "file": "src/systems/projectileFrame.js",
-      "sha256": "4b5af8908b0574e5aed01c921256c6e89e432b9a9748b28590af3fd704e2da11"
+      "sha256": "2ffc79557629fbb4a8abb62a3fca7c2a537dc9311457e6bf78faeb58cca43a80"
     },
     {
-      "file": "src/systems/combatResolution.js",
-      "sha256": "b62c98d4d344b88e65399093633c88d0e5d8cabff8c40d154a74dc2ee1e24f15"
+      "file": "src/utils/gamepad.js",
+      "sha256": "f60f0c56796f9b232a7447b6fc451f03247b37e69994de907e93f0669320de66"
     }
   ],
   "captures": [
     {
-      "file": "session-194/before-sewer-night-390-controller-held-pause.png",
-      "sha256": "7b74c83ccba857cd27cfbceb01beab9f2a96eda81326aaa7ac48c3836d5918bd",
+      "file": "session-195/before-sewer-night-390-beam-lifesteal.png",
+      "sha256": "4ff9d738cce367eacd6815cd091a99457d1a23b6880ce9053f75ea5acf484716",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "controller-held-pause",
+      "page": "beam-lifesteal",
       "phase": "before"
     },
     {
-      "file": "session-194/before-sewer-night-390-controller-resume.png",
-      "sha256": "94ea693a72051a195327a1bd355e57cc925557064138d1243ba10b3570875c23",
+      "file": "session-195/before-sewer-night-390-controller-pause.png",
+      "sha256": "1c3c6de59144b9b0778cddd8a5da49a3bfaf36cf8d17d8b342513aa270fdd522",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "controller-resume",
+      "page": "controller-pause",
       "phase": "before"
     },
     {
-      "file": "session-194/before-sewer-night-390-rail-threshold.png",
-      "sha256": "719e685366c37c1431e7ca662af090ee4f48c2eb952d8b42773985e9419d14ef",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "page": "rail-threshold",
-      "phase": "before"
-    },
-    {
-      "file": "session-194/before-sewer-night-1440-controller-held-pause.png",
-      "sha256": "5a685f2c0fc96305fb757d6009989cddf18b9209817af89507b096b22a17bbc8",
+      "file": "session-195/before-sewer-night-1440-beam-lifesteal.png",
+      "sha256": "79763176e5c7407af1445c3226e840bf88aadef2a24873ba0e65d315f5b386f2",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "controller-held-pause",
+      "page": "beam-lifesteal",
       "phase": "before"
     },
     {
-      "file": "session-194/before-sewer-night-1440-controller-resume.png",
-      "sha256": "657261255e0a71df33a173a9847850b282545ee6741e72263871186ec2f639ca",
+      "file": "session-195/before-sewer-night-1440-controller-pause.png",
+      "sha256": "23a377f5082a17ecd44f3d45c496c1c88760aaf8cd6724bb8ba96ba815fd7990",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "controller-resume",
+      "page": "controller-pause",
       "phase": "before"
     },
     {
-      "file": "session-194/before-sewer-night-1440-rail-threshold.png",
-      "sha256": "5a6a2c398589495bd86150b8d341e0811326ff6710cc56dfa9f070b6d15ba426",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "rail-threshold",
-      "phase": "before"
-    },
-    {
-      "file": "session-194/before-porcelain-day-390-controller-held-pause.png",
-      "sha256": "d106690da71edee7c531fcd06d2a31ef5aeaa7c51c741fd76df3de253e02da5a",
+      "file": "session-195/before-porcelain-day-390-beam-lifesteal.png",
+      "sha256": "5fb5b8b323bf0f3bbf36d4b6ef56089f6a5278d5d51e8deb7cd2e2c549a7194b",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "controller-held-pause",
+      "page": "beam-lifesteal",
       "phase": "before"
     },
     {
-      "file": "session-194/before-porcelain-day-390-controller-resume.png",
-      "sha256": "985735148f157fbf9a5ed32c64fd6a3b26ba074efa85283d07e26712a9cd1498",
+      "file": "session-195/before-porcelain-day-390-controller-pause.png",
+      "sha256": "cc6dadbd14b68c2a83976c36ec154789b9d3b102036ef3f05ee0a1f6442fa6cb",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "controller-resume",
+      "page": "controller-pause",
       "phase": "before"
     },
     {
-      "file": "session-194/before-porcelain-day-390-rail-threshold.png",
-      "sha256": "26e3bad88bc4fdcb0a1d4f61715079e7f673c633bbcf3afc9fd68cd86b1cbdd4",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "page": "rail-threshold",
-      "phase": "before"
-    },
-    {
-      "file": "session-194/before-porcelain-day-1440-controller-held-pause.png",
-      "sha256": "8089a2bc53330884d8a81bf7a7d00eefbd8cf86c08e0acaf5a1019a36555b016",
+      "file": "session-195/before-porcelain-day-1440-beam-lifesteal.png",
+      "sha256": "fee6143122917a016bc64846bba423e6a2793a95e13a5a0de2527e5f509f6736",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "controller-held-pause",
+      "page": "beam-lifesteal",
       "phase": "before"
     },
     {
-      "file": "session-194/before-porcelain-day-1440-controller-resume.png",
-      "sha256": "6d3a0b113d41fbbae0fbd57b0e518ba2b00881850df37b9a0cfa68d9e9779b30",
+      "file": "session-195/before-porcelain-day-1440-controller-pause.png",
+      "sha256": "5331b0b8b47beb247cfa9767678f28e4f46db7a28ba3c14eb40e6d5eae89bfe5",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "controller-resume",
+      "page": "controller-pause",
       "phase": "before"
     },
     {
-      "file": "session-194/before-porcelain-day-1440-rail-threshold.png",
-      "sha256": "a4fa1f2d77ccf40accda2092109506c65e1325c9609ba997ce4e1915992ad74d",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "rail-threshold",
-      "phase": "before"
-    },
-    {
-      "file": "session-194/after-local-sewer-night-390-controller-held-pause.png",
-      "sha256": "035e9c279dfcf9cba1ccf4fa7462140072b7d09c1b70184244dcb907c0c2a832",
+      "file": "session-195/after-staging-sewer-night-390-beam-lifesteal.png",
+      "sha256": "c8c8cda4bb53bd13c19dbdaa7660362de4219db5c4344735ecdb5ecad69cb1e4",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "controller-held-pause",
+      "page": "beam-lifesteal",
       "phase": "after"
     },
     {
-      "file": "session-194/after-local-sewer-night-390-controller-resume.png",
-      "sha256": "afd1987bbbfbd76a71ab4ca72f865b82cbca2c803e2af5b455d626b9e3ead64f",
+      "file": "session-195/after-staging-sewer-night-390-controller-pause.png",
+      "sha256": "739e4f52e90389b793c621f6d0b48837c90164c0e3c3a1187d269f6b65b67e5a",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "controller-resume",
+      "page": "controller-pause",
       "phase": "after"
     },
     {
-      "file": "session-194/after-local-sewer-night-390-rail-threshold.png",
-      "sha256": "f6e8cc06fe8d06c0de46e782ee08c0752169c70d566355675f2be3d1ecfc0100",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "page": "rail-threshold",
-      "phase": "after"
-    },
-    {
-      "file": "session-194/after-local-sewer-night-1440-controller-held-pause.png",
-      "sha256": "3321a95e70b6aa3d440f78a6b2a183b1eeb83bcd2dd40eb86d5dd5e352a30f48",
+      "file": "session-195/after-staging-sewer-night-1440-beam-lifesteal.png",
+      "sha256": "b9ab7e9a46f9a646610be20d80a24de6d5e43cbc28fef2af09a9f3f166e06ed7",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "controller-held-pause",
+      "page": "beam-lifesteal",
       "phase": "after"
     },
     {
-      "file": "session-194/after-local-sewer-night-1440-controller-resume.png",
-      "sha256": "6ec9b7481349f81f516fdd96c45568c81b3a4330569503b61f6c220910d3817f",
+      "file": "session-195/after-staging-sewer-night-1440-controller-pause.png",
+      "sha256": "a119a4291835fdfe31f6c0409d4c8758bd136e23749745e9392a8e1d1bdb5623",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "controller-resume",
+      "page": "controller-pause",
       "phase": "after"
     },
     {
-      "file": "session-194/after-local-sewer-night-1440-rail-threshold.png",
-      "sha256": "a7ab61aecedf6f136e7489081f7d1e0cd86dd0ffcb37cc099439a052de3d783d",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "rail-threshold",
-      "phase": "after"
-    },
-    {
-      "file": "session-194/after-local-porcelain-day-390-controller-held-pause.png",
-      "sha256": "61ac8d44e6197412da4a9b25e9ce2a5eec2f99b2dc236f29e8564591b5a14bf6",
+      "file": "session-195/after-staging-porcelain-day-390-beam-lifesteal.png",
+      "sha256": "50bb61833a929e295b5f8ea399868be523947fffce3de99b4101a6c9dcd50bf2",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "controller-held-pause",
+      "page": "beam-lifesteal",
       "phase": "after"
     },
     {
-      "file": "session-194/after-local-porcelain-day-390-controller-resume.png",
-      "sha256": "d3e9052e9d3c737e3166ebdcf4d39f1c31c56d290e7aeb0fcdde1554663d7b9c",
+      "file": "session-195/after-staging-porcelain-day-390-controller-pause.png",
+      "sha256": "c26303fee57c26119d8e6b13f99c80257ecb7bc281bf67095e78d026188dfb82",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "controller-resume",
+      "page": "controller-pause",
       "phase": "after"
     },
     {
-      "file": "session-194/after-local-porcelain-day-390-rail-threshold.png",
-      "sha256": "ecb99bab579f5e9a592f9c80f9a33bb368274c3338af4987ed66bcb8da836f8e",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "page": "rail-threshold",
-      "phase": "after"
-    },
-    {
-      "file": "session-194/after-local-porcelain-day-1440-controller-held-pause.png",
-      "sha256": "b76700c481f94d5df7a5dbef985ced4253dee496f90847205fc5183008e0121a",
+      "file": "session-195/after-staging-porcelain-day-1440-beam-lifesteal.png",
+      "sha256": "092a0e0057c3b5550936547c8f806bd3a04c90df19a648a09158a5b8b49ecd34",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "controller-held-pause",
+      "page": "beam-lifesteal",
       "phase": "after"
     },
     {
-      "file": "session-194/after-local-porcelain-day-1440-controller-resume.png",
-      "sha256": "8d1015cdea2e7e400e36f105036bf7c93a75e11fdafeab93c964af2e9f22d2a7",
+      "file": "session-195/after-staging-porcelain-day-1440-controller-pause.png",
+      "sha256": "6cbfb7363875ee78f8ef34c7113b47c2eef3d0528c9d901c7f6947b4ae98549f",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "controller-resume",
-      "phase": "after"
-    },
-    {
-      "file": "session-194/after-local-porcelain-day-1440-rail-threshold.png",
-      "sha256": "1be3a35eaa5f0bd7d97b8374aaa6897e866c421964e514247ee6433831763f8b",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "rail-threshold",
+      "page": "controller-pause",
       "phase": "after"
     }
   ],
   "inspection": {
     "renderedPixelsReviewed": true,
-    "reviewer": "Codex root: three contact sheets, all24 before/after images inspected",
-    "reviewedAt": "2026-10-20T05:47:25.026Z",
-    "scope": "Controller-held pause, resumed combat and rail-threshold impact;390/1440;both themes.",
+    "reviewer": "Codex root: two contact sheets, all16 before/after images inspected",
+    "reviewedAt": "2026-10-20T15:07:06.033Z",
+    "scope": "Beam lifesteal health feedback and controller pause;390/1440;both themes.",
     "findings": [
-      "No introduced layout or readability defect across pause, resume and rail impact.",
-      "Home themes remain distinct; arena and pause use intentional gameplay palettes independent of shell theme.",
-      "Before held Reload fires on resume and rail deals160 at24HP; after no stale Reload and rail480 at24HP/160 at25HP in all4 cases."
+      "No introduced layout/readability defect in either touched gameplay state.",
+      "Gameplay palette is independent of shell theme; unchanged pause composition remains readable.",
+      "Before beam480/160 and health30.4, after480/480 and33.6; profile writes62–63/second before,0 in measured unchanged1-second window after."
     ],
     "fixesApplied": [
-      "Persist and consume controller edges across barriers/screens; share the Last Resort threshold with rail.",
-      "Use actual xpMult ref rather than nonexistent default perk keys in the browser fixture."
+      "Snapshot health bonus once per beam; bound controller metadata persistence attempts."
     ],
     "blockingDefectsOpen": 0
   },
   "methodLimits": [
-    "Synthetic controller/keyboard and assisted App state/ticks; not a production score submission or physical-controller test.",
-    "No participant or every-route claim."
+    "Synthetic controller/keyboard and assisted App state/ticks; no participant or physical-device claim.",
+    "No wider palette/route redesign or hardware frame-time improvement claim."
   ]
 }

@@ -1,3 +1,9 @@
+## S195 beam consistency and controller persistence
+
+Fresh startup and nine-axis/game-loop audit completed for this invocation. Both selected L2 outcomes implemented; failing-before3 regressions, fixed-after49/49 focused assertions. Real pre-change Chrome reproduced480/160 beam damage and62–63 profile writes/second across390/1440 and both themes. Independent source review passes0 blocking findings. Full suite, staging and production acceptance pending.
+
+FORGE/public-unlaunched unchanged. Synthetic controller/keyboard and assisted App ticks do not prove physical-pad or participant outcomes. Existing S183 comparisons remain unmeasured. No dependency, backend, identity/trust-policy, cost, licensing or public-launch change. CDR legitimately unchanged without creative direction.
+
 ## S194 production acceptance
 
 S194 implementation 51fc42bf1510f6a4b625f3fb250140472f04862d passed exact-main workflow 39377541819:299 files/2056 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 51fc42bf1510. Canonical and immutable https://8e3a9bb5.call-of-doodie.pages.dev shell7/7 each; production browser24/24 across390/1440/both themes proves held menu Reload consumed, fresh Reload usable, rail480 at24HP/160 at25HP, and held/released keyboard movement.
