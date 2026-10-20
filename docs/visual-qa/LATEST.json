@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-10-20T02:58:48.710Z",
-  "uiBaseRef": "5ee06d3918ec977245ceaf67ea79f2ebc4149caf",
-  "stagingUrl": "https://562130b0.call-of-doodie.pages.dev/",
+  "capturedAt": "2026-10-20T03:45:09.155Z",
+  "uiBaseRef": "b4362a41e9799b7ab1b40c527a6a100b54c738df",
+  "stagingUrl": "https://1da5492a.call-of-doodie.pages.dev/",
   "themes": [
     "dark",
     "light"
@@ -10,317 +10,325 @@
   "sourceFiles": [
     {
       "file": "src/App.jsx",
-      "sha256": "8da406ff87ff7216b69367d0974102c18b26214fc8785396b98e05ee32ae335c"
+      "sha256": "376dadf6d22e8f31ff0b842cb0f14e61935949f3052d8ad725bec2ab3ded9c26"
+    },
+    {
+      "file": "src/components/DialogShell.jsx",
+      "sha256": "c152132fa47cf404ee87bca556895aba5b6a418d340f9275b7d065440d0e7ec8"
+    },
+    {
+      "file": "src/systems/combatResolution.js",
+      "sha256": "3f1cab1d3bce38f7d8cf78e3e06c7a23b9385aba0e883d7b69ad6751c61ad5dc"
     }
   ],
   "captures": [
     {
-      "file": "session-192/before-sewer-night-390-home.png",
-      "sha256": "67bbc97ae5c1e4d282e376420b2fbbdf8078b647aba4b44ff9d26b14d337b15d",
+      "file": "session-193/before-sewer-night-390-shield-hit.png",
+      "sha256": "f639852a41a1a5138332c2bfaccb3846a686af490302a8de773f128823d9b87c",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "home",
+      "page": "shield-hit",
       "phase": "before"
     },
     {
-      "file": "session-192/before-sewer-night-390-replacement.png",
-      "sha256": "021340d99a80e0d63fbd4b5df6ae5dee34f42d2037247bc8bc79e498c3df5f30",
+      "file": "session-193/before-sewer-night-390-held-pause.png",
+      "sha256": "264b649eb9bf577c9d7af259438110edb1ff97c66cb8562424f0466697de4142",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "replacement",
+      "page": "held-pause",
       "phase": "before"
     },
     {
-      "file": "session-192/before-sewer-night-390-paused.png",
-      "sha256": "9b379491b6fa807039d076c6bcc00df3c56ba8f582c0e1606c62f021f61c389b",
+      "file": "session-193/before-sewer-night-390-held-weapon.png",
+      "sha256": "3275ca9fb656b7b66c255c6b88b7975831f6d877d62e0c0254db41caea2099b5",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "paused",
+      "page": "held-weapon",
       "phase": "before"
     },
     {
-      "file": "session-192/before-sewer-night-1440-home.png",
-      "sha256": "e532ee45b69a4272bd5602e5cf815b10353e690da34741beea2d7e8feef46c62",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "home",
-      "phase": "before"
-    },
-    {
-      "file": "session-192/before-sewer-night-1440-replacement.png",
-      "sha256": "bb80ae64b171c9d829e68c9c9bfc0e49bdd592f734b646f338106964726d8c6c",
+      "file": "session-193/before-sewer-night-1440-shield-hit.png",
+      "sha256": "6130c23fe2f833ad25e6db18f832c32e66de8b64905ba6d7b57d458a5d79f4eb",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "replacement",
+      "page": "shield-hit",
       "phase": "before"
     },
     {
-      "file": "session-192/before-sewer-night-1440-paused.png",
-      "sha256": "6e71429038559434838494de536587d54e74b55a2f33e1baa2700921d671d5a7",
+      "file": "session-193/before-sewer-night-1440-held-pause.png",
+      "sha256": "a73ef4784b6999464b5098ba979cdaf1d566a3a2c47f650d3401d0bf273b4cc3",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "paused",
+      "page": "held-pause",
       "phase": "before"
     },
     {
-      "file": "session-192/before-porcelain-day-390-home.png",
-      "sha256": "f88bbc90a0650768d051e9bdd7e73d3a9d325e868fe3bb5ba43a92f452394b72",
+      "file": "session-193/before-sewer-night-1440-held-weapon.png",
+      "sha256": "deb03ff6c1a6bd77c9b851bca5a40fe30da3106adc08a73b0903407e9aa86b03",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "held-weapon",
+      "phase": "before"
+    },
+    {
+      "file": "session-193/before-porcelain-day-390-shield-hit.png",
+      "sha256": "66997d7fd316d119fb345b3d80d0d011bcedd2be3dbf96e24775a6b20b0f8e91",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "home",
+      "page": "shield-hit",
       "phase": "before"
     },
     {
-      "file": "session-192/before-porcelain-day-390-replacement.png",
-      "sha256": "aa6bca87f85ad6e26f0c82be92d30635700fe78e6e8fde2e32091325a82cab05",
+      "file": "session-193/before-porcelain-day-390-held-pause.png",
+      "sha256": "73508b9420c3c4e23c11dfd36ea2c039932db8a6b16a2908368877e28fa16d7e",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "replacement",
+      "page": "held-pause",
       "phase": "before"
     },
     {
-      "file": "session-192/before-porcelain-day-390-paused.png",
-      "sha256": "8329941c85c670dcb8b1f2715a89bb179b0eb64c5cb135da8df93ff0ff399931",
+      "file": "session-193/before-porcelain-day-390-held-weapon.png",
+      "sha256": "e4952267c72da5981ad372d70c5352f323c2d0f80629024aefca3dbeca08c2ef",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "paused",
+      "page": "held-weapon",
       "phase": "before"
     },
     {
-      "file": "session-192/before-porcelain-day-1440-home.png",
-      "sha256": "505f618e0e33eb2417a4211e001d12f5869c835e69beb57ec1dd436866d66f1d",
+      "file": "session-193/before-porcelain-day-1440-shield-hit.png",
+      "sha256": "47f3a956fcaadb386acd0173c0ae9a6cfbf7080d069b83befbc2c29847fdc43a",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "home",
+      "page": "shield-hit",
       "phase": "before"
     },
     {
-      "file": "session-192/before-porcelain-day-1440-replacement.png",
-      "sha256": "92580be199a29593897f611ad03ce13a5c20929188e0ee63293c1210677f43f2",
+      "file": "session-193/before-porcelain-day-1440-held-pause.png",
+      "sha256": "ed8d5b9b445d19a4160e8cf08330e9a6e38f3207be976c49268a5729be6fcb93",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "replacement",
+      "page": "held-pause",
       "phase": "before"
     },
     {
-      "file": "session-192/before-porcelain-day-1440-paused.png",
-      "sha256": "a4234d7726406e1df84554d55b4666215f66a765e73ec7f4e088edd77f253edd",
+      "file": "session-193/before-porcelain-day-1440-held-weapon.png",
+      "sha256": "3ee9dada39a0887f6fe1e32475d958f3020c62ca255e279ce7100b19cd99b319",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "paused",
+      "page": "held-weapon",
       "phase": "before"
     },
     {
-      "file": "session-192/staging-sewer-night-390-home.png",
-      "sha256": "67bbc97ae5c1e4d282e376420b2fbbdf8078b647aba4b44ff9d26b14d337b15d",
+      "file": "session-193/staging-sewer-night-390-shield-hit.png",
+      "sha256": "84c435e440e34397c371b6faaa48149ea06b14da6ac077f617e294b9d2e7cf07",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "home",
+      "page": "shield-hit",
       "phase": "after"
     },
     {
-      "file": "session-192/staging-sewer-night-390-replacement.png",
-      "sha256": "46f3a779e06ba4067b227018e8fb3c830b4fb73a283d25d7c91d60a144b3624a",
+      "file": "session-193/staging-sewer-night-390-held-pause.png",
+      "sha256": "9864aeca7000957ded44e50edaeffdc6cd9ee96ea20aa4ec1e0cf9bea23d1a86",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "replacement",
+      "page": "held-pause",
       "phase": "after"
     },
     {
-      "file": "session-192/staging-sewer-night-390-paused.png",
-      "sha256": "5a3e5e0e5eb6670f508cf7cf617d9cc0f8ead75cf5d7d7125633a97c5837b03b",
+      "file": "session-193/staging-sewer-night-390-held-weapon.png",
+      "sha256": "a57a8c5e4a0cb191b5e99f00944d72c6055f6abe2bb23ea6cb79b78721fbb4e1",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "paused",
+      "page": "held-weapon",
       "phase": "after"
     },
     {
-      "file": "session-192/staging-sewer-night-1440-home.png",
-      "sha256": "e532ee45b69a4272bd5602e5cf815b10353e690da34741beea2d7e8feef46c62",
+      "file": "session-193/staging-sewer-night-1440-shield-hit.png",
+      "sha256": "d9214b7371ff2828fe9a434746cb79c214e1dac765e9735f4dd7ff1ef6218aa4",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "home",
+      "page": "shield-hit",
       "phase": "after"
     },
     {
-      "file": "session-192/staging-sewer-night-1440-replacement.png",
-      "sha256": "cca065a547df2a3df8da8ffb6889ae6ecd98242408f0fb07ad628d45f2d614a2",
+      "file": "session-193/staging-sewer-night-1440-held-pause.png",
+      "sha256": "67ffd982b000b0c2a47e3a61ba5db9cc866958ca1c30ac40440fc6042ec059cb",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "replacement",
+      "page": "held-pause",
       "phase": "after"
     },
     {
-      "file": "session-192/staging-sewer-night-1440-paused.png",
-      "sha256": "cf393eff001223e84db8c284d073ca2d61cbf69108a7cbc81d1b3b3d6a5effb2",
+      "file": "session-193/staging-sewer-night-1440-held-weapon.png",
+      "sha256": "747d15363f790fe38262e5f60937c29d3824034a5784eb5003b9c60cce79bace",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "paused",
+      "page": "held-weapon",
       "phase": "after"
     },
     {
-      "file": "session-192/staging-porcelain-day-390-home.png",
-      "sha256": "f88bbc90a0650768d051e9bdd7e73d3a9d325e868fe3bb5ba43a92f452394b72",
+      "file": "session-193/staging-porcelain-day-390-shield-hit.png",
+      "sha256": "36981cde5c649de2965aeac5ed8c22f6ca81a1737c9b0eac585b8a924f39299e",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "home",
+      "page": "shield-hit",
       "phase": "after"
     },
     {
-      "file": "session-192/staging-porcelain-day-390-replacement.png",
-      "sha256": "f51ed854e5e54474f68a20cac3073d00e8617e4ecff5e1fabb88a5766db92c10",
+      "file": "session-193/staging-porcelain-day-390-held-pause.png",
+      "sha256": "23a3c86ab7a43d27c1bf8f124e3b9356ba9ee057d20c8c58ad3d448b0544ce7e",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "replacement",
+      "page": "held-pause",
       "phase": "after"
     },
     {
-      "file": "session-192/staging-porcelain-day-390-paused.png",
-      "sha256": "85880f40100680fa3636ee4c408abf529aea9f4a8d0849c51e72f2261a6051ed",
+      "file": "session-193/staging-porcelain-day-390-held-weapon.png",
+      "sha256": "8551ff396c5c8cd3c783b5664294015cafd92817d9214be8c43cf6244a00cc80",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "paused",
+      "page": "held-weapon",
       "phase": "after"
     },
     {
-      "file": "session-192/staging-porcelain-day-1440-home.png",
-      "sha256": "1aeaacfe0271a59b3669856da3f7d8fdd75a5feb9275a84cea2c6fa08efeced4",
+      "file": "session-193/staging-porcelain-day-1440-shield-hit.png",
+      "sha256": "7abf1baf0797da91a092461e5d17fbf956744da34d9867ef6287936bad96c734",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "home",
+      "page": "shield-hit",
       "phase": "after"
     },
     {
-      "file": "session-192/staging-porcelain-day-1440-replacement.png",
-      "sha256": "da06c23ec8666451cdb615c128701327829dd914fc649e6c95099af556fc2fa2",
+      "file": "session-193/staging-porcelain-day-1440-held-pause.png",
+      "sha256": "3266a0eedba5a81ed6bdd2842146cc9c8b24c3a0b6751f695ede608820391c03",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "replacement",
+      "page": "held-pause",
       "phase": "after"
     },
     {
-      "file": "session-192/staging-porcelain-day-1440-paused.png",
-      "sha256": "6e20e20d2aca36e9ec926f60f42fa5278a3f78978be5298be1990cc99b38a238",
+      "file": "session-193/staging-porcelain-day-1440-held-weapon.png",
+      "sha256": "3f63fdb3651837bdcdb42833af36a1d80cf947b17819fc14c06cf726e928e25a",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "paused",
+      "page": "held-weapon",
       "phase": "after"
     }
   ],
   "inspection": {
     "renderedPixelsReviewed": true,
     "reviewer": "Codex root: three contact sheets, all24 before/after images inspected",
-    "reviewedAt": "2026-10-20T02:58:48.713Z",
-    "scope": "Home, replacement gameplay and pause;390/1440;both themes.",
+    "reviewedAt": "2026-10-20T03:45:09.158Z",
+    "scope": "Shield impact, held Escape and held-weapon reload;390/1440;both themes.",
     "findings": [
-      "No introduced layout or readability defect across home, gameplay and pause.",
-      "Home themes remain distinct; arena and pause use intentional gameplay palettes independent of shell theme.",
-      "Before race loses replacement token/signature in all4 cases; staging retains both."
+      "No introduced layout or readability defect across impact, pause and reload.",
+      "Both selected shell themes exercised; arena and pause retain their intentional gameplay palette.",
+      "Before front32/rear4 and pause/reload repeat failures; staging front4/rear32 and stable pause/reload in all4 cases."
     ],
     "fixesApplied": [
-      "Isolate startup preparation and callbacks by generation/game identity.",
+      "Correct incoming shield direction and consume discrete keyboard repeats at App and dialog boundaries.",
       "Recapture before pause after waiting for the actual loaded panel."
     ],
     "blockingDefectsOpen": 0
   },
   "methodLimits": [
-    "Synthetic ticket/interleaving fixtures and App callbacks; not a production score submission or physical-controller test.",
+    "Synthetic keyboard and assisted App state/ticks; not a production score submission or physical-controller test.",
     "No participant or every-route claim."
   ]
 }

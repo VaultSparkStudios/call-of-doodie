@@ -3541,6 +3541,16 @@ export default function CallOfDoodie() {
   // ── Keyboard ──────────────────────────────────────────────────────────────
   useEffect(() => {
     const kd = (e) => {
+      // Browser repeat is a held key, not a fresh action. Movement/interact
+      // remain held in keysRef until keyup; repeated weapon selection would
+      // otherwise cancel reloads, and Escape/M would toggle repeatedly.
+      if (e.repeat) {
+        if (screen === "game" && ["escape", "w", "a", "s", "d", "arrowup", "arrowdown", "arrowleft", "arrowright", "r", "q", "g", "e", "m", "z", "x", "c", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "=", " ", "shift"].includes(e.key.toLowerCase())) {
+          const tag = e.target?.tagName?.toLowerCase();
+          if (e.key === "Escape" || !["input", "textarea", "select"].includes(tag)) e.preventDefault();
+        }
+        return;
+      }
       const tag = e.target?.tagName?.toLowerCase();
       if (tag === "input" || tag === "textarea" || tag === "select") {
         if (e.key === "Escape" && screen === "game") { transitionPause(!pausedRef.current, "keyboard"); e.preventDefault(); }

@@ -311,6 +311,46 @@ describe("CallOfDoodie launch smoke", () => {
     }
     throw new Error("App hooks missing");
   }
+  it("keeps pause and reload stable through keyboard autorepeat while retaining held movement and interaction", async () => {
+    await mountRun();
+    const game = barrierFixture.input.gsRef.current;
+    const key = async (value, repeat = false, target = window, type = "keydown") => {
+      const event = new KeyboardEvent(type, { key: value, repeat, bubbles: true, cancelable: true });
+      await act(async () => { target.dispatchEvent(event); });
+      return event;
+    };
+    await key("Escape");
+    expect(barrierFixture.refs.paused.current).toBe(true);
+    expect((await key("Escape", true)).defaultPrevented).toBe(true);
+    expect(barrierFixture.refs.paused.current).toBe(true);
+    const input = document.createElement("input"); container.appendChild(input);
+    input.focus();
+    await key("Escape", true, input);
+    expect(barrierFixture.refs.paused.current).toBe(true);
+    await key("Escape", false, input);
+    expect(barrierFixture.refs.paused.current).toBe(false);
+    input.remove();
+    await key("w"); await key("e");
+    await key("w", true); await key("e", true);
+    expect(barrierFixture.input.keysRef.current.w).toBe(true);
+    expect(game._interactHeld).toBe(true);
+    await key("w", false, window, "keyup"); await key("e", false, window, "keyup");
+    expect(barrierFixture.input.keysRef.current.w).toBe(false);
+    expect(game._interactHeld).toBe(false);
+    await key("1");
+    game.ammoCount = 0;
+    await key("r");
+    const pending = game.pendingReload;
+    expect(pending).toBeTruthy();
+    await key("1", true);
+    expect(game.pendingReload).toBe(pending);
+    const { setMuted } = await import("./audio/soundFacade.js");
+    setMuted.mockClear();
+    await key("m");
+    expect(setMuted).toHaveBeenCalledTimes(1);
+    await key("m", true);
+    expect(setMuted).toHaveBeenCalledTimes(1);
+  }, 60000);
   it.each(["resolve", "reject"])("ignores an older ticket %s after the replacement ticket arrives", async (outcome) => {
     let resolveOld, rejectOld;
     issueRunTokenMock.mockImplementationOnce(() => new Promise((resolve, reject) => { resolveOld = resolve; rejectOld = reject; }))

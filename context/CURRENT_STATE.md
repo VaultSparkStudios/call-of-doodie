@@ -1,3 +1,13 @@
+## S193 candidate verified
+
+S193 final local suite passes 299/299 files and 2049/2049 assertions with no failed/pending tests. Strict lint, configured build, schema/startup/public/security/runtime gates pass; dependency audit zero vulnerabilities; backend check and replay3/3 pass. Staging1da5492a shell7/7 and browser28/28 pass at390/1440/both themes;24 before/after captures inspected/hash-bound. Final independent review approved App, DialogShell and shield corrections. Exact-main production pending.
+
+## S193 candidate
+
+S193 corrects Shield Guy facing and makes keyboard actions fire once per press.
+
+Fresh two-outcome L2 audit implemented. Independent review and final full suite/staging verification in progress; production not yet promoted. Authoritative acceptance: LATEST_HANDOFF.
+
 ## S192 production verified
 
 Async run startup, deferred perks/audio and leaderboard tickets isolated to owning runs.

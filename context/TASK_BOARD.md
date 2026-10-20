@@ -1,3 +1,16 @@
+## S193 arc outcomes and waves
+
+Session Intent: fresh full arc, authorized main commit/push and full deployment.
+
+Wave 1 ✔ startup and fresh audit. Wave 2 ✔ implementation acceptance. Wave 3 ◼ production and closeout.
+
+- [x] S193 shield-facing damage L2 acceptance.
+- [x] S193 keyboard-action edges L2 acceptance, including dialog capture boundary.
+- [ ] S193 production and full closeout acceptance.
+- [ ] [SIL:1] S193 reserve: matched shield/flanking comprehension study with representative participants.
+- [ ] [SIL:1] S193 reserve: physical keyboard/controller interruption comparison.
+
+
 ## S192 arc outcomes and waves
 
 Session Intent: fresh full arc, main push and deployment.

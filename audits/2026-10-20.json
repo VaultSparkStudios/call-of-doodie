@@ -1,58 +1,37 @@
 {
   "schemaVersion": "1.3",
-  "session": 192,
+  "session": 193,
   "date": "2026-10-20",
-  "headline": "S192 isolates asynchronous run startup, delayed perks/audio and leaderboard tickets.",
+  "headline": "S193 corrects Shield Guy facing and makes keyboard actions fire once per press.",
   "shipped": [
-    "Delayed run startup work cannot mutate a replacement run"
+    "shield-facing",
+    "keyboard-action-edges"
   ],
-  "validation": "S192 implementation 815f9b47b15388d2167af2fbc282b40dc7eb9a7b passed exact-main workflow 39362694165: 299 test files/2039 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 815f9b47b153; canonical and immutable https://be661b17.call-of-doodie.pages.dev shell7/7 each. Browser12/12 across390/1440/both themes proves replacement token/signature survive old-ticket delivery and pause remains usable.",
-  "limits": "FORGE/public-unlaunched unchanged. Assisted App callbacks, intercepted ticket fixtures and synthetic input do not prove participant outcomes or physical controllers. Existing S183 comparisons remain unmeasured. No backend, dependency, identity-policy, cost, licensing or launch change. CDR unchanged without creative direction.",
-  "review": {
-    "verdict": "pass",
-    "blockingFindings": 0,
-    "fixed": 3
-  },
-  "staging": {
-    "url": "https://562130b0.call-of-doodie.pages.dev",
-    "browserCases": 4,
-    "browserAssertions": 12,
-    "shellAssertions": 7
-  },
+  "validation": "S193 final local suite passes 299/299 files and 2049/2049 assertions with no failed/pending tests. Strict lint, configured build, schema/startup/public/security/runtime gates pass; dependency audit zero vulnerabilities; backend check and replay3/3 pass. Staging1da5492a shell7/7 and browser28/28 pass at390/1440/both themes;24 before/after captures inspected/hash-bound. Final independent review approved App, DialogShell and shield corrections. Exact-main production pending.",
+  "limits": "FORGE/public-unlaunched unchanged. Synthetic keyboard, assisted App state/ticks and automated Chrome checks do not prove participant or physical-controller outcomes. Existing S183 comparisons remain unmeasured. No backend, dependency, identity/trust-policy, cost, licensing or public-launch change. CDR legitimately unchanged without new creative direction.",
   "production": {
-    "source": "815f9b47b15388d2167af2fbc282b40dc7eb9a7b",
-    "workflow": 39362694165,
-    "immutableUrl": "https://be661b17.call-of-doodie.pages.dev",
-    "canonical": "https://callofdoodie.wtf/",
-    "verifiedAt": "2026-10-20T03:13:58.428Z",
-    "health": {
-      "contract": "edge-health-v1",
-      "status": "edge-ready",
-      "service": "call-of-doodie",
-      "scope": "cloudflare-pages-edge-only",
-      "deploy": "815f9b47b153",
-      "checkedAt": "2026-10-20T03:13:50.829Z"
-    },
-    "requiredChecks": {
-      "quality": "success",
-      "buildAndDeploy": "success"
-    },
-    "testFiles": 299,
-    "assertions": 2039,
-    "browserCases": 4,
-    "browserAssertions": 12
+    "status": "pending"
   },
   "closeout": {
-    "state": "complete",
+    "state": "delivery-pending",
     "silScore": 945,
     "scaffold": {
       "tasks": 3,
-      "done": 3,
-      "inProgress": 0,
-      "open": 0
+      "done": 1,
+      "inProgress": 1,
+      "open": 1
     }
   },
   "testFiles": 299,
-  "assertions": 2039,
-  "visualCaptures": 24
+  "assertions": 2049,
+  "visualCaptures": 24,
+  "staging": {
+    "url": "https://1da5492a.call-of-doodie.pages.dev",
+    "browserAssertions": 28,
+    "shellAssertions": 7
+  },
+  "review": {
+    "verdict": "pass",
+    "blockingFindings": 0
+  }
 }

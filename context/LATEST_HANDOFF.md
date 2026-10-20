@@ -1,19 +1,26 @@
-## Where We Left Off — Session 192 final closeout
+## Where We Left Off — Session 193
 
-Session Intent: fresh full /arc, authorized direct-main commit/push and full deployment. Intent outcome: selected L2 run-ownership outcome verified on production; final records seal receives exact-main CI/readback before native completion.
+Session Intent: fresh full /arc, authorized direct-main commit/push and full deployment. Intent outcome: in progress.
 
-S192 implementation 815f9b47b15388d2167af2fbc282b40dc7eb9a7b passed exact-main workflow 39362694165: 299 test files/2039 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 815f9b47b153; canonical and immutable https://be661b17.call-of-doodie.pages.dev shell7/7 each. Browser12/12 across390/1440/both themes proves replacement token/signature survive old-ticket delivery and pause remains usable.
+S193 corrects Shield Guy facing and makes keyboard actions fire once per press.
 
-Native goal01a15732-6ad9-7d23-9c7b-4a795750258d createdAt1792464294 bound S192/start5ee06d3918ec977245ceaf67ea79f2ebc4149caf. Fresh startup, nine-axis audit/game-loop review and L2 plan in ignored .cache/audit-S192/docs. Typed2/2 premise gate recorded before implementation; timing verified.
+Native goal01a1575d-f676-7860-82d2-06102ca16101 createdAt1792467172 bound S193/startb4362a41e9799b7ab1b40c527a6a100b54c738df. Prior S192 closeout clean; not substituted for this invocation. Fresh nine-axis/game-loop audit and plan in ignored .cache/audit-S193/docs. Typed2/2 premise gate recorded before edits with dirty implementation paths0, timing verified.
 
-Launch generation rejects superseded dependency loads before initialization. Menu and unmount invalidate requests; deferred draft/audio require live owning game. Ticket success/failure require owning request/game, preserving same-ended-run score submission. Independent review fixed menu cancellation and positive/live-unmount test coverage. 299/2039 full local and hosted acceptance;24 before/after images inspected/hash-bound.
+Shield now compares projectile source bearing with the renderer's player-facing shield: front0.2x and rear1.6x. Cardinal, perpendicular boundary, stacking and actual moving projectile consumption tests preserve rail policy. Keyboard repeat suppresses discrete actions while preserving held movement/interact and keyup. Actual browser exposed DialogShell capture-phase Escape as a second handler; it now consumes repeats without closing. Focused dialog test covers the previously missed boundary.
 
-FORGE/public-unlaunched unchanged. Assisted App callbacks, intercepted ticket fixtures and synthetic input do not prove participant or physical-controller outcomes. Existing S183 comparisons remain unmeasured. CDR unchanged without creative direction.
+Fresh two-outcome L2 audit implemented. Independent review and final full suite/staging verification in progress; production not yet promoted.
 
-Existing CANON-045 STRONG gap retained for unchanged guest-game promotion. Offline conformance absolute gaps0; manual/doctor-owned evidence not called conformed. Foreign-rooted doctor/autopilot excluded; project-local schema/startup/public/security/full suite and exact-candidate hosted quality/build-and-deploy supply recipient acceptance. Subject-bound state vector/entropy/genome refreshed. Signed Ark impact cargo requests central visibility refresh; shipment is not applied adoption.
+Live before checks at390/1440/both themes reproduce front32/rear4, pause autorepeat close and cancelled reload. Final staging and production must prove front4/rear32, stable pause/reload and held/released movement. Full local299/2049 before the dialog correction passed; final suite must pass after it.
 
-Rollback: rebuild/redeploy known-good main5ee06d3 directly; source rollback requires reverting both S192 commits815f9b4 and6659fcc in reverse order. Existing founder authorization covers routine promotion; no launch. Final records seal preserves browser-verified runtime bytes and receives exact-SHA CI/readback.
+FORGE/public-unlaunched unchanged. Synthetic keyboard, assisted App state/ticks and automated Chrome checks do not prove participant or physical-controller outcomes. Existing S183 comparisons remain unmeasured. No backend, dependency, identity/trust-policy, cost, licensing or public-launch change. CDR legitimately unchanged without new creative direction.
 
-## S192 verification history
+Canon reconciliation55 checked, offline absolute gaps0; existing CANON-045 STRONG gap retained for unchanged guest-game promotion. Manual/doctor-owned checks not claimed conformed. Radar10/10 current. Beacon unconfigured; optional recovery-preflight absent; context usage UNMEASURED. Foreign-rooted doctor/autopilot cannot certify this recipient: local schema/startup/public/security/runtime/full-suite plus exact-candidate hosted quality/build-and-deploy own acceptance. Autopilot dry-run inspected; reproduce recipient-safe sequence with native gates rather than mutate foreign health. Subject-bound state-vector/entropy/genome refreshed after writeback. Ark requests central visibility refresh; sent never means applied.
 
-Initial hosted candidate6659fcc failed one pre-existing random-seed rail assertion: Glass Cannon doubled damage while the fixture expected1x. Deployment was skipped. Explicit Vampire/Glass Cannon seeds now verify both1x/2x damage. Final local and hosted suites pass299files/2039assertions; focused launch suite16/16. Earlier development fixture failures and the initial hosted failure remain in ignored evidence; none is counted green. Example token labels pass scans. Full-local run mode stores its120000ms timeout ceiling separately; no files were deferred.
+Rollback: ordinary revert S193 implementation and rebuild/deploy prior mainb4362a4. Existing founder authorization covers staging/main/routine production; no lifecycle change.
+
+
+## S193 candidate acceptance
+
+S193 final local suite passes 299/299 files and 2049/2049 assertions with no failed/pending tests. Strict lint, configured build, schema/startup/public/security/runtime gates pass; dependency audit zero vulnerabilities; backend check and replay3/3 pass. Staging1da5492a shell7/7 and browser28/28 pass at390/1440/both themes;24 before/after captures inspected/hash-bound. Final independent review approved App, DialogShell and shield corrections. Exact-main production pending.
+
+Development failures retained in ignored cache: initial unit fixture referenced wrong barrier key; first browser pass inspected lazy loading, corrected wait exposed DialogShell capture handler. Added root fix and test, re-reviewed, rebuilt, redeployed and reran final full acceptance. No failing result called passing.

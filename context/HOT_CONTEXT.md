@@ -4,6 +4,16 @@
 
 ## Current Session
 
+## S193 candidate verified
+
+S193 final local suite passes 299/299 files and 2049/2049 assertions with no failed/pending tests. Strict lint, configured build, schema/startup/public/security/runtime gates pass; dependency audit zero vulnerabilities; backend check and replay3/3 pass. Staging1da5492a shell7/7 and browser28/28 pass at390/1440/both themes;24 before/after captures inspected/hash-bound. Final independent review approved App, DialogShell and shield corrections. Exact-main production pending.
+
+## S193 candidate
+
+S193 corrects Shield Guy facing and makes keyboard actions fire once per press.
+
+Fresh two-outcome L2 audit implemented. Independent review and final full suite/staging verification in progress; production not yet promoted. Authoritative acceptance: LATEST_HANDOFF.
+
 ## S192 production verified
 
 Async run startup, deferred perks/audio and leaderboard tickets isolated to owning runs.
@@ -104,16 +114,14 @@ Local suite and staging verified; exact-main delivery pending. See [LATEST_HANDO
 
 S186 source 6dc4c4235cf2b263c1c8fef228ece1b3d8eb4b58 passed exact-main workflow 39141994765: 294/294 test files and 1,970/1,970 tests, strict lint, build and Cloudflare deployment. Canonical callofdoodie.wtf reports 6dc4c4235cf2; immutable https://b0ffec69.call-of-doodie.pages.dev/ and canonical shell checks pass 7/7 each. All four canonical browser input cases pass at 390/1440 in both themes, including uppercase release, pause, focus loss, resume and normal movement.
 
-Four selected reliability outcomes are complete. The final records seal retains the verified gameplay source and receives its own exact-main CI/deploy observation. Seven frozen-choice barriers use actual-App ref fixtures for keyboard/mouse/touch/controller actions; visible pause and focus-loss states also pass the real browser. Physical controllers, participant outcomes and the separate S183 comparative evidence remain unmeasured. FORGE/public-unlaunched unchanged.
-
-## S186 input reliability and runtime measurement
-
-S186 repairs session goal identity, latched interaction after focus loss, combat input during frozen choices, and incomplete catch-up frame timing.
-
-Independent review passes after one lock-rotation correction. Focused regressions pass. Staging https://298a5f72.call-of-doodie.pages.dev passes shell 7/7 and four actual-app theme/width input cases. Before/after
+Four selected reliability outcomes are complete. The final records seal retains the verified
 
 ## Open Work
 
+## S193 arc outcomes and waves
+- [ ] S193 production and full closeout acceptance.
+- [ ] [SIL:1] S193 reserve: matched shield/flanking comprehension study with representative participants.
+- [ ] [SIL:1] S193 reserve: physical keyboard/controller interruption comparison.
 ## S192 arc outcomes and waves
 - [ ] [SIL:1] S192 reserve: measure rapid-rematch comprehension with natural participants.
 - [ ] [SIL:1] S192 reserve: physical-device interruption/reconnection comparison.
@@ -165,27 +173,8 @@ Independent review passes after one lock-rotation correction. Focused regression
 ## Session 165 - Scrolling camera, live royale bots, death-beat diet, record recovery
 - [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET on the Pages project: neither is in the secrets gateway, so Porcelain Passport verification (and therefore cloud backup) answers 503 in production until they exist.
 - [ ] [SIL:2] Never continue work under a sealed session number — open the next number instead. Carried from the S164 SIL brainstorm.
-## Session 163 - Real modes, CPU squad, fixed timestep, single brand
-- [ ] [SIL:2] Deploy the S163 migration and edge-function change (profiles table, ghost_path column, submit-score ghostPath) and set OBELISK_VERIFY_SECRET / SUPABASE_SERVICE_ROLE_KEY on Pages so cloud backup and the remote ghost race light up.
-- [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET on the Pages project: neither is in the secrets gateway, so Porcelain Passport verification (and therefore cloud backup) answers 503 in production until they exist.
-- [ ] [SIL:1] Scrolling camera for a sixteen-bot royale; DeathScreen diet.
 
 ## Recent Decisions
-
-## 2026-10-18 — Session 189
-
-Use one trigger-time damage snapshot for rail and ordinary projectiles. Count geometric rail contacts once per beam, including invulnerable summoner contact, matching ordinary hit accounting. Run-owned burst data replaces asynchronous timers; preserve current muzzle and trigger aim/build, sample spread at trigger. Context meter byte estimates cannot represent live context; valid closeout-routing exits retain their measurements.
-
-FORGE/public-unlaunched unchanged. Browser cases use assisted game-state fixtures and synthetic inputs; physical-controller and participant outcomes remain unmeasured. Existing S183 comparisons and narrow-screen precision-feedback reserve remain separate. No new identity, licensing, spending or launch decision.
-
-Routine promotion uses the exact candidate workflow and current staging. Foreign doctor output is excluded from project health; existing central delivery gap remains documented. No new dependency.
-
-
-S189 release acceptance — S189 implementation 34e3ec0950990185af9027adad1bac238ace8ee4 passed exact-main workflow 39152134303: all 297 test files / 2,020 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 34e3ec095099. Canonical and immutable https://8a11a8ae.call-of-doodie.pages.dev pass shell7/7 each. Four real-Chrome cases pass all24 checks across 390/1440 and both themes, including full rail build damage, one-hit beam accounting and retained burst rounds.
-
-Existing bounded founder authorization covers staging/main/promotion. Lifecycle remains FORGE/public-unlaunched. Records-only seal retains implementation bytes and follows through exact-main CI/readback.
-
-
 
 ## 2026-10-19 — Session 190
 
@@ -219,11 +208,17 @@ S191 receipt scan correction: a chained PowerShell invocation advanced to commit
 Use launch generation plus captured game identity for deferred run entry work. Invalidate on menu/unmount; preserve ticket arrival after death for the same run. Check live phase only for deferred perk/audio. No cancellation of unrelated storage history or server work. Existing CANON-045 STRONG gap retained: no identity/trust-policy change; routine promotion scoped to guest-game correctness. FORGE/public-unlaunched unchanged. Assisted App callbacks, intercepted ticket fixtures and synthetic input do not prove participant outcomes or physical controllers. Existing S183 comparisons remain unmeasured. No backend, dependency, identity-policy, cost, licensing or launch change. CDR unchanged without creative direction.
 
 
-S192 final release acceptance: S192 implementation 815f9b47b15388d2167af2fbc282b40dc7eb9a7b passed exact-main workflow 39362694165: 299 test files/2039 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 815f9b47b153; canonical and immutable https://be661b17.call-of-doodie.pages.dev shell7/7 each. Browser12/12 across390/1440/both themes proves replacement token/signature survive old-
+S192 final release acceptance: S192 implementation 815f9b47b15388d2167af2fbc282b40dc7eb9a7b passed exact-main workflow 39362694165: 299 test files/2039 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 815f9b47b153; canonical and immutable https://be661b17.call-of-doodie.pages.dev shell7/7 each. Browser12/12 across390/1440/both themes proves replacement token/signature survive old-ticket delivery and pause remains usable.
+
+
+
+## 2026-10-20 — Session 193
+
+Use incoming source direction for the existing player-facing shield; preserve hemisphere boundary and rail policy. Consume repeated Escape in both App and dialog capture boundaries, leaving fresh presses and held movement/interact intact. Existing CANON-045 STRONG gap is retained for unchanged guest-game promotion. FORGE/public-unlaunched unchanged. Synthetic keyboard, assisted App state/ticks and automated Chrome checks do not prove participant or physical-controller outcomes. Existing S183 comparisons remain unmeasured. No backend, dependency, identity/trust-policy, cost, licensing or public-launch change. CDR legitimately unchanged without new creative direction.
 
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 268,341 bytes · SHA-256 `90ce92d4743f…`
-- `context/TASK_BOARD.md` · 185,168 bytes · SHA-256 `b656a859eb6c…`
-- `context/DECISIONS.md` · 183,403 bytes · SHA-256 `19787b74602f…`
+- `context/CURRENT_STATE.md` · 269,133 bytes · SHA-256 `62f82a91803b…`
+- `context/TASK_BOARD.md` · 185,765 bytes · SHA-256 `dca79b130dc4…`
+- `context/DECISIONS.md` · 184,111 bytes · SHA-256 `fca1ea78bd02…`
 - `docs/AUDIT_2026-10-18.json` · 6,892 bytes · SHA-256 `b34b668a7b5a…`

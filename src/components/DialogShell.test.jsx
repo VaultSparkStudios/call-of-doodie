@@ -49,6 +49,11 @@ describe("DialogShell", () => {
     last.dispatchEvent(new KeyboardEvent("keydown", { key: "Tab", bubbles: true, cancelable: true }));
     expect(document.activeElement).toBe(first);
 
+    const repeatedEscape = new KeyboardEvent("keydown", { key: "Escape", repeat: true, bubbles: true, cancelable: true });
+    document.dispatchEvent(repeatedEscape);
+    expect(repeatedEscape.defaultPrevented).toBe(true);
+    expect(close).not.toHaveBeenCalled();
+    expect(document.activeElement).toBe(first);
     document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true, cancelable: true }));
     expect(close).toHaveBeenCalledOnce();
     act(() => root.render(null));

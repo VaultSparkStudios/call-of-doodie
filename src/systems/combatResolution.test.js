@@ -6,6 +6,7 @@ import {
   computeJuggernautShieldDamage,
   enemyProjectilePlayerCollision,
   findLightningChainTarget,
+  getShieldFacingMultiplier,
   isPrecisionHit,
   resolveEnemyContactPlayerHit,
   resolveEnemyProjectilePlayerHit,
@@ -44,6 +45,43 @@ describe("combatResolution", () => {
 
   it("keeps juggernaut shield drain separate from post-mitigation damage", () => {
     expect(computeJuggernautShieldDamage({ bulletDamage: 10, comboCount: 3, isCrit: true, critMult: 2 })).toBe(26);
+  });
+
+  it.each([
+    ["east", 1, 0],
+    ["west", -1, 0],
+    ["south", 0, 1],
+    ["north", 0, -1],
+  ])("protects the visible %s shield face and exposes the rear", (_heading, dx, dy) => {
+    const enemy = { typeIndex: 11, x: 100, y: 100 };
+    const player = { x: 100 + dx * 80, y: 100 + dy * 80 };
+    expect(getShieldFacingMultiplier({ enemy, player, bullet: { vx: -dx * 12, vy: -dy * 12 } })).toBe(0.2);
+    expect(getShieldFacingMultiplier({ enemy, player, bullet: { vx: dx * 12, vy: dy * 12 } })).toBe(1.6);
+  });
+
+  it("keeps perpendicular contacts on the existing unshielded boundary", () => {
+    const enemy = { typeIndex: 11, x: 100, y: 100 };
+    const player = { x: 180, y: 100 };
+    for (const vy of [-12, 12]) {
+      expect(getShieldFacingMultiplier({ enemy, player, bullet: { vx: 0, vy } })).toBe(1.6);
+    }
+    expect(getShieldFacingMultiplier({ enemy: { ...enemy, typeIndex: 0 }, player, bullet: { vx: -12, vy: 0 } })).toBe(1);
+  });
+
+  it.each([["front", -12, 0.2], ["rear", 12, 1.6]])("stacks %s shield damage with earned combat multipliers", (_side, vx, shieldMult) => {
+    const result = computeBulletDamage({
+      bullet: { damage: 20, vx, vy: 0 },
+      enemy: { typeIndex: 11, x: 100, y: 100, dmgMult: 1.5 },
+      player: { x: 180, y: 100, health: 20, maxHealth: 100 },
+      comboCount: 2,
+      critMult: 2,
+      critMultBonus: 0.5,
+      isCrit: true,
+      lastResort: true,
+      rageActive: true,
+    });
+    expect(result.shieldMult).toBe(shieldMult);
+    expect(result.damage).toBeCloseTo(20 * 1.2 * 2.5 * 3 * shieldMult * 1.5 * 1.75);
   });
 
   it("computes incoming player damage with glassjaw and armor modifiers", () => {

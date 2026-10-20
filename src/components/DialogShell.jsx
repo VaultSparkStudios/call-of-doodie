@@ -33,7 +33,9 @@ export default function DialogShell({
       if (event.key === "Escape" && closeRef.current) {
         event.preventDefault();
         event.stopPropagation();
-        closeRef.current();
+        // A held Escape that opened a panel must not immediately close it,
+        // or cascade through nested panels as the browser repeats keydown.
+        if (!event.repeat) closeRef.current();
         return;
       }
       if (event.key !== "Tab") return;

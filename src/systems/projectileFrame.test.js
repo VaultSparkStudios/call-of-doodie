@@ -41,6 +41,18 @@ describe("stepProjectileFrame", () => {
   const enemyAt = (extra = {}) => ({ x: 80, y: 60, size: 30, health: 10000, maxHealth: 10000, color: "#fff", ...extra });
   const shot = (extra = {}) => ({ x: 80, y: 60, vx: 0, vy: 0, life: 100, size: 5, damage: 10, color: "#fff", ...extra });
 
+  it.each([["front", 100, -10, 4], ["rear", 60, 10, 32]])("resolves a moving shot through the Shield Guy's %s with matching damage", (_side, x, vx, damage) => {
+    const target = enemyAt({ typeIndex: 11 });
+    const bullet = shot({ x, vx, damage: 20 });
+    const ctx = runtime({ player: { x: 150, y: 60, health: 100, maxHealth: 100 }, bullets: [bullet], enemies: [target] });
+    ctx.perkMods.critBonus = -1;
+    stepProjectileFrame(ctx);
+    expect(target.health).toBeCloseTo(10000 - damage);
+    expect(ctx.gs.totalDamage).toBeCloseTo(damage);
+    expect(ctx.stats.totalHits).toBe(1);
+    expect(bullet.life).toBe(0);
+  });
+
   it.each(["ordinary", "shield", "summoner"])("stops a consumed %s shot before the next overlapping target", kind => {
     const first = enemyAt(kind === "shield" ? { shieldPulseActive: true } : kind === "summoner" ? { typeIndex: 18, summonerInvuln: true } : {});
     const second = enemyAt();

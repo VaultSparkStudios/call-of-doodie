@@ -1670,3 +1670,8 @@ Use launch generation plus captured game identity for deferred run entry work. I
 
 
 S192 final release acceptance: S192 implementation 815f9b47b15388d2167af2fbc282b40dc7eb9a7b passed exact-main workflow 39362694165: 299 test files/2039 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 815f9b47b153; canonical and immutable https://be661b17.call-of-doodie.pages.dev shell7/7 each. Browser12/12 across390/1440/both themes proves replacement token/signature survive old-ticket delivery and pause remains usable.
+
+
+## 2026-10-20 — Session 193
+
+Use incoming source direction for the existing player-facing shield; preserve hemisphere boundary and rail policy. Consume repeated Escape in both App and dialog capture boundaries, leaving fresh presses and held movement/interact intact. Existing CANON-045 STRONG gap is retained for unchanged guest-game promotion. FORGE/public-unlaunched unchanged. Synthetic keyboard, assisted App state/ticks and automated Chrome checks do not prove participant or physical-controller outcomes. Existing S183 comparisons remain unmeasured. No backend, dependency, identity/trust-policy, cost, licensing or public-launch change. CDR legitimately unchanged without new creative direction.

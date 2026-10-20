@@ -1,12 +1,12 @@
 <!-- generated-by: scripts/render-startup-brief.mjs v3.1 -->
-<!-- generated-at: 2026-10-20 (Session 192 closeout) -->
-<!-- semantic-freshness: hash=9ec7b4d784d38d6b next=193 silSession=192 silScore=945 handoff=- tests=- -->
+<!-- generated-at: 2026-10-20 (Session 193 closeout) -->
+<!-- semantic-freshness: hash=bb21f2609925cb58 next=194 silSession=193 silScore=945 handoff=- tests=- -->
 <!-- fast-boot-valid-until: next session if within 24h -->
 <!-- brief-coherent: true -->
 
 # Startup Brief — Call-Of-Doodie
 
-> **Fast-boot brief** — generated at Session 192 closeout · 2026-10-20.
+> **Fast-boot brief** — generated at Session 193 closeout · 2026-10-20.
 > Valid for next session if started within 24h. For sessions >24h later, load context files fresh (start.md §3).
 
 ---
@@ -15,24 +15,24 @@
 ╔════════════════════════════════════════════════════════════════╗
 ║  🚀 CALL-OF-DOODIE                                               ║
 ║  project · deployed/public-unlaunched · FORGE                    ║
-║  Session 193 · 2026-10-20 · FOUNDER MODE                         ║
+║  Session 194 · 2026-10-20 · FOUNDER MODE                         ║
 ║  Owner: VaultSpark Studios                                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ LAST SESSION (S192) - WHAT SHIPPED ══════════════════════════╗
-║  S192 asynchronous run-start ownership production verified.      ║
+╔══ LAST SESSION (S193) - WHAT SHIPPED ══════════════════════════╗
+║  S193 corrects Shield Guy facing and makes keyboard actions fir  ║
 ║  Tests  -                                                        ║
 ║  Deploy -                                                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ WHERE TO TEST · Call-Of-Doodie ══════════════════════════════╗
+║  Staging       → https://1da5492a.call-of-doodie.pages.dev/ ·    ║
 ║  Unit tests    → npm test — 299/299 passing ✓                    ║
 ║  hosted-visual-proof → session-169-staging · route/theme/wid ✓   ║
 ║  production-verification → source ca1324136f8c · workflow 34 ✓   ║
 ║  hosted-staging → session-170-staging · immutable 520a56d6 · ✓   ║
 ║  full-gates   → 237/237 files · 1,387/1,387 assertions · str ✓   ║
 ║  production-verification → source bb88eb48d57d · workflow 34 ✓   ║
-║  full-gates   → 238/238 files · 1,389/1,389 assertions · str ✓   ║
 ║  full-gates   → 238/238 files · 1,389/1,389 assertions · str ✓   ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -43,7 +43,7 @@
 ╔══ SCORE ═══════════════════════════════════════════════════════╗
 ║                                                                  ║
 ║    945/1000   ██████████████████████░░   95%                     ║
-║    SIL v3.0  ·  Avg3: 945  ·  Velocity 1→                        ║
+║    SIL v3.0  ·  Avg3: 945  ·  Velocity 2→                        ║
 ║    Last active: 0d  ·  Last closeout: 0d  ·  (active = newest…   ║
 ║    Trend  ▂▂▂▄▄  →  (last 5 sessions)                            ║
 ║                                                                  ║
@@ -62,25 +62,25 @@
 ║                                                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ WHERE WE LEFT OFF  ·  Session 192 ═══════════════════════════╗
+╔══ WHERE WE LEFT OFF  ·  Session 193 ═══════════════════════════╗
 ║  Shipped:  see LATEST_HANDOFF.md                                 ║
 ║  Tests:    299/299 passing  ·  Deploy: N/A                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ✓  ███████░░░░░░░░░░░░░░░░░  29% used                           ║
-║     79,456 / 272,000 tok  ·  codex/codex-272k  · …               ║
-║     ~39,728 tok/turn  ·  cache 50%  ·  4 turns to compact        ║
+║  ✓  ████████░░░░░░░░░░░░░░░░  33% used                           ║
+║     88,648 / 272,000 tok  ·  codex/codex-272k  · …               ║
+║     ~44,324 tok/turn  ·  cache 50%  ·  3 turns to compact        ║
 ║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         299/299 passing (2026-10-20T03:13:45.277Z)     ║
-║  ⚠  Velocity      1   ·  Debt: →                                 ║
-║  ✓  Runway        S192 production verified                       ║
+║  ✓  Tests         299/299 passing (2026-10-20T03:46:34.453Z)     ║
+║  ✓  Velocity      2   ·  Debt: →                                 ║
+║  ✓  Runway        S193 acceptance in progress                    ║
 ║  ⛔  Context age   ?d                                             ║
 ║  ⚠  IGNIS         44193 FORGE  ·  12d old                        ║
-║  ⛔  Truth         selected run-ownership outcome production…     ║
+║  ⛔  Truth         final acceptance in progress.  ·  Genome: ?    ║
 ║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs…        ║
 ║  ✓  Genome dims   all stable  (24/25)                            ║
 ║  ✓  Entropy       0.214  (healthy)                               ║
@@ -115,7 +115,7 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ MOMENTUM METER ══════════════════════════════════════════════╗
-║  Velocity:   ▂▂▂▄▄  1→  (last 5 sessions)                        ║
+║  Velocity:   ▂▂▂▄▄  2→  (last 5 sessions)                        ║
 ║  Intent:     ?% achieved last 5                                  ║
 ║  Streak:     — (last intent not achieved)                        ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -151,5 +151,5 @@
 
 ---
 
-*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 192 closeout · 2026-10-20*
+*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 193 closeout · 2026-10-20*
 *Run `node scripts/ops.mjs doctor` for live health check · `node scripts/ops.mjs genius-list` to refresh hit list*

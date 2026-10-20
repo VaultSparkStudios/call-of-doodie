@@ -56,7 +56,9 @@ export function rollCrit({ baseCrit = 0, perkCrit = 0, runCrit = 0, rng = Math.r
 export function getShieldFacingMultiplier({ enemy, bullet, player }) {
   if (!enemy || enemy.typeIndex !== 11) return 1;
   const moveAngle = Math.atan2((player?.y || 0) - enemy.y, (player?.x || 0) - enemy.x);
-  const bulletAngle = Math.atan2(bullet?.vy || 0, bullet?.vx || 0);
+  // The shield faces the player. Compare that facing with the side the shot
+  // arrives from, which is opposite its travel direction (including ricochets).
+  const bulletAngle = Math.atan2(-(bullet?.vy || 0), -(bullet?.vx || 0));
   const angleDiff = Math.abs(Math.atan2(Math.sin(bulletAngle - moveAngle), Math.cos(bulletAngle - moveAngle)));
   return angleDiff < Math.PI / 2 ? 0.20 : 1.60;
 }
