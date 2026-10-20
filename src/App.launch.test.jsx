@@ -496,12 +496,12 @@ describe("CallOfDoodie launch smoke", () => {
       expect(next.ammoCount).toBe(before - 1);
     } finally { clock.mockRestore(); context.mockRestore(); }
   }, 60000);
-  it("preserves burst continuations through every gameplay barrier and snapshots rail builds", async () => {
+  it.each([1, 8])("preserves burst continuations and snapshots rail builds with deterministic seed %i", async (seed) => {
     const { default: App } = await import("./App.jsx");
     const { useGameLoop } = await import("./hooks/useGameLoop.js");
     container = document.createElement("div"); document.body.appendChild(container); root = createRoot(container);
     await act(async () => { root.render(<App />); }); await flush();
-    await act(async () => { container.querySelector("button").click(); }); await flush();
+    await act(async () => { await launchFixture.start(seed); }); await flush();
     const canvas = container.querySelector("#game-canvas");
     let fiber = canvas[Object.keys(canvas).find(key => key.startsWith("__reactFiber"))];
     const refs = [];
@@ -550,7 +550,8 @@ describe("CallOfDoodie launch smoke", () => {
         barrierFixture.input.mouseRef.current.down = true;
         await tick();
         barrierFixture.input.mouseRef.current.down = false;
-        expect(gs.pendingBeam.damage).toBeCloseTo(160 * synergy * weaponMod * evolution * (1 + upgrade * 0.25));
+        const runDamageMult = seed === 8 ? 2 : 1; // Glass Cannon versus Vampire
+        expect(gs.pendingBeam.damage).toBeCloseTo(160 * runDamageMult * synergy * weaponMod * evolution * (1 + upgrade * 0.25));
       }
       // Terminal transitions discard delayed projectiles before any rematch.
       gs.pendingBurstShots = [{ remainingFrames: 1 }];

@@ -22,3 +22,6 @@ Rollback: ordinary revert of S192 implementation and rebuild/redeploy prior main
 S192 full local suite passes 299/299 files and 2038/2038 assertions, no failed or pending tests. Strict lint, configured build, schema/startup/public/security gates pass; dependency audit zero vulnerabilities, backend5/5/replay3/3. Staging562130b0 shell7/7/browser12/12 across390/1440/both themes. All24 before/after captures inspected/hash-bound. Independent review approved. Exact-main production pending.
 
 Development fixture failures retained in ignored cache: attempted Home button after leaving menu; wrong analytics event name; snapshot before normal input cleanup. Corrected fixtures passed before full acceptance. Native startup probes missing local tools used explicit subject-bound canonical paths or honest gap labels; no foreign health claimed.
+
+
+S192 hosted candidate6659fcc failed one existing random-seed rail fixture (Glass Cannon2x versus expected1x); all2037 other assertions passed and deployment was skipped. Root-fix parameterizes explicit Vampire/Glass Cannon seeds with full expected multipliers; focused16/16 passes. Full acceptance rerun pending. Corrected testsLastRunMode to full-local with timeout ceiling stored separately; no deferred files were fabricated.

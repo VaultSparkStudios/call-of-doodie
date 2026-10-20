@@ -366,7 +366,7 @@
     "independentReview": "pass after menu and test corrections",
     "autopilot": "recipient equivalent; foreign doctor excluded"
   },
-  "testsLastRunMode": "full-local-120s-timeout",
+  "testsLastRunMode": "full-local",
   "velocity": 1,
   "silVelocityLastSession": 1,
   "deploy": {
