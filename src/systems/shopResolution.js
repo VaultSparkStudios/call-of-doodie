@@ -1,7 +1,9 @@
+import { getWeaponAmmoCapacity } from "./weaponAmmo.js";
+
 export function buildWeaponAmmoArray(weapons, weaponUpgrades, ammoMult = 1) {
   return weapons.map((weapon, index) => {
     const upgradeLevel = weaponUpgrades?.[index] || 0;
-    return Math.floor(weapon.maxAmmo * (1 + upgradeLevel * 0.25) * ammoMult);
+    return getWeaponAmmoCapacity(weapon, upgradeLevel, ammoMult);
   });
 }
 

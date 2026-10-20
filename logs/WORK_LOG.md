@@ -2023,3 +2023,11 @@ S190 candidate: S190 full local suite passes 298/298 files and 2,024/2,024 asser
 
 
 S190 final production: S190 implementation 3548fb5b4445a01a2e5d58ae8ecefe9cc1d924cc passed exact-main workflow 39344132347: all 298 test files / 2,024 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 3548fb5b4445. Canonical and immutable https://55bb853c.call-of-doodie.pages.dev pass shell 7/7 each. All 16 actual-App browser assertions pass across 390/1440 and both themes: equal 21/21 shot counts, no wall-jump extra shot, and active 0:02 terminal time for 120 frames.
+
+
+## 2026-10-20 — Session 191
+
+S191 preserves earned movement speed through Kill Frenzy and keeps cursed magazines usable. Two L2 outcomes staged; full-suite/production pending. Public acceptance: audits/2026-10-20.json.
+
+
+S191 candidate: S191 full local suite passes 299/299 files and 2032/2032 assertions, no failed or pending tests. Strict lint, configured build, schema/startup/public/security/runtime checks pass; zero dependency vulnerabilities; backend5/5 and replay3/3. Staging7e4d9a14 shell7/7 and actual-App24/24 pass across390/1440 and both themes. All40 real before/after captures inspected and hash-bound. Independent implementation/closeout review passes. Exact-main production pending.

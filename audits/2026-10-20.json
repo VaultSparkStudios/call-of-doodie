@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "1.3",
+  "session": 191,
+  "date": "2026-10-20",
+  "headline": "S191 preserves earned movement speed through Kill Frenzy and keeps cursed magazines usable.",
+  "shipped": [
+    "Kill Frenzy multiplies movement for exactly its active frames, preserving permanent gains and pickup/adrenaline/rubble composition.",
+    "All magazine/refill and desktop/mobile capacity displays share a minimum-one capacity rule, including Scavenger ammo restoration."
+  ],
+  "validation": "S191 full local suite passes 299/299 files and 2032/2032 assertions, no failed or pending tests. Strict lint, configured build, schema/startup/public/security/runtime checks pass; zero dependency vulnerabilities; backend5/5 and replay3/3. Staging7e4d9a14 shell7/7 and actual-App24/24 pass across390/1440 and both themes. All40 real before/after captures inspected and hash-bound. Independent implementation/closeout review passes. Exact-main production pending.",
+  "limits": "FORGE/public-unlaunched unchanged. Assisted actual-App state/callback fixtures and synthetic input do not prove physical-controller or participant outcomes. Existing S183 comparisons remain unmeasured. No new backend, dependency, cost, identity, licensing or launch change. CDR unchanged without creative direction.",
+  "review": {
+    "verdict": "pass",
+    "blockingFindings": 0
+  },
+  "staging": {
+    "url": "https://7e4d9a14.call-of-doodie.pages.dev",
+    "browserCases": 4,
+    "shellAssertions": 7,
+    "browserAssertions": 24
+  },
+  "production": {
+    "status": "pending"
+  },
+  "closeout": {
+    "state": "delivery-pending",
+    "silScore": 945,
+    "scaffold": {
+      "tasks": 3,
+      "done": 2,
+      "inProgress": 1,
+      "open": 0
+    }
+  },
+  "testRunNote": "Initial full run passed2031 assertions with one Git/startup fixture exceeding30s under host load (36.99s). Isolated fixture passes13.63s; complete rerun uses120s test timeout and passes all299 files/2032 assertions. Second complete run passed startup but one hot-context freshness assertion failed because concurrent closeout writes changed its inputs. Regenerated context and froze inputs before the final full rerun. Both failed reports retained; neither is passing evidence.",
+  "visualCaptures": 40
+}

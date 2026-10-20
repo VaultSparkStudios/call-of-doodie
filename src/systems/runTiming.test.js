@@ -69,4 +69,17 @@ describe("temporary speed pickup", () => {
     expect(gs.player.x).toBeCloseTo(100 + 3.7 * 2 * 0.6);
     expect(gs.player.speed).toBe(3.2);
   });
+
+  it("composes Frenzy with capped pickups and permanent gains without changing base speed", () => {
+    const gs = { player: { x: 100, y: 100, speed: 7.8 } };
+    addSpeedPickup(gs);
+    applyPlayerMovement(gs.player, { dx: 1, dy: 0 }, { speedBonus: speedPickupBonus(gs), speedMultiplier: 1.2, adrenalineRushTimer: 10, rubbleSlowed: true });
+    expect(gs.player.x - 100).toBeCloseTo(8 * 1.2 * 2 * 0.6);
+    expect(gs.player.speed).toBe(7.8);
+    gs.player.speed *= 1.1;
+    gs.player.x = 100;
+    applyPlayerMovement(gs.player, { dx: 1, dy: 0 }, { speedBonus: speedPickupBonus(gs), speedMultiplier: 1.2 });
+    expect(gs.player.x - 100).toBeCloseTo(7.8 * 1.1 * 1.2);
+    expect(gs.player.speed).toBeCloseTo(8.58);
+  });
 });

@@ -9,6 +9,7 @@ function useReducedEffects() {
     () => 0,
   );
 }
+import { getWeaponAmmoCapacity } from "../systems/weaponAmmo.js";
 import { WEAPONS, DIFFICULTIES } from "../constants.js";
 import { getHudCenterStackLayout, getHudDebugSlots, isHudDebugEnabled } from "../utils/hudLayout.js";
 import { buildRunDrillLiveProgress } from "../systems/runDrill.js";
@@ -23,7 +24,7 @@ export default function HUD({
   currentWeapon, combo, comboTimer, killstreak, level, xp, xpNeeded,
   killFeed, username, grenadeReady, dashReady, extraLives, guardianAngelFlash,
   bankedPerkChoices, nextPerkLevel,
-  difficulty, isMobile, weaponUpgrades, activePerks, runModifier, weaponEvolutions,
+  difficulty, isMobile, weaponUpgrades, ammoMult = 1, activePerks, runModifier, weaponEvolutions,
   buildArchetype, unlockedArchetypes,
   onPause,
   fmtTime,
@@ -85,7 +86,7 @@ export default function HUD({
         isMobile={isMobile}
         wave={wave} waveLabel={waveLabel} timeSurvived={timeSurvived} score={score} kills={kills} deaths={deaths}
         health={health} maxHealth={healthLimit} level={level}
-        currentWeapon={currentWeapon} ammo={ammo} isReloading={isReloading} extraLives={extraLives}
+        currentWeapon={currentWeapon} weaponUpgrades={weaponUpgrades} ammoMult={ammoMult} ammo={ammo} isReloading={isReloading} extraLives={extraLives}
         fmtTime={fmtTime} onPause={onPause}
         activeDrill={activeDrill} drillProgress={drillProgress} practiceEvidence={practiceEvidence} runIntegrity={runIntegrity}
         runModifier={runModifier} rivalPace={rivalPace} vsScore={vsScore} vsName={vsName}
@@ -461,7 +462,7 @@ export default function HUD({
         </div>
         <div style={{ fontSize: 20, fontWeight: 900 }}>
           <span style={{ color: ammo > 0 ? "#FFF" : "#F44" }}>{ammo}</span>
-          <span style={{ color: "#BBB", fontSize: 13 }}>/{weapon.maxAmmo}</span>
+          <span style={{ color: "#BBB", fontSize: 13 }}>/{getWeaponAmmoCapacity(weapon, weaponUpgrades?.[currentWeapon], ammoMult)}</span>
         </div>
         {isReloading && <div style={{ fontSize: 11, color: "var(--cod-gold)", animation: "blink 0.5s infinite" }}>RELOADING...</div>}
       </div>

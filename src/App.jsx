@@ -1,6 +1,6 @@
 import { getRunXpGain, getPlayerProjectileSpeed, getPickupCollectionRange, shouldDropStandardPickup } from "./config/weeklyMutationRuntime.js";
 import { version as appVersion } from "../package.json";
-import { applyMetaUpgrades, applyMetaTree, finalizeMetaStart, multiplyKillScore, applyWeeklyMutationWithAffinity, consumeGauntletMetaChoice, metaUpgradeValue, metaIncrease, META_TREE_FACTS } from "./config/upgradeFacts.js";
+import { applyMetaUpgrades, applyMetaTree, multiplyKillScore, applyWeeklyMutationWithAffinity, consumeGauntletMetaChoice, metaUpgradeValue, metaIncrease, META_TREE_FACTS } from "./config/upgradeFacts.js";
 import { PERK_FACTS } from "./config/perkFacts.js";
 import { useState, useEffect, useRef, useCallback, useMemo, lazy } from "react";
 import AsyncPanelBoundary from "./components/AsyncPanelBoundary.jsx";
@@ -132,6 +132,7 @@ import { matchesExperiment } from "./utils/runBrain.js";
 import { applyThreatRecommendationChoice, queueCompletedRunFact, recordPostRunFieldReport } from "./systems/runFactFlow.js";
 import { applyModeRules, getModeRewardFlow, getModeRules, isBossWaveForMode, resolveModeId } from "./systems/modeRules.js";
 import { getModeMeta } from "./systems/modeRegistry.js";
+import { getWeaponAmmoCapacity } from "./systems/weaponAmmo.js";
 import { beginWeaponReload, advanceWeaponReload } from "./systems/weaponReload.js";
 import { runElapsedSeconds } from "./systems/runClock.js";
 import { queueBurstShots, advanceBurstShots } from "./systems/burstShots.js";
@@ -918,7 +919,6 @@ export default function CallOfDoodie() {
         if (gs) addScreenText(gs, sizeRef.current.w / 2, sizeRef.current.h / 2 - 40, "⚙ Adapted for you", "#88FF88", true);
       }, 800);
     }
-    finalizeMetaStart(gsRef.current);
     return seed;
   }, [leaderboard, _modeAnnounce]);
 
@@ -1424,7 +1424,7 @@ export default function CallOfDoodie() {
     }
     soundShoot(weaponIdx);
     const p = gs.player;
-    const maxAmmo = Math.floor(WEAPONS[weaponIdx].maxAmmo * (1 + upgLevel * 0.25) * (perkModsRef.current.ammoMult || 1));
+    const maxAmmo = getWeaponAmmoCapacity(WEAPONS[weaponIdx], upgLevel, perkModsRef.current.ammoMult);
     const lowAmmoThreshold = Math.max(1, Math.min(3, Math.floor(maxAmmo * 0.2)));
     if (gs.ammoCount > 0 && gs.ammoCount <= lowAmmoThreshold) {
       const lowAmmoRoast = getRoastCallout("low_ammo", roastCooldowns.current, gs.currentWave, 1);
@@ -2345,7 +2345,7 @@ export default function CallOfDoodie() {
       gs.weaponAmmos[currentWeaponRef.current] = gs.ammoCount;
       // Load saved ammo for the new weapon (init to max if first equip)
       const upgLevel = gs.weaponUpgrades?.[idx] || 0;
-      const maxAmmo = Math.floor(WEAPONS[idx].maxAmmo * (1 + upgLevel * 0.25) * (perkModsRef.current.ammoMult || 1));
+      const maxAmmo = getWeaponAmmoCapacity(WEAPONS[idx], upgLevel, perkModsRef.current.ammoMult);
       const savedAmmo = gs.weaponAmmos[idx] ?? maxAmmo;
       gs.ammoCount = savedAmmo;
       setAmmo(savedAmmo);
@@ -2510,7 +2510,7 @@ export default function CallOfDoodie() {
     const reloadedWeapon = advanceWeaponReload(gs);
     if (reloadedWeapon !== null) {
       const upgrade = gs.weaponUpgrades?.[reloadedWeapon] || 0;
-      const maxAmmo = Math.floor(WEAPONS[reloadedWeapon].maxAmmo * (1 + upgrade * 0.25) * (perkModsRef.current.ammoMult || 1));
+      const maxAmmo = getWeaponAmmoCapacity(WEAPONS[reloadedWeapon], upgrade, perkModsRef.current.ammoMult);
       gs.weaponAmmos[reloadedWeapon] = maxAmmo;
       if (currentWeaponRef.current === reloadedWeapon) { gs.ammoCount = maxAmmo; setAmmo(maxAmmo); }
       setIsReloading(false); isReloadingRef.current = false;
@@ -2534,6 +2534,7 @@ export default function CallOfDoodie() {
     combatRuntimeRef.current.applyPlayerMovement(p, movement, {
       dashActive: dashRef.current.active > 0,
       speedBonus: speedPickupBonus(gs),
+      speedMultiplier: (gs._killFrenzyTimer || 0) > 0 ? metaIncrease(META_TREE_FACTS.off4) : 1,
       adrenalineRushTimer: gs.adrenalineRushTimer || 0,
       rubbleSlowed: !!gs._rubbleSlowed,
       W: AW,
@@ -2541,6 +2542,7 @@ export default function CallOfDoodie() {
       obstacles: gs.obstacles || [],
     });
     advanceSpeedPickups(gs);
+    if ((gs._killFrenzyTimer || 0) > 0) gs._killFrenzyTimer--;
     // Frame the player before anything reads the camera this frame.
     updateCamera(cam, p, { viewW: W, viewH: H });
     const _vc = viewCenter(cam, W, H);
@@ -2673,11 +2675,6 @@ export default function CallOfDoodie() {
       }
     }
 
-    // ── Kill Frenzy: shared duration and speed promise ──
-    if ((gs._killFrenzyTimer || 0) > 0) { gs._killFrenzyTimer--; gs.player.speed = gs._killFrenzyBaseSpeed * metaIncrease(META_TREE_FACTS.off4); }
-    else if (gs._killFrenzyUnlocked && gs.player.speed === (gs._killFrenzyBaseSpeed || 0) * metaIncrease(META_TREE_FACTS.off4)) {
-      gs.player.speed = gs._killFrenzyBaseSpeed;
-    }
 
     // ── Dynamic Objective tick + reward resolution ──
     const objectiveFrame = combatRuntimeRef.current.resolveObjectiveFrame(gs, statsRef.current.objectiveChains);
@@ -3372,15 +3369,15 @@ export default function CallOfDoodie() {
           setHealth(p.health); addText(gs, pk.x, pk.y, "+30 HP", "#00FF00");
         } else if (pk.type === "ammo") {
           const upgLevel = gs.weaponUpgrades?.[wpnIdx] || 0;
-          const maxAmmo = Math.floor(WEAPONS[wpnIdx].maxAmmo * (1 + upgLevel * 0.25) * (perkModsRef.current.ammoMult || 1));
+          const maxAmmo = getWeaponAmmoCapacity(WEAPONS[wpnIdx], upgLevel, perkModsRef.current.ammoMult);
           // Scavenger: restore 30% more ammo (partial restore for all weapons)
           const ammoRestoreMult = perkModsRef.current.ammoRestoreMult || 1;
           if (ammoRestoreMult > 1) {
             // Scavenger mode: restore 30% of max ammo across ALL weapons
             WEAPONS.forEach((w, wi) => {
               const wUpg = gs.weaponUpgrades?.[wi] || 0;
-              const wMax = Math.floor(w.maxAmmo * (1 + wUpg * 0.25) * (perkModsRef.current.ammoMult || 1));
-              gs.weaponAmmos[wi] = Math.min(wMax, (gs.weaponAmmos[wi] || 0) + Math.floor(wMax * 0.30 * ammoRestoreMult));
+              const wMax = getWeaponAmmoCapacity(w, wUpg, perkModsRef.current.ammoMult);
+              gs.weaponAmmos[wi] = Math.min(wMax, (gs.weaponAmmos[wi] || 0) + Math.max(1, Math.floor(wMax * 0.30 * ammoRestoreMult)));
             });
           }
           if (ammoRestoreMult <= 1) gs.weaponAmmos[wpnIdx] = maxAmmo; // normal: full refill current weapon
@@ -3755,7 +3752,7 @@ export default function CallOfDoodie() {
       lastShotRef.current = -Infinity;
       gs.player.health = 100; gs.player.x = W / 2; gs.player.y = H / 2; gs.player.invincible = 60;
       const upgLevel = gs.weaponUpgrades?.[currentWeaponRef.current] || 0;
-      gs.ammoCount = Math.floor(WEAPONS[currentWeaponRef.current].maxAmmo * (1 + upgLevel * 0.25));
+      gs.ammoCount = getWeaponAmmoCapacity(WEAPONS[currentWeaponRef.current], upgLevel, perkModsRef.current.ammoMult);
       gs.enemies = []; gs.bullets = []; gs.grenades = []; gs.enemyBullets = []; gs.enemiesThisWave = 0;
       setHealth(100); setAmmo(gs.ammoCount);
       setIsReloading(false); isReloadingRef.current = false;
@@ -4299,6 +4296,7 @@ export default function CallOfDoodie() {
       {/* HUD overlay */}
       <AsyncPanelBoundary>
       <HUD
+        ammoMult={perkModsRef.current.ammoMult}
         scoreAttackTimeLeft={gsRef.current?.scoreAttackMode ? gsRef.current.scoreAttackTimeLeft : null}
         runElapsedSeconds={runElapsedSeconds(gsRef.current)}
         modeHud={modeRuntimeRef.current ? modeRuntimeRef.current.getModeHudModel(gsRef.current, modeDefRef.current) : null}
@@ -4368,8 +4366,8 @@ export default function CallOfDoodie() {
 
       {/* Mobile action bar */}
       <AsyncPanelBoundary>
-      {isMobile && <MobileWeaponDock currentWeapon={currentWeapon} weaponUpgrades={weaponUpgrades} weaponAmmos={gsRef.current?.weaponAmmos || []} ammo={ammo} weaponMods={gsRef.current?.weaponMods || {}} grenadeReady={grenadeReady} dashReady={dashReady} isReloading={isReloading} onSwitchWeapon={switchWeapon} onReload={() => doReload(currentWeaponRef.current)} onDash={doDash} onGrenade={throwGrenade} />}
-      {!isMobile && <DesktopWeaponDock currentWeapon={currentWeapon} weaponUpgrades={weaponUpgrades} weaponAmmos={gsRef.current?.weaponAmmos || []} ammo={ammo} weaponMods={gsRef.current?.weaponMods || {}} grenadeReady={grenadeReady} dashReady={dashReady} isReloading={isReloading} showAmmoBars onSwitchWeapon={switchWeapon} onReload={() => doReload(currentWeaponRef.current)} onDash={doDash} onGrenade={throwGrenade} />}
+      {isMobile && <MobileWeaponDock ammoMult={perkModsRef.current.ammoMult} currentWeapon={currentWeapon} weaponUpgrades={weaponUpgrades} weaponAmmos={gsRef.current?.weaponAmmos || []} ammo={ammo} weaponMods={gsRef.current?.weaponMods || {}} grenadeReady={grenadeReady} dashReady={dashReady} isReloading={isReloading} onSwitchWeapon={switchWeapon} onReload={() => doReload(currentWeaponRef.current)} onDash={doDash} onGrenade={throwGrenade} />}
+      {!isMobile && <DesktopWeaponDock ammoMult={perkModsRef.current.ammoMult} currentWeapon={currentWeapon} weaponUpgrades={weaponUpgrades} weaponAmmos={gsRef.current?.weaponAmmos || []} ammo={ammo} weaponMods={gsRef.current?.weaponMods || {}} grenadeReady={grenadeReady} dashReady={dashReady} isReloading={isReloading} showAmmoBars onSwitchWeapon={switchWeapon} onReload={() => doReload(currentWeaponRef.current)} onDash={doDash} onGrenade={throwGrenade} />}
       </AsyncPanelBoundary>
 
       <style>{`

@@ -1,3 +1,13 @@
+## S191 candidate verified
+
+S191 full local suite passes 299/299 files and 2032/2032 assertions, no failed or pending tests. Strict lint, configured build, schema/startup/public/security/runtime checks pass; zero dependency vulnerabilities; backend5/5 and replay3/3. Staging7e4d9a14 shell7/7 and actual-App24/24 pass across390/1440 and both themes. All40 real before/after captures inspected and hash-bound. Independent implementation/closeout review passes. Exact-main production pending.
+
+## S191 build integrity
+
+S191 preserves earned movement speed through Kill Frenzy and keeps cursed magazines usable.
+
+Staging verified; final full-suite and production pending. See LATEST_HANDOFF.
+
 ## S190 production verified
 
 Weapon cadence and run-duration fixes are live.

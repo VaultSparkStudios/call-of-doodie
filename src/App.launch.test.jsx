@@ -283,6 +283,50 @@ afterEach(async () => {
 });
 
 describe("CallOfDoodie launch smoke", () => {
+  it("preserves earned speed and applies Kill Frenzy on exactly its active movement frames", async () => {
+    const { default: App } = await import("./App.jsx");
+    const { useGameLoop } = await import("./hooks/useGameLoop.js");
+    container = document.createElement("div"); document.body.appendChild(container); root = createRoot(container);
+    await act(async () => { root.render(<App />); }); await flush();
+    await act(async () => { container.querySelector("button").click(); }); await flush();
+    const canvas = container.querySelector("#game-canvas");
+    let fiber = canvas[Object.keys(canvas).find(key => key.startsWith("__reactFiber"))];
+    let gs;
+    while (fiber && !gs) { let h = fiber.memoizedState; while (h) { const value = h.memoizedState?.current; if (value && Object.hasOwn(value, "player") && value.player && value.enemies) gs = value; h = h.next; } fiber = fiber.return; }
+    const context = vi.spyOn(HTMLCanvasElement.prototype, "getContext").mockReturnValue({});
+    const tick = () => useGameLoop.mock.calls.at(-1)[0]({ render: false });
+    for (const ref of Object.values(barrierFixture.refs)) ref.current = false;
+    gs.spawnTimer = 1e9; gs.maxEnemiesThisWave = 1e9; gs.enemies = []; gs.obstacles = []; gs.hazards = [];
+    gs.player.health = 1e9; gs.player.maxHealth = 1e9; gs.settHighlightCapture = false;
+    gs._killFrenzyUnlocked = true; gs._killFrenzyTimer = 90; gs.player.speed = 5;
+    barrierFixture.input.keysRef.current = { d: true };
+    try {
+      for (const ref of Object.values(barrierFixture.refs)) {
+        ref.current = true;
+        await act(async () => { tick(); });
+        expect(gs._killFrenzyTimer).toBe(90); expect(gs.player.speed).toBe(5);
+        ref.current = false;
+      }
+      await act(async () => {
+        for (let i = 0; i < 90; i++) {
+          if (i === 30) gs.player.speed *= 1.1; // shop/perk multiplicative gain
+          if (i === 60) gs.player.speed += 0.12; // level gain during active Frenzy
+          gs.player.x = 100; gs.player.y = 200;
+          const base = gs.player.speed;
+          tick();
+          expect(gs.player.x - 100).toBeCloseTo(base * 1.2);
+          expect(gs.player.speed).toBe(base);
+          expect(gs._killFrenzyTimer).toBe(89 - i);
+        }
+        gs.player.x = 100; tick();
+      });
+      expect(gs.player.speed).toBeCloseTo(5.62);
+      expect(gs.player.x - 100).toBeCloseTo(5.62);
+      gs._killFrenzyTimer = 90;
+      await act(async () => { gs.player.x = 100; tick(); });
+      expect(gs.player.x - 100).toBeCloseTo(5.62 * 1.2);
+    } finally { context.mockRestore(); }
+  }, 60000);
   it("uses active steps for firing and terminal time across wall jumps, barriers and rematches", async () => {
     const { default: App } = await import("./App.jsx");
     const { useGameLoop } = await import("./hooks/useGameLoop.js");
@@ -474,6 +518,53 @@ describe("CallOfDoodie launch smoke", () => {
         expect(gs.pendingReload?.weaponIndex).toBe(0);
       } finally { clock.mockRestore(); }
     } finally { vi.useRealTimers(); context.mockRestore(); }
+  }, 60000);
+  it("reloads and resupplies a usable RPG magazine after Haste Poison", async () => {
+    const { default: App } = await import("./App.jsx");
+    const { useGameLoop } = await import("./hooks/useGameLoop.js");
+    const { CURSED_PERKS } = await import("./constants.js");
+    container = document.createElement("div"); document.body.appendChild(container); root = createRoot(container);
+    await act(async () => { root.render(<App />); }); await flush();
+    await act(async () => { container.querySelector("button").click(); }); await flush();
+    const canvas = container.querySelector("#game-canvas");
+    let fiber = canvas[Object.keys(canvas).find(key => key.startsWith("__reactFiber"))];
+    const refs = [];
+    while (fiber) {
+      let hook = fiber.memoizedState;
+      while (hook) { if (hook.memoizedState && Object.hasOwn(hook.memoizedState, "current")) refs.push(hook.memoizedState); hook = hook.next; }
+      fiber = fiber.return;
+    }
+    const gs = refs.find(ref => ref.current?.player && ref.current?.enemies).current;
+    // perkModsRef immediately follows difficultyRef in the App's ref declaration.
+    const mods = refs[refs.findIndex(ref => ref.current === "normal") + 1].current;
+    CURSED_PERKS.find(perk => perk.id === "haste_poison").apply(mods);
+    expect(mods.ammoMult).toBe(0.3);
+    const context = vi.spyOn(canvas, "getContext").mockReturnValue({});
+    for (const ref of Object.values(barrierFixture.refs)) ref.current = false;
+    gs.spawnTimer = 1e9; gs.maxEnemiesThisWave = 1e9; gs.enemies = []; gs.obstacles = []; gs.hazards = [];
+    gs.player.health = 1e9; gs.player.maxHealth = 1e9; gs.settHighlightCapture = false; gs.settAutoReload = false;
+    try {
+      await act(async () => { container.querySelector('[data-testid="combat-swap"]').click(); });
+      gs.ammoCount = 0; gs.weaponAmmos[1] = 0;
+      await act(async () => { container.querySelector('[data-testid="combat-reload"]').click(); });
+      expect(gs.pendingReload?.weaponIndex).toBe(1);
+      gs.pendingReload.remainingFrames = 1;
+      await act(async () => { useGameLoop.mock.calls.at(-1)[0]({ render: false }); });
+      expect(gs.ammoCount).toBe(1); expect(gs.weaponAmmos[1]).toBe(1);
+      barrierFixture.input.mouseRef.current.down = true;
+      await act(async () => { useGameLoop.mock.calls.at(-1)[0]({ render: false }); });
+      expect(gs.ammoCount).toBe(0); expect(gs.bullets.some(bullet => bullet.wpnIdx === 1)).toBe(true);
+      barrierFixture.input.mouseRef.current.down = false;
+      gs.pickups = [{ type: "ammo", x: gs.player.x, y: gs.player.y, life: 100 }];
+      await act(async () => { useGameLoop.mock.calls.at(-1)[0]({ render: false }); });
+      expect(gs.ammoCount).toBe(1); expect(gs.weaponAmmos[1]).toBe(1);
+      // Scavenger's partial all-weapon resupply also respects the same capacity.
+      mods.ammoRestoreMult = 1.3;
+      gs.ammoCount = 0; gs.weaponAmmos[1] = 0;
+      gs.pickups = [{ type: "ammo", x: gs.player.x, y: gs.player.y, life: 100 }];
+      await act(async () => { useGameLoop.mock.calls.at(-1)[0]({ render: false }); });
+      expect(gs.ammoCount).toBeGreaterThanOrEqual(1);
+    } finally { context.mockRestore(); }
   }, 60000);
   it("blocks combat through keyboard, pointer, touch, controller and dock during every frozen state, then resumes", async () => {
     const { default: App } = await import("./App.jsx");

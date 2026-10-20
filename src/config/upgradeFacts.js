@@ -108,10 +108,6 @@ export function consumeGauntletMetaChoice(gs) {
   gs._treeGauntletBonusGranted = true;
   return 1;
 }
-// Called after run modifiers and settings so later starting bonuses survive.
-export function finalizeMetaStart(gs) {
-  if (gs._killFrenzyUnlocked) gs._killFrenzyBaseSpeed = gs.player.speed;
-}
 
 export function multiplyKillScore(gs, multiplier) {
   gs.killScoreMult = (gs.killScoreMult || 1) * multiplier;

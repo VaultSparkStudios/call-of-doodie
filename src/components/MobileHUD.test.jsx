@@ -22,6 +22,10 @@ const baseProps = {
 };
 
 describe("MobileHUD", () => {
+  it("displays the usable cursed magazine and upgraded capacity", () => {
+    expect(renderToStaticMarkup(<MobileHUD {...baseProps} currentWeapon={1} ammo={1} ammoMult={0.3} />)).toContain("1/1");
+    expect(renderToStaticMarkup(<MobileHUD {...baseProps} ammo={67} weaponUpgrades={[2]} ammoMult={1.5} />)).toContain("67/67");
+  });
   it("leaves mobile weapon and ammo to the action dock while preserving health and objective", () => {
     const mobile = renderToStaticMarkup(<MobileHUD {...baseProps} isMobile modeHud={{ banner: "POWER THREE PUMPS" }} />);
     expect(mobile).toContain("POWER THREE PUMPS");

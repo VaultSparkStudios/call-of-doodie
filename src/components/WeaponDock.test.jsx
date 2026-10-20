@@ -38,6 +38,16 @@ describe("WeaponDock", () => {
     });
   }
 
+  it("shows the same cursed capacity in desktop, mobile and arsenal labels", async () => {
+    await render(<><DesktopWeaponDock {...sharedProps} currentWeapon={1} ammo={1} ammoMult={0.3} onSwitchWeapon={noop} /><MobileWeaponDock {...sharedProps} currentWeapon={1} ammo={1} ammoMult={0.3} onSwitchWeapon={noop} /></>);
+    expect(container.textContent).toContain("1/1 AMMO");
+    expect(container.textContent).toContain("1 / 1");
+    await act(async () => container.querySelector('[aria-controls="desktop-weapon-selector"]').click());
+    expect(document.querySelector('[aria-label="Equipped Rubber Chicken RPG, 1 of 1 ammo"]')).not.toBeNull();
+    await act(async () => container.querySelector('.weapon-dock-mobile__active').click());
+    expect(container.querySelector('[aria-label="Equipped Rubber Chicken RPG, 1 of 1 ammo"]')).not.toBeNull();
+  });
+
   it("keeps twelve pre-run choices but collapses the combat dock until requested", async () => {
     const onSwitchWeapon = vi.fn();
     await render(<><PrimaryWeaponSelector selectedIndex={0} onSelect={noop} /><DesktopWeaponDock {...sharedProps} onSwitchWeapon={onSwitchWeapon} /></>);

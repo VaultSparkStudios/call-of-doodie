@@ -1,15 +1,26 @@
-## Where We Left Off — Session 190 final closeout
+## Where We Left Off — Session 191
 
-Session Intent: fresh full /arc, direct-main commit/push and full deployment. Intent outcome: achieved for the two selected L2 outcomes; final records-seal CI/readback must be verified separately before native completion.
+Session Intent: fresh full /arc, direct-main commit/push and full deployment. Intent outcome: implementation and staging verified; full acceptance and production pending.
 
-S190 implementation 3548fb5b4445a01a2e5d58ae8ecefe9cc1d924cc passed exact-main workflow 39344132347: all 298 test files / 2,024 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 3548fb5b4445. Canonical and immutable https://55bb853c.call-of-doodie.pages.dev pass shell 7/7 each. All 16 actual-App browser assertions pass across 390/1440 and both themes: equal 21/21 shot counts, no wall-jump extra shot, and active 0:02 terminal time for 120 frames.
+S191 preserves earned movement speed through Kill Frenzy and keeps cursed magazines usable.
 
-Fresh startup and nine-axis audit belong to goal 01a15684-ad6f-77c3-9e73-7962a39657dc createdAt1792452906, bound to S190/start ac298d1a254d31c53326f0f035b2eb8de3f96250. Audit and plan live in ignored .cache/audit-S190/docs. Typed premise gate2/2 preceded runtime edits with implementationDirty empty. Timing checker flags canonical startup hook/trailer propagation18cbf19 before the gate; deviation retained. Durable implementation plan rendered after runtime edits; audit recipes and scope preceded them.
+Kill Frenzy multiplies movement for exactly its active frames, preserving permanent gains and pickup/adrenaline/rubble composition.
 
-Active60Hz steps drive firing and all player-duration consumers. Operations uses active start marker; legacy/headless state retains frame fallback. Wall timestamps remain for event ordering. Historical replay equivalence is not claimed. Independent implementation review fixed Operations counter divergence; closeout review fixed rolling averages and a truncated compact handoff. All ten write-back records reconciled and32 before/after captures source/hash bound.
+All magazine/refill and desktop/mobile capacity displays share a minimum-one capacity rule, including Scavenger ammo restoration.
 
-FORGE/public-unlaunched unchanged. Browser checks use assisted actual-App state/callback fixtures and synthetic input. Physical controllers, participant outcomes and the existing S183 comparisons remain unmeasured. CDR unchanged without creative direction.
+Focused gameplay and component checks pass 6 files / 55 assertions. Strict lint, configured deployable build, public contracts and security gate pass; dependency audit reports zero vulnerabilities. Staging 7e4d9a14 passes shell7/7 and actual-App Frenzy/ammo checks at390/1440 in both themes. Full suite, expanded arsenal visual proof and exact-main production remain pending.
 
-Canon sync55, no absolute gap. Existing CANON-045 STRONG legacy gap retained; timing changes do not alter trust. Doctor/autopilot still delegate foreign Studio Ops health, so scoped project schema, startup, security, public/runtime checks and exact-main workflow own release acceptance; no zero-finding doctor claim. State-vector, entropy and genome wrappers were inspected and honor explicit --project, then refreshed for S190. Signed Ark cargo requests central visibility refresh; sent is not applied.
+This native goal01a156fb-cb42-72a3-b4fd-1abe4a4dc774 createdAt1792460722 binds fresh S191/start f33a485b6b7aeda4f7bdcef484327f4206d601a9. Fresh nine-axis audit, typed3/3 pre-edit gate with implementationDirty[] and L2 plan live in ignored .cache/audit-S191/docs. Timing checker passes pre-implementation; startup propagation d66d2125 preceded gate but no implementation source changed. Two independent work lanes reviewed one another: obsolete Frenzy init invocation and divergent ammo displays were fixed before acceptance.
 
-Rollback: ordinary revert of implementation 3548fb5, rebuild and redeploy prior gameplay ac298d1a. Existing founder authorization covers routine main/promotion; no lifecycle launch. No persistent server. This records-only seal preserves browser-verified src/functions/public bytes and receives its own exact-main CI and canonical readback before native completion.
+FORGE/public-unlaunched unchanged. Assisted actual-App state/callback fixtures and synthetic input do not prove physical-controller or participant outcomes. Existing S183 comparisons remain unmeasured. No new backend, dependency, cost, identity, licensing or launch change. CDR unchanged without creative direction.
+
+Existing CANON-045 STRONG integration gap retained: unchanged guest-game build correction does not alter identity/trust. Local ops doctor delegates to the foreign Studio Ops subject, so its result cannot certify project health. Project-local schema/startup/public/security/runtime gates and exact-candidate required workflow own release acceptance; no zero-finding foreign-doctor claim. State vector/entropy/genome wrappers accept explicit project binding. Owner-scoped Ark cargo requests central visibility refresh; shipment is not adoption.
+
+Rollback: ordinary revert of this implementation, rebuild/redeploy prior main f33a485. Existing founder authorization covers staging, main and routine promotion. Final records seal must retain tested runtime bytes and receive exact-main CI/readback before native completion.
+
+
+## S191 final candidate evidence
+
+S191 full local suite passes 299/299 files and 2032/2032 assertions, no failed or pending tests. Strict lint, configured build, schema/startup/public/security/runtime checks pass; zero dependency vulnerabilities; backend5/5 and replay3/3. Staging7e4d9a14 shell7/7 and actual-App24/24 pass across390/1440 and both themes. All40 real before/after captures inspected and hash-bound. Independent implementation/closeout review passes. Exact-main production pending.
+
+Initial full run passed2031 assertions with one Git/startup fixture exceeding30s under host load (36.99s). Isolated fixture passes13.63s; complete rerun uses120s test timeout and passes all299 files/2032 assertions. Second complete run passed startup but one hot-context freshness assertion failed because concurrent closeout writes changed its inputs. Regenerated context and froze inputs before the final full rerun. Both failed reports retained; neither is passing evidence.

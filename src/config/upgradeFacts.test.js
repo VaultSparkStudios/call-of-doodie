@@ -2,7 +2,7 @@ import fs from "node:fs";
 import { applyRunSettings, SETTINGS_DEFAULTS } from "../settings.js";
 import { describe, expect, it } from "vitest";
 import { META_UPGRADES, META_TREE, WEEKLY_MUTATIONS, WEAPONS } from "../constants.js";
-import { applyMetaUpgrades, applyMetaTree, finalizeMetaStart, multiplyKillScore, applyWeeklyMutationWithAffinity, consumeGauntletMetaChoice } from "./upgradeFacts.js";
+import { applyMetaUpgrades, applyMetaTree, multiplyKillScore, applyWeeklyMutationWithAffinity, consumeGauntletMetaChoice } from "./upgradeFacts.js";
 import { getCoinShopOptions } from "../systems/shopOptions.js";
 import { applyCoinShopEffect } from "../systems/shopResolution.js";
 const state = () => ({ player: { health: 80, maxHealth: 100, speed: 4 }, currentWave: 5, coins: 0, enemies: [], score: 0 });
@@ -100,18 +100,16 @@ describe("meta bonuses compose through final run initialization", () => {
     const ordinary = state(); multiplyKillScore(ordinary, 1.5);
     expect(ordinary.killScoreMult).toBe(1.5);
   });
-  it("Kill Frenzy captures the final speed including loadout, run modifier, and settings", () => {
+  it("Kill Frenzy unlock preserves starting speed including loadout, modifier and settings", () => {
     const gs = state();
     applyMetaUpgrades({}, gs, { speedster: 3 });
     applyMetaTree({}, gs, new Set(["off4"]));
     gs.player.speed = 5.4 * 1.38; // Speed Freak starter retains purchased Speedster.
     gs.player.speed *= 1.15; // Lightweight run modifier.
     applyRunSettings(gs, { ...SETTINGS_DEFAULTS, playerSpeedMult: 1.5 });
-    finalizeMetaStart(gs);
-    expect(gs._killFrenzyBaseSpeed).toBeCloseTo(5.4 * 1.38 * 1.15 * 1.5);
+    expect(gs.player.speed).toBeCloseTo(5.4 * 1.38 * 1.15 * 1.5);
     const app = fs.readFileSync("src/App.jsx", "utf8");
     const initialization = app.slice(0, app.indexOf("    return seed;"));
-    expect(initialization.indexOf("finalizeMetaStart(gsRef.current)")).toBeGreaterThan(initialization.indexOf("applyRunSettings(gsRef.current, sett)"));
     expect(initialization).toContain("multiplyKillScore(gsRef.current, 1.5)");
   });
 });

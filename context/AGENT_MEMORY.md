@@ -1,3 +1,9 @@
+## S191 build integrity
+
+Kill Frenzy multiplies movement for exactly its active frames, preserving permanent gains and pickup/adrenaline/rubble composition. All magazine/refill and desktop/mobile capacity displays share a minimum-one capacity rule, including Scavenger ammo restoration.
+
+Focused gameplay and component checks pass 6 files / 55 assertions. Strict lint, configured deployable build, public contracts and security gate pass; dependency audit reports zero vulnerabilities. Staging 7e4d9a14 passes shell7/7 and actual-App Frenzy/ammo checks at390/1440 in both themes. Full suite, expanded arsenal visual proof and exact-main production remain pending.
+
 ## S190 final production
 
 S190 implementation 3548fb5b4445a01a2e5d58ae8ecefe9cc1d924cc passed exact-main workflow 39344132347: all 298 test files / 2,024 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 3548fb5b4445. Canonical and immutable https://55bb853c.call-of-doodie.pages.dev pass shell 7/7 each. All 16 actual-App browser assertions pass across 390/1440 and both themes: equal 21/21 shot counts, no wall-jump extra shot, and active 0:02 terminal time for 120 frames.

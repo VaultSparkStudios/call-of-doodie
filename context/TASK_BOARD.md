@@ -1,3 +1,16 @@
+## S191 arc outcomes and waves
+
+Session Intent: fresh full arc, direct-main push and full deployment.
+
+Wave 1 ✔ fresh startup/audit. Wave 2 ✔ Frenzy progression and usable cursed magazines. Wave 3 ◼ final acceptance, production and closeout.
+
+- [x] S191 preserve speed progression and exact Frenzy movement duration.
+- [x] S191 usable cursed magazines, refills and consistent capacity displays.
+- [ ] S191 exact-main production and final closeout proof.
+- [ ] [SIL:1] S191 reserve: measure natural participant comprehension of capacity penalties.
+- [ ] [SIL:1] S191 reserve: physical-controller movement pacing comparison.
+
+
 ## S190 arc outcomes and waves
 
 Session Intent: fresh full arc, direct-main push and full deployment.

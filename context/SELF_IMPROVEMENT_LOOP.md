@@ -1262,10 +1262,11 @@ SIL +10: Closed five founder-visible defects and all four fresh audit items: Ene
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Avgs — 3: 945 | 5: 944
-Velocity trend: two verified timing outcomes |Debt:flat
-Momentum runway: S190 production verified | Intent rate: achieved
-Last session: 2026-10-19 | Session 190 | Total: 945/1000 | Velocity: 2 | protocolVelocity: 2
+Avgs — 3: 945 | 5: 944.8 | 10: 940.5 | 25: 965.6 | all: 988.5 (140 unique 1000-point sessions; legacy 500-point entries excluded)
+Last five: 945 → 945 → 945 → 945 → 944 · ▄▄▄▄▄
+Velocity trend: two verified build-integrity outcomes | Debt: flat
+Momentum runway: S191 staged; production pending | Intent rate: delivery in progress
+Last session: 2026-10-20 | Session 191 | Total: 945/1000 | Velocity: 2 | protocolVelocity: 2
 <!-- rolling-status-end -->
 
 ## 2026-06-05 — Session 81 | Total: 1000/1000 | Velocity: 1 | Debt: ↓
@@ -3679,3 +3680,25 @@ Focused App, clock, Operations, HUD, public-contract and session-lock checks pas
 
 
 S190 final delivery: S190 implementation 3548fb5b4445a01a2e5d58ae8ecefe9cc1d924cc passed exact-main workflow 39344132347: all 298 test files / 2,024 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 3548fb5b4445. Canonical and immutable https://55bb853c.call-of-doodie.pages.dev pass shell 7/7 each. All 16 actual-App browser assertions pass across 390/1440 and both themes: equal 21/21 shot counts, no wall-jump extra shot, and active 0:02 terminal time for 120 frames.
+
+
+## 2026-10-20 — Session 191
+
+Total:945/1000 | Velocity:2 | Debt:→
+
+| Category | Score | Rationale |
+|---|---:|---|
+| devHealth | 97 | Automated build/runtime proof; participant/device and central health limits retained |
+| creativeAlignment | 96 | Automated build/runtime proof; participant/device and central health limits retained |
+| momentum | 94 | Automated build/runtime proof; participant/device and central health limits retained |
+| engagement | 92 | Automated build/runtime proof; participant/device and central health limits retained |
+| processQuality | 93 | Automated build/runtime proof; participant/device and central health limits retained |
+| crossRepoCoherence | 90 | Automated build/runtime proof; participant/device and central health limits retained |
+| securityPosture | 98 | Automated build/runtime proof; participant/device and central health limits retained |
+| ecosystemIntegration | 92 | Automated build/runtime proof; participant/device and central health limits retained |
+| capitalEfficiency | 98 | Automated build/runtime proof; participant/device and central health limits retained |
+| automationCoverage | 95 | Automated build/runtime proof; participant/device and central health limits retained |
+
+Win: real production fixtures reproduced progression loss and zero-round magazines before implementation. Gap: concurrent helper retirement briefly left an init call, fixed before acceptance. Learning: compose temporary effects from current permanent stats and share capacity with what the player sees. Brainstorm: capacity comprehension study, physical-pad pacing comparison, build-state differential witness. Two [SIL] reserve items recorded; no automatic scope expansion.
+
+Focused gameplay and component checks pass 6 files / 55 assertions. Strict lint, configured deployable build, public contracts and security gate pass; dependency audit reports zero vulnerabilities. Staging 7e4d9a14 passes shell7/7 and actual-App Frenzy/ammo checks at390/1440 in both themes. Full suite, expanded arsenal visual proof and exact-main production remain pending.

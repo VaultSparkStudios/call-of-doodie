@@ -1649,3 +1649,10 @@ Existing CANON-045 STRONG integration gap is retained because guest timing chang
 S190 release acceptance — S190 implementation 3548fb5b4445a01a2e5d58ae8ecefe9cc1d924cc passed exact-main workflow 39344132347: all 298 test files / 2,024 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 3548fb5b4445. Canonical and immutable https://55bb853c.call-of-doodie.pages.dev pass shell 7/7 each. All 16 actual-App browser assertions pass across 390/1440 and both themes: equal 21/21 shot counts, no wall-jump extra shot, and active 0:02 terminal time for 120 frames.
 
 Routine staging/main/promotion uses existing founder authorization. Records-only seal preserves tested runtime and receives exact-main CI/readback. FORGE/public-unlaunched unchanged. Browser checks use assisted actual-App state/callback fixtures and synthetic input. Physical controllers, participant outcomes and the existing S183 comparisons remain unmeasured. CDR unchanged without creative direction.
+
+
+## 2026-10-20 — Session 191
+
+Resolve temporary Frenzy speed at movement instead of rewriting base stats. Consume its duration after the movement it boosts; preserve current pickup cap and multiplicative adrenaline/rubble behavior. Remove obsolete start-speed snapshot. Share capacity rounding across runtime, shops, HUD and docks with minimum one round; Scavenger fractions restore at least one round within capacity. Previously loaded rounds are preserved when a capacity penalty is selected. FORGE/public-unlaunched unchanged. Assisted actual-App state/callback fixtures and synthetic input do not prove physical-controller or participant outcomes. Existing S183 comparisons remain unmeasured. No new backend, dependency, cost, identity, licensing or launch change. CDR unchanged without creative direction.
+
+Existing bounded founder authorization covers routine promotion. CANON-045 STRONG legacy gap is unchanged; scoped recipient acceptance excludes foreign doctor health.

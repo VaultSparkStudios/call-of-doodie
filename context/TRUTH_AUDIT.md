@@ -1,3 +1,15 @@
+## S191 candidate verified
+
+S191 full local suite passes 299/299 files and 2032/2032 assertions, no failed or pending tests. Strict lint, configured build, schema/startup/public/security/runtime checks pass; zero dependency vulnerabilities; backend5/5 and replay3/3. Staging7e4d9a14 shell7/7 and actual-App24/24 pass across390/1440 and both themes. All40 real before/after captures inspected and hash-bound. Independent implementation/closeout review passes. Exact-main production pending.
+
+## S191 build reconciliation
+
+Overall status: two selected build-integrity outcomes staged; full-suite/exact-main production pending.
+
+Focused gameplay and component checks pass 6 files / 55 assertions. Strict lint, configured deployable build, public contracts and security gate pass; dependency audit reports zero vulnerabilities. Staging 7e4d9a14 passes shell7/7 and actual-App Frenzy/ammo checks at390/1440 in both themes. Full suite, expanded arsenal visual proof and exact-main production remain pending.
+
+FORGE/public-unlaunched unchanged. Assisted actual-App state/callback fixtures and synthetic input do not prove physical-controller or participant outcomes. Existing S183 comparisons remain unmeasured. No new backend, dependency, cost, identity, licensing or launch change. CDR unchanged without creative direction.
+
 ## S190 final truth
 
 Overall status: S190 selected timing outcomes production verified.

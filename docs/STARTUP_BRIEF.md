@@ -1,12 +1,12 @@
 <!-- generated-by: scripts/render-startup-brief.mjs v3.1 -->
-<!-- generated-at: 2026-10-19 (Session 190 closeout) -->
-<!-- semantic-freshness: hash=a17805985836ad8f next=191 silSession=190 silScore=945 handoff=- tests=- -->
+<!-- generated-at: 2026-10-20 (Session 191 closeout) -->
+<!-- semantic-freshness: hash=6405a643719bbdfe next=192 silSession=191 silScore=945 handoff=- tests=- -->
 <!-- fast-boot-valid-until: next session if within 24h -->
 <!-- brief-coherent: true -->
 
 # Startup Brief — Call-Of-Doodie
 
-> **Fast-boot brief** — generated at Session 190 closeout · 2026-10-19.
+> **Fast-boot brief** — generated at Session 191 closeout · 2026-10-20.
 > Valid for next session if started within 24h. For sessions >24h later, load context files fresh (start.md §3).
 
 ---
@@ -15,12 +15,12 @@
 ╔════════════════════════════════════════════════════════════════╗
 ║  🚀 CALL-OF-DOODIE                                               ║
 ║  project · deployed/public-unlaunched · FORGE                    ║
-║  Session 191 · 2026-10-19 · FOUNDER MODE                         ║
+║  Session 192 · 2026-10-20 · FOUNDER MODE                         ║
 ║  Owner: VaultSpark Studios                                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ LAST SESSION (S190) - WHAT SHIPPED ══════════════════════════╗
-║  S190 two timing outcomes verified on production.                ║
+╔══ LAST SESSION (S191) - WHAT SHIPPED ══════════════════════════╗
+║  S191 preserves earned movement speed through Kill Frenzy and k  ║
 ║  Tests  -                                                        ║
 ║  Deploy -                                                        ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -62,25 +62,25 @@
 ║                                                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ WHERE WE LEFT OFF  ·  Session 190 ═══════════════════════════╗
+╔══ WHERE WE LEFT OFF  ·  Session 191 ═══════════════════════════╗
 ║  Shipped:  see LATEST_HANDOFF.md                                 ║
 ║  Tests:    298/298 passing  ·  Deploy: N/A                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ✓  ███████░░░░░░░░░░░░░░░░░  29% used                           ║
-║     78,009 / 272,000 tok  ·  codex/codex-272k  · …               ║
-║     ~39,005 tok/turn  ·  cache 50%  ·  4 turns to compact        ║
+║  ✓  ████████░░░░░░░░░░░░░░░░  33% used                           ║
+║     91,003 / 272,000 tok  ·  codex/codex-272k  · …               ║
+║     ~45,502 tok/turn  ·  cache 50%  ·  3 turns to compact        ║
 ║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
 ║  ✓  Tests         298/298 passing (2026-10-19T23:50:47.504Z)     ║
 ║  ✓  Velocity      2   ·  Debt: →                                 ║
-║  ✓  Runway        S190 production verified                       ║
+║  ✓  Runway        S191 staged; production pending                ║
 ║  ⛔  Context age   ?d                                             ║
-║  ⚠  IGNIS         44193 FORGE  ·  11d old                        ║
-║  ⛔  Truth         S190 selected timing outcomes production…      ║
+║  ⚠  IGNIS         44193 FORGE  ·  12d old                        ║
+║  ⛔  Truth         two selected build-integrity outcomes…         ║
 ║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs…        ║
 ║  ✓  Genome dims   all stable  (24/25)                            ║
 ║  ✓  Entropy       0.214  (healthy)                               ║
@@ -97,8 +97,8 @@
 
 ╔══ FOUNDER UNLOCKS ═════════════════════════════════════════════╗
 ║  Single founder actions that reopen sprint surface:              ║
-║   158d · [S60] Rotate or narrow the broad Cloudflare `cloud      ║
-║   180d · Physical launch QA                                      ║
+║   159d · [S60] Rotate or narrow the broad Cloudflare `cloud      ║
+║   181d · Physical launch QA                                      ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ ORCHESTRATOR ════════════════════════════════════════════════╗
@@ -121,9 +121,9 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIL FORECAST (next session) ═════════════════════════════════╗
-║  Projected:  943/1000  (↓2 vs current 945)                       ║
+║  Projected:  940/1000  (↓5 vs current 945)                       ║
 ║  At-risk:    Momentum Δ-3                                        ║
-║  Calibration: MAE 7.8 over last 10 forecasts                     ║
+║  Calibration: MAE 7.5 over last 10 forecasts                     ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ GENIUS HIT LIST ═════════════════════════════════════════════╗
@@ -157,5 +157,5 @@
 
 ---
 
-*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 190 closeout · 2026-10-19*
+*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 191 closeout · 2026-10-20*
 *Run `node scripts/ops.mjs doctor` for live health check · `node scripts/ops.mjs genius-list` to refresh hit list*

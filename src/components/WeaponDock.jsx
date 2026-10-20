@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { WEAPONS } from "../constants.js";
+import { getWeaponAmmoCapacity } from "../systems/weaponAmmo.js";
 import { loadCareerStats } from "../storage.js";
 import { getWeaponKillMastery } from "../utils/arsenalMastery.js";
 import { WEAPON_ATLAS_CONTRACT, getWeaponAtlasRect } from "../utils/objectAtlasContract.js";
@@ -95,7 +96,7 @@ export function PrimaryWeaponSelector({ selectedIndex = 0, onSelect }) {
 
 export function DesktopWeaponDock(props) {
   const {
-    currentWeapon = 0, weaponUpgrades, weaponAmmos, ammo, weaponMods,
+    currentWeapon = 0, weaponUpgrades, weaponAmmos, ammo, weaponMods, ammoMult = 1,
     grenadeReady, dashReady, isReloading, showAmmoBars = true,
     onSwitchWeapon, onGrenade, onDash, onReload,
   } = props;
@@ -108,7 +109,7 @@ export function DesktopWeaponDock(props) {
       <div className="weapon-dock__current" style={{ "--weapon-color": selected.color }}>
         <span>ACTIVE WEAPON</span>
         <strong>{selected.emoji} {selected.name}</strong>
-        <small>{isReloading ? "RELOADING…" : `${ammo}/${selected.maxAmmo} AMMO`}</small>
+        <small>{isReloading ? "RELOADING…" : `${ammo}/${getWeaponAmmoCapacity(selected, weaponUpgrades?.[currentWeapon], ammoMult)} AMMO`}</small>
       </div>
       <button type="button" className="weapon-dock__arsenal-toggle" onClick={() => setOpen((value) => !value)} aria-expanded={open} aria-controls="desktop-weapon-selector" aria-label={`${open ? "Close" : "Open"} weapon selector`}>
         <span>ARSENAL</span><b>{open ? "× CLOSE" : "12 WEAPONS ▴"}</b>
@@ -128,7 +129,7 @@ export function DesktopWeaponDock(props) {
             index={index}
             selected={index === currentWeapon}
             ammo={index === currentWeapon ? ammo : weaponAmmos?.[index]}
-            maxAmmo={weapon.maxAmmo}
+            maxAmmo={getWeaponAmmoCapacity(weapon, weaponUpgrades?.[index], ammoMult)}
             upgrades={weaponUpgrades?.[index]}
             mod={weaponMods?.[index]}
             mastery={mastery[index]}
@@ -144,7 +145,7 @@ export function DesktopWeaponDock(props) {
 
 export function MobileWeaponDock(props) {
   const {
-    currentWeapon = 0, weaponUpgrades, weaponAmmos, ammo, weaponMods,
+    currentWeapon = 0, weaponUpgrades, weaponAmmos, ammo, weaponMods, ammoMult = 1,
     grenadeReady, dashReady, isReloading,
     onSwitchWeapon, onGrenade, onDash, onReload,
   } = props;
@@ -163,7 +164,7 @@ export function MobileWeaponDock(props) {
                 index={index}
                 selected={index === currentWeapon}
                 ammo={index === currentWeapon ? ammo : weaponAmmos?.[index]}
-                maxAmmo={weapon.maxAmmo}
+                maxAmmo={getWeaponAmmoCapacity(weapon, weaponUpgrades?.[index], ammoMult)}
                 upgrades={weaponUpgrades?.[index]}
                 mod={weaponMods?.[index]}
                 mastery={mastery[index]}
@@ -175,7 +176,7 @@ export function MobileWeaponDock(props) {
         </div>
       )}
       <button type="button" className="weapon-dock-mobile__active" style={{ "--weapon-color": selected.color }} onClick={() => setOpen((value) => !value)} aria-expanded={open}>
-        <span>{selected.emoji}</span><strong>{selected.name}</strong><small>{ammo} / {selected.maxAmmo}</small><b>ARSENAL {open ? "▼" : "▲"}</b>
+        <span>{selected.emoji}</span><strong>{selected.name}</strong><small>{ammo} / {getWeaponAmmoCapacity(selected, weaponUpgrades?.[currentWeapon], ammoMult)}</small><b>ARSENAL {open ? "▼" : "▲"}</b>
       </button>
       <button type="button" className="weapon-dock-mobile__action" onClick={onReload}>{isReloading ? "…" : "R"}<small>RELOAD</small></button>
       <button type="button" className={`weapon-dock-mobile__action ${dashReady ? "is-ready is-cyan" : ""}`} onClick={onDash}>💨<small>DASH</small></button>

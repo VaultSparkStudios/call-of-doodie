@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { getWeaponAmmoCapacity } from "../systems/weaponAmmo.js";
 import { WEAPONS } from "../constants.js";
 import { buildResponsiveHudModel } from "../utils/responsiveHudModel.js";
 
@@ -12,7 +13,7 @@ const TONE_COLOR = {
 export default function MobileHUD({
   isMobile = false,
   wave, waveLabel = "WAVE", timeSurvived, score, kills, deaths, health, maxHealth, level,
-  currentWeapon, ammo, isReloading, extraLives, fmtTime, onPause,
+  currentWeapon, ammo, weaponUpgrades, ammoMult = 1, isReloading, extraLives, fmtTime, onPause,
   activeDrill, drillProgress, practiceEvidence, runIntegrity, runModifier, rivalPace,
   vsScore, vsName, topGhosts, weeklyRival, bankedPerkChoices,
   nextPerkLevel, cursedHideScore, activeWaveContract, grenadeReady, dashReady,
@@ -129,7 +130,7 @@ export default function MobileHUD({
         </div>
         {!isMobile && <div style={{ minWidth: 112, padding: "8px 10px", border: `1px solid ${weapon.color}66`, borderRadius: 11, background: "rgba(4,7,10,.78)", textAlign: "right", backdropFilter: "blur(8px)" }}>
           <div style={{ color: weapon.color, fontSize: 10, fontWeight: 850, maxWidth: 120, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{weapon.emoji} {weapon.name}</div>
-          <div style={{ marginTop: 2, fontSize: 15, fontWeight: 950 }}>{isReloading ? "Reloading" : `${ammo}/${weapon.maxAmmo}`}</div>
+          <div style={{ marginTop: 2, fontSize: 15, fontWeight: 950 }}>{isReloading ? "Reloading" : `${ammo}/${getWeaponAmmoCapacity(weapon, weaponUpgrades?.[currentWeapon], ammoMult)}`}</div>
           <div style={{ marginTop: 3, color: "#94A0AE", fontSize: 8, fontWeight: 750 }}>{isMobile ? "Use action controls" : "R reload · Shift dash · Q grenade"}</div>
         </div>}
       </div>

@@ -219,6 +219,7 @@ export function resolveAimFrame({
  * @param {object} opts
  * @param {boolean} opts.dashActive - if true, skip movement (dash handles it externally)
  * @param {number}  opts.speedBonus - temporary additive speed, without changing base stats
+ * @param {number}  opts.speedMultiplier - temporary multiplier on base plus pickup speed
  * @param {number}  opts.adrenalineRushTimer - >0 → 2× speed
  * @param {boolean} opts.rubbleSlowed - true → 60% speed
  * @param {number}  opts.W - canvas width (for clamping)
@@ -228,6 +229,7 @@ export function resolveAimFrame({
 export function applyPlayerMovement(player, dir, {
   dashActive = false,
   speedBonus = 0,
+  speedMultiplier = 1,
   adrenalineRushTimer = 0,
   rubbleSlowed = false,
   W = 800,
@@ -245,8 +247,9 @@ export function applyPlayerMovement(player, dir, {
   if (!dashActive) {
     const rushMult   = adrenalineRushTimer > 0 ? 2.0 : 1.0;
     const rubbleMult = rubbleSlowed ? 0.6 : 1.0;
-    player.x += safeDx * safeSpeed * rushMult * rubbleMult;
-    player.y += safeDy * safeSpeed * rushMult * rubbleMult;
+    const tempMult = Math.max(0, Number.isFinite(Number(speedMultiplier)) ? Number(speedMultiplier) : 1);
+    player.x += safeDx * safeSpeed * tempMult * rushMult * rubbleMult;
+    player.y += safeDy * safeSpeed * tempMult * rushMult * rubbleMult;
   }
   // Canvas boundary clamp
   player.x = Math.max(20, Math.min(safeW - 20, player.x));
