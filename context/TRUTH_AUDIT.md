@@ -1,3 +1,15 @@
+## S195 final truth
+
+Overall status: both selected outcomes production verified.
+
+S195 implementation 18285e4cc1c0d582eeffeab3a8ae3cee43c93ee5 passed exact-main workflow 39445821523:299 files/2063 assertions,strict lint,configured build and Cloudflare deployment. Canonical edge-health matches18285e4cc1c0. Canonical and immutable https://0d08b70e.call-of-doodie.pages.dev shell7/7 each;production browser28/28 across390/1440,both themes proves rail480/480 with health33.6,unchanged profile writes0 during1-second window,and keyboard/controller movement.
+
+Local full299/2063 passed in one run; focused49/49 after3 failing-before regressions. Staging shell7/7 and browser28/28.16 inspected before/after captures hash-bound to both changed gameplay sources. Dependency audit0 vulnerabilities; schema/startup/public/security/runtime checks pass. Review optional buttons-only and restricted-storage-getter tests were not blockers and are not claimed executed.
+
+FORGE/public-unlaunched unchanged. Synthetic controller/keyboard and assisted App ticks do not prove physical-pad or participant outcomes. Existing S183 comparisons remain unmeasured. No dependency, backend, identity/trust-policy, cost, licensing or public-launch change. CDR legitimately unchanged without creative direction.
+
+Legacy local session-floor resource estimates excluded; current canonical outcome gate proves2 shipped/0 remaining with dated notes. Foreign doctor evidence excluded; native acceptance used.
+
 ## S195 candidate acceptance
 
 S195 full local suite299files/2063assertions passing. Focused49/49 after3 failing-before regressions. Strict lint, configured build, schema/startup/public/security/runtime and dependency audit pass. Staging6c05b5e9 shell7/7 and browser28/28 across390/1440,both themes; rail480/480,health33.6,unchanged profile writes0/second.16 real before/after captures inspected and hash-bound; independent source review pass0 blocking findings. Exact-main production pending.

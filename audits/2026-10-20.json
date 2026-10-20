@@ -7,18 +7,37 @@
     "rail-health-snapshot",
     "controller-profile-write-budget"
   ],
-  "validation": "S195 full local suite299files/2063assertions passing. Focused49/49 after3 failing-before regressions. Strict lint, configured build, schema/startup/public/security/runtime and dependency audit pass. Staging6c05b5e9 shell7/7 and browser28/28 across390/1440,both themes; rail480/480,health33.6,unchanged profile writes0/second.16 real before/after captures inspected and hash-bound; independent source review pass0 blocking findings. Exact-main production pending.",
+  "validation": "S195 implementation 18285e4cc1c0d582eeffeab3a8ae3cee43c93ee5 passed exact-main workflow 39445821523:299 files/2063 assertions,strict lint,configured build and Cloudflare deployment. Canonical edge-health matches18285e4cc1c0. Canonical and immutable https://0d08b70e.call-of-doodie.pages.dev shell7/7 each;production browser28/28 across390/1440,both themes proves rail480/480 with health33.6,unchanged profile writes0 during1-second window,and keyboard/controller movement.",
   "limits": "FORGE/public-unlaunched unchanged. Synthetic controller/keyboard and assisted App ticks do not prove physical-pad or participant outcomes. Existing S183 comparisons remain unmeasured. No dependency, backend, identity/trust-policy, cost, licensing or public-launch change. CDR legitimately unchanged without creative direction.",
   "production": {
-    "status": "pending"
+    "source": "18285e4cc1c0d582eeffeab3a8ae3cee43c93ee5",
+    "workflow": 39445821523,
+    "immutableUrl": "https://0d08b70e.call-of-doodie.pages.dev",
+    "canonical": "https://callofdoodie.wtf/",
+    "verifiedAt": "2026-10-20T15:13:43.017Z",
+    "health": {
+      "contract": "edge-health-v1",
+      "status": "edge-ready",
+      "service": "call-of-doodie",
+      "scope": "cloudflare-pages-edge-only",
+      "deploy": "18285e4cc1c0",
+      "checkedAt": "2026-10-20T15:13:34.480Z"
+    },
+    "requiredChecks": {
+      "quality": "success",
+      "buildAndDeploy": "success"
+    },
+    "testFiles": 299,
+    "assertions": 2063,
+    "browserAssertions": 28
   },
   "closeout": {
-    "state": "delivery-pending",
+    "state": "complete",
     "silScore": 945,
     "scaffold": {
       "tasks": 3,
-      "done": 2,
-      "inProgress": 1,
+      "done": 3,
+      "inProgress": 0,
       "open": 0
     }
   },

@@ -2,11 +2,11 @@
 
 Session Intent: fresh full arc, authorized direct-main commit/push and full deployment.
 
-Wave 1 ✔ startup and fresh audit. Wave 2 ✔ implementation acceptance. Wave 3 ◼ production and closeout.
+Wave 1 ✔ startup and fresh audit. Wave 2 ✔ implementation acceptance. Wave 3 ✔ production and closeout.
 
 - [x] S195 rail-health-snapshot L2 acceptance.
 - [x] S195 controller-profile-write-budget L2 acceptance.
-- [ ] S195 production and full closeout acceptance.
+- [x] S195 production and full closeout acceptance.
 
 
 ## S194 arc outcomes and waves

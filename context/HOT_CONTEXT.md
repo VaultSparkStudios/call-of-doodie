@@ -4,6 +4,12 @@
 
 ## Current Session
 
+## S195 production verified
+
+Consistent Railgun health bonus and bounded controller persistence.
+
+S195 implementation 18285e4cc1c0d582eeffeab3a8ae3cee43c93ee5 passed exact-main workflow 39445821523:299 files/2063 assertions,strict lint,configured build and Cloudflare deployment. Canonical edge-health matches18285e4cc1c0. Canonical and immutable https://0d08b70e.call-of-doodie.pages.dev shell7/7 each;production browser28/28 across390/1440,both themes proves rail480/480 with health33.6,unchanged profile writes0 during1-second window,and keyboard/controller movement.
+
 ## S195 candidate acceptance
 
 S195 full local suite299files/2063assertions passing. Focused49/49 after3 failing-before regressions. Strict lint, configured build, schema/startup/public/security/runtime and dependency audit pass. Staging6c05b5e9 shell7/7 and browser28/28 across390/1440,both themes; rail480/480,health33.6,unchanged profile writes0/second.16 real before/after captures inspected and hash-bound; independent source review pass0 blocking findings. Exact-main production pending.
@@ -92,24 +98,11 @@ S190 implementation 3548fb5b4445a01a2e5d58ae8ecefe9cc1d924cc passed exact-main w
 
 ## S190 candidate verified
 
-S190 full local suite passes 298/298 files and 2,024/2,024 assertions with zero failed/pending tests. Strict lint, configured build, schema/startup/public/security/runtime checks, zero dependency vulnerabilities, backend5/5, replay3/3, independent reviews and32 hash-bound before/after captures pass. Current staging passes shell7/7 and16 browser assertions. Exact-main deployment/readback pending.
-
-## S190 active timing
-
-S190 makes weapon cadence independent of render batching and keeps run durations faithful to active play.
-
-Staging verified; final suite and production pending. See LATEST_HANDOFF for evidence.
-
-## S189 production verified
-
-Rail builds apply full damage and record one hit per penetrating beam. Paused bursts retain paid rounds; startup context remains unknown when unmeasured.
-
-S189 implementation 34e3ec0950990185af9027adad1bac238ace8ee4 passed exact-main workflow 39152134303: all 297 tes
+S190 full local suite passes 298/298 files and 2,024/2,024 assertions with zero failed/pending tests. Strict lint, configured build, schema/startup/public/security/runtime checks, zero dependency vulnerabilities, backend5/5, replay3/3, independent reviews and32 hash-bound before/after captures pass. Current staging passes shell7/7 and16 bro
 
 ## Open Work
 
 ## S195 arc outcomes and waves
-- [ ] S195 production and full closeout acceptance.
 ## S194 arc outcomes and waves
 ## S193 arc outcomes and waves
 - [ ] [SIL:1] S193 reserve: matched shield/flanking comprehension study with representative participants.
@@ -163,6 +156,7 @@ S189 implementation 34e3ec0950990185af9027adad1bac238ace8ee4 passed exact-main w
 - [ ] [SIL:1] Collect consented extraction telemetry before changing the 1.25× pressure slope or 1.5× arena scale; synthetic distance and enemy-count math are not balance evidence.
 - [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET on the Pages project so Porcelain Passport verification and cloud backup stop answering 503.
 ## Session 165 - Scrolling camera, live royale bots, death-beat diet, record recovery
+- [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET on the Pages project: neither is in the secrets gateway, so Porcelain Passport verification (and therefore cloud backup) answers 503 in production until they exist.
 
 ## Recent Decisions
 
@@ -197,9 +191,12 @@ S194 final acceptance: S194 implementation 51fc42bf1510f6a4b625f3fb250140472f048
 
 Snapshot the health factor once per instantaneous rail beam, retaining per-target lifesteal and crit/armor/shield/nominal-damage policies. This resolves a newly demonstrated S194 interaction: healing on target1 caused target2 to lose the same beam's bonus; no wider projectile balance policy changes. Bound controller profile IO to metadata changes or60s per storage, including failed attempts. Existing CANON-045 STRONG gap retained for unchanged guest-game promotion. FORGE/public-unlaunched unchanged. Synthetic controller/keyboard and assisted App ticks do not prove physical-pad or participant outcomes. Existing S183 comparisons remain unmeasured. No dependency, backend, identity/trust-policy, cost, licensing or public-launch change. CDR legitimately unchanged without creative direction.
 
+
+S195 final acceptance: S195 implementation 18285e4cc1c0d582eeffeab3a8ae3cee43c93ee5 passed exact-main workflow 39445821523:299 files/2063 assertions,strict lint,configured build and Cloudflare deployment. Canonical edge-health matches18285e4cc1c0. Canonical and immutable https://0d08b70e.call-of-doodie.pages.dev shell7/7 each;production browser28/28 across390/1440,both themes proves rail480/480 with health33.6,unchanged profile writes0 during1-second window,and keyboard/controller movement. Local full299/2063 passed in one run; focused49/49 after3 failing-before regressions. Staging shell7/7 and browser28/28.16 inspected before/after captures hash-bound to both changed gameplay sources. Dependency audit0 vulnerabilities; schema/startup/public/security/runtime checks pass. Review optional buttons-only and restricted-storage-getter tests were not blockers and are not claimed executed.
+
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 272,586 bytes · SHA-256 `a4cf92615fc1…`
-- `context/TASK_BOARD.md` · 187,104 bytes · SHA-256 `39f27fc6af16…`
-- `context/DECISIONS.md` · 187,198 bytes · SHA-256 `cbd8ff5770b4…`
+- `context/CURRENT_STATE.md` · 273,158 bytes · SHA-256 `2d32e0a96db9…`
+- `context/TASK_BOARD.md` · 187,104 bytes · SHA-256 `b362d43deea8…`
+- `context/DECISIONS.md` · 188,096 bytes · SHA-256 `b6fffb0bb130…`
 - `docs/AUDIT_2026-10-18.json` · 6,892 bytes · SHA-256 `b34b668a7b5a…`

@@ -19,21 +19,19 @@
 ║  Owner: VaultSpark Studios                                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ LAST SESSION (S195) - WHAT SHIPPED ══════════════════════════╗
-║  S195 consistent Railgun health bonus and bounded controller pe  ║
-║  Tests  -                                                        ║
-║  Deploy -                                                        ║
+╔══ LAST SESSION (S195) · WHAT SHIPPED ══════════════════════════╗
+║  ✓ Consistent Railgun health bonus                               ║
+║  ✓ Bounded controller profile persistence                        ║
+║  Tests  299 files /2063 assertions passing                       ║
+║  Deploy 18285e4cc1c0 production verified                         ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ WHERE TO TEST · Call-Of-Doodie ══════════════════════════════╗
-║  Production    → https://callofdoodie.wtf/ ·                     ║
-║  Staging       → https://1da5492a.call-of-doodie.pages.dev/ ·    ║
+║  Production    → https://callofdoodie.wtf/ ✓                     ║
+║  Staging       → https://6c05b5e9.call-of-doodie.pages.dev/ ✓    ║
 ║  Unit tests    → npm test — 299/299 passing ✓                    ║
-║  hosted-visual-proof → session-169-staging · route/theme/wid ✓   ║
-║  production-verification → source ca1324136f8c · workflow 34 ✓   ║
-║  hosted-staging → session-170-staging · immutable 520a56d6 · ✓   ║
-║  full-gates   → 237/237 files · 1,387/1,387 assertions · str ✓   ║
-║  production-verification → source bb88eb48d57d · workflow 34 ✓   ║
+║  local-browser-capture → S195 sixteen before/after images in ✓   ║
+║  production-smoke → S195 keyboard/controller,beam healing an ✓   ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ PROJECT PROFILE ═════════════════════════════════════════════╗
@@ -53,7 +51,7 @@
 ║    Alignment         96    ██████████  ▇▇▇▇▇▇▇▇ →                ║
 ║    Momentum          94    █████████░  ▇▇▇▇▇▇▇▇ →                ║
 ║    Engagement        92    █████████░  ▇▇▇▇▇▇▇▇ →                ║
-║    Process Qual      92    █████████░  ▇▇▇▇▇▇▇▇ →                ║
+║    Process Qual      93    █████████░  ▇▇▇▇▇▇▇▇ →                ║
 ║    Coherence         90    █████████░  ········ →                ║
 ║    Security          98    ██████████  ········ →                ║
 ║    Ecosystem         92    █████████░  ········ →                ║
@@ -64,7 +62,7 @@
 
 ╔══ WHERE WE LEFT OFF  ·  Session 195 ═══════════════════════════╗
 ║  Shipped:  see LATEST_HANDOFF.md                                 ║
-║  Tests:    299/299 passing  ·  Deploy: N/A                       ║
+║  Tests:    299/299 passing  ·  Deploy: verified                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
@@ -74,12 +72,12 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         299/299 passing (2026-10-20T05:58:35Z)         ║
+║  ✓  Tests         299/299 passing (2026-10-20T15:11:38Z)         ║
 ║  ✓  Velocity      2   ·  Debt: →                                 ║
-║  ✓  Runway        S195 acceptance in progress                    ║
+║  ✓  Runway        S195 production verified                       ║
 ║  ⛔  Context age   ?d                                             ║
 ║  ⚠  IGNIS         44193 FORGE  ·  12d old                        ║
-║  ⛔  Truth         acceptance in progress.  ·  Genome: ?          ║
+║  ⛔  Truth         both selected outcomes production verified.…   ║
 ║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs…        ║
 ║  ✓  Genome dims   all stable  (24/25)                            ║
 ║  ✓  Entropy       0.214  (healthy)                               ║
@@ -117,6 +115,12 @@
 ║  Velocity:   ▂▂▂▄▄  2→  (last 5 sessions)                        ║
 ║  Intent:     ?% achieved last 5                                  ║
 ║  Streak:     — (last intent not achieved)                        ║
+╚════════════════════════════════════════════════════════════════╝
+
+╔══ SIL FORECAST (next session) ═════════════════════════════════╗
+║  Projected:  941/1000  (↓4 vs current 945)                       ║
+║  At-risk:    Momentum Δ-3                                        ║
+║  Calibration: MAE 7.7 over last 10 forecasts                     ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ GENIUS HIT LIST ═════════════════════════════════════════════╗

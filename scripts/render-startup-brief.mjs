@@ -241,7 +241,7 @@ function loadLiveContextMeter() {
       cwd: root, encoding: 'utf8', timeout: 5000,
     });
     const meter = parseContextMeterResult(res);
-    if (meter) {
+    if (meter && meter.measurementSource !== 'heuristic') {
       return {
         live: true,
         measured_ok: meter.measured_ok,
@@ -1245,7 +1245,7 @@ const lines = [
       row(`${tagIcon}  ${bar}  ${meterView.pctUsed == null ? 'usage unknown' : meterView.displayPercent + '% used'}`),
       row(`   ${usedStr} / ${limitStr} tok  ·  ${meter.agent}${meter.model ? '/' + meter.model : ''}  ·  ${liveTag}`),
     ];
-    if (meter.continueCostPerTurn != null) {
+    if (meterView.pctUsed != null && meter.continueCostPerTurn != null) {
       const cacheLabel = meter.cacheHitRate != null ? `cache ${Math.round(meter.cacheHitRate * 100)}%` : 'cache n/a';
       const turnsLabel = meter.turnsToCompact != null && meter.turnsToCompact < 999 ? `${meter.turnsToCompact} turns to compact` : 'compact distant';
       lines.push(row(`   ~${meter.continueCostPerTurn.toLocaleString()} tok/turn  ·  ${cacheLabel}  ·  ${turnsLabel}`));

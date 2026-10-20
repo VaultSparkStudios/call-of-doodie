@@ -1197,7 +1197,7 @@
       "session": 195,
       "total": 24,
       "maxTotal": 25,
-      "overallStatus": "acceptance in progress.",
+      "overallStatus": "both selected outcomes production verified.",
       "lastReviewed": "2026-10-18",
       "dimensions": {
         "schema_alignment": 5,
@@ -1207,7 +1207,7 @@
         "contradiction_density": 5
       },
       "delta": 0,
-      "cause": "S195 consistent Railgun health bonus and bounded controller persistence."
+      "cause": "S195 Railgun health snapshot and controller persistence production verified."
     }
   ]
 }

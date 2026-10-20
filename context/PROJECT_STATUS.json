@@ -4,265 +4,32 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "S195 consistent Railgun health bonus and bounded controller persistence.",
-  "nextMilestone": "Verify both outcomes on exact-main production.",
+  "currentFocus": "S195 Railgun health snapshot and controller persistence production verified.",
+  "nextMilestone": "Collect existing participant/device acceptance evidence.",
   "testingSurfaces": [
     {
       "session": 195,
-      "type": "staging",
-      "status": "verified",
-      "url": "https://6c05b5e9.call-of-doodie.pages.dev/",
-      "command": "S195 full local suite299files/2063assertions passing. Focused49/49 after3 failing-before regressions. Strict lint, configured build, schema/startup/public/security/runtime and dependency audit pass. Staging6c05b5e9 shell7/7 and browser28/28 across390/1440,both themes; rail480/480,health33.6,unchanged profile writes0/second.16 real before/after captures inspected and hash-bound; independent source review pass0 blocking findings. Exact-main production pending."
-    },
-    {
-      "session": 194,
       "type": "production",
-      "status": "verified",
-      "url": "https://callofdoodie.wtf/",
-      "command": "S194 implementation 51fc42bf1510f6a4b625f3fb250140472f04862d passed exact-main workflow 39377541819:299 files/2056 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 51fc42bf1510. Canonical and immutable https://8e3a9bb5.call-of-doodie.pages.dev shell7/7 each; production browser24/24 across390/1440/both themes proves held menu Reload consumed, fresh Reload usable, rail480 at24HP/160 at25HP, and held/released keyboard movement."
+      "status": "green",
+      "url": "https://callofdoodie.wtf/"
     },
     {
-      "session": 194,
+      "session": 195,
       "type": "staging",
-      "status": "verified",
-      "url": "https://48c2ee6d.call-of-doodie.pages.dev/",
-      "command": "S194 local299-file run:2055 passed,1 startup fixture timeout at43.6s under load; unchanged isolated startup fixture then passed1/1 in25.8s. All gameplay regressions pass. Strict lint/configured build/schema/startup/public/security/runtime gates pass; dependency audit0 vulnerabilities. Staging48c2ee6d shell7/7 and browser24/24 at390/1440/both themes.24 inspected before/after images hash-bound to all3 changed runtime sources. Independent review pass after screen-lifetime correction. Exact-main hosted full-suite and production acceptance pending."
-    },
-    {
-      "session": 193,
-      "type": "production",
-      "status": "verified",
-      "url": "https://callofdoodie.wtf/",
-      "command": "S193 implementation 49c6b60eb9e40b7e343daa6073ac7a424f4eaeb5 passed exact-main workflow 39366155584: 299 test files/2049 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 49c6b60eb9e4. Canonical and immutable https://e023d899.call-of-doodie.pages.dev shell7/7 each; production browser28/28 across390/1440/both themes proves front4/rear32, stable held Escape/reload, and held/released movement."
-    },
-    {
-      "session": 193,
-      "type": "staging",
-      "status": "verified",
-      "url": "https://1da5492a.call-of-doodie.pages.dev/",
-      "command": "S193 final local suite passes 299/299 files and 2049/2049 assertions with no failed/pending tests. Strict lint, configured build, schema/startup/public/security/runtime gates pass; dependency audit zero vulnerabilities; backend check and replay3/3 pass. Staging1da5492a shell7/7 and browser28/28 pass at390/1440/both themes;24 before/after captures inspected/hash-bound. Final independent review approved App, DialogShell and shield corrections. Exact-main production pending."
-    },
-    {
-      "session": 192,
-      "type": "production-verification",
-      "status": "verified",
-      "command": "S192 implementation 815f9b47b15388d2167af2fbc282b40dc7eb9a7b passed exact-main workflow 39362694165: 299 test files/2039 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 815f9b47b153; canonical and immutable https://be661b17.call-of-doodie.pages.dev shell7/7 each. Browser12/12 across390/1440/both themes proves replacement token/signature survive old-ticket delivery and pause remains usable."
-    },
-    {
-      "session": 192,
-      "type": "staging-run-start-ownership",
-      "status": "verified",
-      "command": "Actual App focused suite15/15 passes. Staging562130b0 shell7/7 and browser12/12 pass across390/1440 and both themes; reordered ticket fixtures retain the replacement token/signature. Independent review addressed menu cancellation, positive draft and live unmount coverage. Full suite and exact-main production pending."
-    },
-    {
-      "session": 191,
-      "type": "production-verification",
-      "status": "verified",
-      "command": "S191 implementation 40d7b319072d7d4067d403c861bf6de804594de2 passed exact-main workflow 39357464497: all299 test files /2032 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 40d7b319072d. Canonical and immutable https://40b2a0c6.call-of-doodie.pages.dev pass shell7/7 each. All24 actual-App browser assertions pass across390/1440 and both themes: earned base5 preserved; all90 Frenzy movement frames6 then5; pause frozen; Haste RPG reload1/1 and arsenal capacity labels correct."
-    },
-    {
-      "session": 191,
-      "type": "hosted-staging-build-integrity",
-      "status": "verified",
-      "command": "Focused gameplay and component checks pass 6 files / 55 assertions. Strict lint, configured deployable build, public contracts and security gate pass; dependency audit reports zero vulnerabilities. Staging 7e4d9a14 passes shell7/7 and actual-App Frenzy/ammo checks at390/1440 in both themes. Full suite, expanded arsenal visual proof and exact-main production remain pending."
-    },
-    {
-      "session": 190,
-      "type": "production-verification",
-      "status": "verified",
-      "command": "S190 implementation 3548fb5b4445a01a2e5d58ae8ecefe9cc1d924cc passed exact-main workflow 39344132347: all 298 test files / 2,024 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 3548fb5b4445. Canonical and immutable https://55bb853c.call-of-doodie.pages.dev pass shell 7/7 each. All 16 actual-App browser assertions pass across 390/1440 and both themes: equal 21/21 shot counts, no wall-jump extra shot, and active 0:02 terminal time for 120 frames."
-    },
-    {
-      "session": 190,
-      "type": "hosted-staging-timing",
-      "status": "verified",
-      "command": "Focused App, clock, Operations, HUD, public-contract and session-lock checks pass. Staging https://642e9b4e.call-of-doodie.pages.dev passes shell7/7 and four real-Chrome cases (16 assertions) at390/1440 in both themes. Before checks reproduced21/16 shots, wall-jump extra shot and1:05 terminal time; staging yields21/21, zero extra shot and0:02. Independent review passes after Operations clock correction. All32 before/after captures reviewed and hash-bound. Full local suite and exact-main delivery pending."
-    },
-    {
-      "session": 189,
-      "type": "production-verification",
-      "status": "verified",
-      "command": "S189 implementation 34e3ec0950990185af9027adad1bac238ace8ee4 passed exact-main workflow 39152134303: all 297 test files / 2,020 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 34e3ec095099. Canonical and immutable https://8a11a8ae.call-of-doodie.pages.dev pass shell7/7 each. Four real-Chrome cases pass all24 checks across 390/1440 and both themes, including full rail build damage, one-hit beam accounting and retained burst rounds."
-    },
-    {
-      "session": 189,
-      "type": "hosted-staging-combat",
-      "status": "verified",
-      "command": "All 51 focused tests pass, including actual-App fixtures for every gameplay barrier, rail damage products and one hit per beam. Independent review passes after fixing closeout-routing exit handling in the meter. Staging shell 7/7 and four real-Chrome cases pass at 390/1440 in both themes. Full candidate suite and exact-main production delivery remain pending."
-    },
-    {
-      "session": 188,
-      "type": "production-verification",
-      "status": "verified",
-      "command": "S188 implementation f8b3254c75b90a3542420d6fa83cd3b108f5b1d3 passed exact-main workflow 39149635426: all 296 test files / 1,995 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches f8b3254c75b9. Canonical and immutable https://9024cfb5.call-of-doodie.pages.dev pass shell 7/7 each. Four real-Chrome combat cases pass on canonical production at 390/1440 in both themes."
-    },
-    {
-      "session": 188,
-      "type": "hosted-staging-combat",
-      "status": "verified",
-      "command": "Focused combat suite passes 2 files / 33 tests; seven new cases expose the old collision behavior. Independent review approves both outcomes. Staging 0aa75416 passes shell 7/7 and four assisted Chrome combat cases across 390/1440 and both themes. Sixteen before/after captures are reviewed and hash-bound. Strict lint, configured build, public contract and security checks pass (zero dependency vulnerabilities). Full-suite rerun and exact-main hosted deployment remain pending."
-    },
-    {
-      "session": 187,
-      "type": "production-verification",
       "status": "green",
-      "command": "S187 source 40e619d78bc72939366613ce754f8689d508ce4f passed exact-main workflow 39144720337: 296/296 test files, 1,988/1,988 assertions, strict lint, configured build and Cloudflare deployment. Canonical callofdoodie.wtf reports 40e619d78bc7; canonical and immutable https://73a5ea19.call-of-doodie.pages.dev pass shell 7/7 each. Four real-browser cooldown cases pass at 390/1440 in both themes; two desktop/mobile speed and manual/automatic reload cases also pass."
+      "url": "https://6c05b5e9.call-of-doodie.pages.dev/"
     },
     {
-      "session": 187,
-      "type": "staging-and-local-full-gates",
-      "status": "verified",
-      "command": "Local full suite: 296/296 files and 1988/1988 tests pass. Strict lint, configured build, public contracts, dependency security (zero vulnerabilities), scoped supply-chain scan and independent review pass. Final staging https://107df7f2.call-of-doodie.pages.dev passes shell 7/7, four cooldown theme/width cases and two speed/reload browser cases. Exact-main hosted checks and production verification follow the push."
-    },
-    {
-      "session": 186,
-      "type": "production-verification",
+      "session": 195,
+      "type": "production-smoke",
       "status": "green",
-      "command": "S186 source 6dc4c4235cf2b263c1c8fef228ece1b3d8eb4b58 passed exact-main workflow 39141994765: 294/294 test files and 1,970/1,970 tests, strict lint, build and Cloudflare deployment. Canonical callofdoodie.wtf reports 6dc4c4235cf2; immutable https://b0ffec69.call-of-doodie.pages.dev/ and canonical shell checks pass 7/7 each. All four canonical browser input cases pass at 390/1440 in both themes, including uppercase release, pause, focus loss, resume and normal movement."
+      "command": "S195 keyboard/controller,beam healing and profile IO:28/28"
     },
     {
-      "session": 186,
-      "type": "local-full-suite-and-corrected-record-fixture",
-      "status": "corrected-fixture-verified",
-      "command": "Final local suite: 294 files, 1969/1970 assertions; only the stale CANON-056 pending-count fixture failed. The fixture was updated to the actively verified adoption posture and the corrected adoption/hot-context/native-binding suites pass 5/5. All gameplay assertions passed. Exact-main hosted full suite remains required before deployment completion."
-    },
-    {
-      "session": 186,
-      "status": "staging-verified",
-      "type": "input-reliability",
-      "command": "Independent review passes after one lock-rotation correction. Focused regressions pass. Staging https://298a5f72.call-of-doodie.pages.dev passes shell 7/7 and four actual-app theme/width input cases. Before/after browser checks reproduced and resolved interaction latching. Strict lint, configured build, public contracts, security and scoped supply-chain checks pass. Final full suite and exact-main production verification follow."
-    },
-    {
-      "session": 184,
-      "status": "verified",
-      "type": "production-end-run",
-      "command": "Gameplay source 9e6304be12f8979a59e6684c448c07e6808949b1 passed exact-main workflow 37421044480: 293/293 files, 1,954/1,954 tests, strict lint, configured build and Cloudflare deployment. Canonical callofdoodie.wtf reports 9e6304be12f8; immutable deployment https://000027d0.call-of-doodie.pages.dev/. Canonical browser checks pass all eight defeat/victory, theme and width cases, including actual clipboard writes/readback, share success/manual fallback, score-image downloads, expanded sections, short screens, keyboard/touch scroll and menu return. Canonical/immutable shell 7/7 each, domain routing 5/5, backend health 5/5, replay trust 3/3 and shared-leaderboard isolation pass."
-    },
-    {
-      "session": 184,
-      "status": "staging-verified",
-      "type": "end-run-interaction",
-      "command": "Staging https://aa2065a8.call-of-doodie.pages.dev passed shell 7/7 and eight actual-app ending cases across defeat/victory, dark/light and 390/1440px, including short screens, touch, keyboard End and menu return. Eight share checks covered native API fixture success, clipboard success/denial, manual selectable links and real score-image downloads. 92 before/after captures were directly inspected and hash-bound; CANON-053 passed. Submission behavior tests cover pending/double click, online rank, local/rejected states and eligibility. Exact-main CI and production verification remain pending."
-    },
-    {
-      "session": 183,
+      "session": 195,
+      "type": "local-browser-capture",
       "status": "green",
-      "type": "gameplay-audit-increment",
-      "command": "Source e6b72c770cd83a70847f74b390e28aa9f50b4622 passed exact-main workflow 37245074608: 291/291 files, 1,931/1,931 tests, strict lint, build and Cloudflare deployment. Canonical callofdoodie.wtf reports e6b72c770cd8; canonical and immutable https://ea7fba17.call-of-doodie.pages.dev/ pass shell 7/7 each, domain routing 5/5 and replay trust 3/3. Actual canonical browser checks pass 24/24 mode advancement/pause/resume cases, 8/8 death/victory ending cases with expanded sections, short-screen scrolling, menu return and hashed downloads, 4/4 setup/settings cases and 20/20 creature practice cases. Actual Classic/Zombies/Operations audio output, pause/mute/resume, single context and movement pass."
-    },
-    {
-      "session": 182,
-      "status": "green",
-      "type": "mode-rebuild-staging-and-full-gates",
-      "command": "Gameplay source 9f508f9eda50 passed exact-main workflow 37157705445: 285/285 files and 1,762/1,762 tests, strict lint, build and Cloudflare deploy. Immutable https://554d0a13.call-of-doodie.pages.dev/ and canonical https://callofdoodie.wtf/ pass shell/health 7/7 each. Canonical production passes all six assisted Operations routes, zombie pump-to-hatch victory, four Classic checkpoint skips and twelve theme/width gameplay captures with zero browser errors."
-    },
-    {
-      "session": 181,
-      "status": "green",
-      "type": "full-site-audit-staging-production-and-full-gates",
-      "command": "Exact-main CI 37062730744: 281/281 files, 1741/1741 tests, lint, build and Cloudflare deploy pass. Source d192f62a754e reports on canonical and immutable 2b00673d; each passes shell/API 7/7; canonical 22 routes x two themes x 390/1440 = 88/88 browser states. Staging a197f471 passes the same 88-state matrix. Public/schema/security gates pass; npm audit 0; browser E2E 19 passed / 1 intentional skip. Game-project function CI 37062310935 passed."
-    },
-    {
-      "session": 180,
-      "status": "green",
-      "type": "toolchain-staging-and-full-gates",
-      "command": "262 files / 1,671 tests; strict lint (ESLint 10.11.0), build and npm audit 0 vulnerabilities. Staging e02ebb39 shell 7/7, /, /stats/, /board/, /_health 200, hosted browser audit 1020/1020 (public pages, not a played run). sharp 0.35.5 and supabase-js 2.117.2 held for release-age cooldown."
-    },
-    {
-      "session": 179,
-      "status": "green",
-      "type": "stats-page-staging-production-and-full-gates",
-      "command": "262 files / 1,671 tests; strict lint, deployable build, 29-file public contract, schema, security and supply chain pass. Staging e01aa752 shell 7/7, hosted browser and 21 inspected hash-bound captures. Exact source 2b4e18e passed CI 36618034795, immutable 1104bdc2 and canonical shell 7/7; /stats/ 200, live API 53 runs/39 identifiers, canonical health 2b4e18e92fbb."
-    },
-    {
-      "session": 178,
-      "status": "green",
-      "type": "staging-production-and-full-gates",
-      "command": "261 files / 1,668 tests; strict lint, deployable build, public/schema/security and supply-chain gates passed. Staging ce59619c passed shell 7/7 and hosted browser 28/28; 14 hash-bound captures directly inspected. Exact gameplay revision 237003e88841 passed CI 36509845993 and deployed as 773a1f58. Immutable and canonical origins passed shell 7/7 each, cutover 5/5, backend 5/5, replay 3/3 and leaderboard isolation."
-    },
-    {
-      "session": 177,
-      "status": "green",
-      "type": "final-operation-replay-verification",
-      "command": "Exact source 65f983937142 passed GitHub Actions 34926899773: 260 files / 1,639 tests. Strict lint, deployable build, public contract (28 files), claims, schema, security and supply-chain gates passed. All 12 modes received natural-input browser runs; Extraction and Bot Royale reached victory. Six assisted Operation routes completed 42 encounters with zero objective failures or browser errors; all six pause checks passed. Sixty-four hash-bound before/after captures cover dark/light and desktop/mobile. Production 7cb07a99 and callofdoodie.wtf report 65f983937142; shell 7/7 and desktop/mobile play, audio suspend/resume and six directly inspected production states passed."
-    },
-    {
-      "session": 177,
-      "status": "green",
-      "type": "mode-corrective-validation",
-      "command": "257 files / 1,608 tests passed; strict lint and deployable build passed; public contract 28 files and claims passed; dependency audit zero vulnerabilities. Seventeen short natural-input runs cover all twelve desktop modes and Classic plus four new mobile modes. Four controlled six-boss sequences reached victory. Sixteen browser clock/ending cases and four Classic/Operation launch transitions passed. Seven Throne recovery paths were simulated independently. Production 4eab033d534f verified: CI successful, edge revision matched, public shell 7/7 passed. Desktop Classic reached wave 2; mobile Boss Gauntlet reached a normal death screen. Real keyboard/touch playtests and audio mute/resume passed without browser errors; six production captures were visually inspected."
-    },
-    {
-      "session": 177,
-      "status": "green",
-      "type": "production-verification",
-      "command": "S177 complete: production 9d6c3eafd501 verified; CI 250/250 files and 1583/1583 tests passed; shell, backend, replay, domain routing, leaderboard and launch-surface checks passed."
-    },
-    {
-      "session": 177,
-      "status": "green",
-      "type": "hosted-staging",
-      "command": "Immutable 38cb07a7 shell7/7; 32 boss states +20 meta states at390/1440, both themes; direct rendered-pixel inspection. Existing Gauntlet arena clipping documented in baseline and final."
-    },
-    {
-      "session": 177,
-      "status": "green",
-      "type": "full-gates",
-      "command": "Full suite250 files/1572 assertions Sep11; later shopForecast28/28 including11 new; strict lint/build472.72KB; schema/public/security audit zero vulnerabilities Sep14."
-    },
-    {
-      "session": 175,
-      "status": "green",
-      "type": "full-gates",
-      "command": "245/245 files · 1,490/1,490 assertions (+24) · 15/15 static gates (exit codes captured directly) · strict lint · build · deployable build · security release gate · App chunk 469.46 KB under the 560 KB gate"
-    },
-    {
-      "session": 173,
-      "status": "green",
-      "type": "full-gates",
-      "command": "240/240 files · 1,438/1,438 assertions (+49) · strict lint · deployable build · security release gate · dependency-tree check green · no player-facing bundle change"
-    },
-    {
-      "session": 172,
-      "status": "green",
-      "type": "full-gates",
-      "command": "238/238 files · 1,389/1,389 assertions · strict lint · deployable build · security release gate green (dependency-tree resynced via npm install) · no player-facing bundle change"
-    },
-    {
-      "session": 171,
-      "status": "green",
-      "type": "full-gates",
-      "command": "238/238 files · 1,389/1,389 assertions · strict lint · deployable build · security release gate green · no player-facing bundle change"
-    },
-    {
-      "session": 170,
-      "status": "green",
-      "type": "production-verification",
-      "command": "source bb88eb48d57d · workflow 34436020611 · immutable d9842f42 · shell 7/7 both · cutover 5/5 · backend 5/5 · replay 3/3 · leaderboard isolation · launch surfaces"
-    },
-    {
-      "session": 170,
-      "status": "green",
-      "type": "full-gates",
-      "command": "237/237 files · 1,387/1,387 assertions · strict lint · deployable build · startup/protocol/schema/public/security/dependency/runtime/entry/assets · npm audit zero · supply-chain green"
-    },
-    {
-      "session": 170,
-      "status": "green",
-      "type": "hosted-staging",
-      "command": "session-170-staging · immutable 520a56d6 · shell 7/7 · route/theme/width 969/969 · no UI/UX source changed · direct image viewer unavailable"
-    },
-    {
-      "session": 169,
-      "status": "green",
-      "type": "production-verification",
-      "command": "source ca1324136f8c · workflow 34429538894 · immutable 90e27a19 · shell 7/7 · cutover 5/5 · backend 5/5 · replay 3/3 · leaderboard isolation · launch surfaces · focused hazard 28/28 · lazy analysis 72/72"
-    },
-    {
-      "session": 169,
-      "status": "green",
-      "type": "hosted-visual-proof",
-      "command": "session-169-staging · route/theme/width 969/969 · hazard 28/28 · lazy analysis 72/72 · 26 hash-bound captures · direct representative pixel inspection · CANON-053 pass"
+      "command": "S195 sixteen before/after images inspected; both widths/themes"
     }
   ],
   "blockers": [
@@ -276,7 +43,7 @@
   "lastUpdated": "2026-10-20",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
-  "truthAuditStatus": "S195 both outcomes verified local/staging; exact-main production pending.",
+  "truthAuditStatus": "S195 both selected L2 outcomes production verified.",
   "truthAuditLastRun": "2026-10-20",
   "ignisScore": 44193,
   "ignisGrade": "FORGE",
@@ -322,7 +89,7 @@
   "runtimeUrl": "https://callofdoodie.wtf/",
   "stagingType": "cloudflare-pages",
   "stagingUrl": "https://6c05b5e9.call-of-doodie.pages.dev/",
-  "testsLastRun": "2026-10-20T15:08:20.064Z",
+  "testsLastRun": "2026-10-20T15:11:38Z",
   "sanitizationLastCleared": "2026-10-06",
   "sessionShellHygiene": {
     "session": 191,
@@ -377,7 +144,15 @@
     "skipped": 3,
     "note": "Studio-wide doctor evidence; not a project-only zero-findings claim. Central follow-up delivered through Ark; application unobserved."
   },
-  "lastSessionSummary": "S195 consistent Railgun health bonus and bounded controller persistence.",
+  "lastSessionSummary": {
+    "session": 195,
+    "shipped": [
+      "Consistent Railgun health bonus",
+      "Bounded controller profile persistence"
+    ],
+    "tests": "299 files /2063 assertions passing",
+    "deploy": "18285e4cc1c0 production verified"
+  },
   "testsAssertionsPassing": 2063,
   "testsAssertionsTotal": 2063,
   "testsAssertionsFiles": 299,
@@ -388,41 +163,49 @@
   "testsBudgetExhausted": false,
   "silAvg5": 945,
   "testsAssertionsDeferred": [],
-  "testsAssertionsLastRun": "2026-10-20T15:08:20.064Z",
-  "lastShipped": "S195 consistent Railgun health bonus and bounded controller persistence.",
+  "testsAssertionsLastRun": "2026-10-20T15:11:38Z",
+  "lastShipped": "S195 consistent low-health rail beams and bounded controller storage IO.",
   "truthStatus": "FORGE/public-unlaunched unchanged. Synthetic controller/keyboard and assisted App ticks do not prove physical-pad or participant outcomes. Existing S183 comparisons remain unmeasured. No dependency, backend, identity/trust-policy, cost, licensing or public-launch change. CDR legitimately unchanged without creative direction.",
   "testsFocusedSupplement": "S195 all local assertions passed in one full run; focused49/49.",
-  "lastDeployCommit": "51fc42bf1510f6a4b625f3fb250140472f04862d",
-  "lastDeployAt": "2026-10-20T05:58:35Z",
+  "lastDeployCommit": "18285e4cc1c0d582eeffeab3a8ae3cee43c93ee5",
+  "lastDeployAt": "2026-10-20T15:11:38Z",
   "closeoutAcceptance": {
     "session": 195,
-    "state": "delivery-pending",
+    "state": "complete",
     "writeback": "all ten reconciled; CDR legitimately unchanged",
     "scaffold": {
       "tasks": 3,
-      "done": 2,
-      "inProgress": 1,
+      "done": 3,
+      "inProgress": 0,
       "open": 0
     },
-    "independentReview": "pass0 blocking findings; source review only",
+    "independentReview": "Source pass; two independent records reviews, all6 text findings corrected and verified.",
     "autopilot": "recipient equivalents; foreign-rooted doctor excluded",
-    "localSuite": "S195 full local suite299files/2063assertions passing. Focused49/49 after3 failing-before regressions. Strict lint, configured build, schema/startup/public/security/runtime and dependency audit pass. Staging6c05b5e9 shell7/7 and browser28/28 across390/1440,both themes; rail480/480,health33.6,unchanged profile writes0/second.16 real before/after captures inspected and hash-bound; independent source review pass0 blocking findings. Exact-main production pending."
+    "localSuite": "S195 full local suite299files/2063assertions passing. Focused49/49 after3 failing-before regressions. Strict lint, configured build, schema/startup/public/security/runtime and dependency audit pass. Staging6c05b5e9 shell7/7 and browser28/28 across390/1440,both themes; rail480/480,health33.6,unchanged profile writes0/second.16 real before/after captures inspected and hash-bound; independent source review pass0 blocking findings. Exact-main production verified; see production receipt.",
+    "production": {
+      "source": "18285e4cc1c0d582eeffeab3a8ae3cee43c93ee5",
+      "workflow": 39445821523,
+      "immutableUrl": "https://0d08b70e.call-of-doodie.pages.dev",
+      "canonical": "https://callofdoodie.wtf/",
+      "browserAssertions": 28
+    }
   },
-  "testsLastRunMode": "full-local",
+  "testsLastRunMode": "full-hosted-exact-main",
   "velocity": 2,
   "silVelocityLastSession": 2,
   "deploy": {
-    "source": "51fc42bf1510f6a4b625f3fb250140472f04862d",
-    "workflow": 39377541819,
-    "immutableUrl": "https://8e3a9bb5.call-of-doodie.pages.dev",
+    "source": "18285e4cc1c0d582eeffeab3a8ae3cee43c93ee5",
+    "workflow": 39445821523,
+    "immutableUrl": "https://0d08b70e.call-of-doodie.pages.dev",
     "status": "verified",
-    "commit": "51fc42bf1510f6a4b625f3fb250140472f04862d",
+    "commit": "18285e4cc1c0d582eeffeab3a8ae3cee43c93ee5",
     "url": "https://callofdoodie.wtf/",
-    "deployedAt": "2026-10-20T05:58:35Z"
+    "deployedAt": "2026-10-20T15:11:38Z"
   },
   "lastSession": 195,
   "silAvg10": 940.5,
   "silAvg25": 965.6,
   "silAvgAll": 988.5,
-  "testsTimeoutMs": 120000
+  "testsTimeoutMs": 120000,
+  "lastDeployStatus": "verified"
 }

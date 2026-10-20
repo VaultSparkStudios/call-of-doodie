@@ -1,20 +1,19 @@
-## Where We Left Off — Session 195
+## Where We Left Off — Session 195 final closeout
 
-Session Intent: fresh full /arc, authorized direct-main commit/push and full deployment. Intent outcome: in progress.
+Session Intent: fresh full /arc, authorized direct-main commit/push and full deployment. Intent outcome: both selected L2 outcomes production verified. Final records commit receives exact-main checks/readback before native completion.
 
-S195 consistent Railgun health bonus and bounded controller persistence.
+S195 implementation 18285e4cc1c0d582eeffeab3a8ae3cee43c93ee5 passed exact-main workflow 39445821523:299 files/2063 assertions,strict lint,configured build and Cloudflare deployment. Canonical edge-health matches18285e4cc1c0. Canonical and immutable https://0d08b70e.call-of-doodie.pages.dev shell7/7 each;production browser28/28 across390/1440,both themes proves rail480/480 with health33.6,unchanged profile writes0 during1-second window,and keyboard/controller movement.
 
-Native goal01a159d0-10f9-71d3-abb8-590f6bbbefa1 createdAt1792508195 bound toS195/start6e802b4. Fresh audit and plan in ignored .cache/audit-S195/docs; strict2/2 premise gate recorded before implementation and timing verified. Prior closeout does not substitute for this invocation.
+This invocation completed fresh startup and a nine-axis/game-loop audit; prior-session completion was not substituted. Strict2/2 premise gate was recorded before implementation; timing verified.
 
-Fresh startup and nine-axis/game-loop audit completed for this invocation. Both selected L2 outcomes implemented; failing-before3 regressions, fixed-after49/49 focused assertions. Real pre-change Chrome reproduced480/160 beam damage and62–63 profile writes/second across390/1440 and both themes. Independent source review passes0 blocking findings. Full suite, staging and production acceptance pending.
+Rail snapshots Last Resort once before its instantaneous target traversal. Per-target healing,critical rolls,armor,shields and nominal-damage policy remain. Controller persistence is scoped by storage and metadata,refreshes every60s,bounds failed attempts,and returns a current profile. Real before-change Chrome reproduced480/160 damage and62–63 storage writes/second across all4 cases; after480/480,correct healing,and0 unchanged-window writes.
 
-Rail snapshots Last Resort once immediately before the instantaneous beam target traversal. Healing still applies per target; it no longer removes the same shot's bonus midway. This refines S194 per-target healing semantics without changing nominal damage, shields or crit policy. Controller profile attempts are storage-scoped, metadata-sensitive, refreshed every60s and bounded on failure; returned profile remains current. Privacy-restricted localStorage getter access is guarded.
+Local full299/2063 passed in one run; focused49/49 after3 failing-before regressions. Staging shell7/7 and browser28/28.16 inspected before/after captures hash-bound to both changed gameplay sources. Dependency audit0 vulnerabilities; schema/startup/public/security/runtime checks pass. Review optional buttons-only and restricted-storage-getter tests were not blockers and are not claimed executed.
+
+Independent source review passed. Closeout review found stale pending summaries,old testing links,category label mismatch,unmeasured context forecasts and unnecessary native goal identity in the public handoff. Current summaries and current testing surfaces were reconciled; SIL display labels appended; the startup renderer now suppresses token/cache/compact forecasts when usage is unmeasured. Native identity remains only in ignored local handoff. No gameplay changes followed source review.
 
 FORGE/public-unlaunched unchanged. Synthetic controller/keyboard and assisted App ticks do not prove physical-pad or participant outcomes. Existing S183 comparisons remain unmeasured. No dependency, backend, identity/trust-policy, cost, licensing or public-launch change. CDR legitimately unchanged without creative direction.
 
-Canon55 reconciled,0 absolute gaps; unchanged CANON-045 STRONG gap retained for guest-game promotion. Radar10/10 current. Beacon unconfigured and context usage unmeasured. Local ops doctor delegates to control-plane root; no foreign doctor evidence used as project proof. Native schema/startup/public/security/runtime checks and exact-main quality/build-and-deploy own this routine release acceptance.
+Canon55 reconciled,0 absolute gaps; existing CANON-045 STRONG gap retained for unchanged guest-game promotion. Radar10/10 current. Context usage remains unmeasured;beacon unconfigured. Project ops doctor delegates to the control-plane root,so it is excluded as recipient proof. Native acceptance and exact-candidate quality/build-and-deploy own this routine promotion. Missing local IGNIS rescore is an owner-delivery gap; signed Ark impact supplies central follow-through without a false adoption claim. Historical backend degradation is not reclassified green by client checks; no backend code changed.
 
-Rollback ordinary revert and rebuild/redeploy prior main6e802b4. Existing founder authorization retained.
-
-
-S195 candidate acceptance: S195 full local suite299files/2063assertions passing. Focused49/49 after3 failing-before regressions. Strict lint, configured build, schema/startup/public/security/runtime and dependency audit pass. Staging6c05b5e9 shell7/7 and browser28/28 across390/1440,both themes; rail480/480,health33.6,unchanged profile writes0/second.16 real before/after captures inspected and hash-bound; independent source review pass0 blocking findings. Exact-main production pending.
+Both selected outcomes and all3 waves reconciled. Rollback ordinary revert18285e4 and rebuild/redeploy prior main6e802b4. Final records commit has no gameplay difference from the verified candidate.
