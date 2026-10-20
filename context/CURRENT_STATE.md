@@ -1,3 +1,9 @@
+## S197 production verified
+
+Consistent Shield Pulse protection across rail, grenades and lightning.
+
+S197 implementation 56a5655324f59e4f87601fd4554f540ccf8eaba7 passed exact-main workflow 39478756481:299 files/2081 assertions,strict lint,configured build and Cloudflare deployment. Canonical health matches 56a5655324f5. Canonical and immutable https://412cabf5.call-of-doodie.pages.dev shell7/7 each;production browser44/44 across390/1440,both themes. Shield Pulse holds HP10000 against grenade/rail/chain;vulnerable grenade70,eligible chain fallback5 retained. Controller selection,handoff and held/released keyboard remain usable.
+
 ## S197 candidate acceptance
 
 Consistent Shield Pulse protection across rail, grenades and lightning.

@@ -4,6 +4,12 @@
 
 ## Current Session
 
+## S197 production verified
+
+Consistent Shield Pulse protection across rail, grenades and lightning.
+
+S197 implementation 56a5655324f59e4f87601fd4554f540ccf8eaba7 passed exact-main workflow 39478756481:299 files/2081 assertions,strict lint,configured build and Cloudflare deployment. Canonical health matches 56a5655324f5. Canonical and immutable https://412cabf5.call-of-doodie.pages.dev shell7/7 each;production browser44/44 across390/1440,both themes. Shield Pulse holds HP10000 against grenade/rail/chain;vulnerable grenade70,eligible chain fallback5 retained. Controller selection,handoff and held/released keyboard remain usable.
+
 ## S197 candidate acceptance
 
 Consistent Shield Pulse protection across rail, grenades and lightning.
@@ -84,20 +90,11 @@ S192 full local suite passes 299/299 files and 2039/2039 assertions, no failed o
 
 ## S192 candidate verified
 
-S192 full local suite passes 299/299 files and 2038/2038 assertions, no failed or pending tests. Strict lint, configured build, schema/startup/public/security gates pass; dependency audit zero vulnerabilities, backend5/5/replay3/3. Staging562130b0 shell7/7/browser12/12 across390/1440/both themes. All24 before/after captures inspected/hash-bound. Independent review approved. Exact-main production pending.
-
-## S192 run ownership
-
-S192 isolates asynchronous run startup, delayed perks/audio and leaderboard tickets.
-
-Actual App focused suite15/15 passes. Staging562130b0 shell7/7 and browser12/12 pass across390/1440 and both themes; reordered ticket fixtures retain the replacement token/signature. Independent review addressed menu cancellation, positive draft and live unmount coverage. Full suite and exact-main production pending. Authoritative detail: LATEST_HANDOFF.
-
-## S
+S192 full local suite passes 299/299 files and 2038/2038 assertions, no failed or pending tests. Strict lint, configured build, schema/startup/public/security gates pass; dependency audit zero vulnerabilities, backend5/5/replay3/3. Staging5621
 
 ## Open Work
 
 ## S197 arc outcomes and waves
-- [ ] S197 exact-main production and full closeout.
 ## S196 arc outcomes and waves
 ## S195 arc outcomes and waves
 ## S194 arc outcomes and waves
@@ -151,6 +148,7 @@ Actual App focused suite15/15 passes. Staging562130b0 shell7/7 and browser12/12 
 - [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET on the Pages project so Porcelain Passport verification and cloud backup stop answering 503.
 ## Session 166 - Extraction distance, pressure, radar objectives, and death-beat split
 - [ ] [SIL:1] Collect consented extraction telemetry before changing the 1.25× pressure slope or 1.5× arena scale; synthetic distance and enemy-count math are not balance evidence.
+- [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET on the Pages project so Porcelain Passport verification and cloud backup stop answering 503.
 
 ## Recent Decisions
 
@@ -185,9 +183,12 @@ S196 final acceptance: S196 implementation 729870fb560e776f947f84957c83db6fea1ba
 
 Share Shield Pulse and Summoner protection eligibility for grenade,rail and chain selection; preserve ordinary bullet consumption and presentation. Keep existing nominal damage policies outside protected hits. Existing CANON-045 STRONG gap remains justified for unchanged guest-game promotion. FORGE/public-unlaunched unchanged. Real Chrome with synthetic controller/keyboard and assisted App state/ticks does not prove physical-device or participant outcomes. Existing S183 comparisons remain unmeasured. No backend, dependency, identity/trust-policy, variable cost, rights or launch change. CDR legitimately unchanged without creative direction.
 
+
+S197 final acceptance: S197 implementation 56a5655324f59e4f87601fd4554f540ccf8eaba7 passed exact-main workflow 39478756481:299 files/2081 assertions,strict lint,configured build and Cloudflare deployment. Canonical health matches 56a5655324f5. Canonical and immutable https://412cabf5.call-of-doodie.pages.dev shell7/7 each;production browser44/44 across390/1440,both themes. Shield Pulse holds HP10000 against grenade/rail/chain;vulnerable grenade70,eligible chain fallback5 retained. Controller selection,handoff and held/released keyboard remain usable. Local full2080/2081 with startup-fixture44s timeout;unchanged isolated1/1 pass;load-sensitive cause is an inference,not established. Hosted exact-main full299/2081 passes.66 focused;4 failing-before regressions. Independent source review passed;guaranteed-crit guard strengthened and re-reviewed. Staging44/44,shell7/7;24 inspected hash-bound before/after images. Native schema/startup/public/security/runtime gates pass;
+
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 275,439 bytes · SHA-256 `86cba13b2eb8…`
-- `context/TASK_BOARD.md` · 188,500 bytes · SHA-256 `df793c56425a…`
-- `context/DECISIONS.md` · 190,601 bytes · SHA-256 `4caaeec789e2…`
+- `context/CURRENT_STATE.md` · 276,076 bytes · SHA-256 `91f50c291f8e…`
+- `context/TASK_BOARD.md` · 188,500 bytes · SHA-256 `2c1fdddb2b06…`
+- `context/DECISIONS.md` · 191,640 bytes · SHA-256 `d14fcea9c023…`
 - `docs/AUDIT_2026-10-18.json` · 6,892 bytes · SHA-256 `b34b668a7b5a…`

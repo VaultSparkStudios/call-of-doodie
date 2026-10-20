@@ -4,9 +4,15 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Consistent Shield Pulse protection across rail, grenades and lightning.",
-  "nextMilestone": "Verify exact-main production.",
+  "currentFocus": "S197 Shield Pulse source parity production verified.",
+  "nextMilestone": "Collect existing participant/device acceptance evidence.",
   "testingSurfaces": [
+    {
+      "session": 197,
+      "type": "production",
+      "status": "green",
+      "url": "https://callofdoodie.wtf/"
+    },
     {
       "session": 197,
       "type": "staging",
@@ -15,9 +21,15 @@
     },
     {
       "session": 197,
+      "type": "production-smoke",
+      "status": "green",
+      "command": "S197 Shield Pulse/input44/44"
+    },
+    {
+      "session": 197,
       "type": "local-browser-capture",
       "status": "green",
-      "command": "S19724 inspected captures;390/1440,both themes"
+      "command": "S19724 before/after images inspected;390/1440,both themes"
     }
   ],
   "blockers": [
@@ -31,7 +43,7 @@
   "lastUpdated": "2026-10-20",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
-  "truthAuditStatus": "S197 selected outcome local/staging verified;production pending.",
+  "truthAuditStatus": "S197 selected L2 outcome production verified.",
   "truthAuditLastRun": "2026-10-20",
   "ignisScore": 44193,
   "ignisGrade": "FORGE",
@@ -45,7 +57,7 @@
   "currentSession": 197,
   "sessionMode": "founder",
   "lastAgent": "codex",
-  "testsPassing": 298,
+  "testsPassing": 299,
   "testsTotal": 299,
   "entropyScore": 0.215,
   "entropyLastComputed": "2026-10-20",
@@ -77,7 +89,7 @@
   "runtimeUrl": "https://callofdoodie.wtf/",
   "stagingType": "cloudflare-pages",
   "stagingUrl": "https://5ab785fa.call-of-doodie.pages.dev/",
-  "testsLastRun": "2026-10-20T18:51:19.230Z",
+  "testsLastRun": "2026-10-20T18:56:08Z",
   "sanitizationLastCleared": "2026-10-06",
   "sessionShellHygiene": {
     "session": 191,
@@ -137,10 +149,10 @@
     "shipped": [
       "Consistent Shield Pulse protection across rail, grenades and lightning."
     ],
-    "tests": "298/299 files;2080/2081 assertions,isolated startup1/1",
-    "deploy": "pending exact-main production"
+    "tests": "299 files/2081 assertions passing",
+    "deploy": "56a5655324f5 production verified"
   },
-  "testsAssertionsPassing": 2080,
+  "testsAssertionsPassing": 2081,
   "testsAssertionsTotal": 2081,
   "testsAssertionsFiles": 299,
   "testsFlaky": [],
@@ -150,36 +162,43 @@
   "testsBudgetExhausted": false,
   "silAvg5": 945,
   "testsAssertionsDeferred": [],
-  "testsAssertionsLastRun": "2026-10-20T18:51:19.231Z",
+  "testsAssertionsLastRun": "2026-10-20T18:56:08Z",
   "lastShipped": "S197 consistent Shield Pulse protection.",
   "truthStatus": "FORGE/public-unlaunched unchanged. Real Chrome with synthetic controller/keyboard and assisted App state/ticks does not prove physical-device or participant outcomes. Existing S183 comparisons remain unmeasured. No backend, dependency, identity/trust-policy, variable cost, rights or launch change. CDR legitimately unchanged without creative direction.",
   "testsFocusedSupplement": "S19766 focused;4 failing-before regressions;full suite includes strengthened guaranteed-crit guard.",
-  "lastDeployCommit": "729870fb560e776f947f84957c83db6fea1ba2d3",
-  "lastDeployAt": "2026-10-20T18:05:35Z",
+  "lastDeployCommit": "56a5655324f59e4f87601fd4554f540ccf8eaba7",
+  "lastDeployAt": "2026-10-20T18:56:08Z",
   "closeoutAcceptance": {
     "session": 197,
-    "state": "delivery-pending",
+    "state": "complete",
     "writeback": "ten surfaces reconciled;CDR legitimately unchanged",
     "scaffold": {
       "tasks": 3,
-      "done": 2,
-      "inProgress": 1,
+      "done": 3,
+      "inProgress": 0,
       "open": 0
     },
-    "independentReview": "source pass;test improvement applied",
-    "localSuite": "S197 local full299 files/2081 assertions:2080 passed,one startup/session-binding fixture timeout at44s under load;unchanged isolated rerun1/1 passed. This is not a passing full local run. Focused66/66 before final full;four failing-before regressions. Independent source review passed;guaranteed-crit assertion strengthened and re-reviewed. Staging https://5ab785fa.call-of-doodie.pages.dev shell7/7 and browser44/44 across390/1440,both themes. Before protected HP fell by70 grenade/160rail/5chain;after pulse blocks each,vulnerable grenade70 and chain fallback5 retained.24 before/after captures visually inspected and hash-bound to both runtime sources. Strict lint,configured build,public/security/runtime checks pass;dependency audit0 vulnerabilities. Exact-main hosted FULL suite is mandatory before production."
+    "independentReview": "source and final records independently reviewed:pass;0 blocking findings",
+    "localSuite": "Local full2080/2081 with startup-fixture44s timeout;unchanged isolated1/1 pass;load-sensitive cause is an inference,not established. Hosted exact-main full299/2081 passes.66 focused;4 failing-before regressions. Independent source review passed;guaranteed-crit guard strengthened and re-reviewed. Staging44/44,shell7/7;24 inspected hash-bound before/after images. Native schema/startup/public/security/runtime gates pass;dependency audit0 vulnerabilities. Sanitization0 findings.",
+    "production": {
+      "source": "56a5655324f59e4f87601fd4554f540ccf8eaba7",
+      "workflow": 39478756481,
+      "immutableUrl": "https://412cabf5.call-of-doodie.pages.dev",
+      "canonical": "https://callofdoodie.wtf/",
+      "browserAssertions": 44
+    }
   },
-  "testsLastRunMode": "full-local",
+  "testsLastRunMode": "full-hosted-exact-main",
   "velocity": 1,
   "silVelocityLastSession": 1,
   "deploy": {
-    "source": "729870fb560e776f947f84957c83db6fea1ba2d3",
-    "workflow": 39471382673,
-    "immutableUrl": "https://f3b3056d.call-of-doodie.pages.dev",
+    "source": "56a5655324f59e4f87601fd4554f540ccf8eaba7",
+    "workflow": 39478756481,
+    "immutableUrl": "https://412cabf5.call-of-doodie.pages.dev",
     "status": "verified",
-    "commit": "729870fb560e776f947f84957c83db6fea1ba2d3",
+    "commit": "56a5655324f59e4f87601fd4554f540ccf8eaba7",
     "url": "https://callofdoodie.wtf/",
-    "deployedAt": "2026-10-20T18:05:35Z"
+    "deployedAt": "2026-10-20T18:56:08Z"
   },
   "lastSession": 197,
   "silAvg10": 940.5,

@@ -2,10 +2,10 @@
 
 Session Intent: fresh full arc, authorized direct-main commit/push and full deployment.
 
-Wave 1 ✔ startup and fresh nine-axis/game-loop audit. Wave 2 ✔ Shield Pulse source parity. Wave 3 ◼ staging,production and full closeout.
+Wave 1 ✔ startup and fresh nine-axis/game-loop audit. Wave 2 ✔ Shield Pulse source parity. Wave 3 ✔ staging,production and full closeout.
 
 - [x] S197 shield-pulse-source-parity L2 accepted on staging.
-- [ ] S197 exact-main production and full closeout.
+- [x] S197 exact-main production and full closeout.
 
 
 ## S196 arc outcomes and waves
