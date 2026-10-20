@@ -4,6 +4,16 @@
 
 ## Current Session
 
+## S192 production verified
+
+Async run startup, deferred perks/audio and leaderboard tickets isolated to owning runs.
+
+S192 implementation 815f9b47b15388d2167af2fbc282b40dc7eb9a7b passed exact-main workflow 39362694165: 299 test files/2039 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 815f9b47b153; canonical and immutable https://be661b17.call-of-doodie.pages.dev shell7/7 each. Browser12/12 across390/1440/both themes proves replacement token/signature survive old-ticket delivery and pause remains usable.
+
+## S192 candidate verified
+
+S192 full local suite passes 299/299 files and 2039/2039 assertions, no failed or pending tests. Strict lint, configured build, schema/startup/public/security gates pass; dependency audit zero vulnerabilities, backend5/5/replay3/3. Staging562130b0 shell7/7/browser12/12 across390/1440/both themes. All24 before/after captures inspected/hash-bound. Independent review approved. Exact-main production pending.
+
 ## S192 candidate verified
 
 S192 full local suite passes 299/299 files and 2038/2038 assertions, no failed or pending tests. Strict lint, configured build, schema/startup/public/security gates pass; dependency audit zero vulnerabilities, backend5/5/replay3/3. Staging562130b0 shell7/7/browser12/12 across390/1440/both themes. All24 before/after captures inspected/hash-bound. Independent review approved. Exact-main production pending.
@@ -100,20 +110,11 @@ Four selected reliability outcomes are complete. The final records seal retains 
 
 S186 repairs session goal identity, latched interaction after focus loss, combat input during frozen choices, and incomplete catch-up frame timing.
 
-Independent review passes after one lock-rotation correction. Focused regressions pass. Staging https://298a5f72.call-of-doodie.pages.dev passes shell 7/7 and four actual-app theme/width input cases. Before/after browser checks reproduced and resolved interaction latching. Strict lint, configured build, public contracts, security and scoped supply-chain checks pass. Final full suite and exact-main production verification follow.
-
-See LATEST_HANDOFF for acceptance limits.
-
-## S185 arc completion — menus follow the active controller
-
-Implemented audit item 2 (1221846): SettingsPanel and VirtualKeyboard polled navigator.getGamepads()[0], so a pad in slot 1+ (common after a Chrome reconnect) could not navigate those screens. Both now use getPrimaryGamepad(); slot-1 selection and a menu source contract are tested.
-
-S185 arc completion: /start ran (session lock, canon sync 55 canons / 0 pending, CANON-049 radar current, fresh brief), then a scoped /audit of full range of motion on every input device (docs/AUDIT_2026-10-18.md, 4/4 premises verified). Verified clean with evidence: mouse aim (DPR + camera), touch aim, ADS zoom (scaled around the player), arena movement clamp (AW/AH) and movement dir
+Independent review passes after one lock-rotation correction. Focused regressions pass. Staging https://298a5f72.call-of-doodie.pages.dev passes shell 7/7 and four actual-app theme/width input cases. Before/after
 
 ## Open Work
 
 ## S192 arc outcomes and waves
-- [ ] S192 exact-main production and final closeout evidence.
 - [ ] [SIL:1] S192 reserve: measure rapid-rematch comprehension with natural participants.
 - [ ] [SIL:1] S192 reserve: physical-device interruption/reconnection comparison.
 ## S191 arc outcomes and waves
@@ -167,6 +168,7 @@ S185 arc completion: /start ran (session lock, canon sync 55 canons / 0 pending,
 ## Session 163 - Real modes, CPU squad, fixed timestep, single brand
 - [ ] [SIL:2] Deploy the S163 migration and edge-function change (profiles table, ghost_path column, submit-score ghostPath) and set OBELISK_VERIFY_SECRET / SUPABASE_SERVICE_ROLE_KEY on Pages so cloud backup and the remote ghost race light up.
 - [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET on the Pages project: neither is in the secrets gateway, so Porcelain Passport verification (and therefore cloud backup) answers 503 in production until they exist.
+- [ ] [SIL:1] Scrolling camera for a sixteen-bot royale; DeathScreen diet.
 
 ## Recent Decisions
 
@@ -216,9 +218,12 @@ S191 receipt scan correction: a chained PowerShell invocation advanced to commit
 
 Use launch generation plus captured game identity for deferred run entry work. Invalidate on menu/unmount; preserve ticket arrival after death for the same run. Check live phase only for deferred perk/audio. No cancellation of unrelated storage history or server work. Existing CANON-045 STRONG gap retained: no identity/trust-policy change; routine promotion scoped to guest-game correctness. FORGE/public-unlaunched unchanged. Assisted App callbacks, intercepted ticket fixtures and synthetic input do not prove participant outcomes or physical controllers. Existing S183 comparisons remain unmeasured. No backend, dependency, identity-policy, cost, licensing or launch change. CDR unchanged without creative direction.
 
+
+S192 final release acceptance: S192 implementation 815f9b47b15388d2167af2fbc282b40dc7eb9a7b passed exact-main workflow 39362694165: 299 test files/2039 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 815f9b47b153; canonical and immutable https://be661b17.call-of-doodie.pages.dev shell7/7 each. Browser12/12 across390/1440/both themes proves replacement token/signature survive old-
+
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 267,345 bytes · SHA-256 `768c156c22a9…`
-- `context/TASK_BOARD.md` · 185,168 bytes · SHA-256 `5e34fc6a844e…`
-- `context/DECISIONS.md` · 182,931 bytes · SHA-256 `abdf33f7f51e…`
+- `context/CURRENT_STATE.md` · 268,341 bytes · SHA-256 `90ce92d4743f…`
+- `context/TASK_BOARD.md` · 185,168 bytes · SHA-256 `b656a859eb6c…`
+- `context/DECISIONS.md` · 183,403 bytes · SHA-256 `19787b74602f…`
 - `docs/AUDIT_2026-10-18.json` · 6,892 bytes · SHA-256 `b34b668a7b5a…`

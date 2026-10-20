@@ -2,10 +2,10 @@
 
 Session Intent: fresh full arc, main push and deployment.
 
-Wave 1 ✔ fresh audit and startup. Wave 2 ✔ run-start ownership L2. Wave 3 ◼ full acceptance, production and closeout.
+Wave 1 ✔ fresh audit and startup. Wave 2 ✔ run-start ownership L2. Wave 3 ✔ full acceptance, production and closeout.
 
 - [x] S192 isolate preparation, deferred perks/audio and ticket success/failure by launch generation and game identity.
-- [ ] S192 exact-main production and final closeout evidence.
+- [x] S192 exact-main production and final closeout evidence.
 - [ ] [SIL:1] S192 reserve: measure rapid-rematch comprehension with natural participants.
 - [ ] [SIL:1] S192 reserve: physical-device interruption/reconnection comparison.
 

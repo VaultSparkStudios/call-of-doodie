@@ -20,7 +20,7 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ LAST SESSION (S192) - WHAT SHIPPED ══════════════════════════╗
-║  S192 isolates asynchronous run startup, delayed perks/audio an  ║
+║  S192 asynchronous run-start ownership production verified.      ║
 ║  Tests  -                                                        ║
 ║  Deploy -                                                        ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -68,19 +68,19 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ✓  ████████░░░░░░░░░░░░░░░░  34% used                           ║
-║     93,002 / 272,000 tok  ·  codex/codex-272k  · …               ║
-║     ~46,501 tok/turn  ·  cache 50%  ·  3 turns to compact        ║
+║  ✓  ███████░░░░░░░░░░░░░░░░░  29% used                           ║
+║     79,456 / 272,000 tok  ·  codex/codex-272k  · …               ║
+║     ~39,728 tok/turn  ·  cache 50%  ·  4 turns to compact        ║
 ║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ⚠  Tests         299/299 files · 2038/2038 assertions —…        ║
+║  ✓  Tests         299/299 passing (2026-10-20T03:13:45.277Z)     ║
 ║  ⚠  Velocity      1   ·  Debt: →                                 ║
-║  ✓  Runway        S192 staged; production pending                ║
+║  ✓  Runway        S192 production verified                       ║
 ║  ⛔  Context age   ?d                                             ║
 ║  ⚠  IGNIS         44193 FORGE  ·  12d old                        ║
-║  ⛔  Truth         implementation/staging verified;…              ║
+║  ⛔  Truth         selected run-ownership outcome production…     ║
 ║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs…        ║
 ║  ✓  Genome dims   all stable  (24/25)                            ║
 ║  ✓  Entropy       0.214  (healthy)                               ║
