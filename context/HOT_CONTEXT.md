@@ -4,6 +4,12 @@
 
 ## Current Session
 
+## S199 production verified
+
+Rail hits wear down Juggernaut shields and open the shield-break window.
+
+S199 implementationf7b35abe2d1f93ff8f0abe1b3217017c48eaa3ce passed exact-main workflow39514242690:299files/2099assertions,strict lint,configured build and Cloudflare deployment. Canonical health matchesf7b35abe2d1f. Canonical and immutablehttps://c6750ee5.call-of-doodie.pages.dev shell7/7 each;production browser52/52 across390/1440,both themes. Rail shield200→40.6 after regeneration→0;breaking hit24health,next hit160. Protected armor unchanged;mobile shield-break announcement fits. Changed combat runtime matches staging after generated import filenames are normalized.
+
 ## S199 candidate acceptance
 
 S199 focused103/103 pass,four failing-before regressions. Independent source and announcement reviews pass,58/58 projectile tests independently. Local full:295/299 files,2094/2099 assertions;5 failed. It ran while the final announcement correction was being made;exact-main hosted full suite is the final release authority. Staginghttps://215d8bfc.call-of-doodie.pages.dev browser52/52,shell7/7 across390/1440,both themes. Rail shield200→40.6 after regeneration→0;breaking hit24health damage,next hit160. Protected hits leave armor intact.24 before/after images inspected and hash-bound after mobile announcement clipping correction. Strict lint,configured build,schema,public/runtime/security and sanitization checks passed;dependency audit0 vulnerabilities. Production pending.
@@ -74,20 +80,11 @@ S194 implementation 51fc42bf1510f6a4b625f3fb250140472f04862d passed exact-main w
 
 ## S194 candidate acceptance
 
-S194 local299-file run:2055 passed,1 startup fixture timeout at43.6s under load; unchanged isolated startup fixture then passed1/1 in25.8s. All gameplay regressions pass. Strict lint/configured build/schema/startup/public/security/runtime gates pass; dependency audit0 vulnerabilities. Staging48c2ee6d shell7/7 and browser24/24 at390/1440/both themes.24 inspected before/after images hash-bound to all3 changed runtime sources. Independent review pass after screen-lifetime correction. Exact-main hosted full-suite and production acceptance pending.
-
-Unchanged remote backend diagnostics degraded: leaderboard reads504/timeouts; replay valid/weak cases pass but malformed case returned provider546. No backend source/configuration change. These are not claimed green; routine client promotion required-check contract is hosted quality and build-and-deploy plus changed-input/combat staging acceptance. Existing guest identity unchanged. Recheck service separately.
-
-## S194 candidate
-
-S194 consumes controller menu presses and restores Railgun Last Resort.
-
-Both selected L2 fixes implemented and independently reviewed. Staging48c2ee6d
+S194 local299-file run:2055 passed,1 startup fixture timeout at43.6s under load; unchanged isolated startup fixture then passed1/1 in25.8s. All gameplay regressions pass. Strict lint/configured build/schema/startup/public/security/runtime gates pass; dependency audit0 vulnerabilities. Staging48c2ee6d shell7/7 and browser24/24 at390/1440/both themes.24 inspected before/after images hash-bound to all3 changed runtime sources. Independent review pass after
 
 ## Open Work
 
 ## S199 verified work
-- [ ] S199 production verification.
 ## S198 verified work
 ## S197 arc outcomes and waves
 ## S196 arc outcomes and waves
@@ -141,6 +138,7 @@ Both selected L2 fixes implemented and independently reviewed. Staging48c2ee6d
 - [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET so cloud backup stops answering 503.
 ## Session 167 - The debrief names names, modes say what the run was worth, announcements stay on screen
 - [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET on the Pages project so Porcelain Passport verification and cloud backup stop answering 503.
+## Session 166 - Extraction distance, pressure, radar objectives, and death-beat split
 
 ## Recent Decisions
 
@@ -175,9 +173,12 @@ S198 final acceptance: S198 implementation 10c54521f2f6215624b14f44121d5fa310e68
 
 Reuse the physical-projectile armor impact rule for rail. Preserve the breaking hit’s pre-impact health reduction,240-frame regeneration delay and existing visual cues. Intentional rail Shield Guy piercing remains unchanged. Existing CANON-045 STRONG integration gap remains visible;unchanged guest-game promotion does not claim identity readiness.
 
+
+S199 final acceptance: S199 implementationf7b35abe2d1f93ff8f0abe1b3217017c48eaa3ce passed exact-main workflow39514242690:299files/2099assertions,strict lint,configured build and Cloudflare deployment. Canonical health matchesf7b35abe2d1f. Canonical and immutablehttps://c6750ee5.call-of-doodie.pages.dev shell7/7 each;production browser52/52 across390/1440,both themes. Rail shield200→40.6 after regeneration→0;breaking hit24health,next hit160. Protected armor unchanged;mobile shield-break announcement fits. Changed combat runtime matches staging after generated import filenames are normalized. Local full remains nonpassing:2094/2099assertions,two hot-context freshness assertions,one closeout freshness assertion,one startup timeout and one temporary-directory cleanup EPERM. Refreshed isolated failed surfaces24/24 pass with90s limit;focused103/103 and independent projectile58/58 pass. Hosted exact-main299/2099 is the final full-suite acceptance.
+
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 278,837 bytes · SHA-256 `62bd4d90a116…`
-- `context/TASK_BOARD.md` · 189,443 bytes · SHA-256 `6ef40e8f037c…`
-- `context/DECISIONS.md` · 193,317 bytes · SHA-256 `d0db3f58b43d…`
+- `context/CURRENT_STATE.md` · 279,520 bytes · SHA-256 `b2fc3f3ef427…`
+- `context/TASK_BOARD.md` · 189,439 bytes · SHA-256 `d7fb5b4aeb8e…`
+- `context/DECISIONS.md` · 194,278 bytes · SHA-256 `c8c1e795e57d…`
 - `docs/AUDIT_2026-10-18.json` · 6,892 bytes · SHA-256 `b34b668a7b5a…`

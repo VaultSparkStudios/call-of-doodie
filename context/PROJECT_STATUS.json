@@ -4,9 +4,15 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Rail hits wear down Juggernaut shields and open the shield-break window.",
-  "nextMilestone": "Verify exact-main production.",
+  "currentFocus": "S199 Railgun Juggernaut shield durability production verified.",
+  "nextMilestone": "Collect existing participant/device acceptance evidence.",
   "testingSurfaces": [
+    {
+      "session": 199,
+      "type": "production",
+      "status": "green",
+      "url": "https://callofdoodie.wtf/"
+    },
     {
       "session": 199,
       "type": "staging",
@@ -15,9 +21,15 @@
     },
     {
       "session": 199,
+      "type": "production-smoke",
+      "status": "green",
+      "command": "S199 rail-shield/input52/52"
+    },
+    {
+      "session": 199,
       "type": "local-browser-capture",
       "status": "green",
-      "command": "S19924 inspected before/after captures;390/1440,both themes"
+      "command": "S19924 inspected hash-bound before/after captures"
     }
   ],
   "blockers": [
@@ -31,7 +43,7 @@
   "lastUpdated": "2026-10-20",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
-  "truthAuditStatus": "S199 release verification pending.",
+  "truthAuditStatus": "S199 selected L2 outcome production verified.",
   "truthAuditLastRun": "2026-10-20",
   "ignisScore": 44193,
   "ignisGrade": "FORGE",
@@ -45,7 +57,7 @@
   "currentSession": 199,
   "sessionMode": "founder",
   "lastAgent": "codex",
-  "testsPassing": 295,
+  "testsPassing": 299,
   "testsTotal": 299,
   "entropyScore": 0.215,
   "entropyLastComputed": "2026-10-20",
@@ -77,47 +89,48 @@
   "runtimeUrl": "https://callofdoodie.wtf/",
   "stagingType": "cloudflare-pages",
   "stagingUrl": "https://215d8bfc.call-of-doodie.pages.dev/",
-  "testsLastRun": "2026-10-20T23:14:51.386Z",
+  "testsLastRun": "2026-10-20T23:21:25Z",
   "sanitizationLastCleared": "2026-10-06",
   "sessionShellHygiene": {
-    "session": 191,
-    "scope": "Durable root harness handles through source production verification; each confirmed terminal, including corrected failed development/baseline runs. Agent reports its32913failed,73681interrupted,75041lint terminal; no persistent server or browser left open. Final records-seal handles tracked in ignored live-hygiene.json.",
-    "started": 30,
-    "closed": 30,
+    "session": 199,
+    "started": 32,
+    "closed": 32,
     "running": 0,
     "terminalHandles": [
-      18956,
-      43664,
-      69701,
-      77269,
-      37032,
-      34530,
-      97137,
-      13142,
-      97658,
-      36108,
-      1193,
-      39422,
-      97252,
-      18109,
-      6448,
-      27008,
-      65170,
-      55499,
-      85660,
-      76031,
-      42815,
-      35084,
-      35914,
-      15232,
-      23158,
-      47684,
-      2162,
-      46490,
-      60352,
-      53361
+      23740,
+      65092,
+      18499,
+      94329,
+      62773,
+      66426,
+      81217,
+      41924,
+      92556,
+      70463,
+      40276,
+      55795,
+      78079,
+      48086,
+      12222,
+      80172,
+      37527,
+      77419,
+      74620,
+      80347,
+      88453,
+      39834,
+      34934,
+      25078,
+      68051,
+      3474,
+      83067,
+      40078,
+      86883,
+      92158,
+      44647,
+      89421
     ],
-    "enumeratedAt": "2026-10-20T02:14:28.790Z"
+    "scope": "Every owned durable root harness handle observed terminal through implementation production verification;browser contexts closed in finally. Final records/deployment handles tracked separately before native completion."
   },
   "doctorScore": {
     "date": "2026-10-04",
@@ -135,12 +148,12 @@
   "lastSessionSummary": {
     "session": 199,
     "shipped": [
-      "Rail wears down Juggernaut shields;shield break announcement fits mobile."
+      "Rail hits wear down Juggernaut shields and open the shield-break window."
     ],
-    "tests": "2094/2099 assertions;hosted final source pending",
-    "deploy": "production pending"
+    "tests": "299files/2099assertions passing",
+    "deploy": "f7b35abe2d1f production verified"
   },
-  "testsAssertionsPassing": 2094,
+  "testsAssertionsPassing": 2099,
   "testsAssertionsTotal": 2099,
   "testsAssertionsFiles": 299,
   "testsFlaky": [],
@@ -150,40 +163,47 @@
   "testsBudgetExhausted": false,
   "silAvg5": 945,
   "testsAssertionsDeferred": [],
-  "testsAssertionsLastRun": "2026-10-20T23:14:51.387Z",
-  "lastShipped": "S198 Summoner lifecycle and Vite patch.",
+  "testsAssertionsLastRun": "2026-10-20T23:21:25Z",
+  "lastShipped": "S199 Railgun armor durability and mobile shield-break announcement.",
   "truthStatus": "FORGE/public-unlaunched unchanged. Synthetic inputs and assisted game ticks do not prove physical devices or participant outcomes. Existing identity,backend,reply-email and comparative measurement gaps remain explicit. No new creative direction;CDR legitimately unchanged.",
   "testsFocusedSupplement": "S199103 focused assertions,four failing-before regressions.",
-  "lastDeployCommit": "10c54521f2f6215624b14f44121d5fa310e68c07",
-  "lastDeployAt": "2026-10-20T20:47:27Z",
+  "lastDeployCommit": "f7b35abe2d1f93ff8f0abe1b3217017c48eaa3ce",
+  "lastDeployAt": "2026-10-20T23:21:25Z",
   "closeoutAcceptance": {
     "session": 199,
-    "state": "delivery-pending",
+    "state": "complete",
     "scaffold": {
       "tasks": 3,
-      "done": 2,
-      "inProgress": 1,
+      "done": 3,
+      "inProgress": 0,
       "open": 0
     },
-    "independentReview": "source and announcement pass;record freshness corrections under re-review",
-    "localSuite": "S199 isolated rerun24/24 assertions passes after record refresh,with90s timeout. Initial full remains nonpassing:2094/2099;two hot-context freshness assertions,one closeout-currency assertion,one startup timeout and one Windows temporary-directory cleanup EPERM. No gameplay failure. Exact-main full suite remains mandatory."
+    "localSuite": "Local full remains nonpassing:2094/2099assertions,two hot-context freshness assertions,one closeout freshness assertion,one startup timeout and one temporary-directory cleanup EPERM. Refreshed isolated failed surfaces24/24 pass with90s limit;focused103/103 and independent projectile58/58 pass. Hosted exact-main299/2099 is the final full-suite acceptance.",
+    "independentReview": "source,announcement and corrected records pass",
+    "production": {
+      "source": "f7b35abe2d1f93ff8f0abe1b3217017c48eaa3ce",
+      "workflow": 39514242690,
+      "immutableUrl": "https://c6750ee5.call-of-doodie.pages.dev",
+      "canonical": "https://callofdoodie.wtf/",
+      "browserAssertions": 52
+    }
   },
-  "testsLastRunMode": "full-local-non-final-source",
+  "testsLastRunMode": "full-hosted-exact-main",
   "velocity": 1,
   "silVelocityLastSession": 1,
   "deploy": {
-    "source": "10c54521f2f6215624b14f44121d5fa310e68c07",
-    "workflow": 39494601691,
-    "immutableUrl": "https://e3c20115.call-of-doodie.pages.dev",
+    "source": "f7b35abe2d1f93ff8f0abe1b3217017c48eaa3ce",
+    "workflow": 39514242690,
+    "immutableUrl": "https://c6750ee5.call-of-doodie.pages.dev",
     "status": "verified",
-    "commit": "10c54521f2f6215624b14f44121d5fa310e68c07",
+    "commit": "f7b35abe2d1f93ff8f0abe1b3217017c48eaa3ce",
     "url": "https://callofdoodie.wtf/",
-    "deployedAt": "2026-10-20T20:47:27Z"
+    "deployedAt": "2026-10-20T23:21:25Z"
   },
   "lastSession": 199,
   "silAvg10": 940.5,
   "silAvg25": 965.6,
   "silAvgAll": 988.5,
   "testsTimeoutMs": 120000,
-  "lastDeployStatus": "S199 pending;S198 verified"
+  "lastDeployStatus": "verified"
 }

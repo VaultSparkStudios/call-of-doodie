@@ -20,15 +20,17 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ LAST SESSION (S199) · WHAT SHIPPED ══════════════════════════╗
-║  ✓ Rail wears down Juggernaut shields;shield break announcement  ║
-║  Tests  2094/2099 assertions;hosted final source pending         ║
-║  Deploy production pending                                       ║
+║  ✓ Rail hits wear down Juggernaut shields and open the shield-b  ║
+║  Tests  299files/2099assertions passing                          ║
+║  Deploy f7b35abe2d1f production verified                         ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ WHERE TO TEST · Call-Of-Doodie ══════════════════════════════╗
+║  Production    → https://callofdoodie.wtf/ ✓                     ║
 ║  Staging       → https://215d8bfc.call-of-doodie.pages.dev/ ✓    ║
-║  Unit tests    → npm test — 295/299 passing ⛔                    ║
-║  local-browser-capture → S19924 inspected before/after captu ✓   ║
+║  Unit tests    → npm test — 299/299 passing ✓                    ║
+║  local-browser-capture → S19924 inspected hash-bound before/ ✓   ║
+║  production-smoke → S199 rail-shield/input52/52 ✓                ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ PROJECT PROFILE ═════════════════════════════════════════════╗
@@ -59,22 +61,22 @@
 
 ╔══ WHERE WE LEFT OFF  ·  Session 199 ═══════════════════════════╗
 ║  Shipped:  see LATEST_HANDOFF.md                                 ║
-║  Tests:    295/299 passing  ·  Deploy: S199 pending;S198…        ║
+║  Tests:    299/299 passing  ·  Deploy: verified                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
 ║  ?  ░░░░░░░░░░░░░░░░░░░░░░░░  usage unknown                      ║
-║     unknown / 272,000 tok  ·  codex  ·  unmeasured               ║
+║     unknown / 200,000 tok  ·  unknown  ·  unmeasured             ║
 ║     Verdict: UNMEASURED                                          ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ⛔  Tests         suite RED — 295/299 files…                     ║
+║  ✓  Tests         299/299 passing (2026-10-20T23:21:25Z)         ║
 ║  ⚠  Velocity      1   ·  Debt: →                                 ║
 ║  ✓  Runway        unknown                                        ║
 ║  ⛔  Context age   ?d                                             ║
 ║  ⚠  IGNIS         44193 FORGE  ·  12d old                        ║
-║  ⛔  Truth         release verification pending.  ·  Genome: ?    ║
+║  ⛔  Truth         selected outcomes production verified.  · …    ║
 ║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs…        ║
 ║  ✓  Genome dims   all stable  (24/25)                            ║
 ║  ✓  Entropy       0.215  (healthy)                               ║

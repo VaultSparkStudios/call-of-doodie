@@ -1,9 +1,9 @@
 ## S199 verified work
 
-Wave 1 ✔ fresh review. Wave 2 ✔ rail shield durability and independent review. Wave 3 ◼ staging,production and closeout verification.
+Wave 1 ✔ fresh review. Wave 2 ✔ rail shield durability and independent review. Wave 3 ✔ staging,production and closeout verified.
 
 - [x] S199 rail hits share existing armor durability and shield-break presentation.
-- [ ] S199 production verification.
+- [x] S199 production verification.
 
 ## S198 verified work
 
