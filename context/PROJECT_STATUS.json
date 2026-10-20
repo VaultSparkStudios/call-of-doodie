@@ -4,32 +4,20 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "S198 Summoner guard lifecycle and Vite patch production verified.",
-  "nextMilestone": "Collect existing participant/device acceptance evidence.",
+  "currentFocus": "Rail hits wear down Juggernaut shields and open the shield-break window.",
+  "nextMilestone": "Verify exact-main production.",
   "testingSurfaces": [
     {
-      "session": 198,
-      "type": "production",
-      "status": "green",
-      "url": "https://callofdoodie.wtf/"
-    },
-    {
-      "session": 198,
+      "session": 199,
       "type": "staging",
       "status": "green",
-      "url": "https://36ead169.call-of-doodie.pages.dev/"
+      "url": "https://215d8bfc.call-of-doodie.pages.dev/"
     },
     {
-      "session": 198,
-      "type": "production-smoke",
-      "status": "green",
-      "command": "S198 Summoner/input44/44"
-    },
-    {
-      "session": 198,
+      "session": 199,
       "type": "local-browser-capture",
       "status": "green",
-      "command": "S19824 inspected hash-bound before/after captures"
+      "command": "S19924 inspected before/after captures;390/1440,both themes"
     }
   ],
   "blockers": [
@@ -43,21 +31,21 @@
   "lastUpdated": "2026-10-20",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
-  "truthAuditStatus": "S198 selected L2 outcomes production verified.",
+  "truthAuditStatus": "S199 release verification pending.",
   "truthAuditLastRun": "2026-10-20",
   "ignisScore": 44193,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-10-08",
-  "silSession": 198,
+  "silSession": 199,
   "silScore": 945,
   "silAvg3": 945,
-  "silVelocity": 2,
+  "silVelocity": 1,
   "silDebt": "flat",
-  "silLastSession": 198,
-  "currentSession": 198,
+  "silLastSession": 199,
+  "currentSession": 199,
   "sessionMode": "founder",
   "lastAgent": "codex",
-  "testsPassing": 299,
+  "testsPassing": 295,
   "testsTotal": 299,
   "entropyScore": 0.215,
   "entropyLastComputed": "2026-10-20",
@@ -88,8 +76,8 @@
   "freeTierCostStatus": "cost-neutral",
   "runtimeUrl": "https://callofdoodie.wtf/",
   "stagingType": "cloudflare-pages",
-  "stagingUrl": "https://36ead169.call-of-doodie.pages.dev/",
-  "testsLastRun": "2026-10-20T20:47:27Z",
+  "stagingUrl": "https://215d8bfc.call-of-doodie.pages.dev/",
+  "testsLastRun": "2026-10-20T23:14:51.386Z",
   "sanitizationLastCleared": "2026-10-06",
   "sessionShellHygiene": {
     "session": 191,
@@ -145,15 +133,15 @@
     "note": "Studio-wide doctor evidence; not a project-only zero-findings claim. Central follow-up delivered through Ark; application unobserved."
   },
   "lastSessionSummary": {
-    "session": 198,
+    "session": 199,
     "shipped": [
-      "Summoner protection follows living guards immediately; Vite security patch applied."
+      "Rail wears down Juggernaut shields;shield break announcement fits mobile."
     ],
-    "tests": "299 files/2092 assertions passing",
-    "deploy": "10c54521f2f6 production verified"
+    "tests": "2094/2099 assertions;hosted final source pending",
+    "deploy": "production pending"
   },
-  "testsAssertionsPassing": 2092,
-  "testsAssertionsTotal": 2092,
+  "testsAssertionsPassing": 2094,
+  "testsAssertionsTotal": 2099,
   "testsAssertionsFiles": 299,
   "testsFlaky": [],
   "testsInconclusive": [],
@@ -162,34 +150,27 @@
   "testsBudgetExhausted": false,
   "silAvg5": 945,
   "testsAssertionsDeferred": [],
-  "testsAssertionsLastRun": "2026-10-20T20:47:27Z",
+  "testsAssertionsLastRun": "2026-10-20T23:14:51.387Z",
   "lastShipped": "S198 Summoner lifecycle and Vite patch.",
-  "truthStatus": "Guest play and FORGE/public-unlaunched status remain unchanged. Synthetic input and assisted game ticks do not prove physical-device or participant outcomes;existing comparative evidence remains unmeasured. No backend,identity,rights,pricing or launch change.",
-  "testsFocusedSupplement": "S19890 focused;9 failing-before regressions.",
+  "truthStatus": "FORGE/public-unlaunched unchanged. Synthetic inputs and assisted game ticks do not prove physical devices or participant outcomes. Existing identity,backend,reply-email and comparative measurement gaps remain explicit. No new creative direction;CDR legitimately unchanged.",
+  "testsFocusedSupplement": "S199103 focused assertions,four failing-before regressions.",
   "lastDeployCommit": "10c54521f2f6215624b14f44121d5fa310e68c07",
   "lastDeployAt": "2026-10-20T20:47:27Z",
   "closeoutAcceptance": {
-    "session": 198,
-    "state": "complete",
+    "session": 199,
+    "state": "delivery-pending",
     "scaffold": {
       "tasks": 3,
-      "done": 3,
-      "inProgress": 0,
+      "done": 2,
+      "inProgress": 1,
       "open": 0
     },
-    "localSuite": "Local full remains nonpassing:297/299files,2089/2092assertions;two stale-context assertions corrected by refresh and startup30s timeout retained. Default isolated startup also timed out;refreshed-context/unchanged startup5/5 passes at90s limit. Hosted exact-main full299/2092 is the complete-suite acceptance proof.90 focused tests pass,9 failing-before regressions.",
-    "independentReview": "source,dependency and final public records reviewed;all pass",
-    "production": {
-      "source": "10c54521f2f6215624b14f44121d5fa310e68c07",
-      "workflow": 39494601691,
-      "immutableUrl": "https://e3c20115.call-of-doodie.pages.dev",
-      "canonical": "https://callofdoodie.wtf/",
-      "browserAssertions": 44
-    }
+    "independentReview": "source and announcement pass;record freshness corrections under re-review",
+    "localSuite": "S199 isolated rerun24/24 assertions passes after record refresh,with90s timeout. Initial full remains nonpassing:2094/2099;two hot-context freshness assertions,one closeout-currency assertion,one startup timeout and one Windows temporary-directory cleanup EPERM. No gameplay failure. Exact-main full suite remains mandatory."
   },
-  "testsLastRunMode": "full-hosted-exact-main",
-  "velocity": 2,
-  "silVelocityLastSession": 2,
+  "testsLastRunMode": "full-local-non-final-source",
+  "velocity": 1,
+  "silVelocityLastSession": 1,
   "deploy": {
     "source": "10c54521f2f6215624b14f44121d5fa310e68c07",
     "workflow": 39494601691,
@@ -199,10 +180,10 @@
     "url": "https://callofdoodie.wtf/",
     "deployedAt": "2026-10-20T20:47:27Z"
   },
-  "lastSession": 198,
+  "lastSession": 199,
   "silAvg10": 940.5,
   "silAvg25": 965.6,
   "silAvgAll": 988.5,
   "testsTimeoutMs": 120000,
-  "lastDeployStatus": "verified"
+  "lastDeployStatus": "S199 pending;S198 verified"
 }

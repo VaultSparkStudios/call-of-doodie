@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-10-20T20:37:43.028Z",
-  "uiBaseRef": "6981c3165206e06e5acb46a432ace912528cec0f",
-  "stagingUrl": "https://36ead169.call-of-doodie.pages.dev/",
+  "capturedAt": "2026-10-20T23:14:59.836Z",
+  "uiBaseRef": "7a46dee5f56ff47825aed9e0da82b3ac01125b31",
+  "stagingUrl": "https://215d8bfc.call-of-doodie.pages.dev/",
   "themes": [
     "dark",
     "light"
@@ -10,21 +10,13 @@
   "sourceFiles": [
     {
       "file": "src/systems/projectileFrame.js",
-      "sha256": "b3a99e45f3b547c2cb15a091b596fee47eebde8af7b3e0887283f0dd2b21634a"
-    },
-    {
-      "file": "src/systems/combatResolution.js",
-      "sha256": "3a892966b5ebb529d4982be19e040ace4516cd9a33c707c41a461b3d3c26dc39"
-    },
-    {
-      "file": "src/systems/enemyFrame.js",
-      "sha256": "7df798f1c1309abf2d14c6f651eaf15edacef7499852cbeb8ea7fd5eaebe0c1b"
+      "sha256": "f61303edb102be3699a14101958a995c78499418297b4eb743b53e21ffda6eb3"
     }
   ],
   "captures": [
     {
-      "file": "session-198/before-production-sewer-night-390-held-controller.png",
-      "sha256": "0dbc9c35df408baeb877a52847099ade667fb316a3bc8cfe54a55977ed5a3b1d",
+      "file": "session-199/before-production-sewer-night-390-held-controller.png",
+      "sha256": "68c83c97e4cb8616a30809128c799eb229b7cd6161522a1b0f37b7b1cb5b285e",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -35,8 +27,8 @@
       "phase": "before"
     },
     {
-      "file": "session-198/before-production-sewer-night-390-controller-pause.png",
-      "sha256": "6423403a0eebae475ac62d9d20fc4bcb65ec37ea2678db357ce5e392bd330dd2",
+      "file": "session-199/before-production-sewer-night-390-controller-pause.png",
+      "sha256": "fd5e13e913fee34a63d458df12873d3c8cbaf770dbb9249205f6e2fafafc98f2",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -47,20 +39,20 @@
       "phase": "before"
     },
     {
-      "file": "session-198/before-production-sewer-night-390-summoner-guards.png",
-      "sha256": "fd235fdd55b03e637c2505a8bad0fdc945ee97f4a8bb1a4d038c0967915ba5e1",
+      "file": "session-199/before-production-sewer-night-390-juggernaut-shield.png",
+      "sha256": "5e85cedb51767dfd7bb03d7cff6b75409ee4eabb413dfa178160dbb48f521aed",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "summoner-guards",
+      "page": "juggernaut-shield",
       "phase": "before"
     },
     {
-      "file": "session-198/before-production-sewer-night-1440-held-controller.png",
-      "sha256": "4923438d961139524a5f1a2f1670537c999acef13f4a7f8ed87af6c8c66884f8",
+      "file": "session-199/before-production-sewer-night-1440-held-controller.png",
+      "sha256": "06eafec40bcbf43f5c18b3de555b523cc320d08ac03bd3c1ec550d7166f70db0",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -71,8 +63,8 @@
       "phase": "before"
     },
     {
-      "file": "session-198/before-production-sewer-night-1440-controller-pause.png",
-      "sha256": "730f74f6cda0e1128b7703a23031b42b91f0b6074f6827481064a77adc4ae949",
+      "file": "session-199/before-production-sewer-night-1440-controller-pause.png",
+      "sha256": "f2e8f024b276ad14234b5df5c189288cc14a0d8507f7e64c47b4a83fb461b538",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -83,20 +75,20 @@
       "phase": "before"
     },
     {
-      "file": "session-198/before-production-sewer-night-1440-summoner-guards.png",
-      "sha256": "ba25d44aa8e3b0015dbc90069927ac348cabc1adff4cfb3f2f54e330630b5da4",
+      "file": "session-199/before-production-sewer-night-1440-juggernaut-shield.png",
+      "sha256": "5198c226a4410445c8ab7a68e8f0b814cadc51c1f4b2c2200091f6edaf9ad9fe",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "summoner-guards",
+      "page": "juggernaut-shield",
       "phase": "before"
     },
     {
-      "file": "session-198/before-production-porcelain-day-390-held-controller.png",
-      "sha256": "3151eb506c0b1affe9d53faaed331b466773491df03e00ef65ae7d95d1085d69",
+      "file": "session-199/before-production-porcelain-day-390-held-controller.png",
+      "sha256": "7c7dbc180ba9093b6b2295ce85bdd5056eb09f93ea02cfed68bc1c7490af8d23",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -107,8 +99,8 @@
       "phase": "before"
     },
     {
-      "file": "session-198/before-production-porcelain-day-390-controller-pause.png",
-      "sha256": "328f8fb454f2dec0e738eaf93dcf72f41dc6aefbd32a9aa8062893c0436ff1bf",
+      "file": "session-199/before-production-porcelain-day-390-controller-pause.png",
+      "sha256": "e24a03fa38f66ce2cbdb40965ad94301b164d8f0f01ac43679f9a565cb8bb1a4",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -119,20 +111,20 @@
       "phase": "before"
     },
     {
-      "file": "session-198/before-production-porcelain-day-390-summoner-guards.png",
-      "sha256": "3d6a506f069c50de1d1fcfb535fe49304bbc70c9bf7e64033e1f585bc84ea7e4",
+      "file": "session-199/before-production-porcelain-day-390-juggernaut-shield.png",
+      "sha256": "9987990c72e1d43cebb0f4c29bb5a4c4cfcae86d095c130abc42057f232ca578",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "summoner-guards",
+      "page": "juggernaut-shield",
       "phase": "before"
     },
     {
-      "file": "session-198/before-production-porcelain-day-1440-held-controller.png",
-      "sha256": "8fc17d66348d6762fc984351b34412503d5ec5b5f58c1fd7cc7c0c701920129a",
+      "file": "session-199/before-production-porcelain-day-1440-held-controller.png",
+      "sha256": "8e8ce67b8eb3095d5f24e1f3d20c2854d07715902e6770dac7ee62e62ea22cfe",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -143,8 +135,8 @@
       "phase": "before"
     },
     {
-      "file": "session-198/before-production-porcelain-day-1440-controller-pause.png",
-      "sha256": "e9cfe216e4fa1c7b0554c2b86555dadf36137067a9ceeb8a2ec9137de3b99d10",
+      "file": "session-199/before-production-porcelain-day-1440-controller-pause.png",
+      "sha256": "dedd67eead8f9707d3f7980cb0a79c0587ae65b1b3a1a8013bad1f00e5c154ce",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -155,20 +147,20 @@
       "phase": "before"
     },
     {
-      "file": "session-198/before-production-porcelain-day-1440-summoner-guards.png",
-      "sha256": "28f32ed28b9e1a5f843ef3c0e8dc00a34098dfae3722af32019e9cd150c04432",
+      "file": "session-199/before-production-porcelain-day-1440-juggernaut-shield.png",
+      "sha256": "cc8cff1b507f9bf8dfad63ac9edbe197c74a654e320077bb07c089acee9823d5",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "summoner-guards",
+      "page": "juggernaut-shield",
       "phase": "before"
     },
     {
-      "file": "session-198/after-staging-sewer-night-390-held-controller.png",
-      "sha256": "889990847ffec87db0cdc94169d47ef494c0a7fde6486b1f43293625b8c4e8b6",
+      "file": "session-199/after-staging-sewer-night-390-held-controller.png",
+      "sha256": "5bd2c6f2a811173326ee64bfda329ee69fe64a69ebbee92f2065ff7f6284248d",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -179,8 +171,8 @@
       "phase": "after"
     },
     {
-      "file": "session-198/after-staging-sewer-night-390-controller-pause.png",
-      "sha256": "427c5e3af3d96302a3d905ab2e4a63b104823d04d43fc1660f169830f108045f",
+      "file": "session-199/after-staging-sewer-night-390-controller-pause.png",
+      "sha256": "fe82ec108639662093dbc8ed7a4a00c15058d5a637fe06575cf55f7c79b5cfd1",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -191,20 +183,20 @@
       "phase": "after"
     },
     {
-      "file": "session-198/after-staging-sewer-night-390-summoner-guards.png",
-      "sha256": "cee901768933217ec79a11f92469de4c8215dcf38daf50f0c999efe09cf96e73",
+      "file": "session-199/after-staging-sewer-night-390-juggernaut-shield.png",
+      "sha256": "f52d1b9f17d3b74e62e689fb91b04e31f67eb1cf1bcf061716174c211ea466d5",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "summoner-guards",
+      "page": "juggernaut-shield",
       "phase": "after"
     },
     {
-      "file": "session-198/after-staging-sewer-night-1440-held-controller.png",
-      "sha256": "9845829d0bc39570b0cd44b2c9a1de7133e75740cd6ab068b46c33eae6b7d823",
+      "file": "session-199/after-staging-sewer-night-1440-held-controller.png",
+      "sha256": "467833bb6df7d7efba3f4c1e377a7ac8f117bf4cc661e3d8d90bb86b7ef64f51",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -215,8 +207,8 @@
       "phase": "after"
     },
     {
-      "file": "session-198/after-staging-sewer-night-1440-controller-pause.png",
-      "sha256": "2eb87326333c0802d2e65b95a8d41936f318fe99ebc0cc19a3d3f308305462cc",
+      "file": "session-199/after-staging-sewer-night-1440-controller-pause.png",
+      "sha256": "ac0a5ab6a34c3a39ce37f0e71fd90fcb81d2a8959a075eebdd2c1dae7512b2b3",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -227,20 +219,20 @@
       "phase": "after"
     },
     {
-      "file": "session-198/after-staging-sewer-night-1440-summoner-guards.png",
-      "sha256": "839d53c4df53b9412ea2999fbf15761b1fb1d3df18ddae749aa931af195e78cc",
+      "file": "session-199/after-staging-sewer-night-1440-juggernaut-shield.png",
+      "sha256": "721e9128b10ea721c8466e2b7c3586999d2e0c886b38d7b7c23a759b894b88c2",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "summoner-guards",
+      "page": "juggernaut-shield",
       "phase": "after"
     },
     {
-      "file": "session-198/after-staging-porcelain-day-390-held-controller.png",
-      "sha256": "bc44402c378e1a8de2c2fa60f7ff9d15c0a8758d631f270e3bb34842aadd520c",
+      "file": "session-199/after-staging-porcelain-day-390-held-controller.png",
+      "sha256": "813d54d6972f62a690c34137f83ce2e360db2a6be02bed9c6d3b34e77e43b270",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -251,8 +243,8 @@
       "phase": "after"
     },
     {
-      "file": "session-198/after-staging-porcelain-day-390-controller-pause.png",
-      "sha256": "3e6196234110c20f4d7ceeed502a1a91fe7c1ad718cc548a76afd700e99b22d4",
+      "file": "session-199/after-staging-porcelain-day-390-controller-pause.png",
+      "sha256": "d9a54c7af7086eff232ce7c9e42136ba6c60bec2cd014d36e0096aae1d03fbbe",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -263,20 +255,20 @@
       "phase": "after"
     },
     {
-      "file": "session-198/after-staging-porcelain-day-390-summoner-guards.png",
-      "sha256": "fb07bf6d7916fa36d09960c5dab5ccba6deb96c46827c4624b6db635f12b9682",
+      "file": "session-199/after-staging-porcelain-day-390-juggernaut-shield.png",
+      "sha256": "865efa9274f70e8e379707f8a7d9e8bb67d2e4b9e7145f260623c4f46fb17c6a",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "summoner-guards",
+      "page": "juggernaut-shield",
       "phase": "after"
     },
     {
-      "file": "session-198/after-staging-porcelain-day-1440-held-controller.png",
-      "sha256": "75c23a7e18dd0c2fb81ca2227010aaee1b3b151910f38d491cef60e04dd1f1ab",
+      "file": "session-199/after-staging-porcelain-day-1440-held-controller.png",
+      "sha256": "be0bd330137473cdd8bb7a3e3e826db1fd5d4287a9f29d33a21f843deea8e0f2",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -287,8 +279,8 @@
       "phase": "after"
     },
     {
-      "file": "session-198/after-staging-porcelain-day-1440-controller-pause.png",
-      "sha256": "f0ee3d07659ea91b7a7e2a9567ff02dfe23fef8b97d6aa8f3cf711f5abeed67e",
+      "file": "session-199/after-staging-porcelain-day-1440-controller-pause.png",
+      "sha256": "2d4ef1a1db10faec5e693ea366e427e9dc712a17f4f424a10d1687e977cb67a3",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -299,30 +291,30 @@
       "phase": "after"
     },
     {
-      "file": "session-198/after-staging-porcelain-day-1440-summoner-guards.png",
-      "sha256": "c57c8a8bb77a2436dc0db18a75afb01191dc341baca71160415cb173fa1da500",
+      "file": "session-199/after-staging-porcelain-day-1440-juggernaut-shield.png",
+      "sha256": "335260025763a585d41410803f86de4736306ac2c22a58892a9f05ef8652e6f9",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "summoner-guards",
+      "page": "juggernaut-shield",
       "phase": "after"
     }
   ],
   "inspection": {
     "renderedPixelsReviewed": true,
     "reviewer": "Codex root: all24 before/after images inspected through three contact sheets",
-    "reviewedAt": "2026-10-20T20:37:43.030Z",
-    "scope": "Summoner guard lifecycle,controller and pause;390/1440,both themes.",
+    "reviewedAt": "2026-10-20T23:14:59.838Z",
+    "scope": "Juggernaut shield durability,controller and pause;390/1440,both themes.",
     "findings": [
       "No introduced layout/readability defect in touched gameplay states.",
       "Synthetic boss name corrected before baseline recapture;no product copy change.",
-      "Before3 guards with count0/protection false and rail damage160;after immediate protection/count3,guard removal permits rail160."
+      "Before:three rail hits leave shield200;after:shield falls40 then0,third hit deals160 rather than24."
     ],
     "fixesApplied": [
-      "Live owned-guard protection and spawn count publication."
+      "Shared armor impact path for rail and physical projectiles."
     ],
     "blockingDefectsOpen": 0
   },

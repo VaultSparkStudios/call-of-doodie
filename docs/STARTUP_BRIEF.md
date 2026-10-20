@@ -1,12 +1,12 @@
 <!-- generated-by: scripts/render-startup-brief.mjs v3.1 -->
-<!-- generated-at: 2026-10-20 (Session 198 closeout) -->
-<!-- semantic-freshness: hash=2149be94eab8ba44 next=199 silSession=198 silScore=945 handoff=- tests=- -->
+<!-- generated-at: 2026-10-20 (Session 199 closeout) -->
+<!-- semantic-freshness: hash=19c57247a4c6ec0d next=200 silSession=199 silScore=945 handoff=- tests=- -->
 <!-- fast-boot-valid-until: next session if within 24h -->
 <!-- brief-coherent: true -->
 
 # Startup Brief — Call-Of-Doodie
 
-> **Fast-boot brief** — generated at Session 198 closeout · 2026-10-20.
+> **Fast-boot brief** — generated at Session 199 closeout · 2026-10-20.
 > Valid for next session if started within 24h. For sessions >24h later, load context files fresh (start.md §3).
 
 ---
@@ -15,22 +15,20 @@
 ╔════════════════════════════════════════════════════════════════╗
 ║  🚀 CALL-OF-DOODIE                                               ║
 ║  project · deployed/public-unlaunched · FORGE                    ║
-║  Session 199 · 2026-10-20 · FOUNDER MODE                         ║
+║  Session 200 · 2026-10-20 · FOUNDER MODE                         ║
 ║  Owner: VaultSpark Studios                                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ LAST SESSION (S198) · WHAT SHIPPED ══════════════════════════╗
-║  ✓ Summoner protection follows living guards immediately; Vite   ║
-║  Tests  299 files/2092 assertions passing                        ║
-║  Deploy 10c54521f2f6 production verified                         ║
+╔══ LAST SESSION (S199) · WHAT SHIPPED ══════════════════════════╗
+║  ✓ Rail wears down Juggernaut shields;shield break announcement  ║
+║  Tests  2094/2099 assertions;hosted final source pending         ║
+║  Deploy production pending                                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ WHERE TO TEST · Call-Of-Doodie ══════════════════════════════╗
-║  Production    → https://callofdoodie.wtf/ ✓                     ║
-║  Staging       → https://36ead169.call-of-doodie.pages.dev/ ✓    ║
-║  Unit tests    → npm test — 299/299 passing ✓                    ║
-║  local-browser-capture → S19824 inspected hash-bound before/ ✓   ║
-║  production-smoke → S198 Summoner/input44/44 ✓                   ║
+║  Staging       → https://215d8bfc.call-of-doodie.pages.dev/ ✓    ║
+║  Unit tests    → npm test — 295/299 passing ⛔                    ║
+║  local-browser-capture → S19924 inspected before/after captu ✓   ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ PROJECT PROFILE ═════════════════════════════════════════════╗
@@ -40,7 +38,7 @@
 ╔══ SCORE ═══════════════════════════════════════════════════════╗
 ║                                                                  ║
 ║    945/1000   ██████████████████████░░   95%                     ║
-║    SIL v3.0  ·  Avg3: 945  ·  Velocity 2→                        ║
+║    SIL v3.0  ·  Avg3: 945  ·  Velocity 1→                        ║
 ║    Last active: 0d  ·  Last closeout: 0d  ·  (active = newest…   ║
 ║    Trend  ▂▂▂▄▄  →  (last 5 sessions)                            ║
 ║                                                                  ║
@@ -59,24 +57,24 @@
 ║                                                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ WHERE WE LEFT OFF  ·  Session 198 ═══════════════════════════╗
+╔══ WHERE WE LEFT OFF  ·  Session 199 ═══════════════════════════╗
 ║  Shipped:  see LATEST_HANDOFF.md                                 ║
-║  Tests:    299/299 passing  ·  Deploy: verified                  ║
+║  Tests:    295/299 passing  ·  Deploy: S199 pending;S198…        ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
 ║  ?  ░░░░░░░░░░░░░░░░░░░░░░░░  usage unknown                      ║
-║     unknown / 200,000 tok  ·  unknown  ·  unmeasured             ║
+║     unknown / 272,000 tok  ·  codex  ·  unmeasured               ║
 ║     Verdict: UNMEASURED                                          ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         299/299 passing (2026-10-20T20:47:27Z)         ║
-║  ✓  Velocity      2   ·  Debt: →                                 ║
+║  ⛔  Tests         suite RED — 295/299 files…                     ║
+║  ⚠  Velocity      1   ·  Debt: →                                 ║
 ║  ✓  Runway        unknown                                        ║
 ║  ⛔  Context age   ?d                                             ║
 ║  ⚠  IGNIS         44193 FORGE  ·  12d old                        ║
-║  ⛔  Truth         selected outcomes production verified.  · …    ║
+║  ⛔  Truth         release verification pending.  ·  Genome: ?    ║
 ║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs…        ║
 ║  ✓  Genome dims   all stable  (24/25)                            ║
 ║  ✓  Entropy       0.215  (healthy)                               ║
@@ -111,7 +109,7 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ MOMENTUM METER ══════════════════════════════════════════════╗
-║  Velocity:   ▂▂▂▄▄  2→  (last 5 sessions)                        ║
+║  Velocity:   ▂▂▂▄▄  1→  (last 5 sessions)                        ║
 ║  Intent:     ?% achieved last 5                                  ║
 ║  Streak:     — (last intent not achieved)                        ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -119,7 +117,7 @@
 ╔══ SIL FORECAST (next session) ═════════════════════════════════╗
 ║  Projected:  941/1000  (↓4 vs current 945)                       ║
 ║  At-risk:    Momentum Δ-3                                        ║
-║  Calibration: MAE 2.4 over last 10 forecasts                     ║
+║  Calibration: MAE 2.8 over last 10 forecasts                     ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ GENIUS HIT LIST ═════════════════════════════════════════════╗
@@ -153,5 +151,5 @@
 
 ---
 
-*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 198 closeout · 2026-10-20*
+*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 199 closeout · 2026-10-20*
 *Run `node scripts/ops.mjs doctor` for live health check · `node scripts/ops.mjs genius-list` to refresh hit list*

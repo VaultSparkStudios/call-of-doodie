@@ -1,17 +1,17 @@
 {
   "vectorVersion": "1.0",
   "generatedAt": "2026-10-20",
-  "generatedAtMs": 1792529411568,
-  "session": 198,
-  "vectorHash": "319867f600467399",
+  "generatedAtMs": 1792538228366,
+  "session": 199,
+  "vectorHash": "a7eb10c6b1a54968",
   "silTotal": 945,
   "silAvg3": 945,
-  "velocity": 2,
+  "velocity": 1,
   "debt": "flat",
   "runway": "unknown",
   "intentRate": "unknown",
   "openNow": 4,
-  "openNext": 19,
+  "openNext": 21,
   "openBlocked": 0,
   "topNow": [
     "[SIL:2] **S183 measured comparisons** Complete matched human/agent, music/creatu",
@@ -19,12 +19,12 @@
     "[SIL:2] [S60] Supabase Auth / Studio membership implementation decision — if pai"
   ],
   "topNext": [
-    "[SIL:1] [S197 reserve] Observe boss-counterplay comprehension with participants;",
-    "[SIL:1] [S197 reserve] Add source/expiry permutations when new damage sources ar",
-    "[SIL:1] [S196 reserve] Observe multi-controller handoffs on actual pads; owner p"
+    "[SIL:1] [S199 reserve] Observe shield-counterplay comprehension with participant",
+    "[SIL:1] [S199 reserve] Extend mixed-source armor transitions if new weapon mecha",
+    "[SIL:1] [S197 reserve] Observe boss-counterplay comprehension with participants;"
   ],
   "health": "green",
-  "truthStatus": "selected outcomes production verified.",
+  "truthStatus": "release verification pending.",
   "genome": null,
   "ignisScore": 44193,
   "ignisGrade": "FORGE",
@@ -33,8 +33,8 @@
   "slug": "call-of-doodie",
   "type": null,
   "lifecycle": "deployed",
-  "nextMilestone": "Collect existing participant/device acceptance evidence.",
-  "currentFocus": "S198 Summoner guard lifecycle and Vite patch production verified.",
+  "nextMilestone": "Verify exact-main production.",
+  "currentFocus": "Rail hits wear down Juggernaut shields and open the shield-break window.",
   "lastShipped": "see LATEST_HANDOFF.md",
   "blockers": [
     "PostHog and project-scoped Sentry evidence remain unavailable; provider readiness is not represented as verified telemetry.",

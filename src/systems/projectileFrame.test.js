@@ -41,6 +41,60 @@ describe("stepProjectileFrame", () => {
   const enemyAt = (extra = {}) => ({ x: 80, y: 60, size: 30, health: 10000, maxHealth: 10000, color: "#fff", ...extra });
   const shot = (extra = {}) => ({ x: 80, y: 60, vx: 0, vy: 0, life: 100, size: 5, damage: 10, color: "#fff", ...extra });
 
+  it.each(["rail", "bullet"])("wears down and breaks Juggernaut armor with %s, then deals full damage", source => {
+    const enemy = enemyAt({ typeIndex: 17, jugShield: 100 });
+    const ctx = runtime({ enemies: [enemy], floatingTexts: [] });
+    ctx.perkMods.critBonus = -1;
+    const fire = damage => {
+      if (source === "rail") ctx.gs.pendingBeam = { ox: 0, oy: 60, cos: 1, sin: 0, maxT: 180, weaponIdx: 9, damage };
+      else ctx.gs.bullets = [shot({ damage })];
+      stepProjectileFrame(ctx);
+    };
+    fire(40);
+    expect(enemy.jugShield).toBe(60);
+    expect(enemy.health).toBe(9994);
+    fire(60);
+    expect(enemy.jugShield).toBe(0);
+    expect(enemy.jugShieldRegenDelay).toBe(240);
+    expect(enemy.health).toBe(9985); // Breaking hit still sees the pre-hit armor.
+    fire(40);
+    expect(enemy.health).toBe(9945);
+    expect(ctx.gs.totalDamage).toBe(55);
+    expect(ctx.gs.floatingTexts.filter(t => t.text.includes("SHIELD BROKEN"))).toHaveLength(1);
+    expect(ctx.gs.floatingTexts.find(t => t.text.includes("SHIELD SHATTERED"))).toMatchObject({ screen: true, x: 100, y: 40 });
+  });
+
+  it.each([0, 1, 500])("handles rail armor durability %i without negative shield or false break", shield => {
+    const enemy = enemyAt({ typeIndex: 17, jugShield: shield });
+    const ctx = runtime({ enemies: [enemy], pendingBeam: { ox: 0, oy: 60, cos: 1, sin: 0, maxT: 180, weaponIdx: 9, damage: 160 } });
+    ctx.perkMods.critBonus = -1;
+    stepProjectileFrame(ctx);
+    expect(enemy.jugShield).toBe(Math.max(0, shield - 160));
+    expect(enemy.health).toBe(shield ? 9976 : 9840);
+    expect(enemy.jugShieldRegenDelay).toBe(shield === 1 ? 240 : undefined);
+  });
+
+  it("retains raw bullet shield math for rail despite health-only bonuses and armor", () => {
+    const enemy = enemyAt({ typeIndex: 17, jugShield: 5000, dmgMult: 0.5 });
+    const ctx = runtime({ enemies: [enemy], pendingBeam: { ox: 0, oy: 60, cos: 1, sin: 0, maxT: 180, weaponIdx: 9, damage: 160 }, critBonus: 1, critMultBonus: 0.5, rageTimer: 10 });
+    ctx.player.health = 24;
+    ctx.combo.count = 4;
+    ctx.perkMods.lastResort = true;
+    stepProjectileFrame(ctx);
+    expect(enemy.jugShield).toBeCloseTo(5000 - 160 * 1.4 * 2);
+    expect(ctx.gs.totalDamage).toBeCloseTo(160 * 1.4 * 2.5 * 3 * 0.5 * 1.75 * 0.15);
+  });
+
+  it("does not wear armor or announce a break during Shield Pulse", () => {
+    const enemy = enemyAt({ typeIndex: 17, jugShield: 10, shieldPulseActive: true });
+    const ctx = runtime({ enemies: [enemy], pendingBeam: { ox: 0, oy: 60, cos: 1, sin: 0, maxT: 180, weaponIdx: 9, damage: 160 } });
+    stepProjectileFrame(ctx);
+    expect(enemy.jugShield).toBe(10);
+    expect(enemy.health).toBe(10000);
+    expect(enemy.jugShieldRegenDelay).toBeUndefined();
+    expect(ctx.gs.floatingTexts || []).toHaveLength(0);
+  });
+
   it.each(["bullet", "grenade", "rail"])("derives %s protection from living guards despite a stale flag", source => {
     const boss = enemyAt({ typeIndex: 18, summonerId: "owner", summonerInvuln: false });
     const guard = enemyAt({ x: 180, y: 110, summonedBy: "owner" });

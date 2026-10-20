@@ -18,7 +18,7 @@ import { applyEnemyDamage } from "./enemyDefeatLifecycle.js";
 import { applyObservedPlayerDamage } from "./damageSequence.js";
 import { healBossesFromEnemyBullet } from "./bossAbilities.js";
 import { stepAndCompactInPlace } from "./transientLifecycle.js";
-import { addParticles, addText } from "./transientPresentation.js";
+import { addParticles, addText, addScreenText } from "./transientPresentation.js";
 import { stampArenaDecal } from "./backgroundLayer.js";
 import { cosmeticRandom, getRunRng } from "./runRng.js";
 import { getMusicBPM, soundHitAt, soundPrecisionClick, soundPrecisionLock } from "../audio/soundFacade.js";
@@ -27,6 +27,18 @@ import { trackRhythmMasteryHit } from "../storage.js";
 
 function finite(value, fallback = 0) {
   return Number.isFinite(value) ? value : fallback;
+}
+
+function damageJuggernautShield(gs, enemy, rawDamage, W, H) {
+  if (enemy.typeIndex !== 17 || !(enemy.jugShield > 0)) return;
+  enemy.jugShield = Math.max(0, enemy.jugShield - rawDamage);
+  if (enemy.jugShield <= 0) {
+    enemy.jugShieldRegenDelay = 240;
+    addText(gs, enemy.x, enemy.y - 40, "🛡 SHIELD BROKEN!", "#FF6600");
+    addScreenText(gs, (gs._viewW || W) / 2, (gs._viewH || H) / 3, "🦏 SHIELD SHATTERED!", "#FF6600", true);
+    gs.screenShake = Math.max(gs.screenShake, 14);
+    addParticles(gs, enemy.x, enemy.y, "#5599FF", 20);
+  }
 }
 
 /**
@@ -226,6 +238,14 @@ export function stepProjectileFrame({
         * (isCrit ? CRIT_MULT + (gs.critMultBonus || 0) : 1)
         * lastResortMultiplier
         * (enemy.dmgMult || 1) * rageMultiplier * shieldMultiplier;
+      // Resolve health against the pre-hit armor, then wear down that armor
+      // using the same raw-impact rule as physical projectiles.
+      damageJuggernautShield(gs, enemy, computeJuggernautShieldDamage({
+        bulletDamage: baseDamage,
+        comboCount: combo.count,
+        isCrit,
+        critMult: CRIT_MULT,
+      }), W, H);
       const result = applyEnemyDamage(enemy, damage, {
         source: "rail",
         weaponIdx: beamWeaponIndex,
@@ -296,14 +316,7 @@ export function stepProjectileFrame({
           isCrit,
           critMult: CRIT_MULT,
         });
-        enemy.jugShield = Math.max(0, enemy.jugShield - rawDamage);
-        if (enemy.jugShield <= 0) {
-          enemy.jugShieldRegenDelay = 240;
-          addText(gs, enemy.x, enemy.y - 40, "🛡 SHIELD BROKEN!", "#FF6600");
-          addText(gs, W / 2, H / 3, "🦏 SHIELD SHATTERED!", "#FF6600", true);
-          gs.screenShake = Math.max(gs.screenShake, 14);
-          addParticles(gs, enemy.x, enemy.y, "#5599FF", 20);
-        }
+        damageJuggernautShield(gs, enemy, rawDamage, W, H);
       }
       const result = applyEnemyDamage(enemy, damage, {
         source: "projectile",

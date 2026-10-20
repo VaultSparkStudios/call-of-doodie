@@ -4,6 +4,16 @@
 
 ## Current Session
 
+## S199 candidate acceptance
+
+S199 focused103/103 pass,four failing-before regressions. Independent source and announcement reviews pass,58/58 projectile tests independently. Local full:295/299 files,2094/2099 assertions;5 failed. It ran while the final announcement correction was being made;exact-main hosted full suite is the final release authority. Staginghttps://215d8bfc.call-of-doodie.pages.dev browser52/52,shell7/7 across390/1440,both themes. Rail shield200→40.6 after regeneration→0;breaking hit24health damage,next hit160. Protected hits leave armor intact.24 before/after images inspected and hash-bound after mobile announcement clipping correction. Strict lint,configured build,schema,public/runtime/security and sanitization checks passed;dependency audit0 vulnerabilities. Production pending.
+
+## S199 candidate verification
+
+Rail hits wear down Juggernaut shields and open the shield-break window.
+
+S199103 focused assertions pass;four failing-before rail regressions reproduced on unchanged source. Independent source review passed,58/58 projectile assertions independently. Live production-before browser reproduces unchanged shield200 after three rail hits at390/1440 in both themes. Strict lint and configured build pass;full local suite,staging and exact-main production pending.
+
 ## S198 production verified
 
 Summoner protection follows living guards immediately; Vite security patch applied.
@@ -72,24 +82,12 @@ Unchanged remote backend diagnostics degraded: leaderboard reads504/timeouts; re
 
 S194 consumes controller menu presses and restores Railgun Last Resort.
 
-Both selected L2 fixes implemented and independently reviewed. Staging48c2ee6d passes shell7/7 and browser24/24 across390/1440 and both themes. Full-suite and backend verification still in progress; production pending.
-
-## S193 production verified
-
-Shield Guy protects the visible front; held keyboard actions preserve pause and reload.
-
-S193 implementation 49c6b60eb9e40b7e343daa6073ac7a424f4eaeb5 passed exact-main workflow 39366155584: 299 test files/2049 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 49c6b60eb9e4. Canonical and immutable https://e023d899.call-of-doodie.pages.dev shell7/7 each; production browser28/28 across390/1440/both themes proves front4/rear32, stable held Escape/reload, and held/released movement.
-
-## S193 candidate verified
-
-S193 final local suite passes 299/299 files and 2049/2049 assertions with no failed/pending tests. Strict lint, configured build, schema/startup/public/security/runtime gates pass; dependency audit zero vulnerabilities; backend check and replay3/3 pass. Staging1da5492a shell7/7 and browser28/28 pass at390/1440/both themes;24 before/after captures inspected/hash-bound. Final independent review approved App, DialogShell and shield corrections. Exact-main production pending.
-
-## S193 candidate
-
-S193 corrects Shield Guy facing and makes keyboard actions fire once per press.
+Both selected L2 fixes implemented and independently reviewed. Staging48c2ee6d
 
 ## Open Work
 
+## S199 verified work
+- [ ] S199 production verification.
 ## S198 verified work
 ## S197 arc outcomes and waves
 ## S196 arc outcomes and waves
@@ -143,19 +141,8 @@ S193 corrects Shield Guy facing and makes keyboard actions fire once per press.
 - [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET so cloud backup stops answering 503.
 ## Session 167 - The debrief names names, modes say what the run was worth, announcements stay on screen
 - [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET on the Pages project so Porcelain Passport verification and cloud backup stop answering 503.
-## Session 166 - Extraction distance, pressure, radar objectives, and death-beat split
-- [ ] [SIL:1] Collect consented extraction telemetry before changing the 1.25× pressure slope or 1.5× arena scale; synthetic distance and enemy-count math are not balance evidence.
 
 ## Recent Decisions
-
-## 2026-10-20 — Session 195
-
-Snapshot the health factor once per instantaneous rail beam, retaining per-target lifesteal and crit/armor/shield/nominal-damage policies. This resolves a newly demonstrated S194 interaction: healing on target1 caused target2 to lose the same beam's bonus; no wider projectile balance policy changes. Bound controller profile IO to metadata changes or60s per storage, including failed attempts. Existing CANON-045 STRONG gap retained for unchanged guest-game promotion. FORGE/public-unlaunched unchanged. Synthetic controller/keyboard and assisted App ticks do not prove physical-pad or participant outcomes. Existing S183 comparisons remain unmeasured. No dependency, backend, identity/trust-policy, cost, licensing or public-launch change. CDR legitimately unchanged without creative direction.
-
-
-S195 final acceptance: S195 implementation 18285e4cc1c0d582eeffeab3a8ae3cee43c93ee5 passed exact-main workflow 39445821523:299 files/2063 assertions,strict lint,configured build and Cloudflare deployment. Canonical edge-health matches18285e4cc1c0. Canonical and immutable https://0d08b70e.call-of-doodie.pages.dev shell7/7 each;production browser28/28 across390/1440,both themes proves rail480/480 with health33.6,unchanged profile writes0 during1-second window,and keyboard/controller movement. Local full299/2063 passed in one run; focused49/49 after3 failing-before regressions. Staging shell7/7 and browser28/28.16 inspected before/after captures hash-bound to both changed gameplay sources. Dependency audit0 vulnerabilities; schema/startup/public/security/runtime checks pass. Review optional buttons-only and restricted-storage-getter tests were not blockers and are not claimed executed.
-
-
 
 ## 2026-10-20 — Session 196
 
@@ -182,9 +169,15 @@ Damage protection follows living guards belonging to the Summoner instead of a f
 
 S198 final acceptance: S198 implementation 10c54521f2f6215624b14f44121d5fa310e68c07 passed exact-main workflow 39494601691:299 files/2092 assertions,strict lint,configured build and Cloudflare deployment. Canonical health matches 10c54521f2f6. Canonical and immutable https://e3c20115.call-of-doodie.pages.dev shell7/7 each;production browser44/44 across390/1440,both themes. Summoner spawns3 guards with immediate count3/protection true,rail/grenade keep HP10000;final guard removal permits rail160. Keyboard/controller selection,handoff,pause and release remain usable. Vite7.3.7 security patch passes native dependency audit with0 vulnerabilities. Local full remains nonpassing:297/299files,2089/2092assertions;two stale-context assertions corrected by refresh and startup30s timeout retained. Default isolated startup also timed out;refreshed-context/unchanged startup5/5 passes at90s limit. Hosted exact-main full299/2092 is the complete-suite acceptance proof.90 focused tests pass,9 failing-before regressions.
 
+
+
+## 2026-10-20 — Session 199
+
+Reuse the physical-projectile armor impact rule for rail. Preserve the breaking hit’s pre-impact health reduction,240-frame regeneration delay and existing visual cues. Intentional rail Shield Guy piercing remains unchanged. Existing CANON-045 STRONG integration gap remains visible;unchanged guest-game promotion does not claim identity readiness.
+
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 277,529 bytes · SHA-256 `2c4150b689d1…`
-- `context/TASK_BOARD.md` · 188,877 bytes · SHA-256 `08911062735d…`
-- `context/DECISIONS.md` · 192,933 bytes · SHA-256 `e636af265ed6…`
+- `context/CURRENT_STATE.md` · 278,837 bytes · SHA-256 `62bd4d90a116…`
+- `context/TASK_BOARD.md` · 189,443 bytes · SHA-256 `6ef40e8f037c…`
+- `context/DECISIONS.md` · 193,317 bytes · SHA-256 `d0db3f58b43d…`
 - `docs/AUDIT_2026-10-18.json` · 6,892 bytes · SHA-256 `b34b668a7b5a…`

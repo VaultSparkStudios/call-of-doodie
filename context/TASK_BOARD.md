@@ -1,3 +1,10 @@
+## S199 verified work
+
+Wave 1 ✔ fresh review. Wave 2 ✔ rail shield durability and independent review. Wave 3 ◼ staging,production and closeout verification.
+
+- [x] S199 rail hits share existing armor durability and shield-break presentation.
+- [ ] S199 production verification.
+
 ## S198 verified work
 
 Wave 1 ✔ fresh review of game behavior. Wave 2 ✔ guard-protection lifecycle and Vite security patch. Wave 3 ✔ production verification.
@@ -864,6 +871,9 @@ First checkpoint the bounded post-S159 propagation/CI/deploy recovery. Then begi
 - [ ] [Human/Data] [SIL:1] HomeV2 analytics funnel — compare `home_v2_deploy` vs legacy `front_door_action` completion rates after 48h of traffic
 
 ## Next
+
+- [ ] [SIL:1] [S199 reserve] Observe shield-counterplay comprehension with participants;owner project,dependency observed session.
+- [ ] [SIL:1] [S199 reserve] Extend mixed-source armor transitions if new weapon mechanics are selected;owner project,dependency future scoped work.
 
 - [ ] [SIL:1] [S197 reserve] Observe boss-counterplay comprehension with participants;owner project,dependency observed session.
 - [ ] [SIL:1] [S197 reserve] Add source/expiry permutations when new damage sources are selected;owner project,dependency future scoped work.

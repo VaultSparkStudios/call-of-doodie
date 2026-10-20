@@ -1,3 +1,13 @@
+## S199 candidate acceptance
+
+S199 focused103/103 pass,four failing-before regressions. Independent source and announcement reviews pass,58/58 projectile tests independently. Local full:295/299 files,2094/2099 assertions;5 failed. It ran while the final announcement correction was being made;exact-main hosted full suite is the final release authority. Staginghttps://215d8bfc.call-of-doodie.pages.dev browser52/52,shell7/7 across390/1440,both themes. Rail shield200→40.6 after regeneration→0;breaking hit24health damage,next hit160. Protected hits leave armor intact.24 before/after images inspected and hash-bound after mobile announcement clipping correction. Strict lint,configured build,schema,public/runtime/security and sanitization checks passed;dependency audit0 vulnerabilities. Production pending.
+
+## S199 candidate verification
+
+Rail hits wear down Juggernaut shields and open the shield-break window.
+
+S199103 focused assertions pass;four failing-before rail regressions reproduced on unchanged source. Independent source review passed,58/58 projectile assertions independently. Live production-before browser reproduces unchanged shield200 after three rail hits at390/1440 in both themes. Strict lint and configured build pass;full local suite,staging and exact-main production pending.
+
 ## S198 production verified
 
 Summoner protection follows living guards immediately; Vite security patch applied.
