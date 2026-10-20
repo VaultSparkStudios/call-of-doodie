@@ -176,6 +176,7 @@ export function stepProjectileFrame({
     gs.explosionFlash = { x: grenade.x, y: grenade.y, life: 3 };
     stampArenaDecal(gs, { kind: "scorch", x: grenade.x, y: grenade.y, size: 30, alpha: 0.4 });
     gs.enemies.forEach((enemy) => {
+      if (enemy.typeIndex === 18 && enemy.summonerInvuln) return;
       const blast = resolveGrenadeEnemyDamage({
         grenade,
         enemy,

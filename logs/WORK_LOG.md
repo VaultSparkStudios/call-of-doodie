@@ -2079,3 +2079,8 @@ S195 candidate acceptance: S195 full local suite299files/2063assertions passing.
 
 
 S195 final acceptance: S195 implementation 18285e4cc1c0d582eeffeab3a8ae3cee43c93ee5 passed exact-main workflow 39445821523:299 files/2063 assertions,strict lint,configured build and Cloudflare deployment. Canonical edge-health matches18285e4cc1c0. Canonical and immutable https://0d08b70e.call-of-doodie.pages.dev shell7/7 each;production browser28/28 across390/1440,both themes proves rail480/480 with health33.6,unchanged profile writes0 during1-second window,and keyboard/controller movement. Local full299/2063 passed in one run; focused49/49 after3 failing-before regressions. Staging shell7/7 and browser28/28.16 inspected before/after captures hash-bound to both changed gameplay sources. Dependency audit0 vulnerabilities; schema/startup/public/security/runtime checks pass. Review optional buttons-only and restricted-storage-getter tests were not blockers and are not claimed executed.
+
+
+## 2026-10-20 — Session 196
+
+Reliable controller ownership and consistent Summoner protection. S196 local full 299 files/2075 assertions passed in one final run;83 focused pass. Ten new initial failing-before cases plus independent-review trigger regression covered. Staging https://4e070130.call-of-doodie.pages.dev shell7/7 and browser40/40 across390/1440,both themes. Real production-before probes reproduced wrong controller ownership and protected grenade/chain damage; after protection holds, vulnerable grenade damage remains70,chain falls back. Twenty-four before/after images inspected and source-hash-bound. Strict lint,configured build,public/security/runtime/schema/startup gates are recorded separately. Exact-main production pending.

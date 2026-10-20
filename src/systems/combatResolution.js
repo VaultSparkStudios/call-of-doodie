@@ -194,6 +194,7 @@ export function findLightningChainTarget(enemies = [], sourceEnemy, { range = 20
   let bestSq = rangeSq;
   for (const enemy of enemies) {
     if (!enemy || enemy === sourceEnemy || enemy.health <= 0) continue;
+    if (enemy.typeIndex === 18 && enemy.summonerInvuln) continue;
     const d = dist2(enemy.x, enemy.y, sourceEnemy.x, sourceEnemy.y);
     if (d < bestSq) {
       bestSq = d;

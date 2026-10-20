@@ -113,8 +113,20 @@ export function resolveAimAxes(gp) {
 
 function hasInput(gp, deadZone = DEFAULT_DEAD_ZONE) {
   const rest = restingAxesFor(gp);
+  const [aimX, aimY] = resolveAimAxes(gp);
+  const knownLayout = detectControllerType(gp) !== "controller";
   return (gp.buttons || []).some(b => b?.pressed || (b?.value || 0) > 0.15)
-    || (gp.axes || []).some((v, i) => Math.abs((v || 0) - (rest[i] || 0)) > deadZone);
+    || (gp.axes || []).some((v, i) => {
+      // Known sticks are centered at zero even if first sighted while held.
+      // An unknown layout's fallback can include a resting trigger at an
+      // endpoint. Keep that baseline without calibrating a partly held stick
+      // (such as 0.8) into a false neutral position.
+      const aimStick = (i === aimX || i === aimY)
+        && (knownLayout || Math.abs(rest[i] || 0) < 0.95);
+      const baseline = gp.mapping === "standard" || i < 2 || aimStick
+        ? 0 : (rest[i] || 0);
+      return Math.abs((v || 0) - baseline) > deadZone;
+    });
 }
 
 export function getPrimaryGamepad(nav = globalThis.navigator) {

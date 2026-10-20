@@ -1,3 +1,14 @@
+## S196 arc outcomes and waves
+
+Session Intent: fresh full arc, authorized direct-main commit/push and full deployment.
+
+Wave 1 ✔ startup and fresh nine-axis/game-loop audit. Wave 2 ✔ controller ownership and Summoner protections. Wave 3 ◼ staging,production and full closeout.
+
+- [x] S196 controller-selection-neutral L2 accepted on staging.
+- [x] S196 summoner-blast-chain-protection L2 accepted on staging.
+- [ ] S196 exact-main production and full closeout.
+
+
 ## S195 arc outcomes and waves
 
 Session Intent: fresh full arc, authorized direct-main commit/push and full deployment.
@@ -835,6 +846,9 @@ First checkpoint the bounded post-S159 propagation/CI/deploy recovery. Then begi
 - [ ] [Human/Data] [SIL:1] HomeV2 analytics funnel — compare `home_v2_deploy` vs legacy `front_door_action` completion rates after 48h of traffic
 
 ## Next
+
+- [ ] [SIL:1] [S196 reserve] Observe multi-controller handoffs on actual pads; owner project,dependency hardware observation.
+- [ ] [SIL:1] [S196 reserve] Extend protected-hit source matrix only when a new source is selected; owner project,dependency future scoped work.
 
 - [ ] [SIL:1] [S195 reserve] Observe low-health multi-target build confidence with participants; owner project, dependency matched observations.
 - [ ] [SIL:1] [S195 reserve] Measure controller storage/frame timing on representative devices; owner project, dependency hardware observation.

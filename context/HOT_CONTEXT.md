@@ -4,6 +4,12 @@
 
 ## Current Session
 
+## S196 candidate acceptance
+
+Reliable controller ownership and consistent Summoner protection.
+
+S196 local full 299 files/2075 assertions passed in one final run;83 focused pass. Ten new initial failing-before cases plus independent-review trigger regression covered. Staging https://4e070130.call-of-doodie.pages.dev shell7/7 and browser40/40 across390/1440,both themes. Real production-before probes reproduced wrong controller ownership and protected grenade/chain damage; after protection holds, vulnerable grenade damage remains70,chain falls back. Twenty-four before/after images inspected and source-hash-bound. Strict lint,configured build,public/security/runtime/schema/startup gates are recorded separately. Exact-main production pending.
+
 ## S195 production verified
 
 Consistent Railgun health bonus and bounded controller persistence.
@@ -94,14 +100,12 @@ Staging verified; final full-suite and production pending. See LATEST_HANDOFF.
 
 Weapon cadence and run-duration fixes are live.
 
-S190 implementation 3548fb5b4445a01a2e5d58ae8ecefe9cc1d924cc passed exact-main workflow 39344132347: all 298 test files / 2,024 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 3548fb5b4445. Canonical and immutable https://55bb853c.call-of-doodie.pages.dev pass shell 7/7 each. All 16 actual-App browser assertions pass across 390/1440 and both themes: equal 21/21 shot counts, no wall-jump extra shot, and active 0:02 terminal time for 120 frames.
-
-## S190 candidate verified
-
-S190 full local suite passes 298/298 files and 2,024/2,024 assertions with zero failed/pending tests. Strict lint, configured build, schema/startup/public/security/runtime checks, zero dependency vulnerabilities, backend5/5, replay3/3, independent reviews and32 hash-bound before/after captures pass. Current staging passes shell7/7 and16 bro
+S190 implementation 3548fb5b4445a01a2e5d58ae8ecefe9cc1d924cc passed exact-main workflow 39344132347: all 298 test
 
 ## Open Work
 
+## S196 arc outcomes and waves
+- [ ] S196 exact-main production and full closeout.
 ## S195 arc outcomes and waves
 ## S194 arc outcomes and waves
 ## S193 arc outcomes and waves
@@ -155,19 +159,8 @@ S190 full local suite passes 298/298 files and 2,024/2,024 assertions with zero 
 ## Session 166 - Extraction distance, pressure, radar objectives, and death-beat split
 - [ ] [SIL:1] Collect consented extraction telemetry before changing the 1.25× pressure slope or 1.5× arena scale; synthetic distance and enemy-count math are not balance evidence.
 - [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET on the Pages project so Porcelain Passport verification and cloud backup stop answering 503.
-## Session 165 - Scrolling camera, live royale bots, death-beat diet, record recovery
-- [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET on the Pages project: neither is in the secrets gateway, so Porcelain Passport verification (and therefore cloud backup) answers 503 in production until they exist.
 
 ## Recent Decisions
-
-## 2026-10-20 — Session 192
-
-Use launch generation plus captured game identity for deferred run entry work. Invalidate on menu/unmount; preserve ticket arrival after death for the same run. Check live phase only for deferred perk/audio. No cancellation of unrelated storage history or server work. Existing CANON-045 STRONG gap retained: no identity/trust-policy change; routine promotion scoped to guest-game correctness. FORGE/public-unlaunched unchanged. Assisted App callbacks, intercepted ticket fixtures and synthetic input do not prove participant outcomes or physical controllers. Existing S183 comparisons remain unmeasured. No backend, dependency, identity-policy, cost, licensing or launch change. CDR unchanged without creative direction.
-
-
-S192 final release acceptance: S192 implementation 815f9b47b15388d2167af2fbc282b40dc7eb9a7b passed exact-main workflow 39362694165: 299 test files/2039 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 815f9b47b153; canonical and immutable https://be661b17.call-of-doodie.pages.dev shell7/7 each. Browser12/12 across390/1440/both themes proves replacement token/signature survive old-ticket delivery and pause remains usable.
-
-
 
 ## 2026-10-20 — Session 193
 
@@ -194,9 +187,15 @@ Snapshot the health factor once per instantaneous rail beam, retaining per-targe
 
 S195 final acceptance: S195 implementation 18285e4cc1c0d582eeffeab3a8ae3cee43c93ee5 passed exact-main workflow 39445821523:299 files/2063 assertions,strict lint,configured build and Cloudflare deployment. Canonical edge-health matches18285e4cc1c0. Canonical and immutable https://0d08b70e.call-of-doodie.pages.dev shell7/7 each;production browser28/28 across390/1440,both themes proves rail480/480 with health33.6,unchanged profile writes0 during1-second window,and keyboard/controller movement. Local full299/2063 passed in one run; focused49/49 after3 failing-before regressions. Staging shell7/7 and browser28/28.16 inspected before/after captures hash-bound to both changed gameplay sources. Dependency audit0 vulnerabilities; schema/startup/public/security/runtime checks pass. Review optional buttons-only and restricted-storage-getter tests were not blockers and are not claimed executed.
 
+
+
+## 2026-10-20 — Session 196
+
+Use zero-centered known stick axes for input arbitration independently of first sighting; preserve unknown nonstandard endpoint calibration rather than invent universal mapping. Reject protected Summoners before grenade damage and lightning target choice, preserving vulnerable accounting. Reviewer caught trigger starvation; corrected before release. Existing CANON-045 STRONG gap retained for unchanged guest-game promotion. FORGE/public-unlaunched unchanged. Synthetic controller/keyboard and assisted App ticks do not prove physical-device or participant results. Unknown nonstandard layouts first seen at a stick endpoint retain calibration ambiguity. Existing S183 comparisons remain unmeasured. No dependency, backend, identity/trust-policy, variable cost, rights, licensing or launch change. CDR unchanged without creative direction.
+
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 273,158 bytes · SHA-256 `2d32e0a96db9…`
-- `context/TASK_BOARD.md` · 187,104 bytes · SHA-256 `b362d43deea8…`
-- `context/DECISIONS.md` · 188,096 bytes · SHA-256 `b6fffb0bb130…`
+- `context/CURRENT_STATE.md` · 273,909 bytes · SHA-256 `f53a000d014d…`
+- `context/TASK_BOARD.md` · 187,846 bytes · SHA-256 `231a3e24cf05…`
+- `context/DECISIONS.md` · 188,971 bytes · SHA-256 `8140309b3815…`
 - `docs/AUDIT_2026-10-18.json` · 6,892 bytes · SHA-256 `b34b668a7b5a…`

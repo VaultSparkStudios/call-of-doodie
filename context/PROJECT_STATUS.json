@@ -4,32 +4,20 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "S195 Railgun health snapshot and controller persistence production verified.",
-  "nextMilestone": "Collect existing participant/device acceptance evidence.",
+  "currentFocus": "Reliable controller ownership and consistent Summoner protection.",
+  "nextMilestone": "Verify exact-main production.",
   "testingSurfaces": [
     {
-      "session": 195,
-      "type": "production",
-      "status": "green",
-      "url": "https://callofdoodie.wtf/"
-    },
-    {
-      "session": 195,
+      "session": 196,
       "type": "staging",
       "status": "green",
-      "url": "https://6c05b5e9.call-of-doodie.pages.dev/"
+      "url": "https://4e070130.call-of-doodie.pages.dev/"
     },
     {
-      "session": 195,
-      "type": "production-smoke",
-      "status": "green",
-      "command": "S195 keyboard/controller,beam healing and profile IO:28/28"
-    },
-    {
-      "session": 195,
+      "session": 196,
       "type": "local-browser-capture",
       "status": "green",
-      "command": "S195 sixteen before/after images inspected; both widths/themes"
+      "command": "S19624 before/after captures inspected;390/1440,both themes"
     }
   ],
   "blockers": [
@@ -43,18 +31,18 @@
   "lastUpdated": "2026-10-20",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
-  "truthAuditStatus": "S195 both selected L2 outcomes production verified.",
+  "truthAuditStatus": "S196 both selected outcomes local/staging verified; production pending.",
   "truthAuditLastRun": "2026-10-20",
   "ignisScore": 44193,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-10-08",
-  "silSession": 195,
+  "silSession": 196,
   "silScore": 945,
   "silAvg3": 945,
   "silVelocity": 2,
   "silDebt": "flat",
-  "silLastSession": 195,
-  "currentSession": 195,
+  "silLastSession": 196,
+  "currentSession": 196,
   "sessionMode": "founder",
   "lastAgent": "codex",
   "testsPassing": 299,
@@ -88,8 +76,8 @@
   "freeTierCostStatus": "cost-neutral",
   "runtimeUrl": "https://callofdoodie.wtf/",
   "stagingType": "cloudflare-pages",
-  "stagingUrl": "https://6c05b5e9.call-of-doodie.pages.dev/",
-  "testsLastRun": "2026-10-20T15:11:38Z",
+  "stagingUrl": "https://4e070130.call-of-doodie.pages.dev/",
+  "testsLastRun": "2026-10-20T17:59:50.794Z",
   "sanitizationLastCleared": "2026-10-06",
   "sessionShellHygiene": {
     "session": 191,
@@ -145,16 +133,16 @@
     "note": "Studio-wide doctor evidence; not a project-only zero-findings claim. Central follow-up delivered through Ark; application unobserved."
   },
   "lastSessionSummary": {
-    "session": 195,
+    "session": 196,
     "shipped": [
-      "Consistent Railgun health bonus",
-      "Bounded controller profile persistence"
+      "Reliable controller selection",
+      "Consistent Summoner protection"
     ],
-    "tests": "299 files /2063 assertions passing",
-    "deploy": "18285e4cc1c0 production verified"
+    "tests": "299 files/2075 assertions passing",
+    "deploy": "pending exact-main production"
   },
-  "testsAssertionsPassing": 2063,
-  "testsAssertionsTotal": 2063,
+  "testsAssertionsPassing": 2075,
+  "testsAssertionsTotal": 2075,
   "testsAssertionsFiles": 299,
   "testsFlaky": [],
   "testsInconclusive": [],
@@ -163,34 +151,26 @@
   "testsBudgetExhausted": false,
   "silAvg5": 945,
   "testsAssertionsDeferred": [],
-  "testsAssertionsLastRun": "2026-10-20T15:11:38Z",
-  "lastShipped": "S195 consistent low-health rail beams and bounded controller storage IO.",
-  "truthStatus": "FORGE/public-unlaunched unchanged. Synthetic controller/keyboard and assisted App ticks do not prove physical-pad or participant outcomes. Existing S183 comparisons remain unmeasured. No dependency, backend, identity/trust-policy, cost, licensing or public-launch change. CDR legitimately unchanged without creative direction.",
-  "testsFocusedSupplement": "S195 all local assertions passed in one full run; focused49/49.",
+  "testsAssertionsLastRun": "2026-10-20T17:59:50.795Z",
+  "lastShipped": "S196 controller ownership and protected boss damage consistency.",
+  "truthStatus": "FORGE/public-unlaunched unchanged. Synthetic controller/keyboard and assisted App ticks do not prove physical-device or participant results. Unknown nonstandard layouts first seen at a stick endpoint retain calibration ambiguity. Existing S183 comparisons remain unmeasured. No dependency, backend, identity/trust-policy, variable cost, rights, licensing or launch change. CDR unchanged without creative direction.",
+  "testsFocusedSupplement": "S19683 focused passing; initial10 pre-fix regressions and reviewer edge covered.",
   "lastDeployCommit": "18285e4cc1c0d582eeffeab3a8ae3cee43c93ee5",
   "lastDeployAt": "2026-10-20T15:11:38Z",
   "closeoutAcceptance": {
-    "session": 195,
-    "state": "complete",
-    "writeback": "all ten reconciled; CDR legitimately unchanged",
+    "session": 196,
+    "state": "delivery-pending",
+    "writeback": "ten surfaces reconciled; CDR legitimately unchanged",
     "scaffold": {
       "tasks": 3,
-      "done": 3,
-      "inProgress": 0,
+      "done": 2,
+      "inProgress": 1,
       "open": 0
     },
-    "independentReview": "Source pass; two independent records reviews, all6 text findings corrected and verified.",
-    "autopilot": "recipient equivalents; foreign-rooted doctor excluded",
-    "localSuite": "S195 full local suite299files/2063assertions passing. Focused49/49 after3 failing-before regressions. Strict lint, configured build, schema/startup/public/security/runtime and dependency audit pass. Staging6c05b5e9 shell7/7 and browser28/28 across390/1440,both themes; rail480/480,health33.6,unchanged profile writes0/second.16 real before/after captures inspected and hash-bound; independent source review pass0 blocking findings. Exact-main production verified; see production receipt.",
-    "production": {
-      "source": "18285e4cc1c0d582eeffeab3a8ae3cee43c93ee5",
-      "workflow": 39445821523,
-      "immutableUrl": "https://0d08b70e.call-of-doodie.pages.dev",
-      "canonical": "https://callofdoodie.wtf/",
-      "browserAssertions": 28
-    }
+    "independentReview": "source pass after one fix round",
+    "localSuite": "S196 local full 299 files/2075 assertions passed in one final run;83 focused pass. Ten new initial failing-before cases plus independent-review trigger regression covered. Staging https://4e070130.call-of-doodie.pages.dev shell7/7 and browser40/40 across390/1440,both themes. Real production-before probes reproduced wrong controller ownership and protected grenade/chain damage; after protection holds, vulnerable grenade damage remains70,chain falls back. Twenty-four before/after images inspected and source-hash-bound. Strict lint,configured build,public/security/runtime/schema/startup gates are recorded separately. Exact-main production pending."
   },
-  "testsLastRunMode": "full-hosted-exact-main",
+  "testsLastRunMode": "full-local",
   "velocity": 2,
   "silVelocityLastSession": 2,
   "deploy": {
@@ -202,7 +182,7 @@
     "url": "https://callofdoodie.wtf/",
     "deployedAt": "2026-10-20T15:11:38Z"
   },
-  "lastSession": 195,
+  "lastSession": 196,
   "silAvg10": 940.5,
   "silAvg25": 965.6,
   "silAvgAll": 988.5,

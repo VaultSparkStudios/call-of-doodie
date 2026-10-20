@@ -93,6 +93,59 @@ describe("gamepad helpers", () => {
     expect(getPrimaryGamepad(nav)?.index).toBe(1);
   });
 
+  it.each([0, 1, 2, 3])("selects a standard pad first seen with stick axis %i held", (axis) => {
+    resetGamepadCalibration();
+    getPrimaryGamepad({ getGamepads: () => [] });
+    const idle = { ...pad({ id: "Xbox idle" }), mapping: "standard" };
+    const active = { ...pad({ index: 1, id: "Generic held", axes: { [axis]: -0.8 } }), mapping: "standard" };
+    expect(getPrimaryGamepad({ getGamepads: () => [idle, active] })).toBe(active);
+  });
+
+  it("does not mistake return to center for activity after a deflected first sighting", () => {
+    resetGamepadCalibration();
+    getPrimaryGamepad({ getGamepads: () => [] });
+    const xbox = { ...pad({ id: "Xbox idle" }), mapping: "standard" };
+    const generic = { ...pad({ index: 1, id: "Generic held", axes: { 0: .8 } }), mapping: "standard" };
+    const nav = { getGamepads: () => [xbox, generic] };
+    getPrimaryGamepad(nav);
+    generic.axes[0] = 0;
+    xbox.buttons[0] = { pressed: true, value: 1 };
+    expect(getPrimaryGamepad(nav)).toBe(xbox);
+    xbox.buttons[0] = { pressed: false, value: 0 };
+    expect(getPrimaryGamepad(nav)).toBe(xbox);
+    expect(getPrimaryGamepad({ getGamepads: () => [] })).toBeNull();
+  });
+
+  it("uses nonstandard stick displacement while ignoring resting analog triggers", () => {
+    resetGamepadCalibration();
+    getPrimaryGamepad({ getGamepads: () => [] });
+    const idle = { ...pad({ id: "Xbox idle" }), mapping: "standard" };
+    const ps = { index: 1, id: "054c DualSense", mapping: "", axes: [0, 0, .8, -1, -1, 0], buttons: [] };
+    const nav = { getGamepads: () => [idle, ps] };
+    expect(getPrimaryGamepad(nav)).toBe(ps);
+    ps.axes[2] = 0;
+    idle.buttons[0] = { pressed: true, value: 1 };
+    expect(getPrimaryGamepad(nav)).toBe(idle);
+    idle.buttons[0] = { pressed: false, value: 0 };
+    expect(getPrimaryGamepad(nav)).toBe(idle);
+    ps.axes[3] = 0;
+    expect(getPrimaryGamepad(nav)).toBe(ps);
+  });
+
+  it("does not let an unknown interleaved trigger steal activity from a later pad", () => {
+    resetGamepadCalibration();
+    getPrimaryGamepad({ getGamepads: () => [] });
+    const generic = { index: 0, id: "Generic Linux", mapping: "", axes: [0, 0, -1, .8, 0, -1], buttons: [] };
+    const xbox = { ...pad({ index: 1, id: "Xbox later" }), mapping: "standard" };
+    const nav = { getGamepads: () => [generic, xbox] };
+    getPrimaryGamepad(nav);
+    generic.axes[3] = 0;
+    xbox.buttons[0] = { pressed: true, value: 1 };
+    expect(getPrimaryGamepad(nav)).toBe(xbox);
+    xbox.buttons[0] = { pressed: false, value: 0 };
+    expect(getPrimaryGamepad(nav)).toBe(xbox);
+  });
+
   it("finds a pad that connected in a later slot while slot zero is empty", () => {
     const nav = { getGamepads: () => [null, pad({ index: 1, id: "Wireless Controller" })] };
     expect(getPrimaryGamepad(nav)?.index).toBe(1);

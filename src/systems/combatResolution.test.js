@@ -129,6 +129,17 @@ describe("combatResolution", () => {
     expect(findLightningChainTarget([source, { x: 10, y: 0, health: 0 }], source)).toBeNull();
   });
 
+  it("skips summon-protected bosses without hiding vulnerable or ordinary targets", () => {
+    const source = { x: 0, y: 0, health: 10 };
+    const boss = { x: 20, y: 0, health: 10, typeIndex: 18, summonerInvuln: true };
+    const fallback = { x: 60, y: 0, health: 10 };
+    expect(findLightningChainTarget([source, boss, fallback], source)).toBe(fallback);
+    expect(findLightningChainTarget([source, boss], source)).toBeNull();
+    boss.summonerInvuln = false;
+    expect(findLightningChainTarget([source, boss, fallback], source)).toBe(boss);
+    expect(findLightningChainTarget([source, { ...boss, typeIndex: 0, summonerInvuln: true }], source)).not.toBeNull();
+  });
+
   it("resolves pierce consumption deterministically", () => {
     expect(resolvePierce({ pierceLeft: 2 })).toEqual({ nextPierceLeft: 1, consumeBullet: false });
     expect(resolvePierce({ pierceLeft: 0 })).toEqual({ nextPierceLeft: 0, consumeBullet: true });

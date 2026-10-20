@@ -139,6 +139,49 @@ describe("stepProjectileFrame", () => {
     expect(ctx.drainEnemyDefeats).toHaveBeenCalled();
   });
 
+  it("keeps a summon-protected boss safe from grenades until its protection ends", () => {
+    const boss = enemyAt({ typeIndex: 18, summonerInvuln: true, health: 50 });
+    const guard = enemyAt({ health: 50 });
+    const grenade = () => ({ x: 80, y: 60, vx: 0, vy: 0, life: 1 });
+    const ctx = runtime({ grenades: [grenade()], enemies: [boss, guard] });
+    stepProjectileFrame(ctx);
+    expect(boss.health).toBe(50);
+    expect(boss._defeatPending).toBeUndefined();
+    expect(guard.health).toBe(-20);
+    expect(guard._defeatPending?.source).toBe("grenade");
+    expect(ctx.gs.totalDamage).toBe(70);
+    expect(ctx.gs.grenades).toHaveLength(0);
+    boss.summonerInvuln = false;
+    ctx.gs.enemies = [boss];
+    ctx.gs.grenades = [grenade()];
+    stepProjectileFrame(ctx);
+    expect(boss.health).toBe(-20);
+    expect(boss._defeatPending?.source).toBe("grenade");
+    expect(ctx.gs.totalDamage).toBe(140);
+  });
+
+  it.each(["fallback", "protected-only", "vulnerable"])("honors summon protection for chain lightning: %s", kind => {
+    const primary = enemyAt();
+    const boss = enemyAt({ x: 120, health: 3, typeIndex: 18, summonerInvuln: kind !== "vulnerable" });
+    const fallback = enemyAt({ x: 160 });
+    const ctx = runtime({
+      chainLightning: true,
+      enemies: kind === "fallback" ? [primary, boss, fallback] : [primary, boss],
+      bullets: [shot()],
+      _runRngSeed: 17,
+      _runRngStreams: new Map([["1:combat", () => 0]]),
+    });
+    ctx.perkMods.critBonus = -1;
+    stepProjectileFrame(ctx);
+    expect(primary.health).toBe(9990);
+    expect(boss.health).toBe(kind === "vulnerable" ? -2 : 3);
+    expect(boss._defeatPending?.source).toBe(kind === "vulnerable" ? "chain-lightning" : undefined);
+    expect(fallback.health).toBe(kind === "fallback" ? 9995 : 10000);
+    expect(ctx.gs.totalDamage).toBe(kind === "protected-only" ? 10 : 15);
+    expect(ctx.gs.lightningArcs || []).toHaveLength(kind === "protected-only" ? 0 : 1);
+    expect(ctx.stats.totalHits).toBe(1);
+  });
+
   it("handles a pending rail beam without the former undefined combo multiplier", () => {
     const ctx = runtime({
       pendingBeam: { ox: 0, oy: 50, cos: 1, sin: 0, maxT: 180, weaponIdx: 0 },

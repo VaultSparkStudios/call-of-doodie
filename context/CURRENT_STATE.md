@@ -1,3 +1,9 @@
+## S196 candidate acceptance
+
+Reliable controller ownership and consistent Summoner protection.
+
+S196 local full 299 files/2075 assertions passed in one final run;83 focused pass. Ten new initial failing-before cases plus independent-review trigger regression covered. Staging https://4e070130.call-of-doodie.pages.dev shell7/7 and browser40/40 across390/1440,both themes. Real production-before probes reproduced wrong controller ownership and protected grenade/chain damage; after protection holds, vulnerable grenade damage remains70,chain falls back. Twenty-four before/after images inspected and source-hash-bound. Strict lint,configured build,public/security/runtime/schema/startup gates are recorded separately. Exact-main production pending.
+
 ## S195 production verified
 
 Consistent Railgun health bonus and bounded controller persistence.

@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-10-20T15:07:06.031Z",
-  "uiBaseRef": "6e802b4d596477538caa3751f7b31589c2bf7aaa",
-  "stagingUrl": "https://6c05b5e9.call-of-doodie.pages.dev/",
+  "capturedAt": "2026-10-20T17:59:01.706Z",
+  "uiBaseRef": "c8e5ac8a664ed150c215198cf61bc9b5ce1f6465",
+  "stagingUrl": "https://4e070130.call-of-doodie.pages.dev/",
   "themes": [
     "dark",
     "light"
@@ -10,29 +10,33 @@
   "sourceFiles": [
     {
       "file": "src/systems/projectileFrame.js",
-      "sha256": "2ffc79557629fbb4a8abb62a3fca7c2a537dc9311457e6bf78faeb58cca43a80"
+      "sha256": "ce541994686c2d0c42595cd32f8e7d86f21a197bafb8a62416cf95bf7118f238"
+    },
+    {
+      "file": "src/systems/combatResolution.js",
+      "sha256": "c8349f8dcdf7eaae835f744697cf1df47eca1dc43690398bf4f8e20298fee955"
     },
     {
       "file": "src/utils/gamepad.js",
-      "sha256": "f60f0c56796f9b232a7447b6fc451f03247b37e69994de907e93f0669320de66"
+      "sha256": "4a4d885891518dc06f8bf0af69d9757cb18b826a48ff632e29b51f1eff3cef2b"
     }
   ],
   "captures": [
     {
-      "file": "session-195/before-sewer-night-390-beam-lifesteal.png",
-      "sha256": "4ff9d738cce367eacd6815cd091a99457d1a23b6880ce9053f75ea5acf484716",
+      "file": "session-196/before-production-sewer-night-390-held-controller.png",
+      "sha256": "42064a389dbbfa8e38de917528ff7b8c70649a60128309ffda4d163060af9d74",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "beam-lifesteal",
+      "page": "held-controller",
       "phase": "before"
     },
     {
-      "file": "session-195/before-sewer-night-390-controller-pause.png",
-      "sha256": "1c3c6de59144b9b0778cddd8a5da49a3bfaf36cf8d17d8b342513aa270fdd522",
+      "file": "session-196/before-production-sewer-night-390-controller-pause.png",
+      "sha256": "f9d968a484c2849522953057f619a200e8b3a83e8ce8b063d3b7f86037053f1d",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -43,20 +47,32 @@
       "phase": "before"
     },
     {
-      "file": "session-195/before-sewer-night-1440-beam-lifesteal.png",
-      "sha256": "79763176e5c7407af1445c3226e840bf88aadef2a24873ba0e65d315f5b386f2",
+      "file": "session-196/before-production-sewer-night-390-summoner-protection.png",
+      "sha256": "024854a06ae7de0bee34e7d83e587638caf27566357e33f2f113c43fccc81770",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "summoner-protection",
+      "phase": "before"
+    },
+    {
+      "file": "session-196/before-production-sewer-night-1440-held-controller.png",
+      "sha256": "d51838250d2566575e13cf55eaada0fb14b57b171e4647de386d431c10944e40",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "beam-lifesteal",
+      "page": "held-controller",
       "phase": "before"
     },
     {
-      "file": "session-195/before-sewer-night-1440-controller-pause.png",
-      "sha256": "23a377f5082a17ecd44f3d45c496c1c88760aaf8cd6724bb8ba96ba815fd7990",
+      "file": "session-196/before-production-sewer-night-1440-controller-pause.png",
+      "sha256": "26ec56ff1f58c4cb7da13065d649c7bbd7c7abd2d3ab53b87b6d428445242070",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -67,20 +83,32 @@
       "phase": "before"
     },
     {
-      "file": "session-195/before-porcelain-day-390-beam-lifesteal.png",
-      "sha256": "5fb5b8b323bf0f3bbf36d4b6ef56089f6a5278d5d51e8deb7cd2e2c549a7194b",
+      "file": "session-196/before-production-sewer-night-1440-summoner-protection.png",
+      "sha256": "2d2f50e78abc79a6ed25db629cce632cd2d12e542fcf30a0d6e9877c2c83a8d6",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "summoner-protection",
+      "phase": "before"
+    },
+    {
+      "file": "session-196/before-production-porcelain-day-390-held-controller.png",
+      "sha256": "ee59eca2799f3ca63a6f5c250176de8e8b718a43e5f70c5ddbbdb4aec08a4c61",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "beam-lifesteal",
+      "page": "held-controller",
       "phase": "before"
     },
     {
-      "file": "session-195/before-porcelain-day-390-controller-pause.png",
-      "sha256": "cc6dadbd14b68c2a83976c36ec154789b9d3b102036ef3f05ee0a1f6442fa6cb",
+      "file": "session-196/before-production-porcelain-day-390-controller-pause.png",
+      "sha256": "f7417a02f3b8e4750f16ba0a17fb392ee723fc20fc79151a6826de1fb8ba3b2e",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -91,20 +119,32 @@
       "phase": "before"
     },
     {
-      "file": "session-195/before-porcelain-day-1440-beam-lifesteal.png",
-      "sha256": "fee6143122917a016bc64846bba423e6a2793a95e13a5a0de2527e5f509f6736",
+      "file": "session-196/before-production-porcelain-day-390-summoner-protection.png",
+      "sha256": "ea349af24daa995ea6618e8917ce88e5f4cd9de0aeb3f19bf765b0fa3089f610",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "summoner-protection",
+      "phase": "before"
+    },
+    {
+      "file": "session-196/before-production-porcelain-day-1440-held-controller.png",
+      "sha256": "acc5a1ce17d153a7ca496d24570a3e08eef7861ac36a163861894520d4205d8d",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "beam-lifesteal",
+      "page": "held-controller",
       "phase": "before"
     },
     {
-      "file": "session-195/before-porcelain-day-1440-controller-pause.png",
-      "sha256": "5331b0b8b47beb247cfa9767678f28e4f46db7a28ba3c14eb40e6d5eae89bfe5",
+      "file": "session-196/before-production-porcelain-day-1440-controller-pause.png",
+      "sha256": "de7cc25830475e476f99642f33273a1562497912f18dfbcf392fa8595942f007",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -115,20 +155,32 @@
       "phase": "before"
     },
     {
-      "file": "session-195/after-staging-sewer-night-390-beam-lifesteal.png",
-      "sha256": "c8c8cda4bb53bd13c19dbdaa7660362de4219db5c4344735ecdb5ecad69cb1e4",
+      "file": "session-196/before-production-porcelain-day-1440-summoner-protection.png",
+      "sha256": "7a64c192bb27d168b15c7d63f9124ea9e3cc8335746bcc4636c76c0d3b3e8715",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "summoner-protection",
+      "phase": "before"
+    },
+    {
+      "file": "session-196/after-staging-sewer-night-390-held-controller.png",
+      "sha256": "8b9cc6d412e696193f3cd7772d2b6ca73e35296efe49e3058c2e6954acfd41b6",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "beam-lifesteal",
+      "page": "held-controller",
       "phase": "after"
     },
     {
-      "file": "session-195/after-staging-sewer-night-390-controller-pause.png",
-      "sha256": "739e4f52e90389b793c621f6d0b48837c90164c0e3c3a1187d269f6b65b67e5a",
+      "file": "session-196/after-staging-sewer-night-390-controller-pause.png",
+      "sha256": "455750e674707909487196b09dfa4c354fc0a5bd4fa2b22295cd7c3e90f5b4a3",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -139,20 +191,32 @@
       "phase": "after"
     },
     {
-      "file": "session-195/after-staging-sewer-night-1440-beam-lifesteal.png",
-      "sha256": "b9ab7e9a46f9a646610be20d80a24de6d5e43cbc28fef2af09a9f3f166e06ed7",
+      "file": "session-196/after-staging-sewer-night-390-summoner-protection.png",
+      "sha256": "3a0d8e1baaff5df9bdb7aa887bc3f0dac4bca5a484d607fdab093a32ea2b10c2",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "summoner-protection",
+      "phase": "after"
+    },
+    {
+      "file": "session-196/after-staging-sewer-night-1440-held-controller.png",
+      "sha256": "ff9c368ec4b902eb0a30fa887609c5561836cda79934e210b53887733a4b40b0",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "beam-lifesteal",
+      "page": "held-controller",
       "phase": "after"
     },
     {
-      "file": "session-195/after-staging-sewer-night-1440-controller-pause.png",
-      "sha256": "a119a4291835fdfe31f6c0409d4c8758bd136e23749745e9392a8e1d1bdb5623",
+      "file": "session-196/after-staging-sewer-night-1440-controller-pause.png",
+      "sha256": "e399a75a63eaaf1a11318cc17a57538ca4bc2afcb0698e2552af7517155e14d0",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -163,20 +227,32 @@
       "phase": "after"
     },
     {
-      "file": "session-195/after-staging-porcelain-day-390-beam-lifesteal.png",
-      "sha256": "50bb61833a929e295b5f8ea399868be523947fffce3de99b4101a6c9dcd50bf2",
+      "file": "session-196/after-staging-sewer-night-1440-summoner-protection.png",
+      "sha256": "996bea6a5d5dcbc322c39917429c2444caf41e753bb41582ad945eefeeb5c4a5",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "summoner-protection",
+      "phase": "after"
+    },
+    {
+      "file": "session-196/after-staging-porcelain-day-390-held-controller.png",
+      "sha256": "93a8cffbc7c687862d60e528b3fe39342729be128b2eb2d012b87f4650008db2",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "beam-lifesteal",
+      "page": "held-controller",
       "phase": "after"
     },
     {
-      "file": "session-195/after-staging-porcelain-day-390-controller-pause.png",
-      "sha256": "c26303fee57c26119d8e6b13f99c80257ecb7bc281bf67095e78d026188dfb82",
+      "file": "session-196/after-staging-porcelain-day-390-controller-pause.png",
+      "sha256": "bc959c2388a886dc3e3dbeaf1e2f94cb50432ab3f54c07a6e071c194b4e5ae1c",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -187,20 +263,32 @@
       "phase": "after"
     },
     {
-      "file": "session-195/after-staging-porcelain-day-1440-beam-lifesteal.png",
-      "sha256": "092a0e0057c3b5550936547c8f806bd3a04c90df19a648a09158a5b8b49ecd34",
+      "file": "session-196/after-staging-porcelain-day-390-summoner-protection.png",
+      "sha256": "6f6cc025f4dc5043f53ec02b334433e4347e57515db969fbc94bd32acc073f44",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "summoner-protection",
+      "phase": "after"
+    },
+    {
+      "file": "session-196/after-staging-porcelain-day-1440-held-controller.png",
+      "sha256": "ebcd968b0c6563f5b2155f447ee340a5a3ddb34dac30d7001b740c9c11282992",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "beam-lifesteal",
+      "page": "held-controller",
       "phase": "after"
     },
     {
-      "file": "session-195/after-staging-porcelain-day-1440-controller-pause.png",
-      "sha256": "6cbfb7363875ee78f8ef34c7113b47c2eef3d0528c9d901c7f6947b4ae98549f",
+      "file": "session-196/after-staging-porcelain-day-1440-controller-pause.png",
+      "sha256": "da4742724f0addd888c8c03c79af3c9a4d99c43ff01ec7b7de9a791c5310c3ca",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -208,21 +296,33 @@
         "height": 900
       },
       "page": "controller-pause",
+      "phase": "after"
+    },
+    {
+      "file": "session-196/after-staging-porcelain-day-1440-summoner-protection.png",
+      "sha256": "9d8ee065809baff257e9a794163987ad4492838cec7e3a47b5e3ad876401796a",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "summoner-protection",
       "phase": "after"
     }
   ],
   "inspection": {
     "renderedPixelsReviewed": true,
-    "reviewer": "Codex root: two contact sheets, all16 before/after images inspected",
-    "reviewedAt": "2026-10-20T15:07:06.033Z",
-    "scope": "Beam lifesteal health feedback and controller pause;390/1440;both themes.",
+    "reviewer": "Codex root: three contact sheets, all24 before/after images inspected",
+    "reviewedAt": "2026-10-20T17:59:01.708Z",
+    "scope": "Controller ownership, pause and Summoner protection;390/1440;both themes.",
     "findings": [
       "No introduced layout/readability defect in either touched gameplay state.",
       "Gameplay palette is independent of shell theme; unchanged pause composition remains readable.",
-      "Before beam480/160 and health30.4, after480/480 and33.6; profile writes62–63/second before,0 in measured unchanged1-second window after."
+      "Before:held controller ignored,neutral steals ownership,protected boss takes70 grenade/5chain. After:correct ownership,protected boss untouched,chain reaches eligible target."
     ],
     "fixesApplied": [
-      "Snapshot health bonus once per beam; bound controller metadata persistence attempts."
+      "Corrected stick activity and protected damage sources. QA fixture enemy names were corrected and images recaptured."
     ],
     "blockingDefectsOpen": 0
   },
