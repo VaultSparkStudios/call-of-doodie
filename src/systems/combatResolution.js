@@ -187,8 +187,23 @@ export function resolveGrenadeEnemyDamage({
   };
 }
 
-export function isEnemyDamageProtected(enemy) {
-  return Boolean(enemy?.shieldPulseActive || (enemy?.typeIndex === 18 && enemy.summonerInvuln));
+export function countLivingSummons(enemy, enemies = []) {
+  if (enemy?.summonerId == null) return 0;
+  return enemies.reduce((count, unit) => count + Number(Boolean(unit && unit !== enemy
+    && unit.summonedBy === enemy.summonerId
+    && unit.health > 0 && !unit._defeatResolved)), 0);
+}
+
+export function isEnemyDamageProtected(enemy, enemies) {
+  if (enemy?.shieldPulseActive) return true;
+  if (enemy?.typeIndex !== 18) return false;
+  // Damage can follow a summon spawn or defeat before the next enemy frame.
+  // The live roster owns protection; the cached flag is only a fallback for
+  // callers without a roster or an owner identity.
+  if (enemy.summonerId != null && Array.isArray(enemies)) {
+    return countLivingSummons(enemy, enemies) > 0;
+  }
+  return Boolean(enemy.summonerInvuln);
 }
 
 export function findLightningChainTarget(enemies = [], sourceEnemy, { range = 200 } = {}) {
@@ -198,7 +213,7 @@ export function findLightningChainTarget(enemies = [], sourceEnemy, { range = 20
   let bestSq = rangeSq;
   for (const enemy of enemies) {
     if (!enemy || enemy === sourceEnemy || enemy.health <= 0) continue;
-    if (isEnemyDamageProtected(enemy)) continue;
+    if (isEnemyDamageProtected(enemy, enemies)) continue;
     const d = dist2(enemy.x, enemy.y, sourceEnemy.x, sourceEnemy.y);
     if (d < bestSq) {
       bestSq = d;

@@ -2095,3 +2095,10 @@ Consistent Shield Pulse protection across rail, grenades and lightning. S197 loc
 
 
 S197 final acceptance: S197 implementation 56a5655324f59e4f87601fd4554f540ccf8eaba7 passed exact-main workflow 39478756481:299 files/2081 assertions,strict lint,configured build and Cloudflare deployment. Canonical health matches 56a5655324f5. Canonical and immutable https://412cabf5.call-of-doodie.pages.dev shell7/7 each;production browser44/44 across390/1440,both themes. Shield Pulse holds HP10000 against grenade/rail/chain;vulnerable grenade70,eligible chain fallback5 retained. Controller selection,handoff and held/released keyboard remain usable. Local full2080/2081 with startup-fixture44s timeout;unchanged isolated1/1 pass;load-sensitive cause is an inference,not established. Hosted exact-main full299/2081 passes.66 focused;4 failing-before regressions. Independent source review passed;guaranteed-crit guard strengthened and re-reviewed. Staging44/44,shell7/7;24 inspected hash-bound before/after images. Native schema/startup/public/security/runtime gates pass;dependency audit0 vulnerabilities. Sanitization0 findings.
+
+
+## 2026-10-20 — Session 198
+
+Summoner protection follows its living guards immediately;Vite updated to7.3.7.
+
+S198:90 focused tests pass,including9 failing-before regressions. Local full297/299files and2089/2092assertions:two stale-context assertions and one startup30s timeout. Refreshed context and unchanged startup tests pass5/5 with90s limit;the full local run remains nonpassing. Staging44/44 browser checks plus7/7 shell checks;24 inspected hash-bound before/after images at390/1440,in both themes. Independent code/dependency reviews pass;strict lint,configured build and security check pass;dependency audit0 vulnerabilities. Exact-commit hosted full tests and production readback remain pending.

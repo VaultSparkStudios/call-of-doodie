@@ -6,7 +6,8 @@ import { rumbleGamepad, vibrate } from "../utils/haptics.js";
 import { soundBossPhase2 } from "../audio/soundFacade.js";
 import { getBossRangedBurstCount, triggerBossPhaseTwoTransition } from "./bossPhases.js";
 import { retireEnemyWithoutDefeat } from "./enemyDefeatLifecycle.js";
-import { applySergeantAura, buildEnemyFrameIndex, countSummonsFor, createEnemyFrameIndex } from "./frameIndex.js";
+import { applySergeantAura, buildEnemyFrameIndex, createEnemyFrameIndex } from "./frameIndex.js";
+import { countLivingSummons } from "./combatResolution.js";
 import { buildFlowField, sampleFlowField } from "./flowField.js";
 import { stepBossDecoys } from "./bossAbilities.js";
 import { invalidateArenaLayers } from "./backgroundLayer.js";
@@ -471,7 +472,7 @@ export function stepEnemyFrame({
     // ── Summoner (18): summon elites + invulnerability ──
     if (e.typeIndex === 18 && e.isBossEnemy) {
       // Count alive summons
-      const _aliveCount = countSummonsFor(gs._enemyFrameIndex, e.summonerId);
+      const _aliveCount = countLivingSummons(e, gs.enemies);
       e.summonerCount = _aliveCount;
       e.summonerInvuln = _aliveCount > 0;
       if (_aliveCount === 0 && (e.summonerVulnTimer || 0) > 0) e.summonerVulnTimer--;
@@ -493,14 +494,19 @@ export function stepEnemyFrame({
           const summonRng = getRunRng(gs, "hazards");
           for (let _si = 0; _si < _sCount; _si++) {
             const _sa = summonRng() * Math.PI * 2, _sd = 80 + summonRng() * 60;
+            const previousCount = gs.enemies.length;
             spawnEnemy(gs);
+            if (gs.enemies.length <= previousCount) continue;
             const _ne = gs.enemies[gs.enemies.length - 1];
+            if (!_ne || _ne === e || _ne.health <= 0 || _ne._defeatResolved) continue;
             _ne.x = e.x + Math.cos(_sa) * _sd; _ne.y = e.y + Math.sin(_sa) * _sd;
             _ne.summonedBy = e.summonerId;
             _ne.eliteType = ["armored","fast","explosive"][Math.floor(summonRng()*3)];
             if (_ne.eliteType === "fast") { _ne.speed *= 2; _ne.size *= 0.75; }
             else if (_ne.eliteType === "armored") { _ne.dmgMult = 0.45; _ne.health *= 1.5; _ne.maxHealth = _ne.health; }
           }
+          e.summonerCount = countLivingSummons(e, gs.enemies);
+          e.summonerInvuln = e.summonerCount > 0;
           addText(gs, e.x, e.y - 70, "🌀 SUMMONING!", "#8844FF", true);
           addParticles(gs, e.x, e.y, "#8844FF", 25);
           e.summonerVulnTimer = 360; // re-enters invuln after summons die

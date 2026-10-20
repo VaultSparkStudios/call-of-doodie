@@ -4,6 +4,12 @@
 
 ## Current Session
 
+## S198 candidate verification
+
+Summoner protection follows its living guards immediately;Vite updated to7.3.7.
+
+S198:90 focused tests pass,including9 failing-before regressions. Local full297/299files and2089/2092assertions:two stale-context assertions and one startup30s timeout. Refreshed context and unchanged startup tests pass5/5 with90s limit;the full local run remains nonpassing. Staging44/44 browser checks plus7/7 shell checks;24 inspected hash-bound before/after images at390/1440,in both themes. Independent code/dependency reviews pass;strict lint,configured build and security check pass;dependency audit0 vulnerabilities. Exact-commit hosted full tests and production readback remain pending.
+
 ## S197 production verified
 
 Consistent Shield Pulse protection across rail, grenades and lightning.
@@ -84,16 +90,10 @@ Async run startup, deferred perks/audio and leaderboard tickets isolated to owni
 
 S192 implementation 815f9b47b15388d2167af2fbc282b40dc7eb9a7b passed exact-main workflow 39362694165: 299 test files/2039 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 815f9b47b153; canonical and immutable https://be661b17.call-of-doodie.pages.dev shell7/7 each. Browser12/12 across390/1440/both themes proves replacement token/signature survive old-ticket delivery and pause remains usable.
 
-## S192 candidate verified
-
-S192 full local suite passes 299/299 files and 2039/2039 assertions, no failed or pending tests. Strict lint, configured build, schema/startup/public/security gates pass; dependency audit zero vulnerabilities, backend5/5/replay3/3. Staging562130b0 shell7/7/browser12/12 across390/1440/both themes. All24 before/after captures inspected/hash-bound. Independent review approved. Exact-main production pending.
-
-## S192 candidate verified
-
-S192 full local suite passes 299/299 files and 2038/2038 assertions, no failed or pending tests. Strict lint, configured build, schema/startup/public/security gates pass; dependency audit zero vulnerabilities, backend5/5/replay3/3. Staging5621
-
 ## Open Work
 
+## S198 verified work
+- [ ] S198 production verification.
 ## S197 arc outcomes and waves
 ## S196 arc outcomes and waves
 ## S195 arc outcomes and waves
@@ -147,19 +147,8 @@ S192 full local suite passes 299/299 files and 2038/2038 assertions, no failed o
 ## Session 167 - The debrief names names, modes say what the run was worth, announcements stay on screen
 - [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET on the Pages project so Porcelain Passport verification and cloud backup stop answering 503.
 ## Session 166 - Extraction distance, pressure, radar objectives, and death-beat split
-- [ ] [SIL:1] Collect consented extraction telemetry before changing the 1.25× pressure slope or 1.5× arena scale; synthetic distance and enemy-count math are not balance evidence.
-- [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET on the Pages project so Porcelain Passport verification and cloud backup stop answering 503.
 
 ## Recent Decisions
-
-## 2026-10-20 — Session 194
-
-Persist controller button history across listener/screen transitions and sample it even when gameplay is blocked. Start owns a poll before combat effects. Share Last Resort's below25% threshold between rail and bullets; preserve rail shield policy and per-target lifesteal semantics. Existing CANON-045 STRONG gap retained for unchanged guest-game promotion. FORGE/public-unlaunched unchanged. Assisted App state/ticks and synthetic controller/keyboard do not prove participant or physical-pad behavior. Existing S183 comparisons remain unmeasured. No backend, dependencies, identity/trust policy, cost, licensing or launch changes. CDR legitimately unchanged without creative direction.
-
-
-S194 final acceptance: S194 implementation 51fc42bf1510f6a4b625f3fb250140472f04862d passed exact-main workflow 39377541819:299 files/2056 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 51fc42bf1510. Canonical and immutable https://8e3a9bb5.call-of-doodie.pages.dev shell7/7 each; production browser24/24 across390/1440/both themes proves held menu Reload consumed, fresh Reload usable, rail480 at24HP/160 at25HP, and held/released keyboard movement. Local full run2055/2056 with one startup-fixture timeout at43.6s under load; unchanged isolated fixture passed1/1 in25.8s. Hosted exact-main full run299/2056 passed. Both histories retained; local first run is not rewritten green. Unchanged backend diagnostics remain degraded: leaderboard504/timeouts; replay valid/weak cases passed before provider546, subsequent valid replay504. No backend/configuration change or backend-green claim. This routine client promotion passed its scoped hosted quality/build/deploy and changed-input/combat checks; no launch-readiness claim.
-
-
 
 ## 2026-10-20 — Session 195
 
@@ -184,11 +173,17 @@ S196 final acceptance: S196 implementation 729870fb560e776f947f84957c83db6fea1ba
 Share Shield Pulse and Summoner protection eligibility for grenade,rail and chain selection; preserve ordinary bullet consumption and presentation. Keep existing nominal damage policies outside protected hits. Existing CANON-045 STRONG gap remains justified for unchanged guest-game promotion. FORGE/public-unlaunched unchanged. Real Chrome with synthetic controller/keyboard and assisted App state/ticks does not prove physical-device or participant outcomes. Existing S183 comparisons remain unmeasured. No backend, dependency, identity/trust-policy, variable cost, rights or launch change. CDR legitimately unchanged without creative direction.
 
 
-S197 final acceptance: S197 implementation 56a5655324f59e4f87601fd4554f540ccf8eaba7 passed exact-main workflow 39478756481:299 files/2081 assertions,strict lint,configured build and Cloudflare deployment. Canonical health matches 56a5655324f5. Canonical and immutable https://412cabf5.call-of-doodie.pages.dev shell7/7 each;production browser44/44 across390/1440,both themes. Shield Pulse holds HP10000 against grenade/rail/chain;vulnerable grenade70,eligible chain fallback5 retained. Controller selection,handoff and held/released keyboard remain usable. Local full2080/2081 with startup-fixture44s timeout;unchanged isolated1/1 pass;load-sensitive cause is an inference,not established. Hosted exact-main full299/2081 passes.66 focused;4 failing-before regressions. Independent source review passed;guaranteed-crit guard strengthened and re-reviewed. Staging44/44,shell7/7;24 inspected hash-bound before/after images. Native schema/startup/public/security/runtime gates pass;
+S197 final acceptance: S197 implementation 56a5655324f59e4f87601fd4554f540ccf8eaba7 passed exact-main workflow 39478756481:299 files/2081 assertions,strict lint,configured build and Cloudflare deployment. Canonical health matches 56a5655324f5. Canonical and immutable https://412cabf5.call-of-doodie.pages.dev shell7/7 each;production browser44/44 across390/1440,both themes. Shield Pulse holds HP10000 against grenade/rail/chain;vulnerable grenade70,eligible chain fallback5 retained. Controller selection,handoff and held/released keyboard remain usable. Local full2080/2081 with startup-fixture44s timeout;unchanged isolated1/1 pass;load-sensitive cause is an inference,not established. Hosted exact-main full299/2081 passes.66 focused;4 failing-before regressions. Independent source review passed;guaranteed-crit guard strengthened and re-reviewed. Staging44/44,shell7/7;24 inspected hash-bound before/after images. Native schema/startup/public/security/runtime gates pass;dependency audit0 vulnerabilities. Sanitization0 findings.
+
+
+
+## 2026-10-20 — Session 198
+
+Damage protection follows living guards belonging to the Summoner instead of a frame-old flag. Preserve Shield Pulse and vulnerable windup. Vite7.3.7 addresses GHSA-698v-4r3x-3vcv;existing platform selectors and overrides remain unchanged.
 
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 276,076 bytes · SHA-256 `91f50c291f8e…`
-- `context/TASK_BOARD.md` · 188,500 bytes · SHA-256 `2c1fdddb2b06…`
-- `context/DECISIONS.md` · 191,640 bytes · SHA-256 `d14fcea9c023…`
+- `context/CURRENT_STATE.md` · 276,786 bytes · SHA-256 `17751015389f…`
+- `context/TASK_BOARD.md` · 188,877 bytes · SHA-256 `fb0b67103366…`
+- `context/DECISIONS.md` · 191,913 bytes · SHA-256 `59bcbb5f02ea…`
 - `docs/AUDIT_2026-10-18.json` · 6,892 bytes · SHA-256 `b34b668a7b5a…`

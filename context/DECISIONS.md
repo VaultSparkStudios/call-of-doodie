@@ -1710,3 +1710,8 @@ Share Shield Pulse and Summoner protection eligibility for grenade,rail and chai
 
 
 S197 final acceptance: S197 implementation 56a5655324f59e4f87601fd4554f540ccf8eaba7 passed exact-main workflow 39478756481:299 files/2081 assertions,strict lint,configured build and Cloudflare deployment. Canonical health matches 56a5655324f5. Canonical and immutable https://412cabf5.call-of-doodie.pages.dev shell7/7 each;production browser44/44 across390/1440,both themes. Shield Pulse holds HP10000 against grenade/rail/chain;vulnerable grenade70,eligible chain fallback5 retained. Controller selection,handoff and held/released keyboard remain usable. Local full2080/2081 with startup-fixture44s timeout;unchanged isolated1/1 pass;load-sensitive cause is an inference,not established. Hosted exact-main full299/2081 passes.66 focused;4 failing-before regressions. Independent source review passed;guaranteed-crit guard strengthened and re-reviewed. Staging44/44,shell7/7;24 inspected hash-bound before/after images. Native schema/startup/public/security/runtime gates pass;dependency audit0 vulnerabilities. Sanitization0 findings.
+
+
+## 2026-10-20 — Session 198
+
+Damage protection follows living guards belonging to the Summoner instead of a frame-old flag. Preserve Shield Pulse and vulnerable windup. Vite7.3.7 addresses GHSA-698v-4r3x-3vcv;existing platform selectors and overrides remain unchanged.

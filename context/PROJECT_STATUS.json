@@ -4,32 +4,20 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "S197 Shield Pulse source parity production verified.",
-  "nextMilestone": "Collect existing participant/device acceptance evidence.",
+  "currentFocus": "Summoner protection follows living guards immediately; Vite security patch applied.",
+  "nextMilestone": "Verify exact-main production.",
   "testingSurfaces": [
     {
-      "session": 197,
-      "type": "production",
-      "status": "green",
-      "url": "https://callofdoodie.wtf/"
-    },
-    {
-      "session": 197,
+      "session": 198,
       "type": "staging",
       "status": "green",
-      "url": "https://5ab785fa.call-of-doodie.pages.dev/"
+      "url": "https://36ead169.call-of-doodie.pages.dev/"
     },
     {
-      "session": 197,
-      "type": "production-smoke",
-      "status": "green",
-      "command": "S197 Shield Pulse/input44/44"
-    },
-    {
-      "session": 197,
+      "session": 198,
       "type": "local-browser-capture",
       "status": "green",
-      "command": "S19724 before/after images inspected;390/1440,both themes"
+      "command": "S19824 inspected before/after captures;390/1440,both themes"
     }
   ],
   "blockers": [
@@ -43,21 +31,21 @@
   "lastUpdated": "2026-10-20",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
-  "truthAuditStatus": "S197 selected L2 outcome production verified.",
+  "truthAuditStatus": "S198 local/staging verified;production pending.",
   "truthAuditLastRun": "2026-10-20",
   "ignisScore": 44193,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-10-08",
-  "silSession": 197,
+  "silSession": 198,
   "silScore": 945,
   "silAvg3": 945,
-  "silVelocity": 1,
+  "silVelocity": 2,
   "silDebt": "flat",
-  "silLastSession": 197,
-  "currentSession": 197,
+  "silLastSession": 198,
+  "currentSession": 198,
   "sessionMode": "founder",
   "lastAgent": "codex",
-  "testsPassing": 299,
+  "testsPassing": 297,
   "testsTotal": 299,
   "entropyScore": 0.215,
   "entropyLastComputed": "2026-10-20",
@@ -88,8 +76,8 @@
   "freeTierCostStatus": "cost-neutral",
   "runtimeUrl": "https://callofdoodie.wtf/",
   "stagingType": "cloudflare-pages",
-  "stagingUrl": "https://5ab785fa.call-of-doodie.pages.dev/",
-  "testsLastRun": "2026-10-20T18:56:08Z",
+  "stagingUrl": "https://36ead169.call-of-doodie.pages.dev/",
+  "testsLastRun": "2026-10-20T20:37:44.267Z",
   "sanitizationLastCleared": "2026-10-06",
   "sessionShellHygiene": {
     "session": 191,
@@ -145,15 +133,15 @@
     "note": "Studio-wide doctor evidence; not a project-only zero-findings claim. Central follow-up delivered through Ark; application unobserved."
   },
   "lastSessionSummary": {
-    "session": 197,
+    "session": 198,
     "shipped": [
-      "Consistent Shield Pulse protection across rail, grenades and lightning."
+      "Summoner protection follows living guards immediately; Vite security patch applied."
     ],
-    "tests": "299 files/2081 assertions passing",
-    "deploy": "56a5655324f5 production verified"
+    "tests": "297/299 files;2089/2092 assertions;full hosted pending",
+    "deploy": "pending exact-main production"
   },
-  "testsAssertionsPassing": 2081,
-  "testsAssertionsTotal": 2081,
+  "testsAssertionsPassing": 2089,
+  "testsAssertionsTotal": 2092,
   "testsAssertionsFiles": 299,
   "testsFlaky": [],
   "testsInconclusive": [],
@@ -162,35 +150,27 @@
   "testsBudgetExhausted": false,
   "silAvg5": 945,
   "testsAssertionsDeferred": [],
-  "testsAssertionsLastRun": "2026-10-20T18:56:08Z",
-  "lastShipped": "S197 consistent Shield Pulse protection.",
-  "truthStatus": "FORGE/public-unlaunched unchanged. Real Chrome with synthetic controller/keyboard and assisted App state/ticks does not prove physical-device or participant outcomes. Existing S183 comparisons remain unmeasured. No backend, dependency, identity/trust-policy, variable cost, rights or launch change. CDR legitimately unchanged without creative direction.",
-  "testsFocusedSupplement": "S19766 focused;4 failing-before regressions;full suite includes strengthened guaranteed-crit guard.",
+  "testsAssertionsLastRun": "2026-10-20T20:37:44.268Z",
+  "lastShipped": "S198 Summoner lifecycle and Vite patch.",
+  "truthStatus": "Guest play and FORGE/public-unlaunched status remain unchanged. Synthetic input and assisted game ticks do not prove physical-device or participant outcomes;existing comparative evidence remains unmeasured. No backend,identity,rights,pricing or launch change.",
+  "testsFocusedSupplement": "S19890 focused;9 failing-before regressions.",
   "lastDeployCommit": "56a5655324f59e4f87601fd4554f540ccf8eaba7",
   "lastDeployAt": "2026-10-20T18:56:08Z",
   "closeoutAcceptance": {
-    "session": 197,
-    "state": "complete",
-    "writeback": "ten surfaces reconciled;CDR legitimately unchanged",
+    "session": 198,
+    "state": "delivery-pending",
     "scaffold": {
       "tasks": 3,
-      "done": 3,
-      "inProgress": 0,
+      "done": 2,
+      "inProgress": 1,
       "open": 0
     },
-    "independentReview": "source and final records independently reviewed:pass;0 blocking findings",
-    "localSuite": "Local full2080/2081 with startup-fixture44s timeout;unchanged isolated1/1 pass;load-sensitive cause is an inference,not established. Hosted exact-main full299/2081 passes.66 focused;4 failing-before regressions. Independent source review passed;guaranteed-crit guard strengthened and re-reviewed. Staging44/44,shell7/7;24 inspected hash-bound before/after images. Native schema/startup/public/security/runtime gates pass;dependency audit0 vulnerabilities. Sanitization0 findings.",
-    "production": {
-      "source": "56a5655324f59e4f87601fd4554f540ccf8eaba7",
-      "workflow": 39478756481,
-      "immutableUrl": "https://412cabf5.call-of-doodie.pages.dev",
-      "canonical": "https://callofdoodie.wtf/",
-      "browserAssertions": 44
-    }
+    "localSuite": "S198:90 focused tests pass,including9 failing-before regressions. Local full297/299files and2089/2092assertions:two stale-context assertions and one startup30s timeout. Refreshed context and unchanged startup tests pass5/5 with90s limit;the full local run remains nonpassing. Staging44/44 browser checks plus7/7 shell checks;24 inspected hash-bound before/after images at390/1440,in both themes. Independent code/dependency reviews pass;strict lint,configured build and security check pass;dependency audit0 vulnerabilities. Exact-commit hosted full tests and production readback remain pending.",
+    "independentReview": "source and dependency review passed"
   },
-  "testsLastRunMode": "full-hosted-exact-main",
-  "velocity": 1,
-  "silVelocityLastSession": 1,
+  "testsLastRunMode": "full-local-nonpassing",
+  "velocity": 2,
+  "silVelocityLastSession": 2,
   "deploy": {
     "source": "56a5655324f59e4f87601fd4554f540ccf8eaba7",
     "workflow": 39478756481,
@@ -200,10 +180,10 @@
     "url": "https://callofdoodie.wtf/",
     "deployedAt": "2026-10-20T18:56:08Z"
   },
-  "lastSession": 197,
+  "lastSession": 198,
   "silAvg10": 940.5,
   "silAvg25": 965.6,
   "silAvgAll": 988.5,
   "testsTimeoutMs": 120000,
-  "lastDeployStatus": "verified"
+  "lastDeployStatus": "S198 pending;S197 verified"
 }

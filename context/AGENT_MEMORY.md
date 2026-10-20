@@ -1,3 +1,11 @@
+## S198 behavior and validation
+
+Summoner protection follows its living guards immediately;Vite updated to7.3.7.
+
+S198:90 focused tests pass,including9 failing-before regressions. Local full297/299files and2089/2092assertions:two stale-context assertions and one startup30s timeout. Refreshed context and unchanged startup tests pass5/5 with90s limit;the full local run remains nonpassing. Staging44/44 browser checks plus7/7 shell checks;24 inspected hash-bound before/after images at390/1440,in both themes. Independent code/dependency reviews pass;strict lint,configured build and security check pass;dependency audit0 vulnerabilities. Exact-commit hosted full tests and production readback remain pending.
+
+Guest play and FORGE/public-unlaunched status remain unchanged. Synthetic input and assisted game ticks do not prove physical-device or participant outcomes;existing comparative evidence remains unmeasured. No backend,identity,rights,pricing or launch change.
+
 ## S197 production acceptance
 
 S197 implementation 56a5655324f59e4f87601fd4554f540ccf8eaba7 passed exact-main workflow 39478756481:299 files/2081 assertions,strict lint,configured build and Cloudflare deployment. Canonical health matches 56a5655324f5. Canonical and immutable https://412cabf5.call-of-doodie.pages.dev shell7/7 each;production browser44/44 across390/1440,both themes. Shield Pulse holds HP10000 against grenade/rail/chain;vulnerable grenade70,eligible chain fallback5 retained. Controller selection,handoff and held/released keyboard remain usable.

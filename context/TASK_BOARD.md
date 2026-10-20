@@ -1,3 +1,11 @@
+## S198 verified work
+
+Wave 1 ✔ fresh review of game behavior. Wave 2 ✔ guard-protection lifecycle and Vite security patch. Wave 3 ◼ production verification.
+
+- [x] S198 protection applies immediately to living owned guards and releases after the final guard dies.
+- [x] S198 Vite7.3.7 retains existing dependency platform selectors.
+- [ ] S198 production verification.
+
 ## S197 arc outcomes and waves
 
 Session Intent: fresh full arc, authorized direct-main commit/push and full deployment.

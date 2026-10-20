@@ -30,6 +30,23 @@ function arena(overrides = {}) {
 afterEach(() => vi.useRealTimers());
 
 describe("boss frame behavior", () => {
+  it("protects the Summoner immediately when its first guards spawn", () => {
+    const { gs, enemy } = arena({ typeIndex: 18, summonerId: "owner", summonerTimer: 1, summonerMaxCount: 3 });
+    stepEnemyFrame({ gs, player: gs.player, world: { W: 1280, H: 720 }, frame: 1,
+      spawnEnemy: state => state.enemies.push({ x: 0, y: 0, health: 20, maxHealth: 20, speed: 1, size: 20 }) });
+    expect(gs.enemies.filter(unit => unit.summonedBy === "owner")).toHaveLength(3);
+    expect(enemy.summonerCount).toBe(3);
+    expect(enemy.summonerInvuln).toBe(true);
+  });
+
+  it("does not turn the Summoner into its own guard when spawning does nothing", () => {
+    const { gs, enemy } = arena({ typeIndex: 18, summonerId: "owner", summonerTimer: 1, summonerMaxCount: 3 });
+    stepEnemyFrame({ gs, player: gs.player, world: { W: 1280, H: 720 }, frame: 1, spawnEnemy: () => {} });
+    expect(enemy.summonedBy).toBeUndefined();
+    expect(enemy.eliteType).toBeUndefined();
+    expect(enemy.summonerCount).toBe(0);
+    expect(enemy.summonerInvuln).toBe(false);
+  });
   it("restores Developer walls after 240 simulated frames and repaints both transitions", () => {
     vi.useFakeTimers();
     const { gs, enemy, step } = arena({

@@ -177,7 +177,7 @@ export function stepProjectileFrame({
     gs.explosionFlash = { x: grenade.x, y: grenade.y, life: 3 };
     stampArenaDecal(gs, { kind: "scorch", x: grenade.x, y: grenade.y, size: 30, alpha: 0.4 });
     gs.enemies.forEach((enemy) => {
-      if (isEnemyDamageProtected(enemy)) return;
+      if (isEnemyDamageProtected(enemy, gs.enemies)) return;
       const blast = resolveGrenadeEnemyDamage({
         grenade,
         enemy,
@@ -215,7 +215,7 @@ export function stepProjectileFrame({
         stats.totalHits = (stats.totalHits || 0) + 1;
         hitRecorded = true;
       }
-      if (isEnemyDamageProtected(enemy)) {
+      if (isEnemyDamageProtected(enemy, gs.enemies)) {
         addParticles(gs, enemy.x, enemy.y, enemy.shieldPulseActive ? "#00BFFF" : "#8844FF", 3);
         return;
       }
@@ -273,7 +273,7 @@ export function stepProjectileFrame({
         runCrit: gs.critBonus || 0,
         rng: getRunRng(gs, "combat"),
       });
-      if (enemy.typeIndex === 18 && enemy.summonerInvuln) {
+      if (isEnemyDamageProtected(enemy, gs.enemies)) {
         addParticles(gs, bullet.x, bullet.y, "#8844FF", 3);
         bullet.life = 0;
         return;

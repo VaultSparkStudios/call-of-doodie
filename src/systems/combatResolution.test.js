@@ -8,6 +8,7 @@ import {
   findLightningChainTarget,
   getShieldFacingMultiplier,
   isPrecisionHit,
+  isEnemyDamageProtected,
   resolveEnemyContactPlayerHit,
   resolveEnemyProjectilePlayerHit,
   resolveGrenadeEnemyDamage,
@@ -18,6 +19,17 @@ import {
 } from "./combatResolution.js";
 
 describe("combatResolution", () => {
+  it("protects roster-bound Summoners only while their own living guards remain", () => {
+    const boss = { typeIndex: 18, summonerId: "owner", summonerInvuln: true };
+    const living = { summonedBy: "owner", health: 1 };
+    const others = [{ summonedBy: "other", health: 100 }, { summonedBy: "owner", health: 0 }, { summonedBy: "owner", health: 100, _defeatResolved: true }];
+    expect(isEnemyDamageProtected(boss, others)).toBe(false);
+    expect(isEnemyDamageProtected({ ...boss, summonerInvuln: false }, [...others, living])).toBe(true);
+    expect(isEnemyDamageProtected(boss, [])).toBe(false);
+    expect(isEnemyDamageProtected({ ...boss, shieldPulseActive: true }, [])).toBe(true);
+    const source = { x: 0, y: 0, health: 100 };
+    expect(findLightningChainTarget([source, { ...boss, x: 20, y: 0, health: 100, summonerInvuln: false }, living], source)).toBeNull();
+  });
   it("uses squared-distance bullet/enemy collision with an AABB fast reject", () => {
     expect(bulletEnemyCollision({ x: 10, y: 10, size: 5 }, { x: 18, y: 10, size: 20 }).hit).toBe(true);
     expect(bulletEnemyCollision({ x: 100, y: 100, size: 5 }, { x: 18, y: 10, size: 20 }).hit).toBe(false);

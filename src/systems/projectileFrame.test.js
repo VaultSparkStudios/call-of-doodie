@@ -41,6 +41,62 @@ describe("stepProjectileFrame", () => {
   const enemyAt = (extra = {}) => ({ x: 80, y: 60, size: 30, health: 10000, maxHealth: 10000, color: "#fff", ...extra });
   const shot = (extra = {}) => ({ x: 80, y: 60, vx: 0, vy: 0, life: 100, size: 5, damage: 10, color: "#fff", ...extra });
 
+  it.each(["bullet", "grenade", "rail"])("derives %s protection from living guards despite a stale flag", source => {
+    const boss = enemyAt({ typeIndex: 18, summonerId: "owner", summonerInvuln: false });
+    const guard = enemyAt({ x: 180, y: 110, summonedBy: "owner" });
+    const ctx = runtime({ enemies: [boss, guard] });
+    ctx.perkMods = { critBonus: -1 };
+    if (source === "bullet") ctx.gs.bullets = [shot()];
+    if (source === "grenade") ctx.gs.grenades = [{ x: 80, y: 60, vx: 0, vy: 0, life: 1 }];
+    if (source === "rail") ctx.gs.pendingBeam = { ox: 0, oy: 60, cos: 1, sin: 0, maxT: 100, weaponIdx: 9, damage: 10 };
+    stepProjectileFrame(ctx);
+    expect(boss.health).toBe(10000);
+  });
+
+  it.each(["bullet", "rail"])("releases %s protection after a grenade defeats the last guard in the same frame", source => {
+    const boss = enemyAt({ typeIndex: 18, summonerId: "owner", summonerInvuln: true });
+    const guard = enemyAt({ x: 180, y: 110, health: 1, summonedBy: "owner" });
+    const ctx = runtime({ enemies: [boss, guard], grenades: [{ x: 180, y: 110, vx: 0, vy: 0, life: 1 }] });
+    ctx.perkMods = { critBonus: -1 };
+    if (source === "bullet") ctx.gs.bullets = [shot()];
+    if (source === "rail") ctx.gs.pendingBeam = { ox: 0, oy: 60, cos: 1, sin: 0, maxT: 100, weaponIdx: 9, damage: 10 };
+    stepProjectileFrame(ctx);
+    expect(guard.health).toBeLessThanOrEqual(0);
+    expect(boss.health).toBe(9990);
+  });
+
+  it("chains to a Summoner after its last living guard is defeated", () => {
+    const primary = enemyAt();
+    const boss = enemyAt({ x: 120, typeIndex: 18, summonerId: "owner", summonerInvuln: true });
+    const guard = enemyAt({ x: 180, y: 110, health: 1, summonedBy: "owner" });
+    const ctx = runtime({ chainLightning: true, enemies: [primary, boss, guard], bullets: [shot()], grenades: [{ x: 180, y: 110, vx: 0, vy: 0, life: 1 }], _runRngSeed: 17, _runRngStreams: new Map([["1:combat", () => 0]]) });
+    ctx.perkMods.critBonus = -1;
+    stepProjectileFrame(ctx);
+    expect(boss.health).toBe(9995);
+  });
+
+  it("releases protection for a later grenade in the same projectile frame", () => {
+    const boss = enemyAt({ typeIndex: 18, summonerId: "owner", summonerInvuln: true });
+    const guard = enemyAt({ x: 180, y: 110, health: 1, summonedBy: "owner" });
+    const ctx = runtime({ enemies: [boss, guard], grenades: [
+      { x: 180, y: 110, vx: 0, vy: 0, life: 1 },
+      { x: 80, y: 60, vx: 0, vy: 0, life: 1 },
+    ] });
+    stepProjectileFrame(ctx);
+    expect(boss.health).toBe(9930);
+  });
+
+  it("keeps protection while another owned guard survives the first guard's defeat", () => {
+    const boss = enemyAt({ typeIndex: 18, summonerId: "owner", summonerInvuln: true });
+    const dying = enemyAt({ x: 180, y: 110, health: 1, summonedBy: "owner" });
+    const living = enemyAt({ x: 180, y: 110, summonedBy: "owner" });
+    const ctx = runtime({ enemies: [boss, dying, living], bullets: [shot()], grenades: [{ x: 180, y: 110, vx: 0, vy: 0, life: 1 }] });
+    stepProjectileFrame(ctx);
+    expect(dying.health).toBeLessThanOrEqual(0);
+    expect(living.health).toBeGreaterThan(0);
+    expect(boss.health).toBe(10000);
+  });
+
   it.each(["bullet", "grenade", "rail"])("blocks %s damage and rewards during Shield Pulse, then releases protection", source => {
     const boss = enemyAt({ shieldPulseActive: true, health: 50 });
     const ctx = runtime({ enemies: [boss] });
