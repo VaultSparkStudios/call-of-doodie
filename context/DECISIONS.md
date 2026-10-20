@@ -1659,3 +1659,6 @@ Existing bounded founder authorization covers routine promotion. CANON-045 STRON
 
 
 S191 final release acceptance: S191 implementation 40d7b319072d7d4067d403c861bf6de804594de2 passed exact-main workflow 39357464497: all299 test files /2032 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 40d7b319072d. Canonical and immutable https://40b2a0c6.call-of-doodie.pages.dev pass shell7/7 each. All24 actual-App browser assertions pass across390/1440 and both themes: earned base5 preserved; all90 Frenzy movement frames6 then5; pause frozen; Haste RPG reload1/1 and arsenal capacity labels correct.
+
+
+S191 receipt scan correction: a chained PowerShell invocation advanced to commit/push after the staged entropy scan flagged public CI job URLs. Required workflow results were valid; trim redundant provider job URL metadata from the public audit, retain exact-SHA detailed proof in ignored cache, and verify the scanner in a separate successful invocation before the correction push. No hook-disable or force-push flag was used.

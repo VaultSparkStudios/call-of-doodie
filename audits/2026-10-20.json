@@ -24,6 +24,7 @@
     "workflow": 39357464497,
     "immutableUrl": "https://40b2a0c6.call-of-doodie.pages.dev",
     "canonical": "https://callofdoodie.wtf/",
+    "verifiedAt": "2026-10-20T02:13:04.125Z",
     "health": {
       "contract": "edge-health-v1",
       "status": "edge-ready",
@@ -32,185 +33,12 @@
       "deploy": "40d7b319072d",
       "checkedAt": "2026-10-20T02:12:57.540Z"
     },
-    "counts": [
-      "quality\tTest\t2026-10-20T02:11:48.3964188Z  Test Files  299 passed (299)",
-      "quality\tTest\t2026-10-20T02:11:48.3972207Z       Tests  2032 passed (2032)"
-    ],
-    "ci": {
-      "conclusion": "success",
-      "headSha": "40d7b319072d7d4067d403c861bf6de804594de2",
-      "jobs": [
-        {
-          "completedAt": "2026-10-20T02:11:51Z",
-          "conclusion": "success",
-          "databaseId": 118415467656,
-          "name": "quality",
-          "startedAt": "2026-10-20T02:10:24Z",
-          "status": "completed",
-          "steps": [
-            {
-              "completedAt": "2026-10-20T02:10:25Z",
-              "conclusion": "success",
-              "name": "Set up job",
-              "number": 1,
-              "startedAt": "2026-10-20T02:10:25Z",
-              "status": "completed"
-            },
-            {
-              "completedAt": "2026-10-20T02:10:33Z",
-              "conclusion": "success",
-              "name": "Checkout",
-              "number": 2,
-              "startedAt": "2026-10-20T02:10:25Z",
-              "status": "completed"
-            },
-            {
-              "completedAt": "2026-10-20T02:10:35Z",
-              "conclusion": "success",
-              "name": "Setup Node",
-              "number": 3,
-              "startedAt": "2026-10-20T02:10:33Z",
-              "status": "completed"
-            },
-            {
-              "completedAt": "2026-10-20T02:10:40Z",
-              "conclusion": "success",
-              "name": "Install dependencies",
-              "number": 4,
-              "startedAt": "2026-10-20T02:10:35Z",
-              "status": "completed"
-            },
-            {
-              "completedAt": "2026-10-20T02:10:44Z",
-              "conclusion": "success",
-              "name": "Lint",
-              "number": 5,
-              "startedAt": "2026-10-20T02:10:40Z",
-              "status": "completed"
-            },
-            {
-              "completedAt": "2026-10-20T02:11:48Z",
-              "conclusion": "success",
-              "name": "Test",
-              "number": 6,
-              "startedAt": "2026-10-20T02:10:44Z",
-              "status": "completed"
-            },
-            {
-              "completedAt": "2026-10-20T02:11:48Z",
-              "conclusion": "success",
-              "name": "Post Setup Node",
-              "number": 11,
-              "startedAt": "2026-10-20T02:11:48Z",
-              "status": "completed"
-            },
-            {
-              "completedAt": "2026-10-20T02:11:48Z",
-              "conclusion": "success",
-              "name": "Post Checkout",
-              "number": 12,
-              "startedAt": "2026-10-20T02:11:48Z",
-              "status": "completed"
-            },
-            {
-              "completedAt": "2026-10-20T02:11:48Z",
-              "conclusion": "success",
-              "name": "Complete job",
-              "number": 13,
-              "startedAt": "2026-10-20T02:11:48Z",
-              "status": "completed"
-            }
-          ],
-          "url": "https://github.com/VaultSparkStudios/call-of-doodie/actions/runs/39357464497/job/118415467656"
-        },
-        {
-          "completedAt": "2026-10-20T02:12:29Z",
-          "conclusion": "success",
-          "databaseId": 118415915020,
-          "name": "build-and-deploy",
-          "startedAt": "2026-10-20T02:11:53Z",
-          "status": "completed",
-          "steps": [
-            {
-              "completedAt": "2026-10-20T02:11:55Z",
-              "conclusion": "success",
-              "name": "Set up job",
-              "number": 1,
-              "startedAt": "2026-10-20T02:11:54Z",
-              "status": "completed"
-            },
-            {
-              "completedAt": "2026-10-20T02:12:02Z",
-              "conclusion": "success",
-              "name": "Checkout",
-              "number": 2,
-              "startedAt": "2026-10-20T02:11:55Z",
-              "status": "completed"
-            },
-            {
-              "completedAt": "2026-10-20T02:12:04Z",
-              "conclusion": "success",
-              "name": "Setup Node",
-              "number": 3,
-              "startedAt": "2026-10-20T02:12:02Z",
-              "status": "completed"
-            },
-            {
-              "completedAt": "2026-10-20T02:12:08Z",
-              "conclusion": "success",
-              "name": "Install dependencies",
-              "number": 4,
-              "startedAt": "2026-10-20T02:12:04Z",
-              "status": "completed"
-            },
-            {
-              "completedAt": "2026-10-20T02:12:14Z",
-              "conclusion": "success",
-              "name": "Build",
-              "number": 5,
-              "startedAt": "2026-10-20T02:12:08Z",
-              "status": "completed"
-            },
-            {
-              "completedAt": "2026-10-20T02:12:27Z",
-              "conclusion": "success",
-              "name": "Deploy",
-              "number": 6,
-              "startedAt": "2026-10-20T02:12:14Z",
-              "status": "completed"
-            },
-            {
-              "completedAt": "2026-10-20T02:12:27Z",
-              "conclusion": "success",
-              "name": "Post Setup Node",
-              "number": 11,
-              "startedAt": "2026-10-20T02:12:27Z",
-              "status": "completed"
-            },
-            {
-              "completedAt": "2026-10-20T02:12:27Z",
-              "conclusion": "success",
-              "name": "Post Checkout",
-              "number": 12,
-              "startedAt": "2026-10-20T02:12:27Z",
-              "status": "completed"
-            },
-            {
-              "completedAt": "2026-10-20T02:12:27Z",
-              "conclusion": "success",
-              "name": "Complete job",
-              "number": 13,
-              "startedAt": "2026-10-20T02:12:27Z",
-              "status": "completed"
-            }
-          ],
-          "url": "https://github.com/VaultSparkStudios/call-of-doodie/actions/runs/39357464497/job/118415915020"
-        }
-      ],
-      "status": "completed",
-      "url": "https://github.com/VaultSparkStudios/call-of-doodie/actions/runs/39357464497"
+    "requiredChecks": {
+      "quality": "success",
+      "buildAndDeploy": "success"
     },
-    "verifiedAt": "2026-10-20T02:13:04.125Z",
+    "testFiles": 299,
+    "assertions": 2032,
     "browserCases": 4,
     "browserAssertions": 24
   },
