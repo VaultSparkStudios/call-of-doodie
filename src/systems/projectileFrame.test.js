@@ -41,6 +41,47 @@ describe("stepProjectileFrame", () => {
   const enemyAt = (extra = {}) => ({ x: 80, y: 60, size: 30, health: 10000, maxHealth: 10000, color: "#fff", ...extra });
   const shot = (extra = {}) => ({ x: 80, y: 60, vx: 0, vy: 0, life: 100, size: 5, damage: 10, color: "#fff", ...extra });
 
+  it.each(["bullet", "grenade", "rail"])("blocks %s damage and rewards during Shield Pulse, then releases protection", source => {
+    const boss = enemyAt({ shieldPulseActive: true, health: 50 });
+    const ctx = runtime({ enemies: [boss] });
+    ctx.perkMods = { critBonus: 1, lifesteal: 0.1, critGrantsXp: true };
+    ctx.player.health = 40;
+    const fire = () => {
+      if (source === "bullet") ctx.gs.bullets = [shot()];
+      if (source === "grenade") ctx.gs.grenades = [{ x: 80, y: 60, vx: 0, vy: 0, life: 1 }];
+      if (source === "rail") ctx.gs.pendingBeam = { ox: 0, oy: 60, cos: 1, sin: 0, maxT: 180, weaponIdx: 9, damage: 70 };
+      stepProjectileFrame(ctx);
+    };
+    fire();
+    expect(boss.health).toBe(50);
+    expect(boss._defeatPending).toBeUndefined();
+    expect(ctx.gs.totalDamage).toBe(0);
+    expect(ctx.player.health).toBe(40);
+    expect(ctx.stats.crits).toBe(0);
+    expect(ctx.addXp).not.toHaveBeenCalled();
+    boss.shieldPulseActive = false;
+    ctx.perkMods.critBonus = -1;
+    fire();
+    expect(boss.health).toBe(source === "bullet" ? 40 : -20);
+    expect(ctx.gs.totalDamage).toBe(source === "bullet" ? 10 : 70);
+    expect(boss._defeatPending?.source).toBe(source === "bullet" ? undefined : source);
+  });
+
+  it.each(["fallback", "protected-only", "expired"])("chains around Shield Pulse: %s", kind => {
+    const primary = enemyAt();
+    const shielded = enemyAt({ x: 120, health: 3, shieldPulseActive: kind !== "expired" });
+    const fallback = enemyAt({ x: 160 });
+    const ctx = runtime({ chainLightning: true, enemies: kind === "fallback" ? [primary, shielded, fallback] : [primary, shielded], bullets: [shot()], _runRngSeed: 17, _runRngStreams: new Map([["1:combat", () => 0]]) });
+    ctx.perkMods.critBonus = -1;
+    stepProjectileFrame(ctx);
+    expect(primary.health).toBe(9990);
+    expect(shielded.health).toBe(kind === "expired" ? -2 : 3);
+    expect(shielded._defeatPending?.source).toBe(kind === "expired" ? "chain-lightning" : undefined);
+    expect(fallback.health).toBe(kind === "fallback" ? 9995 : 10000);
+    expect(ctx.gs.totalDamage).toBe(kind === "protected-only" ? 10 : 15);
+    expect(ctx.gs.lightningArcs || []).toHaveLength(kind === "protected-only" ? 0 : 1);
+  });
+
   it.each([["front", 100, -10, 4], ["rear", 60, 10, 32]])("resolves a moving shot through the Shield Guy's %s with matching damage", (_side, x, vx, damage) => {
     const target = enemyAt({ typeIndex: 11 });
     const bullet = shot({ x, vx, damage: 20 });

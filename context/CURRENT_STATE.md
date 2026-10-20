@@ -1,3 +1,9 @@
+## S197 candidate acceptance
+
+Consistent Shield Pulse protection across rail, grenades and lightning.
+
+S197 local full299 files/2081 assertions:2080 passed,one startup/session-binding fixture timeout at44s under load;unchanged isolated rerun1/1 passed. This is not a passing full local run. Focused66/66 before final full;four failing-before regressions. Independent source review passed;guaranteed-crit assertion strengthened and re-reviewed. Staging https://5ab785fa.call-of-doodie.pages.dev shell7/7 and browser44/44 across390/1440,both themes. Before protected HP fell by70 grenade/160rail/5chain;after pulse blocks each,vulnerable grenade70 and chain fallback5 retained.24 before/after captures visually inspected and hash-bound to both runtime sources. Strict lint,configured build,public/security/runtime checks pass;dependency audit0 vulnerabilities. Exact-main hosted FULL suite is mandatory before production.
+
 ## S196 production verified
 
 Reliable controller ownership and consistent Summoner protection.

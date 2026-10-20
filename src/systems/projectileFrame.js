@@ -7,6 +7,7 @@ import {
   computeJuggernautShieldDamage,
   findLightningChainTarget,
   isPrecisionHit,
+  isEnemyDamageProtected,
   resolveEnemyProjectilePlayerHit,
   resolveGrenadeEnemyDamage,
   resolveObstacleBounce,
@@ -176,7 +177,7 @@ export function stepProjectileFrame({
     gs.explosionFlash = { x: grenade.x, y: grenade.y, life: 3 };
     stampArenaDecal(gs, { kind: "scorch", x: grenade.x, y: grenade.y, size: 30, alpha: 0.4 });
     gs.enemies.forEach((enemy) => {
-      if (enemy.typeIndex === 18 && enemy.summonerInvuln) return;
+      if (isEnemyDamageProtected(enemy)) return;
       const blast = resolveGrenadeEnemyDamage({
         grenade,
         enemy,
@@ -214,8 +215,8 @@ export function stepProjectileFrame({
         stats.totalHits = (stats.totalHits || 0) + 1;
         hitRecorded = true;
       }
-      if (enemy.typeIndex === 18 && enemy.summonerInvuln) {
-        addParticles(gs, enemy.x, enemy.y, "#8844FF", 3);
+      if (isEnemyDamageProtected(enemy)) {
+        addParticles(gs, enemy.x, enemy.y, enemy.shieldPulseActive ? "#00BFFF" : "#8844FF", 3);
         return;
       }
       const isCrit = getRunRng(gs, "combat")() < CRIT_CHANCE + (perkMods.critBonus || 0) + (gs.critBonus || 0);

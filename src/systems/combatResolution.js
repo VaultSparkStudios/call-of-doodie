@@ -187,6 +187,10 @@ export function resolveGrenadeEnemyDamage({
   };
 }
 
+export function isEnemyDamageProtected(enemy) {
+  return Boolean(enemy?.shieldPulseActive || (enemy?.typeIndex === 18 && enemy.summonerInvuln));
+}
+
 export function findLightningChainTarget(enemies = [], sourceEnemy, { range = 200 } = {}) {
   if (!sourceEnemy) return null;
   const rangeSq = range * range;
@@ -194,7 +198,7 @@ export function findLightningChainTarget(enemies = [], sourceEnemy, { range = 20
   let bestSq = rangeSq;
   for (const enemy of enemies) {
     if (!enemy || enemy === sourceEnemy || enemy.health <= 0) continue;
-    if (enemy.typeIndex === 18 && enemy.summonerInvuln) continue;
+    if (isEnemyDamageProtected(enemy)) continue;
     const d = dist2(enemy.x, enemy.y, sourceEnemy.x, sourceEnemy.y);
     if (d < bestSq) {
       bestSq = d;

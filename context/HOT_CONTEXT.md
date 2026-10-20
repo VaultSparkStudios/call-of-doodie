@@ -4,6 +4,12 @@
 
 ## Current Session
 
+## S197 candidate acceptance
+
+Consistent Shield Pulse protection across rail, grenades and lightning.
+
+S197 local full299 files/2081 assertions:2080 passed,one startup/session-binding fixture timeout at44s under load;unchanged isolated rerun1/1 passed. This is not a passing full local run. Focused66/66 before final full;four failing-before regressions. Independent source review passed;guaranteed-crit assertion strengthened and re-reviewed. Staging https://5ab785fa.call-of-doodie.pages.dev shell7/7 and browser44/44 across390/1440,both themes. Before protected HP fell by70 grenade/160rail/5chain;after pulse blocks each,vulnerable grenade70 and chain fallback5 retained.24 before/after captures visually inspected and hash-bound to both runtime sources. Strict lint,configured build,public/security/runtime checks pass;dependency audit0 vulnerabilities. Exact-main hosted FULL suite is mandatory before production.
+
 ## S196 production verified
 
 Reliable controller ownership and consistent Summoner protection.
@@ -86,18 +92,12 @@ S192 isolates asynchronous run startup, delayed perks/audio and leaderboard tick
 
 Actual App focused suite15/15 passes. Staging562130b0 shell7/7 and browser12/12 pass across390/1440 and both themes; reordered ticket fixtures retain the replacement token/signature. Independent review addressed menu cancellation, positive draft and live unmount coverage. Full suite and exact-main production pending. Authoritative detail: LATEST_HANDOFF.
 
-## S191 production verified
-
-Frenzy preserves earned speed; cursed magazines remain usable and displays match reload capacity.
-
-S191 implementation 40d7b319072d7d4067d403c861bf6de804594de2 passed exact-main workflow 39357464497: all299 test files /2032 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 40d7b319072d. Canonical and immutable https://40b2a0c6.call-of-doodie.pages.dev pass shell7/7 each. All24 actual-App browser assertions pass across390/1440 and both themes: earned base5 preserved; all90 Frenzy movement frames6 then5; pause frozen; Haste RPG reload1/1 and arsenal capacity labels correct.
-
-## S191 candidate verified
-
-S191 full local suite passes 299/299 files and 2032/2032 assertions, no failed or pending tests. Strict lint, configured build, schema/startup/public/security/runtime checks pass; zero dependency vulnerabilities; backend5/5 and replay3/3. Stagi
+## S
 
 ## Open Work
 
+## S197 arc outcomes and waves
+- [ ] S197 exact-main production and full closeout.
 ## S196 arc outcomes and waves
 ## S195 arc outcomes and waves
 ## S194 arc outcomes and waves
@@ -151,19 +151,8 @@ S191 full local suite passes 299/299 files and 2032/2032 assertions, no failed o
 - [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET on the Pages project so Porcelain Passport verification and cloud backup stop answering 503.
 ## Session 166 - Extraction distance, pressure, radar objectives, and death-beat split
 - [ ] [SIL:1] Collect consented extraction telemetry before changing the 1.25× pressure slope or 1.5× arena scale; synthetic distance and enemy-count math are not balance evidence.
-- [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET on the Pages project so Porcelain Passport verification and cloud backup stop answering 503.
-## Session 165 - Scrolling camera, live royale bots, death-beat diet, record recovery
 
 ## Recent Decisions
-
-## 2026-10-20 — Session 193
-
-Use incoming source direction for the existing player-facing shield; preserve hemisphere boundary and rail policy. Consume repeated Escape in both App and dialog capture boundaries, leaving fresh presses and held movement/interact intact. Existing CANON-045 STRONG gap is retained for unchanged guest-game promotion. FORGE/public-unlaunched unchanged. Synthetic keyboard, assisted App state/ticks and automated Chrome checks do not prove participant or physical-controller outcomes. Existing S183 comparisons remain unmeasured. No backend, dependency, identity/trust-policy, cost, licensing or public-launch change. CDR legitimately unchanged without new creative direction.
-
-
-S193 final acceptance: S193 implementation 49c6b60eb9e40b7e343daa6073ac7a424f4eaeb5 passed exact-main workflow 39366155584: 299 test files/2049 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 49c6b60eb9e4. Canonical and immutable https://e023d899.call-of-doodie.pages.dev shell7/7 each; production browser28/28 across390/1440/both themes proves front4/rear32, stable held Escape/reload, and held/released movement.
-
-
 
 ## 2026-10-20 — Session 194
 
@@ -190,9 +179,15 @@ Use zero-centered known stick axes for input arbitration independently of first 
 
 S196 final acceptance: S196 implementation 729870fb560e776f947f84957c83db6fea1ba2d3 passed exact-main workflow 39471382673:299 files/2075 assertions,strict lint,configured build and Cloudflare deployment. Canonical health matches729870fb560e. Canonical and immutable https://f3b3056d.call-of-doodie.pages.dev shell7/7 each; production browser40/40 across390/1440,both themes. Held controller selected/moves,button handoff preserved,neutral does not steal ownership;protected grenade/chain HP10000,vulnerable grenade70,chain fallback5. Final full local299/2075 passed;83 focused pass. Initial10 failing-before cases; independent review trigger regression corrected,second review passes. Staging40/40 and shell7/7;24 before/after images inspected and hash-bound. Native schema/startup/public/security/runtime checks pass;dependency audit0 vulnerabilities. Earlier full run caught the reviewer edge before its final correction; final full run green.
 
+
+
+## 2026-10-20 — Session 197
+
+Share Shield Pulse and Summoner protection eligibility for grenade,rail and chain selection; preserve ordinary bullet consumption and presentation. Keep existing nominal damage policies outside protected hits. Existing CANON-045 STRONG gap remains justified for unchanged guest-game promotion. FORGE/public-unlaunched unchanged. Real Chrome with synthetic controller/keyboard and assisted App state/ticks does not prove physical-device or participant outcomes. Existing S183 comparisons remain unmeasured. No backend, dependency, identity/trust-policy, variable cost, rights or launch change. CDR legitimately unchanged without creative direction.
+
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 274,518 bytes · SHA-256 `97eeacc38430…`
-- `context/TASK_BOARD.md` · 187,846 bytes · SHA-256 `34995ada6093…`
-- `context/DECISIONS.md` · 189,920 bytes · SHA-256 `696271b61274…`
+- `context/CURRENT_STATE.md` · 275,439 bytes · SHA-256 `86cba13b2eb8…`
+- `context/TASK_BOARD.md` · 188,500 bytes · SHA-256 `df793c56425a…`
+- `context/DECISIONS.md` · 190,601 bytes · SHA-256 `4caaeec789e2…`
 - `docs/AUDIT_2026-10-18.json` · 6,892 bytes · SHA-256 `b34b668a7b5a…`

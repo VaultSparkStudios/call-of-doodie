@@ -1,3 +1,13 @@
+## S197 arc outcomes and waves
+
+Session Intent: fresh full arc, authorized direct-main commit/push and full deployment.
+
+Wave 1 ✔ startup and fresh nine-axis/game-loop audit. Wave 2 ✔ Shield Pulse source parity. Wave 3 ◼ staging,production and full closeout.
+
+- [x] S197 shield-pulse-source-parity L2 accepted on staging.
+- [ ] S197 exact-main production and full closeout.
+
+
 ## S196 arc outcomes and waves
 
 Session Intent: fresh full arc, authorized direct-main commit/push and full deployment.
@@ -846,6 +856,9 @@ First checkpoint the bounded post-S159 propagation/CI/deploy recovery. Then begi
 - [ ] [Human/Data] [SIL:1] HomeV2 analytics funnel — compare `home_v2_deploy` vs legacy `front_door_action` completion rates after 48h of traffic
 
 ## Next
+
+- [ ] [SIL:1] [S197 reserve] Observe boss-counterplay comprehension with participants;owner project,dependency observed session.
+- [ ] [SIL:1] [S197 reserve] Add source/expiry permutations when new damage sources are selected;owner project,dependency future scoped work.
 
 - [ ] [SIL:1] [S196 reserve] Observe multi-controller handoffs on actual pads; owner project,dependency hardware observation.
 - [ ] [SIL:1] [S196 reserve] Extend protected-hit source matrix only when a new source is selected; owner project,dependency future scoped work.

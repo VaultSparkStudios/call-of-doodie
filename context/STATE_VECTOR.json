@@ -1,17 +1,17 @@
 {
   "vectorVersion": "1.0",
   "generatedAt": "2026-10-20",
-  "generatedAtMs": 1792519614764,
-  "session": 196,
-  "vectorHash": "f2d719e86d75f4d0",
+  "generatedAtMs": 1792522280401,
+  "session": 197,
+  "vectorHash": "9d34e1e6aeaf1c65",
   "silTotal": 945,
   "silAvg3": 945,
-  "velocity": 2,
+  "velocity": 1,
   "debt": "flat",
-  "runway": "S196 production verified",
-  "intentRate": "achieved",
+  "runway": "S197 production pending",
+  "intentRate": "in progress",
   "openNow": 4,
-  "openNext": 17,
+  "openNext": 19,
   "openBlocked": 0,
   "topNow": [
     "[SIL:2] **S183 measured comparisons** Complete matched human/agent, music/creatu",
@@ -19,12 +19,12 @@
     "[SIL:2] [S60] Supabase Auth / Studio membership implementation decision — if pai"
   ],
   "topNext": [
-    "[SIL:1] [S196 reserve] Observe multi-controller handoffs on actual pads; owner p",
-    "[SIL:1] [S196 reserve] Extend protected-hit source matrix only when a new source",
-    "[SIL:1] [S195 reserve] Observe low-health multi-target build confidence with par"
+    "[SIL:1] [S197 reserve] Observe boss-counterplay comprehension with participants;",
+    "[SIL:1] [S197 reserve] Add source/expiry permutations when new damage sources ar",
+    "[SIL:1] [S196 reserve] Observe multi-controller handoffs on actual pads; owner p"
   ],
   "health": "green",
-  "truthStatus": "both selected outcomes production verified.",
+  "truthStatus": "local/staging accepted;production pending.",
   "genome": null,
   "ignisScore": 44193,
   "ignisGrade": "FORGE",
@@ -33,8 +33,8 @@
   "slug": "call-of-doodie",
   "type": null,
   "lifecycle": "deployed",
-  "nextMilestone": "Collect existing participant/device acceptance evidence.",
-  "currentFocus": "S196 controller ownership and Summoner protection production verified.",
+  "nextMilestone": "Verify exact-main production.",
+  "currentFocus": "Consistent Shield Pulse protection across rail, grenades and lightning.",
   "lastShipped": "see LATEST_HANDOFF.md",
   "blockers": [
     "PostHog and project-scoped Sentry evidence remain unavailable; provider readiness is not represented as verified telemetry.",

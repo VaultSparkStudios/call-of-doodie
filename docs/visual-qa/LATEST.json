@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-10-20T17:59:01.706Z",
-  "uiBaseRef": "c8e5ac8a664ed150c215198cf61bc9b5ce1f6465",
-  "stagingUrl": "https://4e070130.call-of-doodie.pages.dev/",
+  "capturedAt": "2026-10-20T18:45:52.103Z",
+  "uiBaseRef": "af1aac756618e28682344d951dbfb9dc3c8974af",
+  "stagingUrl": "https://5ab785fa.call-of-doodie.pages.dev/",
   "themes": [
     "dark",
     "light"
@@ -10,21 +10,17 @@
   "sourceFiles": [
     {
       "file": "src/systems/projectileFrame.js",
-      "sha256": "ce541994686c2d0c42595cd32f8e7d86f21a197bafb8a62416cf95bf7118f238"
+      "sha256": "2f75f718ba19b3956f648c3dba54a74f18d5ac6f49a0dcb47a6d92d8194a9362"
     },
     {
       "file": "src/systems/combatResolution.js",
-      "sha256": "c8349f8dcdf7eaae835f744697cf1df47eca1dc43690398bf4f8e20298fee955"
-    },
-    {
-      "file": "src/utils/gamepad.js",
-      "sha256": "4a4d885891518dc06f8bf0af69d9757cb18b826a48ff632e29b51f1eff3cef2b"
+      "sha256": "47e922fdc5c329fb5e3631dac9f38e077835c6ce7f10d31b2bbf2b1544444d4a"
     }
   ],
   "captures": [
     {
-      "file": "session-196/before-production-sewer-night-390-held-controller.png",
-      "sha256": "42064a389dbbfa8e38de917528ff7b8c70649a60128309ffda4d163060af9d74",
+      "file": "session-197/before-production-sewer-night-390-held-controller.png",
+      "sha256": "e34a98daa2f3849f551247607caf859b82aa41fd645e636c2222afd233bc2e18",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -35,8 +31,8 @@
       "phase": "before"
     },
     {
-      "file": "session-196/before-production-sewer-night-390-controller-pause.png",
-      "sha256": "f9d968a484c2849522953057f619a200e8b3a83e8ce8b063d3b7f86037053f1d",
+      "file": "session-197/before-production-sewer-night-390-controller-pause.png",
+      "sha256": "cd0bab1256caf31482695dad0fbb2b9851c71921ae155f95c3d953b0dfe2f80c",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -47,20 +43,20 @@
       "phase": "before"
     },
     {
-      "file": "session-196/before-production-sewer-night-390-summoner-protection.png",
-      "sha256": "024854a06ae7de0bee34e7d83e587638caf27566357e33f2f113c43fccc81770",
+      "file": "session-197/before-production-sewer-night-390-shield-pulse.png",
+      "sha256": "a090d40d4676c88c324aef91a6c2150272e5c245bd5eae7ed7bb6eeecb43c1c6",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "summoner-protection",
+      "page": "shield-pulse",
       "phase": "before"
     },
     {
-      "file": "session-196/before-production-sewer-night-1440-held-controller.png",
-      "sha256": "d51838250d2566575e13cf55eaada0fb14b57b171e4647de386d431c10944e40",
+      "file": "session-197/before-production-sewer-night-1440-held-controller.png",
+      "sha256": "d58281cccc89ef0dd9d362d6bd7fb390dfb420c3caae508d68d84e2eea693701",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -71,8 +67,8 @@
       "phase": "before"
     },
     {
-      "file": "session-196/before-production-sewer-night-1440-controller-pause.png",
-      "sha256": "26ec56ff1f58c4cb7da13065d649c7bbd7c7abd2d3ab53b87b6d428445242070",
+      "file": "session-197/before-production-sewer-night-1440-controller-pause.png",
+      "sha256": "b916bd59295e31333bb36ffc229d32251d675aa1afcb964a2047dbdf4dc330a7",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -83,20 +79,20 @@
       "phase": "before"
     },
     {
-      "file": "session-196/before-production-sewer-night-1440-summoner-protection.png",
-      "sha256": "2d2f50e78abc79a6ed25db629cce632cd2d12e542fcf30a0d6e9877c2c83a8d6",
+      "file": "session-197/before-production-sewer-night-1440-shield-pulse.png",
+      "sha256": "4d3e1e1cbe0772e39559990fab6dd788b2e413c854f25fd97e33b6bb5061416b",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "summoner-protection",
+      "page": "shield-pulse",
       "phase": "before"
     },
     {
-      "file": "session-196/before-production-porcelain-day-390-held-controller.png",
-      "sha256": "ee59eca2799f3ca63a6f5c250176de8e8b718a43e5f70c5ddbbdb4aec08a4c61",
+      "file": "session-197/before-production-porcelain-day-390-held-controller.png",
+      "sha256": "b9bf58089da12473793298dec023d2c4264e082a8fe5108b241baaa98b20b848",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -107,8 +103,8 @@
       "phase": "before"
     },
     {
-      "file": "session-196/before-production-porcelain-day-390-controller-pause.png",
-      "sha256": "f7417a02f3b8e4750f16ba0a17fb392ee723fc20fc79151a6826de1fb8ba3b2e",
+      "file": "session-197/before-production-porcelain-day-390-controller-pause.png",
+      "sha256": "a03a658d2ef4536d313017d637e2cf60de863f382ec72b961db05b1ec99a8903",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -119,20 +115,20 @@
       "phase": "before"
     },
     {
-      "file": "session-196/before-production-porcelain-day-390-summoner-protection.png",
-      "sha256": "ea349af24daa995ea6618e8917ce88e5f4cd9de0aeb3f19bf765b0fa3089f610",
+      "file": "session-197/before-production-porcelain-day-390-shield-pulse.png",
+      "sha256": "9ccb51e9ecac4ad62112eac8b98b68dd9c9a226d3eaf63c9b6df1b413fa56a46",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "summoner-protection",
+      "page": "shield-pulse",
       "phase": "before"
     },
     {
-      "file": "session-196/before-production-porcelain-day-1440-held-controller.png",
-      "sha256": "acc5a1ce17d153a7ca496d24570a3e08eef7861ac36a163861894520d4205d8d",
+      "file": "session-197/before-production-porcelain-day-1440-held-controller.png",
+      "sha256": "1a05692d8bc192c455ddf10db06bc2851a49c2c0de996065534608f1915b47bb",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -143,8 +139,8 @@
       "phase": "before"
     },
     {
-      "file": "session-196/before-production-porcelain-day-1440-controller-pause.png",
-      "sha256": "de7cc25830475e476f99642f33273a1562497912f18dfbcf392fa8595942f007",
+      "file": "session-197/before-production-porcelain-day-1440-controller-pause.png",
+      "sha256": "67da656e2a2ebe960a4ac6cda8d4b1ef3ab49539f94c15fafa3ea5aa5f5abb97",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -155,20 +151,20 @@
       "phase": "before"
     },
     {
-      "file": "session-196/before-production-porcelain-day-1440-summoner-protection.png",
-      "sha256": "7a64c192bb27d168b15c7d63f9124ea9e3cc8335746bcc4636c76c0d3b3e8715",
+      "file": "session-197/before-production-porcelain-day-1440-shield-pulse.png",
+      "sha256": "a9fb990dc8134deb179eb8c87288368f5a9b44a9ed1d94df331f1b0428879cef",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "summoner-protection",
+      "page": "shield-pulse",
       "phase": "before"
     },
     {
-      "file": "session-196/after-staging-sewer-night-390-held-controller.png",
-      "sha256": "8b9cc6d412e696193f3cd7772d2b6ca73e35296efe49e3058c2e6954acfd41b6",
+      "file": "session-197/after-staging-sewer-night-390-held-controller.png",
+      "sha256": "62e7cd795daf7bd88b80fd66deaa601dbd29a2f08d102f395e32687798b448ce",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -179,8 +175,8 @@
       "phase": "after"
     },
     {
-      "file": "session-196/after-staging-sewer-night-390-controller-pause.png",
-      "sha256": "455750e674707909487196b09dfa4c354fc0a5bd4fa2b22295cd7c3e90f5b4a3",
+      "file": "session-197/after-staging-sewer-night-390-controller-pause.png",
+      "sha256": "71670806eec555c5857269a3d9877ddf8a69ec2e911e4b3fe9164203c2db82dd",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -191,20 +187,20 @@
       "phase": "after"
     },
     {
-      "file": "session-196/after-staging-sewer-night-390-summoner-protection.png",
-      "sha256": "3a0d8e1baaff5df9bdb7aa887bc3f0dac4bca5a484d607fdab093a32ea2b10c2",
+      "file": "session-197/after-staging-sewer-night-390-shield-pulse.png",
+      "sha256": "14de24c1160c95ced05c53c3c027705b47b624838c236800ce3f9aec7dc5c5bd",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "summoner-protection",
+      "page": "shield-pulse",
       "phase": "after"
     },
     {
-      "file": "session-196/after-staging-sewer-night-1440-held-controller.png",
-      "sha256": "ff9c368ec4b902eb0a30fa887609c5561836cda79934e210b53887733a4b40b0",
+      "file": "session-197/after-staging-sewer-night-1440-held-controller.png",
+      "sha256": "ecde424a45b4ce0aaf5e71dc0f38f0ffb17a265a34e87a0d28bfb53ff562e303",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -215,8 +211,8 @@
       "phase": "after"
     },
     {
-      "file": "session-196/after-staging-sewer-night-1440-controller-pause.png",
-      "sha256": "e399a75a63eaaf1a11318cc17a57538ca4bc2afcb0698e2552af7517155e14d0",
+      "file": "session-197/after-staging-sewer-night-1440-controller-pause.png",
+      "sha256": "f795d17faaef861862c2015c774aac4b6baf5320b9758a80d5d13444832b55be",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -227,20 +223,20 @@
       "phase": "after"
     },
     {
-      "file": "session-196/after-staging-sewer-night-1440-summoner-protection.png",
-      "sha256": "996bea6a5d5dcbc322c39917429c2444caf41e753bb41582ad945eefeeb5c4a5",
+      "file": "session-197/after-staging-sewer-night-1440-shield-pulse.png",
+      "sha256": "f19c329d472866fadcd28163b1b83bf630c3bc89781e576895a7d180d51d6b1c",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "summoner-protection",
+      "page": "shield-pulse",
       "phase": "after"
     },
     {
-      "file": "session-196/after-staging-porcelain-day-390-held-controller.png",
-      "sha256": "93a8cffbc7c687862d60e528b3fe39342729be128b2eb2d012b87f4650008db2",
+      "file": "session-197/after-staging-porcelain-day-390-held-controller.png",
+      "sha256": "be07d57357dc4df864462a5bfc4cd9dd8a7fa982331d0b21f975a2a5621d3084",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -251,8 +247,8 @@
       "phase": "after"
     },
     {
-      "file": "session-196/after-staging-porcelain-day-390-controller-pause.png",
-      "sha256": "bc959c2388a886dc3e3dbeaf1e2f94cb50432ab3f54c07a6e071c194b4e5ae1c",
+      "file": "session-197/after-staging-porcelain-day-390-controller-pause.png",
+      "sha256": "81bd35e4595343ffedf029de97d6a3f9ce6f3bca15e0b0a52d8e977beb97b6a9",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -263,20 +259,20 @@
       "phase": "after"
     },
     {
-      "file": "session-196/after-staging-porcelain-day-390-summoner-protection.png",
-      "sha256": "6f6cc025f4dc5043f53ec02b334433e4347e57515db969fbc94bd32acc073f44",
+      "file": "session-197/after-staging-porcelain-day-390-shield-pulse.png",
+      "sha256": "410d956ec900fc582c4a35dffa87623e974a0e5323c0cbd137e7683a799ef466",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "summoner-protection",
+      "page": "shield-pulse",
       "phase": "after"
     },
     {
-      "file": "session-196/after-staging-porcelain-day-1440-held-controller.png",
-      "sha256": "ebcd968b0c6563f5b2155f447ee340a5a3ddb34dac30d7001b740c9c11282992",
+      "file": "session-197/after-staging-porcelain-day-1440-held-controller.png",
+      "sha256": "be75627ff939f8ffb682d4e6ea53767bf587b7279c1f96e27798e8c3e8ea5fd6",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -287,8 +283,8 @@
       "phase": "after"
     },
     {
-      "file": "session-196/after-staging-porcelain-day-1440-controller-pause.png",
-      "sha256": "da4742724f0addd888c8c03c79af3c9a4d99c43ff01ec7b7de9a791c5310c3ca",
+      "file": "session-197/after-staging-porcelain-day-1440-controller-pause.png",
+      "sha256": "4f4bb77364337b42a091b35f092cdaca5c36edb01cc3d0dc543f0a5fcc99f33d",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -299,30 +295,30 @@
       "phase": "after"
     },
     {
-      "file": "session-196/after-staging-porcelain-day-1440-summoner-protection.png",
-      "sha256": "9d8ee065809baff257e9a794163987ad4492838cec7e3a47b5e3ad876401796a",
+      "file": "session-197/after-staging-porcelain-day-1440-shield-pulse.png",
+      "sha256": "78b38c792542cfadd1bd251253c926e5e598155d82ba7641b35f7f0827fe62fb",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "summoner-protection",
+      "page": "shield-pulse",
       "phase": "after"
     }
   ],
   "inspection": {
     "renderedPixelsReviewed": true,
     "reviewer": "Codex root: three contact sheets, all24 before/after images inspected",
-    "reviewedAt": "2026-10-20T17:59:01.708Z",
-    "scope": "Controller ownership, pause and Summoner protection;390/1440;both themes.",
+    "reviewedAt": "2026-10-20T18:45:52.105Z",
+    "scope": "Shield Pulse parity, controller and pause regression;390/1440;both themes.",
     "findings": [
       "No introduced layout/readability defect in either touched gameplay state.",
       "Gameplay palette is independent of shell theme; unchanged pause composition remains readable.",
-      "Before:held controller ignored,neutral steals ownership,protected boss takes70 grenade/5chain. After:correct ownership,protected boss untouched,chain reaches eligible target."
+      "Before: pulse takes70 grenade/160rail/5chain. After: pulse blocks these sources and chain reaches eligible target."
     ],
     "fixesApplied": [
-      "Corrected stick activity and protected damage sources. QA fixture enemy names were corrected and images recaptured."
+      "Shared protection predicate added for rail, grenades and chain selection."
     ],
     "blockingDefectsOpen": 0
   },

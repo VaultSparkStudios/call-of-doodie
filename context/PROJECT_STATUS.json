@@ -4,32 +4,20 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "S196 controller ownership and Summoner protection production verified.",
-  "nextMilestone": "Collect existing participant/device acceptance evidence.",
+  "currentFocus": "Consistent Shield Pulse protection across rail, grenades and lightning.",
+  "nextMilestone": "Verify exact-main production.",
   "testingSurfaces": [
     {
-      "session": 196,
-      "type": "production",
-      "status": "green",
-      "url": "https://callofdoodie.wtf/"
-    },
-    {
-      "session": 196,
+      "session": 197,
       "type": "staging",
       "status": "green",
-      "url": "https://4e070130.call-of-doodie.pages.dev/"
+      "url": "https://5ab785fa.call-of-doodie.pages.dev/"
     },
     {
-      "session": 196,
-      "type": "production-smoke",
-      "status": "green",
-      "command": "S196 controller selection,keyboard and protected combat40/40"
-    },
-    {
-      "session": 196,
+      "session": 197,
       "type": "local-browser-capture",
       "status": "green",
-      "command": "S19624 before/after images inspected;390/1440,both themes"
+      "command": "S19724 inspected captures;390/1440,both themes"
     }
   ],
   "blockers": [
@@ -43,24 +31,24 @@
   "lastUpdated": "2026-10-20",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
-  "truthAuditStatus": "S196 both selected L2 outcomes production verified.",
+  "truthAuditStatus": "S197 selected outcome local/staging verified;production pending.",
   "truthAuditLastRun": "2026-10-20",
   "ignisScore": 44193,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-10-08",
-  "silSession": 196,
+  "silSession": 197,
   "silScore": 945,
   "silAvg3": 945,
-  "silVelocity": 2,
+  "silVelocity": 1,
   "silDebt": "flat",
-  "silLastSession": 196,
-  "currentSession": 196,
+  "silLastSession": 197,
+  "currentSession": 197,
   "sessionMode": "founder",
   "lastAgent": "codex",
-  "testsPassing": 299,
+  "testsPassing": 298,
   "testsTotal": 299,
-  "entropyScore": 0.214,
-  "entropyLastComputed": "2026-10-19",
+  "entropyScore": 0.215,
+  "entropyLastComputed": "2026-10-20",
   "silRubricVersion": "3.0",
   "silMax": 1000,
   "silScoreLegacy500": 478.5,
@@ -88,8 +76,8 @@
   "freeTierCostStatus": "cost-neutral",
   "runtimeUrl": "https://callofdoodie.wtf/",
   "stagingType": "cloudflare-pages",
-  "stagingUrl": "https://4e070130.call-of-doodie.pages.dev/",
-  "testsLastRun": "2026-10-20T18:05:35Z",
+  "stagingUrl": "https://5ab785fa.call-of-doodie.pages.dev/",
+  "testsLastRun": "2026-10-20T18:51:19.230Z",
   "sanitizationLastCleared": "2026-10-06",
   "sessionShellHygiene": {
     "session": 191,
@@ -145,16 +133,15 @@
     "note": "Studio-wide doctor evidence; not a project-only zero-findings claim. Central follow-up delivered through Ark; application unobserved."
   },
   "lastSessionSummary": {
-    "session": 196,
+    "session": 197,
     "shipped": [
-      "Reliable controller ownership",
-      "Consistent Summoner protection"
+      "Consistent Shield Pulse protection across rail, grenades and lightning."
     ],
-    "tests": "299 files /2075 assertions passing",
-    "deploy": "729870fb560e production verified"
+    "tests": "298/299 files;2080/2081 assertions,isolated startup1/1",
+    "deploy": "pending exact-main production"
   },
-  "testsAssertionsPassing": 2075,
-  "testsAssertionsTotal": 2075,
+  "testsAssertionsPassing": 2080,
+  "testsAssertionsTotal": 2081,
   "testsAssertionsFiles": 299,
   "testsFlaky": [],
   "testsInconclusive": [],
@@ -163,35 +150,28 @@
   "testsBudgetExhausted": false,
   "silAvg5": 945,
   "testsAssertionsDeferred": [],
-  "testsAssertionsLastRun": "2026-10-20T18:05:35Z",
-  "lastShipped": "S196 controller ownership and protected damage consistency.",
-  "truthStatus": "FORGE/public-unlaunched unchanged. Synthetic controller/keyboard and assisted App ticks do not prove physical-device or participant results. Unknown nonstandard layouts first seen at a stick endpoint retain calibration ambiguity. Existing S183 comparisons remain unmeasured. No dependency, backend, identity/trust-policy, variable cost, rights, licensing or launch change. CDR unchanged without creative direction.",
-  "testsFocusedSupplement": "S19683 focused passing; initial10 pre-fix regressions and reviewer edge covered.",
+  "testsAssertionsLastRun": "2026-10-20T18:51:19.231Z",
+  "lastShipped": "S197 consistent Shield Pulse protection.",
+  "truthStatus": "FORGE/public-unlaunched unchanged. Real Chrome with synthetic controller/keyboard and assisted App state/ticks does not prove physical-device or participant outcomes. Existing S183 comparisons remain unmeasured. No backend, dependency, identity/trust-policy, variable cost, rights or launch change. CDR legitimately unchanged without creative direction.",
+  "testsFocusedSupplement": "S19766 focused;4 failing-before regressions;full suite includes strengthened guaranteed-crit guard.",
   "lastDeployCommit": "729870fb560e776f947f84957c83db6fea1ba2d3",
   "lastDeployAt": "2026-10-20T18:05:35Z",
   "closeoutAcceptance": {
-    "session": 196,
-    "state": "complete",
-    "writeback": "ten surfaces reconciled; CDR legitimately unchanged",
+    "session": 197,
+    "state": "delivery-pending",
+    "writeback": "ten surfaces reconciled;CDR legitimately unchanged",
     "scaffold": {
       "tasks": 3,
-      "done": 3,
-      "inProgress": 0,
+      "done": 2,
+      "inProgress": 1,
       "open": 0
     },
-    "independentReview": "Source pass after1 correction; final records review pass after3 record fixes.",
-    "localSuite": "Final full local299/2075 passed;83 focused pass. Initial10 failing-before cases; independent review trigger regression corrected,second review passes. Staging40/40 and shell7/7;24 before/after images inspected and hash-bound. Native schema/startup/public/security/runtime checks pass;dependency audit0 vulnerabilities. Earlier full run caught the reviewer edge before its final correction; final full run green.",
-    "production": {
-      "source": "729870fb560e776f947f84957c83db6fea1ba2d3",
-      "workflow": 39471382673,
-      "immutableUrl": "https://f3b3056d.call-of-doodie.pages.dev",
-      "canonical": "https://callofdoodie.wtf/",
-      "browserAssertions": 40
-    }
+    "independentReview": "source pass;test improvement applied",
+    "localSuite": "S197 local full299 files/2081 assertions:2080 passed,one startup/session-binding fixture timeout at44s under load;unchanged isolated rerun1/1 passed. This is not a passing full local run. Focused66/66 before final full;four failing-before regressions. Independent source review passed;guaranteed-crit assertion strengthened and re-reviewed. Staging https://5ab785fa.call-of-doodie.pages.dev shell7/7 and browser44/44 across390/1440,both themes. Before protected HP fell by70 grenade/160rail/5chain;after pulse blocks each,vulnerable grenade70 and chain fallback5 retained.24 before/after captures visually inspected and hash-bound to both runtime sources. Strict lint,configured build,public/security/runtime checks pass;dependency audit0 vulnerabilities. Exact-main hosted FULL suite is mandatory before production."
   },
-  "testsLastRunMode": "full-hosted-exact-main",
-  "velocity": 2,
-  "silVelocityLastSession": 2,
+  "testsLastRunMode": "full-local",
+  "velocity": 1,
+  "silVelocityLastSession": 1,
   "deploy": {
     "source": "729870fb560e776f947f84957c83db6fea1ba2d3",
     "workflow": 39471382673,
@@ -201,7 +181,7 @@
     "url": "https://callofdoodie.wtf/",
     "deployedAt": "2026-10-20T18:05:35Z"
   },
-  "lastSession": 196,
+  "lastSession": 197,
   "silAvg10": 940.5,
   "silAvg25": 965.6,
   "silAvgAll": 988.5,

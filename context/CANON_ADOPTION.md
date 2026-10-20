@@ -64,3 +64,4 @@ Audience: public-unlaunched · Live ACTIVE canons: 55 · Pending review: 0
 | CANON-054 | Public Stats Surface: every website reports and analyzes its | adopted | `/stats/` publishes a dated six-metric release snapshot with interpretations, scope, privacy-safe aggregates, and `/stats-surface.json`; the live Sewer Network remains the current in-game view. |
 | CANON-055 | Surface Follow-Through: every project change reaches the thi | adopted | Session 181 reaches the landing page, play menu, debrief, account, feedback, public docs, Board and Stats; the route matrix and visual receipt cover both themes and desktop/mobile. |
 | CANON-056 | AI + SI Hybrid Terminology: keep AI, add Synthetic Intellige | adopted | S186 actively reviewed the rule and ran check-si-terminology against this project: 100 public content files scanned without truncation or findings. No terminology changes introduced. |
+
