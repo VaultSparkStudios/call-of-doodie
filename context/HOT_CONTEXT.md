@@ -4,6 +4,18 @@
 
 ## Current Session
 
+## S194 candidate acceptance
+
+S194 local299-file run:2055 passed,1 startup fixture timeout at43.6s under load; unchanged isolated startup fixture then passed1/1 in25.8s. All gameplay regressions pass. Strict lint/configured build/schema/startup/public/security/runtime gates pass; dependency audit0 vulnerabilities. Staging48c2ee6d shell7/7 and browser24/24 at390/1440/both themes.24 inspected before/after images hash-bound to all3 changed runtime sources. Independent review pass after screen-lifetime correction. Exact-main hosted full-suite and production acceptance pending.
+
+Unchanged remote backend diagnostics degraded: leaderboard reads504/timeouts; replay valid/weak cases pass but malformed case returned provider546. No backend source/configuration change. These are not claimed green; routine client promotion required-check contract is hosted quality and build-and-deploy plus changed-input/combat staging acceptance. Existing guest identity unchanged. Recheck service separately.
+
+## S194 candidate
+
+S194 consumes controller menu presses and restores Railgun Last Resort.
+
+Both selected L2 fixes implemented and independently reviewed. Staging48c2ee6d passes shell7/7 and browser24/24 across390/1440 and both themes. Full-suite and backend verification still in progress; production pending.
+
 ## S193 production verified
 
 Shield Guy protects the visible front; held keyboard actions preserve pause and reload.
@@ -96,32 +108,12 @@ S188 implementation f8b3254c75b90a3542420d6fa83cd3b108f5b1d3 passed exact-main w
 
 ## S188 candidate verification
 
-S188 full local suite passes 296/296 files and 1,995/1,995 assertions. Strict lint, configured build, security/public contracts, independent review, 16 reviewed captures and four staging browser cases pass. Exact-main CI/deployment and production readback pending.
-
-## S188 projectile contact reliability
-
-S188 fixes consumed-projectile damage and repeated piercing contacts.
-
-Ordinary, shield and invulnerable-summoner collisions stop consumed shots before another enemy; finite pierce capacity is respected. Weak per-projectile target membership prevents repeated damage/rewards during overlap or reentry; independent bullets remain independent and boomerangs can hit once on each pass.
-
-Staging verified; exact-main release pending. See LATEST_HANDOFF for current proof.
-
-## S187 production verified
-
-Four selected fixes are live at 40e619d78bc7. All 296 files / 1988 assertions pass exact-main CI. See [LATEST_HANDOFF](LATEST_HANDOFF.md) for deployment evidence, rollback and limits.
-
-## S187 timing and preference reliability
-
-S187 fixes paused ability recharge, speed-pickup stat corruption, ignored reload preference and missing startup sync.
-
-Local suite and staging verified; exact-main delivery pending. See [LATEST_HANDOFF](LATEST_HANDOFF.md) for acceptance evidence and limits.
-
-## S186 production verified
-
-S186 sour
+S188 full local suite
 
 ## Open Work
 
+## S194 arc outcomes and waves
+- [ ] S194 production and full closeout acceptance.
 ## S193 arc outcomes and waves
 - [ ] [SIL:1] S193 reserve: matched shield/flanking comprehension study with representative participants.
 - [ ] [SIL:1] S193 reserve: physical keyboard/controller interruption comparison.
@@ -175,23 +167,8 @@ S186 sour
 - [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET on the Pages project so Porcelain Passport verification and cloud backup stop answering 503.
 ## Session 165 - Scrolling camera, live royale bots, death-beat diet, record recovery
 - [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET on the Pages project: neither is in the secrets gateway, so Porcelain Passport verification (and therefore cloud backup) answers 503 in production until they exist.
-- [ ] [SIL:2] Never continue work under a sealed session number — open the next number instead. Carried from the S164 SIL brainstorm.
-## Session 163 - Real modes, CPU squad, fixed timestep, single brand
 
 ## Recent Decisions
-
-## 2026-10-19 — Session 190
-
-Use active60Hz simulation for primary fire and duration. Minimum1frame cooldown preserves bounded firing; interval modifiers remain effective. Operations records active start marker; legacy/headless fixtures retain frame fallback. Separate wall timestamps continue to order external events. Typed gate2/2 ran before runtime edits with empty implementationDirty. Timing verifier flags startup propagation18cbf19 hook/trailer paths committed after start_head; it is not reported as a passing timing check. Audit recipes preceded edits; durable implementation plan rendered afterward.
-
-Existing CANON-045 STRONG integration gap is retained because guest timing changes do not alter identity/trust. Foreign doctor outputs do not certify this project; state-vector, entropy and genome wrappers bind this project explicitly. Scoped recipient gates and exact-candidate CI own release acceptance. FORGE/public-unlaunched unchanged. Assisted App fixtures and synthetic inputs do not prove physical-controller or participant outcomes. Existing S183 comparisons remain separate and unmeasured. No new identity, backend, dependency, licensing, spending or launch change. CDR unchanged without creative direction.
-
-
-S190 release acceptance — S190 implementation 3548fb5b4445a01a2e5d58ae8ecefe9cc1d924cc passed exact-main workflow 39344132347: all 298 test files / 2,024 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 3548fb5b4445. Canonical and immutable https://55bb853c.call-of-doodie.pages.dev pass shell 7/7 each. All 16 actual-App browser assertions pass across 390/1440 and both themes: equal 21/21 shot counts, no wall-jump extra shot, and active 0:02 terminal time for 120 frames.
-
-Routine staging/main/promotion uses existing founder authorization. Records-only seal preserves tested runtime and receives exact-main CI/readback. FORGE/public-unlaunched unchanged. Browser checks use assisted actual-App state/callback fixtures and synthetic input. Physical controllers, participant outcomes and the existing S183 comparisons remain unmeasured. CDR unchanged without creative direction.
-
-
 
 ## 2026-10-20 — Session 191
 
@@ -223,9 +200,15 @@ Use incoming source direction for the existing player-facing shield; preserve he
 
 S193 final acceptance: S193 implementation 49c6b60eb9e40b7e343daa6073ac7a424f4eaeb5 passed exact-main workflow 39366155584: 299 test files/2049 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 49c6b60eb9e4. Canonical and immutable https://e023d899.call-of-doodie.pages.dev shell7/7 each; production browser28/28 across390/1440/both themes proves front4/rear32, stable held Escape/reload, and held/released movement.
 
+
+
+## 2026-10-20 — Session 194
+
+Persist controller button history across listener/screen transitions and sample it even when gameplay is blocked. Start owns a poll before combat effects. Share Last Resort's below25% threshold between rail and bullets; preserve rail shield policy and per-target lifesteal semantics. Existing CANON-045 STRONG gap retained for unchanged guest-game promotion. FORGE/public-unlaunched unchanged. Assisted App state/ticks and synthetic controller/keyboard do not prove participant or physical-pad behavior. Existing S183 comparisons remain unmeasured. No backend, dependencies, identity/trust policy, cost, licensing or launch changes. CDR legitimately unchanged without creative direction.
+
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 269,690 bytes · SHA-256 `1ab2cef95217…`
-- `context/TASK_BOARD.md` · 185,765 bytes · SHA-256 `526f4b8826e2…`
-- `context/DECISIONS.md` · 184,574 bytes · SHA-256 `d59122be1701…`
+- `context/CURRENT_STATE.md` · 270,998 bytes · SHA-256 `fe1da08bb16d…`
+- `context/TASK_BOARD.md` · 186,423 bytes · SHA-256 `d08a6160ac1f…`
+- `context/DECISIONS.md` · 185,295 bytes · SHA-256 `35cfd6123042…`
 - `docs/AUDIT_2026-10-18.json` · 6,892 bytes · SHA-256 `b34b668a7b5a…`

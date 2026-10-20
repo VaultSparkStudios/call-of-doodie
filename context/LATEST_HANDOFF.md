@@ -1,21 +1,26 @@
-## Where We Left Off — Session 193 final closeout
+## Where We Left Off — Session 194
 
-Session Intent: fresh full /arc, authorized direct-main commit/push and full deployment. Intent outcome: both selected L2 outcomes verified on production. Final records seal receives exact-main CI/readback before native completion.
+Session Intent: fresh full /arc, authorized direct-main commit/push and full deployment. Intent outcome: in progress.
 
-S193 implementation 49c6b60eb9e40b7e343daa6073ac7a424f4eaeb5 passed exact-main workflow 39366155584: 299 test files/2049 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 49c6b60eb9e4. Canonical and immutable https://e023d899.call-of-doodie.pages.dev shell7/7 each; production browser28/28 across390/1440/both themes proves front4/rear32, stable held Escape/reload, and held/released movement.
+S194 consumes controller menu presses and restores Railgun Last Resort.
 
-Native goal01a1575d-f676-7860-82d2-06102ca16101 createdAt1792467172 bound S193/startb4362a41e9799b7ab1b40c527a6a100b54c738df. Fresh startup, nine-axis/game-loop audit and L2 plan in ignored .cache/audit-S193/docs. Typed2/2 premise gate passed before implementation with dirty paths0; timing verified.
+S194 completed a fresh game-loop audit and selected these two correctness outcomes.
 
-Shield incoming/source direction now matches visible player-facing protection, preserving side boundary and rail policy. App and DialogShell consume repeated discrete keys while held movement/interact and keyup remain intact. Browser exposed capture-phase handler beyond mocked App coverage; root correction and test were re-reviewed. Final full local/hosted299/2049, strict lint/build, schema/startup/public/security/runtime, backend and replay gates pass.24 inspected before/after images hash-bound to all three changed source files.
+Controller edge ledger now samples all discrete actions before barriers and persists across screen/listener changes. Start consumes the entire transition poll. Blocked menu presses require release/repress before spending dash/grenade/reload/swap. Independent review found the screen-bound ledger reset; fixed with persistent ref and actual App regression, second review pass0 findings. Rail uses shared Last Resort factor below25% health, preserving snapshot, critical/combo/rage/shield policy and per-target lifesteal threshold semantics.
 
-FORGE/public-unlaunched unchanged. Assisted App state/ticks and synthetic keyboard do not prove participant or physical-controller outcomes. Existing S183 comparisons remain unmeasured. CDR unchanged without creative direction.
+Both selected L2 fixes implemented and independently reviewed. Staging48c2ee6d passes shell7/7 and browser24/24 across390/1440 and both themes. Full-suite and backend verification still in progress; production pending.
 
-Canon reconciliation55 checked; offline absolute gaps0; existing CANON-045 STRONG gap retained for unchanged guest-game promotion. Manual/doctor-owned evidence not called conformed. Foreign doctor/autopilot excluded; recipient-local native gates and exact-candidate hosted quality/build-and-deploy own release acceptance. Local legacy session-floor ignores selected audits; explicit subject-bound canonical checkpoint records both shipped with dated notes, remaining0, dispositioncomplete. Initial mismatched public audit scaffold corrected in final seal; project status/task board/audit agree3/3.
+Before browser reproduced held Reload firing after pause and rail160 at24HP. After browser proves no stale Reload, fresh Reload usable, rail480 at24HP and160 at25HP, held/released keyboard movement.24 before/after captures inspected across390/1440 and both themes; no introduced layout/readability defect. Initial browser fixture searched nonexistent default perk keys; corrected to actual xpMult ref. No implementation claim derived from that failed fixture.
 
-All ten writebacks reconciled; append-only decision/SIL/work logs extended, CDR legitimately unchanged. State-vector/entropy/genome refreshed with explicit project scope. Signed Ark cargo requests central visibility refresh; shipment is not adoption. Rollback: ordinary revert 49c6b60 and rebuild/deploy prior mainb4362a4. No lifecycle approval inferred.
+FORGE/public-unlaunched unchanged. Assisted App state/ticks and synthetic controller/keyboard do not prove participant or physical-pad behavior. Existing S183 comparisons remain unmeasured. No backend, dependencies, identity/trust policy, cost, licensing or launch changes. CDR legitimately unchanged without creative direction.
 
-## S193 candidate acceptance
+Release acceptance uses the exact candidate checks and current staging behavior. Existing integration and physical-device evidence gaps remain explicit; no launch readiness is inferred.
 
-S193 final local suite passes 299/299 files and 2049/2049 assertions with no failed/pending tests. Strict lint, configured build, schema/startup/public/security/runtime gates pass; dependency audit zero vulnerabilities; backend check and replay3/3 pass. Staging1da5492a shell7/7 and browser28/28 pass at390/1440/both themes;24 before/after captures inspected/hash-bound. Final independent review approved App, DialogShell and shield corrections. Exact-main production pending.
+Rollback ordinary revert S194 runtime change and rebuild/redeploy prior main0d4ef8f. Existing deployment authorization retained; no lifecycle change.
 
-Development failures retained in ignored cache: initial unit fixture referenced wrong barrier key; first browser pass inspected lazy loading, corrected wait exposed DialogShell capture handler. Added root fix and test, re-reviewed, rebuilt, redeployed and reran final full acceptance. No failing result called passing.
+
+## S194 candidate acceptance
+
+S194 local299-file run:2055 passed,1 startup fixture timeout at43.6s under load; unchanged isolated startup fixture then passed1/1 in25.8s. All gameplay regressions pass. Strict lint/configured build/schema/startup/public/security/runtime gates pass; dependency audit0 vulnerabilities. Staging48c2ee6d shell7/7 and browser24/24 at390/1440/both themes.24 inspected before/after images hash-bound to all3 changed runtime sources. Independent review pass after screen-lifetime correction. Exact-main hosted full-suite and production acceptance pending.
+
+Unchanged remote backend diagnostics degraded: leaderboard reads504/timeouts; replay valid/weak cases pass but malformed case returned provider546. No backend source/configuration change. These are not claimed green; routine client promotion required-check contract is hosted quality and build-and-deploy plus changed-input/combat staging acceptance. Existing guest identity unchanged. Recheck service separately.

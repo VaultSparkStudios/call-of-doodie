@@ -1,3 +1,14 @@
+## S194 arc outcomes and waves
+
+Session Intent: fresh full arc, authorized direct main push and full deployment.
+
+Wave 1 ✔ startup and fresh audit. Wave 2 ✔ implementation acceptance. Wave 3 ◼ production and closeout.
+
+- [x] S194 controller-menu-edges L2 acceptance.
+- [x] S194 rail-last-resort L2 acceptance.
+- [ ] S194 production and full closeout acceptance.
+
+
 ## S193 arc outcomes and waves
 
 Session Intent: fresh full arc, authorized main commit/push and full deployment.
@@ -813,6 +824,9 @@ First checkpoint the bounded post-S159 propagation/CI/deploy recovery. Then begi
 - [ ] [Human/Data] [SIL:1] HomeV2 analytics funnel — compare `home_v2_deploy` vs legacy `front_door_action` completion rates after 48h of traffic
 
 ## Next
+
+- [ ] [SIL:1] [S194 reserve] Match input-edge interruption timelines on representative physical pads; dependency device observation, owner project.
+- [ ] [SIL:1] [S194 reserve] Extend cross-weapon policy matrix only when a new advertised damage behavior needs acceptance; owner project.
 
 - [ ] [SIL:2] **S181 evidence gate** Test Field Lab valve consequences, complaint cues and paired tactical attempts with representative players before considering live unranked Operation integration; retain competitive isolation until readability and fairness are observed.
 - [ ] [SIL:1] **S181 measurement gate** If paid project inference is introduced, measure real billed prompt/completion tokens and quality on representative tasks; current bounded-context byte counts are only a proxy.

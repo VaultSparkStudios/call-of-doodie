@@ -1,3 +1,11 @@
+## S194 controller and rail correctness
+
+S194 consumes controller menu presses and restores Railgun Last Resort.
+
+Both selected L2 fixes implemented and independently reviewed. Staging48c2ee6d passes shell7/7 and browser24/24 across390/1440 and both themes. Full-suite and backend verification still in progress; production pending.
+
+FORGE/public-unlaunched unchanged. Assisted App state/ticks and synthetic controller/keyboard do not prove participant or physical-pad behavior. Existing S183 comparisons remain unmeasured. No backend, dependencies, identity/trust policy, cost, licensing or launch changes. CDR legitimately unchanged without creative direction.
+
 ## S193 production acceptance
 
 S193 implementation 49c6b60eb9e40b7e343daa6073ac7a424f4eaeb5 passed exact-main workflow 39366155584: 299 test files/2049 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 49c6b60eb9e4. Canonical and immutable https://e023d899.call-of-doodie.pages.dev shell7/7 each; production browser28/28 across390/1440/both themes proves front4/rear32, stable held Escape/reload, and held/released movement.

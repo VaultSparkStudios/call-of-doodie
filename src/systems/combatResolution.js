@@ -63,6 +63,10 @@ export function getShieldFacingMultiplier({ enemy, bullet, player }) {
   return angleDiff < Math.PI / 2 ? 0.20 : 1.60;
 }
 
+export function getLastResortMultiplier(player, enabled = false) {
+  return enabled && player?.health < (player?.maxHealth || 0) * 0.25 ? 3.0 : 1.0;
+}
+
 export function computeBulletDamage({
   bullet,
   enemy,
@@ -75,7 +79,7 @@ export function computeBulletDamage({
   rageActive = false,
 } = {}) {
   const comboMult = 1 + Math.max(0, comboCount) * 0.1;
-  const lastResortMult = lastResort && player?.health < (player?.maxHealth || 0) * 0.25 ? 3.0 : 1.0;
+  const lastResortMult = getLastResortMultiplier(player, lastResort);
   const shieldMult = getShieldFacingMultiplier({ enemy, bullet, player });
   const rageMult = rageActive ? 1.75 : 1.0;
   const jugShieldMult = enemy?.typeIndex === 17 && (enemy.jugShield || 0) > 0 ? 0.15 : 1.0;

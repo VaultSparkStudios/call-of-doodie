@@ -1678,3 +1678,8 @@ Use incoming source direction for the existing player-facing shield; preserve he
 
 
 S193 final acceptance: S193 implementation 49c6b60eb9e40b7e343daa6073ac7a424f4eaeb5 passed exact-main workflow 39366155584: 299 test files/2049 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 49c6b60eb9e4. Canonical and immutable https://e023d899.call-of-doodie.pages.dev shell7/7 each; production browser28/28 across390/1440/both themes proves front4/rear32, stable held Escape/reload, and held/released movement.
+
+
+## 2026-10-20 — Session 194
+
+Persist controller button history across listener/screen transitions and sample it even when gameplay is blocked. Start owns a poll before combat effects. Share Last Resort's below25% threshold between rail and bullets; preserve rail shield policy and per-target lifesteal semantics. Existing CANON-045 STRONG gap retained for unchanged guest-game promotion. FORGE/public-unlaunched unchanged. Assisted App state/ticks and synthetic controller/keyboard do not prove participant or physical-pad behavior. Existing S183 comparisons remain unmeasured. No backend, dependencies, identity/trust policy, cost, licensing or launch changes. CDR legitimately unchanged without creative direction.

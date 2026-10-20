@@ -230,6 +230,7 @@ export default function CallOfDoodie() {
   const gamepadAngleRef  = useRef(null);  // gamepad right-stick aim angle (null = not active)
   const gamepadPollRef   = useRef(null);  // interval id for gamepad polling
   const gamepadMetaRef   = useRef({ connected: false, index: null, id: "", type: "controller" });
+  const gamepadButtonsRef = useRef({}); // edge history survives screen/listener transitions
   const inputActivityRef = useRef({ keyboard: 0, mouse: 0, touch: 0, gamepad: 0 });
   const inputReleaseReceiptRef = useRef(null);
   const inputCalibrationRef = useRef(typeof window === "undefined" ? null : loadInputCalibration());
@@ -3656,8 +3657,7 @@ export default function CallOfDoodie() {
 
   // ── Gamepad polling ───────────────────────────────────────────────────────
   useEffect(() => {
-    let lastPrevWeapon = false, lastNextWeapon = false, lastStart = false;
-    let lastDash = false, lastGrenade = false, lastReload = false;
+    const lastButtons = gamepadButtonsRef.current;
     let lastGpConnected = false;
 
     const poll = () => {
@@ -3691,19 +3691,34 @@ export default function CallOfDoodie() {
       };
       inputDeviceRef.current = cType;
 
+      // Sample every edge while menus own input too. A button used in a menu
+      // must be released and pressed again before it can spend a combat action.
+      const deadZone = settingsRef.current.controllerDeadZone ?? 0.2;
+      const controls = readGamepadControls(gp, deadZone);
+      const dashPressed = controls.dash && !lastButtons.dash;
+      const grenadePressed = controls.grenade && !lastButtons.grenade;
+      const reloadPressed = controls.reload && !lastButtons.reload;
+      const previousPressed = controls.previousWeapon && !lastButtons.previousWeapon;
+      const nextPressed = controls.nextWeapon && !lastButtons.nextWeapon;
+      const startPressed = controls.pause && !lastButtons.pause;
+      for (const action of ["dash", "grenade", "reload", "previousWeapon", "nextWeapon", "pause"]) {
+        lastButtons[action] = !!controls[action];
+      }
+
+      // Start owns this poll, including when it resumes the run. Do not apply
+      // movement, shooting or simultaneous action presses across the transition.
+      if (screen === "game" && startPressed) {
+        transitionPause(!pausedRef.current, "controller");
+        releaseAllInputs("gamepad-pause-transition", ["gamepad"]);
+        return;
+      }
       if (screen !== "game" || isGameplayBlocked()) {
-        // While paused still handle Start button to unpause
-        const start = gp.buttons[9]?.pressed;
-        if (screen === "game" && start && !lastStart) transitionPause(!pausedRef.current, "controller");
-        lastStart = !!start;
         // Clear controller movement so player doesn't keep moving when unpaused.
         // Keyboard state is owned by keyboard events and must not be overwritten here.
         releaseAllInputs("gamepad-paused", ["gamepad"]);
         return;
       }
 
-      const deadZone = settingsRef.current.controllerDeadZone ?? 0.2;
-      const controls = readGamepadControls(gp, deadZone);
       if (controls.left.active || controls.right.active || controls.shoot || controls.dash
         || controls.grenade || controls.reload || controls.previousWeapon || controls.nextWeapon || controls.pause) {
         markInputActivity("gamepad");
@@ -3730,30 +3745,20 @@ export default function CallOfDoodie() {
       gamepadShootRef.current = controls.shoot;
 
       // A/Cross → dash (edge-triggered)
-      if (controls.dash && !lastDash) doDash();
-      lastDash = !!controls.dash;
+      if (dashPressed) doDash();
 
       // B/Circle → grenade (edge-triggered)
-      if (controls.grenade && !lastGrenade) throwGrenade();
-      lastGrenade = !!controls.grenade;
+      if (grenadePressed) throwGrenade();
 
       // Button 2 (X/Square / ☐) → reload (edge-triggered)
-      if (controls.reload && !lastReload) doReload(currentWeaponRef.current);
-      lastReload = !!controls.reload;
+      if (reloadPressed) doReload(currentWeaponRef.current);
 
       // LT (button 6) → ADS / zoom (analog-aware)
       const ltValue = gp.buttons[6]?.value ?? (gp.buttons[6]?.pressed ? 1 : 0);
       if (gsRef.current) gsRef.current.adsZoom = ltValue > 0.3;
 
-      if (controls.previousWeapon && !lastPrevWeapon) switchWeapon(((currentWeaponRef.current - 1) + WEAPONS.length) % WEAPONS.length);
-      if (controls.nextWeapon && !lastNextWeapon) switchWeapon((currentWeaponRef.current + 1) % WEAPONS.length);
-      lastPrevWeapon = !!controls.previousWeapon;
-      lastNextWeapon = !!controls.nextWeapon;
-
-      // Button 9 (Start/Options) → toggle pause (edge-triggered)
-      const start = controls.pause;
-      if (start && !lastStart) transitionPause(!pausedRef.current, "controller");
-      lastStart = !!start;
+      if (previousPressed) switchWeapon(((currentWeaponRef.current - 1) + WEAPONS.length) % WEAPONS.length);
+      if (nextPressed) switchWeapon((currentWeaponRef.current + 1) % WEAPONS.length);
     };
 
     const handleGamepadDisconnected = () => releaseAllInputs("gamepad-disconnected", ["gamepad"]);

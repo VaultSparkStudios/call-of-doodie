@@ -2058,3 +2058,10 @@ S193 candidate acceptance: S193 final local suite passes 299/299 files and 2049/
 
 
 S193 final acceptance: S193 implementation 49c6b60eb9e40b7e343daa6073ac7a424f4eaeb5 passed exact-main workflow 39366155584: 299 test files/2049 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 49c6b60eb9e4. Canonical and immutable https://e023d899.call-of-doodie.pages.dev shell7/7 each; production browser28/28 across390/1440/both themes proves front4/rear32, stable held Escape/reload, and held/released movement.
+
+
+## 2026-10-20 — Session 194
+
+S194 consumes controller menu presses and restores Railgun Last Resort. Fresh startup/audit and both L2 fixes. Both selected L2 fixes implemented and independently reviewed. Staging48c2ee6d passes shell7/7 and browser24/24 across390/1440 and both themes. Full-suite and backend verification still in progress; production pending.
+
+S194 candidate: S194 local299-file run:2055 passed,1 startup fixture timeout at43.6s under load; unchanged isolated startup fixture then passed1/1 in25.8s. All gameplay regressions pass. Strict lint/configured build/schema/startup/public/security/runtime gates pass; dependency audit0 vulnerabilities. Staging48c2ee6d shell7/7 and browser24/24 at390/1440/both themes.24 inspected before/after images hash-bound to all3 changed runtime sources. Independent review pass after screen-lifetime correction. Exact-main hosted full-suite and production acceptance pending. Unchanged remote backend diagnostics degraded: leaderboard reads504/timeouts; replay valid/weak cases pass but malformed case returned provider546. No backend source/configuration change. These are not claimed green; routine client promotion required-check contract is hosted quality and build-and-deploy plus changed-input/combat staging acceptance. Existing guest identity unchanged. Recheck service separately.

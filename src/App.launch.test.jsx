@@ -351,6 +351,70 @@ describe("CallOfDoodie launch smoke", () => {
     await key("m", true);
     expect(setMuted).toHaveBeenCalledTimes(1);
   }, 60000);
+  it("keeps sampled controller menu edges when the screen listener changes", async () => {
+    const buttons = Array.from({ length: 17 }, () => ({ pressed: false, value: 0 }));
+    buttons[9] = { pressed: true, value: 1 };
+    const pad = { index: 0, id: "Xbox screen edge", mapping: "standard", axes: [0, 0, 0, 0], buttons };
+    const prior = Object.getOwnPropertyDescriptor(navigator, "getGamepads");
+    Object.defineProperty(navigator, "getGamepads", { configurable: true, value: () => [pad] });
+    try {
+      const { default: App } = await import("./App.jsx");
+      container = document.createElement("div"); document.body.appendChild(container); root = createRoot(container);
+      await act(async () => { root.render(<App />); }); await flush();
+      await act(async () => { container.querySelector("button").click(); }); await flush();
+      expect(barrierFixture.refs.paused.current).toBe(false);
+      await act(async () => { buttons[9] = { pressed: false, value: 0 }; await new Promise(resolve => setTimeout(resolve, 40)); });
+      await act(async () => { buttons[9] = { pressed: true, value: 1 }; await new Promise(resolve => setTimeout(resolve, 40)); });
+      expect(barrierFixture.refs.paused.current).toBe(true);
+    } finally {
+      if (prior) Object.defineProperty(navigator, "getGamepads", prior);
+      else delete navigator.getGamepads;
+    }
+  }, 60000);
+  it("consumes held menu buttons across every gameplay barrier and honors fresh controller presses", async () => {
+    await mountRun();
+    const gs = barrierFixture.input.gsRef.current;
+    const buttons = Array.from({ length: 17 }, () => ({ pressed: false, value: 0 }));
+    const pad = { index: 0, id: "Xbox edge test", mapping: "standard", connected: true, axes: [0, 0, 0, 0], buttons };
+    const prior = Object.getOwnPropertyDescriptor(navigator, "getGamepads");
+    Object.defineProperty(navigator, "getGamepads", { configurable: true, value: () => [pad] });
+    const { soundDash, soundGrenadeAt, soundReload, soundWeaponSwap } = await import("./audio/soundFacade.js");
+    const sounds = [soundDash, soundGrenadeAt, soundReload, soundWeaponSwap];
+    const poll = async () => { await act(async () => { await new Promise(resolve => setTimeout(resolve, 40)); }); };
+    const press = value => { for (const index of [0, 1, 2, 4, 5]) buttons[index] = { pressed: value, value: Number(value) }; };
+    try {
+      for (const [name, ref] of Object.entries(barrierFixture.refs)) {
+        press(false); await poll();
+        ref.current = true;
+        for (const sound of sounds) sound.mockClear();
+        const grenades = gs.grenades.length;
+        press(true); await poll();
+        ref.current = false; await poll();
+        expect(gs.grenades.length, name).toBe(grenades);
+        for (const sound of sounds) expect(sound, name).not.toHaveBeenCalled();
+      }
+      press(false); await poll();
+      for (const sound of sounds) sound.mockClear();
+      gs.ammoCount = 0;
+      buttons[2] = { pressed: true, value: 1 }; await poll();
+      expect(soundReload).toHaveBeenCalledOnce();
+      await poll(); expect(soundReload).toHaveBeenCalledOnce();
+      buttons[2] = { pressed: false, value: 0 }; await poll();
+      // Start must block the entire poll, even when combat buttons rise together.
+      for (const sound of sounds) sound.mockClear();
+      press(true); buttons[9] = { pressed: true, value: 1 }; await poll();
+      expect(barrierFixture.refs.paused.current).toBe(true);
+      for (const sound of sounds) expect(sound).not.toHaveBeenCalled();
+      await poll(); expect(barrierFixture.refs.paused.current).toBe(true);
+      buttons[9] = { pressed: false, value: 0 }; await poll();
+      buttons[9] = { pressed: true, value: 1 }; await poll();
+      expect(barrierFixture.refs.paused.current).toBe(false);
+      for (const sound of sounds) expect(sound).not.toHaveBeenCalled();
+    } finally {
+      if (prior) Object.defineProperty(navigator, "getGamepads", prior);
+      else delete navigator.getGamepads;
+    }
+  }, 60000);
   it.each(["resolve", "reject"])("ignores an older ticket %s after the replacement ticket arrives", async (outcome) => {
     let resolveOld, rejectOld;
     issueRunTokenMock.mockImplementationOnce(() => new Promise((resolve, reject) => { resolveOld = resolve; rejectOld = reject; }))

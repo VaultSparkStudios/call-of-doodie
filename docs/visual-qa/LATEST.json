@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-10-20T03:45:09.155Z",
-  "uiBaseRef": "b4362a41e9799b7ab1b40c527a6a100b54c738df",
-  "stagingUrl": "https://1da5492a.call-of-doodie.pages.dev/",
+  "capturedAt": "2026-10-20T05:47:25.023Z",
+  "uiBaseRef": "0d4ef8f7ffe217e7e4a756c8902a8a40748e2ed5",
+  "stagingUrl": "https://48c2ee6d.call-of-doodie.pages.dev/",
   "themes": [
     "dark",
     "light"
@@ -10,326 +10,325 @@
   "sourceFiles": [
     {
       "file": "src/App.jsx",
-      "sha256": "72bf049c18f6eab3dde97b2405cb49b9cba0d1b83cbb25ce6e9555d5615b29cb"
+      "sha256": "96c3223dcd8af9b035bfd5c29eada61204caec9db422c9914e3a2db50984360b"
     },
     {
-      "file": "src/components/DialogShell.jsx",
-      "sha256": "c152132fa47cf404ee87bca556895aba5b6a418d340f9275b7d065440d0e7ec8"
+      "file": "src/systems/projectileFrame.js",
+      "sha256": "4b5af8908b0574e5aed01c921256c6e89e432b9a9748b28590af3fd704e2da11"
     },
     {
       "file": "src/systems/combatResolution.js",
-      "sha256": "3f1cab1d3bce38f7d8cf78e3e06c7a23b9385aba0e883d7b69ad6751c61ad5dc"
+      "sha256": "b62c98d4d344b88e65399093633c88d0e5d8cabff8c40d154a74dc2ee1e24f15"
     }
   ],
   "captures": [
     {
-      "file": "session-193/before-sewer-night-390-shield-hit.png",
-      "sha256": "f639852a41a1a5138332c2bfaccb3846a686af490302a8de773f128823d9b87c",
+      "file": "session-194/before-sewer-night-390-controller-held-pause.png",
+      "sha256": "7b74c83ccba857cd27cfbceb01beab9f2a96eda81326aaa7ac48c3836d5918bd",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "shield-hit",
+      "page": "controller-held-pause",
       "phase": "before"
     },
     {
-      "file": "session-193/before-sewer-night-390-held-pause.png",
-      "sha256": "264b649eb9bf577c9d7af259438110edb1ff97c66cb8562424f0466697de4142",
+      "file": "session-194/before-sewer-night-390-controller-resume.png",
+      "sha256": "94ea693a72051a195327a1bd355e57cc925557064138d1243ba10b3570875c23",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "held-pause",
+      "page": "controller-resume",
       "phase": "before"
     },
     {
-      "file": "session-193/before-sewer-night-390-held-weapon.png",
-      "sha256": "3275ca9fb656b7b66c255c6b88b7975831f6d877d62e0c0254db41caea2099b5",
+      "file": "session-194/before-sewer-night-390-rail-threshold.png",
+      "sha256": "719e685366c37c1431e7ca662af090ee4f48c2eb952d8b42773985e9419d14ef",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "held-weapon",
+      "page": "rail-threshold",
       "phase": "before"
     },
     {
-      "file": "session-193/before-sewer-night-1440-shield-hit.png",
-      "sha256": "6130c23fe2f833ad25e6db18f832c32e66de8b64905ba6d7b57d458a5d79f4eb",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "shield-hit",
-      "phase": "before"
-    },
-    {
-      "file": "session-193/before-sewer-night-1440-held-pause.png",
-      "sha256": "a73ef4784b6999464b5098ba979cdaf1d566a3a2c47f650d3401d0bf273b4cc3",
+      "file": "session-194/before-sewer-night-1440-controller-held-pause.png",
+      "sha256": "5a685f2c0fc96305fb757d6009989cddf18b9209817af89507b096b22a17bbc8",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "held-pause",
+      "page": "controller-held-pause",
       "phase": "before"
     },
     {
-      "file": "session-193/before-sewer-night-1440-held-weapon.png",
-      "sha256": "deb03ff6c1a6bd77c9b851bca5a40fe30da3106adc08a73b0903407e9aa86b03",
+      "file": "session-194/before-sewer-night-1440-controller-resume.png",
+      "sha256": "657261255e0a71df33a173a9847850b282545ee6741e72263871186ec2f639ca",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "held-weapon",
+      "page": "controller-resume",
       "phase": "before"
     },
     {
-      "file": "session-193/before-porcelain-day-390-shield-hit.png",
-      "sha256": "66997d7fd316d119fb345b3d80d0d011bcedd2be3dbf96e24775a6b20b0f8e91",
+      "file": "session-194/before-sewer-night-1440-rail-threshold.png",
+      "sha256": "5a6a2c398589495bd86150b8d341e0811326ff6710cc56dfa9f070b6d15ba426",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "rail-threshold",
+      "phase": "before"
+    },
+    {
+      "file": "session-194/before-porcelain-day-390-controller-held-pause.png",
+      "sha256": "d106690da71edee7c531fcd06d2a31ef5aeaa7c51c741fd76df3de253e02da5a",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "shield-hit",
+      "page": "controller-held-pause",
       "phase": "before"
     },
     {
-      "file": "session-193/before-porcelain-day-390-held-pause.png",
-      "sha256": "73508b9420c3c4e23c11dfd36ea2c039932db8a6b16a2908368877e28fa16d7e",
+      "file": "session-194/before-porcelain-day-390-controller-resume.png",
+      "sha256": "985735148f157fbf9a5ed32c64fd6a3b26ba074efa85283d07e26712a9cd1498",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "held-pause",
+      "page": "controller-resume",
       "phase": "before"
     },
     {
-      "file": "session-193/before-porcelain-day-390-held-weapon.png",
-      "sha256": "e4952267c72da5981ad372d70c5352f323c2d0f80629024aefca3dbeca08c2ef",
+      "file": "session-194/before-porcelain-day-390-rail-threshold.png",
+      "sha256": "26e3bad88bc4fdcb0a1d4f61715079e7f673c633bbcf3afc9fd68cd86b1cbdd4",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "held-weapon",
+      "page": "rail-threshold",
       "phase": "before"
     },
     {
-      "file": "session-193/before-porcelain-day-1440-shield-hit.png",
-      "sha256": "47f3a956fcaadb386acd0173c0ae9a6cfbf7080d069b83befbc2c29847fdc43a",
+      "file": "session-194/before-porcelain-day-1440-controller-held-pause.png",
+      "sha256": "8089a2bc53330884d8a81bf7a7d00eefbd8cf86c08e0acaf5a1019a36555b016",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "shield-hit",
+      "page": "controller-held-pause",
       "phase": "before"
     },
     {
-      "file": "session-193/before-porcelain-day-1440-held-pause.png",
-      "sha256": "ed8d5b9b445d19a4160e8cf08330e9a6e38f3207be976c49268a5729be6fcb93",
+      "file": "session-194/before-porcelain-day-1440-controller-resume.png",
+      "sha256": "6d3a0b113d41fbbae0fbd57b0e518ba2b00881850df37b9a0cfa68d9e9779b30",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "held-pause",
+      "page": "controller-resume",
       "phase": "before"
     },
     {
-      "file": "session-193/before-porcelain-day-1440-held-weapon.png",
-      "sha256": "3ee9dada39a0887f6fe1e32475d958f3020c62ca255e279ce7100b19cd99b319",
+      "file": "session-194/before-porcelain-day-1440-rail-threshold.png",
+      "sha256": "a4fa1f2d77ccf40accda2092109506c65e1325c9609ba997ce4e1915992ad74d",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "held-weapon",
+      "page": "rail-threshold",
       "phase": "before"
     },
     {
-      "file": "session-193/staging-sewer-night-390-shield-hit.png",
-      "sha256": "84c435e440e34397c371b6faaa48149ea06b14da6ac077f617e294b9d2e7cf07",
+      "file": "session-194/after-local-sewer-night-390-controller-held-pause.png",
+      "sha256": "035e9c279dfcf9cba1ccf4fa7462140072b7d09c1b70184244dcb907c0c2a832",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "shield-hit",
+      "page": "controller-held-pause",
       "phase": "after"
     },
     {
-      "file": "session-193/staging-sewer-night-390-held-pause.png",
-      "sha256": "9864aeca7000957ded44e50edaeffdc6cd9ee96ea20aa4ec1e0cf9bea23d1a86",
+      "file": "session-194/after-local-sewer-night-390-controller-resume.png",
+      "sha256": "afd1987bbbfbd76a71ab4ca72f865b82cbca2c803e2af5b455d626b9e3ead64f",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "held-pause",
+      "page": "controller-resume",
       "phase": "after"
     },
     {
-      "file": "session-193/staging-sewer-night-390-held-weapon.png",
-      "sha256": "a57a8c5e4a0cb191b5e99f00944d72c6055f6abe2bb23ea6cb79b78721fbb4e1",
+      "file": "session-194/after-local-sewer-night-390-rail-threshold.png",
+      "sha256": "f6e8cc06fe8d06c0de46e782ee08c0752169c70d566355675f2be3d1ecfc0100",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "held-weapon",
+      "page": "rail-threshold",
       "phase": "after"
     },
     {
-      "file": "session-193/staging-sewer-night-1440-shield-hit.png",
-      "sha256": "d9214b7371ff2828fe9a434746cb79c214e1dac765e9735f4dd7ff1ef6218aa4",
+      "file": "session-194/after-local-sewer-night-1440-controller-held-pause.png",
+      "sha256": "3321a95e70b6aa3d440f78a6b2a183b1eeb83bcd2dd40eb86d5dd5e352a30f48",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "shield-hit",
+      "page": "controller-held-pause",
       "phase": "after"
     },
     {
-      "file": "session-193/staging-sewer-night-1440-held-pause.png",
-      "sha256": "67ffd982b000b0c2a47e3a61ba5db9cc866958ca1c30ac40440fc6042ec059cb",
+      "file": "session-194/after-local-sewer-night-1440-controller-resume.png",
+      "sha256": "6ec9b7481349f81f516fdd96c45568c81b3a4330569503b61f6c220910d3817f",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "held-pause",
+      "page": "controller-resume",
       "phase": "after"
     },
     {
-      "file": "session-193/staging-sewer-night-1440-held-weapon.png",
-      "sha256": "747d15363f790fe38262e5f60937c29d3824034a5784eb5003b9c60cce79bace",
+      "file": "session-194/after-local-sewer-night-1440-rail-threshold.png",
+      "sha256": "a7ab61aecedf6f136e7489081f7d1e0cd86dd0ffcb37cc099439a052de3d783d",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "held-weapon",
+      "page": "rail-threshold",
       "phase": "after"
     },
     {
-      "file": "session-193/staging-porcelain-day-390-shield-hit.png",
-      "sha256": "36981cde5c649de2965aeac5ed8c22f6ca81a1737c9b0eac585b8a924f39299e",
+      "file": "session-194/after-local-porcelain-day-390-controller-held-pause.png",
+      "sha256": "61ac8d44e6197412da4a9b25e9ce2a5eec2f99b2dc236f29e8564591b5a14bf6",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "shield-hit",
+      "page": "controller-held-pause",
       "phase": "after"
     },
     {
-      "file": "session-193/staging-porcelain-day-390-held-pause.png",
-      "sha256": "23a3c86ab7a43d27c1bf8f124e3b9356ba9ee057d20c8c58ad3d448b0544ce7e",
+      "file": "session-194/after-local-porcelain-day-390-controller-resume.png",
+      "sha256": "d3e9052e9d3c737e3166ebdcf4d39f1c31c56d290e7aeb0fcdde1554663d7b9c",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "held-pause",
+      "page": "controller-resume",
       "phase": "after"
     },
     {
-      "file": "session-193/staging-porcelain-day-390-held-weapon.png",
-      "sha256": "8551ff396c5c8cd3c783b5664294015cafd92817d9214be8c43cf6244a00cc80",
+      "file": "session-194/after-local-porcelain-day-390-rail-threshold.png",
+      "sha256": "ecb99bab579f5e9a592f9c80f9a33bb368274c3338af4987ed66bcb8da836f8e",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "held-weapon",
+      "page": "rail-threshold",
       "phase": "after"
     },
     {
-      "file": "session-193/staging-porcelain-day-1440-shield-hit.png",
-      "sha256": "7abf1baf0797da91a092461e5d17fbf956744da34d9867ef6287936bad96c734",
+      "file": "session-194/after-local-porcelain-day-1440-controller-held-pause.png",
+      "sha256": "b76700c481f94d5df7a5dbef985ced4253dee496f90847205fc5183008e0121a",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "shield-hit",
+      "page": "controller-held-pause",
       "phase": "after"
     },
     {
-      "file": "session-193/staging-porcelain-day-1440-held-pause.png",
-      "sha256": "3266a0eedba5a81ed6bdd2842146cc9c8b24c3a0b6751f695ede608820391c03",
+      "file": "session-194/after-local-porcelain-day-1440-controller-resume.png",
+      "sha256": "8d1015cdea2e7e400e36f105036bf7c93a75e11fdafeab93c964af2e9f22d2a7",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "held-pause",
+      "page": "controller-resume",
       "phase": "after"
     },
     {
-      "file": "session-193/staging-porcelain-day-1440-held-weapon.png",
-      "sha256": "3f63fdb3651837bdcdb42833af36a1d80cf947b17819fc14c06cf726e928e25a",
+      "file": "session-194/after-local-porcelain-day-1440-rail-threshold.png",
+      "sha256": "1be3a35eaa5f0bd7d97b8374aaa6897e866c421964e514247ee6433831763f8b",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "held-weapon",
+      "page": "rail-threshold",
       "phase": "after"
     }
   ],
   "inspection": {
     "renderedPixelsReviewed": true,
     "reviewer": "Codex root: three contact sheets, all24 before/after images inspected",
-    "reviewedAt": "2026-10-20T03:45:09.158Z",
-    "scope": "Shield impact, held Escape and held-weapon reload;390/1440;both themes.",
+    "reviewedAt": "2026-10-20T05:47:25.026Z",
+    "scope": "Controller-held pause, resumed combat and rail-threshold impact;390/1440;both themes.",
     "findings": [
-      "No introduced layout or readability defect across impact, pause and reload.",
-      "Both selected shell themes exercised; arena and pause retain their intentional gameplay palette.",
-      "Before front32/rear4 and pause/reload repeat failures; staging front4/rear32 and stable pause/reload in all4 cases."
+      "No introduced layout or readability defect across pause, resume and rail impact.",
+      "Home themes remain distinct; arena and pause use intentional gameplay palettes independent of shell theme.",
+      "Before held Reload fires on resume and rail deals160 at24HP; after no stale Reload and rail480 at24HP/160 at25HP in all4 cases."
     ],
     "fixesApplied": [
-      "Correct incoming shield direction and consume discrete keyboard repeats at App and dialog boundaries.",
-      "Recapture before pause after waiting for the actual loaded panel."
+      "Persist and consume controller edges across barriers/screens; share the Last Resort threshold with rail.",
+      "Use actual xpMult ref rather than nonexistent default perk keys in the browser fixture."
     ],
     "blockingDefectsOpen": 0
   },
   "methodLimits": [
-    "Synthetic keyboard and assisted App state/ticks; not a production score submission or physical-controller test.",
-    "No participant or every-route claim.",
-    "Source hashes use canonical LF checkout bytes; App line endings normalized without semantic or git source changes."
+    "Synthetic controller/keyboard and assisted App state/ticks; not a production score submission or physical-controller test.",
+    "No participant or every-route claim."
   ]
 }

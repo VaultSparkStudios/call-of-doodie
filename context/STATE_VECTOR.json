@@ -1,17 +1,17 @@
 {
   "vectorVersion": "1.0",
   "generatedAt": "2026-10-20",
-  "generatedAtMs": 1792468311948,
-  "session": 193,
-  "vectorHash": "777de4c5af8ce452",
+  "generatedAtMs": 1792475578256,
+  "session": 194,
+  "vectorHash": "6a95e136f8b98397",
   "silTotal": 945,
   "silAvg3": 945,
   "velocity": 2,
   "debt": "flat",
-  "runway": "S193 production verified",
-  "intentRate": "achieved",
+  "runway": "S194 acceptance in progress",
+  "intentRate": "in progress",
   "openNow": 4,
-  "openNext": 11,
+  "openNext": 13,
   "openBlocked": 0,
   "topNow": [
     "[SIL:2] **S183 measured comparisons** Complete matched human/agent, music/creatu",
@@ -19,12 +19,12 @@
     "[SIL:2] [S60] Supabase Auth / Studio membership implementation decision — if pai"
   ],
   "topNext": [
-    "[SIL:2] **S181 evidence gate** Test Field Lab valve consequences, complaint cues",
-    "[SIL:1] **S181 measurement gate** If paid project inference is introduced, measu",
-    "[SIL:1] **S180 carryover** Re-check `@supabase/supabase-js` 2.117.2 after its re"
+    "[SIL:1] [S194 reserve] Match input-edge interruption timelines on representative",
+    "[SIL:1] [S194 reserve] Extend cross-weapon policy matrix only when a new adverti",
+    "[SIL:2] **S181 evidence gate** Test Field Lab valve consequences, complaint cues"
   ],
   "health": "green",
-  "truthStatus": "both selected correctness outcomes production verified.",
+  "truthStatus": "acceptance in progress.",
   "genome": null,
   "ignisScore": 44193,
   "ignisGrade": "FORGE",
@@ -33,8 +33,8 @@
   "slug": "call-of-doodie",
   "type": null,
   "lifecycle": "deployed",
-  "nextMilestone": "Gather existing representative participant/device evidence without equating assisted checks with physical acceptance.",
-  "currentFocus": "S193 shield-facing and keyboard action correctness production verified.",
+  "nextMilestone": "Verify both selected outcomes on exact-main production.",
+  "currentFocus": "S194 consumes controller menu presses and restores Railgun Last Resort.",
   "lastShipped": "see LATEST_HANDOFF.md",
   "blockers": [
     "PostHog and project-scoped Sentry evidence remain unavailable; provider readiness is not represented as verified telemetry.",

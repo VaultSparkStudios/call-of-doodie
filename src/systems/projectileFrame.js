@@ -3,6 +3,7 @@ import { PERK_FACTS } from "../config/perkFacts.js";
 import {
   bulletEnemyCollision,
   computeBulletDamage,
+  getLastResortMultiplier,
   computeJuggernautShieldDamage,
   findLightningChainTarget,
   isPrecisionHit,
@@ -218,6 +219,7 @@ export function stepProjectileFrame({
       const shieldMultiplier = enemy.typeIndex === 17 && (enemy.jugShield || 0) > 0 ? 0.15 : 1;
       const damage = baseDamage * comboMultiplier
         * (isCrit ? CRIT_MULT + (gs.critMultBonus || 0) : 1)
+        * getLastResortMultiplier(p, perkMods.lastResort)
         * (enemy.dmgMult || 1) * rageMultiplier * shieldMultiplier;
       const result = applyEnemyDamage(enemy, damage, {
         source: "rail",

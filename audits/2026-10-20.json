@@ -1,53 +1,39 @@
 {
   "schemaVersion": "1.3",
-  "session": 193,
+  "session": 194,
   "date": "2026-10-20",
-  "headline": "S193 corrects Shield Guy facing and makes keyboard actions fire once per press.",
+  "headline": "S194 consumes controller menu presses and restores Railgun Last Resort.",
   "shipped": [
-    "shield-facing",
-    "keyboard-action-edges"
+    "controller-menu-edges",
+    "rail-last-resort"
   ],
-  "validation": "S193 implementation 49c6b60eb9e40b7e343daa6073ac7a424f4eaeb5 passed exact-main workflow 39366155584: 299 test files/2049 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 49c6b60eb9e4. Canonical and immutable https://e023d899.call-of-doodie.pages.dev shell7/7 each; production browser28/28 across390/1440/both themes proves front4/rear32, stable held Escape/reload, and held/released movement.",
-  "limits": "FORGE/public-unlaunched unchanged. Synthetic keyboard, assisted App state/ticks and automated Chrome checks do not prove participant or physical-controller outcomes. Existing S183 comparisons remain unmeasured. No backend, dependency, identity/trust-policy, cost, licensing or public-launch change. CDR legitimately unchanged without new creative direction.",
+  "validation": "S194 local299-file run:2055 passed,1 startup fixture timeout at43.6s under load; unchanged isolated startup fixture then passed1/1 in25.8s. All gameplay regressions pass. Strict lint/configured build/schema/startup/public/security/runtime gates pass; dependency audit0 vulnerabilities. Staging48c2ee6d shell7/7 and browser24/24 at390/1440/both themes.24 inspected before/after images hash-bound to all3 changed runtime sources. Independent review pass after screen-lifetime correction. Exact-main hosted full-suite and production acceptance pending.",
+  "limits": "FORGE/public-unlaunched unchanged. Assisted App state/ticks and synthetic controller/keyboard do not prove participant or physical-pad behavior. Existing S183 comparisons remain unmeasured. No backend, dependencies, identity/trust policy, cost, licensing or launch changes. CDR legitimately unchanged without creative direction.",
   "production": {
-    "source": "49c6b60eb9e40b7e343daa6073ac7a424f4eaeb5",
-    "workflow": 39366155584,
-    "immutableUrl": "https://e023d899.call-of-doodie.pages.dev",
-    "canonical": "https://callofdoodie.wtf/",
-    "verifiedAt": "2026-10-20T03:50:57.098Z",
-    "health": {
-      "contract": "edge-health-v1",
-      "status": "edge-ready",
-      "service": "call-of-doodie",
-      "scope": "cloudflare-pages-edge-only",
-      "deploy": "49c6b60eb9e4",
-      "checkedAt": "2026-10-20T03:50:50.704Z"
-    },
-    "requiredChecks": {
-      "quality": "success",
-      "buildAndDeploy": "success"
-    },
-    "testFiles": 299,
-    "assertions": 2049,
-    "browserCases": 4,
-    "browserAssertions": 28
+    "status": "pending"
   },
   "closeout": {
-    "state": "complete",
+    "state": "delivery-pending",
     "silScore": 945,
     "scaffold": {
       "tasks": 3,
-      "done": 3,
-      "inProgress": 0,
+      "done": 2,
+      "inProgress": 1,
       "open": 0
     }
   },
+  "diagnostic": "Unchanged remote backend diagnostics degraded: leaderboard reads504/timeouts; replay valid/weak cases pass but malformed case returned provider546. No backend source/configuration change. These are not claimed green; routine client promotion required-check contract is hosted quality and build-and-deploy plus changed-input/combat staging acceptance. Existing guest identity unchanged. Recheck service separately.",
   "testFiles": 299,
-  "assertions": 2049,
+  "assertions": 2056,
+  "localSuite": {
+    "fullPassed": 2055,
+    "fullFailed": 1,
+    "isolatedTimeoutRecheck": 1
+  },
   "visualCaptures": 24,
   "staging": {
-    "url": "https://1da5492a.call-of-doodie.pages.dev",
-    "browserAssertions": 28,
+    "url": "https://48c2ee6d.call-of-doodie.pages.dev",
+    "browserAssertions": 24,
     "shellAssertions": 7
   },
   "review": {
