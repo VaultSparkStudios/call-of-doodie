@@ -1265,7 +1265,7 @@ SIL +10: Closed five founder-visible defects and all four fresh audit items: Ene
 Avgs — 3: 945 | 5: 944.8 | 10: 940.5 | 25: 965.6 | all: 988.5 (140 unique 1000-point sessions; legacy 500-point entries excluded)
 Last five: 945 → 945 → 945 → 945 → 944 · ▄▄▄▄▄
 Velocity trend: two verified build-integrity outcomes | Debt: flat
-Momentum runway: S191 staged; production pending | Intent rate: delivery in progress
+Momentum runway: S191 production verified | Intent rate: achieved
 Last session: 2026-10-20 | Session 191 | Total: 945/1000 | Velocity: 2 | protocolVelocity: 2
 <!-- rolling-status-end -->
 
@@ -3702,3 +3702,6 @@ Total:945/1000 | Velocity:2 | Debt:→
 Win: real production fixtures reproduced progression loss and zero-round magazines before implementation. Gap: concurrent helper retirement briefly left an init call, fixed before acceptance. Learning: compose temporary effects from current permanent stats and share capacity with what the player sees. Brainstorm: capacity comprehension study, physical-pad pacing comparison, build-state differential witness. Two [SIL] reserve items recorded; no automatic scope expansion.
 
 Focused gameplay and component checks pass 6 files / 55 assertions. Strict lint, configured deployable build, public contracts and security gate pass; dependency audit reports zero vulnerabilities. Staging 7e4d9a14 passes shell7/7 and actual-App Frenzy/ammo checks at390/1440 in both themes. Full suite, expanded arsenal visual proof and exact-main production remain pending.
+
+
+S191 final release acceptance: S191 implementation 40d7b319072d7d4067d403c861bf6de804594de2 passed exact-main workflow 39357464497: all299 test files /2032 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 40d7b319072d. Canonical and immutable https://40b2a0c6.call-of-doodie.pages.dev pass shell7/7 each. All24 actual-App browser assertions pass across390/1440 and both themes: earned base5 preserved; all90 Frenzy movement frames6 then5; pause frozen; Haste RPG reload1/1 and arsenal capacity labels correct.

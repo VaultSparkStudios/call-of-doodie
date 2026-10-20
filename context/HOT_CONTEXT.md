@@ -4,6 +4,12 @@
 
 ## Current Session
 
+## S191 production verified
+
+Frenzy preserves earned speed; cursed magazines remain usable and displays match reload capacity.
+
+S191 implementation 40d7b319072d7d4067d403c861bf6de804594de2 passed exact-main workflow 39357464497: all299 test files /2032 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 40d7b319072d. Canonical and immutable https://40b2a0c6.call-of-doodie.pages.dev pass shell7/7 each. All24 actual-App browser assertions pass across390/1440 and both themes: earned base5 preserved; all90 Frenzy movement frames6 then5; pause frozen; Haste RPG reload1/1 and arsenal capacity labels correct.
+
 ## S191 candidate verified
 
 S191 full local suite passes 299/299 files and 2032/2032 assertions, no failed or pending tests. Strict lint, configured build, schema/startup/public/security/runtime checks pass; zero dependency vulnerabilities; backend5/5 and replay3/3. Staging7e4d9a14 shell7/7 and actual-App24/24 pass across390/1440 and both themes. All40 real before/after captures inspected and hash-bound. Independent implementation/closeout review passes. Exact-main production pending.
@@ -98,16 +104,11 @@ Staging https://1982e652.call-of-doodie.pages.dev passed shell 7/7, served the c
 
 ## S185 full-range controller aim — 2026-10-18
 
-Controller right-stick aim now covers a full 360° on every gamepad layout. Aim was hard-wired to axes 2/3; pads without the W3C standard mapping (DualShock/DualSense in Firefox, generic Linux pads) place an analog trigger there that rests at -1, pinning stick Y and limiting aim to one half-plane (180°). `resolveAimAxes` in src/utils/gamepad.js now selects the right stick from the pad mapping, the PlayStation non-standard layout and resting-value trigger detection; the HomeV2 aim probe shares it. Resting triggers no longer count as constant controller activity. Controller aim assist bends aim only within a 30° cone, so a nearby enemy no longer captures the stick in every direction. Stick aim and touch starts retire the never-cleared `mouse.moved` flag, which previously snapped aim back to a stale cursor after stick release.
-
-Other devices checked: touch shoot-stick and mouse/pointer aim (DPR-scaled canvas, scrolled S165 camera) already resolved full 360°; new sweep tests pin controller, touch and mouse at 24 directions each. Touch shared the stale-mouse reclaim through emulated mouse events from HUD taps, now closed.
-
-Source b194fa92d945591a2fb8d59c8626c8967214
+Controller right-stick aim now covers a full 360° on every gamepad layout. Aim was hard-wired to axes 2/3; pads without the W3C standard mapping (DualShock/DualSense in Firefox, generic Linux pads) place an analog trigger there that rests at -1, pinning stick Y and limiting aim to one half-plane (180°). `resolveAimAxes` in src/utils/gamepad.js now selects the right stick from the pad mapping, the PlayStation non-standard layout and resting-value trigger detection; the HomeV2 aim probe shares it. Resting triggers no long
 
 ## Open Work
 
 ## S191 arc outcomes and waves
-- [ ] S191 exact-main production and final closeout proof.
 - [ ] [SIL:1] S191 reserve: measure natural participant comprehension of capacity penalties.
 - [ ] [SIL:1] S191 reserve: physical-controller movement pacing comparison.
 ## S190 arc outcomes and waves
@@ -161,6 +162,7 @@ Source b194fa92d945591a2fb8d59c8626c8967214
 - [ ] [SIL:1] Scrolling camera for a sixteen-bot royale; DeathScreen diet.
 ## Session 162 - Corrective-order evidence across runs
 ## Session 161 - Readable threat compass and prospective doctrine choice
+## Session 160 - Propagation and release-evidence recovery
 
 ## Recent Decisions
 
@@ -211,9 +213,12 @@ Resolve temporary Frenzy speed at movement instead of rewriting base stats. Cons
 
 Existing bounded founder authorization covers routine promotion. CANON-045 STRONG legacy gap is unchanged; scoped recipient acceptance excludes foreign doctor health.
 
+
+S191 final release acceptance: S191 implementation 40d7b319072d7d4067d403c861bf6de804594de2 passed exact-main workflow 39357464497: all299 test files /2032 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 40d7b319072d. Canonical and immutable https://40b2a0c6.call-of-doodie.pages.dev pass shell7/7 each. All24 actual-App browser assertions pass across390/1440 and both themes: earned base5 preserved; all90 Frenzy movement frames6 then5; pause frozen; Haste RPG reload1/1 and arsenal capacity labels correct.
+
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 265,788 bytes · SHA-256 `2b359018d879…`
-- `context/TASK_BOARD.md` · 184,595 bytes · SHA-256 `79942e57f366…`
-- `context/DECISIONS.md` · 181,189 bytes · SHA-256 `4e7223ee119e…`
+- `context/CURRENT_STATE.md` · 266,441 bytes · SHA-256 `5fe9c80d9379…`
+- `context/TASK_BOARD.md` · 184,595 bytes · SHA-256 `cdca7737a751…`
+- `context/DECISIONS.md` · 181,746 bytes · SHA-256 `27744e133163…`
 - `docs/AUDIT_2026-10-18.json` · 6,892 bytes · SHA-256 `b34b668a7b5a…`

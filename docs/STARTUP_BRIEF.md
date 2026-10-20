@@ -20,13 +20,13 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ LAST SESSION (S191) - WHAT SHIPPED ══════════════════════════╗
-║  S191 preserves earned movement speed through Kill Frenzy and k  ║
+║  S191 two build-integrity outcomes production verified.          ║
 ║  Tests  -                                                        ║
 ║  Deploy -                                                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ WHERE TO TEST · Call-Of-Doodie ══════════════════════════════╗
-║  Unit tests    → npm test — 298/298 passing ✓                    ║
+║  Unit tests    → npm test — 299/299 passing ✓                    ║
 ║  hosted-visual-proof → session-169-staging · route/theme/wid ✓   ║
 ║  production-verification → source ca1324136f8c · workflow 34 ✓   ║
 ║  hosted-staging → session-170-staging · immutable 520a56d6 · ✓   ║
@@ -64,23 +64,23 @@
 
 ╔══ WHERE WE LEFT OFF  ·  Session 191 ═══════════════════════════╗
 ║  Shipped:  see LATEST_HANDOFF.md                                 ║
-║  Tests:    298/298 passing  ·  Deploy: N/A                       ║
+║  Tests:    299/299 passing  ·  Deploy: N/A                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ✓  ████████░░░░░░░░░░░░░░░░  33% used                           ║
-║     91,003 / 272,000 tok  ·  codex/codex-272k  · …               ║
-║     ~45,502 tok/turn  ·  cache 50%  ·  3 turns to compact        ║
+║  ✓  ███████░░░░░░░░░░░░░░░░░  30% used                           ║
+║     82,895 / 272,000 tok  ·  codex/codex-272k  · …               ║
+║     ~41,448 tok/turn  ·  cache 50%  ·  4 turns to compact        ║
 ║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         298/298 passing (2026-10-19T23:50:47.504Z)     ║
+║  ✓  Tests         299/299 passing (2026-10-20T02:09:16.103Z)     ║
 ║  ✓  Velocity      2   ·  Debt: →                                 ║
-║  ✓  Runway        S191 staged; production pending                ║
+║  ✓  Runway        S191 production verified                       ║
 ║  ⛔  Context age   ?d                                             ║
 ║  ⚠  IGNIS         44193 FORGE  ·  12d old                        ║
-║  ⛔  Truth         two selected build-integrity outcomes…         ║
+║  ⛔  Truth         selected build-integrity outcomes…             ║
 ║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs…        ║
 ║  ✓  Genome dims   all stable  (24/25)                            ║
 ║  ✓  Entropy       0.214  (healthy)                               ║
