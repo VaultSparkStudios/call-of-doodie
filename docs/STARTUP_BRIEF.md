@@ -21,14 +21,16 @@
 
 ╔══ LAST SESSION (S198) · WHAT SHIPPED ══════════════════════════╗
 ║  ✓ Summoner protection follows living guards immediately; Vite   ║
-║  Tests  297/299 files;2089/2092 assertions;full hosted pending   ║
-║  Deploy pending exact-main production                            ║
+║  Tests  299 files/2092 assertions passing                        ║
+║  Deploy 10c54521f2f6 production verified                         ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ WHERE TO TEST · Call-Of-Doodie ══════════════════════════════╗
+║  Production    → https://callofdoodie.wtf/ ✓                     ║
 ║  Staging       → https://36ead169.call-of-doodie.pages.dev/ ✓    ║
-║  Unit tests    → npm test — 297/299 passing ⛔                    ║
-║  local-browser-capture → S19824 inspected before/after captu ✓   ║
+║  Unit tests    → npm test — 299/299 passing ✓                    ║
+║  local-browser-capture → S19824 inspected hash-bound before/ ✓   ║
+║  production-smoke → S198 Summoner/input44/44 ✓                   ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ PROJECT PROFILE ═════════════════════════════════════════════╗
@@ -59,22 +61,22 @@
 
 ╔══ WHERE WE LEFT OFF  ·  Session 198 ═══════════════════════════╗
 ║  Shipped:  see LATEST_HANDOFF.md                                 ║
-║  Tests:    297/299 passing  ·  Deploy: S198 pending;S197…        ║
+║  Tests:    299/299 passing  ·  Deploy: verified                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
 ║  ?  ░░░░░░░░░░░░░░░░░░░░░░░░  usage unknown                      ║
-║     unknown / 272,000 tok  ·  codex  ·  unmeasured               ║
+║     unknown / 200,000 tok  ·  unknown  ·  unmeasured             ║
 ║     Verdict: UNMEASURED                                          ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ⛔  Tests         suite RED — 297/299 files…                     ║
+║  ✓  Tests         299/299 passing (2026-10-20T20:47:27Z)         ║
 ║  ✓  Velocity      2   ·  Debt: →                                 ║
 ║  ✓  Runway        unknown                                        ║
 ║  ⛔  Context age   ?d                                             ║
 ║  ⚠  IGNIS         44193 FORGE  ·  12d old                        ║
-║  ⛔  Truth         S198 local/staging verified;production…        ║
+║  ⛔  Truth         selected outcomes production verified.  · …    ║
 ║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs…        ║
 ║  ✓  Genome dims   all stable  (24/25)                            ║
 ║  ✓  Entropy       0.215  (healthy)                               ║

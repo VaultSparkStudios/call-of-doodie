@@ -4,9 +4,15 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Summoner protection follows living guards immediately; Vite security patch applied.",
-  "nextMilestone": "Verify exact-main production.",
+  "currentFocus": "S198 Summoner guard lifecycle and Vite patch production verified.",
+  "nextMilestone": "Collect existing participant/device acceptance evidence.",
   "testingSurfaces": [
+    {
+      "session": 198,
+      "type": "production",
+      "status": "green",
+      "url": "https://callofdoodie.wtf/"
+    },
     {
       "session": 198,
       "type": "staging",
@@ -15,9 +21,15 @@
     },
     {
       "session": 198,
+      "type": "production-smoke",
+      "status": "green",
+      "command": "S198 Summoner/input44/44"
+    },
+    {
+      "session": 198,
       "type": "local-browser-capture",
       "status": "green",
-      "command": "S19824 inspected before/after captures;390/1440,both themes"
+      "command": "S19824 inspected hash-bound before/after captures"
     }
   ],
   "blockers": [
@@ -31,7 +43,7 @@
   "lastUpdated": "2026-10-20",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
-  "truthAuditStatus": "S198 local/staging verified;production pending.",
+  "truthAuditStatus": "S198 selected L2 outcomes production verified.",
   "truthAuditLastRun": "2026-10-20",
   "ignisScore": 44193,
   "ignisGrade": "FORGE",
@@ -45,7 +57,7 @@
   "currentSession": 198,
   "sessionMode": "founder",
   "lastAgent": "codex",
-  "testsPassing": 297,
+  "testsPassing": 299,
   "testsTotal": 299,
   "entropyScore": 0.215,
   "entropyLastComputed": "2026-10-20",
@@ -77,7 +89,7 @@
   "runtimeUrl": "https://callofdoodie.wtf/",
   "stagingType": "cloudflare-pages",
   "stagingUrl": "https://36ead169.call-of-doodie.pages.dev/",
-  "testsLastRun": "2026-10-20T20:37:44.267Z",
+  "testsLastRun": "2026-10-20T20:47:27Z",
   "sanitizationLastCleared": "2026-10-06",
   "sessionShellHygiene": {
     "session": 191,
@@ -137,10 +149,10 @@
     "shipped": [
       "Summoner protection follows living guards immediately; Vite security patch applied."
     ],
-    "tests": "297/299 files;2089/2092 assertions;full hosted pending",
-    "deploy": "pending exact-main production"
+    "tests": "299 files/2092 assertions passing",
+    "deploy": "10c54521f2f6 production verified"
   },
-  "testsAssertionsPassing": 2089,
+  "testsAssertionsPassing": 2092,
   "testsAssertionsTotal": 2092,
   "testsAssertionsFiles": 299,
   "testsFlaky": [],
@@ -150,40 +162,47 @@
   "testsBudgetExhausted": false,
   "silAvg5": 945,
   "testsAssertionsDeferred": [],
-  "testsAssertionsLastRun": "2026-10-20T20:37:44.268Z",
+  "testsAssertionsLastRun": "2026-10-20T20:47:27Z",
   "lastShipped": "S198 Summoner lifecycle and Vite patch.",
   "truthStatus": "Guest play and FORGE/public-unlaunched status remain unchanged. Synthetic input and assisted game ticks do not prove physical-device or participant outcomes;existing comparative evidence remains unmeasured. No backend,identity,rights,pricing or launch change.",
   "testsFocusedSupplement": "S19890 focused;9 failing-before regressions.",
-  "lastDeployCommit": "56a5655324f59e4f87601fd4554f540ccf8eaba7",
-  "lastDeployAt": "2026-10-20T18:56:08Z",
+  "lastDeployCommit": "10c54521f2f6215624b14f44121d5fa310e68c07",
+  "lastDeployAt": "2026-10-20T20:47:27Z",
   "closeoutAcceptance": {
     "session": 198,
-    "state": "delivery-pending",
+    "state": "complete",
     "scaffold": {
       "tasks": 3,
-      "done": 2,
-      "inProgress": 1,
+      "done": 3,
+      "inProgress": 0,
       "open": 0
     },
-    "localSuite": "S198:90 focused tests pass,including9 failing-before regressions. Local full297/299files and2089/2092assertions:two stale-context assertions and one startup30s timeout. Refreshed context and unchanged startup tests pass5/5 with90s limit;the full local run remains nonpassing. Staging44/44 browser checks plus7/7 shell checks;24 inspected hash-bound before/after images at390/1440,in both themes. Independent code/dependency reviews pass;strict lint,configured build and security check pass;dependency audit0 vulnerabilities. Exact-commit hosted full tests and production readback remain pending.",
-    "independentReview": "source and dependency review passed"
+    "localSuite": "Local full remains nonpassing:297/299files,2089/2092assertions;two stale-context assertions corrected by refresh and startup30s timeout retained. Default isolated startup also timed out;refreshed-context/unchanged startup5/5 passes at90s limit. Hosted exact-main full299/2092 is the complete-suite acceptance proof.90 focused tests pass,9 failing-before regressions.",
+    "independentReview": "source,dependency and final public records reviewed;all pass",
+    "production": {
+      "source": "10c54521f2f6215624b14f44121d5fa310e68c07",
+      "workflow": 39494601691,
+      "immutableUrl": "https://e3c20115.call-of-doodie.pages.dev",
+      "canonical": "https://callofdoodie.wtf/",
+      "browserAssertions": 44
+    }
   },
-  "testsLastRunMode": "full-local-nonpassing",
+  "testsLastRunMode": "full-hosted-exact-main",
   "velocity": 2,
   "silVelocityLastSession": 2,
   "deploy": {
-    "source": "56a5655324f59e4f87601fd4554f540ccf8eaba7",
-    "workflow": 39478756481,
-    "immutableUrl": "https://412cabf5.call-of-doodie.pages.dev",
+    "source": "10c54521f2f6215624b14f44121d5fa310e68c07",
+    "workflow": 39494601691,
+    "immutableUrl": "https://e3c20115.call-of-doodie.pages.dev",
     "status": "verified",
-    "commit": "56a5655324f59e4f87601fd4554f540ccf8eaba7",
+    "commit": "10c54521f2f6215624b14f44121d5fa310e68c07",
     "url": "https://callofdoodie.wtf/",
-    "deployedAt": "2026-10-20T18:56:08Z"
+    "deployedAt": "2026-10-20T20:47:27Z"
   },
   "lastSession": 198,
   "silAvg10": 940.5,
   "silAvg25": 965.6,
   "silAvgAll": 988.5,
   "testsTimeoutMs": 120000,
-  "lastDeployStatus": "S198 pending;S197 verified"
+  "lastDeployStatus": "verified"
 }

@@ -1,13 +1,19 @@
-## Where We Left Off — Session 198
+## Where We Left Off — Session 198 final closeout
 
-Session Intent: full arc,main commit/push and full deployment. Outcome:local/staging behavior verified;exact-commit full tests and production pending.
+Session Intent: fresh full /arc,authorized normal main commit/push and full deployment. Intent outcome:selected L2 outcomes production verified. Final records commit still receives exact-main checks/readback before native completion.
 
-Summoner protection follows its living guards immediately;Vite updated to7.3.7.
+Summoner protection follows living guards immediately; Vite security patch applied.
 
-Living owned guards now determine protection for bullets,grenades,rail and chain lightning. Spawning publishes the guard count immediately;defeating the final guard releases protection during the same projectile phase. Shield Pulse and vulnerable windup remain intact.
+S198 implementation 10c54521f2f6215624b14f44121d5fa310e68c07 passed exact-main workflow 39494601691:299 files/2092 assertions,strict lint,configured build and Cloudflare deployment. Canonical health matches 10c54521f2f6. Canonical and immutable https://e3c20115.call-of-doodie.pages.dev shell7/7 each;production browser44/44 across390/1440,both themes. Summoner spawns3 guards with immediate count3/protection true,rail/grenade keep HP10000;final guard removal permits rail160. Keyboard/controller selection,handoff,pause and release remain usable. Vite7.3.7 security patch passes native dependency audit with0 vulnerabilities.
 
-S198:90 focused tests pass,including9 failing-before regressions. Local full297/299files and2089/2092assertions:two stale-context assertions and one startup30s timeout. Refreshed context and unchanged startup tests pass5/5 with90s limit;the full local run remains nonpassing. Staging44/44 browser checks plus7/7 shell checks;24 inspected hash-bound before/after images at390/1440,in both themes. Independent code/dependency reviews pass;strict lint,configured build and security check pass;dependency audit0 vulnerabilities. Exact-commit hosted full tests and production readback remain pending.
+Independent source and dependency reviews passed;optional platform selectors remain intact.
+
+Local full remains nonpassing:297/299files,2089/2092assertions;two stale-context assertions corrected by refresh and startup30s timeout retained. Default isolated startup also timed out;refreshed-context/unchanged startup5/5 passes at90s limit. Hosted exact-main full299/2092 is the complete-suite acceptance proof.90 focused tests pass,9 failing-before regressions.
+
+Staging44/44,shell7/7;24 inspected hash-bound before/after images. Native startup/schema/public/security/runtime checks pass. Sanitization and staged secrets scans pass.
 
 Guest play and FORGE/public-unlaunched status remain unchanged. Synthetic input and assisted game ticks do not prove physical-device or participant outcomes;existing comparative evidence remains unmeasured. No backend,identity,rights,pricing or launch change.
 
-Rollback:ordinary revert and rebuild previous main6981c31.
+Existing backend and participant limitations remain unchanged.
+
+All3 waves complete. Rollback ordinary revert of 10c5452,rebuild/redeploy previous main6981c31. Final records preserve verified runtime.

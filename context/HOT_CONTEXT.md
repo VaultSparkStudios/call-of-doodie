@@ -4,6 +4,12 @@
 
 ## Current Session
 
+## S198 production verified
+
+Summoner protection follows living guards immediately; Vite security patch applied.
+
+S198 implementation 10c54521f2f6215624b14f44121d5fa310e68c07 passed exact-main workflow 39494601691:299 files/2092 assertions,strict lint,configured build and Cloudflare deployment. Canonical health matches 10c54521f2f6. Canonical and immutable https://e3c20115.call-of-doodie.pages.dev shell7/7 each;production browser44/44 across390/1440,both themes. Summoner spawns3 guards with immediate count3/protection true,rail/grenade keep HP10000;final guard removal permits rail160. Keyboard/controller selection,handoff,pause and release remain usable. Vite7.3.7 security patch passes native dependency audit with0 vulnerabilities.
+
 ## S198 candidate verification
 
 Summoner protection follows its living guards immediately;Vite updated to7.3.7.
@@ -82,18 +88,9 @@ S193 final local suite passes 299/299 files and 2049/2049 assertions with no fai
 
 S193 corrects Shield Guy facing and makes keyboard actions fire once per press.
 
-Fresh two-outcome L2 audit implemented. Independent review and final full suite/staging verification in progress; production not yet promoted. Authoritative acceptance: LATEST_HANDOFF.
-
-## S192 production verified
-
-Async run startup, deferred perks/audio and leaderboard tickets isolated to owning runs.
-
-S192 implementation 815f9b47b15388d2167af2fbc282b40dc7eb9a7b passed exact-main workflow 39362694165: 299 test files/2039 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 815f9b47b153; canonical and immutable https://be661b17.call-of-doodie.pages.dev shell7/7 each. Browser12/12 across390/1440/both themes proves replacement token/signature survive old-ticket delivery and pause remains usable.
-
 ## Open Work
 
 ## S198 verified work
-- [ ] S198 production verification.
 ## S197 arc outcomes and waves
 ## S196 arc outcomes and waves
 ## S195 arc outcomes and waves
@@ -147,6 +144,7 @@ S192 implementation 815f9b47b15388d2167af2fbc282b40dc7eb9a7b passed exact-main w
 ## Session 167 - The debrief names names, modes say what the run was worth, announcements stay on screen
 - [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET on the Pages project so Porcelain Passport verification and cloud backup stop answering 503.
 ## Session 166 - Extraction distance, pressure, radar objectives, and death-beat split
+- [ ] [SIL:1] Collect consented extraction telemetry before changing the 1.25× pressure slope or 1.5× arena scale; synthetic distance and enemy-count math are not balance evidence.
 
 ## Recent Decisions
 
@@ -181,9 +179,12 @@ S197 final acceptance: S197 implementation 56a5655324f59e4f87601fd4554f540ccf8ea
 
 Damage protection follows living guards belonging to the Summoner instead of a frame-old flag. Preserve Shield Pulse and vulnerable windup. Vite7.3.7 addresses GHSA-698v-4r3x-3vcv;existing platform selectors and overrides remain unchanged.
 
+
+S198 final acceptance: S198 implementation 10c54521f2f6215624b14f44121d5fa310e68c07 passed exact-main workflow 39494601691:299 files/2092 assertions,strict lint,configured build and Cloudflare deployment. Canonical health matches 10c54521f2f6. Canonical and immutable https://e3c20115.call-of-doodie.pages.dev shell7/7 each;production browser44/44 across390/1440,both themes. Summoner spawns3 guards with immediate count3/protection true,rail/grenade keep HP10000;final guard removal permits rail160. Keyboard/controller selection,handoff,pause and release remain usable. Vite7.3.7 security patch passes native dependency audit with0 vulnerabilities. Local full remains nonpassing:297/299files,2089/2092assertions;two stale-context assertions corrected by refresh and startup30s timeout retained. Default isolated startup also timed out;refreshed-context/unchanged startup5/5 passes at90s limit. Hosted exact-main full299/2092 is the complete-suite acceptance proof.90 focused tests pass,9 failing-before regressions.
+
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 276,786 bytes · SHA-256 `17751015389f…`
-- `context/TASK_BOARD.md` · 188,877 bytes · SHA-256 `fb0b67103366…`
-- `context/DECISIONS.md` · 191,913 bytes · SHA-256 `59bcbb5f02ea…`
+- `context/CURRENT_STATE.md` · 277,529 bytes · SHA-256 `2c4150b689d1…`
+- `context/TASK_BOARD.md` · 188,877 bytes · SHA-256 `08911062735d…`
+- `context/DECISIONS.md` · 192,933 bytes · SHA-256 `e636af265ed6…`
 - `docs/AUDIT_2026-10-18.json` · 6,892 bytes · SHA-256 `b34b668a7b5a…`
