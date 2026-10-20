@@ -6,6 +6,13 @@ globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 
 const issueRunTokenMock = vi.fn(() => Promise.resolve("token-123"));
 const barrierFixture = vi.hoisted(() => ({ refs: null, input: null }));
+const launchFixture = vi.hoisted(() => ({ start: null, gauntlet: null, prepare: null }));
+vi.mock("./systems/runLaunch.js", async (importOriginal) => {
+  const actual = await importOriginal();
+  return { ...actual, prepareRunDependencies: (...args) => launchFixture.prepare
+    ? launchFixture.prepare(() => actual.prepareRunDependencies(...args))
+    : actual.prepareRunDependencies(...args) };
+});
 vi.mock("./systems/inputBridge.js", async (importOriginal) => {
   const actual = await importOriginal();
   return { ...actual, releaseAllInputs: (refs, ...args) => {
@@ -177,6 +184,8 @@ vi.mock("./storage.js", () => ({
 
 vi.mock("./components/HomeV2.jsx", () => ({
   default: function HomeV2Mock({ onStart, onSetGauntletMode, setStarterLoadout }) {
+    launchFixture.start = onStart;
+    launchFixture.gauntlet = onSetGauntletMode;
     return <>
       <button onClick={() => onStart()}>start</button>
       <button data-testid="gauntlet-start" onClick={() => { onSetGauntletMode(true); onStart(999, { gauntletWeek: -1 }); }}>gauntlet</button>
@@ -192,8 +201,8 @@ vi.mock("./components/DraftScreen.jsx", () => ({
 }));
 
 vi.mock("./components/DeathScreen.jsx", () => ({
-  default: function DeathScreenMock({ onStartGame, score, wave, timeSurvived }) {
-    return <button data-testid="retry-run" data-score={score} data-wave={wave} data-time={timeSurvived} onClick={() => onStartGame()}>death-screen</button>;
+  default: function DeathScreenMock({ onStartGame, onMenu, score, wave, timeSurvived }) {
+    return <><button data-testid="retry-run" data-score={score} data-wave={wave} data-time={timeSurvived} onClick={() => onStartGame()}>death-screen</button><button data-testid="death-menu" onClick={() => onMenu()}>menu</button></>;
   },
 }));
 
@@ -267,7 +276,9 @@ beforeAll(async () => {
 });
 
 afterEach(async () => {
-  issueRunTokenMock.mockClear();
+  issueRunTokenMock.mockReset().mockResolvedValue("token-123");
+  launchFixture.prepare = null;
+  vi.restoreAllMocks();
   window.localStorage.clear();
   window.sessionStorage.clear();
   if (root) {
@@ -283,6 +294,116 @@ afterEach(async () => {
 });
 
 describe("CallOfDoodie launch smoke", () => {
+  async function mountRun() {
+    const { default: App } = await import("./App.jsx");
+    container = document.createElement("div"); document.body.appendChild(container); root = createRoot(container);
+    await act(async () => { root.render(<App />); }); await flush();
+    await act(async () => { container.querySelector("button").click(); }); await flush();
+  }
+  function appHooks() {
+    const canvas = container.querySelector("#game-canvas");
+    let fiber = canvas[Object.keys(canvas).find(k => k.startsWith("__reactFiber"))];
+    while (fiber) {
+      const hooks = []; let h = fiber.memoizedState;
+      while (h) { hooks.push(h.memoizedState); h = h.next; }
+      if (hooks.some(h => h?.current?.player && Array.isArray(h.current.enemies))) return hooks;
+      fiber = fiber.return;
+    }
+    throw new Error("App hooks missing");
+  }
+  it.each(["resolve", "reject"])("ignores an older ticket %s after the replacement ticket arrives", async (outcome) => {
+    let resolveOld, rejectOld;
+    issueRunTokenMock.mockImplementationOnce(() => new Promise((resolve, reject) => { resolveOld = resolve; rejectOld = reject; }))
+      .mockResolvedValueOnce({ token: "example-current-ticket", summarySig: "current-signature" });
+    await mountRun();
+    await act(async () => { await launchFixture.start(222); }); await flush();
+    const refs = appHooks();
+    const token = refs.find(h => h?.current === "example-current-ticket"), signature = refs.find(h => h?.current === "current-signature");
+    expect(token).toBeDefined(); expect(signature).toBeDefined();
+    await act(async () => { if (outcome === "resolve") resolveOld({ token: "old-ticket", summarySig: "old-signature" }); else rejectOld(new Error("old offline request")); });
+    expect(token.current).toBe("example-current-ticket"); expect(signature.current).toBe("current-signature");
+  }, 60000);
+  it("rejects superseded dependency preparation before initializing a run", async () => {
+    await mountRun();
+    let release;
+    launchFixture.prepare = actual => new Promise(resolve => { release = async () => resolve(await actual()); });
+    let oldStart;
+    await act(async () => { oldStart = launchFixture.start(111); });
+    launchFixture.prepare = null;
+    await act(async () => { await launchFixture.start(222); }); await flush();
+    const game = appHooks().find(h => h?.current?.player && h.current.enemies).current;
+    const tickets = issueRunTokenMock.mock.calls.length;
+    await act(async () => { await release(); await oldStart; }); await flush();
+    expect(appHooks().find(h => h?.current?.player && h.current.enemies).current).toBe(game);
+    expect(issueRunTokenMock).toHaveBeenCalledTimes(tickets);
+  }, 60000);
+  it("keeps delayed ticket delivery for the same ended run and ignores delivery after unmount", async () => {
+    let resolveTicket;
+    issueRunTokenMock.mockImplementationOnce(() => new Promise(resolve => { resolveTicket = resolve; }));
+    await mountRun();
+    const hooks = appHooks(), game = hooks.find(h => h?.current?.player && h.current.enemies).current;
+    game.runPhase = "ended";
+    await act(async () => { resolveTicket({ token: "example-ended-ticket", summarySig: "ended-signature" }); });
+    expect(hooks.some(h => h?.current === "example-ended-ticket")).toBe(true);
+    issueRunTokenMock.mockImplementationOnce(() => new Promise(resolve => { resolveTicket = resolve; }));
+    await act(async () => { await launchFixture.start(333); }); await flush();
+    const refs = appHooks().filter(h => h && Object.hasOwn(h, "current"));
+    await act(async () => { root.unmount(); }); root = null;
+    const snapshot = refs.map(h => h.current);
+    await act(async () => { resolveTicket({ token: "example-unmounted-ticket", summarySig: "unmounted-signature" }); });
+    expect(refs.map(h => h.current)).toEqual(snapshot);
+  }, 60000);
+  it("cancels pending rematch preparation when the player returns to the menu", async () => {
+    await mountRun();
+    const { useGameLoop } = await import("./hooks/useGameLoop.js");
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    await act(async () => { useGameLoop.mock.calls.at(-1)[3].onError(new Error("menu cancellation fixture")); }); await flush();
+    let release, pending;
+    launchFixture.prepare = actual => new Promise(resolve => { release = async () => resolve(await actual()); });
+    await act(async () => { pending = launchFixture.start(555); });
+    await act(async () => { container.querySelector('[data-testid="death-menu"]').click(); }); await flush();
+    const tickets = issueRunTokenMock.mock.calls.length;
+    await act(async () => { await release(); await pending; }); await flush();
+    expect(container.querySelector("#game-canvas")).toBeNull();
+    expect(container.textContent).toContain("start");
+    expect(issueRunTokenMock).toHaveBeenCalledTimes(tickets);
+  }, 60000);
+  it("binds delayed draft and audio work to its live owning run", async () => {
+    const delayed = [], originalTimeout = globalThis.setTimeout;
+    const spy = vi.spyOn(globalThis, "setTimeout").mockImplementation((callback, delay, ...args) => {
+      if (delay === 80 || delay === 200) { delayed.push({ callback, delay }); return originalTimeout(() => {}, 0); }
+      return originalTimeout(callback, delay, ...args);
+    });
+    const { startMusic, startAmbient } = await import("./audio/soundFacade.js");
+    try {
+      await mountRun();
+      await act(async () => { launchFixture.gauntlet(true); await launchFixture.start(999, { gauntletWeek: -1 }); }); await flush();
+      const oldDraft = delayed.findLast(t => t.delay === 80), oldAudio = delayed.findLast(t => t.delay === 200);
+      expect(oldDraft).toBeDefined(); expect(oldAudio).toBeDefined();
+      await act(async () => { await launchFixture.start(444); }); await flush();
+      const hooks = appHooks(), game = hooks.find(h => h?.current?.player && h.current.enemies).current;
+      const before = JSON.stringify({ game, mods: barrierFixture.input });
+      startMusic.mockClear(); startAmbient.mockClear();
+      await act(async () => { oldDraft.callback(); oldAudio.callback(); });
+      expect(JSON.stringify({ game, mods: barrierFixture.input })).toBe(before);
+      expect(startMusic).not.toHaveBeenCalled(); expect(startAmbient).not.toHaveBeenCalled();
+      const currentDraft = delayed.findLast(t => t.delay === 80), currentAudio = delayed.findLast(t => t.delay === 200);
+      const { track } = await import("./utils/analytics.js"); track.mockClear();
+      await act(async () => { currentDraft.callback(); currentAudio.callback(); });
+      expect(startMusic).toHaveBeenCalledTimes(1); expect(startAmbient).toHaveBeenCalledTimes(1);
+      expect(track).toHaveBeenCalledWith("perk_chosen", expect.any(Object));
+      startMusic.mockClear(); startAmbient.mockClear(); game.runPhase = "ended";
+      await act(async () => { currentDraft.callback(); currentAudio.callback(); });
+      expect(startMusic).not.toHaveBeenCalled(); expect(startAmbient).not.toHaveBeenCalled();
+      game.runPhase = "playing"; track.mockClear();
+      await act(async () => { root.unmount(); }); root = null;
+      const ended = JSON.stringify(game);
+      await act(async () => { currentDraft.callback(); currentAudio.callback(); });
+      expect(JSON.stringify(game)).toBe(ended);
+      expect(track).not.toHaveBeenCalledWith("perk_chosen", expect.any(Object));
+      expect(startMusic).not.toHaveBeenCalled(); expect(startAmbient).not.toHaveBeenCalled();
+    } finally { spy.mockRestore(); }
+  }, 60000);
   it("preserves earned speed and applies Kill Frenzy on exactly its active movement frames", async () => {
     const { default: App } = await import("./App.jsx");
     const { useGameLoop } = await import("./hooks/useGameLoop.js");

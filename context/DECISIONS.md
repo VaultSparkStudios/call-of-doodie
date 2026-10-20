@@ -1662,3 +1662,8 @@ S191 final release acceptance: S191 implementation 40d7b319072d7d4067d403c861bf6
 
 
 S191 receipt scan correction: a chained PowerShell invocation advanced to commit/push after the staged entropy scan flagged public CI job URLs. Required workflow results were valid; trim redundant provider job URL metadata from the public audit, retain exact-SHA detailed proof in ignored cache, and verify the scanner in a separate successful invocation before the correction push. No hook-disable or force-push flag was used.
+
+
+## 2026-10-20 — Session 192
+
+Use launch generation plus captured game identity for deferred run entry work. Invalidate on menu/unmount; preserve ticket arrival after death for the same run. Check live phase only for deferred perk/audio. No cancellation of unrelated storage history or server work. Existing CANON-045 STRONG gap retained: no identity/trust-policy change; routine promotion scoped to guest-game correctness. FORGE/public-unlaunched unchanged. Assisted App callbacks, intercepted ticket fixtures and synthetic input do not prove participant outcomes or physical controllers. Existing S183 comparisons remain unmeasured. No backend, dependency, identity-policy, cost, licensing or launch change. CDR unchanged without creative direction.

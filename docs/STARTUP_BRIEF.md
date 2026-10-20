@@ -1,12 +1,12 @@
 <!-- generated-by: scripts/render-startup-brief.mjs v3.1 -->
-<!-- generated-at: 2026-10-20 (Session 191 closeout) -->
-<!-- semantic-freshness: hash=6405a643719bbdfe next=192 silSession=191 silScore=945 handoff=- tests=- -->
+<!-- generated-at: 2026-10-20 (Session 192 closeout) -->
+<!-- semantic-freshness: hash=9ec7b4d784d38d6b next=193 silSession=192 silScore=945 handoff=- tests=- -->
 <!-- fast-boot-valid-until: next session if within 24h -->
 <!-- brief-coherent: true -->
 
 # Startup Brief — Call-Of-Doodie
 
-> **Fast-boot brief** — generated at Session 191 closeout · 2026-10-20.
+> **Fast-boot brief** — generated at Session 192 closeout · 2026-10-20.
 > Valid for next session if started within 24h. For sessions >24h later, load context files fresh (start.md §3).
 
 ---
@@ -15,12 +15,12 @@
 ╔════════════════════════════════════════════════════════════════╗
 ║  🚀 CALL-OF-DOODIE                                               ║
 ║  project · deployed/public-unlaunched · FORGE                    ║
-║  Session 192 · 2026-10-20 · FOUNDER MODE                         ║
+║  Session 193 · 2026-10-20 · FOUNDER MODE                         ║
 ║  Owner: VaultSpark Studios                                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ LAST SESSION (S191) - WHAT SHIPPED ══════════════════════════╗
-║  S191 two build-integrity outcomes production verified.          ║
+╔══ LAST SESSION (S192) - WHAT SHIPPED ══════════════════════════╗
+║  S192 isolates asynchronous run startup, delayed perks/audio an  ║
 ║  Tests  -                                                        ║
 ║  Deploy -                                                        ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -43,7 +43,7 @@
 ╔══ SCORE ═══════════════════════════════════════════════════════╗
 ║                                                                  ║
 ║    945/1000   ██████████████████████░░   95%                     ║
-║    SIL v3.0  ·  Avg3: 945  ·  Velocity 2→                        ║
+║    SIL v3.0  ·  Avg3: 945  ·  Velocity 1→                        ║
 ║    Last active: 0d  ·  Last closeout: 0d  ·  (active = newest…   ║
 ║    Trend  ▂▂▂▄▄  →  (last 5 sessions)                            ║
 ║                                                                  ║
@@ -62,25 +62,25 @@
 ║                                                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ WHERE WE LEFT OFF  ·  Session 191 ═══════════════════════════╗
+╔══ WHERE WE LEFT OFF  ·  Session 192 ═══════════════════════════╗
 ║  Shipped:  see LATEST_HANDOFF.md                                 ║
 ║  Tests:    299/299 passing  ·  Deploy: N/A                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ✓  ███████░░░░░░░░░░░░░░░░░  30% used                           ║
-║     82,895 / 272,000 tok  ·  codex/codex-272k  · …               ║
-║     ~41,448 tok/turn  ·  cache 50%  ·  4 turns to compact        ║
+║  ✓  ████████░░░░░░░░░░░░░░░░  34% used                           ║
+║     93,002 / 272,000 tok  ·  codex/codex-272k  · …               ║
+║     ~46,501 tok/turn  ·  cache 50%  ·  3 turns to compact        ║
 ║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         299/299 passing (2026-10-20T02:09:16.103Z)     ║
-║  ✓  Velocity      2   ·  Debt: →                                 ║
-║  ✓  Runway        S191 production verified                       ║
+║  ⚠  Tests         299/299 files · 2038/2038 assertions —…        ║
+║  ⚠  Velocity      1   ·  Debt: →                                 ║
+║  ✓  Runway        S192 staged; production pending                ║
 ║  ⛔  Context age   ?d                                             ║
 ║  ⚠  IGNIS         44193 FORGE  ·  12d old                        ║
-║  ⛔  Truth         selected build-integrity outcomes…             ║
+║  ⛔  Truth         implementation/staging verified;…              ║
 ║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs…        ║
 ║  ✓  Genome dims   all stable  (24/25)                            ║
 ║  ✓  Entropy       0.214  (healthy)                               ║
@@ -115,15 +115,9 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ MOMENTUM METER ══════════════════════════════════════════════╗
-║  Velocity:   ▂▂▂▄▄  2→  (last 5 sessions)                        ║
+║  Velocity:   ▂▂▂▄▄  1→  (last 5 sessions)                        ║
 ║  Intent:     ?% achieved last 5                                  ║
 ║  Streak:     — (last intent not achieved)                        ║
-╚════════════════════════════════════════════════════════════════╝
-
-╔══ SIL FORECAST (next session) ═════════════════════════════════╗
-║  Projected:  940/1000  (↓5 vs current 945)                       ║
-║  At-risk:    Momentum Δ-3                                        ║
-║  Calibration: MAE 7.5 over last 10 forecasts                     ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ GENIUS HIT LIST ═════════════════════════════════════════════╗
@@ -157,5 +151,5 @@
 
 ---
 
-*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 191 closeout · 2026-10-20*
+*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 192 closeout · 2026-10-20*
 *Run `node scripts/ops.mjs doctor` for live health check · `node scripts/ops.mjs genius-list` to refresh hit list*

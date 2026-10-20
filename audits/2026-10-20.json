@@ -1,57 +1,38 @@
 {
   "schemaVersion": "1.3",
-  "session": 191,
+  "session": 192,
   "date": "2026-10-20",
-  "headline": "S191 preserves earned movement speed through Kill Frenzy and keeps cursed magazines usable.",
+  "headline": "S192 isolates asynchronous run startup, delayed perks/audio and leaderboard tickets.",
   "shipped": [
-    "Kill Frenzy multiplies movement for exactly its active frames, preserving permanent gains and pickup/adrenaline/rubble composition.",
-    "All magazine/refill and desktop/mobile capacity displays share a minimum-one capacity rule, including Scavenger ammo restoration."
+    "Delayed run startup work cannot mutate a replacement run"
   ],
-  "validation": "S191 implementation 40d7b319072d7d4067d403c861bf6de804594de2 passed exact-main workflow 39357464497: all299 test files /2032 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 40d7b319072d. Canonical and immutable https://40b2a0c6.call-of-doodie.pages.dev pass shell7/7 each. All24 actual-App browser assertions pass across390/1440 and both themes: earned base5 preserved; all90 Frenzy movement frames6 then5; pause frozen; Haste RPG reload1/1 and arsenal capacity labels correct.",
-  "limits": "FORGE/public-unlaunched unchanged. Assisted actual-App state/callback fixtures and synthetic input do not prove physical-controller or participant outcomes. Existing S183 comparisons remain unmeasured. No new backend, dependency, cost, identity, licensing or launch change. CDR unchanged without creative direction.",
+  "validation": "S192 full local suite passes 299/299 files and 2038/2038 assertions, no failed or pending tests. Strict lint, configured build, schema/startup/public/security gates pass; dependency audit zero vulnerabilities, backend5/5/replay3/3. Staging562130b0 shell7/7/browser12/12 across390/1440/both themes. All24 before/after captures inspected/hash-bound. Independent review approved. Exact-main production pending.",
+  "limits": "FORGE/public-unlaunched unchanged. Assisted App callbacks, intercepted ticket fixtures and synthetic input do not prove participant outcomes or physical controllers. Existing S183 comparisons remain unmeasured. No backend, dependency, identity-policy, cost, licensing or launch change. CDR unchanged without creative direction.",
   "review": {
     "verdict": "pass",
-    "blockingFindings": 0
+    "blockingFindings": 0,
+    "fixed": 3
   },
   "staging": {
-    "url": "https://7e4d9a14.call-of-doodie.pages.dev",
+    "url": "https://562130b0.call-of-doodie.pages.dev",
     "browserCases": 4,
-    "shellAssertions": 7,
-    "browserAssertions": 24
+    "browserAssertions": 12,
+    "shellAssertions": 7
   },
   "production": {
-    "source": "40d7b319072d7d4067d403c861bf6de804594de2",
-    "workflow": 39357464497,
-    "immutableUrl": "https://40b2a0c6.call-of-doodie.pages.dev",
-    "canonical": "https://callofdoodie.wtf/",
-    "verifiedAt": "2026-10-20T02:13:04.125Z",
-    "health": {
-      "contract": "edge-health-v1",
-      "status": "edge-ready",
-      "service": "call-of-doodie",
-      "scope": "cloudflare-pages-edge-only",
-      "deploy": "40d7b319072d",
-      "checkedAt": "2026-10-20T02:12:57.540Z"
-    },
-    "requiredChecks": {
-      "quality": "success",
-      "buildAndDeploy": "success"
-    },
-    "testFiles": 299,
-    "assertions": 2032,
-    "browserCases": 4,
-    "browserAssertions": 24
+    "status": "pending"
   },
   "closeout": {
-    "state": "complete",
+    "state": "delivery-pending",
     "silScore": 945,
     "scaffold": {
       "tasks": 3,
-      "done": 3,
-      "inProgress": 0,
+      "done": 2,
+      "inProgress": 1,
       "open": 0
     }
   },
-  "testRunNote": "Initial full run passed2031 assertions with one Git/startup fixture exceeding30s under host load (36.99s). Isolated fixture passes13.63s; complete rerun uses120s test timeout and passes all299 files/2032 assertions. Second complete run passed startup but one hot-context freshness assertion failed because concurrent closeout writes changed its inputs. Regenerated context and froze inputs before the final full rerun. Both failed reports retained; neither is passing evidence.",
-  "visualCaptures": 40
+  "testFiles": 299,
+  "assertions": 2038,
+  "visualCaptures": 24
 }

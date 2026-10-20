@@ -2117,7 +2117,11 @@ export default function CallOfDoodie() {
   drainEnemyDefeatsRef.current = drainEnemyDefeats;
 
   // ── Start game ────────────────────────────────────────────────────────────
+  const runStartRequestRef = useRef(0);
+  useEffect(() => () => { runStartRequestRef.current++; }, []);
+  useEffect(() => { if (screen === "menu") runStartRequestRef.current++; }, [screen]);
   const startGame = useCallback(async (forceSeed, challengeOpts = {}) => {
+    const request = ++runStartRequestRef.current;
     setPendingNextRunContract(null);
     const launch = resolveRunLaunch({ operationId: challengeOpts.operationId, modeId: zombiesRef.current ? "zombies" : gameModeIdRef.current, gauntlet: gauntletRef.current });
     const requestedOperation = launch.operation;
@@ -2132,6 +2136,7 @@ export default function CallOfDoodie() {
       prepareRunDependencies({ launch, combatRuntime: combatRuntimeRef.current, loadCombatRuntime }),
       loadDrawGame(),
     ]);
+    if (request !== runStartRequestRef.current) return;
     modeRuntimeRef.current = prepared.modeRuntime;
     combatRuntimeRef.current = prepared.combatRuntime;
     drawGameRef.current = renderer.drawGame;
@@ -2184,6 +2189,9 @@ export default function CallOfDoodie() {
     settingsRef.current = loadSettings(); // refresh settings at game start
     starterLoadoutRef.current = starterLoadout;
     const seed = initGame(forceSeed, challengeOpts.startWave, challengeOpts.drill || null);
+    const startedGame = gsRef.current;
+    const ownsRun = () => request === runStartRequestRef.current && gsRef.current === startedGame;
+    const ownsLiveRun = () => ownsRun() && startedGame.runPhase === RUN_PHASE.PLAYING && !inactiveGameplayRef.current;
     if (gsRef.current?.sewerRun) gsRef.current.sewerRun.pacing = new URLSearchParams(window.location.search).get("zombiePacing") === "pumps" ? "pumps" : "time";
     if (gsRef.current) gsRef.current._duelId = _pendingDuelId;
     if (requestedOperation) {
@@ -2236,6 +2244,7 @@ export default function CallOfDoodie() {
     draftChosenRef.current = null;
     if (_draftPerk) {
       setTimeout(() => {
+        if (!ownsLiveRun()) return;
         applyPerk(_draftPerk);
         const bonus = consumeGauntletMetaChoice(gsRef.current);
         if (bonus) {
@@ -2269,8 +2278,9 @@ export default function CallOfDoodie() {
     setMusicPaused(false);
     preloadBossAtlas(); // warm boss sprites before the first boss wave (S155)
     setTimeout(() => {
-      startMusic(Boolean(gsRef.current?.bossWave));
-      startAmbient(gsRef.current?.mapTheme ?? 0);
+      if (!ownsLiveRun()) return;
+      startMusic(Boolean(startedGame.bossWave));
+      startAmbient(startedGame.mapTheme ?? 0);
     }, 200); // small delay to let audio context resume
     // ── Analytics: game start ──
     const startArtifacts = createRunStartArtifacts({
@@ -2286,9 +2296,12 @@ export default function CallOfDoodie() {
       runSummarySigRef.current = "";
     } else {
       issueRunToken(runClaim).then(runTicket => {
+        // A ticket may arrive after death, but must still belong to this run.
+        if (!ownsRun()) return;
         runTokenRef.current = runTicket?.token || null;
         runSummarySigRef.current = runTicket?.summarySig || "";
       }).catch(() => {
+        if (!ownsRun()) return;
         runTokenRef.current = null;
         runSummarySigRef.current = "";
       });

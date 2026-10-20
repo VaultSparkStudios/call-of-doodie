@@ -4,6 +4,16 @@
 
 ## Current Session
 
+## S192 candidate verified
+
+S192 full local suite passes 299/299 files and 2038/2038 assertions, no failed or pending tests. Strict lint, configured build, schema/startup/public/security gates pass; dependency audit zero vulnerabilities, backend5/5/replay3/3. Staging562130b0 shell7/7/browser12/12 across390/1440/both themes. All24 before/after captures inspected/hash-bound. Independent review approved. Exact-main production pending.
+
+## S192 run ownership
+
+S192 isolates asynchronous run startup, delayed perks/audio and leaderboard tickets.
+
+Actual App focused suite15/15 passes. Staging562130b0 shell7/7 and browser12/12 pass across390/1440 and both themes; reordered ticket fixtures retain the replacement token/signature. Independent review addressed menu cancellation, positive draft and live unmount coverage. Full suite and exact-main production pending. Authoritative detail: LATEST_HANDOFF.
+
 ## S191 production verified
 
 Frenzy preserves earned speed; cursed magazines remain usable and displays match reload capacity.
@@ -98,16 +108,14 @@ See LATEST_HANDOFF for acceptance limits.
 
 Implemented audit item 2 (1221846): SettingsPanel and VirtualKeyboard polled navigator.getGamepads()[0], so a pad in slot 1+ (common after a Chrome reconnect) could not navigate those screens. Both now use getPrimaryGamepad(); slot-1 selection and a menu source contract are tested.
 
-S185 arc completion: /start ran (session lock, canon sync 55 canons / 0 pending, CANON-049 radar current, fresh brief), then a scoped /audit of full range of motion on every input device (docs/AUDIT_2026-10-18.md, 4/4 premises verified). Verified clean with evidence: mouse aim (DPR + camera), touch aim, ADS zoom (scaled around the player), arena movement clamp (AW/AH) and movement direction on keyboard/touch/left stick.
-
-Staging https://1982e652.call-of-doodie.pages.dev passed shell 7/7, served the candidate entry index-DCEIi-al.js and a SettingsPanel chunk without slot-0 polling. Local full suite, strict lint and deployable build are recorded in the closeout brief; production follows exact-main CI on push.
-
-## S185 full-range controller aim — 2026-10-18
-
-Controller right-stick aim now covers a full 360° on every gamepad layout. Aim was hard-wired to axes 2/3; pads without the W3C standard mapping (DualShock/DualSense in Firefox, generic Linux pads) place an analog trigger there that rests at -1, pinning stick Y and limiting aim to one half-plane (180°). `resolveAimAxes` in src/utils/gamepad.js now selects the right stick from the pad mapping, the PlayStation non-standard layout and resting-value trigger detection; the HomeV2 aim probe shares it. Resting triggers no long
+S185 arc completion: /start ran (session lock, canon sync 55 canons / 0 pending, CANON-049 radar current, fresh brief), then a scoped /audit of full range of motion on every input device (docs/AUDIT_2026-10-18.md, 4/4 premises verified). Verified clean with evidence: mouse aim (DPR + camera), touch aim, ADS zoom (scaled around the player), arena movement clamp (AW/AH) and movement dir
 
 ## Open Work
 
+## S192 arc outcomes and waves
+- [ ] S192 exact-main production and final closeout evidence.
+- [ ] [SIL:1] S192 reserve: measure rapid-rematch comprehension with natural participants.
+- [ ] [SIL:1] S192 reserve: physical-device interruption/reconnection comparison.
 ## S191 arc outcomes and waves
 - [ ] [SIL:1] S191 reserve: measure natural participant comprehension of capacity penalties.
 - [ ] [SIL:1] S191 reserve: physical-controller movement pacing comparison.
@@ -159,25 +167,8 @@ Controller right-stick aim now covers a full 360° on every gamepad layout. Aim 
 ## Session 163 - Real modes, CPU squad, fixed timestep, single brand
 - [ ] [SIL:2] Deploy the S163 migration and edge-function change (profiles table, ghost_path column, submit-score ghostPath) and set OBELISK_VERIFY_SECRET / SUPABASE_SERVICE_ROLE_KEY on Pages so cloud backup and the remote ghost race light up.
 - [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET on the Pages project: neither is in the secrets gateway, so Porcelain Passport verification (and therefore cloud backup) answers 503 in production until they exist.
-- [ ] [SIL:1] Scrolling camera for a sixteen-bot royale; DeathScreen diet.
-## Session 162 - Corrective-order evidence across runs
-## Session 161 - Readable threat compass and prospective doctrine choice
-## Session 160 - Propagation and release-evidence recovery
 
 ## Recent Decisions
-
-## 2026-10-18 — Session 188
-
-A projectile cannot damage after consumption, and one piercing pass damages each distinct target once. Use weak target membership to avoid retaining defeated enemies; reset exactly once at boomerang return. Preserve piercing capacity, separate shots and existing collision geometry. No new package or variable user cost.
-
-FORGE/public-unlaunched unchanged. Assisted combat fixtures are not natural full-run, physical-controller or participant evidence. Existing participant/device/model-token comparisons remain unmeasured. Existing narrow-screen precision text can crop; this combat correction does not change presentation. No identity, spending, licensing or lifecycle change.
-
-Canonical doctor/autopilot currently delegates to a sibling subject; scoped local evidence and exact-main CI remain the applicable release contract. No foreign doctor result is asserted as project health.
-
-
-S188 delivery acceptance: S188 implementation f8b3254c75b90a3542420d6fa83cd3b108f5b1d3 passed exact-main workflow 39149635426: all 296 test files / 1,995 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches f8b3254c75b9. Canonical and immutable https://9024cfb5.call-of-doodie.pages.dev pass shell 7/7 each. Four real-Chrome combat cases pass on canonical production at 390/1440 in both themes. The final closeout seal retains the same gameplay bytes, also corrects whitespace exposed by summary truncation, and follows through its own exact-main deployment. No launch or lifecycle promotion.
-
-
 
 ## 2026-10-18 — Session 189
 
@@ -217,11 +208,17 @@ Existing bounded founder authorization covers routine promotion. CANON-045 STRON
 S191 final release acceptance: S191 implementation 40d7b319072d7d4067d403c861bf6de804594de2 passed exact-main workflow 39357464497: all299 test files /2032 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 40d7b319072d. Canonical and immutable https://40b2a0c6.call-of-doodie.pages.dev pass shell7/7 each. All24 actual-App browser assertions pass across390/1440 and both themes: earned base5 preserved; all90 Frenzy movement frames6 then5; pause frozen; Haste RPG reload1/1 and arsenal capacity labels correct.
 
 
-S191 receipt scan correction: a chained PowerShell invocati
+S191 receipt scan correction: a chained PowerShell invocation advanced to commit/push after the staged entropy scan flagged public CI job URLs. Required workflow results were valid; trim redundant provider job URL metadata from the public audit, retain exact-SHA detailed proof in ignored cache, and verify the scanner in a separate successful invocation before the correction push. No hook-disable or force-push flag was used.
+
+
+
+## 2026-10-20 — Session 192
+
+Use launch generation plus captured game identity for deferred run entry work. Invalidate on menu/unmount; preserve ticket arrival after death for the same run. Check live phase only for deferred perk/audio. No cancellation of unrelated storage history or server work. Existing CANON-045 STRONG gap retained: no identity/trust-policy change; routine promotion scoped to guest-game correctness. FORGE/public-unlaunched unchanged. Assisted App callbacks, intercepted ticket fixtures and synthetic input do not prove participant outcomes or physical controllers. Existing S183 comparisons remain unmeasured. No backend, dependency, identity-policy, cost, licensing or launch change. CDR unchanged without creative direction.
 
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 266,441 bytes · SHA-256 `5fe9c80d9379…`
-- `context/TASK_BOARD.md` · 184,595 bytes · SHA-256 `cdca7737a751…`
-- `context/DECISIONS.md` · 182,176 bytes · SHA-256 `4289bb563cbd…`
+- `context/CURRENT_STATE.md` · 267,345 bytes · SHA-256 `768c156c22a9…`
+- `context/TASK_BOARD.md` · 185,168 bytes · SHA-256 `5e34fc6a844e…`
+- `context/DECISIONS.md` · 182,931 bytes · SHA-256 `abdf33f7f51e…`
 - `docs/AUDIT_2026-10-18.json` · 6,892 bytes · SHA-256 `b34b668a7b5a…`

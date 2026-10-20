@@ -2034,3 +2034,11 @@ S191 candidate: S191 full local suite passes 299/299 files and 2032/2032 asserti
 
 
 S191 final release acceptance: S191 implementation 40d7b319072d7d4067d403c861bf6de804594de2 passed exact-main workflow 39357464497: all299 test files /2032 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 40d7b319072d. Canonical and immutable https://40b2a0c6.call-of-doodie.pages.dev pass shell7/7 each. All24 actual-App browser assertions pass across390/1440 and both themes: earned base5 preserved; all90 Frenzy movement frames6 then5; pause frozen; Haste RPG reload1/1 and arsenal capacity labels correct.
+
+
+## 2026-10-20 — Session 192
+
+S192 isolates asynchronous run startup, delayed perks/audio and leaderboard tickets. One L2 outcome staged; full-suite/production pending. Public acceptance: audits/2026-10-20.json.
+
+
+S192 candidate: S192 full local suite passes 299/299 files and 2038/2038 assertions, no failed or pending tests. Strict lint, configured build, schema/startup/public/security gates pass; dependency audit zero vulnerabilities, backend5/5/replay3/3. Staging562130b0 shell7/7/browser12/12 across390/1440/both themes. All24 before/after captures inspected/hash-bound. Independent review approved. Exact-main production pending.

@@ -1,3 +1,11 @@
+## S192 run ownership
+
+S192 isolates asynchronous run startup, delayed perks/audio and leaderboard tickets.
+
+Actual App focused suite15/15 passes. Staging562130b0 shell7/7 and browser12/12 pass across390/1440 and both themes; reordered ticket fixtures retain the replacement token/signature. Independent review addressed menu cancellation, positive draft and live unmount coverage. Full suite and exact-main production pending.
+
+FORGE/public-unlaunched unchanged. Assisted App callbacks, intercepted ticket fixtures and synthetic input do not prove participant outcomes or physical controllers. Existing S183 comparisons remain unmeasured. No backend, dependency, identity-policy, cost, licensing or launch change. CDR unchanged without creative direction.
+
 ## S191 final production
 
 S191 implementation 40d7b319072d7d4067d403c861bf6de804594de2 passed exact-main workflow 39357464497: all299 test files /2032 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 40d7b319072d. Canonical and immutable https://40b2a0c6.call-of-doodie.pages.dev pass shell7/7 each. All24 actual-App browser assertions pass across390/1440 and both themes: earned base5 preserved; all90 Frenzy movement frames6 then5; pause frozen; Haste RPG reload1/1 and arsenal capacity labels correct.

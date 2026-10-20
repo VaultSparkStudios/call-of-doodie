@@ -1,3 +1,13 @@
+## S192 candidate verified
+
+S192 full local suite passes 299/299 files and 2038/2038 assertions, no failed or pending tests. Strict lint, configured build, schema/startup/public/security gates pass; dependency audit zero vulnerabilities, backend5/5/replay3/3. Staging562130b0 shell7/7/browser12/12 across390/1440/both themes. All24 before/after captures inspected/hash-bound. Independent review approved. Exact-main production pending.
+
+## S192 run ownership
+
+S192 isolates asynchronous run startup, delayed perks/audio and leaderboard tickets.
+
+Actual App focused suite15/15 passes. Staging562130b0 shell7/7 and browser12/12 pass across390/1440 and both themes; reordered ticket fixtures retain the replacement token/signature. Independent review addressed menu cancellation, positive draft and live unmount coverage. Full suite and exact-main production pending. Authoritative detail: LATEST_HANDOFF.
+
 ## S191 production verified
 
 Frenzy preserves earned speed; cursed magazines remain usable and displays match reload capacity.
