@@ -10,7 +10,7 @@
   "sourceFiles": [
     {
       "file": "src/App.jsx",
-      "sha256": "376dadf6d22e8f31ff0b842cb0f14e61935949f3052d8ad725bec2ab3ded9c26"
+      "sha256": "72bf049c18f6eab3dde97b2405cb49b9cba0d1b83cbb25ce6e9555d5615b29cb"
     },
     {
       "file": "src/components/DialogShell.jsx",
@@ -329,6 +329,7 @@
   },
   "methodLimits": [
     "Synthetic keyboard and assisted App state/ticks; not a production score submission or physical-controller test.",
-    "No participant or every-route claim."
+    "No participant or every-route claim.",
+    "Source hashes use canonical LF checkout bytes; App line endings normalized without semantic or git source changes."
   ]
 }

@@ -4,6 +4,12 @@
 
 ## Current Session
 
+## S193 production verified
+
+Shield Guy protects the visible front; held keyboard actions preserve pause and reload.
+
+S193 implementation 49c6b60eb9e40b7e343daa6073ac7a424f4eaeb5 passed exact-main workflow 39366155584: 299 test files/2049 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 49c6b60eb9e4. Canonical and immutable https://e023d899.call-of-doodie.pages.dev shell7/7 each; production browser28/28 across390/1440/both themes proves front4/rear32, stable held Escape/reload, and held/released movement.
+
 ## S193 candidate verified
 
 S193 final local suite passes 299/299 files and 2049/2049 assertions with no failed/pending tests. Strict lint, configured build, schema/startup/public/security/runtime gates pass; dependency audit zero vulnerabilities; backend check and replay3/3 pass. Staging1da5492a shell7/7 and browser28/28 pass at390/1440/both themes;24 before/after captures inspected/hash-bound. Final independent review approved App, DialogShell and shield corrections. Exact-main production pending.
@@ -112,14 +118,11 @@ Local suite and staging verified; exact-main delivery pending. See [LATEST_HANDO
 
 ## S186 production verified
 
-S186 source 6dc4c4235cf2b263c1c8fef228ece1b3d8eb4b58 passed exact-main workflow 39141994765: 294/294 test files and 1,970/1,970 tests, strict lint, build and Cloudflare deployment. Canonical callofdoodie.wtf reports 6dc4c4235cf2; immutable https://b0ffec69.call-of-doodie.pages.dev/ and canonical shell checks pass 7/7 each. All four canonical browser input cases pass at 390/1440 in both themes, including uppercase release, pause, focus loss, resume and normal movement.
-
-Four selected reliability outcomes are complete. The final records seal retains the verified
+S186 sour
 
 ## Open Work
 
 ## S193 arc outcomes and waves
-- [ ] S193 production and full closeout acceptance.
 - [ ] [SIL:1] S193 reserve: matched shield/flanking comprehension study with representative participants.
 - [ ] [SIL:1] S193 reserve: physical keyboard/controller interruption comparison.
 ## S192 arc outcomes and waves
@@ -173,6 +176,7 @@ Four selected reliability outcomes are complete. The final records seal retains 
 ## Session 165 - Scrolling camera, live royale bots, death-beat diet, record recovery
 - [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET on the Pages project: neither is in the secrets gateway, so Porcelain Passport verification (and therefore cloud backup) answers 503 in production until they exist.
 - [ ] [SIL:2] Never continue work under a sealed session number — open the next number instead. Carried from the S164 SIL brainstorm.
+## Session 163 - Real modes, CPU squad, fixed timestep, single brand
 
 ## Recent Decisions
 
@@ -216,9 +220,12 @@ S192 final release acceptance: S192 implementation 815f9b47b15388d2167af2fbc282b
 
 Use incoming source direction for the existing player-facing shield; preserve hemisphere boundary and rail policy. Consume repeated Escape in both App and dialog capture boundaries, leaving fresh presses and held movement/interact intact. Existing CANON-045 STRONG gap is retained for unchanged guest-game promotion. FORGE/public-unlaunched unchanged. Synthetic keyboard, assisted App state/ticks and automated Chrome checks do not prove participant or physical-controller outcomes. Existing S183 comparisons remain unmeasured. No backend, dependency, identity/trust-policy, cost, licensing or public-launch change. CDR legitimately unchanged without new creative direction.
 
+
+S193 final acceptance: S193 implementation 49c6b60eb9e40b7e343daa6073ac7a424f4eaeb5 passed exact-main workflow 39366155584: 299 test files/2049 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 49c6b60eb9e4. Canonical and immutable https://e023d899.call-of-doodie.pages.dev shell7/7 each; production browser28/28 across390/1440/both themes proves front4/rear32, stable held Escape/reload, and held/released movement.
+
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 269,133 bytes · SHA-256 `62f82a91803b…`
-- `context/TASK_BOARD.md` · 185,765 bytes · SHA-256 `dca79b130dc4…`
-- `context/DECISIONS.md` · 184,111 bytes · SHA-256 `fca1ea78bd02…`
+- `context/CURRENT_STATE.md` · 269,690 bytes · SHA-256 `1ab2cef95217…`
+- `context/TASK_BOARD.md` · 185,765 bytes · SHA-256 `526f4b8826e2…`
+- `context/DECISIONS.md` · 184,574 bytes · SHA-256 `d59122be1701…`
 - `docs/AUDIT_2026-10-18.json` · 6,892 bytes · SHA-256 `b34b668a7b5a…`

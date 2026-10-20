@@ -4,9 +4,16 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "S193 corrects Shield Guy facing and makes keyboard actions fire once per press.",
-  "nextMilestone": "Verify both selected outcomes on exact-main production.",
+  "currentFocus": "S193 shield-facing and keyboard action correctness production verified.",
+  "nextMilestone": "Gather existing representative participant/device evidence without equating assisted checks with physical acceptance.",
   "testingSurfaces": [
+    {
+      "session": 193,
+      "type": "production",
+      "status": "verified",
+      "url": "https://callofdoodie.wtf/",
+      "command": "S193 implementation 49c6b60eb9e40b7e343daa6073ac7a424f4eaeb5 passed exact-main workflow 39366155584: 299 test files/2049 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 49c6b60eb9e4. Canonical and immutable https://e023d899.call-of-doodie.pages.dev shell7/7 each; production browser28/28 across390/1440/both themes proves front4/rear32, stable held Escape/reload, and held/released movement."
+    },
     {
       "session": 193,
       "type": "staging",
@@ -248,7 +255,7 @@
   "lastUpdated": "2026-10-20",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
-  "truthAuditStatus": "S193 both selected outcomes fully verified locally and on staging; exact-main production pending.",
+  "truthAuditStatus": "S193 both selected L2 outcomes production verified.",
   "truthAuditLastRun": "2026-10-20",
   "ignisScore": 44193,
   "ignisGrade": "FORGE",
@@ -349,7 +356,7 @@
     "skipped": 3,
     "note": "Studio-wide doctor evidence; not a project-only zero-findings claim. Central follow-up delivered through Ark; application unobserved."
   },
-  "lastSessionSummary": "S193 corrects Shield Guy facing and makes keyboard actions fire once per press.",
+  "lastSessionSummary": "S193 shield damage and keyboard action edges production verified.",
   "testsAssertionsPassing": 2049,
   "testsAssertionsTotal": 2049,
   "testsAssertionsFiles": 299,
@@ -361,35 +368,43 @@
   "silAvg5": 945,
   "testsAssertionsDeferred": [],
   "testsAssertionsLastRun": "2026-10-20T03:46:34.453Z",
-  "lastShipped": "S193 corrects Shield Guy facing and makes keyboard actions fire once per press.",
-  "truthStatus": "FORGE/public-unlaunched unchanged. Synthetic keyboard, assisted App state/ticks and automated Chrome checks do not prove participant or physical-controller outcomes. Existing S183 comparisons remain unmeasured. No backend, dependency, identity/trust-policy, cost, licensing or public-launch change. CDR legitimately unchanged without new creative direction.",
+  "lastShipped": "S193 front/rear shield damage, stable keyboard pause/reload and dialog Escape.",
+  "truthStatus": "FORGE/public-unlaunched unchanged. Assisted App state/ticks and synthetic keyboard do not prove participant or physical-controller outcomes. Existing S183 comparisons remain unmeasured. CDR unchanged without creative direction.",
   "testsFocusedSupplement": "S193 cardinal/stacked shield damage, moving projectile consumption, held keyboard actions, DialogShell capture Escape.",
-  "lastDeployCommit": "815f9b47b15388d2167af2fbc282b40dc7eb9a7b",
-  "lastDeployAt": "2026-10-20T03:10:48Z",
+  "lastDeployCommit": "49c6b60eb9e40b7e343daa6073ac7a424f4eaeb5",
+  "lastDeployAt": "2026-10-20T03:50:17Z",
   "closeoutAcceptance": {
     "session": 193,
-    "state": "delivery-pending",
+    "state": "complete",
     "writeback": "all ten reconciled; CDR legitimately unchanged",
     "scaffold": {
       "tasks": 3,
-      "done": 2,
-      "inProgress": 1,
+      "done": 3,
+      "inProgress": 0,
       "open": 0
     },
     "autopilot": "recipient equivalent; foreign doctor excluded",
-    "independentReview": "pass final two rounds; zero blocking findings"
+    "independentReview": "pass after browser-discovered dialog correction and audit scaffold reconciliation",
+    "production": {
+      "source": "49c6b60eb9e40b7e343daa6073ac7a424f4eaeb5",
+      "workflow": 39366155584,
+      "immutableUrl": "https://e023d899.call-of-doodie.pages.dev",
+      "canonical": "https://callofdoodie.wtf/",
+      "browserCases": 4,
+      "browserAssertions": 28
+    }
   },
   "testsLastRunMode": "full-local",
   "velocity": 2,
   "silVelocityLastSession": 2,
   "deploy": {
-    "source": "815f9b47b15388d2167af2fbc282b40dc7eb9a7b",
-    "workflow": 39362694165,
-    "immutableUrl": "https://be661b17.call-of-doodie.pages.dev",
+    "source": "49c6b60eb9e40b7e343daa6073ac7a424f4eaeb5",
+    "workflow": 39366155584,
+    "immutableUrl": "https://e023d899.call-of-doodie.pages.dev",
     "status": "verified",
-    "commit": "815f9b47b15388d2167af2fbc282b40dc7eb9a7b",
+    "commit": "49c6b60eb9e40b7e343daa6073ac7a424f4eaeb5",
     "url": "https://callofdoodie.wtf/",
-    "deployedAt": "2026-10-20T03:10:48Z"
+    "deployedAt": "2026-10-20T03:50:17Z"
   },
   "lastSession": 193,
   "silAvg10": 940.5,

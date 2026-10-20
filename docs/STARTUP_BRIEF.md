@@ -20,12 +20,13 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ LAST SESSION (S193) - WHAT SHIPPED ══════════════════════════╗
-║  S193 corrects Shield Guy facing and makes keyboard actions fir  ║
+║  S193 shield damage and keyboard action edges production verifi  ║
 ║  Tests  -                                                        ║
 ║  Deploy -                                                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ WHERE TO TEST · Call-Of-Doodie ══════════════════════════════╗
+║  Production    → https://callofdoodie.wtf/ ·                     ║
 ║  Staging       → https://1da5492a.call-of-doodie.pages.dev/ ·    ║
 ║  Unit tests    → npm test — 299/299 passing ✓                    ║
 ║  hosted-visual-proof → session-169-staging · route/theme/wid ✓   ║
@@ -33,7 +34,6 @@
 ║  hosted-staging → session-170-staging · immutable 520a56d6 · ✓   ║
 ║  full-gates   → 237/237 files · 1,387/1,387 assertions · str ✓   ║
 ║  production-verification → source bb88eb48d57d · workflow 34 ✓   ║
-║  full-gates   → 238/238 files · 1,389/1,389 assertions · str ✓   ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ PROJECT PROFILE ═════════════════════════════════════════════╗
@@ -68,19 +68,19 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ✓  ████████░░░░░░░░░░░░░░░░  33% used                           ║
-║     88,648 / 272,000 tok  ·  codex/codex-272k  · …               ║
-║     ~44,324 tok/turn  ·  cache 50%  ·  3 turns to compact        ║
+║  ✓  ███████░░░░░░░░░░░░░░░░░  29% used                           ║
+║     79,429 / 272,000 tok  ·  codex/codex-272k  · …               ║
+║     ~39,715 tok/turn  ·  cache 50%  ·  4 turns to compact        ║
 ║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
 ║  ✓  Tests         299/299 passing (2026-10-20T03:46:34.453Z)     ║
 ║  ✓  Velocity      2   ·  Debt: →                                 ║
-║  ✓  Runway        S193 acceptance in progress                    ║
+║  ✓  Runway        S193 production verified                       ║
 ║  ⛔  Context age   ?d                                             ║
 ║  ⚠  IGNIS         44193 FORGE  ·  12d old                        ║
-║  ⛔  Truth         final acceptance in progress.  ·  Genome: ?    ║
+║  ⛔  Truth         both selected correctness outcomes…            ║
 ║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs…        ║
 ║  ✓  Genome dims   all stable  (24/25)                            ║
 ║  ✓  Entropy       0.214  (healthy)                               ║
