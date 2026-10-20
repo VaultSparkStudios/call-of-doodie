@@ -1180,7 +1180,7 @@
       "session": 194,
       "total": 24,
       "maxTotal": 25,
-      "overallStatus": "acceptance in progress.",
+      "overallStatus": "both selected correctness outcomes production verified; unchanged remote backend diagnostic remains degraded.",
       "lastReviewed": "2026-10-18",
       "dimensions": {
         "schema_alignment": 5,
@@ -1190,7 +1190,7 @@
         "contradiction_density": 5
       },
       "delta": 0,
-      "cause": "S194 consumes controller menu presses and restores Railgun Last Resort."
+      "cause": "S194 controller menu-edge and rail Last Resort correctness production verified."
     }
   ]
 }

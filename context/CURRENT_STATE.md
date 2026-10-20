@@ -1,3 +1,9 @@
+## S194 production verified
+
+Controller menu inputs stay consumed and Railgun Last Resort matches its damage promise.
+
+S194 implementation 51fc42bf1510f6a4b625f3fb250140472f04862d passed exact-main workflow 39377541819:299 files/2056 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 51fc42bf1510. Canonical and immutable https://8e3a9bb5.call-of-doodie.pages.dev shell7/7 each; production browser24/24 across390/1440/both themes proves held menu Reload consumed, fresh Reload usable, rail480 at24HP/160 at25HP, and held/released keyboard movement.
+
 ## S194 candidate acceptance
 
 S194 local299-file run:2055 passed,1 startup fixture timeout at43.6s under load; unchanged isolated startup fixture then passed1/1 in25.8s. All gameplay regressions pass. Strict lint/configured build/schema/startup/public/security/runtime gates pass; dependency audit0 vulnerabilities. Staging48c2ee6d shell7/7 and browser24/24 at390/1440/both themes.24 inspected before/after images hash-bound to all3 changed runtime sources. Independent review pass after screen-lifetime correction. Exact-main hosted full-suite and production acceptance pending.

@@ -4,6 +4,12 @@
 
 ## Current Session
 
+## S194 production verified
+
+Controller menu inputs stay consumed and Railgun Last Resort matches its damage promise.
+
+S194 implementation 51fc42bf1510f6a4b625f3fb250140472f04862d passed exact-main workflow 39377541819:299 files/2056 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 51fc42bf1510. Canonical and immutable https://8e3a9bb5.call-of-doodie.pages.dev shell7/7 each; production browser24/24 across390/1440/both themes proves held menu Reload consumed, fresh Reload usable, rail480 at24HP/160 at25HP, and held/released keyboard movement.
+
 ## S194 candidate acceptance
 
 S194 local299-file run:2055 passed,1 startup fixture timeout at43.6s under load; unchanged isolated startup fixture then passed1/1 in25.8s. All gameplay regressions pass. Strict lint/configured build/schema/startup/public/security/runtime gates pass; dependency audit0 vulnerabilities. Staging48c2ee6d shell7/7 and browser24/24 at390/1440/both themes.24 inspected before/after images hash-bound to all3 changed runtime sources. Independent review pass after screen-lifetime correction. Exact-main hosted full-suite and production acceptance pending.
@@ -102,18 +108,11 @@ Staging verified; exact-main release pending. See LATEST_HANDOFF for acceptance 
 
 ## S188 production verified
 
-Consumed shots stop at their final collision. Piercing shots damage each target once per pass; boomerang outbound and return passes stay independent.
-
-S188 implementation f8b3254c75b90a3542420d6fa83cd3b108f5b1d3 passed exact-main workflow 39149635426: all 296 test files / 1,995 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches f8b3254c75b9. Canonical and immutable https://9024cfb5.call-of-doodie.pages.dev pass shell 7/7 each. Four real-Chrome combat cases pass on canonical production at 390/1440 in both themes.
-
-## S188 candidate verification
-
-S188 full local suite
+Consumed shots stop a
 
 ## Open Work
 
 ## S194 arc outcomes and waves
-- [ ] S194 production and full closeout acceptance.
 ## S193 arc outcomes and waves
 - [ ] [SIL:1] S193 reserve: matched shield/flanking comprehension study with representative participants.
 - [ ] [SIL:1] S193 reserve: physical keyboard/controller interruption comparison.
@@ -167,6 +166,7 @@ S188 full local suite
 - [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET on the Pages project so Porcelain Passport verification and cloud backup stop answering 503.
 ## Session 165 - Scrolling camera, live royale bots, death-beat diet, record recovery
 - [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET on the Pages project: neither is in the secrets gateway, so Porcelain Passport verification (and therefore cloud backup) answers 503 in production until they exist.
+- [ ] [SIL:2] Never continue work under a sealed session number — open the next number instead. Carried from the S164 SIL brainstorm.
 
 ## Recent Decisions
 
@@ -206,9 +206,12 @@ S193 final acceptance: S193 implementation 49c6b60eb9e40b7e343daa6073ac7a424f4ea
 
 Persist controller button history across listener/screen transitions and sample it even when gameplay is blocked. Start owns a poll before combat effects. Share Last Resort's below25% threshold between rail and bullets; preserve rail shield policy and per-target lifesteal semantics. Existing CANON-045 STRONG gap retained for unchanged guest-game promotion. FORGE/public-unlaunched unchanged. Assisted App state/ticks and synthetic controller/keyboard do not prove participant or physical-pad behavior. Existing S183 comparisons remain unmeasured. No backend, dependencies, identity/trust policy, cost, licensing or launch changes. CDR legitimately unchanged without creative direction.
 
+
+S194 final acceptance: S194 implementation 51fc42bf1510f6a4b625f3fb250140472f04862d passed exact-main workflow 39377541819:299 files/2056 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 51fc42bf1510. Canonical and immutable https://8e3a9bb5.call-of-doodie.pages.dev shell7/7 each; production browser24/24 across390/1440/both themes proves held menu Reload consumed, fresh Reload usable, rail480 at24HP/160 at25HP, and held/released keyboard movement. Local full run2055/2056 with one startup-fixture timeout at43.6s under load; unchanged isolated fixture passed1/1 in25.8s. Hosted exact-main full run299/2056 passed. Both histories retained; local first run is not rewritten green. Unchanged backend diagnostics remain degraded: leaderboard504/timeouts; replay valid/weak cases passed before provider546, subsequent valid replay504. No backend/configuration change or backend-green claim. This routine client promotion passed its scoped hosted quality/build/deploy and changed-input/combat checks; no launch-readiness claim.
+
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 270,998 bytes · SHA-256 `fe1da08bb16d…`
-- `context/TASK_BOARD.md` · 186,423 bytes · SHA-256 `d08a6160ac1f…`
-- `context/DECISIONS.md` · 185,295 bytes · SHA-256 `35cfd6123042…`
+- `context/CURRENT_STATE.md` · 271,592 bytes · SHA-256 `6ffc69fa1a06…`
+- `context/TASK_BOARD.md` · 186,423 bytes · SHA-256 `6ed867f72596…`
+- `context/DECISIONS.md` · 186,368 bytes · SHA-256 `a4158e48b178…`
 - `docs/AUDIT_2026-10-18.json` · 6,892 bytes · SHA-256 `b34b668a7b5a…`

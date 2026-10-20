@@ -20,7 +20,7 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ LAST SESSION (S194) - WHAT SHIPPED ══════════════════════════╗
-║  S194 consumes controller menu presses and restores Railgun Las  ║
+║  S194 controller menu edges and Railgun Last Resort production   ║
 ║  Tests  -                                                        ║
 ║  Deploy -                                                        ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -68,19 +68,19 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ✓  ███████░░░░░░░░░░░░░░░░░  28% used                           ║
-║     75,522 / 272,000 tok  ·  codex/codex-272k  · …               ║
-║     ~37,761 tok/turn  ·  cache 50%  ·  4 turns to compact        ║
+║  ✓  ███████░░░░░░░░░░░░░░░░░  29% used                           ║
+║     79,754 / 272,000 tok  ·  codex/codex-272k  · …               ║
+║     ~39,877 tok/turn  ·  cache 50%  ·  4 turns to compact        ║
 ║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ⚠  Tests         299/299 files · 2056/2056 assertions —…        ║
+║  ✓  Tests         299/299 passing (2026-10-20T05:58:35Z)         ║
 ║  ✓  Velocity      2   ·  Debt: →                                 ║
-║  ✓  Runway        S194 acceptance in progress                    ║
+║  ✓  Runway        S194 production verified                       ║
 ║  ⛔  Context age   ?d                                             ║
 ║  ⚠  IGNIS         44193 FORGE  ·  12d old                        ║
-║  ⛔  Truth         acceptance in progress.  ·  Genome: ?          ║
+║  ⛔  Truth         both selected correctness outcomes…            ║
 ║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs…        ║
 ║  ✓  Genome dims   all stable  (24/25)                            ║
 ║  ✓  Entropy       0.214  (healthy)                               ║

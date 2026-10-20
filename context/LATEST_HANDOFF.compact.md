@@ -1,5 +1,7 @@
 # S194 compact handoff
 
-Controller edges persist across barriers/screens; rail Last Resort matches bullets. Both selected L2 fixes implemented and independently reviewed. Staging48c2ee6d passes shell7/7 and browser24/24 across390/1440 and both themes. Full-suite and backend verification still in progress; production pending.
+Both L2 outcomes production verified at51fc42bf1510, workflow39377541819; hosted299/2056, staging/production browser24/24 and shell7/7. Public handoff owns evidence/limits. Final records commit receives exact-main checks/readback.
 
-FORGE/public-unlaunched unchanged. Assisted App state/ticks and synthetic controller/keyboard do not prove participant or physical-pad behavior. Existing S183 comparisons remain unmeasured. No backend, dependencies, identity/trust policy, cost, licensing or launch changes. CDR legitimately unchanged without creative direction.
+Unchanged backend diagnostics remain degraded: leaderboard504/timeouts; replay valid/weak cases passed before provider546, subsequent valid replay504. No backend/configuration change or backend-green claim. This routine client promotion passed its scoped hosted quality/build/deploy and changed-input/combat checks; no launch-readiness claim.
+
+FORGE/public-unlaunched unchanged. Assisted App state/ticks and synthetic controller/keyboard do not prove participant or physical-pad outcomes. Existing S183 comparisons remain unmeasured. CDR unchanged without creative direction.

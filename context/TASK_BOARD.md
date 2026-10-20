@@ -2,11 +2,11 @@
 
 Session Intent: fresh full arc, authorized direct main push and full deployment.
 
-Wave 1 ✔ startup and fresh audit. Wave 2 ✔ implementation acceptance. Wave 3 ◼ production and closeout.
+Wave 1 ✔ startup and fresh audit. Wave 2 ✔ implementation acceptance. Wave 3 ✔ production and closeout.
 
 - [x] S194 controller-menu-edges L2 acceptance.
 - [x] S194 rail-last-resort L2 acceptance.
-- [ ] S194 production and full closeout acceptance.
+- [x] S194 production and full closeout acceptance.
 
 
 ## S193 arc outcomes and waves
