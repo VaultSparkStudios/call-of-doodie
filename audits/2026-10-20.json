@@ -6,7 +6,7 @@
   "shipped": [
     "controller-menu-interruption"
   ],
-  "validation": "S200:59 focused assertions pass;7 failing-before regressions;independent source review8/8. Staging16/16,shell7/7,16 inspected hash-bound captures. Strict lint,configured build,public/runtime/schema/security pass;dependency audit0 vulnerabilities;backend5/5,replay3/3,shared leaderboard check pass. Local full300 files:2106/2107 assertions,one startup/session-binding fixture failure. Isolated fixture rerun1/1 passes with120s limit. Local full remains nonpassing;exact-main hosted full suite required. Production pending.",
+  "validation": "S200 implementation 34305a258284660263c2af678547a9eb9d0e003b passed exact-main workflow 39522461612:300 files/2107 assertions,strict lint,configured build and Cloudflare deployment. Canonical health matches 34305a258284. Canonical and immutable https://4846f601.call-of-doodie.pages.dev shell7/7 each;production browser16/16 across390/1440,both themes. Disconnect preserves menu focus,held reconnect causes no action,and fresh press navigates. Shared menu runtime matches staging after generated import filename normalization.",
   "limits": "FORGE/public-unlaunched unchanged. Synthetic controller checks do not prove physical-device behavior or participant outcomes. Existing identity,reply-email,backend and comparative measurement gaps remain explicit. No creative direction;CDR unchanged.",
   "focusedAssertions": 59,
   "staging": {
@@ -15,15 +15,30 @@
     "shellAssertions": 7
   },
   "production": {
-    "status": "pending"
+    "source": "34305a258284660263c2af678547a9eb9d0e003b",
+    "workflow": 39522461612,
+    "immutableUrl": "https://4846f601.call-of-doodie.pages.dev",
+    "canonical": "https://callofdoodie.wtf/",
+    "verifiedAt": "2026-10-21T00:40:45.767Z",
+    "health": {
+      "contract": "edge-health-v1",
+      "status": "edge-ready",
+      "service": "call-of-doodie",
+      "scope": "cloudflare-pages-edge-only",
+      "deploy": "34305a258284",
+      "checkedAt": "2026-10-21T00:40:38.645Z"
+    },
+    "testFiles": 300,
+    "assertions": 2107,
+    "browserAssertions": 16
   },
   "closeout": {
-    "state": "delivery-pending",
+    "state": "complete",
     "silScore": 945,
     "scaffold": {
       "tasks": 3,
-      "done": 2,
-      "inProgress": 1,
+      "done": 3,
+      "inProgress": 0,
       "open": 0
     }
   },

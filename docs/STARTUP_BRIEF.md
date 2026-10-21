@@ -21,14 +21,16 @@
 
 ╔══ LAST SESSION (S200) · WHAT SHIPPED ══════════════════════════╗
 ║  ✓ Controller menus stop stale repeats and require fresh input   ║
-║  Tests  Local2106/2107;isolated1/1 passes;hosted pending         ║
-║  Deploy pending exact-main production                            ║
+║  Tests  300files/2107assertions passing                          ║
+║  Deploy 34305a258284 production verified                         ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ WHERE TO TEST · Call-Of-Doodie ══════════════════════════════╗
+║  Production    → https://callofdoodie.wtf/ ✓                     ║
 ║  Staging       → https://ec4cbc23.call-of-doodie.pages.dev/ ✓    ║
-║  Unit tests    → npm test — 299/300 passing ⛔                    ║
-║  local-browser-capture → S20016 inspected before/after captu ✓   ║
+║  Unit tests    → npm test — 300/300 passing ✓                    ║
+║  local-browser-capture → S20016 inspected hash-bound before/ ✓   ║
+║  production-smoke → S200 controller menu16/16 ✓                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ PROJECT PROFILE ═════════════════════════════════════════════╗
@@ -59,17 +61,17 @@
 
 ╔══ WHERE WE LEFT OFF  ·  Session 200 ═══════════════════════════╗
 ║  Shipped:  see LATEST_HANDOFF.md                                 ║
-║  Tests:    299/300 passing  ·  Deploy: verified                  ║
+║  Tests:    300/300 passing  ·  Deploy: verified                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
 ║  ?  ░░░░░░░░░░░░░░░░░░░░░░░░  usage unknown                      ║
-║     unknown / 272,000 tok  ·  codex  ·  unmeasured               ║
+║     unknown / 200,000 tok  ·  unknown  ·  unmeasured             ║
 ║     Verdict: UNMEASURED                                          ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ⛔  Tests         suite RED — 299/300 files…                     ║
+║  ✓  Tests         300/300 passing (2026-10-21T00:40:07Z)         ║
 ║  ⚠  Velocity      1   ·  Debt: →                                 ║
 ║  ✓  Runway        unknown                                        ║
 ║  ⛔  Context age   ?d                                             ║

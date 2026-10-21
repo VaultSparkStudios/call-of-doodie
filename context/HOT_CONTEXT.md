@@ -4,6 +4,12 @@
 
 ## Current Session
 
+## S200 production verified
+
+Controller menus stop stale repeats and require fresh input after interruptions.
+
+S200 implementation 34305a258284660263c2af678547a9eb9d0e003b passed exact-main workflow 39522461612:300 files/2107 assertions,strict lint,configured build and Cloudflare deployment. Canonical health matches 34305a258284. Canonical and immutable https://4846f601.call-of-doodie.pages.dev shell7/7 each;production browser16/16 across390/1440,both themes. Disconnect preserves menu focus,held reconnect causes no action,and fresh press navigates. Shared menu runtime matches staging after generated import filename normalization.
+
 ## S200 candidate acceptance
 
 S200:59 focused assertions pass;7 failing-before regressions;independent source review8/8. Staging16/16,shell7/7,16 inspected hash-bound captures. Strict lint,configured build,public/runtime/schema/security pass;dependency audit0 vulnerabilities;backend5/5,replay3/3,shared leaderboard check pass. Local full300 files:2106/2107 assertions,one startup/session-binding fixture failure. Isolated fixture rerun1/1 passes with120s limit. Local full remains nonpassing;exact-main hosted full suite required. Production pending.
@@ -74,22 +80,11 @@ S195 implementation 18285e4cc1c0d582eeffeab3a8ae3cee43c93ee5 passed exact-main w
 
 ## S195 candidate acceptance
 
-S195 full local suite299files/2063assertions passing. Focused49/49 after3 failing-before regressions. Strict lint, configured build, schema/startup/public/security/runtime and dependency audit pass. Staging6c05b5e9 shell7/7 and browser28/28 across390/1440,both themes; rail480/480,health33.6,unchanged profile writes0/second.16 real before/after captures inspected and hash-bound; independent source review pass0 blocking findings. Exact-main production pending.
-
-## S195 candidate
-
-S195 consistent Railgun health bonus and bounded controller persistence.
-
-Fresh startup and nine-axis/game-loop audit completed for this invocation. Both selected L2 outcomes implemented; failing-before3 regressions, fixed-after49/49 focused assertions. Real pre-change Chrome reproduced480/160 beam damage and62–63 profile writes/second across390/1440 and both themes. Independent source review passes0 blocking findings. Full suite, staging and production acceptance pending.
-
-## S194 production verified
-
-Co
+S195 full local suite299files/2063assertions passing. Focused49/49 after3 failing-before regressions. Strict lint, configured build, schema/startup/public/security/runtime and dependency audit pass. Staging6c05b5e9 shell7/7 and browser28/28 across390/1440,both themes; rail480/480,health33.6,unchanged profile writes0/second.16 real before/after captures
 
 ## Open Work
 
 ## S200 arc outcomes and waves
-- [ ] S200 exact-main production and final closeout.
 - [ ] [SIL:1] S200 reserve: physical controller interruption comparison;owner project,dependency hardware.
 - [ ] [SIL:1] S200 reserve: representative-player menu interruption comprehension;owner project,dependency observed participants.
 ## S199 verified work
@@ -143,6 +138,7 @@ Co
 ## Session 174 - The gates themselves get measured
 ## Session 173 - Objective-verb and zone coverage gap closed
 ## Session 168 - Terminal order, exactly-once extraction, and mode-specific debrief proof
+- [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET so cloud backup stops answering 503.
 
 ## Recent Decisions
 
@@ -177,9 +173,12 @@ S199 final acceptance: S199 implementationf7b35abe2d1f93ff8f0abe1b3217017c48eaa3
 
 Neutral ownership barrier applies to shared controller menus at activation/reconnect/device change. Ownership compares index/id/mapping rather than browser object identity. Cancel auto-repeat on missing input. Existing unchanged identity STRONG gap remains visible;no launch/lifecycle change. Reuse installed packages and project-native release tooling.
 
+
+S200 final acceptance: S200 implementation 34305a258284660263c2af678547a9eb9d0e003b passed exact-main workflow 39522461612:300 files/2107 assertions,strict lint,configured build and Cloudflare deployment. Canonical health matches 34305a258284. Canonical and immutable https://4846f601.call-of-doodie.pages.dev shell7/7 each;production browser16/16 across390/1440,both themes. Disconnect preserves menu focus,held reconnect causes no action,and fresh press navigates. Shared menu runtime matches staging after generated import filename normalization. Local full300 files:2106/2107 assertions,one startup/session-binding fixture failure. Isolated fixture rerun1/1 passes with120s limit. Local full remains nonpassing;exact-main hosted full suite required.
+
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 280,571 bytes · SHA-256 `a0e1cc06aae2…`
-- `context/TASK_BOARD.md` · 189,996 bytes · SHA-256 `710288109040…`
-- `context/DECISIONS.md` · 194,665 bytes · SHA-256 `6a6dcf37a7f7…`
+- `context/CURRENT_STATE.md` · 281,210 bytes · SHA-256 `e2785bf205a8…`
+- `context/TASK_BOARD.md` · 190,003 bytes · SHA-256 `e0a8432aa8e3…`
+- `context/DECISIONS.md` · 195,421 bytes · SHA-256 `889eceedd853…`
 - `docs/AUDIT_2026-10-18.json` · 6,892 bytes · SHA-256 `b34b668a7b5a…`
