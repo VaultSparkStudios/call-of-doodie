@@ -1,3 +1,9 @@
+## S203 candidate
+
+Guest Record stays usable when browser storage is denied, with visible backup failure notices.
+
+Staging verified;production pending. Acceptance detail:LATEST_HANDOFF.md.
+
 ## S202 production verified
 
 Guest play survives denied browser storage through home, tutorial, pause, defeat, rematch and Operations.

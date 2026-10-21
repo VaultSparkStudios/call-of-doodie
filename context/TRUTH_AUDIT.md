@@ -1,3 +1,13 @@
+## S203 candidate truth
+
+Overall status:staging verified;production pending.
+
+S203:3 typed premises and timing verified before implementation;5 failing-before regressions. Focused22/22,independent source review pass. Staging52/52 denied-storage checks plus36/36 normal backup/restore/play checks and20/20 synthetic controller checks across390/1440,both themes;shell7/7. Strict lint,configured build,public/runtime/security pass;0 dependency vulnerabilities. Backend health5/5,replay3/3,shared leaderboard check pass. Production pending.
+
+Local complete suite: 2114/2135 assertions across 303 files; nonpassing; failures retained. Exact-main hosted suite remains required.
+
+FORGE/public-unlaunched unchanged. Injected browser storage denial and synthetic controller checks do not establish native privacy-browser,physical-device or participant outcomes. Existing STRONG CANON-045 identity gap and reply-email/comparative measurement gaps remain visible. Remote verification,cloud-session,auth-return and authorization contracts unchanged. No creative direction;CDR reviewed unchanged.
+
 ## S202 final truth
 
 Overall status:selected outcomes production verified.

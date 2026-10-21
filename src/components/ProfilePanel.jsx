@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { exportProgressBackup, importProgressBackup, previewProgressBackup, loadCareerStats, loadDoctrineArchive, loadStash, loadRunHistory, loadMetaProgress, getDailyMissions, loadMissionProgress, countIncompleteMissions } from "../storage.js";
 import { ACHIEVEMENTS, ACHIEVEMENT_PROGRESS } from "../constants.js";
 import { readPassport } from "../utils/obeliskPassport.js";
@@ -39,11 +39,14 @@ export default function ProfilePanel({ onClose, username = null, activeTab, onTa
   const [passport] = useState(() => readPassport());
   const [identity, setIdentity] = useState({ state: passport ? "checking" : "guest", cloudCapability: false });
   const [notice, setNotice] = useState("");
+  const noticeRef = useRef(null);
   const [pendingRestore, setPendingRestore] = useState(null);
   const [cloud, setCloud] = useState({ state: "idle", updatedAt: null });
   const [squad, setSquad] = useState(() => getSquadCode());
   const [squadInput, setSquadInput] = useState("");
   const [masteryTrail, setMasteryTrail] = useState(() => loadMasteryTrail());
+
+  useEffect(() => { if (notice) noticeRef.current?.scrollIntoView?.({ block: "nearest" }); }, [notice]);
 
   useEffect(() => {
     if (!passport?.subject) return;
@@ -64,14 +67,18 @@ export default function ProfilePanel({ onClose, username = null, activeTab, onTa
   }, [passport, identity.state, identity.cloudCapability]);
 
   const download = () => {
-    const backup = exportProgressBackup();
-    const blob = new Blob([JSON.stringify(backup, null, 2)], { type: "application/json" });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = `call-of-doodie-progress-${new Date().toISOString().slice(0, 10)}.json`;
-    a.click();
-    setTimeout(() => URL.revokeObjectURL(a.href), 5000);
-    setNotice(`Backup downloaded · ${backup.keys} records${backup.skipped.length ? ` · ${backup.skipped.length} invalid or oversized records omitted` : ""}.`);
+    try {
+      const backup = exportProgressBackup();
+      const blob = new Blob([JSON.stringify(backup, null, 2)], { type: "application/json" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = `call-of-doodie-progress-${new Date().toISOString().slice(0, 10)}.json`;
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+      setNotice(`Backup downloaded · ${backup.keys} records${backup.skipped.length ? ` · ${backup.skipped.length} invalid or oversized records omitted` : ""}.`);
+    } catch (error) {
+      setNotice(String(error.message || "Backup unavailable. Try again after checking browser storage and download permissions."));
+    }
   };
   const restore = async (event) => {
     const file = event.target.files?.[0];
@@ -244,7 +251,7 @@ export default function ProfilePanel({ onClose, username = null, activeTab, onTa
 
         </>}
 
-        {notice && <div role="status" style={{ marginTop: 6, fontSize: 12, color: "var(--cod-gold)" }}>{notice}</div>}
+        {notice && <div ref={noticeRef} role="status" style={{ marginTop: 6, fontSize: 12, color: "var(--cod-gold)" }}>{notice}</div>}
       </div>
     </DialogShell>
   );

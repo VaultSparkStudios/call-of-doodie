@@ -1,3 +1,5 @@
+import { optionalBrowserStorage } from "./browserStorage.js";
+
 // A save is portable game state, never an identity or eligibility receipt.
 export const BACKUP_SCHEMA = "cod-progress-backup-v2";
 const LEGACY_SCHEMA = "cod-progress-backup-v1";
@@ -56,18 +58,23 @@ function validEntry(key, value) {
 
 function sizeOf(value) { return textEncoder.encode(JSON.stringify(value)).length; }
 
-export function exportProgressBackup(storage = globalThis.localStorage) {
-  const entries = Object.create(null);
-  const skipped = [];
-  for (let i = 0; i < storage.length; i += 1) {
-    const key = storage.key(i);
-    if (!key || !kindFor(key)) continue;
-    const value = storage.getItem(key);
-    if (!validEntry(key, value) || Object.keys(entries).length >= MAX_ENTRIES) { skipped.push(key); continue; }
-    entries[key] = value;
-    if (sizeOf({ schema: BACKUP_SCHEMA, entries }) > MAX_BYTES) { delete entries[key]; skipped.push(key); }
+export function exportProgressBackup(storage = optionalBrowserStorage()) {
+  try {
+    if (!storage) throw new Error("Browser storage is unavailable.");
+    const entries = Object.create(null);
+    const skipped = [];
+    for (let i = 0; i < storage.length; i += 1) {
+      const key = storage.key(i);
+      if (!key || !kindFor(key)) continue;
+      const value = storage.getItem(key);
+      if (!validEntry(key, value) || Object.keys(entries).length >= MAX_ENTRIES) { skipped.push(key); continue; }
+      entries[key] = value;
+      if (sizeOf({ schema: BACKUP_SCHEMA, entries }) > MAX_BYTES) { delete entries[key]; skipped.push(key); }
+    }
+    return { schema: BACKUP_SCHEMA, exportedAt: new Date().toISOString(), keys: Object.keys(entries).length, entries, skipped };
+  } catch (error) {
+    throw new Error("Backup unavailable: browser save could not be read. Check site storage permissions and try again.", { cause: error });
   }
-  return { schema: BACKUP_SCHEMA, exportedAt: new Date().toISOString(), keys: Object.keys(entries).length, entries, skipped };
 }
 
 export function previewProgressBackup(backup) {
@@ -89,9 +96,15 @@ export function previewProgressBackup(backup) {
   return { entries, restored: Object.keys(entries).length, ignored, legacy: parsed.schema === LEGACY_SCHEMA, exportedAt: parsed.exportedAt || null };
 }
 
-export function importProgressBackup(backup, storage = globalThis.localStorage) {
+export function importProgressBackup(backup, storage = optionalBrowserStorage()) {
   const preview = previewProgressBackup(backup);
-  const before = new Map(Object.keys(preview.entries).map((key) => [key, storage.getItem(key)]));
+  let before;
+  try {
+    if (!storage) throw new Error("Browser storage is unavailable.");
+    before = new Map(Object.keys(preview.entries).map((key) => [key, storage.getItem(key)]));
+  } catch (error) {
+    throw new Error("Restore unavailable: browser save could not be read. No records were changed.", { cause: error });
+  }
   const written = [];
   try {
     for (const [key, value] of Object.entries(preview.entries)) {

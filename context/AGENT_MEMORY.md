@@ -1,3 +1,11 @@
+## S203 candidate
+
+S203:3 typed premises and timing verified before implementation;5 failing-before regressions. Focused22/22,independent source review pass. Staging52/52 denied-storage checks plus36/36 normal backup/restore/play checks and20/20 synthetic controller checks across390/1440,both themes;shell7/7. Strict lint,configured build,public/runtime/security pass;0 dependency vulnerabilities. Backend health5/5,replay3/3,shared leaderboard check pass. Production pending.
+
+Local complete suite: 2114/2135 assertions across 303 files; nonpassing; failures retained. Exact-main hosted suite remains required.
+
+FORGE/public-unlaunched unchanged. Injected browser storage denial and synthetic controller checks do not establish native privacy-browser,physical-device or participant outcomes. Existing STRONG CANON-045 identity gap and reply-email/comparative measurement gaps remain visible. Remote verification,cloud-session,auth-return and authorization contracts unchanged. No creative direction;CDR reviewed unchanged.
+
 ## S202 production acceptance
 
 S202 implementation db250d79ef430d9c4a58404fc81d14ce48ed6f7f passed exact-main workflow 39545138373:301 files/2126 assertions,strict lint,configured build and Cloudflare deployment. Canonical health matches db250d79ef43. Canonical and immutable https://ccdfd8d9.call-of-doodie.pages.dev shell7/7 each. Production browser48/48:home,play,pause,resume,tutorial dismissal,assisted defeat,rematch and Operations entry across390/1440,both themes,with local/session storage getters denied. Staging source manifest matches the hosted commit after line-ending normalization;all eight shared panels exist. Same game project and guest-read access verified for staging legacy-anon and production publishable keys. Key/compiled chunk bytes differ;bitwise reproducibility is not claimed.

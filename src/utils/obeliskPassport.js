@@ -1,3 +1,5 @@
+import { optionalBrowserStorage } from "./browserStorage.js";
+
 export const PASSPORT_STORAGE_KEY = "cod-obelisk-passport-v1";
 export const PASSPORT_SCHEMA = "porcelain-passport-v1";
 
@@ -36,18 +38,19 @@ export function sanitizeObeliskIdentity(result, now = Date.now()) {
   };
 }
 
-export function savePassport(passport, storage = globalThis.localStorage) {
+export function savePassport(passport, storage = optionalBrowserStorage()) {
   const receipt = canonicalReceipt(passport);
   if (!receipt) return false;
   try {
-    storage?.setItem(PASSPORT_STORAGE_KEY, JSON.stringify(receipt));
+    if (!storage) return false;
+    storage.setItem(PASSPORT_STORAGE_KEY, JSON.stringify(receipt));
     return true;
   } catch {
     return false;
   }
 }
 
-export function readPassport(storage = globalThis.localStorage) {
+export function readPassport(storage = optionalBrowserStorage()) {
   try {
     const parsed = JSON.parse(storage?.getItem(PASSPORT_STORAGE_KEY) || "null");
     const receipt = canonicalReceipt(parsed);
@@ -59,7 +62,7 @@ export function readPassport(storage = globalThis.localStorage) {
   }
 }
 
-export function clearPassport(storage = globalThis.localStorage) {
+export function clearPassport(storage = optionalBrowserStorage()) {
   try { storage?.removeItem(PASSPORT_STORAGE_KEY); } catch {}
 }
 
