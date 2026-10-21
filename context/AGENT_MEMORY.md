@@ -1,3 +1,15 @@
+## S201 candidate acceptance
+
+Local full: 2112/2113 assertions;1 failed. Nonpassing; failures retained in local receipt; exact-main hosted suite required.
+
+## S201 input interruption
+
+Controller menus suspend while unfocused or hidden and require fresh input on return.
+
+S201: four failing-before regressions;42 focused assertions pass,including14 mounted-hook cases. Independent source review passes. Staging https://1106fdb0.call-of-doodie.pages.dev browser20/20 across390/1440 and both themes;shell7/7. Strict lint,configured build,public/runtime contracts and release security pass;dependency audit0 vulnerabilities. Full suite and exact-main production pending.
+
+FORGE/public-unlaunched unchanged. Synthetic controller checks do not prove physical-device behavior or participant outcomes. Existing identity,reply-email,backend and comparative measurement gaps remain explicit. No creative direction;CDR unchanged.
+
 ## S200 production acceptance
 
 S200 implementation 34305a258284660263c2af678547a9eb9d0e003b passed exact-main workflow 39522461612:300 files/2107 assertions,strict lint,configured build and Cloudflare deployment. Canonical health matches 34305a258284. Canonical and immutable https://4846f601.call-of-doodie.pages.dev shell7/7 each;production browser16/16 across390/1440,both themes. Disconnect preserves menu focus,held reconnect causes no action,and fresh press navigates. Shared menu runtime matches staging after generated import filename normalization.

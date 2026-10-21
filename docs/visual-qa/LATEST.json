@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-10-21T00:32:46.923Z",
-  "uiBaseRef": "09caceceadc09cb89cec016abab42c6b80f248d9",
-  "stagingUrl": "https://ec4cbc23.call-of-doodie.pages.dev/",
+  "capturedAt": "2026-10-21T03:46:51.269Z",
+  "uiBaseRef": "84f470ac293dcccdda2f9212a77c821dada2d49f",
+  "stagingUrl": "https://1106fdb0.call-of-doodie.pages.dev/",
   "themes": [
     "dark",
     "light"
@@ -10,215 +10,215 @@
   "sourceFiles": [
     {
       "file": "src/hooks/useGamepadNav.js",
-      "sha256": "c0262e729bb90556633bc932db135f0e5b027eb42694fc71a93190eb14cc3ff5"
+      "sha256": "4c6b2810589d4c5a2c6eae47504ed1564331f4ba74e1b27b083c3cbeee92992f"
     }
   ],
   "captures": [
     {
-      "file": "session-200/before-production-sewer-night-390-disconnected-menu.png",
-      "sha256": "10367e1f213292ac8504f6962444bf9e36db38317f03c0cbe6b81d61d6f61031",
+      "file": "session-201/before-production-sewer-night-390-blurred-menu.png",
+      "sha256": "e41bfe061f9fec7b4db6f0387f65ec54cc84b02990fa4bf133bcf3058b5d07e4",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "disconnected-menu",
+      "page": "blurred-menu",
       "phase": "before"
     },
     {
-      "file": "session-200/before-production-sewer-night-390-held-reconnect.png",
-      "sha256": "0fa8143a641259785ded3854cc6a10e8eea24e162a847b8cf85ca64f677bdcf5",
+      "file": "session-201/before-production-sewer-night-390-held-return.png",
+      "sha256": "dc547b0cd4c849c13885a2cd32efc236214e381cc28f8ced90133a49795c8382",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "held-reconnect",
+      "page": "held-return",
       "phase": "before"
     },
     {
-      "file": "session-200/before-production-sewer-night-1440-disconnected-menu.png",
-      "sha256": "ecfc2110327744ab50b283941a2b4906e71b77fa23923336c3c5dc82819d34e7",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "disconnected-menu",
-      "phase": "before"
-    },
-    {
-      "file": "session-200/before-production-sewer-night-1440-held-reconnect.png",
-      "sha256": "6bd02fdfe1a8b39dc08de681f79b69f26feeb1f9925d415b12f5cf9efd442546",
+      "file": "session-201/before-production-sewer-night-1440-blurred-menu.png",
+      "sha256": "db0b5f64d9d2f21586dfc491a0db74061211c3101b16fe50412e43e4d343b94b",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "held-reconnect",
+      "page": "blurred-menu",
       "phase": "before"
     },
     {
-      "file": "session-200/before-production-porcelain-day-390-disconnected-menu.png",
-      "sha256": "dc4a1e84b7120f4b304f32b1a01e2b553d2ad0508d045f756b2868ee61990a3a",
+      "file": "session-201/before-production-sewer-night-1440-held-return.png",
+      "sha256": "242dfdc0142f67322b5810d9c06b6d709154a02777da1a0b226415dff48a6096",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "held-return",
+      "phase": "before"
+    },
+    {
+      "file": "session-201/before-production-porcelain-day-390-blurred-menu.png",
+      "sha256": "bc1c8642fa4b411d1ed24126c53f2c46131bd1009f8316bc4e182b77c9343302",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "disconnected-menu",
+      "page": "blurred-menu",
       "phase": "before"
     },
     {
-      "file": "session-200/before-production-porcelain-day-390-held-reconnect.png",
-      "sha256": "be2a8451ca12aa608bd10e4237a918e77f144b33ad92df0dc90633d5d1670446",
+      "file": "session-201/before-production-porcelain-day-390-held-return.png",
+      "sha256": "2614747e1fd6aef224c7212ce1f020086fb74d7e3174bdfdfb2615c7242a063e",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "held-reconnect",
+      "page": "held-return",
       "phase": "before"
     },
     {
-      "file": "session-200/before-production-porcelain-day-1440-disconnected-menu.png",
-      "sha256": "816b4191d229628c61c0e974c9fafd763e456f3b1045a39c5fe0d35dccb4b22b",
+      "file": "session-201/before-production-porcelain-day-1440-blurred-menu.png",
+      "sha256": "48c42bb41b1af993a96ed9e450aff67cce0330b8f08ff95744a1f6e2d1f5e5b8",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "disconnected-menu",
+      "page": "blurred-menu",
       "phase": "before"
     },
     {
-      "file": "session-200/before-production-porcelain-day-1440-held-reconnect.png",
-      "sha256": "374af14d2dc344786310777ba2de78d32d1963321e16131b37f053e4e939793e",
+      "file": "session-201/before-production-porcelain-day-1440-held-return.png",
+      "sha256": "41f1b3ee5d4009baa512497468ce7ca5d4bfdbcd4681c627ea7f2c6ff4cd2541",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "held-reconnect",
+      "page": "held-return",
       "phase": "before"
     },
     {
-      "file": "session-200/after-staging-sewer-night-390-disconnected-menu.png",
-      "sha256": "48992f9cf531195f513934833c31ed0f38d4026f754df8506607ae82bd219501",
+      "file": "session-201/after-staging-sewer-night-390-blurred-menu.png",
+      "sha256": "111cd98e7cb0a17b356e84bda71989d1c46aad2ee7151ad327b935d455b587ca",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "disconnected-menu",
+      "page": "blurred-menu",
       "phase": "after"
     },
     {
-      "file": "session-200/after-staging-sewer-night-390-held-reconnect.png",
-      "sha256": "afa903ce0036d8e57f77c1b981574b71cf8e01c57308cceecf2d220fcbb44df7",
+      "file": "session-201/after-staging-sewer-night-390-held-return.png",
+      "sha256": "111cd98e7cb0a17b356e84bda71989d1c46aad2ee7151ad327b935d455b587ca",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "held-reconnect",
+      "page": "held-return",
       "phase": "after"
     },
     {
-      "file": "session-200/after-staging-sewer-night-1440-disconnected-menu.png",
-      "sha256": "19442fdaf55874ec9eae42bef6cd2c03403fb5d978b3a7daf345fc3affef909d",
+      "file": "session-201/after-staging-sewer-night-1440-blurred-menu.png",
+      "sha256": "3785fe75073b5f5078d6805907bd3e7bb06c657b4b968dd41779396182ede068",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "disconnected-menu",
+      "page": "blurred-menu",
       "phase": "after"
     },
     {
-      "file": "session-200/after-staging-sewer-night-1440-held-reconnect.png",
-      "sha256": "369f2cdfe9162a6df87aa830d36b690bb429113c0d77bb6cf3682c54d6a0b9a0",
+      "file": "session-201/after-staging-sewer-night-1440-held-return.png",
+      "sha256": "3785fe75073b5f5078d6805907bd3e7bb06c657b4b968dd41779396182ede068",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "held-reconnect",
+      "page": "held-return",
       "phase": "after"
     },
     {
-      "file": "session-200/after-staging-porcelain-day-390-disconnected-menu.png",
-      "sha256": "67da959ebca2ef7a638c54842967e6616e90a76aa2bfdd7b320e50502393135d",
+      "file": "session-201/after-staging-porcelain-day-390-blurred-menu.png",
+      "sha256": "93a89a01adc6e2e2faa1601794ffa6d38bc20fec1259bb00ba2b4a356528386d",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "disconnected-menu",
+      "page": "blurred-menu",
       "phase": "after"
     },
     {
-      "file": "session-200/after-staging-porcelain-day-390-held-reconnect.png",
-      "sha256": "837118717c4246ef3c049e9db957d74f0e8981918a98f64a46791d6f80429255",
+      "file": "session-201/after-staging-porcelain-day-390-held-return.png",
+      "sha256": "93a89a01adc6e2e2faa1601794ffa6d38bc20fec1259bb00ba2b4a356528386d",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "held-reconnect",
+      "page": "held-return",
       "phase": "after"
     },
     {
-      "file": "session-200/after-staging-porcelain-day-1440-disconnected-menu.png",
-      "sha256": "b942de0ffc0596b28960cce5b1e061ba5fcab1213a2ea940e69e5bc650075d00",
+      "file": "session-201/after-staging-porcelain-day-1440-blurred-menu.png",
+      "sha256": "eb3bd8cda38dc4ce9f7405c20e505e4bcfc297ab66eec21da914922c3a88cb4a",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "disconnected-menu",
+      "page": "blurred-menu",
       "phase": "after"
     },
     {
-      "file": "session-200/after-staging-porcelain-day-1440-held-reconnect.png",
-      "sha256": "4f5a461160e2d545e51b88dc7594a4bf7ef950b20e1be2e9a89d8bc276c869ac",
+      "file": "session-201/after-staging-porcelain-day-1440-held-return.png",
+      "sha256": "eb3bd8cda38dc4ce9f7405c20e505e4bcfc297ab66eec21da914922c3a88cb4a",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "held-reconnect",
+      "page": "held-return",
       "phase": "after"
     }
   ],
   "inspection": {
     "renderedPixelsReviewed": true,
     "reviewer": "Codex root inspected16 before/after images through2 contact sheets",
-    "reviewedAt": "2026-10-21T00:32:46.924Z",
+    "reviewedAt": "2026-10-21T03:46:51.270Z",
     "scope": "Pause navigation interruption states,390/1440,both shell themes.",
     "findings": [
-      "Before disconnect focus continued down the menu;after it remains on Build Summary.",
-      "Before held reconnect opened an unintended panel;after pause stays open.",
+      "Before blur focus continued down the menu;after it remains on Build Summary.",
+      "Before blurred confirm opened an unintended panel;after pause stays open.",
       "Final affected menu states remain readable and focus ring visible;no new layout defect."
     ],
     "fixesApplied": [
-      "Cancel repeat and neutral-arm shared controller-menu ownership."
+      "Suspend polling and cancel repeats while unfocused/hidden;require neutral on return."
     ],
     "blockingDefectsOpen": 0
   },

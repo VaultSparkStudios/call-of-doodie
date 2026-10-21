@@ -79,7 +79,22 @@ export function useGamepadNav({
 
     const stopDir = () => { clearTimeout(repeatTimeout); activeDir = null; };
 
+    // Focus interruptions invalidate held input just like a device handoff.
+    // Keep window focus separate from visibility: becoming visible does not
+    // mean this window has regained focus.
+    let focused = document.hasFocus();
+    const resetInput = () => { stopDir(); owner = null; armed = false; };
+    const onBlur = () => { focused = false; resetInput(); };
+    const onFocus = () => { focused = true; resetInput(); };
+    window.addEventListener("blur", onBlur);
+    window.addEventListener("focus", onFocus);
+    document.addEventListener("visibilitychange", resetInput);
+
     const id = setInterval(() => {
+      if (!focused || document.hidden) {
+        resetInput();
+        return;
+      }
       const gp = getPrimaryGamepad();
       if (!gp) {
         stopDir();
@@ -123,7 +138,13 @@ export function useGamepadNav({
       lastB = !!bNow;
     }, 50);
 
-    return () => { clearInterval(id); clearTimeout(repeatTimeout); };
+    return () => {
+      clearInterval(id);
+      stopDir();
+      window.removeEventListener("blur", onBlur);
+      window.removeEventListener("focus", onFocus);
+      document.removeEventListener("visibilitychange", resetInput);
+    };
   }, [enabled, count, disableLR]); // callbacks kept in r.current, no deps needed
 
   return focusIdx;

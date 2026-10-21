@@ -1,48 +1,38 @@
 {
   "schemaVersion": "1.3",
-  "session": 200,
+  "session": 201,
   "date": "2026-10-20",
-  "headline": "Controller menus stop stale repeats and require fresh input after interruptions.",
+  "headline": "Controller menus suspend while unfocused or hidden and require fresh input on return.",
   "shipped": [
-    "controller-menu-interruption"
+    "controller-menu-focus-loss"
   ],
-  "validation": "S200 implementation 34305a258284660263c2af678547a9eb9d0e003b passed exact-main workflow 39522461612:300 files/2107 assertions,strict lint,configured build and Cloudflare deployment. Canonical health matches 34305a258284. Canonical and immutable https://4846f601.call-of-doodie.pages.dev shell7/7 each;production browser16/16 across390/1440,both themes. Disconnect preserves menu focus,held reconnect causes no action,and fresh press navigates. Shared menu runtime matches staging after generated import filename normalization.",
+  "validation": "S201: four failing-before regressions;42 focused assertions pass,including14 mounted-hook cases. Independent source review passes. Staging https://1106fdb0.call-of-doodie.pages.dev browser20/20 across390/1440 and both themes;shell7/7. Strict lint,configured build,public/runtime contracts and release security pass;dependency audit0 vulnerabilities. Local full: 2112/2113 assertions;1 failed. Nonpassing; failures retained in local receipt; exact-main hosted suite required. Exact-main production pending.",
   "limits": "FORGE/public-unlaunched unchanged. Synthetic controller checks do not prove physical-device behavior or participant outcomes. Existing identity,reply-email,backend and comparative measurement gaps remain explicit. No creative direction;CDR unchanged.",
-  "focusedAssertions": 59,
+  "focusedAssertions": 42,
   "staging": {
-    "url": "https://ec4cbc23.call-of-doodie.pages.dev",
-    "browserAssertions": 16,
+    "url": "https://1106fdb0.call-of-doodie.pages.dev",
+    "browserAssertions": 20,
     "shellAssertions": 7
   },
   "production": {
-    "source": "34305a258284660263c2af678547a9eb9d0e003b",
-    "workflow": 39522461612,
-    "immutableUrl": "https://4846f601.call-of-doodie.pages.dev",
-    "canonical": "https://callofdoodie.wtf/",
-    "verifiedAt": "2026-10-21T00:40:45.767Z",
-    "health": {
-      "contract": "edge-health-v1",
-      "status": "edge-ready",
-      "service": "call-of-doodie",
-      "scope": "cloudflare-pages-edge-only",
-      "deploy": "34305a258284",
-      "checkedAt": "2026-10-21T00:40:38.645Z"
-    },
-    "testFiles": 300,
-    "assertions": 2107,
-    "browserAssertions": 16
+    "status": "pending"
   },
   "closeout": {
-    "state": "complete",
+    "state": "delivery-pending",
     "silScore": 945,
     "scaffold": {
       "tasks": 3,
-      "done": 3,
-      "inProgress": 0,
+      "done": 2,
+      "inProgress": 1,
       "open": 0
     }
   },
-  "localSuite": "Local full300 files:2106/2107 assertions,one startup/session-binding fixture failure. Isolated fixture rerun1/1 passes with120s limit. Local full remains nonpassing;exact-main hosted full suite required.",
-  "testFiles": 300,
-  "assertions": 2107
+  "localSuite": "Local full: 2112/2113 assertions;1 failed. Nonpassing; failures retained in local receipt; exact-main hosted suite required. Isolated unchanged fixture1/1 passes at120s limit.",
+  "localFailures": [
+    {
+      "file": "tests/session-lock-binding.test.js",
+      "test": "startup lock and native goal binding binds an actual isolated startup, preserves it on repeat, and keeps help read-only",
+      "detail": "Startup fixture failed at33.7s against30s limit;unchanged isolated1/1 passes at120s limit. Full stack retained in ignored local report."
+    }
+  ]
 }
