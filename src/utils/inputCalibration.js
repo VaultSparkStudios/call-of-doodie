@@ -1,6 +1,8 @@
+import { optionalBrowserStorage } from "./browserStorage.js";
+
 const CALIBRATION_KEY = "cod-input-calibration";
 
-function safeStorage(storage = globalThis.localStorage) {
+function safeStorage(storage = optionalBrowserStorage()) {
   return storage && typeof storage.getItem === "function" ? storage : null;
 }
 
@@ -61,7 +63,7 @@ export function buildInputCalibrationRecord({ source = "unknown", buckets = [], 
   };
 }
 
-export function loadInputCalibration(storage = globalThis.localStorage) {
+export function loadInputCalibration(storage = optionalBrowserStorage()) {
   const store = safeStorage(storage);
   if (!store) return null;
   try {
@@ -72,10 +74,10 @@ export function loadInputCalibration(storage = globalThis.localStorage) {
   }
 }
 
-export function saveInputCalibration(record, storage = globalThis.localStorage) {
+export function saveInputCalibration(record, storage = optionalBrowserStorage()) {
   const store = safeStorage(storage);
   if (!store) return record;
-  store.setItem(CALIBRATION_KEY, JSON.stringify(record));
+  try { store.setItem(CALIBRATION_KEY, JSON.stringify(record)); } catch { /* Calibration remains usable for this session. */ }
   return record;
 }
 

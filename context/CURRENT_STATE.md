@@ -1,3 +1,9 @@
+## S202 candidate
+
+Guest play survives denied browser storage through home, tutorial, pause, defeat, rematch and Operations.
+
+Acceptance detail: LATEST_HANDOFF.md. Local complete suite: 2125/2126 assertions across 301 files;startup/session-binding fixture failed. Isolated unchanged fixture1/1 passes at120s limit. Full local run remains nonpassing;exact-main hosted full suite required.
+
 ## S201 production verified
 
 Controller menus suspend while unfocused or hidden and require fresh input on return.

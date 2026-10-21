@@ -1,3 +1,5 @@
+import { optionalBrowserStorage } from "./browserStorage.js";
+
 const DEFAULT_DEAD_ZONE = 0.2;
 const PROFILE_KEY = "cod-controller-profile";
 const PROFILE_REFRESH_MS = 60_000;
@@ -185,7 +187,7 @@ export function rememberControllerProfile(gp, storage) {
   return profile;
 }
 
-export function loadControllerProfile(storage = globalThis.localStorage) {
+export function loadControllerProfile(storage = optionalBrowserStorage()) {
   if (!storage?.getItem) return null;
   try {
     const parsed = JSON.parse(storage.getItem(PROFILE_KEY) || "null");

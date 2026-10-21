@@ -1,7 +1,9 @@
+import { optionalBrowserStorage } from "./browserStorage.js";
+
 const PANEL_RELOAD_KEY = "cod-panel-reload-v1";
 const PANEL_RELOAD_COOLDOWN_MS = 60_000;
 
-export function planPanelRecovery(storage = globalThis.sessionStorage, now = Date.now()) {
+export function planPanelRecovery(storage = optionalBrowserStorage("session"), now = Date.now()) {
   try {
     const previous = Number(storage?.getItem?.(PANEL_RELOAD_KEY) || 0);
     if (Number.isFinite(previous) && previous > 0 && now - previous < PANEL_RELOAD_COOLDOWN_MS) {

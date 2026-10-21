@@ -822,7 +822,8 @@ export function getDailyChallengeSeed() {
   return s % 999999;
 }
 export function hasDailyChallengeSubmitted() {
-  return !!localStorage.getItem("cod-daily-" + getTodayKey());
+  try { return !!localStorage.getItem("cod-daily-" + getTodayKey()); }
+  catch { return false; }
 }
 export function markDailyChallengeSubmitted() {
   persistProgression("cod-daily-" + getTodayKey(), "1");

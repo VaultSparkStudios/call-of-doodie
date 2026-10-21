@@ -1,7 +1,7 @@
-# S201 compact handoff
+# S202 compact handoff
 
-S201 implementation 0d5b5f36d3d6b2016eaa1d326f55d3b719cc8ca4 passed exact-main workflow 39541463651:300 files/2113 assertions,strict lint,configured build and Cloudflare deployment. Canonical health matches 0d5b5f36d3d6. Canonical and immutable https://7cd1c27b.call-of-doodie.pages.dev shell7/7 each;production browser20/20 across390/1440,both themes. Blur preserves menu focus,input while away is ignored,held input on return causes no action,and fresh press navigates. Shared menu runtime matches staging after generated import filename normalization.
+S202: ten failing-before tests and four blank production browser cases reproduced. Three typed premises recorded before edits. Independent review round1 found two paths;both fixed and round2 passed. Focused utility checks75/75 plus extra19/19 (13 denial cases). Staging48/48 behavior checks (36 guest-loop+12 Operations),shell7/7;24 inspected hash-bound captures. Strict lint,configured build,public/runtime contracts and security pass;dependency audit0 vulnerabilities. Production pending.
 
-Local full: 2112/2113 assertions;1 failed. Nonpassing; failures retained in local receipt; exact-main hosted suite required. Isolated unchanged fixture1/1 passes at120s limit.
+Local complete suite: 2125/2126 assertions across 301 files;startup/session-binding fixture failed. Isolated unchanged fixture1/1 passes at120s limit. Full local run remains nonpassing;exact-main hosted full suite required.
 
-FORGE/public-unlaunched unchanged. Synthetic controller checks do not prove physical-device behavior or participant outcomes. Existing identity,reply-email,backend and comparative measurement gaps remain explicit. No creative direction;CDR unchanged.
+FORGE/public-unlaunched unchanged. Injected browser denial and assisted defeat fixtures are not native privacy-browser or participant evidence. Existing account/profile storage,identity,reply-email and comparative measurement gaps remain outside selected guest-game scope. No creative direction;CDR reviewed unchanged. No backend/identity changes.

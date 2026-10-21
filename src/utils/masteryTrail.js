@@ -1,3 +1,5 @@
+import { optionalBrowserStorage } from "./browserStorage.js";
+
 export const MASTERY_TRAIL_KEY = "cod-mastery-trail-v1";
 
 export const MASTERY_FOCI = Object.freeze([
@@ -70,18 +72,18 @@ export function evaluateMasteryTrail(trail, { runs = [], doctrines = {}, career 
   };
 }
 
-export function loadMasteryTrail(storage = globalThis.localStorage) {
+export function loadMasteryTrail(storage = optionalBrowserStorage()) {
   try {
     const trail = JSON.parse(storage.getItem(MASTERY_TRAIL_KEY) || "null");
     return trail?.version === 1 && focusIds.has(trail.focusId) && milestoneIds.has(trail.milestoneId) && Number.isFinite(Number(trail.startedAt)) ? trail : null;
   } catch { return null; }
 }
 
-export function saveMasteryTrail(trail, storage = globalThis.localStorage) {
+export function saveMasteryTrail(trail, storage = optionalBrowserStorage()) {
   if (!trail || !evaluateMasteryTrail(trail)) return false;
   try { storage.setItem(MASTERY_TRAIL_KEY, JSON.stringify(trail)); return true; } catch { return false; }
 }
 
-export function clearMasteryTrail(storage = globalThis.localStorage) {
+export function clearMasteryTrail(storage = optionalBrowserStorage()) {
   try { storage.removeItem(MASTERY_TRAIL_KEY); return true; } catch { return false; }
 }

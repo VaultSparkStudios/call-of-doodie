@@ -1,3 +1,5 @@
+import { optionalBrowserStorage } from "./browserStorage.js";
+
 // Authored, fact-gated flavor lines. No hosted inference, user text, dynamic
 // executable templates, or claims beyond the typed event facts below.
 export const RUN_VOICE_VERSION = 'run-voice-v1';
@@ -30,14 +32,14 @@ export function buildRunVoice(facts = {}, recentIds = []) {
   return result;
 }
 
-export function readRecentRunVoices(storage = globalThis.sessionStorage) {
+export function readRecentRunVoices(storage = optionalBrowserStorage("session")) {
   try {
     const value = JSON.parse(storage.getItem(RECENT_KEY) || '[]');
     return Array.isArray(value) ? value.filter((id) => typeof id === 'string').slice(-4) : [];
   } catch { return []; }
 }
 
-export function rememberRunVoice(id, storage = globalThis.sessionStorage) {
+export function rememberRunVoice(id, storage = optionalBrowserStorage("session")) {
   if (typeof id !== 'string' || id.length > 40) return;
   try { storage.setItem(RECENT_KEY, JSON.stringify([...readRecentRunVoices(storage).filter((prior) => prior !== id), id].slice(-4))); } catch { /* blocked storage still has a deterministic line */ }
 }

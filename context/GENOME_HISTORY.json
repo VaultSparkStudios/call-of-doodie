@@ -1310,6 +1310,23 @@
       },
       "delta": 0,
       "cause": "S201 controller menu focus-loss production verified."
+    },
+    {
+      "date": "2026-10-21",
+      "session": 202,
+      "total": 24,
+      "maxTotal": 25,
+      "overallStatus": "staged;production pending.",
+      "lastReviewed": "2026-10-18",
+      "dimensions": {
+        "schema_alignment": 5,
+        "prompt_template_alignment": 4,
+        "derived_view_freshness": 5,
+        "handoff_continuity": 5,
+        "contradiction_density": 5
+      },
+      "delta": 0,
+      "cause": "Guest play survives denied browser storage through home, tutorial, pause, defeat, rematch and Operations."
     }
   ]
 }

@@ -1,3 +1,5 @@
+import { optionalBrowserStorage } from "./browserStorage.js";
+
 // squads — a short shared code that groups friends on the public board (S163).
 //
 // The code rides along on signed leaderboard submissions (submit-score
@@ -13,11 +15,11 @@ export function normalizeSquadCode(value) {
   return SQUAD_CODE_RE.test(code) ? code : "";
 }
 
-export function getSquadCode(storage = globalThis.localStorage) {
+export function getSquadCode(storage = optionalBrowserStorage()) {
   try { return normalizeSquadCode(storage?.getItem(SQUAD_KEY)); } catch { return ""; }
 }
 
-export function setSquadCode(value, storage = globalThis.localStorage) {
+export function setSquadCode(value, storage = optionalBrowserStorage()) {
   const code = normalizeSquadCode(value);
   try { if (code) storage?.setItem(SQUAD_KEY, code); else storage?.removeItem(SQUAD_KEY); } catch {}
   return code;

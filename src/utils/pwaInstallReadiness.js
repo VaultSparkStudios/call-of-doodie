@@ -1,10 +1,12 @@
+import { optionalBrowserStorage } from "./browserStorage.js";
+
 import { writeLocalState } from "./storageHealth.js";
 
 export const SERVICE_WORKER_LIFECYCLE_EVENT = "cod:service-worker-lifecycle";
 
 const PWA_INSTALL_ATTEMPT_KEY = "cod-pwa-install-attempt";
 
-function safeStorage(storage = globalThis.localStorage) {
+function safeStorage(storage = optionalBrowserStorage()) {
   return storage && typeof storage.getItem === "function" ? storage : null;
 }
 
@@ -138,7 +140,7 @@ export function buildPwaInstallAttempt({ outcome = "unknown", timestamp = Date.n
   };
 }
 
-export function loadPwaInstallAttempt(storage = globalThis.localStorage) {
+export function loadPwaInstallAttempt(storage = optionalBrowserStorage()) {
   const store = safeStorage(storage);
   if (!store) return null;
   try {
@@ -149,7 +151,7 @@ export function loadPwaInstallAttempt(storage = globalThis.localStorage) {
   }
 }
 
-export function savePwaInstallAttempt(record, storage = globalThis.localStorage) {
+export function savePwaInstallAttempt(record, storage = optionalBrowserStorage()) {
   const store = safeStorage(storage);
   if (!store) return record;
   writeLocalState(PWA_INSTALL_ATTEMPT_KEY, JSON.stringify(record), { storage: store, surface: "pwa-install" });

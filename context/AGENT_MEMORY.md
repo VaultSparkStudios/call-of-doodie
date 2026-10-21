@@ -1,3 +1,11 @@
+## S202 guest storage denial
+
+Guest play survives denied browser storage through home, tutorial, pause, defeat, rematch and Operations.
+
+Local complete suite: 2125/2126 assertions across 301 files;startup/session-binding fixture failed. Isolated unchanged fixture1/1 passes at120s limit. Full local run remains nonpassing;exact-main hosted full suite required.
+
+FORGE/public-unlaunched unchanged. Injected browser denial and assisted defeat fixtures are not native privacy-browser or participant evidence. Existing account/profile storage,identity,reply-email and comparative measurement gaps remain outside selected guest-game scope. No creative direction;CDR reviewed unchanged. No backend/identity changes.
+
 ## S201 production acceptance
 
 S201 implementation 0d5b5f36d3d6b2016eaa1d326f55d3b719cc8ca4 passed exact-main workflow 39541463651:300 files/2113 assertions,strict lint,configured build and Cloudflare deployment. Canonical health matches 0d5b5f36d3d6. Canonical and immutable https://7cd1c27b.call-of-doodie.pages.dev shell7/7 each;production browser20/20 across390/1440,both themes. Blur preserves menu focus,input while away is ignored,held input on return causes no action,and fresh press navigates. Shared menu runtime matches staging after generated import filename normalization.

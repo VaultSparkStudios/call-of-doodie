@@ -1,3 +1,5 @@
+import { optionalBrowserStorage } from "./browserStorage.js";
+
 import { getOperation } from "../systems/operationCampaign.js";
 
 export const OPERATION_CAMPAIGN_PROGRESS_SCHEMA = "operation-campaign-progress-v1";
@@ -53,12 +55,12 @@ export function deriveOperationCampaignCarryIn(progress, operationId) {
   };
 }
 
-export function loadOperationCampaignProgress(storage = globalThis.localStorage) {
+export function loadOperationCampaignProgress(storage = optionalBrowserStorage()) {
   try { return normalizeOperationCampaignProgress(JSON.parse(storage?.getItem(OPERATION_CAMPAIGN_PROGRESS_KEY) || "null")); }
   catch { return createOperationCampaignProgress(); }
 }
 
-export function saveOperationCampaignProgress(progress, storage = globalThis.localStorage) {
+export function saveOperationCampaignProgress(progress, storage = optionalBrowserStorage()) {
   const safe = normalizeOperationCampaignProgress(progress);
   try { storage?.setItem(OPERATION_CAMPAIGN_PROGRESS_KEY, JSON.stringify(safe)); } catch {}
   return safe;

@@ -1,229 +1,382 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-10-21T03:46:51.269Z",
-  "uiBaseRef": "84f470ac293dcccdda2f9212a77c821dada2d49f",
-  "stagingUrl": "https://1106fdb0.call-of-doodie.pages.dev/",
+  "capturedAt": "2026-10-21T04:34:04.884Z",
+  "uiBaseRef": "e87a4f448ab007581c06795e33a9164310116b62",
+  "stagingUrl": "https://027eef51.call-of-doodie.pages.dev/",
   "themes": [
     "dark",
     "light"
   ],
   "sourceFiles": [
     {
-      "file": "src/hooks/useGamepadNav.js",
-      "sha256": "4c6b2810589d4c5a2c6eae47504ed1564331f4ba74e1b27b083c3cbeee92992f"
+      "file": "src/storage.js",
+      "sha256": "5eca5f6949d241001c3a5145f52d5e4684e557266e1c080b9611678ac8d2de10"
+    },
+    {
+      "file": "src/utils/asyncPanelRecovery.js",
+      "sha256": "910eef9945c9cc1f26bc5507f9e84042af12b5bf4d6503b68ff698c1ad15b457"
+    },
+    {
+      "file": "src/utils/gamepad.js",
+      "sha256": "058c131894612895016b4a87239aa7ecb7fba0d156e7814db3ed64b125d606c6"
+    },
+    {
+      "file": "src/utils/hudLayout.js",
+      "sha256": "cf506320b7d79ec342b0090850ad27b162d39110228a933a28a490bda17e32a9"
+    },
+    {
+      "file": "src/utils/inputCalibration.js",
+      "sha256": "0f3bcad001d05c77763c78bcff8238f2d364c1689698269e95880ce8b61ea088"
+    },
+    {
+      "file": "src/utils/masteryTrail.js",
+      "sha256": "b731f43c23fc175254d774224dea9f56972e30f15738b3d7fe0ea5042e15367e"
+    },
+    {
+      "file": "src/utils/operationCampaignProgress.js",
+      "sha256": "64994e6881a62f367c1ddfba9ab82713f13a77767722023153b2a555aeee4eca"
+    },
+    {
+      "file": "src/utils/playtestFlightRecorder.js",
+      "sha256": "136103d9e5b44200a1536545c2e95a7a86eaad3117e2eb8a8f7898725f3f9c47"
+    },
+    {
+      "file": "src/utils/pwaInstallReadiness.js",
+      "sha256": "9151802bd657334ad546af6efa6872f1d844d1f96cde3c762a6d9fb13a3087ac"
+    },
+    {
+      "file": "src/utils/runVoice.js",
+      "sha256": "45c763d6061a3e5d1973980aa9c18a6e3a4c0854fbc222cd06da8d4d4c5ae9e0"
+    },
+    {
+      "file": "src/utils/squads.js",
+      "sha256": "9c6cfdab1ed7849f5bd58f2239069cf132f4763267eae3e52f3c7dc648f2805c"
+    },
+    {
+      "file": "src/utils/supporter.js",
+      "sha256": "948e561fc6d8cbffbdb52164c02f6a22925d518ccefde7a9c290430b62301f18"
+    },
+    {
+      "file": "src/utils/theme.js",
+      "sha256": "c883d54cace0ef810132928593fe2f27a987fc862b686dd2843247e544ba3a22"
+    },
+    {
+      "file": "src/utils/tutorialProgress.js",
+      "sha256": "c052279286ba370f0b420df6ba84649ddb64dbe2530475138b432351009aa50c"
+    },
+    {
+      "file": "src/utils/browserStorage.js",
+      "sha256": "792c41d8022c9b9095c864345f61ded1a9c782c0c4715e5982af79620271fe35"
     }
   ],
   "captures": [
     {
-      "file": "session-201/before-production-sewer-night-390-blurred-menu.png",
-      "sha256": "e41bfe061f9fec7b4db6f0387f65ec54cc84b02990fa4bf133bcf3058b5d07e4",
+      "file": "session-202/before-production-sewer-night-390-denied-home.png",
+      "sha256": "983e85b19b5e56e5edf6c6221f48039cf65c131cf531e0950619bfea0994cfc3",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "blurred-menu",
+      "page": "denied-home",
       "phase": "before"
     },
     {
-      "file": "session-201/before-production-sewer-night-390-held-return.png",
-      "sha256": "dc547b0cd4c849c13885a2cd32efc236214e381cc28f8ced90133a49795c8382",
+      "file": "session-202/before-production-sewer-night-390-denied-unavailable.png",
+      "sha256": "983e85b19b5e56e5edf6c6221f48039cf65c131cf531e0950619bfea0994cfc3",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "held-return",
+      "page": "denied-unavailable",
       "phase": "before"
     },
     {
-      "file": "session-201/before-production-sewer-night-1440-blurred-menu.png",
-      "sha256": "db0b5f64d9d2f21586dfc491a0db74061211c3101b16fe50412e43e4d343b94b",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "blurred-menu",
-      "phase": "before"
-    },
-    {
-      "file": "session-201/before-production-sewer-night-1440-held-return.png",
-      "sha256": "242dfdc0142f67322b5810d9c06b6d709154a02777da1a0b226415dff48a6096",
+      "file": "session-202/before-production-sewer-night-1440-denied-home.png",
+      "sha256": "6a1074684c68a625de8660e32a94298db9cc56bbb8de84d3db1a269c486bdf68",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "held-return",
+      "page": "denied-home",
       "phase": "before"
     },
     {
-      "file": "session-201/before-production-porcelain-day-390-blurred-menu.png",
-      "sha256": "bc1c8642fa4b411d1ed24126c53f2c46131bd1009f8316bc4e182b77c9343302",
+      "file": "session-202/before-production-sewer-night-1440-denied-unavailable.png",
+      "sha256": "6a1074684c68a625de8660e32a94298db9cc56bbb8de84d3db1a269c486bdf68",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "denied-unavailable",
+      "phase": "before"
+    },
+    {
+      "file": "session-202/before-production-porcelain-day-390-denied-home.png",
+      "sha256": "983e85b19b5e56e5edf6c6221f48039cf65c131cf531e0950619bfea0994cfc3",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "blurred-menu",
+      "page": "denied-home",
       "phase": "before"
     },
     {
-      "file": "session-201/before-production-porcelain-day-390-held-return.png",
-      "sha256": "2614747e1fd6aef224c7212ce1f020086fb74d7e3174bdfdfb2615c7242a063e",
+      "file": "session-202/before-production-porcelain-day-390-denied-unavailable.png",
+      "sha256": "983e85b19b5e56e5edf6c6221f48039cf65c131cf531e0950619bfea0994cfc3",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "held-return",
+      "page": "denied-unavailable",
       "phase": "before"
     },
     {
-      "file": "session-201/before-production-porcelain-day-1440-blurred-menu.png",
-      "sha256": "48c42bb41b1af993a96ed9e450aff67cce0330b8f08ff95744a1f6e2d1f5e5b8",
+      "file": "session-202/before-production-porcelain-day-1440-denied-home.png",
+      "sha256": "6a1074684c68a625de8660e32a94298db9cc56bbb8de84d3db1a269c486bdf68",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "blurred-menu",
+      "page": "denied-home",
       "phase": "before"
     },
     {
-      "file": "session-201/before-production-porcelain-day-1440-held-return.png",
-      "sha256": "41f1b3ee5d4009baa512497468ce7ca5d4bfdbcd4681c627ea7f2c6ff4cd2541",
+      "file": "session-202/before-production-porcelain-day-1440-denied-unavailable.png",
+      "sha256": "6a1074684c68a625de8660e32a94298db9cc56bbb8de84d3db1a269c486bdf68",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "held-return",
+      "page": "denied-unavailable",
       "phase": "before"
     },
     {
-      "file": "session-201/after-staging-sewer-night-390-blurred-menu.png",
-      "sha256": "111cd98e7cb0a17b356e84bda71989d1c46aad2ee7151ad327b935d455b587ca",
+      "file": "session-202/after-staging-sewer-night-390-denied-home.png",
+      "sha256": "b22b7f986af15ac40847d043d53cf06639dd74ffb8eff05128b19992ba497933",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "blurred-menu",
+      "page": "denied-home",
       "phase": "after"
     },
     {
-      "file": "session-201/after-staging-sewer-night-390-held-return.png",
-      "sha256": "111cd98e7cb0a17b356e84bda71989d1c46aad2ee7151ad327b935d455b587ca",
+      "file": "session-202/after-staging-sewer-night-390-denied-pause.png",
+      "sha256": "5946d7340357739bb089afc990bff0ea41ed98c80ac40b303f90c72de768761c",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "held-return",
+      "page": "denied-pause",
       "phase": "after"
     },
     {
-      "file": "session-201/after-staging-sewer-night-1440-blurred-menu.png",
-      "sha256": "3785fe75073b5f5078d6805907bd3e7bb06c657b4b968dd41779396182ede068",
+      "file": "session-202/after-staging-sewer-night-390-denied-defeat.png",
+      "sha256": "9e4c7ea0eadfdfb620bade0160ffc527a7c5ea25d513b5e32cded2a515b8ef5c",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "denied-defeat",
+      "phase": "after"
+    },
+    {
+      "file": "session-202/after-staging-sewer-night-1440-denied-home.png",
+      "sha256": "0353ca2a1d7dadad710674bd5ff719d104700fae13831da17ca67d7effbd05a6",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "blurred-menu",
+      "page": "denied-home",
       "phase": "after"
     },
     {
-      "file": "session-201/after-staging-sewer-night-1440-held-return.png",
-      "sha256": "3785fe75073b5f5078d6805907bd3e7bb06c657b4b968dd41779396182ede068",
+      "file": "session-202/after-staging-sewer-night-1440-denied-pause.png",
+      "sha256": "aa65c8249c61a68b2f2e9edd376bbbc787348df4b3a597c95e8017e863a94aa0",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "held-return",
+      "page": "denied-pause",
       "phase": "after"
     },
     {
-      "file": "session-201/after-staging-porcelain-day-390-blurred-menu.png",
-      "sha256": "93a89a01adc6e2e2faa1601794ffa6d38bc20fec1259bb00ba2b4a356528386d",
+      "file": "session-202/after-staging-sewer-night-1440-denied-defeat.png",
+      "sha256": "ad905dd93ae89e692a022f13af4d3a557840675da19a2bb99f1404756f907620",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "denied-defeat",
+      "phase": "after"
+    },
+    {
+      "file": "session-202/after-staging-porcelain-day-390-denied-home.png",
+      "sha256": "d0be2ecf9952dee5353a8e2b258bc8227dbce335e41f2235da24f38b1987040b",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "blurred-menu",
+      "page": "denied-home",
       "phase": "after"
     },
     {
-      "file": "session-201/after-staging-porcelain-day-390-held-return.png",
-      "sha256": "93a89a01adc6e2e2faa1601794ffa6d38bc20fec1259bb00ba2b4a356528386d",
+      "file": "session-202/after-staging-porcelain-day-390-denied-pause.png",
+      "sha256": "c63177adb97256929693242740f1884323fa417712b80022f997899bde4e3738",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "held-return",
+      "page": "denied-pause",
       "phase": "after"
     },
     {
-      "file": "session-201/after-staging-porcelain-day-1440-blurred-menu.png",
-      "sha256": "eb3bd8cda38dc4ce9f7405c20e505e4bcfc297ab66eec21da914922c3a88cb4a",
+      "file": "session-202/after-staging-porcelain-day-390-denied-defeat.png",
+      "sha256": "ac461f622b958e6ed4af40b83100c50abd92ea3add3557dfc237b614d55b3e4e",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "denied-defeat",
+      "phase": "after"
+    },
+    {
+      "file": "session-202/after-staging-porcelain-day-1440-denied-home.png",
+      "sha256": "f5f39903e577126e602ea8dd1b44c3fb236c59d307ba782243f05676f16d0e2c",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "blurred-menu",
+      "page": "denied-home",
       "phase": "after"
     },
     {
-      "file": "session-201/after-staging-porcelain-day-1440-held-return.png",
-      "sha256": "eb3bd8cda38dc4ce9f7405c20e505e4bcfc297ab66eec21da914922c3a88cb4a",
+      "file": "session-202/after-staging-porcelain-day-1440-denied-pause.png",
+      "sha256": "62591b428fd3e3660e6915712c82b214d226033f2115542dc15825dc34daa7cc",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "held-return",
+      "page": "denied-pause",
+      "phase": "after"
+    },
+    {
+      "file": "session-202/after-staging-porcelain-day-1440-denied-defeat.png",
+      "sha256": "a7d5b21d90770262e08b8d74c2c8dbd983daacec1f859a7574b10bd8ebfbad31",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "denied-defeat",
+      "phase": "after"
+    },
+    {
+      "file": "session-202/after-staging-sewer-night-390-denied-operation.png",
+      "sha256": "f73c15e797e52ed087b29b4e5d01285fc7592188ea90aa045c933fb0daf0282d",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "denied-operation",
+      "phase": "after"
+    },
+    {
+      "file": "session-202/after-staging-porcelain-day-390-denied-operation.png",
+      "sha256": "9ec6588f458702c7ab740de0c1699962dac91800f5ffc7f4cc615b2d82fe72c3",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "page": "denied-operation",
+      "phase": "after"
+    },
+    {
+      "file": "session-202/after-staging-sewer-night-1440-denied-operation.png",
+      "sha256": "a2d6cdbcf91ad68964df8649bc74d4c3c0e43ddcf6e52b2beca5ffae61dc2b55",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "denied-operation",
+      "phase": "after"
+    },
+    {
+      "file": "session-202/after-staging-porcelain-day-1440-denied-operation.png",
+      "sha256": "4232d2e5c1dfde41efbf1735c4d0045b39e7c59b8270f91a90e5addd68f3eaff",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "page": "denied-operation",
       "phase": "after"
     }
   ],
   "inspection": {
     "renderedPixelsReviewed": true,
-    "reviewer": "Codex root inspected16 before/after images through2 contact sheets",
-    "reviewedAt": "2026-10-21T03:46:51.270Z",
-    "scope": "Pause navigation interruption states,390/1440,both shell themes.",
+    "reviewer": "Codex root inspected 24 before/after images through contact sheets and full-size mobile home/defeat captures",
+    "reviewedAt": "2026-10-21T04:34:04.890Z",
+    "scope": "Denied local/session storage: home, pause, defeat and Operations at390/1440 in both shell themes.",
     "findings": [
-      "Before blur focus continued down the menu;after it remains on Build Summary.",
-      "Before blurred confirm opened an unintended panel;after pause stays open.",
-      "Final affected menu states remain readable and focus ring visible;no new layout defect."
+      "Before: denied getter leaves blank screen at every viewport/theme.",
+      "After: home displays readable entry controls;pause and defeat render with actionable resume/rematch.",
+      "Operations objective fits at mobile and desktop;no introduced layout defect."
     ],
     "fixesApplied": [
-      "Suspend polling and cancel repeats while unfocused/hidden;require neutral on return."
+      "Guard optional storage resolution and remaining daily/tutorial/defeat paths."
     ],
     "blockingDefectsOpen": 0
   },
   "methodLimits": [
-    "Synthetic controllers in real Chrome;no physical-device or participant evidence.",
-    "Gameplay pause palette is independent of shell theme. Shared hook consumers verified through mounted-hook tests;runtime captures focus on Pause."
+    "Injected getter denial in real Chrome;native privacy modes and participant outcomes unmeasured.",
+    "Gameplay pause/defeat palettes are independent of shell theme.",
+    "The prior application never reached any of these states under denial;before images show that unavailable state."
   ]
 }

@@ -1,10 +1,12 @@
+import { optionalBrowserStorage } from "./browserStorage.js";
+
 import { getSupabaseClient } from "../supabase.js";
 
 const VERIFIED_KEY = "cod-supporter-verification-v2";
 export const SUPPORTER_CACHE_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 export const LEGACY_SELF_ATTESTED_KEY = "cod-supporter-v1";
 
-function safeStorage(storage = globalThis.localStorage) {
+function safeStorage(storage = optionalBrowserStorage()) {
   return storage && typeof storage.getItem === "function" ? storage : null;
 }
 
@@ -20,7 +22,7 @@ export function normalizeSupporterVerification(value) {
   return { version: 2, verified: true, callsign, verifiedAt };
 }
 
-export function loadSupporterVerification(storage = globalThis.localStorage) {
+export function loadSupporterVerification(storage = optionalBrowserStorage()) {
   const target = safeStorage(storage);
   if (!target) return null;
   try {
@@ -30,7 +32,7 @@ export function loadSupporterVerification(storage = globalThis.localStorage) {
   }
 }
 
-export function saveVerifiedSupporter(callsign, storage = globalThis.localStorage, now = Date.now()) {
+export function saveVerifiedSupporter(callsign, storage = optionalBrowserStorage(), now = Date.now()) {
   const target = safeStorage(storage);
   const normalizedCallsign = normalizeSupporterCallsign(callsign);
   if (!target || !normalizedCallsign) return null;
@@ -50,18 +52,18 @@ export function saveVerifiedSupporter(callsign, storage = globalThis.localStorag
   }
 }
 
-export function clearSupporterVerification(storage = globalThis.localStorage) {
+export function clearSupporterVerification(storage = optionalBrowserStorage()) {
   try { safeStorage(storage)?.removeItem?.(VERIFIED_KEY); } catch { /* storage unavailable */ }
 }
 
-export function isSupporter(callsign = null, storage = globalThis.localStorage, now = Date.now()) {
+export function isSupporter(callsign = null, storage = optionalBrowserStorage(), now = Date.now()) {
   const record = loadSupporterVerification(storage);
   if (!record || Number(now) - record.verifiedAt > SUPPORTER_CACHE_TTL_MS) return false;
   const expected = normalizeSupporterCallsign(callsign);
   return expected ? record.callsign === expected : true;
 }
 
-export function supporterVerificationStatus(callsign, storage = globalThis.localStorage, now = Date.now()) {
+export function supporterVerificationStatus(callsign, storage = optionalBrowserStorage(), now = Date.now()) {
   const expected = normalizeSupporterCallsign(callsign);
   const record = loadSupporterVerification(storage);
   if (!expected) return { status: "missing-callsign", verified: false, callsign: "", record };
@@ -72,7 +74,7 @@ export function supporterVerificationStatus(callsign, storage = globalThis.local
 
 export async function verifySupporterCallsign(callsign, {
   client = undefined,
-  storage = globalThis.localStorage,
+  storage = optionalBrowserStorage(),
   now = Date.now,
 } = {}) {
   const normalizedCallsign = normalizeSupporterCallsign(callsign);

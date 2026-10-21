@@ -19,7 +19,10 @@ export function tutorialStepComplete(requirement, evidence) {
 }
 
 function stores(win = globalThis.window) {
-  return [win?.localStorage, win?.sessionStorage].filter(Boolean);
+  return ["localStorage", "sessionStorage"].flatMap(key => {
+    try { return win?.[key] ? [win[key]] : []; }
+    catch { return []; }
+  });
 }
 
 export function shouldShowTutorial(win = globalThis.window) {

@@ -1,3 +1,5 @@
+import { optionalBrowserStorage } from "./browserStorage.js";
+
 export function getHudDebugSlots({ isMobile = false } = {}) {
   const bottomInset = isMobile ? 56 : 0;
   return [
@@ -10,7 +12,7 @@ export function getHudDebugSlots({ isMobile = false } = {}) {
   ];
 }
 
-export function isHudDebugEnabled(search = globalThis.location?.search || "", storage = globalThis.localStorage) {
+export function isHudDebugEnabled(search = globalThis.location?.search || "", storage = optionalBrowserStorage()) {
   try {
     return new URLSearchParams(search).get("debug") === "hud"
       || storage?.getItem?.("cod-debug-hud") === "1";

@@ -1,3 +1,5 @@
+import { optionalBrowserStorage } from "./browserStorage.js";
+
 const STORAGE_KEY = "cod-playtest-flight-v1";
 const OPT_IN_KEY = "cod-playtest-pulse-enabled";
 const PULSE_KEY = "cod-playtest-pulse-v1";
@@ -37,9 +39,10 @@ export function isPlaytestMode(search = globalThis.location?.search || "") {
   }
 }
 
-export function setPlaytestPulseEnabled(enabled, storage = globalThis.localStorage) {
+export function setPlaytestPulseEnabled(enabled, storage = optionalBrowserStorage()) {
   try {
-    storage?.setItem(OPT_IN_KEY, enabled ? "1" : "0");
+    if (!storage) return false;
+    storage.setItem(OPT_IN_KEY, enabled ? "1" : "0");
     return Boolean(enabled);
   } catch { return false; }
 }
@@ -177,7 +180,7 @@ export function buildPortablePlaytestPulse(pulse) {
   };
 }
 
-export function recordPlaytestPulse(receipt, storage = globalThis.localStorage) {
+export function recordPlaytestPulse(receipt, storage = optionalBrowserStorage()) {
   const portable = buildPortablePlaytestReceipt(receipt);
   if (!portable?.complete) return null;
   try {
@@ -195,19 +198,20 @@ export function recordPlaytestPulse(receipt, storage = globalThis.localStorage) 
       if (threatReadability[item.annotations.threatReadability] != null) threatReadability[item.annotations.threatReadability] += 1;
     });
     const pulse = { schemaVersion: "playtest-pulse-v1", privacy: "device-local-aggregate-no-upload", sampleSize: nextFlights.length, clarity, replay, inputTrust, threatReadability, flights: nextFlights };
-    storage?.setItem(PULSE_KEY, JSON.stringify(pulse));
+    if (!storage) return null;
+    storage.setItem(PULSE_KEY, JSON.stringify(pulse));
     return pulse;
   } catch { return null; }
 }
 
-export function loadPlaytestPulse(storage = globalThis.localStorage) {
+export function loadPlaytestPulse(storage = optionalBrowserStorage()) {
   try {
     const value = JSON.parse(storage?.getItem(PULSE_KEY) || "null");
     return normalizePulse(value);
   } catch { return emptyPulse(); }
 }
 
-export function loadPlaytestFlight(storage = globalThis.sessionStorage) {
+export function loadPlaytestFlight(storage = optionalBrowserStorage("session")) {
   try {
     const value = JSON.parse(storage?.getItem(STORAGE_KEY) || "null");
     return value?.schemaVersion === "playtest-flight-v1" ? value : null;
@@ -216,16 +220,17 @@ export function loadPlaytestFlight(storage = globalThis.sessionStorage) {
   }
 }
 
-export function savePlaytestFlight(receipt, storage = globalThis.sessionStorage) {
+export function savePlaytestFlight(receipt, storage = optionalBrowserStorage("session")) {
   try {
-    storage?.setItem(STORAGE_KEY, JSON.stringify(receipt));
+    if (!storage) return false;
+    storage.setItem(STORAGE_KEY, JSON.stringify(receipt));
     return true;
   } catch {
     return false;
   }
 }
 
-export function startActivePlaytestFlight(options = {}, storage = globalThis.sessionStorage) {
+export function startActivePlaytestFlight(options = {}, storage = optionalBrowserStorage("session")) {
   const previous = loadPlaytestFlight(storage);
   const fresh = createPlaytestFlight(options);
   fresh.previousRun = previous?.finalizedAt ? buildPortablePlaytestReceipt({ ...previous, previousRun: null }) : null;
@@ -234,7 +239,7 @@ export function startActivePlaytestFlight(options = {}, storage = globalThis.ses
   return receipt;
 }
 
-export function recordActivePlaytestMilestone(milestone, options = {}, storage = globalThis.sessionStorage) {
+export function recordActivePlaytestMilestone(milestone, options = {}, storage = optionalBrowserStorage("session")) {
   const current = loadPlaytestFlight(storage);
   if (!current) return null;
   const next = recordPlaytestMilestone(current, milestone, options);
@@ -242,7 +247,7 @@ export function recordActivePlaytestMilestone(milestone, options = {}, storage =
   return next;
 }
 
-export function annotateActivePlaytestFlight(annotations = {}, storage = globalThis.sessionStorage) {
+export function annotateActivePlaytestFlight(annotations = {}, storage = optionalBrowserStorage("session")) {
   const current = loadPlaytestFlight(storage);
   if (!current) return null;
   const next = annotatePlaytestFlight(current, annotations);
@@ -261,8 +266,8 @@ export function recordPlaytestContinuation(receipt, continuation, { now = Date.n
  */
 export function recordActivePlaytestContinuation(continuation, {
   now = Date.now(),
-  sessionStorage = globalThis.sessionStorage,
-  localStorage = globalThis.localStorage,
+  sessionStorage = optionalBrowserStorage("session"),
+  localStorage = optionalBrowserStorage(),
 } = {}) {
   const current = loadPlaytestFlight(sessionStorage);
   if (!current) return null;
@@ -272,7 +277,7 @@ export function recordActivePlaytestContinuation(continuation, {
   return { receipt, pulse };
 }
 
-export function clearPlaytestFlight(storage = globalThis.sessionStorage) {
+export function clearPlaytestFlight(storage = optionalBrowserStorage("session")) {
   try {
     storage?.removeItem(STORAGE_KEY);
     return true;

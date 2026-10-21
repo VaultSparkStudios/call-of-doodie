@@ -1,3 +1,5 @@
+import { optionalBrowserStorage } from "./browserStorage.js";
+
 export const THEME_STORAGE_KEY = "cod-theme";
 
 export const THEMES = Object.freeze({
@@ -62,7 +64,7 @@ export function readTheme(win = globalThis.window) {
   });
 }
 
-export function applyTheme(theme, { doc = globalThis.document, storage = globalThis.localStorage, persist = true } = {}) {
+export function applyTheme(theme, { doc = globalThis.document, storage = optionalBrowserStorage(), persist = true } = {}) {
   const id = isTheme(theme) ? theme : "sewer-night";
   if (doc?.documentElement) {
     doc.documentElement.dataset.codTheme = id;
