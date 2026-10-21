@@ -4,6 +4,12 @@
 
 ## Current Session
 
+## S201 production verified
+
+Controller menus suspend while unfocused or hidden and require fresh input on return.
+
+S201 implementation 0d5b5f36d3d6b2016eaa1d326f55d3b719cc8ca4 passed exact-main workflow 39541463651:300 files/2113 assertions,strict lint,configured build and Cloudflare deployment. Canonical health matches 0d5b5f36d3d6. Canonical and immutable https://7cd1c27b.call-of-doodie.pages.dev shell7/7 each;production browser20/20 across390/1440,both themes. Blur preserves menu focus,input while away is ignored,held input on return causes no action,and fresh press navigates. Shared menu runtime matches staging after generated import filename normalization.
+
 ## S201 candidate acceptance
 
 Local full: 2112/2113 assertions;1 failed. Nonpassing; failures retained in local receipt; exact-main hosted suite required.
@@ -80,18 +86,11 @@ S196 implementation 729870fb560e776f947f84957c83db6fea1ba2d3 passed exact-main w
 
 Reliable controller ownership and consistent Summoner protection.
 
-S196 local full 299 files/2075 assertions passed in one final run;83 focused pass. Ten new initial failing-before cases plus independent-review trigger regression covered. Staging https://4e070130.call-of-doodie.pages.dev shell7/7 and browser40/40 across390/1440,both themes. Real production-before probes reproduced wrong controller ownership and protected grenade/chain damage; after protection holds, vulnerable grenade damage remains70,chain falls back. Twenty-four before/after images inspected and source-hash-bound. Strict lint,configured build,public/security/runtime/schema/startup gates are recorded separately. Exact-main production pending.
-
-## S195 production verified
-
-Consistent Railgun health bonus and bounded controller persistence.
-
-S195 implementation 18285e4cc1c0d582eeffeab3a8ae3cee43c93ee5 passed exact-main workflow 39445821523:299 files/2063 assertions,strict lint,configured build and Cloudflare deployment. Canonical edge-he
+S196 local full 299 files/2075 assertions passed in one final run;83 focused pass. Ten new initial failing-before cases plus independent-review trigger regression covered. Staging https://4e070130.call-of-doodie.pages.dev shell7/7 and browser40/40 across390/1440,both themes. Rea
 
 ## Open Work
 
 ## S201 arc outcomes and waves
-- [ ] S201 exact-main production and final closeout.
 - [ ] [SIL:1] S201 reserve: physical controller interruption comparison;owner project,dependency hardware.
 - [ ] [SIL:1] S201 reserve: representative-player menu interruption comprehension;owner project,dependency observed participants.
 ## S200 arc outcomes and waves
@@ -145,6 +144,7 @@ S195 implementation 18285e4cc1c0d582eeffeab3a8ae3cee43c93ee5 passed exact-main w
 - [ ] [SIL:1] [ARK] Confirm ops actioned both S176 cargos (genome upsert key; write-back verification record), then re-sync `check-writeback-currency.mjs` from ops and retire the matching `ACCEPTED_HISTORICAL_DEFECTS` by repair.
 ## Session 175 - The claims themselves get measured
 - [ ] [SIL:1] [ARK] **Cross-repo** Confirm `vaultspark-studio-ops` actioned the genome-writer cargo (the `(date, session)` upsert key that appends a duplicate row when a session is re-snapshotted on a later date) and, once repaired upstream, retire the matching `ACCEPTED_HISTORICAL_DEFECTS` entries by repair rather than by waiver. Owned by another repository and must travel through Studio Ark per CANON-018; this repo's gate can detect a new duplicate but cannot prevent one.
+## Session 174 - The gates themselves get measured
 
 ## Recent Decisions
 
@@ -179,9 +179,12 @@ S200 final acceptance: S200 implementation 34305a258284660263c2af678547a9eb9d0e0
 
 Suspend shared controller menus on blur or hidden document;initialize from hasFocus and require neutral on return. Reviewer caught already-unfocused activation and the correction is covered. Tests were added before premise recording;runtime source remained unchanged until the gate. Existing unchanged identity STRONG gap remains visible;no launch/lifecycle change. Reuse installed packages and project-native release tooling.
 
+
+S201 final acceptance: S201 implementation 0d5b5f36d3d6b2016eaa1d326f55d3b719cc8ca4 passed exact-main workflow 39541463651:300 files/2113 assertions,strict lint,configured build and Cloudflare deployment. Canonical health matches 0d5b5f36d3d6. Canonical and immutable https://7cd1c27b.call-of-doodie.pages.dev shell7/7 each;production browser20/20 across390/1440,both themes. Blur preserves menu focus,input while away is ignored,held input on return causes no action,and fresh press navigates. Shared menu runtime matches staging after generated import filename normalization. Local full: 2112/2113 assertions;1 failed. Nonpassing; failures retained in local receipt; exact-main hosted suite required. Isolated unchanged fixture1/1 passes at120s limit.
+
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 281,869 bytes · SHA-256 `9b6533b32b7a…`
-- `context/TASK_BOARD.md` · 190,556 bytes · SHA-256 `e862b716fe7f…`
-- `context/DECISIONS.md` · 195,881 bytes · SHA-256 `27be4372cf27…`
+- `context/CURRENT_STATE.md` · 282,541 bytes · SHA-256 `7bc98070fa3e…`
+- `context/TASK_BOARD.md` · 190,563 bytes · SHA-256 `6c098b0f1ba3…`
+- `context/DECISIONS.md` · 196,637 bytes · SHA-256 `35249c6d0510…`
 - `docs/AUDIT_2026-10-18.json` · 6,892 bytes · SHA-256 `b34b668a7b5a…`

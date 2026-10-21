@@ -1,9 +1,9 @@
 ## S201 arc outcomes and waves
 
-Wave 1 ✔ startup and fresh nine-axis/game-loop audit. Wave 2 ✔ controller menu focus-loss L2 and independent review. Wave 3 ◼ release and closeout verification.
+Wave 1 ✔ startup and fresh nine-axis/game-loop audit. Wave 2 ✔ controller menu focus-loss L2 and independent review. Wave 3 ✔ staging,production and closeout verified.
 
 - [x] S201 controller-menu-focus-loss L2 verified on staging.
-- [ ] S201 exact-main production and final closeout.
+- [x] S201 exact-main production and final closeout.
 - [ ] [SIL:1] S201 reserve: physical controller interruption comparison;owner project,dependency hardware.
 - [ ] [SIL:1] S201 reserve: representative-player menu interruption comprehension;owner project,dependency observed participants.
 

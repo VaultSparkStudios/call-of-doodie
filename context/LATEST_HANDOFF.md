@@ -1,18 +1,17 @@
-## Where We Left Off — Session 201
+## Where We Left Off — Session 201 final closeout
 
-Session Intent: fresh full /arc,authorized direct-main commit/push and full deployment. Native goal01a15c8a-3342-7062-9e85-cdd99e79440c created1792553929 binds this invocation toS201 and start84f470ac.
+Session Intent: fresh full /arc,authorized direct-main commit/push and full deployment. Native goal01a15c8a-3342-7062-9e85-cdd99e79440c created1792553929 bindsS201,start84f470ac. Outcome:selected L2 production verified. Final records commit receives exact-main checks/readback before native completion.
 
 Controller menus suspend while unfocused or hidden and require fresh input on return.
 
-Shared navigation cancels repeat on blur/visibility change, skips input while unfocused or hidden, initializes window focus from hasFocus and requires a neutral poll on return. Listener and timer cleanup covered. This covers home,Pause,perk,route,draft and shop consumers. Existing focus bounds and cleanup remain covered.
+S201 implementation 0d5b5f36d3d6b2016eaa1d326f55d3b719cc8ca4 passed exact-main workflow 39541463651:300 files/2113 assertions,strict lint,configured build and Cloudflare deployment. Canonical health matches 0d5b5f36d3d6. Canonical and immutable https://7cd1c27b.call-of-doodie.pages.dev shell7/7 each;production browser20/20 across390/1440,both themes. Blur preserves menu focus,input while away is ignored,held input on return causes no action,and fresh press navigates. Shared menu runtime matches staging after generated import filename normalization.
 
-S201: four failing-before regressions;42 focused assertions pass,including14 mounted-hook cases. Independent source review passes. Staging https://1106fdb0.call-of-doodie.pages.dev browser20/20 across390/1440 and both themes;shell7/7. Strict lint,configured build,public/runtime contracts and release security pass;dependency audit0 vulnerabilities. Local full: 2112/2113 assertions;1 failed. Nonpassing; failures retained in local receipt; exact-main hosted suite required. Exact-main production pending.
+Local full: 2112/2113 assertions;1 failed. Nonpassing; failures retained in local receipt; exact-main hosted suite required. Isolated unchanged fixture1/1 passes at120s limit.
+
+Staging20/20,shell7/7;16 inspected hash-bound before/after captures. Independent source and corrected records reviews pass. Native startup,schema,public/runtime/security,sanitization and staged secrets checks pass;dependency audit0 vulnerabilities. Backend health5/5,replay3/3,shared leaderboard check pass.
 
 FORGE/public-unlaunched unchanged. Synthetic controller checks do not prove physical-device behavior or participant outcomes. Existing identity,reply-email,backend and comparative measurement gaps remain explicit. No creative direction;CDR unchanged.
 
-Local context meter unmeasured;recipient-native startup acceptance passed. Missing local recovery/doctor/premise helpers use verified subject-correct fallback where available;foreign-root doctor is not project proof. Canon sync and official-source radar current;conformance manual/doctor-owned/unmeasured distinctions retained. Existing CANON-045 STRONG identity gap remains separate from unchanged guest-game promotion.
+Recipient-native acceptance used;foreign-root doctor is not project proof. Missing local recovery/IGNIS helpers remain owner delivery gaps. Canon sync and official-source radar current;manual/doctor-owned/unmeasured conformance remains distinct. Central IGNIS follow-through uses signed Ark summary;delivery does not prove adoption.
 
-Rollback:ordinary revert and rebuild/redeploy previous main84f470ac.
-
-
-S201 isolated verification: unchanged startup-lock fixture1/1 passes at120s limit. Local full2112/2113 remains nonpassing;exact-main hosted full suite remains required.
+All3 waves complete. Rollback:ordinary revert of0d5b5f3,rebuild/redeploy previous main84f470ac.

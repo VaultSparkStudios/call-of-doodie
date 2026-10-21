@@ -4,9 +4,15 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Controller menus suspend while unfocused or hidden and require fresh input on return.",
-  "nextMilestone": "Verify exact-main production.",
+  "currentFocus": "S201 controller menu focus-loss production verified.",
+  "nextMilestone": "Collect existing device/participant acceptance evidence.",
   "testingSurfaces": [
+    {
+      "session": 201,
+      "type": "production",
+      "status": "green",
+      "url": "https://callofdoodie.wtf/"
+    },
     {
       "session": 201,
       "type": "staging",
@@ -15,9 +21,15 @@
     },
     {
       "session": 201,
+      "type": "production-smoke",
+      "status": "green",
+      "command": "S201 controller menu20/20"
+    },
+    {
+      "session": 201,
       "type": "local-browser-capture",
       "status": "green",
-      "command": "S20116 inspected before/after captures"
+      "command": "S20116 inspected hash-bound before/after captures"
     }
   ],
   "blockers": [
@@ -31,7 +43,7 @@
   "lastUpdated": "2026-10-21",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
-  "truthAuditStatus": "S201 candidate verified;production pending.",
+  "truthAuditStatus": "S201 selected L2 outcome production verified.",
   "truthAuditLastRun": "2026-10-20",
   "ignisScore": 43784,
   "ignisGrade": "FORGE",
@@ -45,7 +57,7 @@
   "currentSession": 201,
   "sessionMode": "founder",
   "lastAgent": "codex",
-  "testsPassing": 299,
+  "testsPassing": 300,
   "testsTotal": 300,
   "entropyScore": 0.215,
   "entropyLastComputed": "2026-10-20",
@@ -77,7 +89,7 @@
   "runtimeUrl": "https://callofdoodie.wtf/",
   "stagingType": "cloudflare-pages",
   "stagingUrl": "https://1106fdb0.call-of-doodie.pages.dev/",
-  "testsLastRun": "2026-10-21T03:54:48.453Z",
+  "testsLastRun": "2026-10-21T04:00:47Z",
   "sanitizationLastCleared": "2026-10-06",
   "sessionShellHygiene": {
     "session": 199,
@@ -138,10 +150,10 @@
     "shipped": [
       "Controller menus suspend while unfocused or hidden and require fresh input on return."
     ],
-    "tests": "Local full: 2112/2113 assertions;1 failed. Nonpassing; failures retained in local receipt; exact-main hosted suite required.",
-    "deploy": "pending exact-main production"
+    "tests": "300files/2113assertions passing",
+    "deploy": "0d5b5f36d3d6 production verified"
   },
-  "testsAssertionsPassing": 2112,
+  "testsAssertionsPassing": 2113,
   "testsAssertionsTotal": 2113,
   "testsAssertionsFiles": 300,
   "testsFlaky": [],
@@ -151,35 +163,42 @@
   "testsBudgetExhausted": false,
   "silAvg5": 945,
   "testsAssertionsDeferred": [],
-  "testsAssertionsLastRun": "2026-10-21T03:54:48.454Z",
-  "lastShipped": "S199 Railgun armor durability and mobile shield-break announcement.",
+  "testsAssertionsLastRun": "2026-10-21T04:00:47Z",
+  "lastShipped": "S201 controller menu focus-loss protection production verified.",
   "truthStatus": "FORGE/public-unlaunched unchanged. Synthetic controller checks do not prove physical-device behavior or participant outcomes. Existing identity,reply-email,backend and comparative measurement gaps remain explicit. No creative direction;CDR unchanged.",
   "testsFocusedSupplement": "S20142 focused assertions;4 failing-before regressions.",
-  "lastDeployCommit": "34305a258284660263c2af678547a9eb9d0e003b",
-  "lastDeployAt": "2026-10-21T00:40:07Z",
+  "lastDeployCommit": "0d5b5f36d3d6b2016eaa1d326f55d3b719cc8ca4",
+  "lastDeployAt": "2026-10-21T04:00:47Z",
   "closeoutAcceptance": {
     "session": 201,
-    "state": "delivery-pending",
+    "state": "complete",
     "scaffold": {
       "tasks": 3,
-      "done": 2,
-      "inProgress": 1,
+      "done": 3,
+      "inProgress": 0,
       "open": 0
     },
-    "independentReview": "source pass;14/14 mounted-hook cases independently",
-    "localSuite": "Local full: 2112/2113 assertions;1 failed. Nonpassing; failures retained in local receipt; exact-main hosted suite required."
+    "localSuite": "Local full: 2112/2113 assertions;1 failed. Nonpassing; failures retained in local receipt; exact-main hosted suite required. Isolated unchanged fixture1/1 passes at120s limit.",
+    "independentReview": "source and corrected records pass",
+    "production": {
+      "source": "0d5b5f36d3d6b2016eaa1d326f55d3b719cc8ca4",
+      "workflow": 39541463651,
+      "immutableUrl": "https://7cd1c27b.call-of-doodie.pages.dev",
+      "canonical": "https://callofdoodie.wtf/",
+      "browserAssertions": 20
+    }
   },
-  "testsLastRunMode": "full-local",
+  "testsLastRunMode": "full-hosted-exact-main",
   "velocity": 1,
   "silVelocityLastSession": 1,
   "deploy": {
-    "source": "34305a258284660263c2af678547a9eb9d0e003b",
-    "workflow": 39522461612,
-    "immutableUrl": "https://4846f601.call-of-doodie.pages.dev",
+    "source": "0d5b5f36d3d6b2016eaa1d326f55d3b719cc8ca4",
+    "workflow": 39541463651,
+    "immutableUrl": "https://7cd1c27b.call-of-doodie.pages.dev",
     "status": "verified",
-    "commit": "34305a258284660263c2af678547a9eb9d0e003b",
+    "commit": "0d5b5f36d3d6b2016eaa1d326f55d3b719cc8ca4",
     "url": "https://callofdoodie.wtf/",
-    "deployedAt": "2026-10-21T00:40:07Z"
+    "deployedAt": "2026-10-21T04:00:47Z"
   },
   "lastSession": 201,
   "silAvg10": 940.5,

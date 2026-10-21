@@ -1309,7 +1309,7 @@
         "contradiction_density": 5
       },
       "delta": 0,
-      "cause": "Controller menus suspend while unfocused or hidden and require fresh input on return."
+      "cause": "S201 controller menu focus-loss production verified."
     }
   ]
 }

@@ -21,14 +21,16 @@
 
 ╔══ LAST SESSION (S201) · WHAT SHIPPED ══════════════════════════╗
 ║  ✓ Controller menus suspend while unfocused or hidden and requi  ║
-║  Tests  Local full: 2112/2113 assertions;1 failed. Nonpassing;   ║
-║  Deploy pending exact-main production                            ║
+║  Tests  300files/2113assertions passing                          ║
+║  Deploy 0d5b5f36d3d6 production verified                         ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ WHERE TO TEST · Call-Of-Doodie ══════════════════════════════╗
+║  Production    → https://callofdoodie.wtf/ ✓                     ║
 ║  Staging       → https://1106fdb0.call-of-doodie.pages.dev/ ✓    ║
-║  Unit tests    → npm test — 299/300 passing ⛔                    ║
-║  local-browser-capture → S20116 inspected before/after captu ✓   ║
+║  Unit tests    → npm test — 300/300 passing ✓                    ║
+║  local-browser-capture → S20116 inspected hash-bound before/ ✓   ║
+║  production-smoke → S201 controller menu20/20 ✓                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ PROJECT PROFILE ═════════════════════════════════════════════╗
@@ -59,7 +61,7 @@
 
 ╔══ WHERE WE LEFT OFF  ·  Session 201 ═══════════════════════════╗
 ║  Shipped:  see LATEST_HANDOFF.md                                 ║
-║  Tests:    299/300 passing  ·  Deploy: verified                  ║
+║  Tests:    300/300 passing  ·  Deploy: verified                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
@@ -69,12 +71,12 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ⛔  Tests         suite RED — 299/300 files…                     ║
+║  ✓  Tests         300/300 passing (2026-10-21T04:00:47Z)         ║
 ║  ⚠  Velocity      1   ·  Debt: →                                 ║
 ║  ✓  Runway        unknown                                        ║
 ║  ⛔  Context age   ?d                                             ║
 ║  ✓  IGNIS         43784 FORGE  ·  0d old                         ║
-║  ⛔  Truth         S201 staged; exact-main production pending.…   ║
+║  ⛔  Truth         selected outcomes production verified.  · …    ║
 ║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs…        ║
 ║  ✓  Genome dims   all stable  (24/25)                            ║
 ║  ✓  Entropy       0.215  (healthy)                               ║
