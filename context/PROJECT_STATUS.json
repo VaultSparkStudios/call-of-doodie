@@ -4,32 +4,32 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Guest Record stays usable when browser storage is denied, with visible backup failure notices.",
-  "nextMilestone": "Verify exact-main production.",
+  "currentFocus": "S203 guest Record/save resilience production verified.",
+  "nextMilestone": "Collect existing native-browser,device and participant acceptance evidence.",
   "testingSurfaces": [
     {
-      "session": 202,
+      "session": 203,
       "type": "production",
       "status": "green",
       "url": "https://callofdoodie.wtf/"
     },
     {
-      "session": 202,
+      "session": 203,
       "type": "staging",
       "status": "green",
-      "url": "https://027eef51.call-of-doodie.pages.dev/"
+      "url": "https://f7081112.call-of-doodie.pages.dev/"
     },
     {
-      "session": 202,
+      "session": 203,
       "type": "production-smoke",
       "status": "green",
-      "command": "S202 denied browser-storage guest48/48"
+      "command": "S203 Record/save browser88/88"
     },
     {
-      "session": 202,
+      "session": 203,
       "type": "local-browser-capture",
       "status": "green",
-      "command": "S20224 inspected hash-bound before/after captures"
+      "command": "S20328 inspected hash-bound before/after captures"
     }
   ],
   "blockers": [
@@ -43,7 +43,7 @@
   "lastUpdated": "2026-10-21",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
-  "truthAuditStatus": "S203 staged;production pending.",
+  "truthAuditStatus": "S203 selected L2 outcome production verified.",
   "truthAuditLastRun": "2026-10-21",
   "ignisScore": 43784,
   "ignisGrade": "FORGE",
@@ -57,7 +57,7 @@
   "currentSession": 203,
   "sessionMode": "founder",
   "lastAgent": "codex",
-  "testsPassing": 300,
+  "testsPassing": 303,
   "testsTotal": 303,
   "entropyScore": 0.215,
   "entropyLastComputed": "2026-10-20",
@@ -89,7 +89,7 @@
   "runtimeUrl": "https://callofdoodie.wtf/",
   "stagingType": "cloudflare-pages",
   "stagingUrl": "https://f7081112.call-of-doodie.pages.dev/",
-  "testsLastRun": "2026-10-21T14:10:07.316Z",
+  "testsLastRun": "2026-10-21T14:15:48Z",
   "sanitizationLastCleared": "2026-10-06",
   "sessionShellHygiene": {
     "session": 199,
@@ -147,14 +147,13 @@
   },
   "lastSessionSummary": {
     "session": 203,
-    "shipped": [],
-    "pending": [
+    "shipped": [
       "Guest Record stays usable when browser storage is denied, with visible backup failure notices."
     ],
-    "tests": "Local full suite 2114/2135 assertions across 303 files remains nonpassing. Isolated serial retry 23/24;App launch and goal binding pass,start-sync fixture remains nonpassing at its explicit90s limit. Exact-main hosted full suite required.",
-    "deploy": "pending exact-main"
+    "tests": "303files/2135assertions passing",
+    "deploy": "ed551ec605e9 production verified"
   },
-  "testsAssertionsPassing": 2114,
+  "testsAssertionsPassing": 2135,
   "testsAssertionsTotal": 2135,
   "testsAssertionsFiles": 303,
   "testsFlaky": [],
@@ -164,38 +163,47 @@
   "testsBudgetExhausted": false,
   "silAvg5": 944.6,
   "testsAssertionsDeferred": [],
-  "testsAssertionsLastRun": "2026-10-21T14:10:07.317Z",
-  "lastShipped": "S202 guest play survives denied browser storage.",
+  "testsAssertionsLastRun": "2026-10-21T14:15:48Z",
+  "lastShipped": "S203 guest Record and explicit save errors survive browser storage denial.",
   "truthStatus": "FORGE/public-unlaunched unchanged. Injected browser storage denial and synthetic controller checks do not establish native privacy-browser,physical-device or participant outcomes. Existing STRONG CANON-045 identity gap and reply-email/comparative measurement gaps remain visible. Remote verification,cloud-session,auth-return and authorization contracts unchanged. No creative direction;CDR reviewed unchanged.",
   "testsFocusedSupplement": "S20142 focused assertions;4 failing-before regressions.",
-  "lastDeployCommit": "db250d79ef430d9c4a58404fc81d14ce48ed6f7f",
-  "lastDeployAt": "2026-10-21T04:40:55Z",
+  "lastDeployCommit": "ed551ec605e97195166d11be90db804fc6c1bc4f",
+  "lastDeployAt": "2026-10-21T14:15:48Z",
   "closeoutAcceptance": {
     "session": 203,
-    "state": "candidate",
+    "state": "complete",
     "scaffold": {
       "tasks": 3,
-      "done": 2,
-      "inProgress": 1,
+      "done": 3,
+      "inProgress": 0,
       "open": 0
+    },
+    "localSuite": "Local full suite 2114/2135 assertions across 303 files remains nonpassing. Isolated serial retry 23/24;App launch and goal binding pass,start-sync fixture remains nonpassing at its explicit90s limit. Exact-main hosted full suite required.",
+    "independentReview": "final source and corrected candidate records pass",
+    "production": {
+      "source": "ed551ec605e97195166d11be90db804fc6c1bc4f",
+      "workflow": 39614921716,
+      "immutableUrl": "https://3aab4b94.call-of-doodie.pages.dev",
+      "canonical": "https://callofdoodie.wtf/",
+      "browserAssertions": 88
     }
   },
-  "testsLastRunMode": "full-local-nonpassing",
+  "testsLastRunMode": "full-hosted-exact-main",
   "velocity": 1,
   "silVelocityLastSession": 1,
   "deploy": {
-    "source": "db250d79ef430d9c4a58404fc81d14ce48ed6f7f",
-    "workflow": 39545138373,
-    "immutableUrl": "https://ccdfd8d9.call-of-doodie.pages.dev",
-    "status": "S203-candidate-pending;previous-production-retained",
-    "commit": "db250d79ef430d9c4a58404fc81d14ce48ed6f7f",
+    "source": "ed551ec605e97195166d11be90db804fc6c1bc4f",
+    "workflow": 39614921716,
+    "immutableUrl": "https://3aab4b94.call-of-doodie.pages.dev",
+    "status": "verified",
+    "commit": "ed551ec605e97195166d11be90db804fc6c1bc4f",
     "url": "https://callofdoodie.wtf/",
-    "deployedAt": "2026-10-21T04:40:55Z"
+    "deployedAt": "2026-10-21T14:15:48Z"
   },
   "lastSession": 203,
   "silAvg10": 940.5,
   "silAvg25": 965.6,
   "silAvgAll": 988.5,
   "testsTimeoutMs": 120000,
-  "lastDeployStatus": "pending-S203-exact-main"
+  "lastDeployStatus": "verified"
 }

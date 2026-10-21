@@ -4,6 +4,12 @@
 
 ## Current Session
 
+## S203 production verified
+
+Guest Record stays usable when browser storage is denied, with visible backup failure notices.
+
+S203 implementation ed551ec605e97195166d11be90db804fc6c1bc4f passed exact-main workflow 39614921716:303 files/2135 assertions,strict lint,configured build and Cloudflare deployment. Canonical health matches ed551ec605e9. Canonical and immutable https://3aab4b94.call-of-doodie.pages.dev shell7/7 each. Production browser88/88:52 denied-storage Record/save checks and36 normal backup/restore/play checks across390/1440,both themes. Staging source manifest matches the hosted commit after line-ending normalization;all eight shared panels exist. Same game project and guest-read access verified for staging legacy-anon and production publishable keys. Key/compiled chunk bytes differ;bitwise reproducibility is not claimed.
+
 ## S203 candidate
 
 Guest Record stays usable when browser storage is denied, with visible backup failure notices.
@@ -86,18 +92,11 @@ S198:90 focused tests pass,including9 failing-before regressions. Local full297/
 
 Consistent Shield Pulse protection across rail, grenades and lightning.
 
-S197 implementation 56a5655324f59e4f87601fd4554f540ccf8eaba7 passed exact-main workflow 39478756481:299 files/2081 assertions,strict lint,configured build and Cloudflare deployment. Canonical health matches 56a5655324f5. Canonical and immutable https://412cabf5.call-of-doodie.pages.dev shell7/7 each;production browser44/44 across390/1440,both themes. Shield Pulse holds HP10000 against grenade/rail/chain;vulnerable grenade70,eligible chain fallback5 retained. Controller selection,handoff and held/released keyboard remain usable.
-
-## S197 candidate acceptance
-
-Consistent Shield Pulse protection across rail, grenades and lightning.
-
-S197 local full299 files/2081 assertions:2080 passed,one startup/session-binding fixture timeout at44s under load;unchanged isolated rerun1/1 passed. This is not a passing full local run. Focused66/66 before final full;four failing-before regressions. Independent source review passed;guaranteed-crit assertion st
+S197 implementation 56a5655324f59e4f87601fd4554f540ccf8eaba7 passed exact-main workflow 39478756481:299
 
 ## Open Work
 
 ## S203 arc outcomes and waves
-- [ ] S203 exact-main production verification and final closeout.
 - [ ] [SIL:1] S203 reserve: native privacy-browser save recovery rehearsal;owner project,dependency native browser observations.
 - [ ] [SIL:1] S203 reserve: cloud-session/auth-return storage-denial journey study;owner project,dependency applicable authenticated journey proof.
 ## S202 arc outcomes and waves
@@ -151,6 +150,7 @@ S197 local full299 files/2081 assertions:2080 passed,one startup/session-binding
 ## Session 177 — Mode clarity and live playtest follow-through
 ## Session 177 — Runtime promises and upgrade composition
 ## Session 170 - Startup evidence, bounded audit context, and process-policy closure
+- [ ] [SIL:2] **EVIDENCE** Collect participant, physical PWA/gamepad/media, current production Core Web Vitals, Zoho reply-as, scoped telemetry, Obelisk, publication, direct-pixel, sitemap ≥8/10, and explicit lifecycle evidence before SPARKED.
 
 ## Recent Decisions
 
@@ -185,9 +185,12 @@ S202 final acceptance: S202 implementation db250d79ef430d9c4a58404fc81d14ce48ed6
 
 Reuse lazy optionalBrowserStorage for local Passport receipts,while explicit backup commands retain visible failure semantics. Preserve validation,identity exclusion,rollback and remote trust policy. Existing STRONG CANON-045 gap remains visible;guest Record promotion is not a launch/lifecycle change. No dependencies added. Internal audit/implementation adapters remain ignored;public receipts contain only acceptance evidence.
 
+
+S203 final acceptance: S203 implementation ed551ec605e97195166d11be90db804fc6c1bc4f passed exact-main workflow 39614921716:303 files/2135 assertions,strict lint,configured build and Cloudflare deployment. Canonical health matches ed551ec605e9. Canonical and immutable https://3aab4b94.call-of-doodie.pages.dev shell7/7 each. Production browser88/88:52 denied-storage Record/save checks and36 normal backup/restore/play checks across390/1440,both themes. Staging source manifest matches the hosted commit after line-ending normalization;all eight shared panels exist. Same game project and guest-read access verified for staging legacy-anon and production publishable keys. Key/compiled chunk bytes differ;bitwise reproducibility is not claimed. Local full suite 2114/2135 assertions across 303 files remains nonpassing. Isolated serial retry 23/24;App launch and goal binding pass,start-sync fixture remains nonpassing at its explicit90s limit. Exact-main hosted full suite required.
+
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 284,031 bytes · SHA-256 `8471f6212ac0…`
-- `context/TASK_BOARD.md` · 191,709 bytes · SHA-256 `9b8db133fa8b…`
-- `context/DECISIONS.md` · 198,646 bytes · SHA-256 `47bfa3ab7a85…`
+- `context/CURRENT_STATE.md` · 284,879 bytes · SHA-256 `214fc80a38bf…`
+- `context/TASK_BOARD.md` · 191,722 bytes · SHA-256 `bb02b36abeb9…`
+- `context/DECISIONS.md` · 199,632 bytes · SHA-256 `3aeca71db9c7…`
 - `docs/AUDIT_2026-10-18.json` · 6,892 bytes · SHA-256 `b34b668a7b5a…`

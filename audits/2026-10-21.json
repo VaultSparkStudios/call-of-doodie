@@ -6,11 +6,11 @@
   "headline": "Guest Record stays usable when browser storage is denied, with visible backup failure notices.",
   "localSuite": "Local full suite 2114/2135 assertions across 303 files remains nonpassing. Isolated serial retry 23/24;App launch and goal binding pass,start-sync fixture remains nonpassing at its explicit90s limit. Exact-main hosted full suite required.",
   "limits": "FORGE/public-unlaunched unchanged. Injected browser storage denial and synthetic controller checks do not establish native privacy-browser,physical-device or participant outcomes. Existing STRONG CANON-045 identity gap and reply-email/comparative measurement gaps remain visible. Remote verification,cloud-session,auth-return and authorization contracts unchanged. No creative direction;CDR reviewed unchanged.",
-  "validation": "S203:3 typed premises and timing verified before implementation;5 failing-before regressions. Focused22/22,independent source review pass. Staging52/52 denied-storage checks plus36/36 normal backup/restore/play checks and20/20 synthetic controller checks across390/1440,both themes;shell7/7. Strict lint,configured build,public/runtime/security pass;0 dependency vulnerabilities. Backend health5/5,replay3/3,shared leaderboard check pass. Production pending.",
-  "shipped": [],
-  "pending": [
-    "guest-record-save-resilience production acceptance"
+  "validation": "S203 implementation ed551ec605e97195166d11be90db804fc6c1bc4f passed exact-main workflow 39614921716:303 files/2135 assertions,strict lint,configured build and Cloudflare deployment. Canonical health matches ed551ec605e9. Canonical and immutable https://3aab4b94.call-of-doodie.pages.dev shell7/7 each. Production browser88/88:52 denied-storage Record/save checks and36 normal backup/restore/play checks across390/1440,both themes. Staging source manifest matches the hosted commit after line-ending normalization;all eight shared panels exist. Same game project and guest-read access verified for staging legacy-anon and production publishable keys. Key/compiled chunk bytes differ;bitwise reproducibility is not claimed.",
+  "shipped": [
+    "guest-record-save-resilience"
   ],
+  "pending": [],
   "staging": {
     "url": "https://f7081112.call-of-doodie.pages.dev",
     "browserAssertions": 88,
@@ -34,13 +34,41 @@
   },
   "scaffold": {
     "tasks": 3,
-    "done": 2,
-    "inProgress": 1,
+    "done": 3,
+    "inProgress": 0,
     "open": 0
   },
   "isolated": {
     "passed": 23,
     "total": 24,
     "success": false
+  },
+  "production": {
+    "source": "ed551ec605e97195166d11be90db804fc6c1bc4f",
+    "workflow": 39614921716,
+    "immutableUrl": "https://3aab4b94.call-of-doodie.pages.dev",
+    "canonical": "https://callofdoodie.wtf/",
+    "verifiedAt": "2026-10-21T14:16:43.471Z",
+    "health": {
+      "contract": "edge-health-v1",
+      "status": "edge-ready",
+      "service": "call-of-doodie",
+      "scope": "cloudflare-pages-edge-only",
+      "deploy": "ed551ec605e9",
+      "checkedAt": "2026-10-21T14:16:35.556Z"
+    },
+    "testFiles": 303,
+    "assertions": 2135,
+    "browserAssertions": 88
+  },
+  "closeout": {
+    "state": "complete",
+    "silScore": 945,
+    "scaffold": {
+      "tasks": 3,
+      "done": 3,
+      "inProgress": 0,
+      "open": 0
+    }
   }
 }

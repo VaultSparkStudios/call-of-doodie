@@ -1,9 +1,9 @@
 ## S203 arc outcomes and waves
 
-Wave1 ✔ fresh startup,nine-axis/game-loop audit. Wave2 ✔ guest Record/save resilience L2. Wave3 ◼ exact-main deployment and full closeout.
+Wave1 ✔ fresh startup,nine-axis/game-loop audit. Wave2 ✔ guest Record/save resilience L2. Wave3 ✔ exact-main production verification and full closeout.
 
 - [x] S203 guest Record/save resilience L2 staged.
-- [ ] S203 exact-main production verification and final closeout.
+- [x] S203 exact-main production verification and final closeout.
 - [ ] [SIL:1] S203 reserve: native privacy-browser save recovery rehearsal;owner project,dependency native browser observations.
 - [ ] [SIL:1] S203 reserve: cloud-session/auth-return storage-denial journey study;owner project,dependency applicable authenticated journey proof.
 
