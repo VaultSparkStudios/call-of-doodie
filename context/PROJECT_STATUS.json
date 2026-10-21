@@ -4,14 +4,26 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Guest play survives denied browser storage through home, tutorial, pause, defeat, rematch and Operations.",
-  "nextMilestone": "Verify exact-main production.",
+  "currentFocus": "S202 guest storage-denial outcome production verified.",
+  "nextMilestone": "Collect existing native-browser,device and participant acceptance evidence.",
   "testingSurfaces": [
+    {
+      "session": 202,
+      "type": "production",
+      "status": "green",
+      "url": "https://callofdoodie.wtf/"
+    },
     {
       "session": 202,
       "type": "staging",
       "status": "green",
       "url": "https://027eef51.call-of-doodie.pages.dev/"
+    },
+    {
+      "session": 202,
+      "type": "production-smoke",
+      "status": "green",
+      "command": "S202 denied browser-storage guest48/48"
     },
     {
       "session": 202,
@@ -31,7 +43,7 @@
   "lastUpdated": "2026-10-21",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
-  "truthAuditStatus": "S202 staged;production pending.",
+  "truthAuditStatus": "S202 selected L2 outcome production verified.",
   "truthAuditLastRun": "2026-10-21",
   "ignisScore": 43784,
   "ignisGrade": "FORGE",
@@ -45,7 +57,7 @@
   "currentSession": 202,
   "sessionMode": "founder",
   "lastAgent": "codex",
-  "testsPassing": 300,
+  "testsPassing": 301,
   "testsTotal": 301,
   "entropyScore": 0.215,
   "entropyLastComputed": "2026-10-20",
@@ -77,7 +89,7 @@
   "runtimeUrl": "https://callofdoodie.wtf/",
   "stagingType": "cloudflare-pages",
   "stagingUrl": "https://027eef51.call-of-doodie.pages.dev/",
-  "testsLastRun": "2026-10-21T04:34:05.801Z",
+  "testsLastRun": "2026-10-21T04:40:55Z",
   "sanitizationLastCleared": "2026-10-06",
   "sessionShellHygiene": {
     "session": 199,
@@ -135,14 +147,13 @@
   },
   "lastSessionSummary": {
     "session": 202,
-    "shipped": [],
-    "tests": "Local complete suite: 2125/2126 assertions across 301 files;startup/session-binding fixture failed. Isolated unchanged fixture1/1 passes at120s limit. Full local run remains nonpassing;exact-main hosted full suite required.",
-    "deploy": "pending exact-main production",
-    "pending": [
-      "S202 optional-storage-denial staged;exact-main production required"
-    ]
+    "shipped": [
+      "Guest play survives denied browser storage through home, tutorial, pause, defeat, rematch and Operations."
+    ],
+    "tests": "301files/2126assertions passing",
+    "deploy": "db250d79ef43 production verified"
   },
-  "testsAssertionsPassing": 2125,
+  "testsAssertionsPassing": 2126,
   "testsAssertionsTotal": 2126,
   "testsAssertionsFiles": 301,
   "testsFlaky": [],
@@ -152,40 +163,47 @@
   "testsBudgetExhausted": false,
   "silAvg5": 944.6,
   "testsAssertionsDeferred": [],
-  "testsAssertionsLastRun": "2026-10-21T04:34:05.802Z",
-  "lastShipped": "S201 controller menu focus-loss protection production verified.",
+  "testsAssertionsLastRun": "2026-10-21T04:40:55Z",
+  "lastShipped": "S202 guest play survives denied browser storage.",
   "truthStatus": "FORGE/public-unlaunched unchanged. Injected browser denial and assisted defeat fixtures are not native privacy-browser or participant evidence. Existing account/profile storage,identity,reply-email and comparative measurement gaps remain outside selected guest-game scope. No creative direction;CDR reviewed unchanged. No backend/identity changes.",
   "testsFocusedSupplement": "S20142 focused assertions;4 failing-before regressions.",
-  "lastDeployCommit": "0d5b5f36d3d6b2016eaa1d326f55d3b719cc8ca4",
-  "lastDeployAt": "2026-10-21T04:00:47Z",
+  "lastDeployCommit": "db250d79ef430d9c4a58404fc81d14ce48ed6f7f",
+  "lastDeployAt": "2026-10-21T04:40:55Z",
   "closeoutAcceptance": {
     "session": 202,
-    "state": "delivery-pending",
+    "state": "complete",
     "scaffold": {
       "tasks": 3,
-      "done": 2,
-      "inProgress": 1,
+      "done": 3,
+      "inProgress": 0,
       "open": 0
     },
-    "independentReview": "round1 two findings fixed;round2 source pass",
-    "localSuite": "Local complete suite: 2125/2126 assertions across 301 files;startup/session-binding fixture failed. Isolated unchanged fixture1/1 passes at120s limit. Full local run remains nonpassing;exact-main hosted full suite required."
+    "localSuite": "Local complete suite: 2125/2126 assertions across 301 files;startup/session-binding fixture failed. Isolated unchanged fixture1/1 passes at120s limit. Full local run remains nonpassing;exact-main hosted full suite required.",
+    "independentReview": "source and corrected candidate records pass",
+    "production": {
+      "source": "db250d79ef430d9c4a58404fc81d14ce48ed6f7f",
+      "workflow": 39545138373,
+      "immutableUrl": "https://ccdfd8d9.call-of-doodie.pages.dev",
+      "canonical": "https://callofdoodie.wtf/",
+      "browserAssertions": 48
+    }
   },
-  "testsLastRunMode": "full-local",
+  "testsLastRunMode": "full-hosted-exact-main",
   "velocity": 1,
   "silVelocityLastSession": 1,
   "deploy": {
-    "source": "0d5b5f36d3d6b2016eaa1d326f55d3b719cc8ca4",
-    "workflow": 39541463651,
-    "immutableUrl": "https://7cd1c27b.call-of-doodie.pages.dev",
-    "status": "S202-candidate-pending;previous-production-retained",
-    "commit": "0d5b5f36d3d6b2016eaa1d326f55d3b719cc8ca4",
+    "source": "db250d79ef430d9c4a58404fc81d14ce48ed6f7f",
+    "workflow": 39545138373,
+    "immutableUrl": "https://ccdfd8d9.call-of-doodie.pages.dev",
+    "status": "verified",
+    "commit": "db250d79ef430d9c4a58404fc81d14ce48ed6f7f",
     "url": "https://callofdoodie.wtf/",
-    "deployedAt": "2026-10-21T04:00:47Z"
+    "deployedAt": "2026-10-21T04:40:55Z"
   },
   "lastSession": 202,
   "silAvg10": 940.5,
   "silAvg25": 965.6,
   "silAvgAll": 988.5,
   "testsTimeoutMs": 120000,
-  "lastDeployStatus": "pending-S202-exact-main"
+  "lastDeployStatus": "verified"
 }

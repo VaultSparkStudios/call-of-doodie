@@ -1,9 +1,9 @@
 ## S202 arc outcomes and waves
 
-Wave 1 ✔ startup and fresh nine-axis/game-loop audit. Wave 2 ✔ optional storage-denial L2 and independent source review. Wave 3 ◼ exact-main release and full closeout.
+Wave 1 ✔ startup and fresh nine-axis/game-loop audit. Wave 2 ✔ optional storage-denial L2 and independent source review. Wave 3 ✔ staging,production and full closeout.
 
 - [x] S202 optional-storage-denial selected L2 staged48/48.
-- [ ] S202 exact-main production verification and final closeout.
+- [x] S202 exact-main production verification and final closeout.
 - [ ] [SIL:1] S202 reserve: native privacy-browser play/save comparison;owner project,dependency target browsers.
 - [ ] [SIL:1] S202 reserve: profile/account storage-denial study;owner project,dependency applicable identity journey proof.
 

@@ -20,14 +20,17 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ LAST SESSION (S202) · WHAT SHIPPED ══════════════════════════╗
-║  Tests  Local complete suite: 2125/2126 assertions across 301 f  ║
-║  Deploy pending exact-main production                            ║
+║  ✓ Guest play survives denied browser storage through home, tut  ║
+║  Tests  301files/2126assertions passing                          ║
+║  Deploy db250d79ef43 production verified                         ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ WHERE TO TEST · Call-Of-Doodie ══════════════════════════════╗
+║  Production    → https://callofdoodie.wtf/ ✓                     ║
 ║  Staging       → https://027eef51.call-of-doodie.pages.dev/ ✓    ║
-║  Unit tests    → npm test — 300/301 passing ⛔                    ║
+║  Unit tests    → npm test — 301/301 passing ✓                    ║
 ║  local-browser-capture → S20224 inspected hash-bound before/ ✓   ║
+║  production-smoke → S202 denied browser-storage guest48/48 ✓     ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ PROJECT PROFILE ═════════════════════════════════════════════╗
@@ -58,22 +61,22 @@
 
 ╔══ WHERE WE LEFT OFF  ·  Session 202 ═══════════════════════════╗
 ║  Shipped:  see LATEST_HANDOFF.md                                 ║
-║  Tests:    300/301 passing  ·  Deploy: pending-S202-exact-main   ║
+║  Tests:    301/301 passing  ·  Deploy: verified                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
 ║  ?  ░░░░░░░░░░░░░░░░░░░░░░░░  usage unknown                      ║
-║     unknown / 272,000 tok  ·  codex  ·  unmeasured               ║
+║     unknown / 200,000 tok  ·  unknown  ·  unmeasured             ║
 ║     Verdict: UNMEASURED                                          ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ⛔  Tests         suite RED — 300/301 files…                     ║
+║  ✓  Tests         301/301 passing (2026-10-21T04:40:55Z)         ║
 ║  ⚠  Velocity      1   ·  Debt: →                                 ║
 ║  ✓  Runway        unknown                                        ║
 ║  ⛔  Context age   ?d                                             ║
 ║  ✓  IGNIS         43784 FORGE  ·  0d old                         ║
-║  ⛔  Truth         staged;production pending.  ·  Genome: ?       ║
+║  ⛔  Truth         selected outcomes production verified.  · …    ║
 ║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs…        ║
 ║  ✓  Genome dims   all stable  (24/25)                            ║
 ║  ✓  Entropy       0.215  (healthy)                               ║

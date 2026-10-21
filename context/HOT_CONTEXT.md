@@ -4,6 +4,12 @@
 
 ## Current Session
 
+## S202 production verified
+
+Guest play survives denied browser storage through home, tutorial, pause, defeat, rematch and Operations.
+
+S202 implementation db250d79ef430d9c4a58404fc81d14ce48ed6f7f passed exact-main workflow 39545138373:301 files/2126 assertions,strict lint,configured build and Cloudflare deployment. Canonical health matches db250d79ef43. Canonical and immutable https://ccdfd8d9.call-of-doodie.pages.dev shell7/7 each. Production browser48/48:home,play,pause,resume,tutorial dismissal,assisted defeat,rematch and Operations entry across390/1440,both themes,with local/session storage getters denied. Staging source manifest matches the hosted commit after line-ending normalization;all eight shared panels exist. Same game project and guest-read access verified for staging legacy-anon and production publishable keys. Key/compiled chunk bytes differ;bitwise reproducibility is not claimed.
+
 ## S202 candidate
 
 Guest play survives denied browser storage through home, tutorial, pause, defeat, rematch and Operations.
@@ -80,18 +86,11 @@ S197 implementation 56a5655324f59e4f87601fd4554f540ccf8eaba7 passed exact-main w
 
 Consistent Shield Pulse protection across rail, grenades and lightning.
 
-S197 local full299 files/2081 assertions:2080 passed,one startup/session-binding fixture timeout at44s under load;unchanged isolated rerun1/1 passed. This is not a passing full local run. Focused66/66 before final full;four failing-before regressions. Independent source review passed;guaranteed-crit assertion strengthened and re-reviewed. Staging https://5ab785fa.call-of-doodie.pages.dev shell7/7 and browser44/44 across390/1440,both themes. Before protected HP fell by70 grenade/160rail/5chain;after pulse blocks each,vulnerable grenade70 and chain fallback5 retained.24 before/after captures visually inspected and hash-bound to both runtime sources. Strict lint,configured build,public/security/runtime checks pass;dependency audit0 vulnerabilities. Exact-main hosted FULL suite is mandatory before production.
-
-## S196 production verified
-
-Reliable controller ownership and consistent Summoner protection.
-
-S196 implementation 729870fb560e776f947f84957c83db6fea1ba2d3 passed exact-main workflow 39471382673:299 files/2075 assertions,strict lint,configured build and Cloudflare deployment. Canonical health matches729870fb560e. Canonical and immutable https://f3b3056d.call-of-doodie.pages.dev shell7/7 each; production browser40/40 across390/1440,both themes. Held controller selected/moves,button handoff preserved,neutral does not steal ownership;protected grenade/chain HP10000,vulnerable grenade70,chain
+S197 local full299 files/2081 assertions:2080 passed,one startup/session-binding fixture timeout at44s under load;unchanged isolated rerun1/1 passed. This is not a passing full local run. Focused66/66 before final full;four failing-before regressions. Independent source review passed;guaranteed-crit assertion strengthened and re-reviewed. Staging https://5ab785fa.call-of-doodie.pages.dev shell7/7 and browser44/44 across390/1440,both themes. Before protected HP fell by70 grenade/160rail/5chain;after
 
 ## Open Work
 
 ## S202 arc outcomes and waves
-- [ ] S202 exact-main production verification and final closeout.
 - [ ] [SIL:1] S202 reserve: native privacy-browser play/save comparison;owner project,dependency target browsers.
 - [ ] [SIL:1] S202 reserve: profile/account storage-denial study;owner project,dependency applicable identity journey proof.
 ## S201 arc outcomes and waves
@@ -145,6 +144,7 @@ S196 implementation 729870fb560e776f947f84957c83db6fea1ba2d3 passed exact-main w
 - [ ] [SIL:2] **EVIDENCE** Collect participant, physical PWA/gamepad/media, current production Core Web Vitals, Zoho reply-as, scoped telemetry, Obelisk, publication, direct-pixel, sitemap ≥8/10, and explicit lifecycle evidence before SPARKED.
 # Task Board
 ## Session 176 - Every player-facing number, not just the modes
+- [ ] [SIL:1] [ARK] Confirm ops actioned both S176 cargos (genome upsert key; write-back verification record), then re-sync `check-writeback-currency.mjs` from ops and retire the matching `ACCEPTED_HISTORICAL_DEFECTS` by repair.
 
 ## Recent Decisions
 
@@ -179,9 +179,12 @@ S201 final acceptance: S201 implementation 0d5b5f36d3d6b2016eaa1d326f55d3b719cc8
 
 Guard optional browser storage at getter resolution;preserve explicit injection/null and fail-closed supporter cache behavior. Reviewer extended coverage to tutorial/defeat;browser exposed daily flag access. Keep account/profile identity and explicit backup error contracts outside guest-game scope. Existing STRONG CANON-045 gap remains visible;no launch or lifecycle transition. No new dependencies. Local startup fixture failure is retained;isolated pass does not turn local full green.
 
+
+S202 final acceptance: S202 implementation db250d79ef430d9c4a58404fc81d14ce48ed6f7f passed exact-main workflow 39545138373:301 files/2126 assertions,strict lint,configured build and Cloudflare deployment. Canonical health matches db250d79ef43. Canonical and immutable https://ccdfd8d9.call-of-doodie.pages.dev shell7/7 each. Production browser48/48:home,play,pause,resume,tutorial dismissal,assisted defeat,rematch and Operations entry across390/1440,both themes,with local/session storage getters denied. Staging source manifest matches the hosted commit after line-ending normalization;all eight shared panels exist. Same game project and guest-read access verified for staging legacy-anon and production publishable keys. Key/compiled chunk bytes differ;bitwise reproducibility is not claimed. Local complete suite: 2125/2126 assertions across 301 files;startup/session-binding fixture failed. Isolated unchanged fixture1/1 passes at120s limit. Full local run remains nonpassing;exact-main hosted full suite required.
+
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 282,930 bytes · SHA-256 `a6f500d48ab3…`
-- `context/TASK_BOARD.md` · 191,136 bytes · SHA-256 `7062fa65a707…`
-- `context/DECISIONS.md` · 197,160 bytes · SHA-256 `1c738ba01232…`
+- `context/CURRENT_STATE.md` · 283,841 bytes · SHA-256 `705147ebce59…`
+- `context/TASK_BOARD.md` · 191,136 bytes · SHA-256 `40064934c325…`
+- `context/DECISIONS.md` · 198,183 bytes · SHA-256 `c7d86f35cdf8…`
 - `docs/AUDIT_2026-10-18.json` · 6,892 bytes · SHA-256 `b34b668a7b5a…`
