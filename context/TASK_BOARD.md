@@ -1,3 +1,12 @@
+## S200 arc outcomes and waves
+
+Wave 1 ✔ startup and fresh nine-axis/game-loop audit. Wave 2 ✔ controller menu interruption L2 and independent review. Wave 3 ◼ release and closeout verification.
+
+- [x] S200 controller-menu-interruption L2 verified on staging.
+- [ ] S200 exact-main production and final closeout.
+- [ ] [SIL:1] S200 reserve: physical controller interruption comparison;owner project,dependency hardware.
+- [ ] [SIL:1] S200 reserve: representative-player menu interruption comprehension;owner project,dependency observed participants.
+
 ## S199 verified work
 
 Wave 1 ✔ fresh review. Wave 2 ✔ rail shield durability and independent review. Wave 3 ✔ staging,production and closeout verified.

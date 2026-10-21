@@ -1,3 +1,13 @@
+## S200 candidate acceptance
+
+S200:59 focused assertions pass;7 failing-before regressions;independent source review8/8. Staging16/16,shell7/7,16 inspected hash-bound captures. Strict lint,configured build,public/runtime/schema/security pass;dependency audit0 vulnerabilities;backend5/5,replay3/3,shared leaderboard check pass. Local full300 files:2106/2107 assertions,one startup/session-binding fixture failure. Isolated fixture rerun1/1 passes with120s limit. Local full remains nonpassing;exact-main hosted full suite required. Production pending.
+
+## S200 candidate
+
+Controller menus stop stale repeats and require fresh input after interruptions.
+
+S200: seven failing-before regressions;59 focused assertions pass,including8 mounted-hook cases. Independent source review passes. Staging https://ec4cbc23.call-of-doodie.pages.dev browser16/16 across390/1440 and both themes;shell7/7. Strict lint,configured build,public/runtime contracts and release security pass;dependency audit0 vulnerabilities. Full suite and exact-main production pending.
+
 ## S199 production verified
 
 Rail hits wear down Juggernaut shields and open the shield-break window.

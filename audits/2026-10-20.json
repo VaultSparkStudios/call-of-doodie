@@ -1,53 +1,33 @@
 {
   "schemaVersion": "1.3",
-  "session": 199,
+  "session": 200,
   "date": "2026-10-20",
-  "headline": "Rail hits wear down Juggernaut shields and open the shield-break window.",
+  "headline": "Controller menus stop stale repeats and require fresh input after interruptions.",
   "shipped": [
-    "rail-juggernaut-shield-durability"
+    "controller-menu-interruption"
   ],
-  "validation": "S199 implementationf7b35abe2d1f93ff8f0abe1b3217017c48eaa3ce passed exact-main workflow39514242690:299files/2099assertions,strict lint,configured build and Cloudflare deployment. Canonical health matchesf7b35abe2d1f. Canonical and immutablehttps://c6750ee5.call-of-doodie.pages.dev shell7/7 each;production browser52/52 across390/1440,both themes. Rail shield200→40.6 after regeneration→0;breaking hit24health,next hit160. Protected armor unchanged;mobile shield-break announcement fits. Changed combat runtime matches staging after generated import filenames are normalized.",
-  "limits": "FORGE/public-unlaunched unchanged. Synthetic inputs and assisted game ticks do not prove physical devices or participant outcomes. Existing identity,backend,reply-email and comparative measurement gaps remain explicit. No new creative direction;CDR legitimately unchanged.",
-  "focusedAssertions": 103,
+  "validation": "S200:59 focused assertions pass;7 failing-before regressions;independent source review8/8. Staging16/16,shell7/7,16 inspected hash-bound captures. Strict lint,configured build,public/runtime/schema/security pass;dependency audit0 vulnerabilities;backend5/5,replay3/3,shared leaderboard check pass. Local full300 files:2106/2107 assertions,one startup/session-binding fixture failure. Isolated fixture rerun1/1 passes with120s limit. Local full remains nonpassing;exact-main hosted full suite required. Production pending.",
+  "limits": "FORGE/public-unlaunched unchanged. Synthetic controller checks do not prove physical-device behavior or participant outcomes. Existing identity,reply-email,backend and comparative measurement gaps remain explicit. No creative direction;CDR unchanged.",
+  "focusedAssertions": 59,
+  "staging": {
+    "url": "https://ec4cbc23.call-of-doodie.pages.dev",
+    "browserAssertions": 16,
+    "shellAssertions": 7
+  },
   "production": {
-    "source": "f7b35abe2d1f93ff8f0abe1b3217017c48eaa3ce",
-    "workflow": 39514242690,
-    "immutableUrl": "https://c6750ee5.call-of-doodie.pages.dev",
-    "canonical": "https://callofdoodie.wtf/",
-    "verifiedAt": "2026-10-20T23:22:21.093Z",
-    "health": {
-      "contract": "edge-health-v1",
-      "status": "edge-ready",
-      "service": "call-of-doodie",
-      "scope": "cloudflare-pages-edge-only",
-      "deploy": "f7b35abe2d1f",
-      "checkedAt": "2026-10-20T23:22:17.015Z"
-    },
-    "testFiles": 299,
-    "assertions": 2099,
-    "browserAssertions": 52
+    "status": "pending"
   },
   "closeout": {
-    "state": "complete",
+    "state": "delivery-pending",
     "silScore": 945,
     "scaffold": {
       "tasks": 3,
-      "done": 3,
-      "inProgress": 0,
+      "done": 2,
+      "inProgress": 1,
       "open": 0
     }
   },
-  "testFiles": 299,
-  "assertions": 2099,
-  "localSuite": "S199 isolated rerun24/24 assertions passes after record refresh,with90s timeout. Initial full remains nonpassing:2094/2099;two hot-context freshness assertions,one closeout-currency assertion,one startup timeout and one Windows temporary-directory cleanup EPERM. No gameplay failure. Exact-main full suite remains mandatory.",
-  "staging": {
-    "url": "https://215d8bfc.call-of-doodie.pages.dev",
-    "browserAssertions": 52,
-    "shellAssertions": 7
-  },
-  "visualCaptures": 24,
-  "review": {
-    "verdict": "pass",
-    "blockingFindings": 0
-  }
+  "localSuite": "Local full300 files:2106/2107 assertions,one startup/session-binding fixture failure. Isolated fixture rerun1/1 passes with120s limit. Local full remains nonpassing;exact-main hosted full suite required.",
+  "testFiles": 300,
+  "assertions": 2107
 }

@@ -1726,3 +1726,8 @@ Reuse the physical-projectile armor impact rule for rail. Preserve the breaking 
 
 
 S199 final acceptance: S199 implementationf7b35abe2d1f93ff8f0abe1b3217017c48eaa3ce passed exact-main workflow39514242690:299files/2099assertions,strict lint,configured build and Cloudflare deployment. Canonical health matchesf7b35abe2d1f. Canonical and immutablehttps://c6750ee5.call-of-doodie.pages.dev shell7/7 each;production browser52/52 across390/1440,both themes. Rail shield200→40.6 after regeneration→0;breaking hit24health,next hit160. Protected armor unchanged;mobile shield-break announcement fits. Changed combat runtime matches staging after generated import filenames are normalized. Local full remains nonpassing:2094/2099assertions,two hot-context freshness assertions,one closeout freshness assertion,one startup timeout and one temporary-directory cleanup EPERM. Refreshed isolated failed surfaces24/24 pass with90s limit;focused103/103 and independent projectile58/58 pass. Hosted exact-main299/2099 is the final full-suite acceptance.
+
+
+## 2026-10-20 — Session 200
+
+Neutral ownership barrier applies to shared controller menus at activation/reconnect/device change. Ownership compares index/id/mapping rather than browser object identity. Cancel auto-repeat on missing input. Existing unchanged identity STRONG gap remains visible;no launch/lifecycle change. Reuse installed packages and project-native release tooling.

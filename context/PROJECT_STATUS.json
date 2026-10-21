@@ -4,32 +4,20 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "S199 Railgun Juggernaut shield durability production verified.",
-  "nextMilestone": "Collect existing participant/device acceptance evidence.",
+  "currentFocus": "Controller menus stop stale repeats and require fresh input after interruptions.",
+  "nextMilestone": "Verify exact-main production.",
   "testingSurfaces": [
     {
-      "session": 199,
-      "type": "production",
-      "status": "green",
-      "url": "https://callofdoodie.wtf/"
-    },
-    {
-      "session": 199,
+      "session": 200,
       "type": "staging",
       "status": "green",
-      "url": "https://215d8bfc.call-of-doodie.pages.dev/"
+      "url": "https://ec4cbc23.call-of-doodie.pages.dev/"
     },
     {
-      "session": 199,
-      "type": "production-smoke",
-      "status": "green",
-      "command": "S199 rail-shield/input52/52"
-    },
-    {
-      "session": 199,
+      "session": 200,
       "type": "local-browser-capture",
       "status": "green",
-      "command": "S19924 inspected hash-bound before/after captures"
+      "command": "S20016 inspected before/after captures"
     }
   ],
   "blockers": [
@@ -40,25 +28,25 @@
     "Broad Cloudflare studio-access token should be rotated or narrowed after domain stabilization.",
     "CANON-045 remains an external Obelisk integration gap. CANON-054's absent /stats route is closed by the verified public page; no ABSOLUTE canon gap is present."
   ],
-  "lastUpdated": "2026-10-20",
+  "lastUpdated": "2026-10-21",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
-  "truthAuditStatus": "S199 selected L2 outcome production verified.",
+  "truthAuditStatus": "S200 candidate verified;production pending.",
   "truthAuditLastRun": "2026-10-20",
   "ignisScore": 44193,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-10-08",
-  "silSession": 199,
+  "silSession": 200,
   "silScore": 945,
   "silAvg3": 945,
   "silVelocity": 1,
   "silDebt": "flat",
-  "silLastSession": 199,
-  "currentSession": 199,
+  "silLastSession": 200,
+  "currentSession": 200,
   "sessionMode": "founder",
   "lastAgent": "codex",
   "testsPassing": 299,
-  "testsTotal": 299,
+  "testsTotal": 300,
   "entropyScore": 0.215,
   "entropyLastComputed": "2026-10-20",
   "silRubricVersion": "3.0",
@@ -88,8 +76,8 @@
   "freeTierCostStatus": "cost-neutral",
   "runtimeUrl": "https://callofdoodie.wtf/",
   "stagingType": "cloudflare-pages",
-  "stagingUrl": "https://215d8bfc.call-of-doodie.pages.dev/",
-  "testsLastRun": "2026-10-20T23:21:25Z",
+  "stagingUrl": "https://ec4cbc23.call-of-doodie.pages.dev/",
+  "testsLastRun": "2026-10-21T00:35:55.124Z",
   "sanitizationLastCleared": "2026-10-06",
   "sessionShellHygiene": {
     "session": 199,
@@ -146,16 +134,16 @@
     "note": "Studio-wide doctor evidence; not a project-only zero-findings claim. Central follow-up delivered through Ark; application unobserved."
   },
   "lastSessionSummary": {
-    "session": 199,
+    "session": 200,
     "shipped": [
-      "Rail hits wear down Juggernaut shields and open the shield-break window."
+      "Controller menus stop stale repeats and require fresh input after interruptions."
     ],
-    "tests": "299files/2099assertions passing",
-    "deploy": "f7b35abe2d1f production verified"
+    "tests": "Local2106/2107;isolated1/1 passes;hosted pending",
+    "deploy": "pending exact-main production"
   },
-  "testsAssertionsPassing": 2099,
-  "testsAssertionsTotal": 2099,
-  "testsAssertionsFiles": 299,
+  "testsAssertionsPassing": 2106,
+  "testsAssertionsTotal": 2107,
+  "testsAssertionsFiles": 300,
   "testsFlaky": [],
   "testsInconclusive": [],
   "testsEnvBlocked": [],
@@ -163,32 +151,25 @@
   "testsBudgetExhausted": false,
   "silAvg5": 945,
   "testsAssertionsDeferred": [],
-  "testsAssertionsLastRun": "2026-10-20T23:21:25Z",
+  "testsAssertionsLastRun": "2026-10-21T00:35:55.126Z",
   "lastShipped": "S199 Railgun armor durability and mobile shield-break announcement.",
-  "truthStatus": "FORGE/public-unlaunched unchanged. Synthetic inputs and assisted game ticks do not prove physical devices or participant outcomes. Existing identity,backend,reply-email and comparative measurement gaps remain explicit. No new creative direction;CDR legitimately unchanged.",
-  "testsFocusedSupplement": "S199103 focused assertions,four failing-before regressions.",
+  "truthStatus": "FORGE/public-unlaunched unchanged. Synthetic controller checks do not prove physical-device behavior or participant outcomes. Existing identity,reply-email,backend and comparative measurement gaps remain explicit. No creative direction;CDR unchanged.",
+  "testsFocusedSupplement": "S20059 focused assertions;7 failing-before regressions.",
   "lastDeployCommit": "f7b35abe2d1f93ff8f0abe1b3217017c48eaa3ce",
   "lastDeployAt": "2026-10-20T23:21:25Z",
   "closeoutAcceptance": {
-    "session": 199,
-    "state": "complete",
+    "session": 200,
+    "state": "delivery-pending",
     "scaffold": {
       "tasks": 3,
-      "done": 3,
-      "inProgress": 0,
+      "done": 2,
+      "inProgress": 1,
       "open": 0
     },
-    "localSuite": "Local full remains nonpassing:2094/2099assertions,two hot-context freshness assertions,one closeout freshness assertion,one startup timeout and one temporary-directory cleanup EPERM. Refreshed isolated failed surfaces24/24 pass with90s limit;focused103/103 and independent projectile58/58 pass. Hosted exact-main299/2099 is the final full-suite acceptance.",
-    "independentReview": "source,announcement and corrected records pass",
-    "production": {
-      "source": "f7b35abe2d1f93ff8f0abe1b3217017c48eaa3ce",
-      "workflow": 39514242690,
-      "immutableUrl": "https://c6750ee5.call-of-doodie.pages.dev",
-      "canonical": "https://callofdoodie.wtf/",
-      "browserAssertions": 52
-    }
+    "independentReview": "source pass;records finding corrected with observed full and isolated results",
+    "localSuite": "Local full300 files:2106/2107 assertions,one startup/session-binding fixture failure. Isolated fixture rerun1/1 passes with120s limit. Local full remains nonpassing;exact-main hosted full suite required."
   },
-  "testsLastRunMode": "full-hosted-exact-main",
+  "testsLastRunMode": "full-local-with-isolated-recheck",
   "velocity": 1,
   "silVelocityLastSession": 1,
   "deploy": {
@@ -200,7 +181,7 @@
     "url": "https://callofdoodie.wtf/",
     "deployedAt": "2026-10-20T23:21:25Z"
   },
-  "lastSession": 199,
+  "lastSession": 200,
   "silAvg10": 940.5,
   "silAvg25": 965.6,
   "silAvgAll": 988.5,

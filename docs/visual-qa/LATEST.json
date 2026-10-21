@@ -1,326 +1,229 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-10-20T23:14:59.836Z",
-  "uiBaseRef": "7a46dee5f56ff47825aed9e0da82b3ac01125b31",
-  "stagingUrl": "https://215d8bfc.call-of-doodie.pages.dev/",
+  "capturedAt": "2026-10-21T00:32:46.923Z",
+  "uiBaseRef": "09caceceadc09cb89cec016abab42c6b80f248d9",
+  "stagingUrl": "https://ec4cbc23.call-of-doodie.pages.dev/",
   "themes": [
     "dark",
     "light"
   ],
   "sourceFiles": [
     {
-      "file": "src/systems/projectileFrame.js",
-      "sha256": "f61303edb102be3699a14101958a995c78499418297b4eb743b53e21ffda6eb3"
+      "file": "src/hooks/useGamepadNav.js",
+      "sha256": "c0262e729bb90556633bc932db135f0e5b027eb42694fc71a93190eb14cc3ff5"
     }
   ],
   "captures": [
     {
-      "file": "session-199/before-production-sewer-night-390-held-controller.png",
-      "sha256": "68c83c97e4cb8616a30809128c799eb229b7cd6161522a1b0f37b7b1cb5b285e",
+      "file": "session-200/before-production-sewer-night-390-disconnected-menu.png",
+      "sha256": "10367e1f213292ac8504f6962444bf9e36db38317f03c0cbe6b81d61d6f61031",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "held-controller",
+      "page": "disconnected-menu",
       "phase": "before"
     },
     {
-      "file": "session-199/before-production-sewer-night-390-controller-pause.png",
-      "sha256": "fd5e13e913fee34a63d458df12873d3c8cbaf770dbb9249205f6e2fafafc98f2",
+      "file": "session-200/before-production-sewer-night-390-held-reconnect.png",
+      "sha256": "0fa8143a641259785ded3854cc6a10e8eea24e162a847b8cf85ca64f677bdcf5",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "controller-pause",
+      "page": "held-reconnect",
       "phase": "before"
     },
     {
-      "file": "session-199/before-production-sewer-night-390-juggernaut-shield.png",
-      "sha256": "5e85cedb51767dfd7bb03d7cff6b75409ee4eabb413dfa178160dbb48f521aed",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "page": "juggernaut-shield",
-      "phase": "before"
-    },
-    {
-      "file": "session-199/before-production-sewer-night-1440-held-controller.png",
-      "sha256": "06eafec40bcbf43f5c18b3de555b523cc320d08ac03bd3c1ec550d7166f70db0",
+      "file": "session-200/before-production-sewer-night-1440-disconnected-menu.png",
+      "sha256": "ecfc2110327744ab50b283941a2b4906e71b77fa23923336c3c5dc82819d34e7",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "held-controller",
+      "page": "disconnected-menu",
       "phase": "before"
     },
     {
-      "file": "session-199/before-production-sewer-night-1440-controller-pause.png",
-      "sha256": "f2e8f024b276ad14234b5df5c189288cc14a0d8507f7e64c47b4a83fb461b538",
+      "file": "session-200/before-production-sewer-night-1440-held-reconnect.png",
+      "sha256": "6bd02fdfe1a8b39dc08de681f79b69f26feeb1f9925d415b12f5cf9efd442546",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "controller-pause",
+      "page": "held-reconnect",
       "phase": "before"
     },
     {
-      "file": "session-199/before-production-sewer-night-1440-juggernaut-shield.png",
-      "sha256": "5198c226a4410445c8ab7a68e8f0b814cadc51c1f4b2c2200091f6edaf9ad9fe",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "juggernaut-shield",
-      "phase": "before"
-    },
-    {
-      "file": "session-199/before-production-porcelain-day-390-held-controller.png",
-      "sha256": "7c7dbc180ba9093b6b2295ce85bdd5056eb09f93ea02cfed68bc1c7490af8d23",
+      "file": "session-200/before-production-porcelain-day-390-disconnected-menu.png",
+      "sha256": "dc4a1e84b7120f4b304f32b1a01e2b553d2ad0508d045f756b2868ee61990a3a",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "held-controller",
+      "page": "disconnected-menu",
       "phase": "before"
     },
     {
-      "file": "session-199/before-production-porcelain-day-390-controller-pause.png",
-      "sha256": "e24a03fa38f66ce2cbdb40965ad94301b164d8f0f01ac43679f9a565cb8bb1a4",
+      "file": "session-200/before-production-porcelain-day-390-held-reconnect.png",
+      "sha256": "be2a8451ca12aa608bd10e4237a918e77f144b33ad92df0dc90633d5d1670446",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "controller-pause",
+      "page": "held-reconnect",
       "phase": "before"
     },
     {
-      "file": "session-199/before-production-porcelain-day-390-juggernaut-shield.png",
-      "sha256": "9987990c72e1d43cebb0f4c29bb5a4c4cfcae86d095c130abc42057f232ca578",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "page": "juggernaut-shield",
-      "phase": "before"
-    },
-    {
-      "file": "session-199/before-production-porcelain-day-1440-held-controller.png",
-      "sha256": "8e8ce67b8eb3095d5f24e1f3d20c2854d07715902e6770dac7ee62e62ea22cfe",
+      "file": "session-200/before-production-porcelain-day-1440-disconnected-menu.png",
+      "sha256": "816b4191d229628c61c0e974c9fafd763e456f3b1045a39c5fe0d35dccb4b22b",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "held-controller",
+      "page": "disconnected-menu",
       "phase": "before"
     },
     {
-      "file": "session-199/before-production-porcelain-day-1440-controller-pause.png",
-      "sha256": "dedd67eead8f9707d3f7980cb0a79c0587ae65b1b3a1a8013bad1f00e5c154ce",
+      "file": "session-200/before-production-porcelain-day-1440-held-reconnect.png",
+      "sha256": "374af14d2dc344786310777ba2de78d32d1963321e16131b37f053e4e939793e",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "controller-pause",
+      "page": "held-reconnect",
       "phase": "before"
     },
     {
-      "file": "session-199/before-production-porcelain-day-1440-juggernaut-shield.png",
-      "sha256": "cc8cff1b507f9bf8dfad63ac9edbe197c74a654e320077bb07c089acee9823d5",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "juggernaut-shield",
-      "phase": "before"
-    },
-    {
-      "file": "session-199/after-staging-sewer-night-390-held-controller.png",
-      "sha256": "5bd2c6f2a811173326ee64bfda329ee69fe64a69ebbee92f2065ff7f6284248d",
+      "file": "session-200/after-staging-sewer-night-390-disconnected-menu.png",
+      "sha256": "48992f9cf531195f513934833c31ed0f38d4026f754df8506607ae82bd219501",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "held-controller",
+      "page": "disconnected-menu",
       "phase": "after"
     },
     {
-      "file": "session-199/after-staging-sewer-night-390-controller-pause.png",
-      "sha256": "fe82ec108639662093dbc8ed7a4a00c15058d5a637fe06575cf55f7c79b5cfd1",
+      "file": "session-200/after-staging-sewer-night-390-held-reconnect.png",
+      "sha256": "afa903ce0036d8e57f77c1b981574b71cf8e01c57308cceecf2d220fcbb44df7",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "controller-pause",
+      "page": "held-reconnect",
       "phase": "after"
     },
     {
-      "file": "session-199/after-staging-sewer-night-390-juggernaut-shield.png",
-      "sha256": "f52d1b9f17d3b74e62e689fb91b04e31f67eb1cf1bcf061716174c211ea466d5",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "page": "juggernaut-shield",
-      "phase": "after"
-    },
-    {
-      "file": "session-199/after-staging-sewer-night-1440-held-controller.png",
-      "sha256": "467833bb6df7d7efba3f4c1e377a7ac8f117bf4cc661e3d8d90bb86b7ef64f51",
+      "file": "session-200/after-staging-sewer-night-1440-disconnected-menu.png",
+      "sha256": "19442fdaf55874ec9eae42bef6cd2c03403fb5d978b3a7daf345fc3affef909d",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "held-controller",
+      "page": "disconnected-menu",
       "phase": "after"
     },
     {
-      "file": "session-199/after-staging-sewer-night-1440-controller-pause.png",
-      "sha256": "ac0a5ab6a34c3a39ce37f0e71fd90fcb81d2a8959a075eebdd2c1dae7512b2b3",
+      "file": "session-200/after-staging-sewer-night-1440-held-reconnect.png",
+      "sha256": "369f2cdfe9162a6df87aa830d36b690bb429113c0d77bb6cf3682c54d6a0b9a0",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "controller-pause",
+      "page": "held-reconnect",
       "phase": "after"
     },
     {
-      "file": "session-199/after-staging-sewer-night-1440-juggernaut-shield.png",
-      "sha256": "721e9128b10ea721c8466e2b7c3586999d2e0c886b38d7b7c23a759b894b88c2",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "juggernaut-shield",
-      "phase": "after"
-    },
-    {
-      "file": "session-199/after-staging-porcelain-day-390-held-controller.png",
-      "sha256": "813d54d6972f62a690c34137f83ce2e360db2a6be02bed9c6d3b34e77e43b270",
+      "file": "session-200/after-staging-porcelain-day-390-disconnected-menu.png",
+      "sha256": "67da959ebca2ef7a638c54842967e6616e90a76aa2bfdd7b320e50502393135d",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "held-controller",
+      "page": "disconnected-menu",
       "phase": "after"
     },
     {
-      "file": "session-199/after-staging-porcelain-day-390-controller-pause.png",
-      "sha256": "d9a54c7af7086eff232ce7c9e42136ba6c60bec2cd014d36e0096aae1d03fbbe",
+      "file": "session-200/after-staging-porcelain-day-390-held-reconnect.png",
+      "sha256": "837118717c4246ef3c049e9db957d74f0e8981918a98f64a46791d6f80429255",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
         "height": 900
       },
-      "page": "controller-pause",
+      "page": "held-reconnect",
       "phase": "after"
     },
     {
-      "file": "session-199/after-staging-porcelain-day-390-juggernaut-shield.png",
-      "sha256": "865efa9274f70e8e379707f8a7d9e8bb67d2e4b9e7145f260623c4f46fb17c6a",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "page": "juggernaut-shield",
-      "phase": "after"
-    },
-    {
-      "file": "session-199/after-staging-porcelain-day-1440-held-controller.png",
-      "sha256": "be0bd330137473cdd8bb7a3e3e826db1fd5d4287a9f29d33a21f843deea8e0f2",
+      "file": "session-200/after-staging-porcelain-day-1440-disconnected-menu.png",
+      "sha256": "b942de0ffc0596b28960cce5b1e061ba5fcab1213a2ea940e69e5bc650075d00",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "held-controller",
+      "page": "disconnected-menu",
       "phase": "after"
     },
     {
-      "file": "session-199/after-staging-porcelain-day-1440-controller-pause.png",
-      "sha256": "2d4ef1a1db10faec5e693ea366e427e9dc712a17f4f424a10d1687e977cb67a3",
+      "file": "session-200/after-staging-porcelain-day-1440-held-reconnect.png",
+      "sha256": "4f5a461160e2d545e51b88dc7594a4bf7ef950b20e1be2e9a89d8bc276c869ac",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "page": "controller-pause",
-      "phase": "after"
-    },
-    {
-      "file": "session-199/after-staging-porcelain-day-1440-juggernaut-shield.png",
-      "sha256": "335260025763a585d41410803f86de4736306ac2c22a58892a9f05ef8652e6f9",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "juggernaut-shield",
+      "page": "held-reconnect",
       "phase": "after"
     }
   ],
   "inspection": {
     "renderedPixelsReviewed": true,
-    "reviewer": "Codex root: all24 before/after images inspected through three contact sheets",
-    "reviewedAt": "2026-10-20T23:14:59.838Z",
-    "scope": "Juggernaut shield durability,controller and pause;390/1440,both themes.",
+    "reviewer": "Codex root inspected16 before/after images through2 contact sheets",
+    "reviewedAt": "2026-10-21T00:32:46.924Z",
+    "scope": "Pause navigation interruption states,390/1440,both shell themes.",
     "findings": [
-      "No introduced layout/readability defect in final inspected gameplay,pause and controller states.",
-      "Initial staging showed mobile SHIELD SHATTERED clipping;screen-space rendering fixed it before rebuild and recapture.",
-      "Before shield200 remains after three160damage rail impacts;after first40.6 including regeneration,second0,third health9792 versus9928 before."
+      "Before disconnect focus continued down the menu;after it remains on Build Summary.",
+      "Before held reconnect opened an unintended panel;after pause stays open.",
+      "Final affected menu states remain readable and focus ring visible;no new layout defect."
     ],
     "fixesApplied": [
-      "Shared armor impact path for rail and physical projectiles.",
-      "Screen-space shield-break announcement uses existing viewport-fit renderer."
+      "Cancel repeat and neutral-arm shared controller-menu ownership."
     ],
     "blockingDefectsOpen": 0
   },
   "methodLimits": [
-    "Synthetic controller/keyboard and assisted App ticks;no physical-device or participant claim.",
-    "Gameplay palette is independent of shell theme;no broader theme or performance claim."
+    "Synthetic controllers in real Chrome;no physical-device or participant evidence.",
+    "Gameplay pause palette is independent of shell theme. Shared hook consumers verified through mounted-hook tests;runtime captures focus on Pause."
   ]
 }

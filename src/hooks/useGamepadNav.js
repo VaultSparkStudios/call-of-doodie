@@ -49,6 +49,8 @@ export function useGamepadNav({
     const REPEAT_RATE   = 140; // ms between repeats
 
     let lastA = false, lastB = false;
+    let owner = null;
+    let armed = false;
     let activeDir = null;
     let repeatTimeout = null;
 
@@ -79,13 +81,35 @@ export function useGamepadNav({
 
     const id = setInterval(() => {
       const gp = getPrimaryGamepad();
-      if (!gp) return;
+      if (!gp) {
+        stopDir();
+        owner = null;
+        armed = false;
+        return;
+      }
+
+      // A held control belongs to the previous menu/device until it returns
+      // to neutral. Object identity is unstable across browser gamepad polls.
+      const nextOwner = JSON.stringify([gp.index, gp.id, gp.mapping]);
+      if (owner !== nextOwner) {
+        stopDir();
+        owner = nextOwner;
+        armed = false;
+      }
 
       const controls = readGamepadControls(gp, DEAD);
       const up    = controls.menuUp;
       const down  = controls.menuDown;
       const left  = !disableLR && controls.menuLeft;
       const right = !disableLR && controls.menuRight;
+      const aNow = controls.confirm;
+      const bNow = controls.back;
+      if (!armed) {
+        lastA = !!aNow;
+        lastB = !!bNow;
+        armed = !up && !down && !left && !right && !aNow && !bNow;
+        return;
+      }
 
       if      (up)    startDir("up");
       else if (down)  startDir("down");
@@ -93,8 +117,6 @@ export function useGamepadNav({
       else if (right) startDir("right");
       else            stopDir();
 
-      const aNow = controls.confirm;
-      const bNow = controls.back;
       if (aNow && !lastA) r.current.onConfirm?.(r.current.focusIdx);
       if (bNow && !lastB) r.current.onBack?.();
       lastA = !!aNow;

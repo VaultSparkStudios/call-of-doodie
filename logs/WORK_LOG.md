@@ -2119,3 +2119,14 @@ S199 isolated rerun24/24 assertions passes after record refresh,with90s timeout.
 
 
 S199 final acceptance: S199 implementationf7b35abe2d1f93ff8f0abe1b3217017c48eaa3ce passed exact-main workflow39514242690:299files/2099assertions,strict lint,configured build and Cloudflare deployment. Canonical health matchesf7b35abe2d1f. Canonical and immutablehttps://c6750ee5.call-of-doodie.pages.dev shell7/7 each;production browser52/52 across390/1440,both themes. Rail shield200→40.6 after regeneration→0;breaking hit24health,next hit160. Protected armor unchanged;mobile shield-break announcement fits. Changed combat runtime matches staging after generated import filenames are normalized. Local full remains nonpassing:2094/2099assertions,two hot-context freshness assertions,one closeout freshness assertion,one startup timeout and one temporary-directory cleanup EPERM. Refreshed isolated failed surfaces24/24 pass with90s limit;focused103/103 and independent projectile58/58 pass. Hosted exact-main299/2099 is the final full-suite acceptance.
+
+
+## 2026-10-20 — Session 200
+
+Controller menus stop stale repeats and require fresh input after interruptions. S200: seven failing-before regressions;59 focused assertions pass,including8 mounted-hook cases. Independent source review passes. Staging https://ec4cbc23.call-of-doodie.pages.dev browser16/16 across390/1440 and both themes;shell7/7. Strict lint,configured build,public/runtime contracts and release security pass;dependency audit0 vulnerabilities. Full suite and exact-main production pending.
+
+
+S200 Local full300 files:2106/2107 assertions,one startup/session-binding fixture failure;isolated recheck pending. No gameplay failure. Exact-main hosted full suite remains required.
+
+
+S200 evidence refresh: Local full300 files:2106/2107 assertions,one startup/session-binding fixture failure. Isolated fixture rerun1/1 passes with120s limit. Local full remains nonpassing;exact-main hosted full suite required.

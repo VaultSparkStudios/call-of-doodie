@@ -4,6 +4,16 @@
 
 ## Current Session
 
+## S200 candidate acceptance
+
+S200:59 focused assertions pass;7 failing-before regressions;independent source review8/8. Staging16/16,shell7/7,16 inspected hash-bound captures. Strict lint,configured build,public/runtime/schema/security pass;dependency audit0 vulnerabilities;backend5/5,replay3/3,shared leaderboard check pass. Local full300 files:2106/2107 assertions,one startup/session-binding fixture failure. Isolated fixture rerun1/1 passes with120s limit. Local full remains nonpassing;exact-main hosted full suite required. Production pending.
+
+## S200 candidate
+
+Controller menus stop stale repeats and require fresh input after interruptions.
+
+S200: seven failing-before regressions;59 focused assertions pass,including8 mounted-hook cases. Independent source review passes. Staging https://ec4cbc23.call-of-doodie.pages.dev browser16/16 across390/1440 and both themes;shell7/7. Strict lint,configured build,public/runtime contracts and release security pass;dependency audit0 vulnerabilities. Full suite and exact-main production pending.
+
 ## S199 production verified
 
 Rail hits wear down Juggernaut shields and open the shield-break window.
@@ -74,16 +84,14 @@ Fresh startup and nine-axis/game-loop audit completed for this invocation. Both 
 
 ## S194 production verified
 
-Controller menu inputs stay consumed and Railgun Last Resort matches its damage promise.
-
-S194 implementation 51fc42bf1510f6a4b625f3fb250140472f04862d passed exact-main workflow 39377541819:299 files/2056 assertions, strict lint, configured build and Cloudflare deployment. Canonical health matches 51fc42bf1510. Canonical and immutable https://8e3a9bb5.call-of-doodie.pages.dev shell7/7 each; production browser24/24 across390/1440/both themes proves held menu Reload consumed, fresh Reload usable, rail480 at24HP/160 at25HP, and held/released keyboard movement.
-
-## S194 candidate acceptance
-
-S194 local299-file run:2055 passed,1 startup fixture timeout at43.6s under load; unchanged isolated startup fixture then passed1/1 in25.8s. All gameplay regressions pass. Strict lint/configured build/schema/startup/public/security/runtime gates pass; dependency audit0 vulnerabilities. Staging48c2ee6d shell7/7 and browser24/24 at390/1440/both themes.24 inspected before/after images hash-bound to all3 changed runtime sources. Independent review pass after
+Co
 
 ## Open Work
 
+## S200 arc outcomes and waves
+- [ ] S200 exact-main production and final closeout.
+- [ ] [SIL:1] S200 reserve: physical controller interruption comparison;owner project,dependency hardware.
+- [ ] [SIL:1] S200 reserve: representative-player menu interruption comprehension;owner project,dependency observed participants.
 ## S199 verified work
 ## S198 verified work
 ## S197 arc outcomes and waves
@@ -135,21 +143,8 @@ S194 local299-file run:2055 passed,1 startup fixture timeout at43.6s under load;
 ## Session 174 - The gates themselves get measured
 ## Session 173 - Objective-verb and zone coverage gap closed
 ## Session 168 - Terminal order, exactly-once extraction, and mode-specific debrief proof
-- [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET so cloud backup stops answering 503.
-## Session 167 - The debrief names names, modes say what the run was worth, announcements stay on screen
-- [ ] [SIL:2] **FOUNDER** Set OBELISK_VERIFY_URL and OBELISK_VERIFY_SECRET on the Pages project so Porcelain Passport verification and cloud backup stop answering 503.
-## Session 166 - Extraction distance, pressure, radar objectives, and death-beat split
 
 ## Recent Decisions
-
-## 2026-10-20 — Session 196
-
-Use zero-centered known stick axes for input arbitration independently of first sighting; preserve unknown nonstandard endpoint calibration rather than invent universal mapping. Reject protected Summoners before grenade damage and lightning target choice, preserving vulnerable accounting. Reviewer caught trigger starvation; corrected before release. Existing CANON-045 STRONG gap retained for unchanged guest-game promotion. FORGE/public-unlaunched unchanged. Synthetic controller/keyboard and assisted App ticks do not prove physical-device or participant results. Unknown nonstandard layouts first seen at a stick endpoint retain calibration ambiguity. Existing S183 comparisons remain unmeasured. No dependency, backend, identity/trust-policy, variable cost, rights, licensing or launch change. CDR unchanged without creative direction.
-
-
-S196 final acceptance: S196 implementation 729870fb560e776f947f84957c83db6fea1ba2d3 passed exact-main workflow 39471382673:299 files/2075 assertions,strict lint,configured build and Cloudflare deployment. Canonical health matches729870fb560e. Canonical and immutable https://f3b3056d.call-of-doodie.pages.dev shell7/7 each; production browser40/40 across390/1440,both themes. Held controller selected/moves,button handoff preserved,neutral does not steal ownership;protected grenade/chain HP10000,vulnerable grenade70,chain fallback5. Final full local299/2075 passed;83 focused pass. Initial10 failing-before cases; independent review trigger regression corrected,second review passes. Staging40/40 and shell7/7;24 before/after images inspected and hash-bound. Native schema/startup/public/security/runtime checks pass;dependency audit0 vulnerabilities. Earlier full run caught the reviewer edge before its final correction; final full run green.
-
-
 
 ## 2026-10-20 — Session 197
 
@@ -176,9 +171,15 @@ Reuse the physical-projectile armor impact rule for rail. Preserve the breaking 
 
 S199 final acceptance: S199 implementationf7b35abe2d1f93ff8f0abe1b3217017c48eaa3ce passed exact-main workflow39514242690:299files/2099assertions,strict lint,configured build and Cloudflare deployment. Canonical health matchesf7b35abe2d1f. Canonical and immutablehttps://c6750ee5.call-of-doodie.pages.dev shell7/7 each;production browser52/52 across390/1440,both themes. Rail shield200→40.6 after regeneration→0;breaking hit24health,next hit160. Protected armor unchanged;mobile shield-break announcement fits. Changed combat runtime matches staging after generated import filenames are normalized. Local full remains nonpassing:2094/2099assertions,two hot-context freshness assertions,one closeout freshness assertion,one startup timeout and one temporary-directory cleanup EPERM. Refreshed isolated failed surfaces24/24 pass with90s limit;focused103/103 and independent projectile58/58 pass. Hosted exact-main299/2099 is the final full-suite acceptance.
 
+
+
+## 2026-10-20 — Session 200
+
+Neutral ownership barrier applies to shared controller menus at activation/reconnect/device change. Ownership compares index/id/mapping rather than browser object identity. Cancel auto-repeat on missing input. Existing unchanged identity STRONG gap remains visible;no launch/lifecycle change. Reuse installed packages and project-native release tooling.
+
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 279,520 bytes · SHA-256 `b2fc3f3ef427…`
-- `context/TASK_BOARD.md` · 189,439 bytes · SHA-256 `d7fb5b4aeb8e…`
-- `context/DECISIONS.md` · 194,278 bytes · SHA-256 `c8c1e795e57d…`
+- `context/CURRENT_STATE.md` · 280,571 bytes · SHA-256 `a0e1cc06aae2…`
+- `context/TASK_BOARD.md` · 189,996 bytes · SHA-256 `710288109040…`
+- `context/DECISIONS.md` · 194,665 bytes · SHA-256 `6a6dcf37a7f7…`
 - `docs/AUDIT_2026-10-18.json` · 6,892 bytes · SHA-256 `b34b668a7b5a…`
