@@ -133,17 +133,143 @@
     "scope": "Every owned durable root harness handle observed terminal through implementation production verification;browser contexts closed in finally. Final records/deployment handles tracked separately before native completion."
   },
   "doctorScore": {
-    "date": "2026-10-04",
-    "generatedAt": "2026-10-04T23:23:27.137Z",
-    "passing": 157,
-    "total": 233,
-    "score": 68,
-    "warning": 70,
-    "failing": 3,
-    "blockingFailing": 1,
-    "advisoryFailing": 2,
-    "skipped": 3,
-    "note": "Studio-wide doctor evidence; not a project-only zero-findings claim. Central follow-up delivered through Ark; application unobserved."
+    "schemaVersion": "project-doctor-v1",
+    "date": "2026-10-22",
+    "ranAt": "2026-10-22T02:02:30.009Z",
+    "generatedAt": "2026-10-22T02:02:30.009Z",
+    "subject": {
+      "slug": "call-of-doodie",
+      "head": "f7069077a499d2c6cf6d9fd424d4a90f009bf596",
+      "scope": "recipient-native",
+      "groups": [
+        "schema:lint",
+        "protocol:drift",
+        "canon:adoption-check",
+        "runtime:boundary",
+        "public:contract"
+      ],
+      "worktreeDirty": true,
+      "manifestDigest": "ca1edb71346eb4003d730bd24c12f0568f1b5ada3285d931c11b482c45c83735"
+    },
+    "coverage": "Recipient-native schema, protocol, adoption, runtime boundary and public contract checks; excludes Studio Ops infrastructure, network health, gameplay tests and launch approval.",
+    "persisted": true,
+    "overallPass": true,
+    "passing": 15,
+    "warning": 0,
+    "failing": 0,
+    "blockingFailing": 0,
+    "advisoryFailing": 0,
+    "skipped": 0,
+    "ran": 15,
+    "total": 15,
+    "score": 100,
+    "checks": [
+      {
+        "id": "schema:lint:scripts/schema-lint.mjs",
+        "pass": true,
+        "warn": false,
+        "blocking": false,
+        "exitCode": 0
+      },
+      {
+        "id": "schema:lint:scripts/check-current-state-coherence.mjs",
+        "pass": true,
+        "warn": false,
+        "blocking": false,
+        "exitCode": 0
+      },
+      {
+        "id": "schema:lint:scripts/check-app-architecture.mjs",
+        "pass": true,
+        "warn": false,
+        "blocking": false,
+        "exitCode": 0
+      },
+      {
+        "id": "schema:lint:scripts/check-boot-storage-boundary.mjs",
+        "pass": true,
+        "warn": false,
+        "blocking": false,
+        "exitCode": 0
+      },
+      {
+        "id": "schema:lint:scripts/check-task-semantics.mjs",
+        "pass": true,
+        "warn": false,
+        "blocking": false,
+        "exitCode": 0
+      },
+      {
+        "id": "schema:lint:scripts/check-project-status-writers.mjs",
+        "pass": true,
+        "warn": false,
+        "blocking": false,
+        "exitCode": 0
+      },
+      {
+        "id": "schema:lint:scripts/check-closeout-artifact-currency.mjs",
+        "pass": true,
+        "warn": false,
+        "blocking": false,
+        "exitCode": 0
+      },
+      {
+        "id": "schema:lint:scripts/check-genome-ledger.mjs",
+        "pass": true,
+        "warn": false,
+        "blocking": false,
+        "exitCode": 0
+      },
+      {
+        "id": "schema:lint:scripts/check-node-runtime.mjs",
+        "pass": true,
+        "warn": false,
+        "blocking": false,
+        "exitCode": 0
+      },
+      {
+        "id": "schema:lint:scripts/record-skill-cost.mjs",
+        "pass": true,
+        "warn": false,
+        "blocking": false,
+        "exitCode": 0
+      },
+      {
+        "id": "protocol:drift:scripts/protocol-drift-check.mjs",
+        "pass": true,
+        "warn": false,
+        "blocking": false,
+        "exitCode": 0
+      },
+      {
+        "id": "canon:adoption-check:scripts/check-canon-adoption-ledger.mjs",
+        "pass": true,
+        "warn": false,
+        "blocking": false,
+        "exitCode": 0
+      },
+      {
+        "id": "runtime:boundary:scripts/check-runtime-boundary.mjs",
+        "pass": true,
+        "warn": false,
+        "blocking": false,
+        "exitCode": 0
+      },
+      {
+        "id": "public:contract:scripts/validate-public-contract.mjs",
+        "pass": true,
+        "warn": false,
+        "blocking": false,
+        "exitCode": 0
+      },
+      {
+        "id": "public:contract:scripts/check-public-claims.mjs",
+        "pass": true,
+        "warn": false,
+        "blocking": false,
+        "exitCode": 0
+      }
+    ]
   },
   "lastSessionSummary": {
     "session": 204,
