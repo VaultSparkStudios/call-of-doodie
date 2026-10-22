@@ -3,9 +3,10 @@
 //  • Shell assets (HTML, icons, manifest) → cache-first, update in background
 //  • /assets/ (hashed JS/CSS) → cache-first (immutable, hash guarantees freshness)
 //  • Supabase / external API calls → network-only (never cache)
+//  • Same-origin /api/* and /_health → network-only (the server owns their freshness)
 //  • Navigation → network-first with offline fallback to index.html
 
-const CACHE_NAME = "cod-v6";
+const CACHE_NAME = "cod-v7";
 const BASE = new URL(self.registration.scope).pathname;
 const SHELL_ASSETS = [
   BASE,
@@ -19,6 +20,9 @@ const SHELL_ASSETS = [
 
 function cacheResponse(cache, request, response) {
   if (!response || !response.ok || response.type === "opaque" || response.bodyUsed) return Promise.resolve();
+  // A server that says no-store/private is not asking to be replayed from this cache.
+  const cacheControl = (response.headers && response.headers.get("cache-control")) || "";
+  if (/\b(no-store|private)\b/i.test(cacheControl)) return Promise.resolve();
   try {
     return cache.put(request, response.clone()).catch(() => {});
   } catch (_) {
@@ -57,8 +61,10 @@ self.addEventListener("fetch", e => {
 
   // Skip non-GET and external domains (Supabase, etc.)
   if (request.method !== "GET") return;
-  if (!url.origin.includes(self.location.origin)) return;
+  if (url.origin !== self.location.origin) return;
   if (url.pathname.includes("supabase") || url.hostname.includes("supabase")) return;
+  // Dynamic endpoints: let the browser and the server's own cache-control decide.
+  if (url.pathname.startsWith(`${BASE}api/`) || url.pathname === `${BASE}_health`) return;
 
   // Navigation → network-first, offline fallback
   if (request.mode === "navigate") {

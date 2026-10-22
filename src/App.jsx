@@ -115,7 +115,8 @@ import {
   getWaveSpawnRate,
   heatBiasedFormation,
 } from "./systems/waveDirector.js";
-import { buildRematchKit, buildRematchDrillBrief, getMaxEnemiesForWave, estimateNonBossWaveCount } from "./systems/rematchDrill.js";
+import { buildRematchKit, buildRematchDrillBrief, getMaxEnemiesForWave, estimateNonBossWaveCount, rematchWaveMultForModifier } from "./systems/rematchDrill.js";
+import { applyAmmoPickup } from "./systems/ammoPickup.js";
 import { buildActiveRunDrill, buildDrillEvidenceLedger, sanitizeCarriedRunDrill } from "./systems/runDrill.js";
 import {
   createDeathStudioEvents,
@@ -687,7 +688,8 @@ export default function CallOfDoodie() {
         ? buildDrillEvidenceLedger(priorDrillOutcomes, { drillId: practiceDrill.id })
         : null;
       gs0.currentWave = _rematchKit.startWave;
-      gs0.maxEnemiesThisWave = getMaxEnemiesForWave(_rematchKit.startWave);
+      // The seed's run modifier is applied further down; size the drill wave with it now (S204).
+      gs0.maxEnemiesThisWave = getMaxEnemiesForWave(_rematchKit.startWave, rematchWaveMultForModifier(RUN_MODIFIERS[seed % RUN_MODIFIERS.length].id));
       gs0._nonBossWaveCount = estimateNonBossWaveCount(_rematchKit.startWave);
       gs0.coins = (gs0.coins || 0) + _rematchKit.coins;
       gs0.player.maxHealth += _rematchKit.maxHealthBonus;
@@ -3382,21 +3384,13 @@ export default function CallOfDoodie() {
           const maxHP = p.maxHealth || 100; p.health = Math.min(maxHP, p.health + 30);
           setHealth(p.health); addText(gs, pk.x, pk.y, "+30 HP", "#00FF00");
         } else if (pk.type === "ammo") {
-          const upgLevel = gs.weaponUpgrades?.[wpnIdx] || 0;
-          const maxAmmo = getWeaponAmmoCapacity(WEAPONS[wpnIdx], upgLevel, perkModsRef.current.ammoMult);
-          // Scavenger: restore 30% more ammo (partial restore for all weapons)
-          const ammoRestoreMult = perkModsRef.current.ammoRestoreMult || 1;
-          if (ammoRestoreMult > 1) {
-            // Scavenger mode: restore 30% of max ammo across ALL weapons
-            WEAPONS.forEach((w, wi) => {
-              const wUpg = gs.weaponUpgrades?.[wi] || 0;
-              const wMax = getWeaponAmmoCapacity(w, wUpg, perkModsRef.current.ammoMult);
-              gs.weaponAmmos[wi] = Math.min(wMax, (gs.weaponAmmos[wi] || 0) + Math.max(1, Math.floor(wMax * 0.30 * ammoRestoreMult)));
-            });
-          }
-          if (ammoRestoreMult <= 1) gs.weaponAmmos[wpnIdx] = maxAmmo; // normal: full refill current weapon
+          // Full refill for the held weapon; Scavenger/Bullet Hose add a top-up to the others (S204).
+          const { resupplied } = applyAmmoPickup({
+            weapons: WEAPONS, weaponAmmos: gs.weaponAmmos, weaponUpgrades: gs.weaponUpgrades, wpnIdx,
+            ammoMult: perkModsRef.current.ammoMult, ammoRestoreMult: perkModsRef.current.ammoRestoreMult || 1,
+          });
           gs.ammoCount = gs.weaponAmmos[wpnIdx]; setAmmo(gs.ammoCount);
-          addText(gs, pk.x, pk.y, ammoRestoreMult > 1 ? "MAX AMMO + RESUPPLY!" : "MAX AMMO", "#00BFFF");
+          addText(gs, pk.x, pk.y, resupplied ? "MAX AMMO + RESUPPLY!" : "MAX AMMO", "#00BFFF");
         } else if (pk.type === "speed") {
           addSpeedPickup(gs); addText(gs, pk.x, pk.y, "SPEED!", "#FFFF00");
         } else if (pk.type === "nuke") {

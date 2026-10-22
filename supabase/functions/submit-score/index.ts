@@ -1,5 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { consumeRateLimit, corsHeadersFor, rejectDisallowedOrigin, requestBucket } from "../_shared/http-trust.ts";
+import { consumeRateLimit, corsHeadersFor, readJsonObject, rejectDisallowedOrigin, requestBucket } from "../_shared/http-trust.ts";
 
 const VALID_MODES = new Set(["score_attack", "daily_challenge", "boss_rush", "cursed", "speedrun", "gauntlet", "zombies", "normal"]);
 const VALID_FEEDBACK = new Set(["too_easy", "dialed_in", "brutal"]);
@@ -316,7 +316,9 @@ Deno.serve(async (req) => {
     // sign-in is unavailable from the browser.
     const { data: { user } } = await userClient.auth.getUser().catch(() => ({ data: { user: null } }));
 
-    const rawBody = await req.json();
+    const parsedBody = await readJsonObject(req, corsHeaders);
+    if (!parsedBody.ok) return parsedBody.response;
+    const rawBody = parsedBody.body;
     const runToken = typeof rawBody.runToken === "string" ? rawBody.runToken.trim() : "";
     const summarySig = typeof rawBody.summarySig === "string" ? rawBody.summarySig.trim() : "";
     if (!runToken) {

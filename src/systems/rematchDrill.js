@@ -23,6 +23,12 @@ export function getMaxEnemiesForWave(wave, waveEnemyMult = 1) {
   return Math.min(Math.floor((5 + wv * 3) * (waveEnemyMult || 1)), waveMax);
 }
 
+// The run modifier that scales wave size. App applies it after the rematch block
+// builds the first drill wave, so the drill must read it from the seed's modifier id.
+export function rematchWaveMultForModifier(modifierId) {
+  return modifierId === "double_trouble" ? 2 : 1;
+}
+
 // Non-boss waves completed before reaching `wave` (bosses land every 5th);
 // keeps the wave-director theme rotation roughly in phase for a mid-run start.
 export function estimateNonBossWaveCount(wave) {

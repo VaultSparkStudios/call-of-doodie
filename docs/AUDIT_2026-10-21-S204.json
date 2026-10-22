@@ -1,0 +1,310 @@
+{
+  "schemaVersion": "2.1",
+  "session": 204,
+  "project": {
+    "slug": "call-of-doodie",
+    "type": "game",
+    "name": "Call-Of-Doodie"
+  },
+  "totals": {
+    "count": 7,
+    "priority": 107.9,
+    "top3": [
+      "sw-api-bypass",
+      "sw-strict-origin",
+      "scavenger-held-weapon-refill"
+    ]
+  },
+  "meta": {
+    "generatedAt": "2026-10-21",
+    "project": "call-of-doodie",
+    "type": "game",
+    "scope": "Whole-project sweep across robustness/security, gameplay loop, and speed/test infrastructure, after S204 baseline (lint, suite, build) found the local suite red on one spawn-budget fixture (already fixed in 15c6295).",
+    "baseline": "15c6295 on main and canonical production; 303/303 files, 2135/2135 tests, strict lint and build green",
+    "method": "Three read-only subagent sweeps (robustness/security, gameplay loop, speed/test infra). Every finding below was re-read by the author against live files before inclusion; nothing is included on an agent's word alone.",
+    "gameLoopReview": {
+      "loopTightness": "No loop defect found that survived verification; the gameplay sweep is recorded under items only if verified.",
+      "progression": "Unaffected.",
+      "sessionEngagement": "Stale leaderboard and profile reads are the player-visible risk: a player who just beat the top 10 can be shown the old board.",
+      "retention": "No retention claim is made.",
+      "soulFidelity": "Proof over posture: caches must not contradict the server's own no-store promise.",
+      "nextMoves": [
+        "Native privacy-browser and physical-device checks remain hardware-gated."
+      ]
+    },
+    "verification": "Gameplay items 6-7 came from a third subagent sweep and were re-read by the author in App.jsx before inclusion. A fourth subagent reviewed the diff independently: approve, with nits applied (byte-length cap, comment wording, lint-ignore scope)."
+  },
+  "items": [
+    {
+      "id": 1,
+      "slug": "sw-api-bypass",
+      "axis": "security-and-robustness",
+      "tier": "🔥",
+      "title": "Service worker must not cache same-origin /api/* responses",
+      "impact": 8,
+      "innovation": 5,
+      "effortHours": 1.5,
+      "priority": 22.1,
+      "status": "implemented",
+      "why": "public/sw.js:97-110 applies cache-first stale-while-revalidate to every same-origin GET under BASE. /api/profile and /api/duel-preview send cache-control: no-store, and /api/top-scores and /api/community-stats send max-age=0, yet the worker replays the first cached copy. The cache key is the URL only, so an authenticated /api/profile read is shared across whoever uses the browser next.",
+      "recipe": "Return before respondWith for pathnames under `${BASE}api/` and for `/_health`; make cacheResponse refuse responses whose Cache-Control contains no-store or private; bump CACHE_NAME so existing poisoned entries are purged on activate. Add a unit test that executes sw.js against a fake self/caches and asserts /api requests are never answered from cache.",
+      "premises": [
+        {
+          "claim": "The shell branch caches every path under BASE including /api",
+          "adapter": "grep",
+          "target": "public/sw.js",
+          "pattern": "Shell assets → stale-while-revalidate",
+          "operator": "eq",
+          "expected": true
+        },
+        {
+          "claim": "Profile endpoint declares no-store",
+          "adapter": "grep",
+          "target": "functions/api/profile.js",
+          "pattern": "\"cache-control\": \"no-store\"",
+          "operator": "eq",
+          "expected": true
+        },
+        {
+          "claim": "Cloud backup reads /api/profile",
+          "adapter": "grep",
+          "target": "src/utils/cloudBackup.js",
+          "pattern": "const ENDPOINT = \"/api/profile\"",
+          "operator": "eq",
+          "expected": true
+        }
+      ],
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Skip /api/ in the fetch handler only."
+        },
+        "L2": {
+          "effortHours": 1.5,
+          "recipe": "L1 plus no-store/private refusal in cacheResponse, cache version bump, and an executable worker test."
+        },
+        "L3": {
+          "effortHours": 4,
+          "recipe": "L2 plus a Playwright check that a second /api/top-scores read reaches the network."
+        }
+      },
+      "executionLog": [
+        "public/sw.js: /api/* and /_health bypass, no-store/private responses never stored, CACHE_NAME cod-v6 to cod-v7. tests/service-worker-boundary.test.js runs the real worker in a sandbox: 4 of 5 fail without the fix. Staging real-Chrome probe: worker controlling, cache cod-v7, /api/top-scores and /api/community-stats not in cache, network hit on every read."
+      ]
+    },
+    {
+      "id": 2,
+      "slug": "sw-strict-origin",
+      "axis": "security-and-robustness",
+      "tier": "🔥",
+      "title": "Service worker same-origin test must compare origins, not substrings",
+      "impact": 6,
+      "innovation": 4,
+      "effortHours": 0.25,
+      "priority": 20.5,
+      "status": "implemented",
+      "why": "public/sw.js:60 uses url.origin.includes(self.location.origin). With origin http://localhost:5173 a request to http://localhost:51730 passes, and a lookalike host that contains the production origin as a prefix would pass the same test and be cached under the shared cache name.",
+      "recipe": "Replace with url.origin !== self.location.origin. Covered by the item 1 worker test.",
+      "premises": [
+        {
+          "claim": "Origin check is a substring test",
+          "adapter": "grep",
+          "target": "public/sw.js",
+          "pattern": "url.origin.includes(self.location.origin)",
+          "operator": "eq",
+          "expected": true
+        }
+      ],
+      "ladder": {
+        "L1": {
+          "effortHours": 0.25,
+          "recipe": "One-line comparison fix."
+        },
+        "L2": {
+          "effortHours": 0.5,
+          "recipe": "L1 plus a lookalike-origin assertion in the worker test."
+        },
+        "L3": {
+          "effortHours": 1,
+          "recipe": "L2 plus a CSP review of connect-src."
+        }
+      },
+      "executionLog": [
+        "url.origin !== self.location.origin; covered by lookalike-origin assertions (callofdoodie.wtf.evil.example, localhost:51730)."
+      ]
+    },
+    {
+      "id": 3,
+      "slug": "edge-body-guards",
+      "axis": "security-and-robustness",
+      "tier": "⚡",
+      "title": "submit-score and sync-game-run return 400, not a leaky 500, on a malformed body",
+      "impact": 6,
+      "innovation": 4,
+      "effortHours": 1,
+      "priority": 15.1,
+      "status": "implemented",
+      "why": "submit-score/index.ts:319 and sync-game-run/index.ts:93 call req.json() unguarded. A body of `null` or non-JSON throws; the outer catch (submit-score:613-619) returns status 500 with the raw error.message, e.g. \"Cannot read properties of null (reading 'runToken')\". That is a client error reported as a server error, discloses internals, and runs after rate-limit budget is spent. The browser client treats 5xx as retryable (src/storage.js).",
+      "recipe": "Parse with .catch(() => null); if the result is not a plain object return 400 {error:\"Invalid JSON body.\"}. Extract the guard as a small pure helper with a Node-runnable test so it is covered without Deno.",
+      "premises": [
+        {
+          "claim": "submit-score reads the body unguarded",
+          "adapter": "grep",
+          "target": "supabase/functions/submit-score/index.ts",
+          "pattern": "const rawBody = await req.json();",
+          "operator": "eq",
+          "expected": true
+        },
+        {
+          "claim": "sync-game-run reads the body unguarded",
+          "adapter": "grep",
+          "target": "supabase/functions/sync-game-run/index.ts",
+          "pattern": "const body = await req.json();",
+          "operator": "eq",
+          "expected": true
+        }
+      ],
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Inline guards in both functions."
+        },
+        "L2": {
+          "effortHours": 1,
+          "recipe": "Shared pure helper plus unit test, both functions use it."
+        },
+        "L3": {
+          "effortHours": 3,
+          "recipe": "L2 plus redeploy and a live malformed-body probe against staging."
+        }
+      },
+      "executionLog": [
+        "readJsonObject in _shared/http-trust.ts used by submit-score and sync-game-run. Live before: 500 with raw TypeError/parser text. Live after deploy to project fjnpzjjyhnpmunfoycrp: 400 Invalid JSON body. for null/non-JSON; {} still reaches the real validation. Deno check: sync-game-run clean; submit-score 7 pre-existing supabase-js generic errors, identical with the change stashed."
+      ]
+    },
+    {
+      "id": 4,
+      "slug": "replay-body-cap",
+      "axis": "security-and-robustness",
+      "tier": "⚡",
+      "title": "validate-replay must cap the body it stores and stop echoing error text",
+      "impact": 6,
+      "innovation": 4,
+      "effortHours": 1,
+      "priority": 15.1,
+      "status": "implemented",
+      "why": "validate-replay/index.ts:231 reads an unbounded body and :242 stores it verbatim as run_anomalies.payload for every failing request, and the catch at :253 returns \"internal: \" + err.message. At the 30/min limit a caller can write large payloads into the table; the limiter itself fails open when its RPC throws.",
+      "recipe": "Read text, reject over 20 KB with 413, parse with a guard, and store only a bounded subset (mode, a few scalar fields) in payload. Replace the echoed message with a fixed reason.",
+      "premises": [
+        {
+          "claim": "Whole body is stored as the anomaly payload",
+          "adapter": "grep",
+          "target": "supabase/functions/validate-replay/index.ts",
+          "pattern": "payload: body,",
+          "operator": "eq",
+          "expected": true
+        }
+      ],
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Size cap and fixed error reason."
+        },
+        "L2": {
+          "effortHours": 1,
+          "recipe": "L1 plus bounded payload subset and helper test."
+        },
+        "L3": {
+          "effortHours": 3,
+          "recipe": "L2 plus fail-closed behaviour when the rate RPC throws, which changes an intentional advisory design and needs a decision."
+        }
+      },
+      "executionLog": [
+        "validate-replay: 32 KB cap (413 live), bounded anomaly payload without the trace body, fixed internal reason. Live: 40 KB body 413; valid-shaped request 200 ok:true. Rate-limit fail-closed (L3) deliberately not done: it changes an intentional advisory design and needs a decision."
+      ]
+    },
+    {
+      "id": 5,
+      "slug": "drawgame-hot-path-allocations",
+      "axis": "speed-and-efficiency",
+      "tier": "◻",
+      "title": "Hoist per-frame literals and cache viewport-only gradients in drawGame.js",
+      "impact": 3,
+      "innovation": 3,
+      "effortHours": 2,
+      "priority": 4.5,
+      "status": "deferred",
+      "why": "src/drawGame.js:389 and :687 build nested array literals each frame, :1057 creates a gradient per bullet, and four fullscreen vignette gradients depend only on W and H. Plausible but unmeasured: no profile shows these in the frame budget.",
+      "recipe": "Capture a CDP trace first. Hoist :389 and :687 like the existing CROC_SCALE_DOTS pattern only if the trace shows allocation pressure.",
+      "deferralReason": "Token and speed items need a measurement plan (audit hard rule). No frame-time evidence exists, and changing render code without it risks the visual-parity gates for an unproven gain.",
+      "premises": [
+        {
+          "claim": "Per-frame array literal exists",
+          "adapter": "grep",
+          "target": "src/drawGame.js",
+          "pattern": "[[4,4,1,1],[_AW-4,4,-1,1]",
+          "operator": "eq",
+          "expected": true
+        }
+      ],
+      "ladder": {
+        "L1": {
+          "effortHours": 1,
+          "recipe": "Hoist the two literals."
+        },
+        "L2": {
+          "effortHours": 2,
+          "recipe": "L1 plus offscreen vignette cache keyed on size."
+        },
+        "L3": {
+          "effortHours": 6,
+          "recipe": "L2 plus per-bullet gradient replacement and a before/after CDP trace."
+        }
+      }
+    },
+    {
+      "id": 6,
+      "slug": "scavenger-held-weapon-refill",
+      "axis": "gameplay-and-feedback",
+      "tier": "fire",
+      "title": "Scavenger / Bullet Hose must not shrink the pickup refill of the held weapon",
+      "impact": 7,
+      "innovation": 4,
+      "effortHours": 1.5,
+      "priority": 15.5,
+      "status": "implemented",
+      "why": "App.jsx ammo pickup: with ammoRestoreMult > 1 the full refill was replaced by floor(max*0.30*mult) on every weapon, so an empty held weapon got +39% instead of 100% while the copy promised more ammo and the popup still said MAX AMMO.",
+      "recipe": "Extract the rule to systems/ammoPickup.js: held weapon always full refill, perk adds a top-up to the other weapons.",
+      "executionLog": [
+        "systems/ammoPickup.js + 4 unit tests (never-less-than-plain test fails on the old rule); App.jsx call site; launch test still passes."
+      ]
+    },
+    {
+      "id": 7,
+      "slug": "rematch-double-trouble-sizing",
+      "axis": "gameplay-and-feedback",
+      "tier": "zap",
+      "title": "Rematch drill wave must be sized with the seed's double_trouble modifier",
+      "impact": 5,
+      "innovation": 4,
+      "effortHours": 0.5,
+      "priority": 15.1,
+      "status": "implemented",
+      "why": "App.jsx sized the first drill wave before the run-modifier switch set waveEnemyMult = 2, so a double_trouble seed practiced wave 7 at 26 enemies instead of the 52 the player faced.",
+      "recipe": "rematchWaveMultForModifier(modifierId) read from RUN_MODIFIERS[seed % len] when sizing the drill wave.",
+      "executionLog": [
+        "rematchDrill.js helper + tests; App.jsx call site. The call site itself is not exercised by a test (reviewer nit, accepted)."
+      ]
+    }
+  ],
+  "rejected": [
+    {
+      "claim": "Navigation responses are cached without an ok check",
+      "reason": "The cached navigation entry is never read; the fallback only matches index.html. No effect."
+    },
+    {
+      "claim": "Convert spawn-heavy script tests to in-process imports",
+      "reason": "Four target scripts execute at import time with no exported main(); the refactor is larger than the saved time and several tests are legitimate CLI exit-code tests. Revisit only with a duration ratchet."
+    }
+  ]
+}

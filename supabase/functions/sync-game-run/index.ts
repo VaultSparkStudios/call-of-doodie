@@ -1,5 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { consumeRateLimit, corsHeadersFor, rejectDisallowedOrigin, requestBucket } from "../_shared/http-trust.ts";
+import { consumeRateLimit, corsHeadersFor, readJsonObject, rejectDisallowedOrigin, requestBucket } from "../_shared/http-trust.ts";
 
 const VALID_MODES = new Set(["standard", "normal", "score_attack", "daily_challenge", "boss_rush", "cursed", "speedrun", "gauntlet", "zombies"]);
 const VALID_DIFFICULTIES = new Set(["easy", "normal", "hard", "insane"]);
@@ -90,7 +90,9 @@ Deno.serve(async (req) => {
       return new Response(JSON.stringify({ error: "Run sync limit reached." }), { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    const body = await req.json();
+    const parsedBody = await readJsonObject(req, corsHeaders);
+    if (!parsedBody.ok) return parsedBody.response;
+    const body = parsedBody.body;
     const runToken = cleanText(body.runToken, 160);
     const summarySig = cleanText(body.summarySig, 200);
     const clientUid = typeof body.clientUid === "string" && /^[0-9a-f-]{36}$/i.test(body.clientUid) ? body.clientUid : null;

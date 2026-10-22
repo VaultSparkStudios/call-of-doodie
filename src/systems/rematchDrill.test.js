@@ -7,7 +7,23 @@ import {
   estimateNonBossWaveCount,
   buildRematchKit,
   buildRematchDrillBrief,
+  rematchWaveMultForModifier,
 } from "./rematchDrill.js";
+import { RUN_MODIFIERS } from "../constants.js";
+
+describe("rematchWaveMultForModifier (S204)", () => {
+  it("doubles the drill wave only for the seed's double_trouble modifier", () => {
+    expect(rematchWaveMultForModifier("double_trouble")).toBe(2);
+    expect(rematchWaveMultForModifier("vampire")).toBe(1);
+    expect(rematchWaveMultForModifier(undefined)).toBe(1);
+  });
+
+  it("sizes wave 7 the way the live run did under double_trouble", () => {
+    expect(RUN_MODIFIERS.some((m) => m.id === "double_trouble")).toBe(true);
+    expect(getMaxEnemiesForWave(7)).toBe(26);
+    expect(getMaxEnemiesForWave(7, rematchWaveMultForModifier("double_trouble"))).toBe(52);
+  });
+});
 
 describe("resolveRematchStartWave", () => {
   it("returns null for wave 1, 0, negatives, and junk", () => {

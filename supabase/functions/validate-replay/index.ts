@@ -11,11 +11,28 @@ import {
   buildTracePressureReceipt,
   collectTraceBodyFailures,
 } from "./pressure.js";
-import { consumeRateLimit, corsHeadersFor, rejectDisallowedOrigin, requestBucket } from "../_shared/http-trust.ts";
+import { consumeRateLimit, corsHeadersFor, readJsonObject, rejectDisallowedOrigin, requestBucket } from "../_shared/http-trust.ts";
 
 // S145 — this endpoint now enforces the same origin allowlist and bounded
 // request quota as issue-run-token/submit-score instead of ACAO * with no limit.
 const RATE_LIMIT = { perMinute: 30 };
+// S204 — pressure.js budgets traceBody at 10 KB and the client sends at most 8 KB,
+// so a legitimate request is far below this; anything larger is rejected before parsing.
+const MAX_REQUEST_BYTES = 32_768;
+
+// S204 — what run_anomalies keeps from a rejected request: the scalar fields the
+// validator reasons about, strings clipped, and never the trace body itself.
+function anomalyPayload(request: ValidateRequest) {
+  const body = request as Record<string, unknown>;
+  const kept: Record<string, unknown> = {};
+  for (const key of ["seed", "mode", "difficulty", "score", "kills", "wave", "timeSec", "bestStreak", "totalDamage", "inputHash", "traceDigest", "traceLength"]) {
+    const value = body[key];
+    if (typeof value === "number" && Number.isFinite(value)) kept[key] = value;
+    else if (typeof value === "string") kept[key] = value.slice(0, 120);
+  }
+  if (typeof body.traceBody === "string") kept.traceBodyBytes = body.traceBody.length;
+  return kept;
+}
 
 const VALID_MODES = new Set(["score_attack", "daily_challenge", "boss_rush", "cursed", "speedrun", "gauntlet", "zombies", "normal", "standard"]);
 interface ValidateRequest {
@@ -228,8 +245,10 @@ Deno.serve(async (req) => {
         }
       }
     } catch { /* rate service unavailable — advisory endpoint fails open */ }
-    const body = (await req.json()) as ValidateRequest;
-    const result = validateRunHeuristic(body || {});
+    const parsedBody = await readJsonObject(req, corsHeaders, MAX_REQUEST_BYTES);
+    if (!parsedBody.ok) return parsedBody.response;
+    const body = parsedBody.body as ValidateRequest;
+    const result = validateRunHeuristic(body);
     if (!result.ok) {
       // Optional anomaly log; safe if table missing.
       try {
@@ -239,7 +258,7 @@ Deno.serve(async (req) => {
           const sb = createClient(url, key);
           await sb.from("run_anomalies").insert([{
             kind: "validate_replay",
-            payload: body,
+            payload: anomalyPayload(body),
             reasons: result.reasons,
             drift: result.drift,
           }]);
@@ -250,7 +269,8 @@ Deno.serve(async (req) => {
       status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (err) {
-    return new Response(JSON.stringify({ ok: false, drift: 1, reasons: ["internal: " + String((err as Error)?.message || err)] }), {
+    console.error("validate-replay failure", err);
+    return new Response(JSON.stringify({ ok: false, drift: 1, reasons: ["internal"] }), {
       status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }

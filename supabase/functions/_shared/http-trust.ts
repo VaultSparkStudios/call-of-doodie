@@ -49,6 +49,45 @@ export function rejectDisallowedOrigin(req: Request, headers = corsHeadersFor(re
   });
 }
 
+export type JsonObjectResult =
+  // deno-lint-ignore no-explicit-any -- handlers read loosely typed client fields, as req.json() did
+  | { ok: true; body: Record<string, any> }
+  | { ok: false; response: Response };
+
+// Read a request body that must be a JSON object. A malformed body is the
+// caller's mistake, so it gets a 400 (or 413 over `maxBytes`) with a fixed
+// message instead of falling into a handler's catch-all 500 that echoes
+// error.message. Pass maxBytes = Infinity to apply the shape guard only.
+export async function readJsonObject(
+  req: Request,
+  headers: Record<string, string>,
+  maxBytes = Infinity,
+): Promise<JsonObjectResult> {
+  const reject = (status: number, error: string): JsonObjectResult => ({
+    ok: false,
+    response: new Response(JSON.stringify({ error }), {
+      status,
+      headers: { ...headers, "Content-Type": "application/json" },
+    }),
+  });
+  let text: string;
+  try {
+    text = await req.text();
+  } catch {
+    return reject(400, "Invalid request body.");
+  }
+  if (new TextEncoder().encode(text).length > maxBytes) return reject(413, "Request body is too large.");
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(text);
+  } catch {
+    return reject(400, "Invalid JSON body.");
+  }
+  if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) return reject(400, "Invalid JSON body.");
+  // deno-lint-ignore no-explicit-any
+  return { ok: true, body: parsed as Record<string, any> };
+}
+
 async function sha256(value: string) {
   const bytes = new TextEncoder().encode(value);
   const digest = await crypto.subtle.digest("SHA-256", bytes);
