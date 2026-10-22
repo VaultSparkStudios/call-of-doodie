@@ -4,32 +4,26 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "S203 guest Record/save resilience production verified.",
+  "currentFocus": "S204 local suite green; fixture budget root-fixed and production verified.",
   "nextMilestone": "Collect existing native-browser,device and participant acceptance evidence.",
   "testingSurfaces": [
     {
-      "session": 203,
+      "session": 204,
       "type": "production",
       "status": "green",
       "url": "https://callofdoodie.wtf/"
     },
     {
-      "session": 203,
-      "type": "staging",
-      "status": "green",
-      "url": "https://f7081112.call-of-doodie.pages.dev/"
-    },
-    {
-      "session": 203,
+      "session": 204,
       "type": "production-smoke",
       "status": "green",
-      "command": "S203 Record/save browser88/88"
+      "command": "live-site-check 7/7"
     },
     {
-      "session": 203,
-      "type": "local-browser-capture",
+      "session": 204,
+      "type": "ci",
       "status": "green",
-      "command": "S20328 inspected hash-bound before/after captures"
+      "command": "exact-main workflow 39698517704 303/303 files"
     }
   ],
   "blockers": [
@@ -43,20 +37,20 @@
   "lastUpdated": "2026-10-21",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
-  "truthAuditStatus": "S203 selected L2 outcome production verified.",
+  "truthAuditStatus": "S204 selected outcome production verified.",
   "truthAuditLastRun": "2026-10-21",
   "ignisScore": 43784,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-10-21",
-  "silSession": 203,
-  "silScore": 945,
-  "silAvg3": 944.3,
+  "silSession": 204,
+  "silScore": 946,
+  "silAvg3": 944.7,
   "silVelocity": 1,
-  "silDebt": "flat",
-  "silLastSession": 203,
-  "currentSession": 203,
+  "silDebt": "down",
+  "silLastSession": 204,
+  "currentSession": 204,
   "sessionMode": "founder",
-  "lastAgent": "codex",
+  "lastAgent": "claude-code",
   "testsPassing": 303,
   "testsTotal": 303,
   "entropyScore": 0.215,
@@ -65,7 +59,7 @@
   "silMax": 1000,
   "silScoreLegacy500": 478.5,
   "silCategoriesV3": {
-    "devHealth": 97,
+    "devHealth": 98,
     "creativeAlignment": 96,
     "momentum": 94,
     "engagement": 92,
@@ -89,7 +83,7 @@
   "runtimeUrl": "https://callofdoodie.wtf/",
   "stagingType": "cloudflare-pages",
   "stagingUrl": "https://f7081112.call-of-doodie.pages.dev/",
-  "testsLastRun": "2026-10-21T14:15:48Z",
+  "testsLastRun": "2026-10-22T00:16:25Z",
   "sanitizationLastCleared": "2026-10-06",
   "sessionShellHygiene": {
     "session": 199,
@@ -146,12 +140,12 @@
     "note": "Studio-wide doctor evidence; not a project-only zero-findings claim. Central follow-up delivered through Ark; application unobserved."
   },
   "lastSessionSummary": {
-    "session": 203,
+    "session": 204,
     "shipped": [
-      "Guest Record stays usable when browser storage is denied, with visible backup failure notices."
+      "Local full suite green again: session-lock fixture given a spawn-realistic per-test budget."
     ],
-    "tests": "303files/2135assertions passing",
-    "deploy": "ed551ec605e9 production verified"
+    "tests": "303files passing exact-main hosted",
+    "deploy": "15c62959d9f2 production verified"
   },
   "testsAssertionsPassing": 2135,
   "testsAssertionsTotal": 2135,
@@ -161,16 +155,16 @@
   "testsEnvBlocked": [],
   "testsDeferred": [],
   "testsBudgetExhausted": false,
-  "silAvg5": 944.6,
+  "silAvg5": 944.8,
   "testsAssertionsDeferred": [],
-  "testsAssertionsLastRun": "2026-10-21T14:15:48Z",
-  "lastShipped": "S203 guest Record and explicit save errors survive browser storage denial.",
-  "truthStatus": "FORGE/public-unlaunched unchanged. Injected browser storage denial and synthetic controller checks do not establish native privacy-browser,physical-device or participant outcomes. Existing STRONG CANON-045 identity gap and reply-email/comparative measurement gaps remain visible. Remote verification,cloud-session,auth-return and authorization contracts unchanged. No creative direction;CDR reviewed unchanged.",
+  "testsAssertionsLastRun": "2026-10-22T00:16:25Z",
+  "lastShipped": "S204 local full suite green: session-lock fixture given a spawn-realistic budget.",
+  "truthStatus": "FORGE/public-unlaunched unchanged. This does not establish native privacy-browser, physical-device or participant outcomes. All open items on the task board remain dependency-blocked reserves needing hardware, participants or owner delivery. No creative direction; CDR reviewed unchanged.",
   "testsFocusedSupplement": "S20142 focused assertions;4 failing-before regressions.",
-  "lastDeployCommit": "ed551ec605e97195166d11be90db804fc6c1bc4f",
-  "lastDeployAt": "2026-10-21T14:15:48Z",
+  "lastDeployCommit": "15c62959d9f2a2ce1684a56db6ae4cf1605a66e5",
+  "lastDeployAt": "2026-10-22T00:17:13Z",
   "closeoutAcceptance": {
-    "session": 203,
+    "session": 204,
     "state": "complete",
     "scaffold": {
       "tasks": 3,
@@ -178,14 +172,13 @@
       "inProgress": 0,
       "open": 0
     },
-    "localSuite": "Local full suite 2114/2135 assertions across 303 files remains nonpassing. Isolated serial retry 23/24;App launch and goal binding pass,start-sync fixture remains nonpassing at its explicit90s limit. Exact-main hosted full suite required.",
-    "independentReview": "final source and corrected candidate records pass",
+    "localSuite": "Isolated fixture passes (30.8s); full local rerun not repeated after the budget change; exact-main hosted suite 303/303 files.",
+    "independentReview": "not run: test-only budget change with no runtime diff",
     "production": {
-      "source": "ed551ec605e97195166d11be90db804fc6c1bc4f",
-      "workflow": 39614921716,
-      "immutableUrl": "https://3aab4b94.call-of-doodie.pages.dev",
+      "source": "15c62959d9f2a2ce1684a56db6ae4cf1605a66e5",
+      "workflow": 39698517704,
       "canonical": "https://callofdoodie.wtf/",
-      "browserAssertions": 88
+      "liveSiteAssertions": "7/7"
     }
   },
   "testsLastRunMode": "full-hosted-exact-main",

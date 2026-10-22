@@ -1,3 +1,11 @@
+## S204 arc outcomes and waves
+
+Wave1 ✔ fresh startup and baseline audit (lint, suite, build). Wave2 ✔ session-lock fixture budget root-fixed. Wave3 ✔ exact-main production verification and full closeout.
+
+- [x] S204 local suite red root-caused and fixed (session-lock-binding spawn budget).
+- [x] S204 exact-main production verification and final closeout.
+- [ ] [SIL:1] S204 reserve: re-pin or fast-node-provision the local test environment so spawn-heavy fixtures stop costing 30s+; owner project plus central fast-node opt-in decision (VAULTSPARK_FAST_NODE=1 needs an execPath-relative resolution check first).
+
 ## S203 arc outcomes and waves
 
 Wave1 ✔ fresh startup,nine-axis/game-loop audit. Wave2 ✔ guest Record/save resilience L2. Wave3 ✔ exact-main production verification and full closeout.
