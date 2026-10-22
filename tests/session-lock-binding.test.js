@@ -47,5 +47,7 @@ describe("startup lock and native goal binding", () => {
     } finally {
       fs.rmSync(root, { recursive: true, force: true });
     }
-  });
+  // ~14 sequential child processes; node spawn costs 1-4s on Windows installs
+  // (see scripts/lib/fast-node.mjs), so the 30s global default cannot fit this fixture.
+  }, 120_000);
 });
