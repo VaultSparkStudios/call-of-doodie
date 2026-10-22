@@ -4,6 +4,14 @@
 
 ## Current Session
 
+## S204 production verified
+
+Local full suite is green again: the isolated session-lock fixture was failing on every local run because it spawns about 14 node processes and the 30s default could not fit them.
+
+S204 fix 15c62959d9f2a2ce1684a56db6ae4cf1605a66e5 is test-only (tests/session-lock-binding.test.js per-test budget 30s to 120s; global testTimeout unchanged). Local full suite before: 302/303 files, 2134/2135 tests, the one red a 45s timeout of session-lock-binding. That fixture alone takes 30.8s here; node spawn costs 1-4s per call on this Windows install (scripts/lib/fast-node.mjs), and the hosted runner finishes the whole suite in 76s. Isolated rerun passes. Strict lint exit 0 and configured build exit 0. Exact-main workflow 39698517704: quality and build-and-deploy success, 303/303 files. Live site check 7/7 on https://callofdoodie.wtf/, HTTP 200. No runtime source changed, so the deployed bundle is behaviorally identical to S203. Rollback: ordinary revert of 15c6295.
+
+FORGE/public-unlaunched unchanged. This does not establish native privacy-browser, physical-device or participant outcomes. All open items on the task board remain dependency-blocked reserves needing hardware, participants or owner delivery. No creative direction; CDR reviewed unchanged.
+
 ## S203 production verified
 
 Guest Record stays usable when browser storage is denied, with visible backup failure notices.
@@ -80,22 +88,12 @@ S199103 focused assertions pass;four failing-before rail regressions reproduced 
 
 Summoner protection follows living guards immediately; Vite security patch applied.
 
-S198 implementation 10c54521f2f6215624b14f44121d5fa310e68c07 passed exact-main workflow 39494601691:299 files/2092 assertions,strict lint,configured build and Cloudflare deployment. Canonical health matches 10c54521f2f6. Canonical and immutable https://e3c20115.call-of-doodie.pages.dev shell7/7 each;production browser44/44 across390/1440,both themes. Summoner spawns3 guards with immediate count3/protection true,rail/grenade keep HP10000;final guard removal permits rail160. Keyboard/controller selection,handoff,pause and release remain usable. Vite7.3.7 security patch passes native dependency audit with0 vulnerabilities.
-
-## S198 candidate verification
-
-Summoner protection follows its living guards immediately;Vite updated to7.3.7.
-
-S198:90 focused tests pass,including9 failing-before regressions. Local full297/299files and2089/2092assertions:two stale-context assertions and one startup30s timeout. Refreshed context and unchanged startup tests pass5/5 with90s limit;the full local run remains nonpassing. Staging44/44 browser checks plus7/7 shell checks;24 inspected hash-bound before/after images at390/1440,in both themes. Independent code/dependency reviews pass;strict lint,configured build and security check pass;dependency audit0 vulnerabilities. Exact-commit hosted full tests and production readback remain pending.
-
-## S197 production verified
-
-Consistent Shield Pulse protection across rail, grenades and lightning.
-
-S197 implementation 56a5655324f59e4f87601fd4554f540ccf8eaba7 passed exact-main workflow 39478756481:299
+S198 implementation 10c54521f2f6215624b14f44121d5fa310e68c07 passed exact-main workflow 39494601691:299 files/2092 assertions,strict lint,configured build and Cloudflare deployment. Canonical health matches 10c54521f2f6. Canonical and immutable https://e3c2011
 
 ## Open Work
 
+## S204 arc outcomes and waves
+- [ ] [SIL:1] S204 reserve: re-pin or fast-node-provision the local test environment so spawn-heavy fixtures stop costing 30s+; owner project plus central fast-node opt-in decision (VAULTSPARK_FAST_NODE=1 needs an execPath-relative resolution check first).
 ## S203 arc outcomes and waves
 - [ ] [SIL:1] S203 reserve: native privacy-browser save recovery rehearsal;owner project,dependency native browser observations.
 - [ ] [SIL:1] S203 reserve: cloud-session/auth-return storage-denial journey study;owner project,dependency applicable authenticated journey proof.
@@ -149,19 +147,8 @@ S197 implementation 56a5655324f59e4f87601fd4554f540ccf8eaba7 passed exact-main w
 ## Session 177 — Final Operation and replay follow-through
 ## Session 177 — Mode clarity and live playtest follow-through
 ## Session 177 — Runtime promises and upgrade composition
-## Session 170 - Startup evidence, bounded audit context, and process-policy closure
-- [ ] [SIL:2] **EVIDENCE** Collect participant, physical PWA/gamepad/media, current production Core Web Vitals, Zoho reply-as, scoped telemetry, Obelisk, publication, direct-pixel, sitemap ≥8/10, and explicit lifecycle evidence before SPARKED.
 
 ## Recent Decisions
-
-## 2026-10-20 — Session 200
-
-Neutral ownership barrier applies to shared controller menus at activation/reconnect/device change. Ownership compares index/id/mapping rather than browser object identity. Cancel auto-repeat on missing input. Existing unchanged identity STRONG gap remains visible;no launch/lifecycle change. Reuse installed packages and project-native release tooling.
-
-
-S200 final acceptance: S200 implementation 34305a258284660263c2af678547a9eb9d0e003b passed exact-main workflow 39522461612:300 files/2107 assertions,strict lint,configured build and Cloudflare deployment. Canonical health matches 34305a258284. Canonical and immutable https://4846f601.call-of-doodie.pages.dev shell7/7 each;production browser16/16 across390/1440,both themes. Disconnect preserves menu focus,held reconnect causes no action,and fresh press navigates. Shared menu runtime matches staging after generated import filename normalization. Local full300 files:2106/2107 assertions,one startup/session-binding fixture failure. Isolated fixture rerun1/1 passes with120s limit. Local full remains nonpassing;exact-main hosted full suite required.
-
-
 
 ## 2026-10-20 — Session 201
 
@@ -188,9 +175,14 @@ Reuse lazy optionalBrowserStorage for local Passport receipts,while explicit bac
 
 S203 final acceptance: S203 implementation ed551ec605e97195166d11be90db804fc6c1bc4f passed exact-main workflow 39614921716:303 files/2135 assertions,strict lint,configured build and Cloudflare deployment. Canonical health matches ed551ec605e9. Canonical and immutable https://3aab4b94.call-of-doodie.pages.dev shell7/7 each. Production browser88/88:52 denied-storage Record/save checks and36 normal backup/restore/play checks across390/1440,both themes. Staging source manifest matches the hosted commit after line-ending normalization;all eight shared panels exist. Same game project and guest-read access verified for staging legacy-anon and production publishable keys. Key/compiled chunk bytes differ;bitwise reproducibility is not claimed. Local full suite 2114/2135 assertions across 303 files remains nonpassing. Isolated serial retry 23/24;App launch and goal binding pass,start-sync fixture remains nonpassing at its explicit90s limit. Exact-main hosted full suite required.
 
+
+## 2026-10-21 — Session 204
+
+Raise only the failing fixture's budget (120s per test) instead of the global testTimeout, because the cost is a measured per-spawn tax multiplied by a legitimately process-heavy fixture, not a hang. Rejected: lowering the fixture's coverage, enabling VAULTSPARK_FAST_NODE=1 here (recipient repos must first prove nothing resolves paths relative to process.execPath), and a global timeout increase that would hide real hangs. If the tax worsens, the fixture's 30.8s isolated time is the number to watch.
+
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 284,879 bytes · SHA-256 `214fc80a38bf…`
-- `context/TASK_BOARD.md` · 191,722 bytes · SHA-256 `bb02b36abeb9…`
-- `context/DECISIONS.md` · 199,632 bytes · SHA-256 `3aeca71db9c7…`
+- `context/CURRENT_STATE.md` · 286,163 bytes · SHA-256 `0f3607ea8d18…`
+- `context/TASK_BOARD.md` · 192,344 bytes · SHA-256 `e7c795ce9826…`
+- `context/DECISIONS.md` · 200,168 bytes · SHA-256 `788252375cbb…`
 - `docs/AUDIT_2026-10-18.json` · 6,892 bytes · SHA-256 `b34b668a7b5a…`

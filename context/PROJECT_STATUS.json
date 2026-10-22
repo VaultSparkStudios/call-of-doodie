@@ -172,7 +172,7 @@
       "inProgress": 0,
       "open": 0
     },
-    "localSuite": "Isolated fixture passes (30.8s); full local rerun not repeated after the budget change; exact-main hosted suite 303/303 files.",
+    "localSuite": "Local full suite 303/303 files, 2135/2135 tests green after the budget change (422s); exact-main hosted suite 303/303 files on 15c6295. First records commit faa9d91 failed hosted hot-context freshness (HOT_CONTEXT and compact handoff not regenerated); fixed in the follow-up commit.",
     "independentReview": "not run: test-only budget change with no runtime diff",
     "production": {
       "source": "15c62959d9f2a2ce1684a56db6ae4cf1605a66e5",
