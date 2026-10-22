@@ -1,3 +1,13 @@
+## S204 final arc outcomes and waves
+
+Wave1 ✔ startup, baseline and fixture-budget fix. Wave2 ✔ written nine-axis audit, seven fixes, independent review. Wave3 ✔ staging gate, edge deploy, exact-main production verification and closeout.
+
+- [x] S204 audit docs/AUDIT_2026-10-21-S204 written and seven items implemented.
+- [x] S204 independent review (approve) and staging gate (real Chrome) complete.
+- [x] S204 production verified at 56dcd79.
+- [ ] [SIL:1] S204 reserve: measure drawGame.js frame cost with a CDP trace before hoisting per-frame allocations (audit item 5, deferred).
+- [ ] [SIL:1] S204 reserve: decide whether validate-replay should fail closed when its rate-limit RPC throws.
+
 ## S204 arc outcomes and waves
 
 Wave1 ✔ fresh startup and baseline audit (lint, suite, build). Wave2 ✔ session-lock fixture budget root-fixed. Wave3 ✔ exact-main production verification and full closeout.

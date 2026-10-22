@@ -4,6 +4,16 @@
 
 ## Current Session
 
+## S204 final: audit-driven fixes production verified
+
+S204 full arc: a written ranked audit, seven implemented fixes across the service worker, three edge functions and two gameplay rules, a real-browser staging gate, an independent review, and production verification. Earlier S204 entries describe only the first fix (a test timeout budget); this supersedes them.
+
+Shipped on 56dcd791b89083d6e5a249588a5b8dc7a5a82548: (1) service worker no longer caches same-origin /api/* or /_health, never stores no-store/private responses, compares origins exactly, cache cod-v6 to cod-v7 (previously /api/profile and /api/top-scores could be replayed stale from the worker cache, ignoring the server cache-control); (2) submit-score and sync-game-run answer a malformed body with 400 and a fixed message, where they returned 500 with raw TypeError/parser text; (3) validate-replay caps the request at 32 KB (413), stores a bounded anomaly payload without the trace body, and stops echoing error text; (4) Scavenger and Bullet Hose no longer shrink the held weapon refill (empty held weapon got +39% with the perk versus a full refill without it); (5) the rematch drill wave is sized with the seed double_trouble modifier (26 instead of 52 enemies on wave 7). Item 5 of the audit (drawGame per-frame allocations) is deferred: no frame-time measurement exists.
+
+Audit docs/AUDIT_2026-10-21-S204.json: seven implemented, one deferred, every item re-read by the author against live code (three read-only subagent sweeps proposed candidates; two of one agent's citations were wrong and corrected). Local full suite 306/306 files, 2158/2158 tests; strict lint and build exit 0; new tests fail without their fixes (service worker 4 of 5). Independent fresh-context review: approve, nits applied (byte-length cap, comment wording, lint-ignore scope). Staging https://session-204-staging.call-of-doodie.pages.dev: live check 7/7 and a real-Chrome probe (worker controlling, cache cod-v7, /api/top-scores and /api/community-stats absent from the cache, every read reached the network). Edge functions deployed to the production game project fjnpzjjyhnpmunfoycrp (not the gateway default ckwtolofoqzrqouqkmvs, a different project) and probed live before and after: 500 with leaked text became 400 Invalid JSON body.; 40 KB body 413; valid-shaped requests unchanged; CORS preflight intact. Exact-main workflow 39704083013: quality 306/306 files and build-and-deploy success. Production health deploy 56dcd791b890; live check 7/7; real-Chrome probe on production matches staging. Rollback: revert 56dcd79 and redeploy; edge functions redeploy from the previous commit with scripts/deploy-supabase-functions.mjs --project-ref fjnpzjjyhnpmunfoycrp.
+
+submit-score still reports 7 pre-existing Deno type errors in strict check (identical with this change stashed); deploys succeed regardless. validate-replay rate-limit still fails open by design; making it fail closed (audit item 4 L3) needs a decision. The rematch call site in App.jsx is covered through its helper, not end to end. Physical-device, native privacy-browser and participant evidence remain open; FORGE/public-unlaunched unchanged. No creative direction; CDR reviewed unchanged.
+
 ## S204 production verified
 
 Local full suite is green again: the isolated session-lock fixture was failing on every local run because it spawns about 14 node processes and the 30s default could not fit them.
@@ -60,38 +70,13 @@ S200 implementation 34305a258284660263c2af678547a9eb9d0e003b passed exact-main w
 
 ## S200 candidate acceptance
 
-S200:59 focused assertions pass;7 failing-before regressions;independent source review8/8. Staging16/16,shell7/7,16 inspected hash-bound captures. Strict lint,configured build,public/runtime/schema/security pass;dependency audit0 vulnerabilities;backend5/5,replay3/3,shared leaderboard check pass. Local full300 files:2106/2107 assertions,one startup/session-binding fixture failure. Isolated fixture rerun1/1 passes with120s limit. Local full remains nonpassing;exact-main hosted full suite required. Production pending.
-
-## S200 candidate
-
-Controller menus stop stale repeats and require fresh input after interruptions.
-
-S200: seven failing-before regressions;59 focused assertions pass,including8 mounted-hook cases. Independent source review passes. Staging https://ec4cbc23.call-of-doodie.pages.dev browser16/16 across390/1440 and both themes;shell7/7. Strict lint,configured build,public/runtime contracts and release security pass;dependency audit0 vulnerabilities. Full suite and exact-main production pending.
-
-## S199 production verified
-
-Rail hits wear down Juggernaut shields and open the shield-break window.
-
-S199 implementationf7b35abe2d1f93ff8f0abe1b3217017c48eaa3ce passed exact-main workflow39514242690:299files/2099assertions,strict lint,configured build and Cloudflare deployment. Canonical health matchesf7b35abe2d1f. Canonical and immutablehttps://c6750ee5.call-of-doodie.pages.dev shell7/7 each;production browser52/52 across390/1440,both themes. Rail shield200→40.6 after regeneration→0;breaking hit24health,next hit160. Protected armor unchanged;mobile shield-break announcement fits. Changed combat runtime matches staging after generated import filenames are normalized.
-
-## S199 candidate acceptance
-
-S199 focused103/103 pass,four failing-before regressions. Independent source and announcement reviews pass,58/58 projectile tests independently. Local full:295/299 files,2094/2099 assertions;5 failed. It ran while the final announcement correction was being made;exact-main hosted full suite is the final release authority. Staginghttps://215d8bfc.call-of-doodie.pages.dev browser52/52,shell7/7 across390/1440,both themes. Rail shield200→40.6 after regeneration→0;breaking hit24health damage,next hit160. Protected hits leave armor intact.24 before/after images inspected and hash-bound after mobile announcement clipping correction. Strict lint,configured build,schema,public/runtime/security and sanitization checks passed;dependency audit0 vulnerabilities. Production pending.
-
-## S199 candidate verification
-
-Rail hits wear down Juggernaut shields and open the shield-break window.
-
-S199103 focused assertions pass;four failing-before rail regressions reproduced on unchanged source. Independent source review passed,58/58 projectile assertions independently. Live production-before browser reproduces unchanged shield200 after three rail hits at390/1440 in both themes. Strict lint and configured build pass;full local suite,staging and exact-main production pending.
-
-## S198 production verified
-
-Summoner protection follows living guards immediately; Vite security patch applied.
-
-S198 implementation 10c54521f2f6215624b14f44121d5fa310e68c07 passed exact-main workflow 39494601691:299 files/2092 assertions,strict lint,configured build and Cloudflare deployment. Canonical health matches 10c54521f2f6. Canonical and immutable https://e3c2011
+S200:59 focused assertions pass;7 failing-before regressions;independent source review8/8. Staging16/16,shell7/7,16 inspected hash-bound captures. Strict lin
 
 ## Open Work
 
+## S204 final arc outcomes and waves
+- [ ] [SIL:1] S204 reserve: measure drawGame.js frame cost with a CDP trace before hoisting per-frame allocations (audit item 5, deferred).
+- [ ] [SIL:1] S204 reserve: decide whether validate-replay should fail closed when its rate-limit RPC throws.
 ## S204 arc outcomes and waves
 - [ ] [SIL:1] S204 reserve: re-pin or fast-node-provision the local test environment so spawn-heavy fixtures stop costing 30s+; owner project plus central fast-node opt-in decision (VAULTSPARK_FAST_NODE=1 needs an execPath-relative resolution check first).
 ## S203 arc outcomes and waves
@@ -144,9 +129,6 @@ S198 implementation 10c54521f2f6215624b14f44121d5fa310e68c07 passed exact-main w
 ## Session 180 — Toolchain currency and stale-PR hygiene
 ## Session 179 — Public stats truth and follow-through
 ## Session 178 — Developer arena and ordinary perk truth
-## Session 177 — Final Operation and replay follow-through
-## Session 177 — Mode clarity and live playtest follow-through
-## Session 177 — Runtime promises and upgrade composition
 
 ## Recent Decisions
 
@@ -180,9 +162,17 @@ S203 final acceptance: S203 implementation ed551ec605e97195166d11be90db804fc6c1b
 
 Raise only the failing fixture's budget (120s per test) instead of the global testTimeout, because the cost is a measured per-spawn tax multiplied by a legitimately process-heavy fixture, not a hang. Rejected: lowering the fixture's coverage, enabling VAULTSPARK_FAST_NODE=1 here (recipient repos must first prove nothing resolves paths relative to process.execPath), and a global timeout increase that would hide real hangs. If the tax worsens, the fixture's 30.8s isolated time is the number to watch.
 
+S204 final decisions:
+
+- Deploy the edge functions to the project the live bundle uses (fjnpzjjyhnpmunfoycrp), resolved from the shipped assets, because the secrets-gateway default is a different project; probe before and after.
+- Cap submit-score and sync-game-run by shape only (no size cap) because their legitimate payload sizes are unmeasured; cap validate-replay at 32 KB because its own validator budgets traceBody at 10 KB.
+- Held-weapon rule for Scavenger/Bullet Hose: always a full refill, perk tops up the other weapons, so the perk can only add ammo. Chosen over editing the copy because the copy says "more ammo".
+- Do not make validate-replay fail closed: it is an advisory endpoint by design and the change needs a founder decision.
+- Defer drawGame allocation work until a frame-time trace exists.
+
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 286,163 bytes · SHA-256 `0f3607ea8d18…`
-- `context/TASK_BOARD.md` · 192,344 bytes · SHA-256 `e7c795ce9826…`
-- `context/DECISIONS.md` · 200,168 bytes · SHA-256 `788252375cbb…`
+- `context/CURRENT_STATE.md` · 289,384 bytes · SHA-256 `8f7d1d1cf466…`
+- `context/TASK_BOARD.md` · 193,045 bytes · SHA-256 `e4b191df8d99…`
+- `context/DECISIONS.md` · 200,983 bytes · SHA-256 `b749170c554a…`
 - `docs/AUDIT_2026-10-18.json` · 6,892 bytes · SHA-256 `b34b668a7b5a…`

@@ -1,9 +1,9 @@
 {
   "vectorVersion": "1.0",
   "generatedAt": "2026-10-22",
-  "generatedAtMs": 1792629346289,
+  "generatedAtMs": 1792631659894,
   "session": 204,
-  "vectorHash": "35139d9247c1d5c1",
+  "vectorHash": "22974ee16de4f795",
   "silTotal": 946,
   "silAvg3": 944.7,
   "velocity": 1,
@@ -24,7 +24,7 @@
     "[SIL:1] [S197 reserve] Observe boss-counterplay comprehension with participants;"
   ],
   "health": "green",
-  "truthStatus": "selected outcome production verified.",
+  "truthStatus": "audit-driven fixes production verified.",
   "genome": null,
   "ignisScore": 43784,
   "ignisGrade": "FORGE",
@@ -34,7 +34,7 @@
   "type": null,
   "lifecycle": "deployed",
   "nextMilestone": "Collect existing native-browser,device and participant acceptance evidence.",
-  "currentFocus": "S204 local suite green; fixture budget root-fixed and production verified.",
+  "currentFocus": "S204 audit-driven fixes production verified.",
   "lastShipped": "see LATEST_HANDOFF.md",
   "blockers": [
     "PostHog and project-scoped Sentry evidence remain unavailable; provider readiness is not represented as verified telemetry.",

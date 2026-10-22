@@ -4,7 +4,7 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "S204 local suite green; fixture budget root-fixed and production verified.",
+  "currentFocus": "S204 audit-driven fixes production verified.",
   "nextMilestone": "Collect existing native-browser,device and participant acceptance evidence.",
   "testingSurfaces": [
     {
@@ -15,15 +15,21 @@
     },
     {
       "session": 204,
-      "type": "production-smoke",
+      "type": "staging",
       "status": "green",
-      "command": "live-site-check 7/7"
+      "url": "https://session-204-staging.call-of-doodie.pages.dev/"
     },
     {
       "session": 204,
-      "type": "ci",
+      "type": "production-smoke",
       "status": "green",
-      "command": "exact-main workflow 39698517704 303/303 files"
+      "command": "live-site-check 7/7 and real-Chrome service worker probe"
+    },
+    {
+      "session": 204,
+      "type": "edge-live-probe",
+      "status": "green",
+      "command": "malformed-body 400, oversize 413, valid request unchanged"
     }
   ],
   "blockers": [
@@ -34,10 +40,10 @@
     "Broad Cloudflare studio-access token should be rotated or narrowed after domain stabilization.",
     "CANON-045 remains an external Obelisk integration gap. CANON-054's absent /stats route is closed by the verified public page; no ABSOLUTE canon gap is present."
   ],
-  "lastUpdated": "2026-10-21",
+  "lastUpdated": "2026-10-22",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
-  "truthAuditStatus": "S204 selected outcome production verified.",
+  "truthAuditStatus": "S204 audit-driven fixes production verified.",
   "truthAuditLastRun": "2026-10-21",
   "ignisScore": 43784,
   "ignisGrade": "FORGE",
@@ -51,8 +57,8 @@
   "currentSession": 204,
   "sessionMode": "founder",
   "lastAgent": "claude-code",
-  "testsPassing": 303,
-  "testsTotal": 303,
+  "testsPassing": 306,
+  "testsTotal": 306,
   "entropyScore": 0.215,
   "entropyLastComputed": "2026-10-20",
   "silRubricVersion": "3.0",
@@ -82,8 +88,8 @@
   "freeTierCostStatus": "cost-neutral",
   "runtimeUrl": "https://callofdoodie.wtf/",
   "stagingType": "cloudflare-pages",
-  "stagingUrl": "https://f7081112.call-of-doodie.pages.dev/",
-  "testsLastRun": "2026-10-22T00:16:25Z",
+  "stagingUrl": "https://session-204-staging.call-of-doodie.pages.dev/",
+  "testsLastRun": "2026-10-22T01:12:32Z",
   "sanitizationLastCleared": "2026-10-06",
   "sessionShellHygiene": {
     "session": 199,
@@ -142,14 +148,17 @@
   "lastSessionSummary": {
     "session": 204,
     "shipped": [
-      "Local full suite green again: session-lock fixture given a spawn-realistic per-test budget."
+      "Service worker no longer caches /api or lookalike origins",
+      "Edge functions return 400/413 instead of leaky 500s",
+      "Scavenger/Bullet Hose keep the full held-weapon refill",
+      "Rematch wave sized with double_trouble"
     ],
-    "tests": "303files passing exact-main hosted",
-    "deploy": "15c62959d9f2 production verified"
+    "tests": "306files/2158assertions passing",
+    "deploy": "56dcd791b890 production verified"
   },
-  "testsAssertionsPassing": 2135,
-  "testsAssertionsTotal": 2135,
-  "testsAssertionsFiles": 303,
+  "testsAssertionsPassing": 2158,
+  "testsAssertionsTotal": 2158,
+  "testsAssertionsFiles": 306,
   "testsFlaky": [],
   "testsInconclusive": [],
   "testsEnvBlocked": [],
@@ -157,12 +166,12 @@
   "testsBudgetExhausted": false,
   "silAvg5": 944.8,
   "testsAssertionsDeferred": [],
-  "testsAssertionsLastRun": "2026-10-22T00:16:25Z",
-  "lastShipped": "S204 local full suite green: session-lock fixture given a spawn-realistic budget.",
-  "truthStatus": "FORGE/public-unlaunched unchanged. This does not establish native privacy-browser, physical-device or participant outcomes. All open items on the task board remain dependency-blocked reserves needing hardware, participants or owner delivery. No creative direction; CDR reviewed unchanged.",
+  "testsAssertionsLastRun": "2026-10-22T01:12:32Z",
+  "lastShipped": "S204 service worker stops replaying /api, edge bodies validated, Scavenger and rematch fidelity fixed.",
+  "truthStatus": "submit-score still reports 7 pre-existing Deno type errors in strict check (identical with this change stashed); deploys succeed regardless. validate-replay rate-limit still fails open by design; making it fail closed (audit item 4 L3) needs a decision. The rematch call site in App.jsx is covered through its helper, not end to end. Physical-device, native privacy-browser and participant evidence remain open; FORGE/public-unlaunched unchanged. No creative direction; CDR reviewed unchanged.",
   "testsFocusedSupplement": "S20142 focused assertions;4 failing-before regressions.",
-  "lastDeployCommit": "15c62959d9f2a2ce1684a56db6ae4cf1605a66e5",
-  "lastDeployAt": "2026-10-22T00:17:13Z",
+  "lastDeployCommit": "56dcd791b89083d6e5a249588a5b8dc7a5a82548",
+  "lastDeployAt": "2026-10-22T01:12:32Z",
   "closeoutAcceptance": {
     "session": 204,
     "state": "complete",
@@ -172,13 +181,14 @@
       "inProgress": 0,
       "open": 0
     },
-    "localSuite": "Local full suite 303/303 files, 2135/2135 tests green after the budget change (422s); exact-main hosted suite 303/303 files on 15c6295. First records commit faa9d91 failed hosted hot-context freshness (HOT_CONTEXT and compact handoff not regenerated); fixed in the follow-up commit.",
-    "independentReview": "not run: test-only budget change with no runtime diff",
+    "localSuite": "Local full suite 306/306 files, 2158/2158 tests green; exact-main hosted 306/306 files on 56dcd79.",
+    "independentReview": "fresh-context reviewer: approve; nits applied",
     "production": {
-      "source": "15c62959d9f2a2ce1684a56db6ae4cf1605a66e5",
-      "workflow": 39698517704,
+      "source": "56dcd791b89083d6e5a249588a5b8dc7a5a82548",
+      "workflow": 39704083013,
       "canonical": "https://callofdoodie.wtf/",
-      "liveSiteAssertions": "7/7"
+      "liveSiteAssertions": "7/7",
+      "edgeProject": "fjnpzjjyhnpmunfoycrp"
     }
   },
   "testsLastRunMode": "full-hosted-exact-main",

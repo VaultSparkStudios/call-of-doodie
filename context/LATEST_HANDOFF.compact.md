@@ -1,40 +1,48 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: 1f260afe528a -->
-<!-- generated-at: 2026-10-22T00:27:11.507Z -->
+<!-- source-hash: 898c219f8e1b -->
+<!-- generated-at: 2026-10-22T01:14:33.266Z -->
 
 # LATEST_HANDOFF (compact)
 
-Session 204 — Closeout Summary
+SESSION 204 — HANDOFF SUMMARY
 
-What Shipped
-- S204 fix 15c62959 (test-only): session-lock-binding.test.js per-test budget raised 30s to 120s; global testTimeout unchanged.
-- Direct-main commit/push authorized; full deployment completed.
-- Workflow 39698517704: quality + build-and-deploy success, 303/303 files.
-- Live site 7/7 on https://callofdoodie.wtf/, HTTP 200.
-- No runtime source changed; deployed bundle behaviorally identical to S203.
+Status
+- All 3 arc waves complete. Session closed out.
+
+Shipped (commit 56dcd791b890, direct-main, deployed prod)
+- Service worker: no longer caches same-origin /api/* or /_health; skips no-store/private; exact-origin compare; cache cod-v6 to cod-v7.
+- submit-score and sync-game-run: malformed body returns 400 fixed message (was 500 raw TypeError).
+- validate-replay: caps request at 32 KB (413); bounded anomaly payload without trace; stops echoing error text.
+- Gameplay: Scavenger/Bullet Hose no longer shrink held-weapon refill; rematch drill wave 7 sized by seed double_trouble modifier (26, not 52).
+- Audit docs/AUDIT_2026-10-21-S204.json: 7 implemented, 1 deferred.
+
+Verification
+- Local: 306/306 files, 2158/2158 tests; strict lint and build exit 0; new tests fail without fixes.
+- Independent fresh-context review: approve, nits applied.
+- Staging and production real-Chrome probes match: worker controlling, cache cod-v7, api reads reach network.
+- Edge functions deployed to prod project fjnpzjjyhnpmunfoycrp (not gateway default); probed before/after.
+- Main workflow 39704083013 quality + deploy success; prod health check 7/7.
 
 Current Intent
-- Session goal met: fresh full /arc, authorized main commit/push, deploy. All 3 waves complete. No remaining authorized work.
+- Arc done; next session chooses new work. Two carried items below.
 
-Context Notes
-- Local full suite green: 303/303 files, 2135 tests after fix.
-- Prior failure cause: isolated session-lock fixture spawns ~14 node processes; 30s default insufficient on this Windows install (node spawn 1-4s each via scripts/lib/fast-node.mjs). Fixture alone takes 30.8s locally; hosted runner finishes suite in 76s.
-- Strict lint exit 0; configured build exit 0.
-- Rollback: ordinary revert of 15c6295.
-- FORGE/public-unlaunched unchanged. CDR reviewed, unchanged. No creative direction.
+Now (top items)
+- Audit item 5: drawGame per-frame allocations — deferred, measure frame-time first before acting.
+- validate-replay fail-closed decision (audit item 4 L3): currently fails open by design; needs a decision.
+- Add end-to-end coverage for rematch call site in App.jsx (currently helper-only).
 
-Now Bucket (top 3)
-- None authorized; every open task-board item is dependency-blocked reserve.
+Blockers
+- submit-score: 7 pre-existing Deno strict type errors (present with change stashed); deploys succeed regardless.
+- validate-replay rate-limit fails open by design pending fail-closed decision.
+- No frame-time measurement exists, blocking audit item 5.
 
-Blockers (top 3)
-- All open task-board items dependency-blocked: require hardware, participants, or owner delivery.
-- Native privacy-browser outcome not established (no physical-device validation).
-- Participant outcomes not established.
+Human-Blocked (open, age unspecified)
+- Physical-device evidence.
+- Native privacy-browser evidence.
+- Participant evidence.
+- FORGE/public-unlaunched unchanged; no creative direction; CDR reviewed unchanged.
 
-Human-Blocked Items (with age)
-- Hardware-dependent reserves: blocked, age not specified.
-- Participant-dependent reserves: blocked, age not specified.
-- Owner-delivery items: blocked, age not specified.
+Rollback
+- Revert 56dcd79 and redeploy; edge functions redeploy from prior commit via scripts/deploy-supabase-functions.mjs --project-ref fjnpzjjyhnpmunfoycrp.
 
-Next Session
-- No authorized work remains; confirm any new owner-delivered dependencies before starting.
+Next session: decide validate-replay fail-closed, or add frame-time measurement to unblock audit item 5.

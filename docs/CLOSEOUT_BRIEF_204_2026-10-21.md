@@ -1,24 +1,29 @@
 # Closeout Brief - Session 204 - 2026-10-21
 
-Headline: The local full suite is green again: a fixture that needs 31 seconds was being held to 30.
+Headline: A written audit found a service worker replaying account reads and a perk that shrank your refill; both are fixed and live.
 
 ## Shipped
 
 | Item | Project Impact | Ecosystem Impact | Evidence |
 |---|---:|---:|---|
-| Session-lock fixture given a spawn-realistic per-test budget | 3 | 1 | Local suite had 1 red of 303 files (45s timeout). Fixture runs about 14 node spawns at 1-4s each on this Windows install; 30.8s alone. Global testTimeout unchanged. Hosted exact-main workflow 39698517704 success, 303/303 files. |
+| Service worker stops caching /api, checks origins exactly | 8 | 2 | cod-v7. Real-Chrome probe on staging and production: /api reads never stored, every read hits the network. 4 of 5 new tests fail without the fix. |
+| Edge functions answer malformed bodies with 400/413, not leaky 500s | 6 | 2 | Probed live before (500 with TypeError text) and after (400 Invalid JSON body.). validate-replay capped at 32 KB with a bounded anomaly payload. Deployed to project fjnpzjjyhnpmunfoycrp. |
+| Scavenger and Bullet Hose keep the full held-weapon refill | 6 | 1 | Empty held weapon got +39% with the perk versus 100% without. New systems/ammoPickup.js with 4 tests. |
+| Rematch drill wave sized with double_trouble | 4 | 1 | Wave 7 drill was 26 enemies; the run that killed the player had 52. |
+| Local full suite green (session-lock fixture budget) | 3 | 1 | Fixture needs 30.8s of real spawns against a 30s default; per-test 120s budget. |
 
 ## Validation
 
-- Strict lint exit 0; configured build exit 0; isolated fixture passes.
-- Exact-main workflow 39698517704: quality and build-and-deploy success on 15c6295.
-- Live site check 7/7 on https://callofdoodie.wtf/, HTTP 200. No runtime source changed.
+- Local 306/306 files, 2158/2158 tests; strict lint and build exit 0.
+- Independent reviewer: approve, nits applied. Staging gate in real Chrome before main.
+- Exact-main workflow 39704083013 success; production health 56dcd791b890; live check 7/7.
 
 ## Remaining
 
-- Audit this repo for safe VAULTSPARK_FAST_NODE=1 opt-in to remove the local spawn tax.
+- Measure drawGame.js frame cost with a CDP trace before hoisting allocations (audit item 5, deferred).
+- Decide whether validate-replay should fail closed when its rate-limit RPC throws.
 - Native privacy-browser, physical-device and participant evidence remain open.
 
 ## Blockers
 
-- All open task-board items depend on hardware, participants or owner delivery.
+- submit-score has 7 pre-existing strict Deno type errors; deploys succeed regardless.

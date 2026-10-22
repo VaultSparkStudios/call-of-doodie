@@ -1762,3 +1762,11 @@ S203 final acceptance: S203 implementation ed551ec605e97195166d11be90db804fc6c1b
 ## 2026-10-21 — Session 204
 
 Raise only the failing fixture's budget (120s per test) instead of the global testTimeout, because the cost is a measured per-spawn tax multiplied by a legitimately process-heavy fixture, not a hang. Rejected: lowering the fixture's coverage, enabling VAULTSPARK_FAST_NODE=1 here (recipient repos must first prove nothing resolves paths relative to process.execPath), and a global timeout increase that would hide real hangs. If the tax worsens, the fixture's 30.8s isolated time is the number to watch.
+
+S204 final decisions:
+
+- Deploy the edge functions to the project the live bundle uses (fjnpzjjyhnpmunfoycrp), resolved from the shipped assets, because the secrets-gateway default is a different project; probe before and after.
+- Cap submit-score and sync-game-run by shape only (no size cap) because their legitimate payload sizes are unmeasured; cap validate-replay at 32 KB because its own validator budgets traceBody at 10 KB.
+- Held-weapon rule for Scavenger/Bullet Hose: always a full refill, perk tops up the other weapons, so the perk can only add ammo. Chosen over editing the copy because the copy says "more ammo".
+- Do not make validate-replay fail closed: it is an advisory endpoint by design and the change needs a founder decision.
+- Defer drawGame allocation work until a frame-time trace exists.

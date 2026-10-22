@@ -20,16 +20,20 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ LAST SESSION (S204) · WHAT SHIPPED ══════════════════════════╗
-║  ✓ Local full suite green again: session-lock fixture given a s  ║
-║  Tests  303files passing exact-main hosted                       ║
-║  Deploy 15c62959d9f2 production verified                         ║
+║  ✓ Service worker no longer caches /api or lookalike origins     ║
+║  ✓ Edge functions return 400/413 instead of leaky 500s           ║
+║  ✓ Scavenger/Bullet Hose keep the full held-weapon refill        ║
+║  ✓ Rematch wave sized with double_trouble                        ║
+║  Tests  306files/2158assertions passing                          ║
+║  Deploy 56dcd791b890 production verified                         ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ WHERE TO TEST · Call-Of-Doodie ══════════════════════════════╗
 ║  Production    → https://callofdoodie.wtf/ ✓                     ║
-║  Unit tests    → npm test — 303/303 passing ✓                    ║
-║  production-smoke → live-site-check 7/7 ✓                        ║
-║  ci           → exact-main workflow 39698517704 303/303 file ✓   ║
+║  Staging       → https://session-204-staging.call-of-doodie. ✓   ║
+║  Unit tests    → npm test — 306/306 passing ✓                    ║
+║  production-smoke → live-site-check 7/7 and real-Chrome serv ✓   ║
+║  edge-live-probe → malformed-body 400, oversize 413, valid r ✓   ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ PROJECT PROFILE ═════════════════════════════════════════════╗
@@ -40,7 +44,7 @@
 ║                                                                  ║
 ║    946/1000   ██████████████████████░░   95%                     ║
 ║    SIL v3.0  ·  Avg3: 944  ·  Velocity 1→                        ║
-║    Last active: 1d  ·  Last closeout: 1d  ·  (active = newest…   ║
+║    Last active: 0d  ·  Last closeout: 1d  ·  (active = newest…   ║
 ║    Trend  ▂▂▂▄▄  →  (last 5 sessions)                            ║
 ║                                                                  ║
 ║    Category         Score  Bar        Spark   Δ                  ║
@@ -60,23 +64,22 @@
 
 ╔══ WHERE WE LEFT OFF  ·  Session 204 ═══════════════════════════╗
 ║  Shipped:  see LATEST_HANDOFF.md                                 ║
-║  Tests:    303/303 passing  ·  Deploy: verified                  ║
+║  Tests:    306/306 passing  ·  Deploy: verified                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ✓  █████░░░░░░░░░░░░░░░░░░░  23% used                           ║
-║     227,932 / 1,000,000 tok  ·  claude-code/opus-4-8-1m  · …     ║
-║     ~113,966 tok/turn  ·  cache 50%  ·  6 turns to compact       ║
-║     Verdict: CONTINUE                                            ║
+║  ?  ░░░░░░░░░░░░░░░░░░░░░░░░  usage unknown                      ║
+║     unknown / 200,000 tok  ·  unknown  ·  unmeasured             ║
+║     Verdict: UNMEASURED                                          ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         303/303 passing (2026-10-22T00:16:25Z)         ║
+║  ✓  Tests         306/306 passing (2026-10-22T01:12:32Z)         ║
 ║  ⚠  Velocity      1   ·  Debt: →                                 ║
 ║  ✓  Runway        unknown                                        ║
 ║  ⛔  Context age   ?d                                             ║
 ║  ✓  IGNIS         43784 FORGE  ·  1d old                         ║
-║  ⛔  Truth         selected outcome production verified.  · …     ║
+║  ⛔  Truth         audit-driven fixes production verified.  · …   ║
 ║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs…        ║
 ║  ✓  Genome dims   all stable  (24/25)                            ║
 ║  ✓  Entropy       0.215  (healthy)                               ║
