@@ -1,17 +1,17 @@
 {
   "vectorVersion": "1.0",
   "generatedAt": "2026-10-22",
-  "generatedAtMs": 1792631659894,
-  "session": 204,
-  "vectorHash": "22974ee16de4f795",
+  "generatedAtMs": 1792635286838,
+  "session": 205,
+  "vectorHash": "b9308fce272052c8",
   "silTotal": 946,
-  "silAvg3": 944.7,
-  "velocity": 1,
+  "silAvg3": 945.7,
+  "velocity": 3,
   "debt": "down",
   "runway": "unknown",
   "intentRate": "unknown",
   "openNow": 4,
-  "openNext": 21,
+  "openNext": 23,
   "openBlocked": 0,
   "topNow": [
     "[SIL:2] **S183 measured comparisons** Complete matched human/agent, music/creatu",
@@ -19,12 +19,12 @@
     "[SIL:2] [S60] Supabase Auth / Studio membership implementation decision — if pai"
   ],
   "topNext": [
-    "[SIL:1] [S199 reserve] Observe shield-counterplay comprehension with participant",
-    "[SIL:1] [S199 reserve] Extend mixed-source armor transitions if new weapon mecha",
-    "[SIL:1] [S197 reserve] Observe boss-counterplay comprehension with participants;"
+    "[SIL:1] [S205 reserve] Observe both perk acquisition orders in participant build",
+    "[SIL:1] [S205 reserve] Audit cached doctor consumers for subject/HEAD freshness ",
+    "[SIL:1] [S199 reserve] Observe shield-counterplay comprehension with participant"
   ],
   "health": "green",
-  "truthStatus": "audit-driven fixes production verified.",
+  "truthStatus": "S205 runtime and local doctor subject verified; launch observations remain unmeasured.",
   "genome": null,
   "ignisScore": 43784,
   "ignisGrade": "FORGE",
@@ -33,8 +33,8 @@
   "slug": "call-of-doodie",
   "type": null,
   "lifecycle": "deployed",
-  "nextMilestone": "Collect existing native-browser,device and participant acceptance evidence.",
-  "currentFocus": "S204 audit-driven fixes production verified.",
+  "nextMilestone": "Gather existing physical-device and participant launch evidence.",
+  "currentFocus": "S205 perk, cache and native doctor repairs production verified.",
   "lastShipped": "see LATEST_HANDOFF.md",
   "blockers": [
     "PostHog and project-scoped Sentry evidence remain unavailable; provider readiness is not represented as verified telemetry.",

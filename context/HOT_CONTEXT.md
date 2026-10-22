@@ -4,6 +4,18 @@
 
 ## Current Session
 
+## S205 production verified
+
+Perk combinations honor either pick order, navigation honors cache policy, and doctor measures the game.
+
+Exact-main Cloudflare workflow 39709516696 passed strict lint, 307/307 test files, 2182/2182 tests and configured build/deploy on 0d38269d100abe2e96edca6fac008ef793a218ec. Production /_health reports 0d38269d100a; live-site-check passes7/7. Staging https://session-205-staging.call-of-doodie.pages.dev/ passed shell7/7 and rendered matrix1224/1224 at390/768/1440 in both themes. Real Chrome staging/production probes show cod-v8 controlling, API reads reaching the network with zero API cache entries, and a gameplay clock that advances; keyboard/mouse events exercised. Local native doctor15/15, blockingFailing0;6 isolation/failure fixtures pass. Independent reviews approve both runtime changes and doctor prerequisite.
+
+Physical gamepad, installed-app, native privacy-browser and participant/comparative performance outcomes remain unmeasured. Existing identity/contact/telemetry launch gaps remain on the board. FORGE/public-unlaunched unchanged; this routine promotion is not a public launch. CDR reviewed: no new creative direction.
+
+The first local full run was305/306 files with2 hot-context freshness failures; canonical regeneration and isolated4/4 retest passed. The new doctor fixture initially exceeded30s while doing real Git/process I/O; explicit fixture-only90s/60s budgets, unchanged global timeout, final6/6 passed. Original two-item pre-edit premise gate is retained; the later discovered doctor prerequisite had its own verified gate before doctor edits. No single retroactive gate is claimed for the expanded plan. Context-window usage remains unmeasured.
+
+Revert the S205 source changes with an ordinary non-force revert and redeploy. Previous production deployment e8d69033-693b-49a7-8072-00e18434b5cb at f7069077a499 remains the rollback checkpoint. Edge-function code and database schema did not change in S205.
+
 ## S204 final: audit-driven fixes production verified
 
 S204 full arc: a written ranked audit, seven implemented fixes across the service worker, three edge functions and two gameplay rules, a real-browser staging gate, an independent review, and production verification. Earlier S204 entries describe only the first fix (a test timeout budget); this supersedes them.
@@ -50,30 +62,11 @@ Acceptance detail: LATEST_HANDOFF.md. Local complete suite: 2125/2126 assertions
 
 Controller menus suspend while unfocused or hidden and require fresh input on return.
 
-S201 implementation 0d5b5f36d3d6b2016eaa1d326f55d3b719cc8ca4 passed exact-main workflow 39541463651:300 files/2113 assertions,strict lint,configured build and Cloudflare deployment. Canonical health matches 0d5b5f36d3d6. Canonical and immutable https://7cd1c27b.call-of-doodie.pages.dev shell7/7 each;production browser20/20 across390/1440,both themes. Blur preserves menu focus,input while away is ignored,held input on return causes no action,and fresh press navigates. Shared menu runtime matches staging after generated import filename normalization.
-
-## S201 candidate acceptance
-
-Local full: 2112/2113 assertions;1 failed. Nonpassing; failures retained in local receipt; exact-main hosted suite required.
-
-## S201 candidate
-
-Controller menus suspend while unfocused or hidden and require fresh input on return.
-
-S201: four failing-before regressions;42 focused assertions pass,including14 mounted-hook cases. Independent source review passes. Staging https://1106fdb0.call-of-doodie.pages.dev browser20/20 across390/1440 and both themes;shell7/7. Strict lint,configured build,public/runtime contracts and release security pass;dependency audit0 vulnerabilities. Full suite and exact-main production pending.
-
-## S200 production verified
-
-Controller menus stop stale repeats and require fresh input after interruptions.
-
-S200 implementation 34305a258284660263c2af678547a9eb9d0e003b passed exact-main workflow 39522461612:300 files/2107 assertions,strict lint,configured build and Cloudflare deployment. Canonical health matches 34305a258284. Canonical and immutable https://4846f601.call-of-doodie.pages.dev shell7/7 each;production browser16/16 across390/1440,both themes. Disconnect preserves menu focus,held reconnect causes no action,and fresh press navigates. Shared menu runtime matches staging after generated import filename normalization.
-
-## S200 candidate acceptance
-
-S200:59 focused assertions pass;7 failing-before regressions;independent source review8/8. Staging16/16,shell7/7,16 inspected hash-bound captures. Strict lin
+S201 implementation 0d5b5f36d3d6b2016eaa1d326f55d3b719cc8ca4 passed
 
 ## Open Work
 
+## S205 verified outcomes and waves
 ## S204 final arc outcomes and waves
 - [ ] [SIL:1] S204 reserve: measure drawGame.js frame cost with a CDP trace before hoisting per-frame allocations (audit item 5, deferred).
 - [ ] [SIL:1] S204 reserve: decide whether validate-replay should fail closed when its rate-limit RPC throws.
@@ -128,18 +121,8 @@ S200:59 focused assertions pass;7 failing-before regressions;independent source 
 ## Session 181 — Full-site audit and implementation
 ## Session 180 — Toolchain currency and stale-PR hygiene
 ## Session 179 — Public stats truth and follow-through
-## Session 178 — Developer arena and ordinary perk truth
 
 ## Recent Decisions
-
-## 2026-10-20 — Session 201
-
-Suspend shared controller menus on blur or hidden document;initialize from hasFocus and require neutral on return. Reviewer caught already-unfocused activation and the correction is covered. Tests were added before premise recording;runtime source remained unchanged until the gate. Existing unchanged identity STRONG gap remains visible;no launch/lifecycle change. Reuse installed packages and project-native release tooling.
-
-
-S201 final acceptance: S201 implementation 0d5b5f36d3d6b2016eaa1d326f55d3b719cc8ca4 passed exact-main workflow 39541463651:300 files/2113 assertions,strict lint,configured build and Cloudflare deployment. Canonical health matches 0d5b5f36d3d6. Canonical and immutable https://7cd1c27b.call-of-doodie.pages.dev shell7/7 each;production browser20/20 across390/1440,both themes. Blur preserves menu focus,input while away is ignored,held input on return causes no action,and fresh press navigates. Shared menu runtime matches staging after generated import filename normalization. Local full: 2112/2113 assertions;1 failed. Nonpassing; failures retained in local receipt; exact-main hosted suite required. Isolated unchanged fixture1/1 passes at120s limit.
-
-
 
 ## 2026-10-21 — Session 202
 
@@ -170,9 +153,20 @@ S204 final decisions:
 - Do not make validate-replay fail closed: it is an advisory endpoint by design and the change needs a founder decision.
 - Defer drawGame allocation work until a frame-time trace exists.
 
+
+
+## 2026-10-22 — S205
+
+- Pair rewards have one once-only owner in shared resolution; preserve unrelated bonuses and existing popup identities.
+- Navigation cache writes use the same eligibility as assets and remain attached to worker event lifetime.
+- A doctor result must name this repository and its real check scope. Replace sibling score copying with a native manifest and bounded public summary; unavailable launch/device evidence is outside that scope.
+- Reuse existing bounded founder direct-main/deploy authorization; no new lifecycle, identity/trust, licensing, public promise or spending decision. Existing STRONG identity/contact gaps remain launch work, not evidence of current promotion failure.
+- Preserve the original premise gate and separate prerequisite gate. The scope addition is explicit and its files were unchanged before its gate; do not relabel the expanded audit as having one pristine global timing receipt.
+- Revert the S205 source changes with an ordinary non-force revert and redeploy. Previous production deployment e8d69033-693b-49a7-8072-00e18434b5cb at f7069077a499 remains the rollback checkpoint. Edge-function code and database schema did not change in S205.
+
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 289,384 bytes · SHA-256 `8f7d1d1cf466…`
-- `context/TASK_BOARD.md` · 193,045 bytes · SHA-256 `e4b191df8d99…`
-- `context/DECISIONS.md` · 200,983 bytes · SHA-256 `b749170c554a…`
-- `docs/AUDIT_2026-10-22.json` · 15,451 bytes · SHA-256 `1998ec4605b5…`
+- `context/CURRENT_STATE.md` · 291,358 bytes · SHA-256 `81768b3aa9c8…`
+- `context/TASK_BOARD.md` · 194,044 bytes · SHA-256 `9372bf5d7799…`
+- `context/DECISIONS.md` · 202,182 bytes · SHA-256 `4e3aa5a91f6b…`
+- `docs/AUDIT_2026-10-22.json` · 18,950 bytes · SHA-256 `2ff8653abed5…`

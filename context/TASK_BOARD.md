@@ -1,3 +1,14 @@
+## S205 verified outcomes and waves
+
+Wave1 ✔ fresh startup and nine-axis audit. Wave2 ✔ perk order fairness, navigation cache eligibility and subject-correct doctor; independent review. Wave3 ✔ staging, exact-main hosted checks and production readback; ordered closeout.
+
+- [x] S205 perk pair rewards are order-independent and once-only; Bloodshot12%.
+- [x] S205 navigation cache eligibility and cod-v8 migration verified.
+- [x] S205 doctor owns fifteen native checks, preserves failures and never copies sibling scores.
+- [x] S205 staging, hosted307/307 and production on0d38269 verified.
+
+S205 selected scope complete; existing unmeasured launch reserves stay open.
+
 ## S204 final arc outcomes and waves
 
 Wave1 ✔ startup, baseline and fixture-budget fix. Wave2 ✔ written nine-axis audit, seven fixes, independent review. Wave3 ✔ staging gate, edge deploy, exact-main production verification and closeout.
@@ -925,6 +936,9 @@ First checkpoint the bounded post-S159 propagation/CI/deploy recovery. Then begi
 - [ ] [Human/Data] [SIL:1] HomeV2 analytics funnel — compare `home_v2_deploy` vs legacy `front_door_action` completion rates after 48h of traffic
 
 ## Next
+
+- [ ] [SIL:1] [S205 reserve] Observe both perk acquisition orders in participant builds; deterministic tests do not prove comprehension or balance.
+- [ ] [SIL:1] [S205 reserve] Audit cached doctor consumers for subject/HEAD freshness checks before reusing any receipt; no broad freshness claim from the new producer alone.
 
 - [ ] [SIL:1] [S199 reserve] Observe shield-counterplay comprehension with participants;owner project,dependency observed session.
 - [ ] [SIL:1] [S199 reserve] Extend mixed-source armor transitions if new weapon mechanics are selected;owner project,dependency future scoped work.

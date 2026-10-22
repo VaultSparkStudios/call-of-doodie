@@ -1,12 +1,12 @@
 <!-- generated-by: scripts/render-startup-brief.mjs v3.1 -->
-<!-- generated-at: 2026-10-22 (Session 204 closeout) -->
-<!-- semantic-freshness: hash=89d69fd134dccc4e next=205 silSession=204 silScore=946 handoff=- tests=- -->
+<!-- generated-at: 2026-10-22 (Session 205 closeout) -->
+<!-- semantic-freshness: hash=9ae07e1939f73992 next=206 silSession=205 silScore=946 handoff=205 tests=- -->
 <!-- fast-boot-valid-until: next session if within 24h -->
 <!-- brief-coherent: true -->
 
 # Startup Brief — Call-Of-Doodie
 
-> **Fast-boot brief** — generated at Session 204 closeout · 2026-10-22.
+> **Fast-boot brief** — generated at Session 205 closeout · 2026-10-22.
 > Valid for next session if started within 24h. For sessions >24h later, load context files fresh (start.md §3).
 
 ---
@@ -15,25 +15,24 @@
 ╔════════════════════════════════════════════════════════════════╗
 ║  🚀 CALL-OF-DOODIE                                               ║
 ║  project · deployed/public-unlaunched · FORGE                    ║
-║  Session 205 · 2026-10-22 · FOUNDER MODE                         ║
+║  Session 206 · 2026-10-22 · FOUNDER MODE                         ║
 ║  Owner: VaultSpark Studios                                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ LAST SESSION (S204) · WHAT SHIPPED ══════════════════════════╗
-║  ✓ Service worker no longer caches /api or lookalike origins     ║
-║  ✓ Edge functions return 400/413 instead of leaky 500s           ║
-║  ✓ Scavenger/Bullet Hose keep the full held-weapon refill        ║
-║  ✓ Rematch wave sized with double_trouble                        ║
-║  Tests  306files/2158assertions passing                          ║
-║  Deploy 56dcd791b890 production verified                         ║
+╔══ LAST SESSION (S205) · WHAT SHIPPED ══════════════════════════╗
+║  ✓ Perk pair bonuses match either acquisition order              ║
+║  ✓ Navigation obeys no-store/private/success policy              ║
+║  ✓ Doctor measures fifteen recipient-native checks               ║
+║  Tests  307/307 files;2182/2182 tests hosted exact-main          ║
+║  Deploy 0d38269 production verified                              ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ WHERE TO TEST · Call-Of-Doodie ══════════════════════════════╗
 ║  Production    → https://callofdoodie.wtf/ ✓                     ║
-║  Staging       → https://session-204-staging.call-of-doodie. ✓   ║
-║  Unit tests    → npm test — 306/306 passing ✓                    ║
-║  production-smoke → live-site-check 7/7 and real-Chrome serv ✓   ║
-║  edge-live-probe → malformed-body 400, oversize 413, valid r ✓   ║
+║  Staging       → https://session-205-staging.call-of-doodie. ✓   ║
+║  Unit tests    → npm test — 307/307 passing ✓                    ║
+║  production-smoke → live-site-check7/7; Chrome worker/API/ga ✓   ║
+║  native-doctor → 15 recipient-native checks; excludes launch ✓   ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ PROJECT PROFILE ═════════════════════════════════════════════╗
@@ -43,8 +42,8 @@
 ╔══ SCORE ═══════════════════════════════════════════════════════╗
 ║                                                                  ║
 ║    946/1000   ██████████████████████░░   95%                     ║
-║    SIL v3.0  ·  Avg3: 944  ·  Velocity 1→                        ║
-║    Last active: 0d  ·  Last closeout: 1d  ·  (active = newest…   ║
+║    SIL v3.0  ·  Avg3: 945.7  ·  Velocity 3→                      ║
+║    Last active: 0d  ·  Last closeout: 0d  ·  (active = newest…   ║
 ║    Trend  ▂▂▂▄▄  →  (last 5 sessions)                            ║
 ║                                                                  ║
 ║    Category         Score  Bar        Spark   Δ                  ║
@@ -62,9 +61,9 @@
 ║                                                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ WHERE WE LEFT OFF  ·  Session 204 ═══════════════════════════╗
+╔══ WHERE WE LEFT OFF  ·  Session 205 ═══════════════════════════╗
 ║  Shipped:  see LATEST_HANDOFF.md                                 ║
-║  Tests:    306/306 passing  ·  Deploy: verified                  ║
+║  Tests:    307/307 passing  ·  Deploy: verified                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
@@ -74,12 +73,12 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         306/306 passing (2026-10-22T01:12:32Z)         ║
-║  ⚠  Velocity      1   ·  Debt: →                                 ║
+║  ✓  Tests         307/307 passing (2026-10-22T02:08:13.517Z)     ║
+║  ✓  Velocity      3   ·  Debt: →                                 ║
 ║  ✓  Runway        unknown                                        ║
 ║  ⛔  Context age   ?d                                             ║
 ║  ✓  IGNIS         43784 FORGE  ·  1d old                         ║
-║  ⛔  Truth         audit-driven fixes production verified.  · …   ║
+║  ⛔  Truth         S205 runtime and local doctor subject…         ║
 ║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs…        ║
 ║  ✓  Genome dims   all stable  (24/25)                            ║
 ║  ✓  Entropy       0.215  (healthy)                               ║
@@ -88,7 +87,7 @@
 ║  ✓  Templates     v3.3 aligned                                   ║
 ║  ⛔  Revenue sig.  not found  ⚠ stale                             ║
 ║  ✓  Deploy gaps   no gaps (run: ops deploy-gaps)                 ║
-║  ⛔  Doctor        157/233 (68%)  ·  3 failing                    ║
+║  ✓  Doctor        15/15 (100%)  ·  2026-10-22  ✓                 ║
 ║  ✓  Codex trust   trusted project active                         ║
 ║  ✓  Canon adopt.  0/55 pending review                            ║
 ║  ✓  Cost          flat-rate Max Plan · usage ledger…             ║
@@ -114,15 +113,15 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ MOMENTUM METER ══════════════════════════════════════════════╗
-║  Velocity:   ▂▂▂▄▄  1→  (last 5 sessions)                        ║
+║  Velocity:   ▂▂▂▄▄  3→  (last 5 sessions)                        ║
 ║  Intent:     ?% achieved last 5                                  ║
 ║  Streak:     — (last intent not achieved)                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIL FORECAST (next session) ═════════════════════════════════╗
-║  Projected:  943/1000  (↓3 vs current 946)                       ║
-║  At-risk:    Momentum Δ-3                                        ║
-║  Calibration: MAE 4 over last 10 forecasts                       ║
+║  Projected:  945/1000  (↓1 vs current 946)                       ║
+║  All categories forecast stable or rising.                       ║
+║  Calibration: MAE 3.8 over last 10 forecasts                     ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ GENIUS HIT LIST ═════════════════════════════════════════════╗
@@ -156,5 +155,5 @@
 
 ---
 
-*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 204 closeout · 2026-10-22*
+*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 205 closeout · 2026-10-22*
 *Run `node scripts/ops.mjs doctor` for live health check · `node scripts/ops.mjs genius-list` to refresh hit list*

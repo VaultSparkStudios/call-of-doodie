@@ -1,384 +1,140 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-10-21T14:09:36.651Z",
-  "uiBaseRef": "01268b407e383f6620648776ad928af01e483293",
-  "stagingUrl": "https://f7081112.call-of-doodie.pages.dev/",
+  "capturedAt": "2026-10-22T01:53:40.507Z",
+  "stagingUrl": "https://session-205-staging.call-of-doodie.pages.dev/",
+  "uiBaseRef": "f7069077a499d2c6cf6d9fd424d4a90f009bf596",
+  "uiHeadRef": "HEAD",
+  "workingTreeUiSha256": "4e7c1821ed22023b15f69a3d33d5cda8feac48ef9f78c8998a07578da8999b84",
+  "sourceMatrix": {
+    "receipt": "output/playwright/S205-staging/visual-audit-receipt.json",
+    "sha256": "a0f37ae77e9803816e3d25b59643b4fe5508b6eec216d63bfece4c183fc5823f",
+    "checks": {
+      "pass": true,
+      "total": 1224,
+      "passed": 1224,
+      "failures": []
+    }
+  },
+  "touchedState": null,
+  "additionalTouchedStates": [],
   "themes": [
     "dark",
     "light"
   ],
-  "sourceFiles": [
-    {
-      "file": "src/components/ProfilePanel.jsx",
-      "sha256": "ea699a4eb0db98c4141788b6466c59da64c328f2aba1fba077c2ef8e2b7642ae"
-    },
-    {
-      "file": "src/utils/obeliskPassport.js",
-      "sha256": "2d3c10c55b867506681134dc23372a108712074d63c6cc2f59ff434d6a73b9fd"
-    },
-    {
-      "file": "src/utils/progressBackup.js",
-      "sha256": "5a8de7ed7d75110da24f0960343064736ffa4fb66e0682ddc9a3af5707abdfd2"
-    }
-  ],
   "captures": [
     {
-      "file": "session-203/before-production-sewer-night-390-overview.png",
-      "sha256": "f7626c3637d7277b243e988a4fbff39df07ccf7a6fe4af8cb96ce950c20618ca",
+      "file": "home-dark-mobile.png",
+      "sha256": "178abe20a2750c1fdf28526092175e5c930f3bc2d827715e6f77587c385b261f",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
-        "height": 900
+        "height": 1000
       },
-      "page": "overview",
-      "phase": "before"
+      "page": "Home v2 first-run command center"
     },
     {
-      "file": "session-203/before-production-sewer-night-1440-overview.png",
-      "sha256": "ccc7fd4cdd61f8e0320fb1ff3383586ed5cbc216b37e7df209223a0fedc95554",
+      "file": "home-light-desktop.png",
+      "sha256": "85cae9184ff7528aee0356fd0aadb734ab5bd2dfdbe537dae0ac3ffe2f47c212",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "page": "Home v2 first-run command center"
+    },
+    {
+      "file": "login-dark-desktop.png",
+      "sha256": "2246cf88f6c80a33e75c15b7a6852eb20c5f15ac1988c9e5f57315469cae349e",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
-        "height": 900
+        "height": 1000
       },
-      "page": "overview",
-      "phase": "before"
+      "page": "Porcelain Passport login receipt surface"
     },
     {
-      "file": "session-203/before-production-porcelain-day-390-overview.png",
-      "sha256": "829737922524e030104737c511aee6e7db226f5fcc64649a00155061abdc87da",
+      "file": "auth-callback-light-mobile.png",
+      "sha256": "ead774ae7a6fac0ce7b52b810848e56ef59bbfb71480d464d4bf8950559fb565",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
-        "height": 900
+        "height": 1000
       },
-      "page": "overview",
-      "phase": "before"
+      "page": "Porcelain Passport callback receipt surface"
     },
     {
-      "file": "session-203/before-production-porcelain-day-1440-overview.png",
-      "sha256": "de58bb3057997dd0bd4ae08ac53b2706f197eca639c6602a1dcfaf818a9343fd",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "overview",
-      "phase": "before"
-    },
-    {
-      "file": "session-203/after-staging-sewer-night-390-overview.png",
-      "sha256": "982b2e934de0294f5e50231de4c8270aa3285ae94f49985cf6fcbb6357b5e7cc",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "page": "overview",
-      "phase": "after"
-    },
-    {
-      "file": "session-203/after-staging-sewer-night-390-runs.png",
-      "sha256": "dc134ca1f27e8d1abb55dd7143119490a0e0e02f5e98e8896af267fb641e9123",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "page": "runs",
-      "phase": "after"
-    },
-    {
-      "file": "session-203/after-staging-sewer-night-390-collection.png",
-      "sha256": "c3589cb71e6e51e0c1fa5a4b092f52f88524cba83682c3e7c9e73d9e8dacbe70",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "page": "collection",
-      "phase": "after"
-    },
-    {
-      "file": "session-203/after-staging-sewer-night-390-save.png",
-      "sha256": "fe7f9bee861a9cdf5fb324dbbabf7c4e1b4c978480aca1428b5acf9f49d91899",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "page": "save",
-      "phase": "after"
-    },
-    {
-      "file": "session-203/after-staging-sewer-night-390-export-denied.png",
-      "sha256": "8f5c386b424eeec4a48efb366384105a371c469395396db62c16915a0048c5b4",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "page": "export-denied",
-      "phase": "after"
-    },
-    {
-      "file": "session-203/after-staging-sewer-night-390-restore-denied.png",
-      "sha256": "d0734bc8d05b6d093b6815c598a78f8076ad6da4b83a8622f6d83809cc16c2ba",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "page": "restore-denied",
-      "phase": "after"
-    },
-    {
-      "file": "session-203/after-staging-sewer-night-1440-overview.png",
-      "sha256": "d6893b8efcd858c8d6cd1106ebedd69e5a7643778f8a1e1abd4e3e3834aa5e58",
+      "file": "modes-dark-desktop.png",
+      "sha256": "4cb4c08c4bd6cec1812d4eaae9e435a05425c6bef2939afc5cd2f9b99c58e1ef",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
-        "height": 900
+        "height": 1000
       },
-      "page": "overview",
-      "phase": "after"
+      "page": "Mode selection surface"
     },
     {
-      "file": "session-203/after-staging-sewer-night-1440-runs.png",
-      "sha256": "fd526336dc2482f60250e6ca79a907210676f8ff5c13c00bd3ad738b0d7275a3",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "runs",
-      "phase": "after"
-    },
-    {
-      "file": "session-203/after-staging-sewer-night-1440-collection.png",
-      "sha256": "8f5797949df7bf08d7dc706e359493327135f203a6e87a3e44495917254be41c",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "collection",
-      "phase": "after"
-    },
-    {
-      "file": "session-203/after-staging-sewer-night-1440-save.png",
-      "sha256": "9c9ab74aec450b72bbdc5868e901e89c8fdca41ed2fe32b319a7cfc46f330c89",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "save",
-      "phase": "after"
-    },
-    {
-      "file": "session-203/after-staging-sewer-night-1440-export-denied.png",
-      "sha256": "89b53afc44e62458c2795d632f95dc0c1f0c41958e3915716dc7538c3133a6cf",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "export-denied",
-      "phase": "after"
-    },
-    {
-      "file": "session-203/after-staging-sewer-night-1440-restore-denied.png",
-      "sha256": "0f3387d2f4ff4e728ff10fd611f02ea4a02a6e38505aee31f1c81c498594b71f",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "restore-denied",
-      "phase": "after"
-    },
-    {
-      "file": "session-203/after-staging-porcelain-day-390-overview.png",
-      "sha256": "ec0008bd6d5d7c333dca89fa40cc92675c86a20190fb8f4533514a6ba591980c",
+      "file": "board-light-mobile.png",
+      "sha256": "41949f53cf1e9df46d4f3fbfa6f012c60178f704b3bcd7cd6bb606f5a49d67bb",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
-        "height": 900
+        "height": 1000
       },
-      "page": "overview",
-      "phase": "after"
-    },
-    {
-      "file": "session-203/after-staging-porcelain-day-390-runs.png",
-      "sha256": "dce30b59cbf80b0b71330e2efa9fc63f9fc70919a876608e2334a59383c7b7f8",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "page": "runs",
-      "phase": "after"
-    },
-    {
-      "file": "session-203/after-staging-porcelain-day-390-collection.png",
-      "sha256": "fa57786537bea90c0b09a2a0be1cc8b443948cc24f30e882a74d918fdb4a2c9c",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "page": "collection",
-      "phase": "after"
-    },
-    {
-      "file": "session-203/after-staging-porcelain-day-390-save.png",
-      "sha256": "c9abbb6c497a261b996fa9dac75865af919f74f051bba552dbf29b807a3d02f1",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "page": "save",
-      "phase": "after"
-    },
-    {
-      "file": "session-203/after-staging-porcelain-day-390-export-denied.png",
-      "sha256": "35c2c37f5f12da70227413c6a9d18947c3bcf2b01338884d0c0f316d9d0339b7",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "page": "export-denied",
-      "phase": "after"
-    },
-    {
-      "file": "session-203/after-staging-porcelain-day-390-restore-denied.png",
-      "sha256": "fd38cc9f61b0a964331cd2710cc5ad61d33810fd40d4c33edc0b4a417690b447",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 900
-      },
-      "page": "restore-denied",
-      "phase": "after"
-    },
-    {
-      "file": "session-203/after-staging-porcelain-day-1440-overview.png",
-      "sha256": "4a5bd52ff0f4ceee4d903a7a7a72037590a36b278989eac282a7f6f9a0a7e23f",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "overview",
-      "phase": "after"
-    },
-    {
-      "file": "session-203/after-staging-porcelain-day-1440-runs.png",
-      "sha256": "96213b1ecbe7ce982e6f6eb83532e370f7029ab5c5e870bbc1ccb86992008176",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "runs",
-      "phase": "after"
-    },
-    {
-      "file": "session-203/after-staging-porcelain-day-1440-collection.png",
-      "sha256": "c0aed4f23938721f6a99ab10b63bb8993b5ba4c9972af4382f449275167009ac",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "collection",
-      "phase": "after"
-    },
-    {
-      "file": "session-203/after-staging-porcelain-day-1440-save.png",
-      "sha256": "d7392f53b0cbc922b92bd96152c3d926e63ab17dca27218c8d681603755478f8",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "save",
-      "phase": "after"
-    },
-    {
-      "file": "session-203/after-staging-porcelain-day-1440-export-denied.png",
-      "sha256": "61f37dd81484cdbad5451976934dd1a618cab8a609b4f3ca1c6cbbd15e785f00",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "export-denied",
-      "phase": "after"
-    },
-    {
-      "file": "session-203/after-staging-porcelain-day-1440-restore-denied.png",
-      "sha256": "1700f8ee84705d14a38cce704989e9ac293e2cad5cc95b2553a736fed5691c4f",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 900
-      },
-      "page": "restore-denied",
-      "phase": "after"
+      "page": "Board surface"
     }
   ],
   "inspection": {
     "renderedPixelsReviewed": true,
-    "reviewer": "Codex inspected before/after contact sheets plus full-size mobile export/restore notices",
-    "reviewedAt": "2026-10-21T14:09:36.653Z",
-    "scope": "Guest Record overview,runs,collection,save,export denial and restore denial at390/1440 in both themes.",
+    "reviewer": "Codex direct rendered-pixel review plus Playwright screenshot and analytics court",
     "findings": [
-      "Before:Record replaced by panel interruption dialog with denied browser storage.",
-      "After:all tabs render readable content and controls.",
-      "Initial mobile error notice fell below fold;ref/effect now scrolls updated notice into view,verified by viewport checks and recaptured."
+      "The source matrix passed 1224/1224 checks across 24 routes, 2 project themes, and 390px, 768px, 1440px widths.",
+      "Representative Home, identity, Modes, and Leaderboard captures are hash-bound across both themes and complementary desktop/mobile viewports.",
+      "No horizontal overflow, clipped primary action, page error, or measured contrast failure remains in the source matrix.",
+      "Before/after Home screenshots reviewed at390/1440 in both themes. Behavior-only repair keeps rendered layout and labels stable. Screenshot capture does not prove physical controller behavior or participant outcomes."
     ],
     "fixesApplied": [
-      "Guard optional local Passport receipt access without false persistence success.",
-      "Report explicit backup read failures and retain restore preview.",
-      "Scroll action feedback into view."
+      "S205 changes behavior and local diagnostics; no layout or copy changes. Reviewed before/after Home desktop and mobile in both themes plus representative identity, modes and board captures. No introduced clipping or primary-action defect found."
     ],
-    "blockingDefectsOpen": 0
+    "blockingDefectsOpen": 0,
+    "subjectiveVisualReviewClaimed": true,
+    "subjectiveVisualReviewStatus": "completed"
   },
-  "methodLimits": [
-    "Injected storage denial in real installed Chrome;not native privacy-browser or participant evidence.",
-    "Before Record unavailable;its other states cannot be reached.",
-    "Remote account/session trust contracts unchanged."
+  "session": 205,
+  "beforeProductionSource": "f7069077a499d2c6cf6d9fd424d4a90f009bf596",
+  "beforeCaptures": [
+    {
+      "file": "S205-before-sewer-night-390.png",
+      "width": 390,
+      "theme": "sewer-night",
+      "sha256": "178abe20a2750c1fdf28526092175e5c930f3bc2d827715e6f77587c385b261f",
+      "page": "Home before S205 runtime hotfix"
+    },
+    {
+      "file": "S205-before-porcelain-day-390.png",
+      "width": 390,
+      "theme": "porcelain-day",
+      "sha256": "04e71adb1aff001e5f7ad5deaa675c5c2b14c23a81bf5e0a1ef3ed032f06863d",
+      "page": "Home before S205 runtime hotfix"
+    },
+    {
+      "file": "S205-before-sewer-night-1440.png",
+      "width": 1440,
+      "theme": "sewer-night",
+      "sha256": "a621405e0990166c750d1dce18fc7ec77e050fcbef2d9ecec9bdd8d9dc5441e0",
+      "page": "Home before S205 runtime hotfix"
+    },
+    {
+      "file": "S205-before-porcelain-day-1440.png",
+      "width": 1440,
+      "theme": "porcelain-day",
+      "sha256": "85cae9184ff7528aee0356fd0aadb734ab5bd2dfdbe537dae0ac3ffe2f47c212",
+      "page": "Home before S205 runtime hotfix"
+    }
   ]
 }

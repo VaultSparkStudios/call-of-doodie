@@ -1,27 +1,27 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.1 -->
-<!-- generated-at: 2026-10-18 (Session 187 closeout) -->
+<!-- generated-at: 2026-10-22 (Session 205 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S187 ════════════════════╗
-║  Date: 2026-10-18  ·  SIL: 944/1000  ·  Velocity: 4 flat         ║
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S205 ════════════════════╗
+║  Date: 2026-10-22  ·  SIL: 946/1000  ·  Velocity: 3 down         ║
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ║  Live:  preview  →  https://callofdoodie.wtf/                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED · last 5 commits ═══════════════════════════════╗
-║  ✓ fix: keep run timers isolated and honor reload preferences    ║
-║  ✓ docs: seal S186 verified production closeout                  ║
-║  ✓ fix: harden gameplay input transitions and session identity   ║
-║  ✓ docs: S185 arc completion closeout records                    ║
-║  ✓ fix(input): menus follow the active controller, not gamepad   ║
+║  ✓ build: refresh generated release metadata for S205            ║
+║  ✓ fix: honor perk combinations and bind runtime checks to the   ║
+║  ✓ docs: seal S204 audit-driven closeout                         ║
+║  ✓ fix: stop caching /api, validate edge request bodies, restor  ║
+║  ✓ docs: regenerate S204 hot context and correct local suite re  ║
 ╚════════════════════════════════════════════════════════════════╝
-╔══ SCORES · SIL 944/1000 ═══════════════════════════════════════╗
-║    Dev Health         97   ██████████                            ║
+╔══ SCORES · SIL 946/1000 ═══════════════════════════════════════╗
+║    Dev Health         98   ██████████                            ║
 ║    Alignment          96   ██████████                            ║
 ║    Momentum           94   █████████░                            ║
 ║    Engagement         92   █████████░                            ║
-║    Process Qual       92   █████████░                            ║
+║    Process Qual       93   █████████░                            ║
 ║    Coherence          90   █████████░                            ║
 ║    Security           98   ██████████                            ║
 ║    Ecosystem          92   █████████░                            ║
@@ -41,23 +41,23 @@
 ║  ✓ agent memory (Claude/Codex project memory)                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 17 files  ·  M:17 A:0 D:0 ?:0                          ║
+║  Changes: 32 files  ·  M:25 A:0 D:0 ?:7                          ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ DEPLOYMENT ══════════════════════════════════════════════════╗
-║  Staging:  https://107df7f2.call-of-doodie.pages.dev/  ·  cloud  ║
+║  Staging:  https://session-205-staging.call-of-doodie.pages.dev  ║
 ║  Live:     https://callofdoodie.wtf/  ·  preview/FORGE (not yet  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
-║  Doctor:        157/233                                          ║
+║  Doctor:        15/15                                            ║
 ║  Compliance:    —                                                ║
-║  Tests:         296/296                                          ║
+║  Tests:         307/307                                          ║
 ║  Validation:    full-fresh                                       ║
-║  IGNIS:         11d ago                                          ║
-║  Truth:         S187 production verified; participant/device ev  ║
-║  Sanitization:  13d ago                                          ║
-║  shells:        2 started · 2 closed · 0 running                 ║
+║  IGNIS:         1d ago                                           ║
+║  Truth:         S205 runtime and local doctor subject verified;  ║
+║  Sanitization:  0d ago                                           ║
+║  shells:        unknown · missing/stale enumeration              ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ NEXT SESSION ════════════════════════════════════════════════╗
 ║  (no genius cache — run `node scripts/cache-genius-list.mjs`)    ║

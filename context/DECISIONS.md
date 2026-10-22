@@ -1770,3 +1770,13 @@ S204 final decisions:
 - Held-weapon rule for Scavenger/Bullet Hose: always a full refill, perk tops up the other weapons, so the perk can only add ammo. Chosen over editing the copy because the copy says "more ammo".
 - Do not make validate-replay fail closed: it is an advisory endpoint by design and the change needs a founder decision.
 - Defer drawGame allocation work until a frame-time trace exists.
+
+
+## 2026-10-22 — S205
+
+- Pair rewards have one once-only owner in shared resolution; preserve unrelated bonuses and existing popup identities.
+- Navigation cache writes use the same eligibility as assets and remain attached to worker event lifetime.
+- A doctor result must name this repository and its real check scope. Replace sibling score copying with a native manifest and bounded public summary; unavailable launch/device evidence is outside that scope.
+- Reuse existing bounded founder direct-main/deploy authorization; no new lifecycle, identity/trust, licensing, public promise or spending decision. Existing STRONG identity/contact gaps remain launch work, not evidence of current promotion failure.
+- Preserve the original premise gate and separate prerequisite gate. The scope addition is explicit and its files were unchanged before its gate; do not relabel the expanded audit as having one pristine global timing receipt.
+- Revert the S205 source changes with an ordinary non-force revert and redeploy. Previous production deployment e8d69033-693b-49a7-8072-00e18434b5cb at f7069077a499 remains the rollback checkpoint. Edge-function code and database schema did not change in S205.

@@ -118,9 +118,7 @@
       ]
     },
     "observability-honesty": {
-      "surviving": [
-        "project-doctor-subject"
-      ],
+      "surviving": [],
       "rejectedOnVerify": [
         {
           "slug": "no-proven-observability-honesty",
@@ -204,6 +202,11 @@
           "status": "shipped",
           "verification": "83 initial targeted,77 consumer and42 final targeted tests pass; independent review approve.",
           "notes": "Source outcome verified; production promotion remains goal-level release work."
+        },
+        {
+          "status": "shipped",
+          "verification": "Exact-main Cloudflare workflow 39709516696 passed strict lint, 307/307 test files, 2182/2182 tests and configured build/deploy on 0d38269d100abe2e96edca6fac008ef793a218ec. Production /_health reports 0d38269d100a; live-site-check passes7/7. Staging https://session-205-staging.call-of-doodie.pages.dev/ passed shell7/7 and rendered matrix1224/1224 at390/768/1440 in both themes. Real Chrome staging/production probes show cod-v8 controlling, API reads reaching the network with zero API cache entries, and a gameplay clock that advances; keyboard/mouse events exercised. Local native doctor15/15, blockingFailing0;6 isolation/failure fixtures pass. Independent reviews approve both runtime changes and doctor prerequisite.",
+          "notes": "Runtime and hosted acceptance verified."
         }
       ],
       "readinessArea": "runtime-correctness",
@@ -252,6 +255,11 @@
           "status": "shipped",
           "verification": "10 real-worker sandbox tests pass; staging shell7/7 and visual1224/1224 pass.",
           "notes": "Source outcome verified; production promotion remains goal-level release work."
+        },
+        {
+          "status": "shipped",
+          "verification": "Exact-main Cloudflare workflow 39709516696 passed strict lint, 307/307 test files, 2182/2182 tests and configured build/deploy on 0d38269d100abe2e96edca6fac008ef793a218ec. Production /_health reports 0d38269d100a; live-site-check passes7/7. Staging https://session-205-staging.call-of-doodie.pages.dev/ passed shell7/7 and rendered matrix1224/1224 at390/768/1440 in both themes. Real Chrome staging/production probes show cod-v8 controlling, API reads reaching the network with zero API cache entries, and a gameplay clock that advances; keyboard/mouse events exercised. Local native doctor15/15, blockingFailing0;6 isolation/failure fixtures pass. Independent reviews approve both runtime changes and doctor prerequisite.",
+          "notes": "Runtime and hosted acceptance verified."
         }
       ],
       "readinessArea": "runtime-correctness",
@@ -294,8 +302,14 @@
       "innovation": 4,
       "effortHours": 2,
       "priority": 18,
-      "status": "pending",
-      "executionLog": [],
+      "status": "shipped",
+      "executionLog": [
+        {
+          "status": "shipped",
+          "verification": "Exact-main Cloudflare workflow 39709516696 passed strict lint, 307/307 test files, 2182/2182 tests and configured build/deploy on 0d38269d100abe2e96edca6fac008ef793a218ec. Production /_health reports 0d38269d100a; live-site-check passes7/7. Staging https://session-205-staging.call-of-doodie.pages.dev/ passed shell7/7 and rendered matrix1224/1224 at390/768/1440 in both themes. Real Chrome staging/production probes show cod-v8 controlling, API reads reaching the network with zero API cache entries, and a gameplay clock that advances; keyboard/mouse events exercised. Local native doctor15/15, blockingFailing0;6 isolation/failure fixtures pass. Independent reviews approve both runtime changes and doctor prerequisite.",
+          "notes": "Native15/15 and fixtures6/6; independent review approve."
+        }
+      ],
       "readinessArea": "release-evidence",
       "stageRationale": "Mandatory prerequisite for honest arc closeout and repeatable project health evidence.",
       "acceptance": "Recipient-only checks execute; any failure remains nonzero and recorded; sibling untouched; foreign receipt never accepted; unsupported flags rejected.",
@@ -325,7 +339,26 @@
       }
     }
   ],
-  "executionLog": [],
+  "executionLog": [
+    {
+      "slug": "perk-order-fairness",
+      "status": "shipped",
+      "notes": "Honor perk combinations in either acquisition order",
+      "verification": "Hosted307/307; staging and production Chrome evidence."
+    },
+    {
+      "slug": "navigation-cache-policy",
+      "status": "shipped",
+      "notes": "Apply cache eligibility to navigation responses",
+      "verification": "Hosted307/307; staging and production Chrome evidence."
+    },
+    {
+      "slug": "project-doctor-subject",
+      "status": "shipped",
+      "notes": "Keep doctor measurements bound to this game",
+      "verification": "Native15/15; fixtures6/6; independent approve."
+    }
+  ],
   "premiseGate": {
     "schema": "premise-gate/v1",
     "at": "2026-10-22T01:56:58.031Z",
@@ -385,5 +418,12 @@
       "src/systems/perkResolution.js",
       "tests/service-worker-boundary.test.js"
     ]
+  },
+  "release": {
+    "candidate": "0d38269d100abe2e96edca6fac008ef793a218ec",
+    "workflow": 39709516696,
+    "status": "verified",
+    "production": "https://callofdoodie.wtf/",
+    "staging": "https://session-205-staging.call-of-doodie.pages.dev/"
   }
 }
