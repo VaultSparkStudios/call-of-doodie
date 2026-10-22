@@ -1,0 +1,389 @@
+{
+  "schemaVersion": "2.1",
+  "session": 205,
+  "project": {
+    "slug": "call-of-doodie",
+    "type": "game",
+    "name": "Call-Of-Doodie"
+  },
+  "axes": {
+    "features-depth": 1.5,
+    "ui-ux-feedback": 2,
+    "gamification-immersion": 3,
+    "ai-intelligence": 1.5,
+    "security": 1,
+    "speed-organization-efficiency": 1,
+    "token-cost": 1,
+    "observability-honesty": 1,
+    "sil-debt": 1
+  },
+  "axisCoverage": {
+    "features-depth": {
+      "surviving": [],
+      "rejectedOnVerify": [
+        {
+          "slug": "no-proven-features-depth",
+          "premise": "Additional scope is needed now",
+          "evidence": "Perk application and facts already provide build depth; select existing correctness under gamification."
+        }
+      ],
+      "candidatesExamined": [
+        "existing capability completeness",
+        "new extension without outcome evidence"
+      ]
+    },
+    "ui-ux-feedback": {
+      "surviving": [],
+      "rejectedOnVerify": [
+        {
+          "slug": "no-proven-ui-ux-feedback",
+          "premise": "Additional scope is needed now",
+          "evidence": "Existing descriptions state bonuses clearly; no unverified visual redesign selected."
+        }
+      ],
+      "candidatesExamined": [
+        "existing capability completeness",
+        "new extension without outcome evidence"
+      ]
+    },
+    "gamification-immersion": {
+      "surviving": [],
+      "rejectedOnVerify": [
+        {
+          "slug": "perk-order-fairness-resolved",
+          "premise": "Bloodlust adds Vampire lifesteal only when Vampire is already present; Turbo and Crit Cascade have equivalent one-way bonuses; Bloodshot adds pierced lifesteal twice.",
+          "evidence": "Problem retired by implementation; original pre-edit gate retained."
+        }
+      ],
+      "candidatesExamined": [
+        "order fairness",
+        "new doctrine forge",
+        "adaptive perk rival"
+      ]
+    },
+    "ai-intelligence": {
+      "surviving": [],
+      "rejectedOnVerify": [
+        {
+          "slug": "no-proven-ai-intelligence",
+          "premise": "Additional scope is needed now",
+          "evidence": "Local coaching and replay coverage exist; new advisor and hosted model candidates lack participant evidence."
+        }
+      ],
+      "candidatesExamined": [
+        "existing capability completeness",
+        "new extension without outcome evidence"
+      ]
+    },
+    "security": {
+      "surviving": [],
+      "rejectedOnVerify": [
+        {
+          "slug": "navigation-cache-policy-resolved",
+          "premise": "The navigation branch writes raw responses directly to CacheStorage, bypassing the no-store/private and success checks.",
+          "evidence": "Problem retired by implementation; original pre-edit gate retained."
+        }
+      ],
+      "candidatesExamined": [
+        "navigation eligibility",
+        "api bypass regression"
+      ]
+    },
+    "speed-organization-efficiency": {
+      "surviving": [],
+      "rejectedOnVerify": [
+        {
+          "slug": "no-proven-speed-organization-efficiency",
+          "premise": "Additional scope is needed now",
+          "evidence": "Per-frame draw allocation candidate lacks target frame-time measurements; no optimization claim."
+        }
+      ],
+      "candidatesExamined": [
+        "existing capability completeness",
+        "new extension without outcome evidence"
+      ]
+    },
+    "token-cost": {
+      "surviving": [],
+      "rejectedOnVerify": [
+        {
+          "slug": "no-proven-token-cost",
+          "premise": "Additional scope is needed now",
+          "evidence": "No model calls added; no measured token-cost problem in selected runtime paths."
+        }
+      ],
+      "candidatesExamined": [
+        "existing capability completeness",
+        "new extension without outcome evidence"
+      ]
+    },
+    "observability-honesty": {
+      "surviving": [
+        "project-doctor-subject"
+      ],
+      "rejectedOnVerify": [
+        {
+          "slug": "no-proven-observability-honesty",
+          "premise": "Additional scope is needed now",
+          "evidence": "Live native context usage remains explicitly unknown; source cannot prove participant outcomes."
+        }
+      ],
+      "candidatesExamined": [
+        "existing capability completeness",
+        "new extension without outcome evidence"
+      ]
+    },
+    "sil-debt": {
+      "surviving": [],
+      "rejectedOnVerify": [
+        {
+          "slug": "no-proven-sil-debt",
+          "premise": "Additional scope is needed now",
+          "evidence": "Physical-pad, participant and timing debts require observations; automated substitutes cannot close them."
+        }
+      ],
+      "candidatesExamined": [
+        "existing capability completeness",
+        "new extension without outcome evidence"
+      ]
+    }
+  },
+  "totals": {
+    "count": 3,
+    "priority": 50,
+    "top3": [
+      "perk-order-fairness",
+      "navigation-cache-policy",
+      "project-doctor-subject"
+    ]
+  },
+  "meta": {
+    "generatedAt": "2026-10-22",
+    "project": "call-of-doodie",
+    "type": "game",
+    "scope": "Fresh S205 audit; nine axes surveyed; selected demonstrated runtime failures.",
+    "baseline": "f7069077",
+    "gameLoopReview": {
+      "loopTightness": "Instant guest loop intact; shared resolver runs after each perk pick.",
+      "progression": "Order-dependent synergy and duplicate lifesteal undermine build fairness.",
+      "sessionEngagement": "Repair advertised combinations before adding breadth.",
+      "retention": "Unmeasured; no retention claim.",
+      "soulFidelity": "Improvised doctrine and proof over posture require consistent rewards.",
+      "nextMoves": [
+        "Repair order fairness",
+        "Preserve trustworthy offline shell",
+        "Gather physical-device and participant evidence before launch"
+      ]
+    }
+  },
+  "readiness": {
+    "provenance": "PROJECT_STATUS public-unlaunched/FORGE; skill-profile medium game",
+    "runtime": "selected repairs",
+    "identity": "unchanged; existing regression tests required",
+    "visual": "no layout/copy changes selected",
+    "physical": "unmeasured remains open",
+    "cost": "no service or dependency added",
+    "release": "current staging and exact-candidate CI required"
+  },
+  "items": [
+    {
+      "id": 1,
+      "slug": "perk-order-fairness",
+      "axis": "gamification-immersion",
+      "title": "Honor perk combinations in either acquisition order",
+      "why": "Bloodlust adds Vampire lifesteal only when Vampire is already present; Turbo and Crit Cascade have equivalent one-way bonuses; Bloodshot adds pierced lifesteal twice.",
+      "recipe": "Give numeric pair bonuses one once-only owner; preserve popup identities; reconcile both acquisition orders, Turbo/Rush and Grenade Chain/Pyromaniac. Test permutations, unrelated base bonuses and idempotence.",
+      "tier": "🔥",
+      "impact": 8,
+      "innovation": 4,
+      "effortHours": 2,
+      "priority": 16,
+      "status": "shipped",
+      "executionLog": [
+        {
+          "status": "shipped",
+          "verification": "83 initial targeted,77 consumer and42 final targeted tests pass; independent review approve.",
+          "notes": "Source outcome verified; production promotion remains goal-level release work."
+        }
+      ],
+      "readinessArea": "runtime-correctness",
+      "stageRationale": "Repair demonstrated failures before public launch",
+      "acceptance": "Both orders produce lifesteal .23, speed 1.38x base, crit .32/.20, rush 240 frames, Bloodshot .12, Grenade Chain/Pyro 3.75x (including Pyromaniac base 2x); repeated resolution adds nothing.",
+      "premises": [
+        {
+          "claim": "Bloodlust adds Vampire lifesteal only when Vampire is already present; Turbo and Crit Cascade have equivalent one-way bonuses; Bloodshot adds pierced lifesteal twice.",
+          "adapter": "file-content",
+          "target": "src/constants.js",
+          "pattern": "if (mods.hasVampire) mods.lifesteal = (mods.lifesteal || 0) + PF.bloodlust.vampireLifesteal;",
+          "operator": "eq",
+          "expected": true
+        }
+      ],
+      "ladder": {
+        "L1": {
+          "effortHours": 1,
+          "recipe": "Repair only the first reproducible case."
+        },
+        "L2": {
+          "effortHours": 2,
+          "recipe": "Give numeric pair bonuses one once-only owner; preserve popup identities; reconcile both acquisition orders, Turbo/Rush and Grenade Chain/Pyromaniac. Test permutations, unrelated base bonuses and idempotence."
+        },
+        "L3": {
+          "effortHours": 4,
+          "recipe": "Give numeric pair bonuses one once-only owner; preserve popup identities; reconcile both acquisition orders, Turbo/Rush and Grenade Chain/Pyromaniac. Test permutations, unrelated base bonuses and idempotence. Add real-browser consumer checks."
+        }
+      }
+    },
+    {
+      "id": 2,
+      "slug": "navigation-cache-policy",
+      "axis": "security",
+      "title": "Apply cache eligibility to navigation responses",
+      "why": "The navigation branch writes raw responses directly to CacheStorage, bypassing the no-store/private and success checks.",
+      "recipe": "Route navigation cache writes through cacheResponse, clone before returning the response, tie writes to event lifetime, and purge prior navigation entries with a version bump. Test no-store/private/errors and ordinary offline shell recovery.",
+      "tier": "🔥",
+      "impact": 8,
+      "innovation": 4,
+      "effortHours": 2,
+      "priority": 16,
+      "status": "shipped",
+      "executionLog": [
+        {
+          "status": "shipped",
+          "verification": "10 real-worker sandbox tests pass; staging shell7/7 and visual1224/1224 pass.",
+          "notes": "Source outcome verified; production promotion remains goal-level release work."
+        }
+      ],
+      "readinessArea": "runtime-correctness",
+      "stageRationale": "Repair demonstrated failures before public launch",
+      "acceptance": "Navigation private/no-store/404/500 responses never cached; public success cached, consumed response safe, offline fallback remains available.",
+      "premises": [
+        {
+          "claim": "The navigation branch writes raw responses directly to CacheStorage, bypassing the no-store/private and success checks.",
+          "adapter": "file-content",
+          "target": "public/sw.js",
+          "pattern": "caches.open(CACHE_NAME).then(c => c.put(request, clone).catch(() => {}));",
+          "operator": "eq",
+          "expected": true
+        }
+      ],
+      "ladder": {
+        "L1": {
+          "effortHours": 1,
+          "recipe": "Repair only the first reproducible case."
+        },
+        "L2": {
+          "effortHours": 2,
+          "recipe": "Route navigation cache writes through cacheResponse, clone before returning the response, tie writes to event lifetime, and purge prior navigation entries with a version bump. Test no-store/private/errors and ordinary offline shell recovery."
+        },
+        "L3": {
+          "effortHours": 4,
+          "recipe": "Route navigation cache writes through cacheResponse, clone before returning the response, tie writes to event lifetime, and purge prior navigation entries with a version bump. Test no-store/private/errors and ordinary offline shell recovery. Add real-browser consumer checks."
+        }
+      }
+    },
+    {
+      "id": 3,
+      "slug": "project-doctor-subject",
+      "axis": "observability-honesty",
+      "tier": "🔥",
+      "title": "Keep doctor measurements bound to this game",
+      "why": "scripts/ops.mjs runs the sibling doctor then copies its score to the game, even though sibling run-doctor binds ROOT to its own script.",
+      "recipe": "Replace the doctor proxy with an explicit local native-check manifest, fail on actual recipient failures, bind receipt to slug/HEAD and write only local status. Test isolated recipient/sibling separation and unknown flags.",
+      "impact": 9,
+      "innovation": 4,
+      "effortHours": 2,
+      "priority": 18,
+      "status": "pending",
+      "executionLog": [],
+      "readinessArea": "release-evidence",
+      "stageRationale": "Mandatory prerequisite for honest arc closeout and repeatable project health evidence.",
+      "acceptance": "Recipient-only checks execute; any failure remains nonzero and recorded; sibling untouched; foreign receipt never accepted; unsupported flags rejected.",
+      "premises": [
+        {
+          "claim": "The local doctor invokes the sibling Studio Ops command",
+          "adapter": "file-content",
+          "target": "scripts/ops.mjs",
+          "pattern": "[STUDIO_OPS, \"doctor\", ...extraArgs]",
+          "operator": "eq",
+          "expected": true
+        }
+      ],
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Stop copying foreign score and report unavailable local measurement."
+        },
+        "L2": {
+          "effortHours": 2,
+          "recipe": "Explicit local native-check runner with provenance and fixture regressions."
+        },
+        "L3": {
+          "effortHours": 4,
+          "recipe": "Extend check registry with cached per-check evidence and freshness courts."
+        }
+      }
+    }
+  ],
+  "executionLog": [],
+  "premiseGate": {
+    "schema": "premise-gate/v1",
+    "at": "2026-10-22T01:56:58.031Z",
+    "head": "f7069077a499d2c6cf6d9fd424d4a90f009bf596",
+    "sidecar": "docs/AUDIT_2026-10-22.json",
+    "selectionMode": "explicit",
+    "recordPathPolicy": "project",
+    "strict": true,
+    "exit": 0,
+    "verified": 1,
+    "contradicted": 2,
+    "unverified": 0,
+    "premiseDigest": "5977251ab5b7cc558dcfc460d1bada8e9ecd11101d5aeabe4b3d1d6c3f2ce32c",
+    "implementationDirty": [
+      "public/sw.js",
+      "src/App.jsx",
+      "src/config/perkFacts.test.js",
+      "src/constants.js",
+      "src/systems/perkResolution.js",
+      "tests/service-worker-boundary.test.js"
+    ]
+  },
+  "initialPremiseGate": {
+    "schema": "premise-gate/v1",
+    "at": "2026-10-22T01:47:28.896Z",
+    "head": "f7069077a499d2c6cf6d9fd424d4a90f009bf596",
+    "sidecar": "docs/AUDIT_2026-10-22.json",
+    "selectionMode": "explicit",
+    "recordPathPolicy": "project",
+    "strict": true,
+    "exit": 0,
+    "verified": 2,
+    "contradicted": 0,
+    "unverified": 0,
+    "premiseDigest": "910f0726c4d18cf34220751ff3084eebc24553cf3c06c14188c4c97e60e0faf2",
+    "implementationDirty": []
+  },
+  "scopeChange": "Mandatory doctor subject-correctness prerequisite discovered while executing release gates. Initial two-item gate retained as initialPremiseGate; prerequisite is verified before any doctor implementation edit. Existing gameplay/worker edits precede this added-item gate and are not retroactively covered by it.",
+  "prerequisiteGateAttempt": {
+    "schema": "premise-gate/v1",
+    "at": "2026-10-22T01:56:42.405Z",
+    "head": "f7069077a499d2c6cf6d9fd424d4a90f009bf596",
+    "sidecar": "docs/AUDIT_2026-10-22.json",
+    "selectionMode": "explicit",
+    "recordPathPolicy": "project",
+    "strict": true,
+    "exit": 1,
+    "verified": 1,
+    "contradicted": 2,
+    "unverified": 0,
+    "premiseDigest": "5977251ab5b7cc558dcfc460d1bada8e9ecd11101d5aeabe4b3d1d6c3f2ce32c",
+    "implementationDirty": [
+      "public/sw.js",
+      "src/App.jsx",
+      "src/config/perkFacts.test.js",
+      "src/constants.js",
+      "src/systems/perkResolution.js",
+      "tests/service-worker-boundary.test.js"
+    ]
+  }
+}

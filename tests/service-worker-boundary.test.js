@@ -9,13 +9,14 @@ const source = fs.readFileSync(path.resolve("public/sw.js"), "utf8");
 function loadWorker({ origin = "https://callofdoodie.wtf", network } = {}) {
   const listeners = {};
   const stores = new Map();
+  const key = (req) => new URL(typeof req === "string" ? req : req.url, origin).href;
   const store = (name) => {
     if (!stores.has(name)) stores.set(name, new Map());
     return stores.get(name);
   };
   const cacheFor = (name) => ({
-    match: async (req) => store(name).get(typeof req === "string" ? req : req.url),
-    put: async (req, res) => { store(name).set(req.url, res); },
+    match: async (req) => store(name).get(key(req))?.clone(),
+    put: async (req, res) => { store(name).set(key(req), res); },
     addAll: async () => {},
   });
   const fetchCalls = [];
@@ -35,8 +36,8 @@ function loadWorker({ origin = "https://callofdoodie.wtf", network } = {}) {
       open: async (name) => cacheFor(name),
       match: async (req) => {
         for (const entries of stores.values()) {
-          const hit = entries.get(typeof req === "string" ? req : req.url);
-          if (hit) return hit;
+          const hit = entries.get(key(req));
+          if (hit) return hit.clone();
         }
         return undefined;
       },
@@ -50,11 +51,16 @@ function loadWorker({ origin = "https://callofdoodie.wtf", network } = {}) {
 
   const dispatch = async (url, { method = "GET", mode = "cors" } = {}) => {
     let responded = null;
+    const pending = [];
     listeners.fetch({
       request: { url, method, mode },
       respondWith: (promise) => { responded = Promise.resolve(promise); },
+      waitUntil: (promise) => { pending.push(promise); },
     });
-    return responded ? { handled: true, response: await responded } : { handled: false };
+    if (!responded) return { handled: false };
+    const response = await responded;
+    await Promise.all(pending);
+    return { handled: true, response };
   };
   return { dispatch, fetchCalls, stores };
 }
@@ -100,6 +106,30 @@ describe("service worker network boundary", () => {
     const prod = loadWorker({ network: async () => json({}) });
     expect((await prod.dispatch("https://callofdoodie.wtf.evil.example/app.js")).handled).toBe(false);
     expect((await prod.dispatch("https://callofdoodie.wtf/app.js")).handled).toBe(true);
+  });
+
+  it.each([
+    [200, "no-store"], [200, "private, max-age=0"], [404, "public"], [500, "public"],
+  ])("does not cache navigation status %s with %s", async (status, cacheControl) => {
+    const worker = loadWorker({ network: async () => new Response("page", { status, headers: { "cache-control": cacheControl } }) });
+    const result = await worker.dispatch("https://callofdoodie.wtf/private", { mode: "navigate" });
+    expect(result.response.status).toBe(status);
+    expect(await result.response.text()).toBe("page");
+    expect([...worker.stores.values()].flatMap(entries => [...entries.keys()])).toEqual([]);
+  });
+
+  it("stores public navigation without consuming it and keeps the offline shell", async () => {
+    let offline = false;
+    const worker = loadWorker({ network: async () => {
+      if (offline) throw new Error("offline");
+      return new Response("public shell", { headers: { "cache-control": "public" } });
+    } });
+    const first = await worker.dispatch("https://callofdoodie.wtf/index.html", { mode: "navigate" });
+    expect(await first.response.text()).toBe("public shell");
+    expect([...worker.stores.values()][0].has("https://callofdoodie.wtf/index.html")).toBe(true);
+    offline = true;
+    const fallback = await worker.dispatch("https://callofdoodie.wtf/other", { mode: "navigate" });
+    expect(await fallback.response.text()).toBe("public shell");
   });
 
   it("uses a new cache name so previously stored /api entries are purged on activate", () => {

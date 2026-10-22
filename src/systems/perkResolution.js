@@ -85,7 +85,7 @@ const PERK_SYNERGIES = [
     name: "⚡ NITRO RUSH",
     desc: `Adrenaline Rush lasts ${perkSeconds(PERK_FACTS.adrenaline_rush.turboFrames)}s instead of ${perkSeconds(PERK_FACTS.adrenaline_rush.frames)}s`,
     apply: (mods) => {
-      mods.adrenalineRushDuration = PERK_FACTS.adrenaline_rush.turboFrames;
+      mods.adrenalineRushDuration = Math.max(mods.adrenalineRushDuration || 0, PERK_FACTS.adrenaline_rush.turboFrames);
     },
   },
   {
@@ -130,7 +130,7 @@ const PERK_SYNERGIES = [
     name: "🩸 BLOODSHOT",
     desc: "+12% lifesteal on every pierced target",
     apply: (mods) => {
-      mods.piercedLifesteal = (mods.piercedLifesteal || 0) + 0.12;
+      mods.piercedLifesteal = (mods.piercedLifesteal || 0) + PERK_FACTS.bloodlust.pierceLifesteal;
     },
   },
   {
@@ -144,7 +144,36 @@ const PERK_SYNERGIES = [
   },
 ];
 
-export function applyPerkSynergies(perkMods) {
+// Numeric reconciliation is silent: existing synergy popups keep their names
+// and cadence. Each pair owns only its bonus, preserving unrelated modifiers.
+function reconcilePairBonuses(mods, gameState) {
+  const once = (condition, flag, apply) => {
+    if (!condition || mods[flag]) return;
+    apply();
+    mods[flag] = true;
+  };
+  once(mods.hasVampire && mods.hasBloodlust, "_pairVampireBloodlust", () => {
+    mods.lifesteal = (mods.lifesteal || 0) + PERK_FACTS.bloodlust.vampireLifesteal;
+  });
+  once(mods.hasTurboBoots && mods.hasAdrenaline && gameState?.player, "_pairTurboSpeed", () => {
+    gameState.player.speed *= PERK_FACTS.turbo_boots.surgeSpeed;
+  });
+  once(mods.hasTurboBoots && mods.adrenalineRush, "_pairTurboRush", () => {
+    mods.adrenalineRushDuration = Math.max(mods.adrenalineRushDuration || 0, PERK_FACTS.adrenaline_rush.turboFrames);
+  });
+  once(mods.hasCritCascade && mods.hasEagleEye, "_pairCascadeEagle", () => {
+    mods.critBonus = (mods.critBonus || 0) + PERK_FACTS.crit_cascade.eagleCrit;
+  });
+  once(mods.hasCritCascade && mods.pierce > 0, "_pairCascadePierce", () => {
+    mods.critBonus = (mods.critBonus || 0) + PERK_FACTS.crit_cascade.pierceCrit;
+  });
+  once(mods.hasGrenadeChain && mods.hasPyromaniac, "_pairGrenadeChainPyro", () => {
+    mods.grenadeDamageMult = (mods.grenadeDamageMult || 1) * PERK_FACTS.grenade_chain.pyroDamage;
+  });
+}
+
+export function applyPerkSynergies(perkMods, gameState) {
+  reconcilePairBonuses(perkMods, gameState);
   const unlocked = [];
   for (const synergy of PERK_SYNERGIES) {
     if (!synergy.condition(perkMods)) continue;

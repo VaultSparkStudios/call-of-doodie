@@ -5,7 +5,6 @@
 
 import { spawnSync } from "./lib/safe-spawn.mjs";
 import { dedupeInnovationCandidates } from "./lib/innovation-candidates.mjs";
-import { syncDoctorScore } from "./lib/doctor-score-sync.mjs";
 import { collectTaskWork, slugifyTask } from "./lib/task-work.mjs";
 import { parseSectionCheckboxItems } from "./lib/task-board.mjs";
 import fs from "fs";
@@ -27,22 +26,7 @@ function runNode(script, extraArgs = []) {
 }
 
 function runDoctor(extraArgs = []) {
-  const result = spawnSync(process.execPath, [STUDIO_OPS, "doctor", ...extraArgs], {
-    cwd: ROOT,
-    stdio: "inherit",
-  });
-  if ((result.status ?? 1) === 0 && extraArgs.includes("--update-json")) {
-    const sourceStatusPath = path.resolve(ROOT, "..", "vaultspark-studio-ops", "context", "PROJECT_STATUS.json");
-    const targetStatusPath = path.join(ROOT, "context", "PROJECT_STATUS.json");
-    try {
-      syncDoctorScore({ sourceStatusPath, targetStatusPath });
-      process.stderr.write("✓ synced doctorScore to this project's context/PROJECT_STATUS.json\n");
-    } catch (error) {
-      process.stderr.write(`⛔ doctor passed but local doctorScore sync failed: ${error.message}\n`);
-      process.exit(1);
-    }
-  }
-  process.exit(result.status ?? 1);
+  runNode(path.join(__dirname, "project-doctor.mjs"), extraArgs);
 }
 
 function printHelp() {
@@ -52,7 +36,7 @@ Commands:
   action-queue     Print the current Now queue from context/TASK_BOARD.md
   blocker-preflight  Check human-blocked items against local secret readiness
   closeout, c      Project-local closeout autopilot
-  doctor           Proxy to Studio Ops doctor for project health checks
+  doctor           Measure recipient-native project checks (not Studio Ops infrastructure)
   feedback-score   Proxy to Studio Ops feedback-score
   genius-list      Generate or print the cached local genius list
   innovation-pack  Write docs/INNOVATION_PACK.md from repo-local open work and genius signals

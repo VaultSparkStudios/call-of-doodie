@@ -152,17 +152,17 @@ export const PERKS = [
   },
   {
     id: "penetrator", name: "Penetrator", desc: `Bullets pierce through ${PF.penetrator.pierce} extra enemy. Synergy: +${perkPercent(PF.penetrator.eagleCrit)}% crit with Eagle Eye; +${perkPercent(PF.penetrator.bloodlustLifesteal)}% lifesteal per pierce with Bloodlust`, emoji: "🔫", tier: "rare",
-    apply: (mods) => { mods.pierce = (mods.pierce || 0) + PF.penetrator.pierce; if (mods.hasEagleEye) mods.critBonus = (mods.critBonus || 0) + PF.penetrator.eagleCrit; if (mods.hasBloodlust) mods.piercedLifesteal = (mods.piercedLifesteal || 0) + PF.penetrator.bloodlustLifesteal; },
+    apply: (mods) => { mods.pierce = (mods.pierce || 0) + PF.penetrator.pierce; if (mods.hasEagleEye) mods.critBonus = (mods.critBonus || 0) + PF.penetrator.eagleCrit; },
   },
   {
     id: "bloodlust", name: "Bloodlust", emoji: "🩸", tier: "uncommon",
     desc: `+${perkIncrease(PF.bloodlust.damage)}% dmg. Synergy: +${perkPercent(PF.bloodlust.vampireLifesteal)}% lifesteal with Vampire; +${perkPercent(PF.bloodlust.pierceLifesteal)}% lifesteal per pierce with Penetrator`,
-    apply: (mods) => { mods.damageMult = (mods.damageMult || 1) * PF.bloodlust.damage; mods.hasBloodlust = true; if (mods.hasVampire) mods.lifesteal = (mods.lifesteal || 0) + PF.bloodlust.vampireLifesteal; if (mods.pierce > 0) mods.piercedLifesteal = (mods.piercedLifesteal || 0) + PF.bloodlust.pierceLifesteal; },
+    apply: (mods) => { mods.damageMult = (mods.damageMult || 1) * PF.bloodlust.damage; mods.hasBloodlust = true; },
   },
   {
     id: "turbo_boots", name: "Turbo Boots", emoji: "🚀", tier: "uncommon",
     desc: `−${perkReduction(PF.turbo_boots.cooldown)}% dash CD. Synergy: +${perkIncrease(PF.turbo_boots.surgeSpeed)}% speed & Adrenaline Rush lasts ${perkSeconds(PF.turbo_boots.rushFrames)}s with Speed Surge`,
-    apply: (mods, gs) => { mods.dashCDMult = (mods.dashCDMult || 1) * PF.turbo_boots.cooldown; mods.hasTurboBoots = true; if (mods.hasAdrenaline && gs?.player) { gs.player.speed *= PF.turbo_boots.surgeSpeed; mods.adrenalineRushDuration = PF.turbo_boots.rushFrames; } },
+    apply: (mods) => { mods.dashCDMult = (mods.dashCDMult || 1) * PF.turbo_boots.cooldown; mods.hasTurboBoots = true; },
   },
   {
     id: "tungsten_rounds", name: "Tungsten Rounds", emoji: "🔩", tier: "uncommon",
@@ -172,7 +172,7 @@ export const PERKS = [
   {
     id: "adrenaline_rush", name: "Adrenaline Rush", emoji: "💉", tier: "uncommon",
     desc: `Killing an enemy while below ${perkPercent(PF.adrenaline_rush.healthThreshold)}% HP grants ${perkSeconds(PF.adrenaline_rush.frames)}s of double speed. Synergy: extends to ${perkSeconds(PF.adrenaline_rush.turboFrames)}s with Turbo Boots`,
-    apply: (mods) => { mods.adrenalineRush = true; if (mods.hasTurboBoots) mods.adrenalineRushDuration = PF.adrenaline_rush.turboFrames; },
+    apply: (mods) => { mods.adrenalineRush = true; },
   },
   {
     id: "chain_lightning", name: "Chain Lightning", emoji: "⚡", tier: "rare",
@@ -229,12 +229,12 @@ export const PERKS = [
   {
     id: "crit_cascade", name: "Crit Cascade", emoji: "🌩️", tier: "rare",
     desc: `+${perkPercent(PF.crit_cascade.crit)}% crit chance. Synergy: +${perkPercent(PF.crit_cascade.eagleCrit)}% crit with Eagle Eye; +${perkPercent(PF.crit_cascade.pierceCrit)}% crit with Penetrator; crits grant +${PF.crit_cascade.glassMindXp} XP with Glass Mind`,
-    apply: (mods) => { mods.critBonus = (mods.critBonus || 0) + PF.crit_cascade.crit; mods.hasCritCascade = true; if (mods.hasEagleEye) mods.critBonus += PF.crit_cascade.eagleCrit; if (mods.pierce > 0) mods.critBonus += PF.crit_cascade.pierceCrit; if (mods.hasGlassMind) mods.critGrantsXp = true; },
+    apply: (mods) => { mods.critBonus = (mods.critBonus || 0) + PF.crit_cascade.crit; mods.hasCritCascade = true; if (mods.hasGlassMind) mods.critGrantsXp = true; },
   },
   {
     id: "grenade_chain", name: "Grenade Chain", emoji: "💥", tier: "rare",
     desc: `−${perkReduction(PF.grenade_chain.cooldown)}% grenade CD · +${perkIncrease(PF.grenade_chain.damage)}% grenade damage. Synergy: +${perkIncrease(PF.grenade_chain.pyroDamage)}% more dmg with Pyromaniac; forced reloads throw grenade with Overclocked`,
-    apply: (mods) => { mods.grenadeCDMult = (mods.grenadeCDMult || 1) * PF.grenade_chain.cooldown; mods.grenadeDamageMult = (mods.grenadeDamageMult || 1) * PF.grenade_chain.damage; mods.hasGrenadeChain = true; if (mods.hasPyromaniac) mods.grenadeDamageMult = (mods.grenadeDamageMult || 1) * PF.grenade_chain.pyroDamage; if (mods.hasOverclocked) mods.reloadFreesGrenade = true; },
+    apply: (mods) => { mods.grenadeCDMult = (mods.grenadeCDMult || 1) * PF.grenade_chain.cooldown; mods.grenadeDamageMult = (mods.grenadeDamageMult || 1) * PF.grenade_chain.damage; mods.hasGrenadeChain = true; if (mods.hasOverclocked) mods.reloadFreesGrenade = true; },
   },
 ];
 

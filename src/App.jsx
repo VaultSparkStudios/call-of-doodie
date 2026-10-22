@@ -1076,7 +1076,7 @@ export default function CallOfDoodie() {
       const d = difficultyRef.current;
       gsRef.current.glassjawMult = d === "insane" ? 1.4 : d === "hard" ? 1.65 : 2.0;
     }
-    const unlockedSynergies = combatRuntimeRef.current.applyPerkSynergies(perkModsRef.current);
+    const unlockedSynergies = combatRuntimeRef.current.applyPerkSynergies(perkModsRef.current, gsRef.current);
     if (unlockedSynergies.length > 0 && gsRef.current) {
       unlockedSynergies.forEach((synergy, index) => {
         const yOffset = index === 0 ? -85 : -50 - ((index - 1) * 30);

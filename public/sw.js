@@ -6,7 +6,7 @@
 //  • Same-origin /api/* and /_health → network-only (the server owns their freshness)
 //  • Navigation → network-first with offline fallback to index.html
 
-const CACHE_NAME = "cod-v7";
+const CACHE_NAME = "cod-v8";
 const BASE = new URL(self.registration.scope).pathname;
 const SHELL_ASSETS = [
   BASE,
@@ -76,7 +76,7 @@ self.addEventListener("fetch", e => {
           // concurrently and bodyUsed will be true by the time the detached
           // caches.open() resolves, causing "clone on used Response" errors.
           const clone = res.clone();
-          caches.open(CACHE_NAME).then(c => c.put(request, clone).catch(() => {}));
+          e.waitUntil(caches.open(CACHE_NAME).then(c => cacheResponse(c, request, clone)));
           return res;
         })
         .catch(() => caches.match(BASE + "index.html"))

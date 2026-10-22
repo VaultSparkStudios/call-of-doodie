@@ -79,10 +79,85 @@ describe("ordinary perk promises", () => {
     for (const id of [first, second]) {
       const perk = byId.get(id) || CURSED_PERKS.find(candidate => candidate.id === id);
       perk.apply(mods, gs);
-      applyPerkSynergies(mods);
+      applyPerkSynergies(mods, gs);
     }
     expect(gs.deadMansHand).toBe(true);
     expect(mods.deadManTripleExplosion).toBe(true);
     expect(deadMansHandDamage(125, mods.deadManTripleExplosion)).toBe(300);
+  });
+});
+
+const allPerks = new Map([...PERKS, ...CURSED_PERKS].map(perk => [perk.id, perk]));
+function pickSequence(ids, initialMods = {}, speed = 100) {
+  const mods = { ...initialMods };
+  const gs = { player: { speed, health: 100, maxHealth: 100 } };
+  const popups = [];
+  for (const id of ids) {
+    allPerks.get(id).apply(mods, gs);
+    popups.push(...applyPerkSynergies(mods, gs).map(entry => entry.name));
+  }
+  return { mods, gs, popups };
+}
+
+describe("perk pair acquisition fairness", () => {
+  it.each([
+    ["vampire", "bloodlust", "lifesteal", 0.23, []],
+    ["eagle_eye", "crit_cascade", "critBonus", 0.32, []],
+    ["penetrator", "crit_cascade", "critBonus", 0.20, []],
+    ["tungsten_rounds", "crit_cascade", "critBonus", 0.20, []],
+    ["adrenaline_rush", "turbo_boots", "adrenalineRushDuration", 240, []],
+    ["penetrator", "bloodlust", "piercedLifesteal", 0.12, ["🩸 BLOODSHOT"]],
+    ["tungsten_rounds", "bloodlust", "piercedLifesteal", 0.12, ["🩸 BLOODSHOT"]],
+    ["grenade_chain", "pyromaniac", "grenadeDamageMult", 3.75, []],
+  ])("%s and %s honor the same reward and popup count in either order", (first, second, stat, expected, popups) => {
+    for (const ids of [[first, second], [second, first]]) {
+      const result = pickSequence(ids);
+      expect(result.mods[stat]).toBeCloseTo(expected);
+      expect(result.popups).toEqual(popups);
+      const before = structuredClone({ mods: result.mods, gs: result.gs });
+      expect(applyPerkSynergies(result.mods, result.gs)).toEqual([]);
+      expect(applyPerkSynergies(result.mods, result.gs)).toEqual([]);
+      expect({ mods: result.mods, gs: result.gs }).toEqual(before);
+    }
+  });
+
+  it.each([["adrenaline", "turbo_boots"], ["turbo_boots", "adrenaline"]])("%s then %s grants the speed bonus exactly once", (first, second) => {
+    const { mods, gs, popups } = pickSequence([first, second], {}, 4);
+    expect(gs.player.speed).toBeCloseTo(5.52);
+    expect(mods.adrenalineRushDuration).toBe(240);
+    expect(popups).toEqual(["⚡ NITRO RUSH"]);
+    expect(applyPerkSynergies(mods, gs)).toEqual([]);
+    expect(gs.player.speed).toBeCloseTo(5.52);
+  });
+
+  it("preserves unrelated bonuses rather than resetting the combined stat", () => {
+    expect(pickSequence(["bloodlust", "vampire"], { lifesteal: 0.07 }).mods.lifesteal).toBeCloseTo(0.30);
+    expect(pickSequence(["crit_cascade", "eagle_eye"], { critBonus: 0.13 }).mods.critBonus).toBeCloseTo(0.45);
+    expect(pickSequence(["bloodlust", "penetrator"], { piercedLifesteal: 0.03 }).mods.piercedLifesteal).toBeCloseTo(0.15);
+    expect(pickSequence(["grenade_chain", "pyromaniac"], { grenadeDamageMult: 1.2 }).mods.grenadeDamageMult).toBeCloseTo(4.5);
+    expect(pickSequence(["adrenaline_rush", "turbo_boots"], { adrenalineRushDuration: 300 }).mods.adrenalineRushDuration).toBe(300);
+    expect(pickSequence(["adrenaline", "turbo_boots"], { adrenalineRushDuration: 300 }).mods.adrenalineRushDuration).toBe(300);
+  });
+
+  it("defers the speed pair until a player exists without consuming its bonus", () => {
+    const mods = { hasAdrenaline: true, hasTurboBoots: true };
+    applyPerkSynergies(mods);
+    const gs = { player: { speed: 5 } };
+    expect(applyPerkSynergies(mods, gs)).toEqual([]);
+    expect(gs.player.speed).toBe(6);
+    applyPerkSynergies(mods, gs);
+    expect(gs.player.speed).toBe(6);
+  });
+
+  it("reconciles a third crit perk without multiplying earlier pair rewards", () => {
+    const ids = ["eagle_eye", "crit_cascade", "penetrator"];
+    for (const first of ids) {
+      for (const second of ids.filter(id => id !== first)) {
+        const third = ids.find(id => id !== first && id !== second);
+        const { mods } = pickSequence([first, second, third], { critBonus: 0.07 });
+        expect(mods.critBonus).toBeCloseTo(0.65);
+        expect(mods.pierce).toBe(2);
+      }
+    }
   });
 });
